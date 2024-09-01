@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "449424125948",
+    "project_id": "money-monkey-468ee",
+    "storage_bucket": "money-monkey-468ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449424125948:android:a9af980533a1ecd8eb0c79",
+        "android_client_info": {
+          "package_name": "com.moneymonkey.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBvZtE28s72WsNqyQUYA73pvqhZoThclM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
