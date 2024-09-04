@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'login.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -14,16 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
   
     return MaterialApp(
-      title: 'Flutter Firebase Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Firebase Integration',
-          style: TextStyle(color: Colors.blue),),
-        ),
-        body: Center(
-          child: Text('Firebase is now integrated!'),
-        ),
-      ),
+      title: "Money Monkey",
+      home: LoginScreen(),
     );
   }
 }
