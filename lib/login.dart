@@ -8,8 +8,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // Index for create or login
   int _selectedIndex = 0;
-
+  // Switches Screen
   void _onButtonPressed(int index) {
     setState(() {
       _selectedIndex = index;
@@ -28,11 +29,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   height: 1,
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.lightGreen,
                   ),
                 ),
-                SizedBox(height: 18),
+                const SizedBox(height: 18),
                 SizedBox(
                   height: 744,
                   width: double.infinity,
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         right: 0,
                         bottom: 0,
                         child: Container(
-                          padding: EdgeInsets.all(30),
+                          padding: const EdgeInsets.all(30),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   TextButton(
                                     onPressed: () => _onButtonPressed(0),
-                                    child: Text("Create Account",
+                                    child: const Text("Create Account",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 22,
@@ -77,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   TextButton(
                                     onPressed: () => _onButtonPressed(1),
-                                    child: Text("Log in",
+                                    child: const Text("Log in",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 22,
@@ -85,11 +86,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 20), // Add some spacing
+                              const SizedBox(height: 20), 
                               _selectedIndex == 0
-                                  ? Text('Create Account',
+                                  ? const Text('Create Account',
                                       style: TextStyle(fontSize: 24))
-                                  : Text('Log in',
+                                  : const Text('Log in',
                                       style: TextStyle(fontSize: 24)),
                             ],
                           ),
