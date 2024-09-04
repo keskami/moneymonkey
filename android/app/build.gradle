@@ -11,7 +11,7 @@ plugins {
 android {
     //was com.example.money_monkey
     namespace = "com.moneymonkey.app"
-    compileSdk = 34
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
