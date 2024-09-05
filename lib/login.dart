@@ -62,34 +62,145 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   TextButton(
                                     onPressed: () => _onButtonPressed(0),
-                                    child: const Text("Create Account",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22,
-
-                                    ),
+                                    child: const Text(
+                                      "Create Account",
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(0, 0, 0, 1),
+                                          fontSize: 22,
+                                          fontFamily: 'Ballo2'),
                                     ),
                                   ),
                                   TextButton(
                                     onPressed: () => _onButtonPressed(1),
-                                    child: const Text("Log in",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22,
-                                    ),),
+                                    child: const Text(
+                                      "Log in",
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontSize: 22,
+                                        fontFamily: 'Ballo2',
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 20), 
+                              const SizedBox(height: 20),
                               _selectedIndex == 0
-                                  ? const Text('Create Account',
-                                      style: TextStyle(fontSize: 24))
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Create Account',
+                                          style: TextStyle(
+                                              fontSize: 26,
+                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              fontFamily: 'Ballo2'),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        const Text(
+                                          'Let’s get started by filling out the form below.',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              fontFamily: 'Ballo2'),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        const SizedBox(height: 15),
+                                        SizedBox(
+                                          width: 314,
+                                          height: 49,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50.0),
+                                              ),
+                                              labelText: 'Email',
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          width: 314,
+                                          height: 49,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50.0),
+                                              ),
+                                              labelText: 'Password',
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          width: 314,
+                                          height: 49,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50.0),
+                                              ),
+                                              labelText: 'Confirm Password',
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 7),
+                                        Center(
+                                          child: SizedBox(
+                                              width: 220,
+                                              height: 49,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  print("clicked");
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          135, 206, 235, 1),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 12),
+                                                  elevation: 8,
+                                                ),
+                                                child: const Text(
+                                                  'Get Started',
+                                                  style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        252, 252, 252, 252),
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                        const SizedBox(height: 15),
+                                        const Center(
+                                            child: Text(
+                                          "Or sign up with",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: "Ballo 2",
+                                              color:
+                                                  Color.fromRGBO(0, 0, 0, 1)),
+                                        )),
+                                        
+                                      ],
+                                    )
                                   : const Text('Log in',
                                       style: TextStyle(fontSize: 24)),
                             ],
