@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/themes/colorThemes.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class ChatBubble extends StatelessWidget {
   final String message;
@@ -29,9 +29,9 @@ class ChatBubble extends StatelessWidget {
               child: Text(
                 message,
                 style: const TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Monstserrat',
-                    fontSize: 14),
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),

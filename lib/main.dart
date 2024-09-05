@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/GettingStarted/Pages/gettingStartedPage.dart';
+import 'package:money_monkey/GettingStarted/Pages/getting_started_page.dart';
 
 import 'firebase_options.dart';
 
@@ -10,8 +10,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Run the app
   runApp(const MyApp());
 }
 
@@ -22,7 +20,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         textTheme: GoogleFonts.fredokaTextTheme(),
       ),
       home: const GettingStartedPage(),
