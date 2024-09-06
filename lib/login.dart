@@ -20,11 +20,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(133, 220, 64, 1),
-          toolbarHeight: 35,
+          toolbarHeight: screenHeight * 0.05, // 5% of screen height
         ),
         body: SizedBox(
           width: double.infinity,
@@ -32,163 +35,175 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 Container(
-                  height: 1,
+                  height: screenHeight * 0.01, // 1% of screen height
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Colors.lightGreen,
                   ),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
                 SizedBox(
-                  height: 744,
+                  height: screenHeight * 1, // 90% of screen height
                   width: double.infinity,
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
                       Image.asset(
                         'assets/images/monkey.png',
-                        height: 390,
+                        height: screenHeight * 0.5, // 50% of screen height
                         width: double.infinity,
                         alignment: Alignment.topCenter,
                       ),
                       Positioned(
-                        top: 195,
-                        left: 10,
-                        right: 10,
-                        bottom: -15,
-                          child: Container(
-                            padding: const EdgeInsets.all(30),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey.withOpacity(.5),
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
+                        top: screenHeight * 0.25, // 30% of screen height
+                        left: screenWidth * 0.025, // 2% of screen width
+                        right: screenWidth * 0.025, // 2% of screen width
+                        bottom: screenHeight * -1, // 5% of screen height
+                        child: Container(
+                          padding: EdgeInsets.all(screenWidth * 0.05), // 5% of screen width
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(.5),
+                              width: 2,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () => _onButtonPressed(0),
-                                      child: const Text(
-                                        "Create Account",
-                                        style: TextStyle(
+                            borderRadius: BorderRadius.circular(screenWidth * 0.05), // 5% of screen width
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () => _onButtonPressed(0),
+                                        child: const Text(
+                                          "Create Account",
+                                          style: TextStyle(
                                             color: Color.fromRGBO(0, 0, 0, 1),
                                             fontSize: 22,
-                                            fontFamily: 'Ballo2'),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () => _onButtonPressed(1),
-                                      child: const Text(
-                                        "Log in",
-                                        style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1),
-                                          fontSize: 22,
-                                          fontFamily: 'Ballo2',
+                                            fontFamily: 'Ballo2',
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 20),
-                                _selectedIndex == 0
-                                    ? SingleChildScrollView(
-                                        child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      Container(
+                                        height: 2,
+                                        width: _selectedIndex == 0 ? screenWidth * 0.4 : 0, // 40% of screen width
+                                        color: Color.fromRGBO(75, 57, 239, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () => _onButtonPressed(1),
+                                        child: const Text(
+                                          "Log in",
+                                          style: TextStyle(
+                                            color: Color.fromRGBO(0, 0, 0, 1),
+                                            fontSize: 22,
+                                            fontFamily: 'Ballo2',
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 2,
+                                        width: _selectedIndex == 1 ? screenWidth * 0.3 : 0, // 30% of screen width
+                                        color: Color.fromRGBO(75, 57, 239, 1),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: screenHeight * 0.025), // 3% of screen height
+                              _selectedIndex == 0
+                                  ? SingleChildScrollView(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
+                                          Text(
                                             'Create Account',
                                             style: TextStyle(
-                                                fontSize: 26,
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, 1),
+                                                fontSize: 22, // 3% of screen height
+                                                color: Color.fromRGBO(0, 0, 0, 1),
                                                 fontFamily: 'Ballo2'),
                                             textAlign: TextAlign.left,
                                           ),
-                                          const Text(
+                                          Text(
                                             'Let’s get started by filling out the form below.',
                                             style: TextStyle(
-                                                fontSize: 14,
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, 1),
+                                                fontSize: screenHeight * 0.02, // 2% of screen height
+                                                color: Color.fromRGBO(0, 0, 0, 1),
                                                 fontFamily: 'Ballo2'),
                                             textAlign: TextAlign.left,
                                           ),
-                                          const SizedBox(height: 15),
+                                          SizedBox(height: screenHeight * 0.02), // 2% of screen height
                                           SizedBox(
-                                            width: 314,
-                                            height: 49,
+                                            width: screenWidth * 0.8, // 80% of screen width
+                                            height: screenHeight * 0.06, // 7% of screen height
                                             child: TextField(
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.0),
+                                                      BorderRadius.circular(screenWidth * 0.1), // 10% of screen width
                                                 ),
                                                 labelText: 'Email',
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(height: 10),
+                                          SizedBox(height: screenHeight * 0.01), // 1% of screen height
                                           SizedBox(
-                                            width: 314,
-                                            height: 49,
+                                            width: screenWidth * 0.8, // 80% of screen width
+                                            height: screenHeight * 0.06, // 7% of screen height
                                             child: TextField(
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.0),
+                                                      BorderRadius.circular(screenWidth * 0.1), // 10% of screen width
                                                 ),
                                                 labelText: 'Password',
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(height: 10),
+                                          SizedBox(height: screenHeight * 0.01), // 1% of screen height
                                           SizedBox(
-                                            width: 314,
-                                            height: 49,
+                                            width: screenWidth * 0.8, // 80% of screen width
+                                            height: screenHeight * 0.06, // 7% of screen height
                                             child: TextField(
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.0),
+                                                      BorderRadius.circular(screenWidth * 0.1), // 10% of screen width
                                                 ),
                                                 labelText: 'Confirm Password',
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(height: 7),
+                                          SizedBox(height: screenHeight * 0.02), // 2% of screen height
                                           Center(
                                             child: SizedBox(
-                                                width: 220,
-                                                height: 49,
+                                                width: screenWidth * 0.6, // 60% of screen width
+                                                height: screenHeight * 0.07, // 7% of screen height
                                                 child: ElevatedButton(
                                                   onPressed: () {
                                                     print("clicked");
                                                   },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
+                                                  style: ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         const Color.fromRGBO(
                                                             135, 206, 235, 1),
-                                                    shape:
-                                                        RoundedRectangleBorder(
+                                                    shape: RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              30),
+                                                              screenWidth * 0.07), // 7% of screen width
                                                     ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 12),
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            screenWidth * 0.05, // 5% of screen width
+                                                        vertical:
+                                                            screenHeight * 0.01), // 2% of screen height
                                                     elevation: 8,
                                                   ),
                                                   child: const Text(
@@ -201,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                 )),
                                           ),
-                                          const SizedBox(height: 15),
+                                          SizedBox(height: screenHeight * 0.02), // 2% of screen height
                                           const Center(
                                               child: Text(
                                             "Or sign up with",
@@ -218,8 +233,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 SizedBox(
-                                                  width: 220,
-                                                  height: 50,
+                                                  width: screenWidth * 0.6, // 60% of screen width
+                                                  height: screenHeight * 0.07, // 7% of screen height
                                                   child: IconButton(
                                                     icon: Image.asset(
                                                         "assets/images/image.png"),
@@ -227,8 +242,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  width: 220,
-                                                  height: 50,
+                                                  width: screenWidth * 0.6, // 60% of screen width
+                                                  height: screenHeight * 0.07, // 7% of screen height
                                                   child: IconButton(
                                                     icon: Image.asset(
                                                         "assets/images/image2.png"),
@@ -240,147 +255,128 @@ class _LoginScreenState extends State<LoginScreen> {
                                           )
                                         ],
                                       ))
-                                    :  Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            'Welcome Back',
-                                            style: TextStyle(
-                                                fontSize: 26,
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, 1),
-                                                fontFamily: 'Ballo2'),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                          const Text(
-                                            'Fill out the information below in order',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, 1),
-                                                fontFamily: 'Ballo2'),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                           const Text(
-                                            'to access your account.',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, 1),
-                                                fontFamily: 'Ballo2'),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                          const SizedBox(height: 15),
-                                          SizedBox(
-                                            width: 314,
-                                            height: 49,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.0),
-                                                ),
-                                                labelText: 'Email',
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Welcome Back',
+                                          style: TextStyle(
+                                              fontSize: screenHeight * 0.03, // 3% of screen height
+                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              fontFamily: 'Ballo2'),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        Text(
+                                          'Log in with your credentials.',
+                                          style: TextStyle(
+                                              fontSize: screenHeight * 0.02, // 2% of screen height
+                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              fontFamily: 'Ballo2'),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                                        SizedBox(
+                                          width: screenWidth * 0.8, // 80% of screen width
+                                          height: screenHeight * 0.07, // 7% of screen height
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        screenWidth * 0.1), // 10% of screen width
                                               ),
+                                              labelText: 'Email',
                                             ),
                                           ),
-                                          const SizedBox(height: 10),
-                                          SizedBox(
-                                            width: 314,
-                                            height: 49,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.0),
-                                                ),
-                                                labelText: 'Password',
+                                        ),
+                                        SizedBox(height: screenHeight * 0.01), // 1% of screen height
+                                        SizedBox(
+                                          width: screenWidth * 0.8, // 80% of screen width
+                                          height: screenHeight * 0.07, // 7% of screen height
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        screenWidth * 0.1), // 10% of screen width
                                               ),
+                                              labelText: 'Password',
                                             ),
                                           ),
-                                          const SizedBox(height: 10),
-                                          
-                                          const SizedBox(height: 7),
-                                          Center(
-                                            child: SizedBox(
-                                                width: 220,
-                                                height: 49,
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    print("clicked");
-                                                  },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color.fromRGBO(
-                                                            135, 206, 235, 1),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30),
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 12),
-                                                    elevation: 8,
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                                        Center(
+                                          child: SizedBox(
+                                              width: screenWidth * 0.6, // 60% of screen width
+                                              height: screenHeight * 0.07, // 7% of screen height
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  print("clicked");
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: const Color.fromRGBO(
+                                                      135, 206, 235, 1),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            screenWidth * 0.07), // 7% of screen width
                                                   ),
-                                                  child: const Text(
-                                                    'Get Started',
-                                                    style: TextStyle(
-                                                      color: Color.fromARGB(
-                                                          252, 252, 252, 252),
-                                                      fontSize: 16,
-                                                    ),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: screenWidth * 0.05, // 5% of screen width
+                                                      vertical: screenHeight * 0.02), // 2% of screen height
+                                                  elevation: 8,
+                                                ),
+                                                child: const Text(
+                                                  'Log in',
+                                                  style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        252, 252, 252, 252),
+                                                    fontSize: 16,
                                                   ),
-                                                )),
+                                                ),
+                                              )),
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                                        const Center(
+                                            child: Text(
+                                          "Or sign in with",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: "Ballo 2",
+                                              color: Color.fromRGBO(0, 0, 0, 1)),
+                                        )),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              SizedBox(
+                                                width: screenWidth * 0.6, // 60% of screen width
+                                                height: screenHeight * 0.07, // 7% of screen height
+                                                child: IconButton(
+                                                  icon: Image.asset(
+                                                      "assets/images/image.png"),
+                                                  onPressed: () {},
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: screenWidth * 0.6, // 60% of screen width
+                                                height: screenHeight * 0.07, // 7% of screen height
+                                                child: IconButton(
+                                                  icon: Image.asset(
+                                                      "assets/images/image2.png"),
+                                                  onPressed: () {},
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(height: 15),
-                                          const Center(
-                                              child: Text(
-                                            "Or sign up with",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: "Ballo 2",
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, 1)),
-                                          )),
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                SizedBox(
-                                                  width: 220,
-                                                  height: 50,
-                                                  child: IconButton(
-                                                    icon: Image.asset(
-                                                        "assets/images/image.png"),
-                                                    onPressed: () {},
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 220,
-                                                  height: 50,
-                                                  child: IconButton(
-                                                    icon: Image.asset(
-                                                        "assets/images/image2.png"),
-                                                    onPressed: () {},
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      )
-                              ],
-                            ),
-                          
+                                        )
+                                      ],
+                                    ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -388,15 +384,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
+          
           ),
+          
         ),
-        bottomNavigationBar: BottomAppBar(
+         bottomNavigationBar: BottomAppBar(
           color: Color.fromRGBO(133, 220, 64, 1),
-          height: 27,
+          height: screenHeight * .05,
+          
         ),
+       
       ),
     );
   }
-
-
 }
