@@ -10,7 +10,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   // Index for create or login
   int _selectedIndex = 0;
-  
+
   // Switches Screen
   void _onButtonPressed(int index) {
     setState(() {
@@ -22,6 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(133, 220, 64, 1),
+          toolbarHeight: 35,
+        ),
         body: SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
@@ -49,10 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Positioned(
                         top: 195,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: SingleChildScrollView(
+                        left: 10,
+                        right: 10,
+                        bottom: -15,
                           child: Container(
                             padding: const EdgeInsets.all(30),
                             decoration: BoxDecoration(
@@ -94,7 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 const SizedBox(height: 20),
                                 _selectedIndex == 0
-                                    ? Column(
+                                    ? SingleChildScrollView(
+                                        child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
@@ -102,8 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             'Create Account',
                                             style: TextStyle(
                                                 fontSize: 26,
-                                                color: Color.fromRGBO(
-                                                    0, 0, 0, 1),
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
                                                 fontFamily: 'Ballo2'),
                                             textAlign: TextAlign.left,
                                           ),
@@ -111,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             'Let’s get started by filling out the form below.',
                                             style: TextStyle(
                                                 fontSize: 14,
-                                                color: Color.fromRGBO(
-                                                    0, 0, 0, 1),
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
                                                 fontFamily: 'Ballo2'),
                                             textAlign: TextAlign.left,
                                           ),
@@ -170,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   onPressed: () {
                                                     print("clicked");
                                                   },
-                                                  style: ElevatedButton
-                                                      .styleFrom(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         const Color.fromRGBO(
                                                             135, 206, 235, 1),
@@ -182,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                               30),
                                                     ),
                                                     padding: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 20,
                                                         vertical: 12),
                                                     elevation: 8,
@@ -204,8 +208,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontFamily: "Ballo 2",
-                                                color: Color.fromRGBO(
-                                                    0, 0, 0, 1)),
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1)),
                                           )),
                                           Align(
                                             alignment: Alignment.center,
@@ -235,26 +239,35 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           )
                                         ],
-                                      )
+                                      ))
                                     :  Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           const Text(
-                                            'Create Account',
+                                            'Welcome Back',
                                             style: TextStyle(
                                                 fontSize: 26,
-                                                color: Color.fromRGBO(
-                                                    0, 0, 0, 1),
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
                                                 fontFamily: 'Ballo2'),
                                             textAlign: TextAlign.left,
                                           ),
                                           const Text(
-                                            'Let’s get started by filling out the form below.',
+                                            'Fill out the information below in order',
                                             style: TextStyle(
                                                 fontSize: 14,
-                                                color: Color.fromRGBO(
-                                                    0, 0, 0, 1),
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
+                                                fontFamily: 'Ballo2'),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                           const Text(
+                                            'to access your account.',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
                                                 fontFamily: 'Ballo2'),
                                             textAlign: TextAlign.left,
                                           ),
@@ -289,20 +302,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           const SizedBox(height: 10),
-                                          SizedBox(
-                                            width: 314,
-                                            height: 49,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.0),
-                                                ),
-                                                labelText: 'Confirm Password',
-                                              ),
-                                            ),
-                                          ),
+                                          
                                           const SizedBox(height: 7),
                                           Center(
                                             child: SizedBox(
@@ -312,8 +312,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   onPressed: () {
                                                     print("clicked");
                                                   },
-                                                  style: ElevatedButton
-                                                      .styleFrom(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         const Color.fromRGBO(
                                                             135, 206, 235, 1),
@@ -324,7 +324,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                               30),
                                                     ),
                                                     padding: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 20,
                                                         vertical: 12),
                                                     elevation: 8,
@@ -346,8 +346,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontFamily: "Ballo 2",
-                                                color: Color.fromRGBO(
-                                                    0, 0, 0, 1)),
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1)),
                                           )),
                                           Align(
                                             alignment: Alignment.center,
@@ -380,7 +380,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       )
                               ],
                             ),
-                          ),
+                          
                         ),
                       ),
                     ],
@@ -390,7 +390,13 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+        bottomNavigationBar: BottomAppBar(
+          color: Color.fromRGBO(133, 220, 64, 1),
+          height: 27,
+        ),
       ),
     );
   }
+
+
 }
