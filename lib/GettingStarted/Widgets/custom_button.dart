@@ -7,42 +7,47 @@ class Custombutton extends StatelessWidget {
     required this.text,
     required this.color,
     required this.isBordered,
+    required this.toNextPage,
   });
   final String text;
   final Color color;
   final bool isBordered;
+  final Function() toNextPage;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5,
-      ),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 10,
-      ),
-      decoration: BoxDecoration(
-        color: color,
-        border: isBordered
-            ? Border.all(
-                color: Colors.black,
-              )
-            : null,
-        borderRadius: BorderRadius.circular(
-          20,
+    return GestureDetector(
+      onTap: toNextPage,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 12,
         ),
-      ),
-      width: double.infinity,
-      child: TextButton(
-        onPressed: () {},
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-            color:
-                isBordered ? Colors.black : LightTheme().primaryBackgroundColor,
+        margin: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10,
+        ),
+        decoration: BoxDecoration(
+          color: color,
+          border: isBordered
+              ? Border.all(
+                  color: Colors.black,
+                )
+              : null,
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+        ),
+        width: double.infinity,
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w600,
+              color: isBordered
+                  ? Colors.black
+                  : LightTheme().primaryBackgroundColor,
+            ),
           ),
         ),
       ),
