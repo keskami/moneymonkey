@@ -90,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       Container(
                                         height: 2,
-                                        width: _selectedIndex == 0 ? screenWidth * 0.4 : 0, // 40% of screen width
-                                        color: Color.fromRGBO(75, 57, 239, 1),
+                                        width: screenWidth * 0.4 , // 40% of screen width
+                                        color:_selectedIndex == 0 ?  Color.fromRGBO(75, 57, 239, 1): Colors.white,
                                       ),
                                     ],
                                   ),
@@ -110,8 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       Container(
                                         height: 2,
-                                        width: _selectedIndex == 1 ? screenWidth * 0.3 : 0, // 30% of screen width
-                                        color: Color.fromRGBO(75, 57, 239, 1),
+                                        width: screenWidth * 0.3 , // 30% of screen width
+                                        color: _selectedIndex == 1 ? Color.fromRGBO(75, 57, 239, 1): Colors.white,
                                       ),
                                     ],
                                   )
