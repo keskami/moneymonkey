@@ -1,78 +1,124 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/themes/color_themes.dart';
 
-class ChatBubble extends StatelessWidget {
-  final String message;
-  const ChatBubble({
+class ChatBubbleContainer extends StatelessWidget {
+  const ChatBubbleContainer({
     super.key,
-    required this.message,
+    required this.text,
+    required this.childWidget,
+    this.trianglePosition = TrianglePosition.bottom,
+    this.triangleWidth = 20, // Default triangle width
+    this.borderWidth = 2, // Default border width
   });
+
+  final String text;
+  final Widget childWidget;
+  final TrianglePosition trianglePosition;
+  final double triangleWidth;
+  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
-    final messageTextGroup = Flexible(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                  color: LightTheme().primaryBackgroundColor,
-                  borderRadius: BorderRadius.circular(
-                    18,
-                  ),
-                  border: Border.all(
-                    color: Colors.black,
-                  )),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ),
-          CustomPaint(
-            painter: Triangle(Colors.grey[900]!),
-          ),
-        ],
+    return CustomPaint(
+      painter: ChatBubblePainter(
+        trianglePosition: trianglePosition,
+        triangleWidth: triangleWidth,
+        borderWidth: borderWidth,
       ),
-    );
-
-    return Padding(
-      padding: const EdgeInsets.only(right: 18.0, left: 50, top: 5, bottom: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          const SizedBox(height: 30),
-          messageTextGroup,
-        ],
+      child: Container(
+        padding: trianglePosition == TrianglePosition.bottom
+            ? const EdgeInsets.fromLTRB(
+                //If it's bottom. The lower space is inadequate otherwise
+                15,
+                10,
+                15,
+                20,
+              )
+            : const EdgeInsets.fromLTRB(
+                //If it's bottom. The lower space is inadequate otherwise
+                33,
+                10,
+                15,
+                10,
+              ),
+        child: childWidget,
       ),
     );
   }
 }
 
-class Triangle extends CustomPainter {
-  final Color bgColor;
+enum TrianglePosition { bottom, left }
 
-  Triangle(this.bgColor);
+class ChatBubblePainter extends CustomPainter {
+  final TrianglePosition trianglePosition;
+  final double triangleWidth;
+  final double borderWidth;
+
+  ChatBubblePainter({
+    required this.trianglePosition,
+    required this.triangleWidth,
+    required this.borderWidth,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()..color = bgColor;
+    final paint = Paint()
+      ..color = Colors.white // Background color of the container
+      ..style = PaintingStyle.fill;
 
-    var path = Path();
-    path.lineTo(-5, 0);
-    path.lineTo(0, 10);
-    path.lineTo(5, 0);
+    final borderPaint = Paint()
+      ..color = Colors.black // Border color
+      ..strokeWidth = borderWidth // Custom border width
+      ..style = PaintingStyle.stroke;
+
+    final path = Path();
+
+    // Define dimensions of the triangle
+    double triangleHeight = 10;
+    double containerWidth = size.width;
+    double containerHeight = size.height;
+
+    if (trianglePosition == TrianglePosition.bottom) {
+      // Draw the main rectangle of the chat bubble with a triangle at the bottom center
+      path.moveTo(0, 0);
+      path.lineTo(containerWidth, 0);
+      path.lineTo(containerWidth, containerHeight - triangleHeight);
+
+      // Triangle at the bottom center
+      path.lineTo((containerWidth / 2) + (triangleWidth / 2),
+          containerHeight - triangleHeight);
+      path.lineTo(containerWidth / 2, containerHeight); // Tip of the triangle
+      path.lineTo((containerWidth / 2) - (triangleWidth / 2),
+          containerHeight - triangleHeight);
+
+      // Continue the path around the rectangle
+      path.lineTo(0, containerHeight - triangleHeight);
+      path.close();
+    } else if (trianglePosition == TrianglePosition.left) {
+      // Draw the main rectangle of the chat bubble with a triangle on the left side
+      path.moveTo(triangleWidth, 0);
+      path.lineTo(containerWidth, 0);
+      path.lineTo(containerWidth, containerHeight);
+      path.lineTo(triangleWidth, containerHeight);
+
+      // Triangle on the left side
+      path.lineTo(triangleWidth, (containerHeight / 2) + (triangleHeight / 2));
+      path.lineTo(0, containerHeight / 2); // Tip of the triangle
+      path.lineTo(triangleWidth, (containerHeight / 2) - (triangleHeight / 2));
+
+      // Continue the path around the rectangle
+      path.lineTo(triangleWidth, 0);
+      path.close();
+    }
+
+    // Draw the background
     canvas.drawPath(path, paint);
+
+    // Draw the border with the specified stroke width
+    canvas.drawPath(path, borderPaint);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
   }
 }

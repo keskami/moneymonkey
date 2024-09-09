@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/controller/gs_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -39,6 +40,19 @@ class GettingStartedHome extends StatelessWidget {
           return const Center(child: Text('Invalid page index'));
         }
       }),
+      floatingActionButton: Obx(
+        () => gettingStartedController.pageIndex.value >= 1 &&
+                gettingStartedController.pageIndex.value <= 3
+            ? Container(
+                margin: const EdgeInsets.only(
+                  bottom: 50,
+                ),
+                child: NextButton(),
+              )
+            : const SizedBox
+                .shrink(), // Use SizedBox.shrink() to represent an empty widget
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

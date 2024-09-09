@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class GettingStartedPage2 extends StatelessWidget {
-  const GettingStartedPage2({super.key});
+class GettingStartedPage3 extends StatelessWidget {
+  const GettingStartedPage3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class GettingStartedPage2 extends StatelessWidget {
             height: 45,
           ),
           const Text(
-            "Meet your new\nFinancial literacy coach.",
+            "Money Monkey gives\nyou friendly feedback.",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 25,
@@ -23,7 +23,7 @@ class GettingStartedPage2 extends StatelessWidget {
             height: 35,
           ),
           const Text(
-            "Money Monkey will help you\nnavigate the world of finance\nand money",
+            "Learn to manage your money wisely,\navoid common pitfalls, and build a\nbrighter financial future.",
             style: TextStyle(
               fontSize: 20,
             ),
@@ -31,7 +31,7 @@ class GettingStartedPage2 extends StatelessWidget {
           const SizedBox(
             height: 25,
           ),
-          Image.asset("assets/money_monkey.png"),
+          Image.asset("assets/gs_blackboard.png"),
           const SizedBox(
             height: 25,
           ),
