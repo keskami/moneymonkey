@@ -15,7 +15,7 @@ class GettingStartedPage4 extends StatelessWidget {
           children: [
             const Spacer(),
             const ChatBubbleContainer(
-              text: "Test1 ",
+              borderRadius: 12,
               childWidget: Text.rich(
                 TextSpan(
                   children: [
@@ -23,18 +23,20 @@ class GettingStartedPage4 extends StatelessWidget {
                       text: "Just ",
                       style: TextStyle(
                         fontSize: 23,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     TextSpan(
                         text: "7 quick questions",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 23,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 25,
                         )),
                     TextSpan(
                       text: " before we start your first Lesson!",
                       style: TextStyle(
                         fontSize: 23,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],

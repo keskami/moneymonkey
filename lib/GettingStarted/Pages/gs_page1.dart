@@ -14,7 +14,8 @@ class GettingStartedPage1 extends StatefulWidget {
 
 GettingStartedController gettingStartedController =
     Get.put(GettingStartedController());
-void toLoginPage() {}
+void
+    toLoginPage() {} //Needs to be integrated once Login Page is shifted to main and replace the toNextPage fn
 void toGettingStarted() {
   gettingStartedController.pageIndex.value = 1;
 }

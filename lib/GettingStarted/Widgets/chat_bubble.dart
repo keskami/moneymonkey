@@ -3,38 +3,34 @@ import 'package:flutter/material.dart';
 class ChatBubbleContainer extends StatelessWidget {
   const ChatBubbleContainer({
     super.key,
-    required this.text,
     required this.childWidget,
     this.trianglePosition = TrianglePosition.bottom,
-    this.triangleWidth = 20, // Default triangle width
     this.borderWidth = 2, // Default border width
+    this.borderRadius = 16, // Default border radius
   });
 
-  final String text;
   final Widget childWidget;
   final TrianglePosition trianglePosition;
-  final double triangleWidth;
   final double borderWidth;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: ChatBubblePainter(
         trianglePosition: trianglePosition,
-        triangleWidth: triangleWidth,
         borderWidth: borderWidth,
+        borderRadius: borderRadius,
       ),
       child: Container(
         padding: trianglePosition == TrianglePosition.bottom
             ? const EdgeInsets.fromLTRB(
-                //If it's bottom. The lower space is inadequate otherwise
                 15,
                 10,
                 15,
                 20,
               )
             : const EdgeInsets.fromLTRB(
-                //If it's bottom. The lower space is inadequate otherwise
                 33,
                 10,
                 15,
@@ -50,13 +46,13 @@ enum TrianglePosition { bottom, left }
 
 class ChatBubblePainter extends CustomPainter {
   final TrianglePosition trianglePosition;
-  final double triangleWidth;
   final double borderWidth;
+  final double borderRadius;
 
   ChatBubblePainter({
     required this.trianglePosition,
-    required this.triangleWidth,
     required this.borderWidth,
+    required this.borderRadius,
   });
 
   @override
@@ -71,46 +67,56 @@ class ChatBubblePainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final path = Path();
-
-    // Define dimensions of the triangle
-    double triangleHeight = 10;
+    double triangleHeight = 10; // Triangle height
     double containerWidth = size.width;
     double containerHeight = size.height;
 
     if (trianglePosition == TrianglePosition.bottom) {
-      // Draw the main rectangle of the chat bubble with a triangle at the bottom center
-      path.moveTo(0, 0);
-      path.lineTo(containerWidth, 0);
-      path.lineTo(containerWidth, containerHeight - triangleHeight);
+      // Draw rounded rectangle without triangle
+      path.addRRect(RRect.fromRectAndCorners(
+        Rect.fromLTRB(0, 0, containerWidth, containerHeight - triangleHeight),
+        topLeft: Radius.circular(borderRadius),
+        topRight: Radius.circular(borderRadius),
+        bottomLeft: Radius.circular(borderRadius),
+        bottomRight: Radius.circular(borderRadius),
+      ));
 
-      // Triangle at the bottom center
-      path.lineTo((containerWidth / 2) + (triangleWidth / 2),
-          containerHeight - triangleHeight);
-      path.lineTo(containerWidth / 2, containerHeight); // Tip of the triangle
-      path.lineTo((containerWidth / 2) - (triangleWidth / 2),
-          containerHeight - triangleHeight);
+      // Draw triangle separately at the bottom
+      final trianglePath = Path();
+      trianglePath.moveTo(
+          (containerWidth / 2) - 10, containerHeight - triangleHeight);
+      trianglePath.lineTo(
+          containerWidth / 2, containerHeight); // Tip of the triangle
+      trianglePath.lineTo(
+          (containerWidth / 2) + 10, containerHeight - triangleHeight);
+      trianglePath.close();
 
-      // Continue the path around the rectangle
-      path.lineTo(0, containerHeight - triangleHeight);
-      path.close();
+      // Draw triangle
+      canvas.drawPath(trianglePath, paint);
+      canvas.drawPath(trianglePath, borderPaint);
     } else if (trianglePosition == TrianglePosition.left) {
-      // Draw the main rectangle of the chat bubble with a triangle on the left side
-      path.moveTo(triangleWidth, 0);
-      path.lineTo(containerWidth, 0);
-      path.lineTo(containerWidth, containerHeight);
-      path.lineTo(triangleWidth, containerHeight);
+      // Draw rounded rectangle without triangle
+      path.addRRect(RRect.fromRectAndCorners(
+        Rect.fromLTRB(triangleHeight, 0, containerWidth, containerHeight),
+        topLeft: Radius.circular(borderRadius),
+        topRight: Radius.circular(borderRadius),
+        bottomLeft: Radius.circular(borderRadius),
+        bottomRight: Radius.circular(borderRadius),
+      ));
 
-      // Triangle on the left side
-      path.lineTo(triangleWidth, (containerHeight / 2) + (triangleHeight / 2));
-      path.lineTo(0, containerHeight / 2); // Tip of the triangle
-      path.lineTo(triangleWidth, (containerHeight / 2) - (triangleHeight / 2));
+      // Draw triangle separately on the left
+      final trianglePath = Path();
+      trianglePath.moveTo(triangleHeight, (containerHeight / 2) - 10);
+      trianglePath.lineTo(0, containerHeight / 2); // Tip of the triangle
+      trianglePath.lineTo(triangleHeight, (containerHeight / 2) + 10);
+      trianglePath.close();
 
-      // Continue the path around the rectangle
-      path.lineTo(triangleWidth, 0);
-      path.close();
+      // Draw triangle
+      canvas.drawPath(trianglePath, paint);
+      canvas.drawPath(trianglePath, borderPaint);
     }
 
-    // Draw the background
+    // Draw the main bubble (rounded rectangle)
     canvas.drawPath(path, paint);
 
     // Draw the border with the specified stroke width
@@ -119,6 +125,6 @@ class ChatBubblePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }

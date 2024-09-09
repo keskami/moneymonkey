@@ -8,7 +8,6 @@ class GettingStartedHome extends StatelessWidget {
   GettingStartedHome({super.key});
   final GettingStartedController gettingStartedController =
       Get.put(GettingStartedController());
-
   void toPreviousPage() {
     int currentIndex = gettingStartedController.pageIndex.value;
     if (currentIndex - 1 < 0) {
@@ -49,8 +48,7 @@ class GettingStartedHome extends StatelessWidget {
                 ),
                 child: NextButton(),
               )
-            : const SizedBox
-                .shrink(), // Use SizedBox.shrink() to represent an empty widget
+            : const SizedBox.shrink(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
