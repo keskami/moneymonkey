@@ -25,9 +25,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -41,49 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCUs5eSHp6WDygKAdMZqo7wVG-04Cl9T5c',
-    appId: '1:449424125948:web:c1f60b03cdb1f4ffeb0c79',
-    messagingSenderId: '449424125948',
-    projectId: 'money-monkey-468ee',
-    authDomain: 'money-monkey-468ee.firebaseapp.com',
-    storageBucket: 'money-monkey-468ee.appspot.com',
-    measurementId: 'G-0HZ03S6KH7',
+    apiKey: 'AIzaSyBYLfoa7GG2oQ83vu7ELAMQdfIHuO-3olY',
+    appId: '1:921136508610:web:552393b9807ffaabbf555b',
+    messagingSenderId: '921136508610',
+    projectId: 'money-monkey-3bd68',
+    authDomain: 'money-monkey-3bd68.firebaseapp.com',
+    storageBucket: 'money-monkey-3bd68.appspot.com',
+    measurementId: 'G-7FTCRTBYFB',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDBvZtE28s72WsNqyQUYA73pvqhZoThclM',
-    appId: '1:449424125948:android:a9af980533a1ecd8eb0c79',
-    messagingSenderId: '449424125948',
-    projectId: 'money-monkey-468ee',
-    storageBucket: 'money-monkey-468ee.appspot.com',
+    apiKey: 'AIzaSyBMEuO6TrDPBHgkOdTyL-40ZWRFwzywuZc',
+    appId: '1:921136508610:android:50d2adc6531ea952bf555b',
+    messagingSenderId: '921136508610',
+    projectId: 'money-monkey-3bd68',
+    storageBucket: 'money-monkey-3bd68.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAhcepxhbjpQbI2EIss1VgQlkbdsDL_vAU',
-    appId: '1:449424125948:ios:f3f2f119695885beeb0c79',
-    messagingSenderId: '449424125948',
-    projectId: 'money-monkey-468ee',
-    storageBucket: 'money-monkey-468ee.appspot.com',
+    apiKey: 'AIzaSyCWwV4_HFqwLfDILD7iDzL49DFVl6ODS0Y',
+    appId: '1:921136508610:ios:4282f4f06b3ddf44bf555b',
+    messagingSenderId: '921136508610',
+    projectId: 'money-monkey-3bd68',
+    storageBucket: 'money-monkey-3bd68.appspot.com',
     iosBundleId: 'com.example.moneyMonkey',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAhcepxhbjpQbI2EIss1VgQlkbdsDL_vAU',
-    appId: '1:449424125948:ios:f3f2f119695885beeb0c79',
-    messagingSenderId: '449424125948',
-    projectId: 'money-monkey-468ee',
-    storageBucket: 'money-monkey-468ee.appspot.com',
-    iosBundleId: 'com.example.moneyMonkey',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCUs5eSHp6WDygKAdMZqo7wVG-04Cl9T5c',
-    appId: '1:449424125948:web:ec5b9df8fbbc38f3eb0c79',
-    messagingSenderId: '449424125948',
-    projectId: 'money-monkey-468ee',
-    authDomain: 'money-monkey-468ee.firebaseapp.com',
-    storageBucket: 'money-monkey-468ee.appspot.com',
-    measurementId: 'G-LS62TB6X7W',
   );
 
 }
