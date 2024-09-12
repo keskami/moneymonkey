@@ -9,15 +9,30 @@ class CustomOptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: const Color.fromARGB(255, 178, 182, 182),
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(
+            10,
+          ),
+        ),
+        color: const Color.fromARGB(
           255,
           242,
           243,
           243,
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 5,
+      ),
       child: childWidget,
     );
   }

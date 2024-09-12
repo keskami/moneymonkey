@@ -41,7 +41,7 @@ class GettingStartedHome extends StatelessWidget {
       }),
       floatingActionButton: Obx(
         () => gettingStartedController.pageIndex.value >= 1 &&
-                gettingStartedController.pageIndex.value <= 3
+                gettingStartedController.pageIndex.value <= 4
             ? Container(
                 margin: const EdgeInsets.only(
                   bottom: 50,
