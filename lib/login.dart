@@ -8,8 +8,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+
   // Index for create or login
   int _selectedIndex = 0;
+  // Text editing controllers
+  TextEditingController _createPasswordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+  TextEditingController _createEmailController = TextEditingController();
+  TextEditingController _loginPasswordController = TextEditingController(); 
+  TextEditingController _loginEmailController = TextEditingController(); 
+
+  @override
+  void dispose() {
+    _createPasswordController.dispose();
+    _loginPasswordController.dispose(); 
+    _loginEmailController.dispose();
+    _confirmPasswordController.dispose();
+    _createEmailController.dispose();
+    super.dispose();
+  }
+  
 
   // Switches Screen
   void _onButtonPressed(int index) {
@@ -22,6 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    
+    
 
     return SafeArea(
       child: Scaffold(
@@ -144,6 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             width: screenWidth * 0.8, // 80% of screen width
                                             height: screenHeight * 0.06, // 7% of screen height
                                             child: TextField(
+                                              controller: _createEmailController,
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                   borderRadius:
@@ -158,6 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             width: screenWidth * 0.8, // 80% of screen width
                                             height: screenHeight * 0.06, // 7% of screen height
                                             child: TextField(
+                                              controller: _createPasswordController,
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                   borderRadius:
@@ -172,6 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             width: screenWidth * 0.8, // 80% of screen width
                                             height: screenHeight * 0.06, // 7% of screen height
                                             child: TextField(
+                                              controller: _confirmPasswordController,
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                   borderRadius:
@@ -189,6 +213,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: ElevatedButton(
                                                   onPressed: () {
                                                     print("clicked");
+                                                    print(_createEmailController.text);
+                                                    print(_createPasswordController.text);
+                                                    print(_confirmPasswordController.text);
+
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
@@ -280,6 +308,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           width: screenWidth * 0.8, // 80% of screen width
                                           height: screenHeight * 0.07, // 7% of screen height
                                           child: TextField(
+                                            controller: _loginEmailController,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius:
@@ -295,6 +324,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           width: screenWidth * 0.8, // 80% of screen width
                                           height: screenHeight * 0.07, // 7% of screen height
                                           child: TextField(
+                                            controller: _loginPasswordController,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius:
@@ -313,6 +343,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                               child: ElevatedButton(
                                                 onPressed: () {
                                                   print("clicked");
+                                                  print(_loginPasswordController.text);
+                                                  print(_loginEmailController.text);
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor: const Color.fromRGBO(
@@ -398,3 +430,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
