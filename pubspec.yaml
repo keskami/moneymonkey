@@ -30,8 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^5.4.0
-  firebase_core: ^3.4.0
+  cloud_firestore: ^4.17.5  # Downgrade to this version
+  firebase_core: ^2.18.0
+  firebase_auth: ^4.0.0  # Ensure compatibility with firebase_core ^2.18.0   
 
 
 
