@@ -1,13 +1,71 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+
 class _LoginScreenState extends State<LoginScreen> {
+
+
+Future<void> createUserWithProfile({
+  required String userId,
+  required Map<String, dynamic> userData,
+  required Map<String, dynamic> profileData,
+}) async {
+  try {
+    userData['Profile'] = profileData;
+
+
+    DocumentReference userDoc = FirebaseFirestore.instance.collection('Users').doc(userId);
+
+
+    await userDoc.set(userData);
+    print("User and profile data added successfully for userID: $userId");
+
+
+  } catch (e) {
+    print("Error creating user and profile: $e");
+  }
+}
+
+
+void createNewUser() {
+  Map<String, dynamic> userData = {
+    "Email": _createEmailController.text,
+    "Age": 20,
+    "Knowledge Level": "Intermediate",
+    "Learning Goal Per Day": "1 hour",
+    "Starting Level": "Beginner"
+  };
+
+  Map<String, dynamic> profileData = {
+    "Full Name": "Joshua Feenberg",
+    "Username": "Josh123",
+    "Number of Followers": 150,
+    "Following": 100,
+    "Top Achievements": ["Completed 100 lessons", "Top 1% in knowledge"],
+    "Streak": 10,
+    "Total Profit": 5000.00,
+    "Portfolio Score": 90.5,
+    "Average Monthly Growth": 7.5
+  };
+
+
+  // Use a unique user ID
+  String _userID = '100';
+  createUserWithProfile(userId: _userID, userData: userData, profileData: profileData);
+}
+
+
+
+
 
 
   // Index for create or login
@@ -16,19 +74,21 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _createPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _createEmailController = TextEditingController();
-  TextEditingController _loginPasswordController = TextEditingController(); 
-  TextEditingController _loginEmailController = TextEditingController(); 
+  TextEditingController _loginPasswordController = TextEditingController();
+  TextEditingController _loginEmailController = TextEditingController();
+
 
   @override
   void dispose() {
     _createPasswordController.dispose();
-    _loginPasswordController.dispose(); 
+    _loginPasswordController.dispose();
     _loginEmailController.dispose();
     _confirmPasswordController.dispose();
     _createEmailController.dispose();
     super.dispose();
   }
-  
+ 
+
 
   // Switches Screen
   void _onButtonPressed(int index) {
@@ -37,19 +97,18 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    
-    
+   
+   
+
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(133, 220, 64, 1),
-          toolbarHeight: screenHeight * 0.05, // 5% of screen height
-        ),
+    
         body: SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
@@ -76,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.topCenter,
                       ),
                       Positioned(
-                        top: screenHeight * 0.25, // 30% of screen height
+                        top: screenHeight * 0.22, // 30% of screen height
                         left: screenWidth * 0.025, // 2% of screen width
                         right: screenWidth * 0.025, // 2% of screen width
                         bottom: screenHeight * -1, // 5% of screen height
@@ -212,10 +271,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 height: screenHeight * 0.07, // 7% of screen height
                                                 child: ElevatedButton(
                                                   onPressed: () {
-                                                    print("clicked");
-                                                    print(_createEmailController.text);
-                                                    print(_createPasswordController.text);
-                                                    print(_confirmPasswordController.text);
+                                                    createNewUser();
+                                                   
+                                                   
+                                             
+
 
                                                   },
                                                   style: ElevatedButton.styleFrom(
@@ -416,18 +476,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-          
+         
           ),
-          
+         
         ),
-         bottomNavigationBar: BottomAppBar(
-          color: Color.fromRGBO(133, 220, 64, 1),
-          height: screenHeight * .05,
-          
-        ),
-       
+         
       ),
     );
   }
 }
+
+
+
+
 
