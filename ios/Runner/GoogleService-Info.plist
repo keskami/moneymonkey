@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCWwV4_HFqwLfDILD7iDzL49DFVl6ODS0Y</string>
+	<string>AIzaSyDIMPvOB3MypmDch70fNsroXmWGh3aMMw0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>921136508610</string>
+	<string>851718603804</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.moneyMonkey</string>
 	<key>PROJECT_ID</key>
-	<string>money-monkey-3bd68</string>
+	<string>money-monkey-f4d73</string>
 	<key>STORAGE_BUCKET</key>
-	<string>money-monkey-3bd68.appspot.com</string>
+	<string>money-monkey-f4d73.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:921136508610:ios:4282f4f06b3ddf44bf555b</string>
+	<string>1:851718603804:ios:93ee6341a4d42da0458bd9</string>
+	<key>DATABASE_URL</key>
+	<string>https://money-monkey-f4d73-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>
