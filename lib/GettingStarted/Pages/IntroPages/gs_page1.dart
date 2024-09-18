@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Widgets/custom_button.dart';
-import 'package:money_monkey/GettingStarted/controller/gs_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class GettingStartedPage1 extends StatefulWidget {
@@ -37,13 +37,13 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
               height: 17,
             ),
             Image.asset(
-              "assets/images/gs_home_title.png",
+              "assets/gs_home_title.png",
             ),
             const SizedBox(
               height: 45,
             ),
             Image.asset(
-              "assets/images/getting_started_home.png",
+              "assets/getting_started_home.png",
               errorBuilder: (context, error, stackTrace) => const SizedBox(
                 height: 230,
                 width: 367,
