@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/nothing.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       String userId = userCredential.user!.uid;
-      addUserDetails(userId);
+      addUserDetails(userId, _createEmailController.text.trim());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -32,14 +33,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> addUserDetails(String userId) async {
+  Future<void> addUserDetails(String userId, String email) async {
     final userDocRef =
         FirebaseFirestore.instance.collection('Users').doc(userId);
 
     //
     await userDocRef.set({
       'User ID': userId,
-      'Email': _createEmailController.text.trim(),
+      'Email': email,
       'Age': 0,
       'Knowledge Level': 0,
       'Learning Goal Per Day': 0
@@ -76,6 +77,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
     
   }
+
+ Future googleAuth() async{
+
+  GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  AuthCredential credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken
+  );
+  UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+  String userId = userCredential.user?.uid ?? '';
+  String email = userCredential.user?.email ?? '';
+  if (email.isNotEmpty){
+  addUserDetails(userId, email);
+  }
+  
+ }
 
   // Index for create or login
   int _selectedIndex = 0;
@@ -373,7 +393,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image2.png"),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    googleAuth();
+                                                  },
                                                 ),
                                               ),
                                             ],
@@ -510,7 +532,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image.png"),
-                                                  onPressed: () {},
+                                                  onPressed: (
+
+                                                  ) {},
                                                 ),
                                               ),
                                               SizedBox(
@@ -521,7 +545,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image2.png"),
-                                                  onPressed: () {},
+                                                  onPressed: (
+                                                    
+                                                  ) {
+                                                    googleAuth();
+                                                  },
                                                 ),
                                               ),
                                             ],

@@ -32,7 +32,9 @@ dependencies:
     sdk: flutter
   cloud_firestore: ^5.4.2  # Downgrade to this version
   firebase_core: ^3.5.0
-  firebase_auth: ^5.3.0   # Ensure compatibility with firebase_core ^2.18.0   
+  firebase_auth: ^5.3.0
+  google_sign_in: ^6.1.5
+     
 
 
 
