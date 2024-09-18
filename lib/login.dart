@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ));
         }
       } catch (e) {
-        print(e);
+       
       }
     }
   }
@@ -85,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> logIn() async {
   try {
-    print("HHHHHHHHHHHHHHHHHHHHHHh");
     UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: _loginEmailController.text.trim(),
       password: _loginPasswordController.text.trim(),
@@ -387,7 +386,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   0.07, // 7% of screen height
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  print("here");
+                                                  
                                                   createNewUser();
                                                 },
                                                 style: ElevatedButton.styleFrom(
