@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">921136508610</string>
+    <string name="google_api_key" translatable="false">AIzaSyBMEuO6TrDPBHgkOdTyL-40ZWRFwzywuZc</string>
+    <string name="google_app_id" translatable="false">1:921136508610:android:50d2adc6531ea952bf555b</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBMEuO6TrDPBHgkOdTyL-40ZWRFwzywuZc</string>
+    <string name="google_storage_bucket" translatable="false">money-monkey-3bd68.appspot.com</string>
+    <string name="project_id" translatable="false">money-monkey-3bd68</string>
+</resources>
