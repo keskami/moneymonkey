@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_monkey/nothing.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -32,29 +33,49 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> addUserDetails(String userId) async {
-  final userDocRef = FirebaseFirestore.instance.collection('Users').doc(userId);
+    final userDocRef =
+        FirebaseFirestore.instance.collection('Users').doc(userId);
 
-  // 
-  await userDocRef.set({
-    'User ID': userId,
-    'Email': _createEmailController.text.trim(),
-    'Age': 0,
-    'Knowledge Level': 0,
-    'Learning Goal Per Day': 0
-  });
+    //
+    await userDocRef.set({
+      'User ID': userId,
+      'Email': _createEmailController.text.trim(),
+      'Age': 0,
+      'Knowledge Level': 0,
+      'Learning Goal Per Day': 0
+    });
 
-  
-  await userDocRef.collection('profile').doc('userProfile').set({
-    'Full Name': 'Your Name Here',
-    'Username': 'Your Name Here',
-    'Number of Followers': 0,
-    'Following': 0,
-    'Top Achievements': 0,
-    'Streak': 0,
-    'Total Profit': 0,
-    'Average Monthly Growth': 0,
-  });
-}
+    await userDocRef.collection('profile').doc('userProfile').set({
+      'Full Name': 'Your Name Here',
+      'Username': 'Your Name Here',
+      'Number of Followers': 0,
+      'Following': 0,
+      'Top Achievements': 0,
+      'Streak': 0,
+      'Total Profit': 0,
+      'Average Monthly Growth': 0,
+    });
+  }
+
+  Future logIn() async {
+   
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _loginEmailController.text.trim(),
+        password: _loginPasswordController.text.trim(),
+      );
+       String userId = userCredential.user?.uid ?? '';
+
+      if (userId.isNotEmpty) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserIdScreen(),
+          ),
+        );
+      } 
+
+    
+  }
 
   // Index for create or login
   int _selectedIndex = 0;
@@ -434,11 +455,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   0.07, // 7% of screen height
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  print("clicked");
-                                                  print(_loginPasswordController
-                                                      .text);
-                                                  print(_loginEmailController
-                                                      .text);
+                                                  print("clicked Login");
+                                                  logIn();
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor:
