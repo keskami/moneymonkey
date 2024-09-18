@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_monkey/nothing.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,8 +12,159 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  Future<void> createNewUser() async {
+    if (_createPasswordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Passwords Do Not Match"),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.red,
+      ));
+    } else {
+      try {
+        UserCredential userCredential =
+            await _auth.createUserWithEmailAndPassword(
+          email: _createEmailController.text,
+          password: _createPasswordController.text,
+        );
+
+        String userId = userCredential.user!.uid;
+        addUserDetails(userId, _createEmailController.text.trim());
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'invalid-email') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("The email address is not valid."),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        } else if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text("Please Enter A Password with at least 6 characters."),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The account already exists for that email.'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        }
+      } catch (e) {}
+    }
+  }
+
+  Future<void> addUserDetails(String userId, String email) async {
+    final userDocRef =
+        FirebaseFirestore.instance.collection('Users').doc(userId);
+
+    //
+    await userDocRef.set({
+      'User ID': userId,
+      'Email': email,
+      'Age': 0,
+      'Knowledge Level': 0,
+      'Learning Goal Per Day': 0
+    });
+
+    await userDocRef.collection('profile').doc('userProfile').set({
+      'Full Name': 'Your Name Here',
+      'Username': 'Your Name Here',
+      'Number of Followers': 0,
+      'Following': 0,
+      'Top Achievements': 0,
+      'Streak': 0,
+      'Total Profit': 0,
+      'Average Monthly Growth': 0,
+    });
+  }
+
+  Future<void> logIn() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _loginEmailController.text.trim(),
+        password: _loginPasswordController.text.trim(),
+      );
+      String userId = userCredential.user?.uid ?? '';
+      if (userId.isNotEmpty) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserIdScreen(),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Invalid Email'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ));
+      } else if (e.code == 'invalid-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Incorrect Email or Password'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.code),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
+  }
+
+  Future googleAuth() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    String userId = userCredential.user?.uid ?? '';
+    String email = userCredential.user?.email ?? '';
+    if (email.isNotEmpty) {
+      addUserDetails(userId, email);
+    }
+  }
+
+  Future appleAuth() async {
+    final appleProvider = AppleAuthProvider();
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithProvider(appleProvider);
+    String userId = user.user!.uid;
+    String? email = user.user?.email ?? "";
+    if (email.isNotEmpty) {
+      addUserDetails(userId, email);
+    }
+  }
+
   // Index for create or login
   int _selectedIndex = 0;
+  // Text editing controllers
+  TextEditingController _createPasswordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+  TextEditingController _createEmailController = TextEditingController();
+  TextEditingController _loginPasswordController = TextEditingController();
+  TextEditingController _loginEmailController = TextEditingController();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    _createPasswordController.dispose();
+    _loginPasswordController.dispose();
+    _loginEmailController.dispose();
+    _confirmPasswordController.dispose();
+    _createEmailController.dispose();
+    super.dispose();
+  }
 
   // Switches Screen
   void _onButtonPressed(int index) {
@@ -25,10 +180,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(133, 220, 64, 1),
-          toolbarHeight: screenHeight * 0.05, // 5% of screen height
-        ),
         body: SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
@@ -55,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.topCenter,
                       ),
                       Positioned(
-                        top: screenHeight * 0.25, // 30% of screen height
+                        top: screenHeight * 0.22, // 30% of screen height
                         left: screenWidth * 0.025, // 2% of screen width
                         right: screenWidth * 0.025, // 2% of screen width
                         bottom: screenHeight * -1, // 5% of screen height
@@ -161,6 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: screenHeight *
                                               0.06, // 7% of screen height
                                           child: TextField(
+                                            controller: _createEmailController,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius
@@ -180,6 +332,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: screenHeight *
                                               0.06, // 7% of screen height
                                           child: TextField(
+                                            controller:
+                                                _createPasswordController,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius
@@ -199,6 +353,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: screenHeight *
                                               0.06, // 7% of screen height
                                           child: TextField(
+                                            controller:
+                                                _confirmPasswordController,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius
@@ -220,7 +376,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   0.07, // 7% of screen height
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  print("clicked");
+                                                  createNewUser();
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor:
@@ -274,7 +430,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image.png"),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    appleAuth();
+                                                  },
                                                 ),
                                               ),
                                               SizedBox(
@@ -285,7 +443,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image2.png"),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    googleAuth();
+                                                  },
                                                 ),
                                               ),
                                             ],
@@ -324,6 +484,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: screenHeight *
                                               0.07, // 7% of screen height
                                           child: TextField(
+                                            controller: _loginEmailController,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius
@@ -343,6 +504,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: screenHeight *
                                               0.07, // 7% of screen height
                                           child: TextField(
+                                            controller:
+                                                _loginPasswordController,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius
@@ -364,7 +527,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   0.07, // 7% of screen height
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  print("clicked");
+                                                  logIn();
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor:
@@ -418,7 +581,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image.png"),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    appleAuth();
+                                                  },
                                                 ),
                                               ),
                                               SizedBox(
@@ -429,7 +594,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image2.png"),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    googleAuth();
+                                                  },
                                                 ),
                                               ),
                                             ],
@@ -447,10 +614,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Color.fromRGBO(133, 220, 64, 1),
-          height: screenHeight * .05,
         ),
       ),
     );
