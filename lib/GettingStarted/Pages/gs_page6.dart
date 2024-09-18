@@ -9,7 +9,7 @@ class GettingStartedPage6 extends StatelessWidget {
   });
 
   final List<Widget> knowledgeOptions = [
-    const SizedBox(
+    SizedBox(
       height: 50, // Match height with multi-line text
       child: Center(
         child: const Text(
