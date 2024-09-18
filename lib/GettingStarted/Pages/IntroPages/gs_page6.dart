@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_home.dart';
 import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Widgets/knowledge_bar.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
@@ -8,52 +9,68 @@ class GettingStartedPage6 extends StatelessWidget {
     super.key,
   });
 
-  final List<Widget> knowledgeOptions = [
-    SizedBox(
-      height: 50, // Match height with multi-line text
-      child: Center(
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> knowledgeOptions = [
+      SizedBox(
+        height: 60, // Match height with multi-line text
+        child: Center(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StartFreshHome(),
+                  ));
+            },
+            child: const Text(
+              "I'm new",
+              style: TextStyle(
+                fontSize: 23,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+      GestureDetector(
         child: const Text(
-          "I'm new",
+          "I have a basic\nunderstanding",
           style: TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.bold,
           ),
-          textAlign: TextAlign.center,
         ),
       ),
-    ),
-    const Text(
-      "I have a basic\nunderstanding",
-      style: TextStyle(
-        fontSize: 23,
-        fontWeight: FontWeight.bold,
+      GestureDetector(
+        child: const Text(
+          "I am moderately\nknowledgeable",
+          style: TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-    ),
-    const Text(
-      "I am moderately\nknowledgeable",
-      style: TextStyle(
-        fontSize: 23,
-        fontWeight: FontWeight.bold,
+      GestureDetector(
+        child: const Text(
+          "I have a good\nunderstanding",
+          style: TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-    ),
-    const Text(
-      "I have a good\nunderstanding",
-      style: TextStyle(
-        fontSize: 23,
-        fontWeight: FontWeight.bold,
+      GestureDetector(
+        child: const Text(
+          "I am very\nknowledgeable",
+          style: TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-    ),
-    const Text(
-      "I am very\nknowledgeable",
-      style: TextStyle(
-        fontSize: 23,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -64,7 +81,7 @@ class GettingStartedPage6 extends StatelessWidget {
             Row(
               children: [
                 Image.asset(
-                  "assets/money_monkey.png",
+                  "assets/images/money_monkey.png",
                   height: 145,
                   errorBuilder: (context, error, stackTrace) => const SizedBox(
                     height: 145,

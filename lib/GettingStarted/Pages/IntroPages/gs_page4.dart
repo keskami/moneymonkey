@@ -46,7 +46,7 @@ class GettingStartedPage4 extends StatelessWidget {
               borderWidth: 1,
             ),
             Image.asset(
-              "assets/money_monkey.png",
+              "assets/images/money_monkey.png",
               height: 225,
             ),
             const SizedBox(

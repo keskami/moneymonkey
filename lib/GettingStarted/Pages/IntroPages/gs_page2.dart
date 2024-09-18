@@ -31,7 +31,7 @@ class GettingStartedPage2 extends StatelessWidget {
           const SizedBox(
             height: 25,
           ),
-          Image.asset("assets/money_monkey.png"),
+          Image.asset("assets/images/money_monkey.png"),
           const SizedBox(
             height: 25,
           ),

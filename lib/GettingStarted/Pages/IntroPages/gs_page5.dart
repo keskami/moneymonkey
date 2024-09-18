@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/GettingStarted/Pages/IntroPages/gs_page1.dart';
 import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 
 class GettingStartedPage5 extends StatelessWidget {
   const GettingStartedPage5({super.key});
-
   @override
   Widget build(BuildContext context) {
+    void submitAge(int val) {
+      gettingStartedController.age.value = val;
+    }
+
     return Container(
       color: Colors.white,
       child: Center(
@@ -19,7 +23,7 @@ class GettingStartedPage5 extends StatelessWidget {
             Row(
               children: [
                 Image.asset(
-                  "assets/money_monkey.png",
+                  "assets/images/money_monkey.png",
                   height: 145,
                   errorBuilder: (context, error, stackTrace) => const SizedBox(
                     height: 145,
@@ -46,22 +50,27 @@ class GettingStartedPage5 extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const CustomOptionTile(
+            CustomOptionTile(
               childWidget: TextField(
                 autofocus: true,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Age",
-                  hintStyle: TextStyle(
+                  hintText: gettingStartedController.age.value == 0
+                      ? "Age"
+                      : gettingStartedController.age.value.toString(),
+                  hintStyle: const TextStyle(
                     fontSize: 23,
                   ),
                 ),
-                keyboardType: TextInputType.numberWithOptions(),
-                style: TextStyle(
+                keyboardType: const TextInputType.numberWithOptions(),
+                style: const TextStyle(
                   color: Color.fromARGB(255, 178, 182, 182),
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
+                onSubmitted: (value) {
+                  submitAge(int.parse(value));
+                },
               ),
             )
           ],

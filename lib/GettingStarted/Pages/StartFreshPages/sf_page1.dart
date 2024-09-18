@@ -18,7 +18,7 @@ class StartFreshPage1 extends StatelessWidget {
             Row(
               children: [
                 Image.asset(
-                  "assets/money_monkey.png",
+                  "assets/images/money_monkey.png",
                   height: 145,
                   errorBuilder: (context, error, stackTrace) => const SizedBox(
                     height: 145,

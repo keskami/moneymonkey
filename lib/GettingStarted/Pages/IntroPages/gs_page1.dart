@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Widgets/custom_button.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
+import 'package:money_monkey/login.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class GettingStartedPage1 extends StatefulWidget {
@@ -14,8 +15,6 @@ class GettingStartedPage1 extends StatefulWidget {
 
 GettingStartedController gettingStartedController =
     Get.put(GettingStartedController());
-void
-    toLoginPage() {} //Needs to be integrated once Login Page is shifted to main and replace the toNextPage fn
 void toGettingStarted() {
   gettingStartedController.pageIndex.value = 1;
 }
@@ -25,6 +24,14 @@ void toNextPage() {
 }
 
 class GettingStartedPage1State extends State<GettingStartedPage1> {
+  void toLoginPage() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ));
+  } //Needs to be integrated once Login Page is shifted to main and replace the toNextPage fn
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,13 +44,13 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
               height: 17,
             ),
             Image.asset(
-              "assets/gs_home_title.png",
+              "assets/images/gs_home_title.png",
             ),
             const SizedBox(
               height: 45,
             ),
             Image.asset(
-              "assets/getting_started_home.png",
+              "assets/images/getting_started_home.png",
               errorBuilder: (context, error, stackTrace) => const SizedBox(
                 height: 230,
                 width: 367,
@@ -86,7 +93,7 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
               text: 'Log In',
               color: LightTheme().primaryBackgroundColor,
               isBordered: true,
-              toNextPage: toNextPage,
+              toNextPage: toLoginPage,
             ),
           ],
         ),

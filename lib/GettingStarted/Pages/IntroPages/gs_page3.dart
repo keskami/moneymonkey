@@ -31,7 +31,7 @@ class GettingStartedPage3 extends StatelessWidget {
           const SizedBox(
             height: 25,
           ),
-          Image.asset("assets/gs_blackboard.png"),
+          Image.asset("assets/images/gs_blackboard.png"),
           const SizedBox(
             height: 25,
           ),

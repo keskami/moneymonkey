@@ -26,7 +26,7 @@ class NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onNextClick,
-      child: Image.asset("assets/nextButton.png"),
+      child: Image.asset("assets/images/nextButton.png"),
     );
   }
 }
