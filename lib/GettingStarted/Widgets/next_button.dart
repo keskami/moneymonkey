@@ -4,7 +4,7 @@ import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.da
 import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 
 class NextButton extends StatelessWidget {
-  NextButton({
+  const NextButton({
     super.key,
     required this.pages,
   });

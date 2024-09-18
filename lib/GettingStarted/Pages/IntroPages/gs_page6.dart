@@ -5,7 +5,7 @@ import 'package:money_monkey/GettingStarted/Widgets/knowledge_bar.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 
 class GettingStartedPage6 extends StatelessWidget {
-  GettingStartedPage6({
+  const GettingStartedPage6({
     super.key,
   });
 

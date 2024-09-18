@@ -37,13 +37,13 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
               height: 17,
             ),
             Image.asset(
-              "assets/gs_home_title.png",
+              "assets/images/gs_home_title.png",
             ),
             const SizedBox(
               height: 45,
             ),
             Image.asset(
-              "assets/getting_started_home.png",
+              "assets/images/getting_started_home.png",
               errorBuilder: (context, error, stackTrace) => const SizedBox(
                 height: 230,
                 width: 367,

@@ -50,7 +50,7 @@ class GettingStartedHome extends StatelessWidget {
                 margin: const EdgeInsets.only(
                   bottom: 50,
                 ),
-                child: NextButton(
+                child: const NextButton(
                   pages: 0,
                 ),
               )
