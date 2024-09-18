@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
-import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 
-class GettingStartedPage5 extends StatelessWidget {
-  const GettingStartedPage5({super.key});
+class StartFreshPage1 extends StatelessWidget {
+  const StartFreshPage1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,7 @@ class GettingStartedPage5 extends StatelessWidget {
                   borderRadius: 12,
                   borderWidth: 1,
                   childWidget: Text(
-                    "How old are you?",
+                    "Okay, we'll start fresh!",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -46,24 +45,6 @@ class GettingStartedPage5 extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const CustomOptionTile(
-              childWidget: TextField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Age",
-                  hintStyle: TextStyle(
-                    fontSize: 23,
-                  ),
-                ),
-                keyboardType: TextInputType.numberWithOptions(),
-                style: TextStyle(
-                  color: Color.fromARGB(255, 178, 182, 182),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
           ],
         ),
       ),

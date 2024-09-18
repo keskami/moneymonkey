@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Widgets/custom_button.dart';
-import 'package:money_monkey/GettingStarted/controller/gs_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class GettingStartedPage1 extends StatefulWidget {
