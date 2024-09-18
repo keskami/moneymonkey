@@ -13,23 +13,48 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   Future<void> createNewUser() async {
-    try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: _createEmailController.text,
-        password: _createPasswordController.text,
-      );
+    if (_createPasswordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Passwords Do Not Match"),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.red,
+      ));
+    } else {
+      try {
+        UserCredential userCredential =
+            await _auth.createUserWithEmailAndPassword(
+          email: _createEmailController.text,
+          password: _createPasswordController.text,
+        );
 
-      String userId = userCredential.user!.uid;
-      addUserDetails(userId, _createEmailController.text.trim());
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        String userId = userCredential.user!.uid;
+        addUserDetails(userId, _createEmailController.text.trim());
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'invalid-email') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("The email address is not valid."),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        } else if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text("Please Enter A Password with at least 6 characters."),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text('The account already exists for that email.'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        }
+      } catch (e) {
+        print(e);
       }
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -58,44 +83,79 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  Future logIn() async {
-   
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _loginEmailController.text.trim(),
-        password: _loginPasswordController.text.trim(),
+  Future<void> logIn() async {
+  try {
+    print("HHHHHHHHHHHHHHHHHHHHHHh");
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _loginEmailController.text.trim(),
+      password: _loginPasswordController.text.trim(),
+    );
+    String userId = userCredential.user?.uid ?? '';
+    if (userId.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserIdScreen(), 
+        ),
       );
-       String userId = userCredential.user?.uid ?? '';
+    }
+  } on FirebaseAuthException catch (e) {
+    if(e.code == 'invalid-email'){
+       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text('Invalid Email'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+    }else if(e.code == 'invalid-credential'){
+       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text('Incorrect Email or Password'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
 
-      if (userId.isNotEmpty) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserIdScreen(),
-          ),
-        );
-      } 
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text(e.code),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+
+    }
 
     
+  } 
+}
+
+
+  Future googleAuth() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    String userId = userCredential.user?.uid ?? '';
+    String email = userCredential.user?.email ?? '';
+    if (email.isNotEmpty) {
+      addUserDetails(userId, email);
+    }
   }
 
- Future googleAuth() async{
-
-  GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-  AuthCredential credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken
-  );
-  UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-  String userId = userCredential.user?.uid ?? '';
-  String email = userCredential.user?.email ?? '';
-  if (email.isNotEmpty){
-  addUserDetails(userId, email);
+  Future appleAuth() async {
+    final appleProvider = AppleAuthProvider();
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithProvider(appleProvider);
+    String userId = user.user!.uid;
+    String? email = user.user?.email ?? "";
+    if (email.isNotEmpty) {
+      addUserDetails(userId, email);
+    }
   }
-  
- }
 
   // Index for create or login
   int _selectedIndex = 0;
@@ -382,7 +442,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image.png"),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    appleAuth();
+                                                  },
                                                 ),
                                               ),
                                               SizedBox(
@@ -477,7 +539,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   0.07, // 7% of screen height
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  print("clicked Login");
+                                                  
                                                   logIn();
                                                 },
                                                 style: ElevatedButton.styleFrom(
@@ -532,9 +594,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image.png"),
-                                                  onPressed: (
-
-                                                  ) {},
+                                                  onPressed: () {
+                                                    appleAuth();
+                                                  },
                                                 ),
                                               ),
                                               SizedBox(
@@ -545,9 +607,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 child: IconButton(
                                                   icon: Image.asset(
                                                       "assets/images/image2.png"),
-                                                  onPressed: (
-                                                    
-                                                  ) {
+                                                  onPressed: () {
                                                     googleAuth();
                                                   },
                                                 ),
