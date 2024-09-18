@@ -23,6 +23,7 @@ class GettingStartedPage4 extends StatelessWidget {
                       text: "Just ",
                       style: TextStyle(
                         fontSize: 23,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     TextSpan(
@@ -35,6 +36,7 @@ class GettingStartedPage4 extends StatelessWidget {
                       text: " before we start your first Lesson!",
                       style: TextStyle(
                         fontSize: 23,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
-import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class StartFreshHome extends StatelessWidget {
