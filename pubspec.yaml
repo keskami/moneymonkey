@@ -68,6 +68,9 @@ flutter:
     - assets/money_monkey.png
     - assets/gs_blackboard.png
     - assets/nextButton.png
+    - assets/images/monkey.png
+    - assets/images/image.png
+    - assets/images/image2.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
