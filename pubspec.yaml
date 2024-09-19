@@ -75,6 +75,11 @@ flutter:
     - assets/images/monkey.png
     - assets/images/image.png
     - assets/images/image2.png
+    - assets/images/rework.png
+    - assets/images/blue_icon.png
+    - assets/images/magnifying_glass.png
+    - assets/images/one.png
+    - assets/images/watch.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
