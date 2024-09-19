@@ -34,69 +34,66 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 17,
-            ),
-            Image.asset(
-              "assets/images/gs_home_title.png",
-            ),
-            const SizedBox(
-              height: 45,
-            ),
-            Image.asset(
-              "assets/images/getting_started_home.png",
-              errorBuilder: (context, error, stackTrace) => const SizedBox(
-                height: 230,
-                width: 367,
-                child: Center(
-                  child: Text('Unable to fetch Image.'),
-                ),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 17,
+          ),
+          Image.asset(
+            "assets/images/gs_home_title.png",
+          ),
+          const SizedBox(
+            height: 45,
+          ),
+          Image.asset(
+            "assets/images/getting_started_home.png",
+            errorBuilder: (context, error, stackTrace) => const SizedBox(
+              height: 230,
+              width: 367,
+              child: Center(
+                child: Text('Unable to fetch Image.'),
               ),
             ),
-            const SizedBox(
-              height: 20,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Financial Literacy,\nlasts a lifetime",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.fredoka(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
             ),
-            Text(
-              "Financial Literacy,\nlasts a lifetime",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.fredoka(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          Text(
+            "Don’t settle for financial confusion\njoin the Money Monkey Revolution",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.baloo2(
+              fontSize: 16,
             ),
-            const SizedBox(
-              height: 24,
-            ),
-            Text(
-              "Don’t settle for financial confusion\njoin the Money Monkey Revolution",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.baloo2(
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(
-              height: 64,
-            ),
-            Custombutton(
-              text: 'Get Started',
-              color: LightTheme().primaryBlue,
-              isBordered: false,
-              toNextPage: toGettingStarted,
-            ),
-            Custombutton(
-              text: 'Log In',
-              color: LightTheme().primaryBackgroundColor,
-              isBordered: true,
-              toNextPage: toLoginPage,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 64,
+          ),
+          Custombutton(
+            text: 'Get Started',
+            color: LightTheme().primaryBlue,
+            isBordered: false,
+            toNextPage: toGettingStarted,
+          ),
+          Custombutton(
+            text: 'Log In',
+            color: LightTheme().primaryBackgroundColor,
+            isBordered: true,
+            toNextPage: toLoginPage,
+          ),
+        ],
       ),
     );
   }

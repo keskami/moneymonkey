@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
 
-class StartFreshPage1 extends StatelessWidget {
-  const StartFreshPage1({super.key});
+class StartFreshPage4 extends StatelessWidget {
+  const StartFreshPage4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class StartFreshPage1 extends StatelessWidget {
                 borderRadius: 12,
                 borderWidth: 1,
                 childWidget: Text(
-                  "Okay, we'll start fresh!",
+                  "Here's what you can\nachieve in 3 months!",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
