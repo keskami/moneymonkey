@@ -25,9 +25,9 @@ class ChatBubbleContainer extends StatelessWidget {
       child: Container(
         padding: trianglePosition == TrianglePosition.bottom
             ? const EdgeInsets.fromLTRB(
-                15,
                 10,
-                15,
+                10,
+                10,
                 20,
               )
             : const EdgeInsets.fromLTRB(
@@ -106,9 +106,9 @@ class ChatBubblePainter extends CustomPainter {
 
       // Draw triangle separately on the left
       final trianglePath = Path();
-      trianglePath.moveTo(triangleHeight, (containerHeight / 2) - 10);
-      trianglePath.lineTo(0, containerHeight / 2); // Tip of the triangle
-      trianglePath.lineTo(triangleHeight, (containerHeight / 2) + 10);
+      trianglePath.moveTo(triangleHeight, (containerHeight / 2) - 5);
+      trianglePath.lineTo(0, containerHeight / 2 + 7); // Tip of the triangle
+      trianglePath.lineTo(triangleHeight, (containerHeight / 2) + 7);
       trianglePath.close();
 
       // Draw triangle

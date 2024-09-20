@@ -4,6 +4,9 @@ import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_page1.dart'
 import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_page2.dart';
 import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_page3.dart';
 import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_page4.dart';
+import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_page5.dart';
+import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_page6.dart';
+import 'package:money_monkey/GettingStarted/Pages/StartFreshPages/sf_page7.dart';
 
 class StartFreshController extends GetxController {
   RxInt pageIndex = 0.obs;
@@ -12,5 +15,8 @@ class StartFreshController extends GetxController {
     const StartFreshPage2(),
     StartFreshPage3(),
     const StartFreshPage4(),
+    const StartFreshPage5(),
+    const StartFreshPage6(),
+    const StartFreshPage7(),
   ];
 }

@@ -35,8 +35,7 @@ class StartFreshHome extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 21),
-            // Row for header
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment:
                   MainAxisAlignment.start, // Distribute space between widgets
@@ -48,10 +47,12 @@ class StartFreshHome extends StatelessWidget {
                     size: 37,
                   ),
                 ),
-                const Expanded(
-                    child: CustomProgressBar(
-                        progress:
-                            10)), // Make progress bar expand to fit available space
+                Expanded(
+                  child: CustomProgressBar(),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
               ],
             ),
             Expanded(

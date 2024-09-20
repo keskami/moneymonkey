@@ -57,7 +57,7 @@ class StartFreshPage4 extends StatelessWidget {
                   TextSpan(
                     text: "Master Financial Habits",
                     style: GoogleFonts.fredoka().copyWith(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
@@ -66,7 +66,7 @@ class StartFreshPage4 extends StatelessWidget {
                     text:
                         "\nBudgeting tools, savings plans,\nand expense tracking.",
                     style: GoogleFonts.fredoka().copyWith(
-                      fontSize: 15,
+                      fontSize: 16,
                       color: Colors.black,
                     ),
                   ),
@@ -87,7 +87,7 @@ class StartFreshPage4 extends StatelessWidget {
                   TextSpan(
                     text: "Build your Financial Blueprint",
                     style: GoogleFonts.fredoka().copyWith(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
@@ -96,7 +96,7 @@ class StartFreshPage4 extends StatelessWidget {
                     text:
                         "\nFinancial planning guides, investment\nsimulations, and personalized advice.",
                     style: GoogleFonts.fredoka().copyWith(
-                      fontSize: 15,
+                      fontSize: 16,
                       color: Colors.black,
                     ),
                   ),
@@ -117,7 +117,7 @@ class StartFreshPage4 extends StatelessWidget {
                   TextSpan(
                     text: "Develop a Learning Habit",
                     style: GoogleFonts.fredoka().copyWith(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
@@ -125,7 +125,7 @@ class StartFreshPage4 extends StatelessWidget {
                   TextSpan(
                     text: "\nSmart reminders, fun challenges,\nand more.",
                     style: GoogleFonts.fredoka().copyWith(
-                      fontSize: 15,
+                      fontSize: 16,
                       color: Colors.black,
                     ),
                   ),
