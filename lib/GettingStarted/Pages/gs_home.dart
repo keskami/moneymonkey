@@ -10,6 +10,13 @@ class GettingStartedHome extends StatelessWidget {
   final GettingStartedController gettingStartedController =
       Get.put(GettingStartedController());
   void toStartFresh() {}
+  void toNextPage() {
+    int currentIndex = gettingStartedController.pageIndex.value;
+    if (currentIndex + 1 > 6) {
+      return;
+    }
+    gettingStartedController.pageIndex.value += 1;
+  }
 
   void toPreviousPage() {
     int currentIndex = gettingStartedController.pageIndex.value;
@@ -51,6 +58,7 @@ class GettingStartedHome extends StatelessWidget {
                   bottom: 50,
                 ),
                 child: NextButton(
+                  nextPage: toNextPage,
                   pages: 0,
                 ),
               )

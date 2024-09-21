@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import this for SystemChrome
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/Pages/su_home.dart';
 import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
-import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class StartFreshHome extends StatelessWidget {
-  StartFreshHome({super.key});
-  final StartFreshController startFreshController =
-      Get.put(StartFreshController());
+class SignUpDetailsHome extends StatelessWidget {
+  SignUpDetailsHome({super.key});
 
+  final SignUpController signUpController = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     // Set system UI overlay style
@@ -22,22 +20,17 @@ class StartFreshHome extends StatelessWidget {
       ),
     );
     void toNextPage() {
-      int currentIndex = startFreshController.pageIndex.value;
-      if (currentIndex + 1 > 6) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SignUpDetailsHome(),
-            ));
+      int currentIndex = signUpController.pageIndex.value;
+      if (currentIndex + 1 > 3) {
         return;
       }
-      startFreshController.pageIndex.value += 1;
+      signUpController.pageIndex.value += 1;
     }
 
     void toPreviousPage() {
-      int currentIndex = startFreshController.pageIndex.value;
+      int currentIndex = signUpController.pageIndex.value;
       if (currentIndex > 0) {
-        startFreshController.pageIndex.value -= 1;
+        signUpController.pageIndex.value -= 1;
       } else {
         Navigator.pop(context);
       }
@@ -62,8 +55,8 @@ class StartFreshHome extends StatelessWidget {
                 ),
                 Expanded(
                   child: CustomProgressBar(
-                    controller: startFreshController,
-                    page: 0,
+                    controller: signUpController,
+                    page: 1,
                   ),
                 ),
                 const SizedBox(
@@ -73,9 +66,9 @@ class StartFreshHome extends StatelessWidget {
             ),
             Expanded(
               child: Obx(() {
-                int pageIndex = startFreshController.pageIndex.value;
-                if (pageIndex < startFreshController.pages.length) {
-                  return startFreshController.pages[pageIndex];
+                int pageIndex = signUpController.pageIndex.value;
+                if (pageIndex < signUpController.pages.length) {
+                  return signUpController.pages[pageIndex];
                 } else {
                   return const Center(child: Text('Invalid page index'));
                 }
@@ -85,13 +78,12 @@ class StartFreshHome extends StatelessWidget {
         ),
       ),
       floatingActionButton: Obx(
-        () => startFreshController.pageIndex.value >= 0 &&
-                startFreshController.pageIndex.value <
-                    startFreshController.pages.length
+        () => signUpController.pageIndex.value >= 0 &&
+                signUpController.pageIndex.value < signUpController.pages.length
             ? Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
-                  pages: 1,
+                  pages: 2,
                   nextPage: toNextPage,
                 ),
               )

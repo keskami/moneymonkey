@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomProgressBar extends StatelessWidget {
-  final StartFreshController startFreshController =
-      Get.put(StartFreshController());
-
-  CustomProgressBar({super.key});
+  const CustomProgressBar({
+    super.key,
+    required this.page,
+    required this.controller,
+  });
+  final int page;
+  final controller;
+  double getProgress() {
+    double progress = 0;
+    if (page == 0) {
+      // final StartFreshController startFreshController =
+      // Get.find<StartFreshController>();
+      progress = controller.pageIndex.value / 6;
+    }
+    // else if (page == 1) {
+    //   // final SignUpController signUpController = Get.find<SignUpController>();
+    //   progress = controller.pageIndex.value / 2;
+    // }
+    return progress;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
         // Dynamically calculate progress based on page index (assuming 7 pages)
-        double progress = startFreshController.pageIndex.value /
-            6; // Adjust 6 based on your total pages
+        double progress = getProgress();
 
         return Container(
           width: double.infinity,
