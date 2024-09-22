@@ -46,15 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
           ));
         } else if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content:
-                Text('The account already exists for that email.'),
+            content: Text('The account already exists for that email.'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         }
-      } catch (e) {
-       
-      }
+      } catch (e) {}
     }
   }
 
@@ -84,50 +81,46 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> logIn() async {
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _loginEmailController.text.trim(),
-      password: _loginPasswordController.text.trim(),
-    );
-    String userId = userCredential.user?.uid ?? '';
-    if (userId.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserIdScreen(), 
-        ),
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _loginEmailController.text.trim(),
+        password: _loginPasswordController.text.trim(),
       );
+      String userId = userCredential.user?.uid ?? '';
+      if (userId.isNotEmpty) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserIdScreen(),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Invalid Email'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ));
+      } else if (e.code == 'invalid-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Incorrect Email or Password'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ));
+      } else if (e.code == 'channel-error') {
+        // Pass
+      }
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.code),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ));
+      }
     }
-  } on FirebaseAuthException catch (e) {
-    if(e.code == 'invalid-email'){
-       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content:
-                Text('Invalid Email'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.red,
-          ));
-    }else if(e.code == 'invalid-credential'){
-       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content:
-                Text('Incorrect Email or Password'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.red,
-          ));
-
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content:
-                Text(e.code),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.red,
-          ));
-
-    }
-
-    
-  } 
-}
-
+  }
 
   Future googleAuth() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -157,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Index for create or login
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   // Text editing controllers
   TextEditingController _createPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
@@ -235,61 +228,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      TextButton(
-                                        onPressed: () => _onButtonPressed(0),
-                                        child: const Text(
-                                          "Create Account",
-                                          style: TextStyle(
-                                            color: Color.fromRGBO(0, 0, 0, 1),
-                                            fontSize: 22,
-                                            fontFamily: 'Ballo2',
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 2,
-                                        width: screenWidth *
-                                            0.4, // 40% of screen width
-                                        color: _selectedIndex == 0
-                                            ? Color.fromRGBO(75, 57, 239, 1)
-                                            : Colors.white,
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      TextButton(
-                                        onPressed: () => _onButtonPressed(1),
-                                        child: const Text(
-                                          "Log in",
-                                          style: TextStyle(
-                                            color: Color.fromRGBO(0, 0, 0, 1),
-                                            fontSize: 22,
-                                            fontFamily: 'Ballo2',
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 2,
-                                        width: screenWidth *
-                                            0.3, // 30% of screen width
-                                        color: _selectedIndex == 1
-                                            ? Color.fromRGBO(75, 57, 239, 1)
-                                            : Colors.white,
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
                               SizedBox(
                                   height: screenHeight *
                                       0.025), // 3% of screen height
-                              _selectedIndex == 0
+                              _selectedIndex > 1000000000000000 // here so it is never there. Want to keep old code for future use
                                   ? SingleChildScrollView(
                                       child: Column(
                                       crossAxisAlignment:
@@ -304,6 +246,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
+                                        //Fill out the information below in order
+//to access your account.
                                         Text(
                                           'Let’s get started by filling out the form below.',
                                           style: TextStyle(
@@ -313,6 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
+
                                         SizedBox(
                                             height: screenHeight *
                                                 0.02), // 2% of screen height
@@ -386,7 +331,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   0.07, // 7% of screen height
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  
                                                   createNewUser();
                                                 },
                                                 style: ElevatedButton.styleFrom(
@@ -477,8 +421,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
+                                        SizedBox(height: screenHeight * .02),
+
                                         Text(
-                                          'Log in with your credentials.',
+                                          'Fill out the information below in order',
+                                          style: TextStyle(
+                                              fontSize: screenHeight *
+                                                  0.02, // 2% of screen height
+                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              fontFamily: 'Ballo2'),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        Text(
+                                          'to access your account.',
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
@@ -488,7 +443,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         SizedBox(
                                             height: screenHeight *
-                                                0.02), // 2% of screen height
+                                                0.04), // 2% of screen height
                                         SizedBox(
                                           width: screenWidth *
                                               0.8, // 80% of screen width
@@ -538,7 +493,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   0.07, // 7% of screen height
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  
                                                   logIn();
                                                 },
                                                 style: ElevatedButton.styleFrom(
@@ -585,31 +539,64 @@ class _LoginScreenState extends State<LoginScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
                                             children: [
-                                              SizedBox(
-                                                width: screenWidth *
-                                                    0.6, // 60% of screen width
-                                                height: screenHeight *
-                                                    0.07, // 7% of screen height
-                                                child: IconButton(
-                                                  icon: Image.asset(
-                                                      "assets/images/image.png"),
-                                                  onPressed: () {
-                                                    appleAuth();
-                                                  },
+                                              Center(
+                                                child: SizedBox(
+                                                  width: screenWidth *
+                                                      0.6, // 60% of screen width
+                                                  height: screenHeight *
+                                                      0.07, // 7% of screen height
+                                                  child: IconButton(
+                                                    icon: Image.asset(
+                                                        "assets/images/image.png"),
+                                                    onPressed: () {
+                                                      appleAuth();
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              Center(
+                                                child: SizedBox(
+                                                  width: screenWidth *
+                                                      0.6, // 60% of screen width
+                                                  height: screenHeight *
+                                                      0.07, // 7% of screen height
+                                                  child: IconButton(
+                                                    icon: Image.asset(
+                                                        "assets/images/image2.png"),
+                                                    onPressed: () {
+                                                      googleAuth();
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                               SizedBox(
                                                 width: screenWidth *
-                                                    0.6, // 60% of screen width
+                                                    1, // 60% of screen width
                                                 height: screenHeight *
-                                                    0.07, // 7% of screen height
-                                                child: IconButton(
-                                                  icon: Image.asset(
-                                                      "assets/images/image2.png"),
-                                                  onPressed: () {
-                                                    googleAuth();
-                                                  },
-                                                ),
+                                                    0.05, // 7% of screen height
+                                                child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              UserIdScreen(),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      "If you are new, create a new account here",
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            screenHeight * 0.02,
+                                                        color: Color.fromRGBO(
+                                                            0, 0, 0, 1),
+                                                        fontFamily: 'Ballo2',
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                    )),
                                               ),
                                             ],
                                           ),
