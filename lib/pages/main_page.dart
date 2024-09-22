@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/login.dart';
-import 'package:money_monkey/main.dart';
-import 'package:money_monkey/nothing.dart';
+import 'package:money_monkey/pages/login.dart';
+import 'package:money_monkey/pages/profileScreen.dart';
 
 class main_page extends StatelessWidget {
   const main_page({super.key});
@@ -19,7 +18,7 @@ class main_page extends StatelessWidget {
             if(userId.isEmpty){
               return LoginScreen();
             }else{
-               return UserIdScreen();
+               return UserProfileScreen();
             }
           } else {
             return LoginScreen();
