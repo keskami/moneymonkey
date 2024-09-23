@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
-import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class GettingStartedHome extends StatelessWidget {

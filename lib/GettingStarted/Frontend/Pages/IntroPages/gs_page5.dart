@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/GettingStarted/Pages/IntroPages/gs_page1.dart';
-import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
-import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 
 class GettingStartedPage5 extends StatelessWidget {
   const GettingStartedPage5({super.key});

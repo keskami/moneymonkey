@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
-import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
-import 'package:money_monkey/GettingStarted/Widgets/knowledge_bar.dart';
-import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/sf_home.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/knowledge_bar.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 
 class GettingStartedPage6 extends StatelessWidget {
   const GettingStartedPage6({

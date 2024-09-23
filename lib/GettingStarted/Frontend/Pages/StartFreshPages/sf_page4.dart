@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
 
 class StartFreshPage4 extends StatelessWidget {
   const StartFreshPage4({super.key});

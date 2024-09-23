@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
-import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsNamePage extends StatefulWidget {
-  const SUDetailsNamePage({
+class SUDetailsEmailPage extends StatefulWidget {
+  const SUDetailsEmailPage({
     super.key,
   });
 
   @override
-  State<SUDetailsNamePage> createState() => _SUDetailsNamePageState();
+  State<SUDetailsEmailPage> createState() => _SUDetailsNamePageState();
 }
 
 SignUpController signUpController = Get.put(SignUpController());
 
-class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
+class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
   @override
   Widget build(BuildContext context) {
     Future<void> submitAge(String val) async {
@@ -29,11 +29,11 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
           const SizedBox(
             height: 17,
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 22),
+          Padding(
+            padding: const EdgeInsets.only(left: 22),
             child: Text(
-              "What is your name?",
-              style: TextStyle(
+              "What is your email, ${signUpController.name.value}?",
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),

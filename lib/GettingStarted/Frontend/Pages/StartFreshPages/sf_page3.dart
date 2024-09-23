@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
-import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 
 class StartFreshPage3 extends StatelessWidget {
   StartFreshPage3({super.key});

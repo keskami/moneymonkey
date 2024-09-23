@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
-import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomProgressBar extends StatelessWidget {
