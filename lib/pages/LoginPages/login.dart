@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_monkey/pages/profileScreen.dart';
+import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,12 +16,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.green, 
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
   }
   Future<void> createNewUser() async {
     if (_createPasswordController.text.trim() !=
@@ -44,14 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
         addUserDetails(userId, _createEmailController.text.trim());
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
-          if (!mounted) return;
+        
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("The email address is not valid."),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'weak-password') {
-          if (!mounted) return;
+          
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content:
                 Text("Please Enter A Password with at least 6 characters."),
@@ -59,9 +52,17 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'email-already-in-use') {
-          if (!mounted) return;
+         
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('The account already exists for that email.'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        }
+        else if (e.code == 'newtwork-request-failed') {
+         
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Unknown Error'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
@@ -75,6 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> addUserDetails(String userId, String email) async {
     final userDocRef =
         FirebaseFirestore.instance.collection('Users').doc(userId);
+        final userSnapshot = await userDocRef.get();
+
+  if (userSnapshot.exists) {
+    
+    return;
+  }
 
     //
     await userDocRef.set({
@@ -106,7 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       String userId = userCredential.user?.uid ?? '';
       if (userId.isNotEmpty) {
-        if (!mounted) return;
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -116,14 +122,14 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
-        if (!mounted) return;
+      
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Invalid Email'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
         ));
       } else if (e.code == 'invalid-credential') {
-        if (!mounted) return;
+     
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Incorrect Email or Password'),
           behavior: SnackBarBehavior.floating,
@@ -208,13 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  height: screenHeight * 0.01, // 1% of screen height
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.lightGreen,
-                  ),
-                ),
+                
                 SizedBox(height: screenHeight * 0.02), // 2% of screen height
                 SizedBox(
                   height: screenHeight * 1, // 90% of screen height

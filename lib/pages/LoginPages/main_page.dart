@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/pages/login.dart';
-import 'package:money_monkey/pages/profileScreen.dart';
+import 'package:money_monkey/pages/LoginPages/login.dart';
+import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
 
 class main_page extends StatelessWidget {
   const main_page({super.key});
