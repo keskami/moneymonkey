@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/Pages/ProfilePages/provider_installer_helper.dart';
+import 'package:intl/intl.dart';
+
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -47,7 +49,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           setState(() {
             profileData = profileSnapshot.data() as Map<String, dynamic>?;
             totalProfit = profileData?['Total Profit'];
-            totalProfitString = totalProfit?.toStringAsFixed(2) ?? '0.00';
+           totalProfitString = NumberFormat('#,###').format(totalProfit?.toInt() ?? 0);
             isLoading = false; 
           });
         } else {
@@ -95,7 +97,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   totalProfitString,
                   style: TextStyle(
                     fontSize: 36,
-                    fontFamily: "Fredoka One"
+                    fontFamily: "FredokaOne"
                   ),
                 ),
               ],
