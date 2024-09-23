@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_monkey/Pages/ProfilePages/provider_installer_helper.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -27,6 +28,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
+    
+    // Call the provider installer method
+    ProviderInstallerHelper.installProvider();
+    _fetchUserProfile(); // Fetch user profile data after installing provider
   }
 
   Future<void> _fetchUserProfile() async {
@@ -40,10 +45,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             .get();
             
         if (profileSnapshot.exists) {
-          print("here");
+          print("User profile fetched successfully.");
           setState(() {
             profileData = profileSnapshot.data() as Map<String, dynamic>?;
-            print(profileData);
             totalProfit = profileData?['Total Profit'];
             totalProfitString = totalProfit?.toStringAsFixed(2) ?? '0.00';
             isLoading = false; 
