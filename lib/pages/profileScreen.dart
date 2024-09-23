@@ -11,7 +11,8 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final User? user = FirebaseAuth.instance.currentUser;
-  double? totalProfit; 
+  final String? userID = FirebaseAuth.instance.currentUser?.uid;
+  int? totalProfit; 
   bool isLoading = true; 
   String totalProfitString = '0.00';
   Map<String, dynamic>? profileData;
@@ -23,29 +24,32 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<void> _fetchUserProfile() async {
-    if (user != null) {
+    if (userID != null) {
       try {
-        DocumentSnapshot profileDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user!.uid)
+        print("HERERERER");
+        print(userID);
+        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userID)
             .collection('profile')
-            .doc('userProfile') // Adjust the document ID as necessary
+            .doc('userProfile') // Assuming the document is called 'userProfile'
             .get();
 
-        if (profileDoc.exists) {
+        if (profileSnapshot.exists) {
           setState(() {
-            profileData = profileDoc.data() as Map<String, dynamic>;
-            totalProfit = profileData!['Total Profit'] ?? 0.0; // Get total profit
-            isLoading = false;
+            profileData = profileSnapshot.data() as Map<String, dynamic>?;
+            totalProfit = profileData?['Total Profit'];
+            totalProfitString = totalProfit?.toStringAsFixed(2) ?? '0.00';
+            isLoading = false; 
           });
         } else {
-          print("Profile document does not exist.");
+          print("User profile not found.");
           setState(() {
             isLoading = false;
           });
         }
       } catch (e) {
-        print("Error fetching profile: $e");
+        print("Error fetching user profile: $e");
         setState(() {
           isLoading = false;
         });
