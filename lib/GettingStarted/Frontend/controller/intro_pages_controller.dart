@@ -13,7 +13,7 @@ class GettingStartedController extends GetxController {
     const GettingStartedPage2(),
     const GettingStartedPage3(),
     const GettingStartedPage4(),
-    GettingStartedPage5(),
+    const GettingStartedPage5(),
     const GettingStartedPage6(),
   ];
   RxInt age = 0.obs;
