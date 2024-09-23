@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class KnowledgeBar extends StatelessWidget {
   final int strength;
-  const KnowledgeBar({super.key, required this.strength});
+  const KnowledgeBar({
+    super.key,
+    required this.strength,
+  });
 
   @override
   Widget build(BuildContext context) {

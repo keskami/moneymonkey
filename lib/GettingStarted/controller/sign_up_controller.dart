@@ -8,11 +8,9 @@ class SignUpController extends GetxController {
   RxInt pageIndex = 0.obs;
 
   var pages = [
-    SUDetailsNamePage(
-      signUpController: SignUpController(),
-    ), // Ensure no recursion happens here
-    SUDetailsEmailPage(signUpController: SignUpController()),
-    SUDetailsPasswordPage(signUpController: SignUpController()),
+    const SUDetailsNamePage(),
+    const SUDetailsEmailPage(),
+    const SUDetailsPasswordPage(),
   ];
 
   RxString name = "".obs;

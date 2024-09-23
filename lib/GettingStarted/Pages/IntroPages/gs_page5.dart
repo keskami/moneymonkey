@@ -5,9 +5,10 @@ import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 
 class GettingStartedPage5 extends StatelessWidget {
   const GettingStartedPage5({super.key});
+
   @override
   Widget build(BuildContext context) {
-    void submitAge(int val) {
+    Future<void> submitAge(int val) async {
       gettingStartedController.age.value = val;
     }
 

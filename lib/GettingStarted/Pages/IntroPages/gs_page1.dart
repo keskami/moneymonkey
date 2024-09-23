@@ -76,6 +76,7 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
             textAlign: TextAlign.center,
             style: GoogleFonts.baloo2(
               fontSize: 16,
+              color: Colors.black,
             ),
           ),
           const SizedBox(

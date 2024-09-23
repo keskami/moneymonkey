@@ -1,24 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
 
-class SUDetailsEmailPage extends StatelessWidget {
-  SUDetailsEmailPage({
+class SUDetailsEmailPage extends StatefulWidget {
+  const SUDetailsEmailPage({
     super.key,
-    required this.signUpController,
   });
-  final signUpController;
+
+  @override
+  State<SUDetailsEmailPage> createState() => _SUDetailsNamePageState();
+}
+
+SignUpController signUpController = Get.put(SignUpController());
+
+class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    Future<void> submitAge(String val) async {
+      signUpController.name.value = val;
+    }
+
+    return Container(
+      color: Colors.white,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 17),
-          const Text(
-            "What is your name?",
-            style: TextStyle(fontSize: 27),
+          const SizedBox(
+            height: 17,
           ),
-          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.only(left: 22),
+            child: Text(
+              "What is your email, ${signUpController.name.value}?",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           CustomOptionTile(
             childWidget: TextField(
               autofocus: true,
@@ -26,8 +49,10 @@ class SUDetailsEmailPage extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: signUpController.name.value.isEmpty
                     ? "Name"
-                    : signUpController.name.value,
-                hintStyle: const TextStyle(fontSize: 23),
+                    : signUpController.name.value.toString(),
+                hintStyle: const TextStyle(
+                  fontSize: 23,
+                ),
               ),
               style: const TextStyle(
                 color: Color.fromARGB(255, 178, 182, 182),
@@ -35,11 +60,10 @@ class SUDetailsEmailPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
               onSubmitted: (value) {
-                signUpController.name.value =
-                    value; // Update the name in controller
+                submitAge(value);
               },
             ),
-          ),
+          )
         ],
       ),
     );

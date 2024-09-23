@@ -53,9 +53,8 @@ class SignUpDetailsHome extends StatelessWidget {
                     size: 37,
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   child: CustomProgressBar(
-                    controller: signUpController,
                     page: 1,
                   ),
                 ),
