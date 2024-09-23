@@ -29,9 +29,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
     
-    // Call the provider installer method
     ProviderInstallerHelper.installProvider();
-    _fetchUserProfile(); // Fetch user profile data after installing provider
+    _fetchUserProfile(); 
   }
 
   Future<void> _fetchUserProfile() async {
@@ -45,7 +44,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             .get();
             
         if (profileSnapshot.exists) {
-          print("User profile fetched successfully.");
           setState(() {
             profileData = profileSnapshot.data() as Map<String, dynamic>?;
             totalProfit = profileData?['Total Profit'];
@@ -95,6 +93,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 Text(
                   totalProfitString,
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontFamily: "Fredoka One"
+                  ),
                 ),
               ],
             ),
