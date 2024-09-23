@@ -26,13 +26,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<void> _fetchUserProfile() async {
     if (userID != null) {
       try {
-        print("HERERERER");
-        print(userID);
         DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
             .collection('Users')
             .doc(userID)
             .collection('profile')
-            .doc('userProfile') // Assuming the document is called 'userProfile'
+            .doc('userProfile')
             .get();
 
         if (profileSnapshot.exists) {

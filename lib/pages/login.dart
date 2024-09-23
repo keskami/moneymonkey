@@ -1,21 +1,33 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/pages/profileScreen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.green, 
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+  }
   Future<void> createNewUser() async {
     if (_createPasswordController.text.trim() !=
         _confirmPasswordController.text.trim()) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Passwords Do Not Match"),
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.red,
@@ -32,12 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
         addUserDetails(userId, _createEmailController.text.trim());
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("The email address is not valid."),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'weak-password') {
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content:
                 Text("Please Enter A Password with at least 6 characters."),
@@ -45,13 +59,16 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'email-already-in-use') {
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('The account already exists for that email.'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         }
-      } catch (e) {}
+      } catch (e) {
+        return;
+      }
     }
   }
 
@@ -89,21 +106,24 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       String userId = userCredential.user?.uid ?? '';
       if (userId.isNotEmpty) {
+        if (!mounted) return;
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => UserProfileScreen(),
+            builder: (context) => const UserProfileScreen(),
           ),
         );
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Invalid Email'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
         ));
       } else if (e.code == 'invalid-credential') {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Incorrect Email or Password'),
           behavior: SnackBarBehavior.floating,
@@ -169,12 +189,12 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // Switches Screen
-  void _onButtonPressed(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // Switches Screen (OLD code keeping in case we switch back)
+  //void _onButtonPressed(int index) {
+    //setState(() {
+      //_selectedIndex = index;
+   // });S
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Create Account',
                                           style: TextStyle(
                                               fontSize:
@@ -253,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
-                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -417,7 +437,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.03, // 3% of screen height
-                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -428,7 +448,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
-                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -437,7 +457,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
-                                              color: Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -580,7 +600,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         context,
                                                         MaterialPageRoute(
                                                           builder: (context) =>
-                                                              UserProfileScreen(),
+                                                              const UserProfileScreen(),
                                                         ),
                                                       );
                                                     },
@@ -589,7 +609,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       style: TextStyle(
                                                         fontSize:
                                                             screenHeight * 0.02,
-                                                        color: Color.fromRGBO(
+                                                        color: const Color.fromRGBO(
                                                             0, 0, 0, 1),
                                                         fontFamily: 'Ballo2',
                                                         decoration:
