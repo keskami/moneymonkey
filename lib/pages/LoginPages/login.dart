@@ -17,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
   }
+
   Future<void> createNewUser() async {
     if (_createPasswordController.text.trim() !=
         _confirmPasswordController.text.trim()) {
@@ -37,14 +38,12 @@ class _LoginScreenState extends State<LoginScreen> {
         addUserDetails(userId, _createEmailController.text.trim());
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
-        
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("The email address is not valid."),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'weak-password') {
-          
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content:
                 Text("Please Enter A Password with at least 6 characters."),
@@ -52,15 +51,12 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'email-already-in-use') {
-         
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('The account already exists for that email.'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
-        }
-        else if (e.code == 'newtwork-request-failed') {
-         
+        } else if (e.code == 'newtwork-request-failed') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Unknown Error'),
             behavior: SnackBarBehavior.floating,
@@ -76,14 +72,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> addUserDetails(String userId, String email) async {
     final userDocRef =
         FirebaseFirestore.instance.collection('Users').doc(userId);
-        final userSnapshot = await userDocRef.get();
+    final userSnapshot = await userDocRef.get();
 
-  if (userSnapshot.exists) {
-    
-    return;
-  }
+    if (userSnapshot.exists) {
+      return;
+    }
 
-    //
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
@@ -122,14 +116,12 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
-      
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Invalid Email'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
         ));
       } else if (e.code == 'invalid-credential') {
-     
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Incorrect Email or Password'),
           behavior: SnackBarBehavior.floating,
@@ -137,8 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
       } else if (e.code == 'channel-error') {
         // Pass
-      }
-      else {
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(e.code),
           behavior: SnackBarBehavior.floating,
@@ -197,9 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Switches Screen (OLD code keeping in case we switch back)
   //void _onButtonPressed(int index) {
-    //setState(() {
-      //_selectedIndex = index;
-   // });S
+  //setState(() {
+  //_selectedIndex = index;
+  // });S
   //}
 
   @override
@@ -214,7 +205,6 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                
                 SizedBox(height: screenHeight * 0.02), // 2% of screen height
                 SizedBox(
                   height: screenHeight * 1, // 90% of screen height
@@ -251,7 +241,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                   height: screenHeight *
                                       0.025), // 3% of screen height
-                              _selectedIndex > 1000000000000000 // here so it is never there. Want to keep old code for future use
+                              _selectedIndex >
+                                      1000000000000000 // here so it is never there. Want to keep old code for future use
                                   ? SingleChildScrollView(
                                       child: Column(
                                       crossAxisAlignment:
@@ -273,7 +264,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
-                                              color: const Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -437,7 +429,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.03, // 3% of screen height
-                                              color: const Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -448,7 +441,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
-                                              color: const Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -457,7 +451,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           style: TextStyle(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
-                                              color: const Color.fromRGBO(0, 0, 0, 1),
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1),
                                               fontFamily: 'Ballo2'),
                                           textAlign: TextAlign.left,
                                         ),
@@ -609,7 +604,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       style: TextStyle(
                                                         fontSize:
                                                             screenHeight * 0.02,
-                                                        color: const Color.fromRGBO(
+                                                        color: const Color
+                                                            .fromRGBO(
                                                             0, 0, 0, 1),
                                                         fontFamily: 'Ballo2',
                                                         decoration:
