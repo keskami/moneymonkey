@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monkey/Pages/ProfilePages/provider_installer_helper.dart';
+//import 'package:money_monkey/Pages/ProfilePages/provider_installer_helper.dart';
 import 'package:intl/intl.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -31,7 +31,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
 
-    ProviderInstallerHelper.installProvider();
+    //ProviderInstallerHelper.installProvider();
     _fetchUserProfile();
   }
 
@@ -96,7 +96,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 Text(
                   totalProfitString,
-                  style: TextStyle(fontSize: 36, fontFamily: "FredokaOne"),
+                  style:
+                      const TextStyle(fontSize: 36, fontFamily: "FredokaOne"),
                 ),
                 SizedBox(
                   width: screenWidth * 0.13,
@@ -113,14 +114,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       : Icons.arrow_downward,
                   color: _changePercentage > 0 ? Colors.blue : Colors.red,
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   '$_changePercentage% ',
                   style: TextStyle(
                     color: _changePercentage > 0 ? Colors.blue : Colors.red,
                   ),
                 ),
-                Text(
+                const Text(
                   'from this week',
                   style: TextStyle(
                     color: Colors.black,
@@ -135,51 +136,62 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 height: screenHeight * 0.225,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(135, 206, 235, 1), 
+                    color: const Color.fromRGBO(135, 206, 235, 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Stack(
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: const EdgeInsets.all(12),
-                          child: Text("Balance",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: "Ballo 2"
-                          ),),
-                        ),
-                      ),
-                      
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Icon(Icons.free_breakfast_rounded,
-                          color: Colors.white,
+                          child: Text(
+                            "Balance",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: "Ballo 2"),
                           ),
                         ),
                       ),
-                     
                       Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          padding: EdgeInsets.only(right: 16.0),
+                          child: SizedBox(
+                            height: screenHeight * .1,
+                            width: screenWidth * .1,
+                            child: Image.asset('assets/images/bank.png'),
+                          ),
+                        ),
+                      ),
+                      const Align(
                         alignment: Alignment.bottomLeft,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("Bottom Left"),
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "**** 0149",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontFamily: "Ballo2"),
+                          ),
                         ),
                       ),
-                    
-                      Align(
+                      const Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("05/25"),
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "05/25",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: "Ballo2",
+                                color: Colors.white),
+                          ),
                         ),
                       ),
-                      // Center of the box
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           "Balance",

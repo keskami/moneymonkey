@@ -396,7 +396,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     0.07, // 7% of screen height
                                                 child: IconButton(
                                                   icon: Image.asset(
-                                                      "assets/images/image.png"),
+                                                      "assets/images/apple.png"),
                                                   onPressed: () {
                                                     appleAuth();
                                                   },
@@ -409,7 +409,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     0.07, // 7% of screen height
                                                 child: IconButton(
                                                   icon: Image.asset(
-                                                      "assets/images/image2.png"),
+                                                      "assets/images/google.png"),
                                                   onPressed: () {
                                                     googleAuth();
                                                   },
@@ -562,7 +562,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       0.07, // 7% of screen height
                                                   child: IconButton(
                                                     icon: Image.asset(
-                                                        "assets/images/image.png"),
+                                                        "assets/images/apple.png"),
                                                     onPressed: () {
                                                       appleAuth();
                                                     },
@@ -577,7 +577,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       0.07, // 7% of screen height
                                                   child: IconButton(
                                                     icon: Image.asset(
-                                                        "assets/images/image2.png"),
+                                                        "assets/images/google.png"),
                                                     onPressed: () {
                                                       googleAuth();
                                                     },

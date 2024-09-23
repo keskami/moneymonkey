@@ -70,9 +70,10 @@ flutter:
         - asset: assets/images/fonts/FredokaOne-Regular.ttf
   assets:
     - assets/images/monkey.png
-    - assets/images/image.png
-    - assets/images/image2.png
+    - assets/images/apple.png
+    - assets/images/google.png
     - assets/images/banana.png
+    - assets/images/bank.png
 
     
 
