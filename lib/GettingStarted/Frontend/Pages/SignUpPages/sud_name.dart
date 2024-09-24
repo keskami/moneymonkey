@@ -15,10 +15,11 @@ class SUDetailsNamePage extends StatefulWidget {
 SignUpController signUpController = Get.put(SignUpController());
 
 class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
+  TextEditingController nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    Future<void> submitAge(String val) async {
-      signUpController.name.value = val;
+    Future<void> submitName(String val) async {
+      signUpController.name.value = nameController.text;
     }
 
     return Container(
@@ -44,10 +45,11 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
           ),
           CustomOptionTile(
             childWidget: TextField(
+              controller: nameController,
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: signUpController.name.value.isEmpty
+                hintText: nameController.text.isEmpty
                     ? "Name"
                     : signUpController.name.value.toString(),
                 hintStyle: const TextStyle(
@@ -60,7 +62,7 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
                 fontWeight: FontWeight.bold,
               ),
               onSubmitted: (value) {
-                submitAge(value);
+                submitName(value);
               },
             ),
           )

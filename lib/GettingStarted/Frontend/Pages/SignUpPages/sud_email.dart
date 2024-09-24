@@ -17,8 +17,8 @@ SignUpController signUpController = Get.put(SignUpController());
 class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
   @override
   Widget build(BuildContext context) {
-    Future<void> submitAge(String val) async {
-      signUpController.name.value = val;
+    Future<void> submitEmail(String val) async {
+      signUpController.email.value = val;
     }
 
     return Container(
@@ -47,9 +47,9 @@ class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: signUpController.name.value.isEmpty
-                    ? "Name"
-                    : signUpController.name.value.toString(),
+                hintText: signUpController.email.value.isEmpty
+                    ? "Email"
+                    : signUpController.email.value.toString(),
                 hintStyle: const TextStyle(
                   fontSize: 23,
                 ),
@@ -60,7 +60,7 @@ class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
                 fontWeight: FontWeight.bold,
               ),
               onSubmitted: (value) {
-                submitAge(value);
+                submitEmail(value);
               },
             ),
           )

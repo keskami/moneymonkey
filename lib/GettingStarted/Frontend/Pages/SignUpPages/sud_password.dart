@@ -17,8 +17,8 @@ SignUpController signUpController = Get.put(SignUpController());
 class _SUDetailsNamePageState extends State<SUDetailsPasswordPage> {
   @override
   Widget build(BuildContext context) {
-    Future<void> submitAge(String val) async {
-      signUpController.name.value = val;
+    Future<void> submitPassword(String val) async {
+      signUpController.password.value = val;
     }
 
     return Container(
@@ -32,7 +32,7 @@ class _SUDetailsNamePageState extends State<SUDetailsPasswordPage> {
           const Padding(
             padding: EdgeInsets.only(left: 22),
             child: Text(
-              "What is your name?",
+              "What is your password?",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -47,9 +47,9 @@ class _SUDetailsNamePageState extends State<SUDetailsPasswordPage> {
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: signUpController.name.value.isEmpty
-                    ? "Name"
-                    : signUpController.name.value.toString(),
+                hintText: signUpController.password.value.isEmpty
+                    ? "Password"
+                    : signUpController.password.value.toString(),
                 hintStyle: const TextStyle(
                   fontSize: 23,
                 ),
@@ -60,7 +60,7 @@ class _SUDetailsNamePageState extends State<SUDetailsPasswordPage> {
                 fontWeight: FontWeight.bold,
               ),
               onSubmitted: (value) {
-                submitAge(value);
+                submitPassword(value);
               },
             ),
           )

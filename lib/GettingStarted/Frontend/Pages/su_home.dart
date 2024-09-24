@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import this for SystemChrome
 import 'package:get/get.dart';
+import 'package:money_monkey/GettingStarted/Backend/Models/auth_service.dart';
+import 'package:money_monkey/GettingStarted/Backend/Models/firestore_service.dart';
+import 'package:money_monkey/GettingStarted/Backend/Models/user_data.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/emptyLoggedIn.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
@@ -10,6 +14,21 @@ class SignUpDetailsHome extends StatelessWidget {
   SignUpDetailsHome({super.key});
 
   final SignUpController signUpController = Get.put(SignUpController());
+  void fetchUserData() async {
+    FirestoreService firestoreService = FirestoreService();
+
+    // Pass the user's ID (you might fetch it from FirebaseAuth.currentUser.uid)
+    UserData? userData = await firestoreService.getUserData('someUserId');
+
+    if (userData != null) {
+      print("User Email: ${userData.email}");
+      print("User Age: ${userData.age}");
+      print("User Profile Name: ${userData.profile.fullName}");
+    } else {
+      print("User data not found.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Set system UI overlay style
@@ -19,12 +38,43 @@ class SignUpDetailsHome extends StatelessWidget {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    void toNextPage() {
+    fetchUserData();
+    void toNextPage() async {
       int currentIndex = signUpController.pageIndex.value;
-      if (currentIndex + 1 > 3) {
+      if (currentIndex == 0 && signUpController.name.value.isEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Enter a Name.")));
         return;
       }
-      signUpController.pageIndex.value += 1;
+      if (currentIndex == 1 && signUpController.email.value.isEmail) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Enter a valid email.")));
+        return;
+      }
+      if (currentIndex == 0 && signUpController.name.value.isEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Enter a Password.")));
+        return;
+      }
+      if (currentIndex == 2) {
+        // This is the final step, where user data is completed
+
+        try {
+          await AuthService().signUpUser();
+
+          // Navigate to the next page (e.g., dashboard)
+          // Get.to(DashboardPage());
+        } catch (e) {
+          // Show error message
+          Get.snackbar('Error', 'Failed to sign up. Please try again.');
+        }
+      }
+      if (currentIndex + 1 == 3) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => const Emptyloggedin()));
+      } else {
+        signUpController.pageIndex.value += 1;
+      }
     }
 
     void toPreviousPage() {
