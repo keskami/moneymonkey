@@ -278,65 +278,76 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: screenHeight * .05,
-                                  width: screenWidth * .15,
+                                  height: screenHeight * .055,
+                                  width: screenWidth * .19,
                                   padding: EdgeInsets.all(0),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color:
-                                        const Color.fromARGB(255, 252, 255, 68),
+                                        const Color.fromRGBO(255, 224, 130, 1),
                                     borderRadius: BorderRadius.circular(
-                                        screenHeight * .01),
+                                      screenHeight * .02,
+                                    ),
+                                    border: Border.all(
+                                      color:
+                                          Colors.lightBlue, 
+                                      width: 2.0, 
+                                    ),
                                   ),
                                   child: TextButton(
                                     onPressed: () {},
-                                    child: const Text(
+                                    child: Text(
                                       "All",
                                       style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontFamily: "Ballo2"),
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: "Ballo2",
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
                                 Container(
-                                  height: screenHeight * .045,
+                                  height: screenHeight * .055,
+                                  width: screenWidth * .225,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Color.fromRGBO(217, 217, 217, 100),
                                     borderRadius: BorderRadius.circular(
-                                        screenHeight * .01),
+                                        screenHeight * .02),
                                   ),
                                   child: TextButton(
                                     onPressed: () {},
                                     child: const Text(
                                       "Income",
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontFamily: "Ballo2"),
+                                          color: Colors.black,
+                                          fontSize: 13,
+                                          fontFamily: "Ballo2",
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
                                 Container(
-                                  height: screenHeight * .045,
-                                  padding: EdgeInsets.all(0),
+                                  height: screenHeight * .055,
+                                  width: screenWidth * .225,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Colors.redAccent,
+                                    color: Color.fromRGBO(217, 217, 217, 100),
                                     borderRadius: BorderRadius.circular(
-                                        screenHeight * .01),
+                                        screenHeight * .02),
                                   ),
                                   child: TextButton(
                                     onPressed: () {},
                                     child: const Text(
                                       "Expenses",
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontFamily: "Ballo2"),
+                                          color: Colors.black,
+                                          fontSize: 13,
+                                          fontFamily: "Ballo2",
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
