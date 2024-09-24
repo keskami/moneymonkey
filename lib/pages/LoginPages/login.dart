@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, use_build_context_synchronously
+// ignore_for_file: prefer_final_fields
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  @override
   void initState() {
     super.initState();
   }
@@ -38,12 +39,14 @@ class _LoginScreenState extends State<LoginScreen> {
         addUserDetails(userId, _createEmailController.text.trim());
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
+          if(!mounted){return;}
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("The email address is not valid."),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'weak-password') {
+          if(!mounted){return;}
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content:
                 Text("Please Enter A Password with at least 6 characters."),
@@ -51,12 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'email-already-in-use') {
+          if(!mounted){return;}
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('The account already exists for that email.'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'newtwork-request-failed') {
+          if(!mounted){return;}
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Unknown Error'),
             behavior: SnackBarBehavior.floating,
@@ -107,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       String userId = userCredential.user?.uid ?? '';
       if (userId.isNotEmpty) {
+        if(!mounted){return;}
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -116,12 +122,14 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
+        if(!mounted){return;}
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Invalid Email'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
         ));
       } else if (e.code == 'invalid-credential') {
+        if(!mounted){return;}
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Incorrect Email or Password'),
           behavior: SnackBarBehavior.floating,
@@ -130,7 +138,9 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (e.code == 'channel-error') {
         // Pass
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        if(!mounted){return;}
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
           content: Text(e.code),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
@@ -591,6 +601,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     0.05, // 7% of screen height
                                                 child: TextButton(
                                                     onPressed: () {
+                                                      if(!mounted){return;}
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(

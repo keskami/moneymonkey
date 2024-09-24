@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:money_monkey/Pages/ProfilePages/provider_installer_helper.dart';
 import 'package:intl/intl.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -30,8 +29,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-
-    //ProviderInstallerHelper.installProvider();
     _fetchUserProfile();
   }
 
@@ -138,14 +135,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(135, 206, 235, 1),
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset:
+                            const Offset(0, 4), // changes position of shadow
+                      ),
+                    ],
                   ),
                   child: Stack(
                     children: [
-                      const Align(
+                      Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
+                          padding: EdgeInsets.all(screenHeight * 0.02),
+                          child: const Text(
                             "Balance",
                             style: TextStyle(
                                 color: Colors.white,
@@ -157,7 +162,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topRight,
                         child: Container(
-                          padding: EdgeInsets.only(right: 16.0),
+                          padding: EdgeInsets.only(right: screenWidth * 0.04),
                           child: SizedBox(
                             height: screenHeight * .1,
                             width: screenWidth * .1,
@@ -165,11 +170,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         ),
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.bottomLeft,
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
+                          padding: EdgeInsets.all(screenHeight * 0.02),
+                          child: const Text(
                             "**** 0149",
                             style: TextStyle(
                                 color: Colors.white,
@@ -178,11 +183,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         ),
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
+                          padding: EdgeInsets.all(screenHeight * 0.02),
+                          child: const Text(
                             "05/25",
                             style: TextStyle(
                                 fontSize: 20,
@@ -191,14 +196,153 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         ),
                       ),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Balance",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                            padding: EdgeInsets.only(left: screenWidth * 0.1),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "7,630",
+                                  style: TextStyle(
+                                      fontSize: 52,
+                                      fontFamily: "Ballo2",
+                                      color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: screenHeight * .15,
+                                  width: screenWidth * .15,
+                                  child:
+                                      Image.asset('assets/images/banana.png'),
+                                ),
+                              ],
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * .04),
+            Center(
+              child: SizedBox(
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.325,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(255, 255, 255, 1),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              screenWidth * .04, screenWidth * .04, 0, 0),
+                          child: Text(
+                            "Transactional History",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontFamily: "FredokaOne"),
+                          ),
                         ),
                       ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              screenWidth * .029, screenWidth * .11, 0, 0),
+                          child: Text(
+                            "A list of historical transaction",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: "Ballo2"),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                            padding: EdgeInsets.fromLTRB(
+                                screenWidth * .029, screenHeight * .1, 0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: screenHeight * .05,
+                                  width: screenWidth * .15,
+                                  padding: EdgeInsets.all(0),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        const Color.fromARGB(255, 252, 255, 68),
+                                    borderRadius: BorderRadius.circular(
+                                        screenHeight * .01),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      "All",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontFamily: "Ballo2"),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Container(
+                                  height: screenHeight * .045,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(
+                                        screenHeight * .01),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      "Income",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontFamily: "Ballo2"),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Container(
+                                  height: screenHeight * .045,
+                                  padding: EdgeInsets.all(0),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.redAccent,
+                                    borderRadius: BorderRadius.circular(
+                                        screenHeight * .01),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      "Expenses",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontFamily: "Ballo2"),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      )
                     ],
                   ),
                 ),
