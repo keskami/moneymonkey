@@ -3,18 +3,11 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsPasswordPage extends StatefulWidget {
-  const SUDetailsPasswordPage({
+class SUDetailsPasswordPage extends StatelessWidget {
+  SUDetailsPasswordPage({
     super.key,
   });
-
-  @override
-  State<SUDetailsPasswordPage> createState() => _SUDetailsNamePageState();
-}
-
-SignUpController signUpController = Get.put(SignUpController());
-
-class _SUDetailsNamePageState extends State<SUDetailsPasswordPage> {
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Future<void> submitPassword(String val) async {
@@ -45,11 +38,14 @@ class _SUDetailsNamePageState extends State<SUDetailsPasswordPage> {
           CustomOptionTile(
             childWidget: TextField(
               autofocus: true,
+              onChanged: (value) {
+                submitPassword(value);
+              },
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: signUpController.password.value.isEmpty
+                hintText: passwordController.text.isEmpty
                     ? "Password"
-                    : signUpController.password.value.toString(),
+                    : passwordController.text,
                 hintStyle: const TextStyle(
                   fontSize: 23,
                 ),
@@ -69,3 +65,5 @@ class _SUDetailsNamePageState extends State<SUDetailsPasswordPage> {
     );
   }
 }
+
+SignUpController signUpController = Get.put(SignUpController());

@@ -10,10 +10,16 @@ import 'package:money_monkey/GettingStarted/Frontend/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class SignUpDetailsHome extends StatelessWidget {
-  SignUpDetailsHome({super.key});
+class SignUpDetailsHome extends StatefulWidget {
+  const SignUpDetailsHome({super.key});
 
+  @override
+  State<SignUpDetailsHome> createState() => _SignUpDetailsHomeState();
+}
+
+class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
   final SignUpController signUpController = Get.put(SignUpController());
+
   void fetchUserData() async {
     FirestoreService firestoreService = FirestoreService();
 
@@ -41,19 +47,21 @@ class SignUpDetailsHome extends StatelessWidget {
     fetchUserData();
     void toNextPage() async {
       int currentIndex = signUpController.pageIndex.value;
+
       if (currentIndex == 0 && signUpController.name.value.isEmpty) {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Enter a Name.")));
         return;
       }
-      if (currentIndex == 1 && signUpController.email.value.isEmail) {
+      if (currentIndex == 1 && !signUpController.email.value.isEmail) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Enter a valid email.")));
         return;
       }
-      if (currentIndex == 0 && signUpController.name.value.isEmpty) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Enter a Password.")));
+      if (currentIndex == 0 && signUpController.name.value.isEmpty ||
+          signUpController.password.value.length < 6) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Enter a valid Password.")));
         return;
       }
       if (currentIndex == 2) {
@@ -71,7 +79,12 @@ class SignUpDetailsHome extends StatelessWidget {
       }
       if (currentIndex + 1 == 3) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (c) => const Emptyloggedin()));
+            context,
+            MaterialPageRoute(
+                builder: (c) => const PopScope(
+                      canPop: false,
+                      child: Emptyloggedin(),
+                    )));
       } else {
         signUpController.pageIndex.value += 1;
       }
@@ -92,24 +105,20 @@ class SignUpDetailsHome extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Row(
+            const Row(
               mainAxisAlignment:
                   MainAxisAlignment.start, // Distribute space between widgets
               children: [
-                IconButton(
-                  onPressed: toPreviousPage,
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 37,
-                  ),
+                SizedBox(
+                  width: 70,
                 ),
-                const Expanded(
+                Expanded(
                   child: CustomProgressBar(
                     page: 1,
                   ),
                 ),
-                const SizedBox(
-                  width: 20,
+                SizedBox(
+                  width: 70,
                 ),
               ],
             ),

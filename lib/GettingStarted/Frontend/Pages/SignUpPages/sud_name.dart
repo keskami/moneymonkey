@@ -3,19 +3,13 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsNamePage extends StatefulWidget {
-  const SUDetailsNamePage({
+class SUDetailsNamePage extends StatelessWidget {
+  SUDetailsNamePage({
     super.key,
   });
 
-  @override
-  State<SUDetailsNamePage> createState() => _SUDetailsNamePageState();
-}
+  final TextEditingController nameController = TextEditingController();
 
-SignUpController signUpController = Get.put(SignUpController());
-
-class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
-  TextEditingController nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Future<void> submitName(String val) async {
@@ -46,12 +40,14 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
           CustomOptionTile(
             childWidget: TextField(
               controller: nameController,
+              onChanged: (value) {
+                submitName(value);
+              },
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: nameController.text.isEmpty
-                    ? "Name"
-                    : signUpController.name.value.toString(),
+                hintText:
+                    nameController.text.isEmpty ? "Name" : nameController.text,
                 hintStyle: const TextStyle(
                   fontSize: 23,
                 ),
@@ -71,3 +67,5 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
     );
   }
 }
+
+SignUpController signUpController = Get.put(SignUpController());

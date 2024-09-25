@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SignUpController signUpController = Get.find();
+  final StartFreshController startFreshController = Get.find();
 
   // Function to create a new user
   Future<void> signUpUser() async {
@@ -71,9 +74,9 @@ class AuthService {
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
-      'Age': 0,
-      'Knowledge Level': 0,
-      'Learning Goal Per Day': 0
+      'Age': gettingStartedController.age.value,
+      'Knowledge Level': gettingStartedController.knowledgeLevel.value,
+      'Learning Goal Per Day': startFreshController.learningGoal.value,
     });
 
     await userDocRef.collection('profile').doc('userProfile').set({

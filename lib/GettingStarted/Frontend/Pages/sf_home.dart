@@ -23,6 +23,11 @@ class StartFreshHome extends StatelessWidget {
     );
     void toNextPage() {
       int currentIndex = startFreshController.pageIndex.value;
+      if (currentIndex == 2 && startFreshController.learningGoal.value == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Pick a learning goal.")));
+        return;
+      }
       if (currentIndex + 1 > 6) {
         Navigator.push(
             context,

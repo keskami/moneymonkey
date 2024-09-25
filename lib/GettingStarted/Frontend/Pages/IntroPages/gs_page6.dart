@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/sf_home.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/knowledge_bar.dart';
@@ -17,6 +18,7 @@ class GettingStartedPage6 extends StatelessWidget {
         child: Center(
           child: GestureDetector(
             onTap: () {
+              gettingStartedController.knowledgeLevel.value = 0;
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -35,6 +37,14 @@ class GettingStartedPage6 extends StatelessWidget {
         ),
       ),
       GestureDetector(
+        onTap: () {
+          gettingStartedController.knowledgeLevel.value = 1;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StartFreshHome(),
+              ));
+        },
         child: const Text(
           "I have a basic\nunderstanding",
           style: TextStyle(
@@ -44,6 +54,14 @@ class GettingStartedPage6 extends StatelessWidget {
         ),
       ),
       GestureDetector(
+        onTap: () {
+          gettingStartedController.knowledgeLevel.value = 2;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StartFreshHome(),
+              ));
+        },
         child: const Text(
           "I am moderately\nknowledgeable",
           style: TextStyle(
@@ -53,6 +71,14 @@ class GettingStartedPage6 extends StatelessWidget {
         ),
       ),
       GestureDetector(
+        onTap: () {
+          gettingStartedController.knowledgeLevel.value = 3;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StartFreshHome(),
+              ));
+        },
         child: const Text(
           "I have a good\nunderstanding",
           style: TextStyle(
@@ -62,6 +88,14 @@ class GettingStartedPage6 extends StatelessWidget {
         ),
       ),
       GestureDetector(
+        onTap: () {
+          gettingStartedController.knowledgeLevel.value = 4;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StartFreshHome(),
+              ));
+        },
         child: const Text(
           "I am very\nknowledgeable",
           style: TextStyle(

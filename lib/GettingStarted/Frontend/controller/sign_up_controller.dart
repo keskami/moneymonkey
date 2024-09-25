@@ -8,9 +8,9 @@ class SignUpController extends GetxController {
   RxInt pageIndex = 0.obs;
 
   var pages = [
-    const SUDetailsNamePage(),
-    const SUDetailsEmailPage(),
-    const SUDetailsPasswordPage(),
+    SUDetailsNamePage(),
+    SUDetailsEmailPage(),
+    SUDetailsPasswordPage(),
   ];
 
   RxString name = "".obs;

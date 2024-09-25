@@ -3,18 +3,12 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsEmailPage extends StatefulWidget {
-  const SUDetailsEmailPage({
+class SUDetailsEmailPage extends StatelessWidget {
+  SUDetailsEmailPage({
     super.key,
   });
 
-  @override
-  State<SUDetailsEmailPage> createState() => _SUDetailsNamePageState();
-}
-
-SignUpController signUpController = Get.put(SignUpController());
-
-class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
+  final TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Future<void> submitEmail(String val) async {
@@ -44,12 +38,15 @@ class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
           ),
           CustomOptionTile(
             childWidget: TextField(
+              onChanged: (value) {
+                submitEmail(value);
+              },
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: signUpController.email.value.isEmpty
+                hintText: emailController.text.isEmpty
                     ? "Email"
-                    : signUpController.email.value.toString(),
+                    : emailController.text,
                 hintStyle: const TextStyle(
                   fontSize: 23,
                 ),
@@ -69,3 +66,5 @@ class _SUDetailsNamePageState extends State<SUDetailsEmailPage> {
     );
   }
 }
+
+SignUpController signUpController = Get.put(SignUpController());

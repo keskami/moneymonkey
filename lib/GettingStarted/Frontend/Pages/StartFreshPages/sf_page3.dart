@@ -1,87 +1,109 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
 
 class StartFreshPage3 extends StatelessWidget {
-  StartFreshPage3({super.key});
-
-  final List<Widget> learningGoals = [
-    const Row(
-      children: [
-        Text(
-          "5 min / day",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-          ),
-        ),
-        Spacer(),
-        Text(
-          "Casual",
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ],
-    ),
-    const Row(
-      children: [
-        Text(
-          "10 min / day",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-          ),
-        ),
-        Spacer(),
-        Text(
-          "Regular",
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ],
-    ),
-    const Row(
-      children: [
-        Text(
-          "15 min / day",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-          ),
-        ),
-        Spacer(),
-        Text(
-          "Serious",
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ],
-    ),
-    const Row(
-      children: [
-        Text(
-          "20 min / day",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-          ),
-        ),
-        Spacer(),
-        Text(
-          "Intense",
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ],
-    ),
-  ];
-
+  const StartFreshPage3({super.key});
   @override
   Widget build(BuildContext context) {
+    StartFreshController startFreshController = Get.find();
+    final List<Widget> learningGoals = [
+      GestureDetector(
+          onTap: () {
+            startFreshController.learningGoal.value = 5;
+
+            startFreshController.pageIndex += 1;
+          },
+          child: const Row(
+            children: [
+              Text(
+                "5 min / day",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                ),
+              ),
+              Spacer(),
+              Text(
+                "Casual",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          )),
+      GestureDetector(
+          onTap: () {
+            startFreshController.learningGoal.value = 10;
+            startFreshController.pageIndex += 1;
+          },
+          child: const Row(
+            children: [
+              Text(
+                "10 min / day",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                ),
+              ),
+              Spacer(),
+              Text(
+                "Regular",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          )),
+      GestureDetector(
+          onTap: () {
+            startFreshController.learningGoal.value = 15;
+            startFreshController.pageIndex += 1;
+          },
+          child: const Row(
+            children: [
+              Text(
+                "15 min / day",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                ),
+              ),
+              Spacer(),
+              Text(
+                "Serious",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          )),
+      GestureDetector(
+          onTap: () {
+            startFreshController.learningGoal.value = 20;
+            startFreshController.pageIndex += 1;
+          },
+          child: const Row(
+            children: [
+              Text(
+                "20 min / day",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                ),
+              ),
+              Spacer(),
+              Text(
+                "Intense",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          )),
+    ];
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
