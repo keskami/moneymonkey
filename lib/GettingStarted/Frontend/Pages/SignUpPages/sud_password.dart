@@ -3,11 +3,18 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsPasswordPage extends StatelessWidget {
+class SUDetailsPasswordPage extends StatefulWidget {
   SUDetailsPasswordPage({
     super.key,
   });
+
+  @override
+  State<SUDetailsPasswordPage> createState() => _SUDetailsPasswordPageState();
+}
+
+class _SUDetailsPasswordPageState extends State<SUDetailsPasswordPage> {
   final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Future<void> submitPassword(String val) async {

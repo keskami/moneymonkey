@@ -3,17 +3,24 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsNamePage extends StatelessWidget {
+class SUDetailsNamePage extends StatefulWidget {
   SUDetailsNamePage({
     super.key,
   });
 
+  @override
+  State<SUDetailsNamePage> createState() => _SUDetailsNamePageState();
+}
+
+class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
   final TextEditingController nameController = TextEditingController();
+
+  final SignUpController signUpController = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {
-    Future<void> submitName(String val) async {
-      signUpController.name.value = nameController.text;
+    void submitName(String val) {
+      signUpController.name.value = val;
     }
 
     return Container(
@@ -67,5 +74,3 @@ class SUDetailsNamePage extends StatelessWidget {
     );
   }
 }
-
-SignUpController signUpController = Get.put(SignUpController());

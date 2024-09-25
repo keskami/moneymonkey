@@ -3,12 +3,18 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsEmailPage extends StatelessWidget {
-  SUDetailsEmailPage({
+class SUDetailsEmailPage extends StatefulWidget {
+  const SUDetailsEmailPage({
     super.key,
   });
 
+  @override
+  State<SUDetailsEmailPage> createState() => _SUDetailsEmailPageState();
+}
+
+class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
   final TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Future<void> submitEmail(String val) async {

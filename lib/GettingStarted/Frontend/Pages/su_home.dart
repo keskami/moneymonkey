@@ -48,28 +48,34 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     void toNextPage() async {
       int currentIndex = signUpController.pageIndex.value;
 
+      print(currentIndex);
       if (currentIndex == 0 && signUpController.name.value.isEmpty) {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Enter a Name.")));
         return;
-      }
-      if (currentIndex == 1 && !signUpController.email.value.isEmail) {
+      } else if (currentIndex == 1 && !signUpController.email.value.isEmail) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Enter a valid email.")));
         return;
-      }
-      if (currentIndex == 0 && signUpController.name.value.isEmpty ||
-          signUpController.password.value.length < 6) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Enter a valid Password.")));
+      } else if (currentIndex == 2 &&
+          (signUpController.password.value.isEmpty ||
+              signUpController.password.value.length < 6)) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Enter a valid password (min 6 characters).")));
         return;
-      }
-      if (currentIndex == 2) {
-        // This is the final step, where user data is completed
-
+      } else if (currentIndex + 1 == 3) {
         try {
           await AuthService().signUpUser();
 
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (c) => const PopScope(
+                canPop: false,
+                child: Emptyloggedin(),
+              ),
+            ),
+          );
           // Navigate to the next page (e.g., dashboard)
           // Get.to(DashboardPage());
         } catch (e) {
@@ -77,17 +83,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           Get.snackbar('Error', 'Failed to sign up. Please try again.');
         }
       }
-      if (currentIndex + 1 == 3) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (c) => const PopScope(
-                      canPop: false,
-                      child: Emptyloggedin(),
-                    )));
-      } else {
-        signUpController.pageIndex.value += 1;
-      }
+      signUpController.pageIndex.value += 1;
     }
 
     void toPreviousPage() {
