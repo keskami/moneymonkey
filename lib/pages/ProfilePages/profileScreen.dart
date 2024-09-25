@@ -81,9 +81,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: screenHeight * 0.08),
+            SizedBox(height: screenHeight * 0.06),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * .04),
+              padding: EdgeInsets.fromLTRB(screenWidth * .04,0,0,0),
               child: const Text(
                 "Total asset value",
                 style: TextStyle(fontSize: 13, fontFamily: "Ballo2"),
@@ -91,11 +91,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             Row(
               children: [
-                Text(
+                Padding(
+              padding: EdgeInsets.fromLTRB(screenWidth * .02,0,0,0),
+              child: Text(
                   totalProfitString,
                   style:
                       const TextStyle(fontSize: 36, fontFamily: "FredokaOne"),
                 ),
+            ),
                 SizedBox(
                   width: screenWidth * 0.13,
                   height: screenHeight * 0.05,
@@ -111,7 +114,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       : Icons.arrow_downward,
                   color: _changePercentage > 0 ? Colors.blue : Colors.red,
                 ),
-                const SizedBox(width: 4),
                 Text(
                   '$_changePercentage% ',
                   style: TextStyle(
@@ -126,11 +128,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(
+              height: screenHeight * 0.002,
+            ),
             Center(
               child: SizedBox(
-                width: screenWidth * 0.80,
-                height: screenHeight * 0.225,
+                width: screenWidth * 0.82,
+                height: screenHeight * 0.259,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(135, 206, 235, 1),
@@ -223,11 +227,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(height: screenHeight * .04),
+            SizedBox(height: screenHeight * .03),
             Center(
               child: SizedBox(
                 width: screenWidth * 0.9,
-                height: screenHeight * 0.325,
+                height: screenHeight * 0.364,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 255, 255, 1),
@@ -261,7 +265,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           padding: EdgeInsets.fromLTRB(
                               screenWidth * .029, screenWidth * .11, 0, 0),
                           child: Text(
-                            "A list of historical transaction",
+                            "A list of historical transactions",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 12,
@@ -289,9 +293,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       screenHeight * .02,
                                     ),
                                     border: Border.all(
-                                      color:
-                                          Colors.lightBlue, 
-                                      width: 2.0, 
+                                      color: Colors.lightBlue,
+                                      width: 2.0,
                                     ),
                                   ),
                                   child: TextButton(
