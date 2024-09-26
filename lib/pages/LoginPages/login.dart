@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_final_fields
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -39,14 +40,18 @@ class _LoginScreenState extends State<LoginScreen> {
         addUserDetails(userId, _createEmailController.text.trim());
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
-          if(!mounted){return;}
+          if (!mounted) {
+            return;
+          }
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("The email address is not valid."),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'weak-password') {
-          if(!mounted){return;}
+          if (!mounted) {
+            return;
+          }
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content:
                 Text("Please Enter A Password with at least 6 characters."),
@@ -54,14 +59,18 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'email-already-in-use') {
-          if(!mounted){return;}
+          if (!mounted) {
+            return;
+          }
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('The account already exists for that email.'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
         } else if (e.code == 'newtwork-request-failed') {
-          if(!mounted){return;}
+          if (!mounted) {
+            return;
+          }
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Unknown Error'),
             behavior: SnackBarBehavior.floating,
@@ -112,7 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       String userId = userCredential.user?.uid ?? '';
       if (userId.isNotEmpty) {
-        if(!mounted){return;}
+        if (!mounted) {
+          return;
+        }
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -122,14 +133,18 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
-        if(!mounted){return;}
+        if (!mounted) {
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Invalid Email'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
         ));
       } else if (e.code == 'invalid-credential') {
-        if(!mounted){return;}
+        if (!mounted) {
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Incorrect Email or Password'),
           behavior: SnackBarBehavior.floating,
@@ -138,9 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (e.code == 'channel-error') {
         // Pass
       } else {
-        if(!mounted){return;}
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+        if (!mounted) {
+          return;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(e.code),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
@@ -258,25 +274,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
+                                         Text(
                                           'Create Account',
-                                          style: TextStyle(
-                                              fontSize:
-                                                  22, // 3% of screen height
-                                              color: Color.fromRGBO(0, 0, 0, 1),
-                                              fontFamily: 'Ballo2'),
+                                          style: GoogleFonts.baloo2(
+                                            fontSize: 22, // 3% of screen height
+                                            color: const Color.fromRGBO(0, 0, 0, 1),
+                                          ),
                                           textAlign: TextAlign.left,
                                         ),
                                         //Fill out the information below in order
 //to access your account.
                                         Text(
                                           'Let’s get started by filling out the form below.',
-                                          style: TextStyle(
+                                          style: GoogleFonts.baloo2(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
                                               color: const Color.fromRGBO(
                                                   0, 0, 0, 1),
-                                              fontFamily: 'Ballo2'),
+                                              ),
                                           textAlign: TextAlign.left,
                                         ),
 
@@ -384,14 +399,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         SizedBox(
                                             height: screenHeight *
                                                 0.02), // 2% of screen height
-                                        const Center(
+                                         Center(
                                             child: Text(
                                           "Or sign up with",
-                                          style: TextStyle(
+                                          style: GoogleFonts.baloo2(
                                               fontSize: 14,
-                                              fontFamily: "Ballo 2",
+                                              
                                               color:
-                                                  Color.fromRGBO(0, 0, 0, 1)),
+                                                  const Color.fromRGBO(0, 0, 0, 1)),
                                         )),
                                         Align(
                                           alignment: Alignment.center,
@@ -436,34 +451,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                       children: [
                                         Text(
                                           'Welcome Back',
-                                          style: TextStyle(
+                                          style: GoogleFonts.baloo2(
                                               fontSize: screenHeight *
                                                   0.03, // 3% of screen height
                                               color: const Color.fromRGBO(
                                                   0, 0, 0, 1),
-                                              fontFamily: 'Ballo2'),
+                                             ),
                                           textAlign: TextAlign.left,
                                         ),
                                         SizedBox(height: screenHeight * .02),
 
                                         Text(
                                           'Fill out the information below in order',
-                                          style: TextStyle(
+                                          style: GoogleFonts.baloo2(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
                                               color: const Color.fromRGBO(
                                                   0, 0, 0, 1),
-                                              fontFamily: 'Ballo2'),
+                                             ),
                                           textAlign: TextAlign.left,
                                         ),
                                         Text(
                                           'to access your account.',
-                                          style: TextStyle(
+                                          style: GoogleFonts.baloo2(
                                               fontSize: screenHeight *
                                                   0.02, // 2% of screen height
                                               color: const Color.fromRGBO(
                                                   0, 0, 0, 1),
-                                              fontFamily: 'Ballo2'),
+                                              ),
                                           textAlign: TextAlign.left,
                                         ),
                                         SizedBox(
@@ -549,14 +564,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         SizedBox(
                                             height: screenHeight *
                                                 0.02), // 2% of screen height
-                                        const Center(
+                                         Center(
                                             child: Text(
                                           "Or sign in with",
-                                          style: TextStyle(
+                                          style: GoogleFonts.baloo2(
                                               fontSize: 14,
-                                              fontFamily: "Ballo 2",
+                                             
                                               color:
-                                                  Color.fromRGBO(0, 0, 0, 1)),
+                                                  const Color.fromRGBO(0, 0, 0, 1)),
                                         )),
                                         Align(
                                           alignment: Alignment.center,
@@ -601,7 +616,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     0.05, // 7% of screen height
                                                 child: TextButton(
                                                     onPressed: () {
-                                                      if(!mounted){return;}
+                                                      if (!mounted) {
+                                                        return;
+                                                      }
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
@@ -612,13 +629,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     },
                                                     child: Text(
                                                       "If you are new, create a new account here",
-                                                      style: TextStyle(
+                                                      style: GoogleFonts.baloo2(
                                                         fontSize:
                                                             screenHeight * 0.02,
                                                         color: const Color
                                                             .fromRGBO(
                                                             0, 0, 0, 1),
-                                                        fontFamily: 'Ballo2',
+                                                        
                                                         decoration:
                                                             TextDecoration
                                                                 .underline,

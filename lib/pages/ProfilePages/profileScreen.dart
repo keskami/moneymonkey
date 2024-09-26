@@ -1,11 +1,14 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
+  const UserProfileScreen({super.key});
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
@@ -51,13 +54,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             isLoading = false;
           });
         } else {
-          print("User profile not found.");
           setState(() {
             isLoading = false;
           });
         }
       } catch (e) {
-        print("Error fetching user profile: $e");
         setState(() {
           isLoading = false;
         });
@@ -66,8 +67,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   void _logout() async {
-    await FirebaseAuth.instance.signOut();
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    if (mounted) {
+       await FirebaseAuth.instance.signOut();
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else {
+      return;
+    }
   }
 
   @override
@@ -76,29 +82,29 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: screenWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: screenHeight * 0.06),
             Padding(
-              padding: EdgeInsets.fromLTRB(screenWidth * .04,0,0,0),
-              child: const Text(
+              padding: EdgeInsets.fromLTRB(screenWidth * .04, 0, 0, 0),
+              child:  Text(
                 "Total asset value",
-                style: TextStyle(fontSize: 13, fontFamily: "Ballo2"),
+                style: GoogleFonts.baloo2(fontSize: 13, ),
               ),
             ),
             Row(
               children: [
                 Padding(
-              padding: EdgeInsets.fromLTRB(screenWidth * .02,0,0,0),
-              child: Text(
-                  totalProfitString,
-                  style:
-                      const TextStyle(fontSize: 36, fontFamily: "FredokaOne"),
+                  padding: EdgeInsets.fromLTRB(screenWidth * .02, 0, 0, 0),
+                  child: Text(
+                    totalProfitString,
+                    style:
+                        const TextStyle(fontSize: 36, fontFamily: "FredokaOne"),
+                  ),
                 ),
-            ),
                 SizedBox(
                   width: screenWidth * 0.13,
                   height: screenHeight * 0.05,
@@ -154,12 +160,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: EdgeInsets.all(screenHeight * 0.02),
-                          child: const Text(
+                          child:  Text(
                             "Balance",
-                            style: TextStyle(
+                            style: GoogleFonts.baloo2(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontFamily: "Ballo 2"),
+                                ),
                           ),
                         ),
                       ),
@@ -178,12 +184,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         alignment: Alignment.bottomLeft,
                         child: Padding(
                           padding: EdgeInsets.all(screenHeight * 0.02),
-                          child: const Text(
+                          child:  Text(
                             "**** 0149",
-                            style: TextStyle(
+                            style: GoogleFonts.baloo2(
                                 color: Colors.white,
                                 fontSize: 18,
-                                fontFamily: "Ballo2"),
+                                ),
                           ),
                         ),
                       ),
@@ -191,11 +197,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         alignment: Alignment.bottomRight,
                         child: Padding(
                           padding: EdgeInsets.all(screenHeight * 0.02),
-                          child: const Text(
+                          child:  Text(
                             "05/25",
-                            style: TextStyle(
+                            style: GoogleFonts.baloo2(
                                 fontSize: 20,
-                                fontFamily: "Ballo2",
+                                
                                 color: Colors.white),
                           ),
                         ),
@@ -206,11 +212,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             padding: EdgeInsets.only(left: screenWidth * 0.1),
                             child: Row(
                               children: [
-                                Text(
+                                 Text(
                                   "7,630",
-                                  style: TextStyle(
+                                  style: GoogleFonts.baloo2(
                                       fontSize: 52,
-                                      fontFamily: "Ballo2",
+                                      
                                       color: Colors.white),
                                 ),
                                 SizedBox(
@@ -250,7 +256,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
                               screenWidth * .04, screenWidth * .04, 0, 0),
-                          child: Text(
+                          child: const Text(
                             "Transactional History",
                             style: TextStyle(
                                 color: Colors.black,
@@ -264,12 +270,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
                               screenWidth * .029, screenWidth * .11, 0, 0),
-                          child: Text(
+                          child:  Text(
                             "A list of historical transactions",
-                            style: TextStyle(
+                            style: GoogleFonts.baloo2(
                                 color: Colors.black,
                                 fontSize: 12,
-                                fontFamily: "Ballo2"),
+                                ),
                           ),
                         ),
                       ),
@@ -284,7 +290,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 Container(
                                   height: screenHeight * .055,
                                   width: screenWidth * .19,
-                                  padding: EdgeInsets.all(0),
+                                  padding: const EdgeInsets.all(0),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color:
@@ -299,12 +305,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                                   child: TextButton(
                                     onPressed: () {},
-                                    child: Text(
+                                    child:  Text(
                                       "All",
-                                      style: TextStyle(
+                                      style: GoogleFonts.baloo2(
                                         color: Colors.black,
                                         fontSize: 15,
-                                        fontFamily: "Ballo2",
+                                       
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -316,18 +322,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   width: screenWidth * .225,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Color.fromRGBO(217, 217, 217, 100),
+                                    color: const Color.fromRGBO(
+                                        217, 217, 217, 100),
                                     borderRadius: BorderRadius.circular(
                                         screenHeight * .02),
                                   ),
                                   child: TextButton(
                                     onPressed: () {},
-                                    child: const Text(
+                                    child:  Text(
                                       "Income",
-                                      style: TextStyle(
+                                      style: GoogleFonts.baloo2(
                                           color: Colors.black,
                                           fontSize: 13,
-                                          fontFamily: "Ballo2",
+                                          
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -338,7 +345,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   width: screenWidth * .225,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Color.fromRGBO(217, 217, 217, 100),
+                                    color: const Color.fromRGBO(
+                                        217, 217, 217, 100),
                                     borderRadius: BorderRadius.circular(
                                         screenHeight * .02),
                                   ),
