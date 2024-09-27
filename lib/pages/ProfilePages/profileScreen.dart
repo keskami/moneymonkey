@@ -149,7 +149,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Center(
               child: SizedBox(
                 width: screenWidth * 0.82,
-                height: screenHeight * 0.259,
+                height: screenHeight * 0.23,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(135, 206, 235, 1),
@@ -242,7 +242,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Center(
               child: SizedBox(
                 width: screenWidth * 0.9,
-                height: screenHeight * 0.364,
+                height: screenHeight * 0.4,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 255, 255, 1),
@@ -287,107 +287,155 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                                screenWidth * .029, screenHeight * .1, 0, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: screenHeight * .055,
-                                  width: screenWidth * .19,
-                                  padding: const EdgeInsets.all(0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: _currButton == "All"
-                                        ? const Color.fromRGBO(255, 224, 130, 1)
-                                        : const Color.fromRGBO(
-                                            217, 217, 217, 100),
-                                    borderRadius: BorderRadius.circular(
-                                      screenHeight * .02,
-                                    ),
-                                    border: Border.all(
-                                      color: Colors.lightBlue,
-                                      width: _currButton == "All" ? 2.0 : 0,
+                          padding: EdgeInsets.fromLTRB(
+                              screenWidth * .029, screenHeight * .1, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: screenHeight * .055,
+                                width: screenWidth * .19,
+                                padding: const EdgeInsets.all(0),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: _currButton == "All"
+                                      ? const Color.fromRGBO(255, 224, 130, 1)
+                                      : const Color.fromRGBO(
+                                          217, 217, 217, 100),
+                                  borderRadius: BorderRadius.circular(
+                                    screenHeight * .02,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: _currButton == "All" ? 2.0 : 0,
+                                  ),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    _updateButton("All");
+                                  },
+                                  child: Text(
+                                    "All",
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      _updateButton("All");
-                                    },
-                                    child: Text(
-                                      "All",
-                                      style: GoogleFonts.baloo2(
+                                ),
+                              ),
+                              SizedBox(width: screenWidth * .025),
+                              Container(
+                                height: screenHeight * .055,
+                                width: screenWidth * .225,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: _currButton == "Income"
+                                      ? const Color.fromRGBO(255, 224, 130, 1)
+                                      : const Color.fromRGBO(
+                                          217, 217, 217, 100),
+                                  borderRadius:
+                                      BorderRadius.circular(screenHeight * .02),
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: _currButton == "Income" ? 2.0 : 0,
+                                  ),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    _updateButton("Income");
+                                  },
+                                  child: Text(
+                                    "Income",
+                                    style: GoogleFonts.baloo2(
                                         color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                const SizedBox(width: 10),
-                                Container(
-                                  height: screenHeight * .055,
-                                  width: screenWidth * .225,
-                                  alignment: Alignment.center,
+                              ),
+                              SizedBox(width: screenWidth * .025),
+                              Container(
+                                height: screenHeight * .055,
+                                width: screenWidth * .225,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: _currButton == "Expenses"
+                                      ? const Color.fromRGBO(255, 224, 130, 1)
+                                      : const Color.fromRGBO(
+                                          217, 217, 217, 100),
+                                  borderRadius:
+                                      BorderRadius.circular(screenHeight * .02),
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: _currButton == "Expenses" ? 2.0 : 0,
+                                  ),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    _updateButton("Expenses");
+                                  },
+                                  child: const Text(
+                                    "Expenses",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 13,
+                                        fontFamily: "Ballo2",
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            screenWidth * .029, screenHeight * .17, 0, 0),
+                        child: Column(
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    0, screenHeight * .00, 0, 0),
+                                child: Container(
+                                  height: screenHeight * .01,
+                                  width: screenWidth * .7,
                                   decoration: BoxDecoration(
-                                    color: _currButton == "Income"
-                                        ? const Color.fromRGBO(255, 224, 130, 1)
-                                        : const Color.fromRGBO(
-                                            217, 217, 217, 100),
-                                    borderRadius: BorderRadius.circular(
-                                        screenHeight * .02),
-                                    border: Border.all(
-                                      color: Colors.lightBlue,
-                                      width: _currButton == "Income" ? 2.0 : 0,
-                                    ),
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      _updateButton("Income");
-                                    },
-                                    child: Text(
-                                      "Income",
-                                      style: GoogleFonts.baloo2(
-                                          color: Colors.black,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                )),
+                            SizedBox(
+                              width: screenWidth * .8,
+                              height: screenHeight * .2,
+                              child: Column(
+                                children: [
+                                  transactionItem(
+                                    icon: Icons.savings_outlined,
+                                    title: 'Savings',
+                                    subtitle: 'Paid From Balance',
+                                    amount: '-200',
+                                    imageUrl: 'assets/images/banana.png',
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Container(
-                                  height: screenHeight * .055,
-                                  width: screenWidth * .225,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: _currButton == "Expenses"
-                                        ? const Color.fromRGBO(255, 224, 130, 1)
-                                        : const Color.fromRGBO(
-                                            217, 217, 217, 100),
-                                    borderRadius: BorderRadius.circular(
-                                        screenHeight * .02),
-                                    border: Border.all(
-                                      color: Colors.lightBlue,
-                                      width:
-                                          _currButton == "Expenses" ? 2.0 : 0,
-                                    ),
+                                  transactionItem(
+                                    icon: Icons.savings_outlined,
+                                    title: 'Savings',
+                                    subtitle: 'Paid From Balance',
+                                    amount: '-200',
+                                    imageUrl: 'assets/images/banana.png',
                                   ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      _updateButton("Expenses");
-                                    },
-                                    child: const Text(
-                                      "Expenses",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 13,
-                                          fontFamily: "Ballo2",
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                  transactionItem(
+                                    icon: Icons.trending_up_outlined,
+                                    title: 'Investment',
+                                    subtitle: 'Paid From Balance',
+                                    amount: '-300',
+                                    imageUrl: 'assets/images/banana.png',
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -400,6 +448,47 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget transactionItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String amount,
+    required String imageUrl,
+  }) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenHeight * .0),
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: EdgeInsets.all(8),
+            child: Icon(icon, size: screenHeight * .03),
+          ),
+          SizedBox(width: screenWidth * .02),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(subtitle, style: TextStyle(color: Colors.grey)),
+              ],
+            ),
+          ),
+          Text(amount,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: screenHeight * .02)),
+          SizedBox(width: screenWidth * .02),
+          Image.asset(imageUrl, height: screenHeight * .02),
+        ],
       ),
     );
   }
