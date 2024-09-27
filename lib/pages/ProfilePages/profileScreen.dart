@@ -92,7 +92,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               padding: EdgeInsets.fromLTRB(screenWidth * .04, 0, 0, 0),
               child:  Text(
                 "Total asset value",
-                style: GoogleFonts.baloo2(fontSize: 13, ),
+                style: GoogleFonts.baloo2(fontSize: screenHeight * .02, ),
               ),
             ),
             Row(
@@ -102,7 +102,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: Text(
                     totalProfitString,
                     style:
-                        const TextStyle(fontSize: 36, fontFamily: "FredokaOne"),
+                         TextStyle(fontSize: screenHeight * .05, fontFamily: "FredokaOne"),
                   ),
                 ),
                 SizedBox(
@@ -144,7 +144,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(135, 206, 235, 1),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(screenHeight * .02),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -164,7 +164,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             "Balance",
                             style: GoogleFonts.baloo2(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: screenHeight * .0235,
                                 ),
                           ),
                         ),
@@ -188,7 +188,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             "**** 0149",
                             style: GoogleFonts.baloo2(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: screenHeight * 0.026,
                                 ),
                           ),
                         ),
@@ -255,12 +255,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
-                              screenWidth * .04, screenWidth * .04, 0, 0),
-                          child: const Text(
+                              screenWidth * .03, screenWidth * .03, 0, 0),
+                          child:  Text(
                             "Transactional History",
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
+                                fontSize: screenHeight * .035,
                                 fontFamily: "FredokaOne"),
                           ),
                         ),
@@ -274,7 +274,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             "A list of historical transactions",
                             style: GoogleFonts.baloo2(
                                 color: Colors.black,
-                                fontSize: 12,
+                                fontSize: screenHeight * .018,
                                 ),
                           ),
                         ),
