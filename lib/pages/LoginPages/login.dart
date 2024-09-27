@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
+
+import 'package:moneymonkey/pages/ProfilePages/profileScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

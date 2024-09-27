@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/pages/LoginPages/login.dart';
-import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
+//import 'package:money_monkey/pages/LoginPages/login.dart';
+//import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
+import 'package:moneymonkey/pages/LoginPages/login.dart';
+import 'package:moneymonkey/pages/ProfilePages/profileScreen.dart';
 
 // ignore: camel_case_types
 class main_page extends StatelessWidget {

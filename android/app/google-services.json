@@ -1,22 +1,21 @@
 {
   "project_info": {
-    "project_number": "851718603804",
-    "firebase_url": "https://money-monkey-f4d73-default-rtdb.firebaseio.com",
-    "project_id": "money-monkey-f4d73",
-    "storage_bucket": "money-monkey-f4d73.appspot.com"
+    "project_number": "921136508610",
+    "project_id": "money-monkey-3bd68",
+    "storage_bucket": "money-monkey-3bd68.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:851718603804:android:da547fd5aa807baf458bd9",
+        "mobilesdk_app_id": "1:921136508610:android:50d2adc6531ea952bf555b",
         "android_client_info": {
-          "package_name": "com.example.moneyMonkey"
+          "package_name": "com.moneymonkey.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCyFYwBCkYWF4fDMheevh66mJeO89sCeQQ"
+          "current_key": "AIzaSyBMEuO6TrDPBHgkOdTyL-40ZWRFwzywuZc"
         }
       ],
       "services": {

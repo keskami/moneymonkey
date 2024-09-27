@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:money_monkey/pages/LoginPages/main_page.dart';
-import 'firebase_options.dart';
+import 'package:flutter/services.dart';
+import 'routes/app_routes.dart';
+import 'package:get/get.dart';
 
-void main() async {
+var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    name: 'com.example.moneyMonkey',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
-  
-    return const MaterialApp(
-      title: "Money Monkey",
-      home: main_page(),
+    return GetMaterialApp(
+      title: 'Money Monkey',
+      theme: ThemeData(
+        fontFamily: "Baloo2"
+      ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: AppRoutes.initialRoute,
+      getPages: AppRoutes.routes,
+     
+      scaffoldMessengerKey: globalMessengerKey
     );
   }
 }
