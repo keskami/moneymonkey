@@ -73,15 +73,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-  void _logout() async {
-    if (mounted) {
-      await FirebaseAuth.instance.signOut();
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    } else {
-      return;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -411,8 +402,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 child: Container(
                                   height: screenHeight * .001,
                                   width: screenWidth * 1,
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(0, 0, 0, .3),
+                                  decoration: const BoxDecoration(
+                                    color: Color.fromRGBO(0, 0, 0, .3),
                                   ),
                                 )),
                             SizedBox(
@@ -445,11 +436,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       padding: EdgeInsets.fromLTRB(
                                           0, screenHeight * .004, 0, 0),
                                       child: Container(
-                                        height: screenHeight * .001,
-                                        width: screenWidth * .825,
-                                        decoration: BoxDecoration(
+                                        height: screenHeight * .0015,
+                                        width: screenWidth * .95,
+                                        decoration: const BoxDecoration(
                                           color:
-                                              const Color.fromRGBO(0, 0, 0, .3),
+                                              Color.fromRGBO(0, 0, 0, .3),
                                         ),
                                       )),
                                   Row(
@@ -457,7 +448,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         height: screenHeight * .05,
                                         width: screenWidth * .3,
                                         child: TextButton(
@@ -484,10 +475,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: _logout,
-              child: const Text("Logout"),
-            ),
+            SizedBox(height: screenHeight * .03,),
+            SizedBox(
+              height: screenHeight*.07,
+              width: screenWidth,
+              child: Container(
+                color: const Color.fromRGBO(255, 255, 255, 1),
+              ),
+
+            )
           ],
         ),
       ),
@@ -513,7 +509,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Icon(icon, size: screenHeight * .02),
           ),
           SizedBox(width: screenWidth * .02),
