@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
@@ -10,6 +11,36 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SignUpController signUpController = Get.find();
   final StartFreshController startFreshController = Get.find();
+
+  //Google Sign In
+  Future<void> googleAuth() async {
+    try {
+      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) return; // User cancelled sign-in
+
+      GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
+
+      if (googleAuth == null) return; // Error retrieving authentication
+
+      AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      String userId = userCredential.user?.uid ?? '';
+      String email = userCredential.user?.email ?? '';
+      print(userId);
+      print(email);
+
+      if (email.isNotEmpty) {
+        addUserDetails(userId, email);
+      }
+    } catch (e) {
+      print('Error during Google Sign In: $e');
+      // Handle error and inform the user (e.g., show a snackbar)
+    }
+  }
 
   // Function to create a new user
   Future<void> signUpUser() async {

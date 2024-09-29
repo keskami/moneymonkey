@@ -76,7 +76,9 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
           CustomSignInButton(
             color: Colors.white,
             isBordered: true,
-            toNextPage: () {},
+            toNextPage: () async {
+              await authService.googleAuth();
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

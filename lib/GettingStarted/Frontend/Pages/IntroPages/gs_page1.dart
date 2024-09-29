@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/emptyLoginPage.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/temp_profile_page.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/custom_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -28,7 +28,7 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const EmptyLoggedInPage(),
+          builder: (context) => const UserProfileScreen(),
         ));
   }
 
