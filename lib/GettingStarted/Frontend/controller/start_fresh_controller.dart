@@ -19,5 +19,5 @@ class StartFreshController extends GetxController {
     const StartFreshPage6(),
     const StartFreshPage7(),
   ];
-  RxInt learningGoal = 0.obs;
+  RxInt learningGoal = 5.obs;
 }

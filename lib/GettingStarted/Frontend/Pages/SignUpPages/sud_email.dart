@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/GettingStarted/Backend/Models/auth_service.dart'; // Import AuthService
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Widgets/sign_in_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
 class SUDetailsEmailPage extends StatefulWidget {
@@ -14,6 +16,8 @@ class SUDetailsEmailPage extends StatefulWidget {
 
 class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
   final TextEditingController emailController = TextEditingController();
+  final AuthService authService =
+      AuthService(); // Create an instance of AuthService
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +70,85 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
                 submitEmail(value);
               },
             ),
-          )
+          ),
+          const Spacer(),
+          // Sign in with Google button
+          CustomSignInButton(
+            color: Colors.white,
+            isBordered: true,
+            toNextPage: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/google.png",
+                  height: 41,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  "Sign in with Google",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Other sign-in buttons...
+          CustomSignInButton(
+            color: Colors.white,
+            isBordered: true,
+            toNextPage: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/facebook.png",
+                  height: 41,
+                ),
+                const Text(
+                  "Sign in with Facebook",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CustomSignInButton(
+            color: Colors.white,
+            isBordered: true,
+            toNextPage: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/apple.png",
+                  height: 41,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  "Sign in with Apple",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 134,
+          ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/emptyLoginPage.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/custom_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -24,12 +25,12 @@ void toNextPage() {
 
 class GettingStartedPage1State extends State<GettingStartedPage1> {
   void toLoginPage() {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => const LoginScreen(),
-    //     ));
-  } //Needs to be integrated once Login Page is shifted to main and replace the toNextPage fn
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const EmptyLoggedInPage(),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {

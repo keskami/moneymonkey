@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Backend/Models/auth_service.dart';
 import 'package:money_monkey/GettingStarted/Backend/Models/firestore_service.dart';
 import 'package:money_monkey/GettingStarted/Backend/Models/user_data.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/emptyLoggedIn.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/emptyLoginPage.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
@@ -67,21 +67,21 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         try {
           await AuthService().signUpUser();
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (c) => const PopScope(
-                canPop: false,
-                child: Emptyloggedin(),
-              ),
-            ),
-          );
           // Navigate to the next page (e.g., dashboard)
           // Get.to(DashboardPage());
         } catch (e) {
           // Show error message
           Get.snackbar('Error', 'Failed to sign up. Please try again.');
         }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => const PopScope(
+              canPop: false,
+              child: EmptyLoggedInPage(),
+            ),
+          ),
+        );
       }
       signUpController.pageIndex.value += 1;
     }

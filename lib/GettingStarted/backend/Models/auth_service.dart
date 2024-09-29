@@ -74,7 +74,7 @@ class AuthService {
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
-      'Age': gettingStartedController.age.value,
+      'Age': gettingStartedController.age.value, // Ensure value is not null
       'Knowledge Level': gettingStartedController.knowledgeLevel.value,
       'Learning Goal Per Day': startFreshController.learningGoal.value,
     });
