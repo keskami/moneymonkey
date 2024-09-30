@@ -76,9 +76,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height * .9;
-    final screenWidth = MediaQuery.of(context).size.width;
-
+    
     return Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +209,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                            padding: EdgeInsets.only(left: screenWidth * 0.1),
+                            padding: EdgeInsets.only(left: 25),
                             child: Row(
                               children: [
                                 Text(
