@@ -82,7 +82,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Column(
+            Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +137,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 )
               ],
-            ),
+            ),),
+            
             SizedBox(
               height: 3,
             ),
