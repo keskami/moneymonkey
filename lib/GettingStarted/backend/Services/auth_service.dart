@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
@@ -13,18 +14,13 @@ class AuthService {
   final StartFreshController startFreshController = Get.find();
   String user = "";
   //Google Sign In
-  Future<void> googleAuth() async {
+  Future<void> googleAuth(BuildContext context) async {
     try {
       GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      print(googleUser?.displayName);
       if (googleUser == null) return; // User cancelled sign-in
 
       GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
       user = googleUser.displayName!;
-      print(googleAuth);
-      if (googleAuth == null) {
-        return;
-      } // Error retrieving authentication
 
       AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
@@ -33,20 +29,23 @@ class AuthService {
 
       String userId = userCredential.user?.uid ?? '';
       String email = userCredential.user?.email ?? '';
-      print(userId);
-      print(email);
 
       if (email.isNotEmpty) {
         addUserDetails(userId, email);
       }
     } catch (e) {
-      print('Error during Google Sign In: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error during Google Sign In: $e",
+              ))));
       // Handle error and inform the user (e.g., show a snackbar)
     }
   }
 
   // Function to create a new user
-  Future<void> signUpUser() async {
+  Future<void> signUpUser(BuildContext context) async {
     try {
       // Get the user input from the controller
       String name = signUpController.name.value;
@@ -76,20 +75,31 @@ class AuthService {
       }
     } catch (e) {
       // Handle errors such as invalid email, weak password, etc.
-      print('Error signing up user: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error during Google Sign In: $e",
+              ))));
       rethrow;
     }
   }
 
   // Function to sign in an existing user
-  Future<void> signInUser(String email, String password) async {
+  Future<void> signInUser(
+      String email, String password, BuildContext context) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
     } catch (e) {
-      print('Error signing in user: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error Signing In: $e",
+              ))));
       rethrow;
     }
   }
@@ -126,11 +136,16 @@ class AuthService {
   }
 
   // Function to sign out the user
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     try {
       await _auth.signOut();
     } catch (e) {
-      print('Error signing out user: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error during Signing Out: $e",
+              ))));
       rethrow;
     }
   }

@@ -13,11 +13,11 @@ class StartFreshController extends GetxController {
   var pages = [
     const StartFreshPage1(),
     const StartFreshPage2(),
-    StartFreshPage3(),
+    const StartFreshPage3(),
     const StartFreshPage4(),
     const StartFreshPage5(),
     const StartFreshPage6(),
     const StartFreshPage7(),
   ];
-  RxInt learningGoal = 5.obs;
+  RxInt learningGoal = 0.obs;
 }

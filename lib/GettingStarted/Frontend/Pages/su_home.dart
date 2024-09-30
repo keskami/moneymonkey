@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import this for SystemChrome
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/Backend/Models/auth_service.dart';
-import 'package:money_monkey/GettingStarted/Backend/Models/firestore_service.dart';
 import 'package:money_monkey/GettingStarted/Backend/Models/user_data.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/emptyLoginPage.dart';
+import 'package:money_monkey/GettingStarted/Backend/Services/auth_service.dart';
+import 'package:money_monkey/GettingStarted/Backend/Services/firestore_service.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/empty_login_page.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
@@ -65,7 +65,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         return;
       } else if (currentIndex + 1 == 3) {
         try {
-          await AuthService().signUpUser();
+          await AuthService().signUpUser(context);
 
           // Navigate to the next page (e.g., dashboard)
           // Get.to(DashboardPage());

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/sign_in_button.dart';
-import 'package:money_monkey/GettingStarted/backend/Models/auth_service.dart';
+import 'package:money_monkey/GettingStarted/backend/Services/auth_service.dart';
 
 class EmptyLoggedInPage extends StatefulWidget {
   const EmptyLoggedInPage({super.key});
@@ -22,8 +22,12 @@ class _EmptyLoggedInPageState extends State<EmptyLoggedInPage> {
           CustomSignInButton(
             color: Colors.white,
             isBordered: true,
-            toNextPage: () async {},
-            child: Text("Signed In as ${authService.user}."),
+            toNextPage: () async {
+              await authService.signOut(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Logged Out. Restart app.")));
+            },
+            child: Text("Signed In as ${authService.user} Tap to Logout."),
           ),
         ],
       ),
