@@ -11,17 +11,20 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SignUpController signUpController = Get.find();
   final StartFreshController startFreshController = Get.find();
-
+  String user = "";
   //Google Sign In
   Future<void> googleAuth() async {
     try {
       GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
+      print(googleUser?.displayName);
       if (googleUser == null) return; // User cancelled sign-in
 
       GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
-
-      if (googleAuth == null) return; // Error retrieving authentication
+      user = googleUser.displayName!;
+      print(googleAuth);
+      if (googleAuth == null) {
+        return;
+      } // Error retrieving authentication
 
       AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);

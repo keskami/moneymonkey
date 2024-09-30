@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Backend/Models/auth_service.dart'; // Import AuthService
+import 'package:money_monkey/GettingStarted/Frontend/Pages/emptyLoginPage.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/sign_in_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
@@ -78,6 +79,9 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
             isBordered: true,
             toNextPage: () async {
               await authService.googleAuth();
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const EmptyLoggedInPage(),
+              ));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

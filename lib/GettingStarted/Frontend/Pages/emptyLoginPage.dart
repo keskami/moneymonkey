@@ -17,12 +17,14 @@ class _EmptyLoggedInPageState extends State<EmptyLoggedInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CustomSignInButton(
-              color: Colors.white,
-              isBordered: true,
-              toNextPage: () async {},
-              child: const Text("Sign In."))
+            color: Colors.white,
+            isBordered: true,
+            toNextPage: () async {},
+            child: Text("Signed In as ${authService.user}."),
+          ),
         ],
       ),
     );

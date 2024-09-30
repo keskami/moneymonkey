@@ -32,7 +32,7 @@ class StartFreshHome extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SignUpDetailsHome(),
+              builder: (context) => const SignUpDetailsHome(),
             ));
         return;
       }
