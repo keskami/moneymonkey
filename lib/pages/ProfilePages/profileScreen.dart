@@ -82,13 +82,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
@@ -103,7 +103,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   height: 47,
                   child: Text(
                     '$totalProfitString🍌',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 36,
                       fontFamily: "FredokaOne",
                     ),
@@ -139,7 +139,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ],
             ),),
             
-            SizedBox(
+            const SizedBox(
               height: 3,
             ),
             Center(
@@ -163,7 +163,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           child: Text(
                             "Balance",
                             style: GoogleFonts.baloo2(
@@ -176,7 +176,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topRight,
                         child: Container(
-                          padding: EdgeInsets.only(top: 15, right: 17),
+                          padding: const EdgeInsets.only(top: 15, right: 17),
                           child: SizedBox(
                             height: 39,
                             width: 41,
@@ -187,7 +187,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: Padding(
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           child: Text(
                             "**** 0149",
                             style: GoogleFonts.baloo2(
@@ -200,7 +200,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           child: Text(
                             "05/25",
                             style: GoogleFonts.baloo2(
@@ -211,7 +211,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                            padding: EdgeInsets.only(left: 25),
+                            padding: const EdgeInsets.only(left: 25),
                             child: Row(
                               children: [
                                 Text(
@@ -227,7 +227,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Center(
               child: SizedBox(
                 width: 366,
@@ -246,7 +246,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                   child: Stack(
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
@@ -263,7 +263,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(15, 31, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 31, 0, 0),
                           child: Text(
                             "A list of historical transactions",
                             style: GoogleFonts.baloo2(
@@ -276,7 +276,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(13, 55, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(13, 55, 0, 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -313,7 +313,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Container(
                                 height: 29,
                                 width: 89,
@@ -346,7 +346,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Container(
                                 height: 29,
                                 width: 89,
@@ -384,11 +384,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(20, 90, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(20, 90, 0, 0),
                         child: Column(
                           children: [
                             Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 child: Container(
                                   height: 1,
                                   width: 332,
@@ -423,7 +423,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     imageUrl: 'assets/images/banana.png',
                                   ),
                                   Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 1, 0, 0),
+                                      padding: const EdgeInsets.fromLTRB(0, 1, 0, 0),
                                       child: Container(
                                         height: 1,
                                         width: 332,
@@ -431,7 +431,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                           color: Color.fromRGBO(0, 0, 0, .3),
                                         ),
                                       )),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 4,
                                   ),
                                   Align(
@@ -467,7 +467,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 15,
                         ),
                         Column(
@@ -481,7 +481,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ),
                             Row(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   width: 20,
                                 ),
                                 Text(
@@ -495,7 +495,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 30,
                         ),
                         Flexible(
@@ -506,11 +506,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               });
                             },
                             child: AnimatedContainer(
-                              duration: Duration(milliseconds: 0),
+                              duration: const Duration(milliseconds: 0),
                               width: 191,
                               height: isExpanded ? 72 : 52,
                               decoration: BoxDecoration(
-                                color: Color.fromRGBO(135, 206, 235, 1),
+                                color: const Color.fromRGBO(135, 206, 235, 1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: isExpanded
@@ -525,7 +525,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                             fontSize: 19,
                                           ),
                                         ),
-                                        Divider(
+                                        const Divider(
                                           color: Colors.white,
                                           thickness: 1,
                                         ),
@@ -592,7 +592,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 3, 5, 3),
+      padding: const EdgeInsets.fromLTRB(0, 3, 5, 3),
       child: Row(
         children: [
           Container(
@@ -603,7 +603,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             padding: const EdgeInsets.all(8),
             child: Icon(icon, size: 15),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
