@@ -93,7 +93,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   height: 20,
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 13,
                   child: Text(
                     "Total asset value",
                     style:
@@ -101,7 +101,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 47,
                   child: Text(
                     '$totalProfitString🍌',
                     style: TextStyle(
@@ -111,7 +111,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 18,
                   child: Row(
                     children: [
                       Icon(
@@ -145,7 +145,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Center(
               child: SizedBox(
                 width: 320,
-                height: 144,
+                height: 140,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(135, 206, 235, 1),
@@ -231,7 +231,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Center(
               child: SizedBox(
                 width: 366,
-                height: 265,
+                height: 250,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 255, 255, 1),
@@ -249,7 +249,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
                           child: Text(
                             "Transactional History",
                             style: TextStyle(
@@ -263,7 +263,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(15, 37, 0, 0),
+                          padding: EdgeInsets.fromLTRB(15, 31, 0, 0),
                           child: Text(
                             "A list of historical transactions",
                             style: GoogleFonts.baloo2(
@@ -276,7 +276,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(13, 60, 0, 0),
+                          padding: EdgeInsets.fromLTRB(13, 55, 0, 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -384,7 +384,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(20, 100, 0, 0),
+                        padding: EdgeInsets.fromLTRB(20, 90, 0, 0),
                         child: Column(
                           children: [
                             Padding(
@@ -398,7 +398,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 )),
                             SizedBox(
                               width: 332,
-                              height: 160,
+                              height: 150,
                               child: Column(
                                 children: [
                                   transactionItem(
@@ -423,7 +423,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     imageUrl: 'assets/images/banana.png',
                                   ),
                                   Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                                      padding: EdgeInsets.fromLTRB(0, 1, 0, 0),
                                       child: Container(
                                         height: 1,
                                         width: 332,
@@ -452,68 +452,134 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-           
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          height: 145,
-          color: Colors.white,
-
-          child: Column(
-            children: [
-              Container(
-                height: 60,
-                width: 500,
-                color: Colors.white,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            height: isExpanded ? 160 : 130,
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                    height: isExpanded ? 86 : 65,
+                    width: 500,
+                    color: Colors.white,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "Buying Power  >",
+                              style: GoogleFonts.baloo2(
+                                fontSize: 17,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  "7,630🍌",
+                                  style: GoogleFonts.baloo2(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Flexible(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isExpanded = !isExpanded;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 0),
+                              width: 191,
+                              height: isExpanded ? 72 : 52,
+                              decoration: BoxDecoration(
+                                color: Color.fromRGBO(135, 206, 235, 1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: isExpanded
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Invest',
+                                          style: GoogleFonts.fredoka(
+                                            color: Colors.white,
+                                            fontSize: 19,
+                                          ),
+                                        ),
+                                        Divider(
+                                          color: Colors.white,
+                                          thickness: 1,
+                                        ),
+                                        Text(
+                                          'Save',
+                                          style: GoogleFonts.fredoka(
+                                            color: Colors.white,
+                                            fontSize: 19,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Grow  ^',
+                                        style: GoogleFonts.fredoka(
+                                          color: Colors.white,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: 15,
+                      width: 42,
+                      height: 38,
+                      child: Image.asset("assets/images/navbar1.png"),
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          "Buying Power  >",
-                          style: GoogleFonts.baloo2(
-                            fontSize: 17,
-                            color: Colors.black,
-                          ),
-                        )
-                      ],
-                    )
+                    SizedBox(
+                      width: 53,
+                      height: 38,
+                      child: Image.asset("assets/images/navbar2.png"),
+                    ),
+                    SizedBox(
+                      width: 39,
+                      height: 38,
+                      child: Image.asset("assets/images/navbar3.png"),
+                    ),
+                    SizedBox(
+                      width: 38,
+                      height: 38,
+                      child: Image.asset("assets/images/navbar4.png"),
+                    ),
                   ],
-                )),
-              Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: 62,
-                height: 55,
-                child: Image.asset("assets/images/navbar1.png"),
-              ),
-              SizedBox(
-                width: 63,
-                height: 60,
-                child: Image.asset("assets/images/navbar2.png"),
-              ),
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: Image.asset("assets/images/navbar3.png"),
-              ),
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: Image.asset("assets/images/navbar4.png"),
-              ),
-            ],
-          ),
-
-            ],
-          )
-         
-        ));
+                ),
+              ],
+            )));
   }
 
   Widget transactionItem({
@@ -526,7 +592,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 4, 5, 4),
+      padding: EdgeInsets.fromLTRB(0, 3, 5, 3),
       child: Row(
         children: [
           Container(
