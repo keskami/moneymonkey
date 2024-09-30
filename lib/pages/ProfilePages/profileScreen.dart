@@ -23,6 +23,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Map<String, dynamic>? profileData;
   final double _changePercentage = -2.43;
   String _currButton = "All";
+  bool isExpanded = false;
 
   void _updateButton(String buttonText) {
     setState(() {
@@ -73,14 +74,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height * .95;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: SizedBox(
+      body: SingleChildScrollView(
+      child: SizedBox(
         width: screenWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +141,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Center(
               child: SizedBox(
                 width: screenWidth * 0.82,
-                height: screenHeight * 0.23,
+                height: screenHeight * 0.2,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(135, 206, 235, 1),
@@ -232,7 +233,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Center(
               child: SizedBox(
                 width: screenWidth * 0.9,
-                height: screenHeight * 0.4,
+                height: screenHeight * 0.415,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 255, 255, 1),
@@ -408,7 +409,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 )),
                             SizedBox(
                               width: screenWidth * .8,
-                              height: screenHeight * .22,
+                              height: screenHeight * .24,
                               child: Column(
                                 children: [
                                   transactionItem(
@@ -439,31 +440,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         height: screenHeight * .0015,
                                         width: screenWidth * .95,
                                         decoration: const BoxDecoration(
-                                          color:
-                                              Color.fromRGBO(0, 0, 0, .3),
+                                          color: Color.fromRGBO(0, 0, 0, .3),
                                         ),
                                       )),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: screenHeight * .05,
-                                        width: screenWidth * .3,
-                                        child: TextButton(
-                                          onPressed: () {},
-                                          child: Text(
-                                            "View ALL >",
-                                            style: GoogleFonts.baloo2(
-                                                fontSize: screenHeight * .025,
-                                                height: screenHeight * 0,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Text("View All >"),
+                                  )
                                 ],
                               ),
                             )
@@ -475,19 +458,140 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(height: screenHeight * .03,),
             SizedBox(
-              height: screenHeight*.07,
+              height: screenHeight * .02,
+            ),
+            SizedBox(
+              height: screenHeight * 0.18,
               width: screenWidth,
               child: Container(
                 color: const Color.fromRGBO(255, 255, 255, 1),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(width: 4),
+                              TextButton(
+                                onPressed: () {
+                                  isExpanded = !isExpanded;
+                                },
+                                child: Text(
+                                  "Buying Power  >",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size(0, 0),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text(
+                              '7,630🍌',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 50),
+                    ),
+                    Flexible(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isExpanded = !isExpanded;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 300),
+                              width: 191,
+                              height: isExpanded ? 80 : 52,
+                              decoration: BoxDecoration(
+                                color: Colors.lightBlueAccent,
+                                borderRadius: BorderRadius.circular(10),
+                                border: isExpanded
+                                    ? Border.all(color: Colors.blue, width: 2)
+                                    : Border.all(
+                                        color: Colors.transparent, width: 0),
+                              ),
+                              child: isExpanded
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Invest',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Divider(
+                                          color: Colors.white,
+                                          thickness: 1,
+                                        ),
+                                        Text(
+                                          'Save',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )
+                                  : Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Grow  ^',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-
             )
           ],
         ),
       ),
+    ),
+    bottomNavigationBar: BottomAppBar(
+      color: Colors.white,
+    
+     child: Row(
+      children: [
+        Text("here")
+      ],
+     ),
+    )
     );
+   
+    
   }
 
   Widget transactionItem({
@@ -510,9 +614,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.all(8),
-            child: Icon(icon, size: screenHeight * .02),
+            child: Icon(icon, size: screenHeight * .018),
           ),
-          SizedBox(width: screenWidth * .02),
+          SizedBox(width: screenWidth * .018),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -520,19 +624,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Text(
                   title,
                   style: GoogleFonts.baloo2(
-                      fontSize: screenHeight * .02, color: Colors.black),
+                      fontSize: screenHeight * .018, color: Colors.black),
                 ),
                 Text(subtitle,
                     style: GoogleFonts.baloo2(
                         color: Colors.black,
-                        fontSize: screenHeight * .0165,
+                        fontSize: screenHeight * .015,
                         height: screenHeight * .0015)),
               ],
             ),
           ),
-          Text(amount, style: GoogleFonts.baloo2(fontSize: screenHeight * .03)),
+          Text(amount,
+              style: GoogleFonts.baloo2(fontSize: screenHeight * .0275)),
           SizedBox(width: screenWidth * .03),
-          Image.asset(imageUrl, height: screenHeight * .04),
+          Image.asset(imageUrl, height: screenHeight * .0367),
         ],
       ),
     );
