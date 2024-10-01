@@ -83,15 +83,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+            Padding(padding: const EdgeInsets.fromLTRB(10, 59, 0, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 30,
-                ),
                 SizedBox(
                   height: 13,
                   child: Text(
@@ -141,12 +137,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),),
             
             const SizedBox(
-              height: 3,
+              height: 5,
             ),
             Center(
               child: SizedBox(
                 width: 320,
-                height: 140,
+                height: 164,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(135, 206, 235, 1),
@@ -228,11 +224,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 33),
             Center(
               child: SizedBox(
                 width: 366,
-                height: 250,
+                height: 300,
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 255, 255, 1),
@@ -250,7 +246,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       const Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                          padding: EdgeInsets.fromLTRB(15, 17, 0, 0),
                           child: Text(
                             "Transactional History",
                             style: TextStyle(
@@ -264,7 +260,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 31, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 45, 0, 0),
                           child: Text(
                             "A list of historical transactions",
                             style: GoogleFonts.baloo2(
@@ -277,7 +273,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(13, 55, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(13, 77, 0, 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -389,7 +385,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         child: Column(
                           children: [
                             Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(0, 29, 0, 0),
                                 child: Container(
                                   height: 1,
                                   width: 332,
@@ -399,7 +395,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 )),
                             SizedBox(
                               width: 332,
-                              height: 150,
+                              height: 175,
                               child: Column(
                                 children: [
                                   transactionItem(
@@ -456,13 +452,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ],
         ),),
         bottomNavigationBar: BottomAppBar(
-            height: isExpanded ? 160 : 130,
+            height: isExpanded ? 185 : 167,
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: isExpanded ? 86 : 65,
+                    height: isExpanded ? 80 : 52,
                     width: 500,
                     color: Colors.white,
                     child: Row(
@@ -554,6 +550,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ],
                     )),
+                  Padding(
+                    padding: Ed
+
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
