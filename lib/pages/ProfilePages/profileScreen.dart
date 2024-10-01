@@ -78,7 +78,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-        body: Column(
+        body:  SingleChildScrollView(child:
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -89,7 +90,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 SizedBox(
                   height: 13,
@@ -227,7 +228,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 25),
             Center(
               child: SizedBox(
                 width: 366,
@@ -453,7 +454,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
           ],
-        ),
+        ),),
         bottomNavigationBar: BottomAppBar(
             height: isExpanded ? 160 : 130,
             color: Colors.white,
