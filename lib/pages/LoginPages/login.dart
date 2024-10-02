@@ -260,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Colors.black.withOpacity(0.1),
                                 blurRadius: 10.0,
                                 spreadRadius: 3.0,
-                                offset: Offset(
+                                offset: const Offset(
                                     0, 4), // Changes the position of the shadow
                               ),
                             ],
@@ -272,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(26, 22, 0, 0),
+                                    padding: const EdgeInsets.fromLTRB(26, 22, 0, 0),
                                     child: Text(
                                       'Welcome Back',
                                       style: GoogleFonts.baloo2(
@@ -283,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(26, 9, 0, 0),
+                                    padding: const EdgeInsets.fromLTRB(26, 9, 0, 0),
                                     child: Text(
                                       'Fill out the information below in order',
                                       style: GoogleFonts.baloo2(
@@ -294,7 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(26, 2, 0, 0),
+                                    padding: const EdgeInsets.fromLTRB(26, 2, 0, 0),
                                     child: Text(
                                       'to access your account.',
                                       style: GoogleFonts.baloo2(
@@ -305,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(28, 29, 0, 0),
+                                    padding: const EdgeInsets.fromLTRB(28, 29, 0, 0),
                                     child: SizedBox(
                                       width: 314,
                                       height: 49,
@@ -322,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(29, 9, 0, 0),
+                                    padding: const EdgeInsets.fromLTRB(29, 9, 0, 0),
                                     child: SizedBox(
                                       width: 314,
                                       height: 49,
@@ -411,7 +411,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         Padding(
                                           padding:
-                                              EdgeInsets.fromLTRB(0, 19, 0, 0),
+                                              const EdgeInsets.fromLTRB(0, 19, 0, 0),
                                           child: Center(
                                             child: TextButton(
                                                 onPressed: () {
