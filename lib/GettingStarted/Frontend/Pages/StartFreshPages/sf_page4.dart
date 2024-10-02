@@ -48,9 +48,24 @@ class StartFreshPage4 extends StatelessWidget {
             mainAxisAlignment:
                 MainAxisAlignment.start, // Distribute space between widgets
             children: [
-              Image.asset(
-                "assets/images/rework.png",
+              Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FGetting%20Started%20Page-Images%2Frework.png?alt=media&token=7988b569-33ea-461d-9030-a0e8b5d3cfb4",
                 width: 100,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    // If loadingProgress is null, the image has fully loaded
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
               ),
               RichText(
                 text: TextSpan(children: [
@@ -78,8 +93,23 @@ class StartFreshPage4 extends StatelessWidget {
             mainAxisAlignment:
                 MainAxisAlignment.start, // Distribute space between widgets
             children: [
-              Image.asset(
-                "assets/images/blue_icon.png",
+              Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FGetting%20Started%20Page-Images%2Fblue_icon.png?alt=media&token=8a2e6bb8-acaa-4d41-835a-9005a28fe3be",
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    // If loadingProgress is null, the image has fully loaded
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
                 width: 100,
               ),
               RichText(
@@ -108,8 +138,23 @@ class StartFreshPage4 extends StatelessWidget {
             mainAxisAlignment:
                 MainAxisAlignment.start, // Distribute space between widgets
             children: [
-              Image.asset(
-                "assets/images/watch.png",
+              Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FGetting%20Started%20Page-Images%2Fwatch.png?alt=media&token=e424e7dc-cdec-4174-bfcb-ad754d45c093",
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    // If loadingProgress is null, the image has fully loaded
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
                 width: 100,
               ),
               RichText(

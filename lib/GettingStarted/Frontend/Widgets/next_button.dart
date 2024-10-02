@@ -13,7 +13,9 @@ class NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: nextPage,
-      child: Image.asset("assets/images/nextButton.png"),
+      child: Image.network(
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FnextButton.png?alt=media&token=a949a38d-4c8d-4965-ac5e-f4bf143514ca",
+      ),
     );
   }
 }
