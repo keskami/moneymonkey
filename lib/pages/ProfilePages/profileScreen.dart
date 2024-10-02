@@ -137,7 +137,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),),
             
             const SizedBox(
-              height: 5,
+              height:15,
             ),
             Center(
               child: SizedBox(
@@ -452,7 +452,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ],
         ),),
         bottomNavigationBar: BottomAppBar(
-            height: isExpanded ? 185 : 167,
+            height: isExpanded ? 205 : 172,
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -550,35 +550,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ],
                     )),
-                  Padding(
-                    padding: Ed
 
-                  ),
+                    SizedBox(height: 10),
+                 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: 42,
+                      width: 39,
                       height: 38,
                       child: Image.asset("assets/images/navbar1.png"),
                     ),
                     SizedBox(
-                      width: 53,
-                      height: 38,
+                      width: 39,
+                      height: 39,
                       child: Image.asset("assets/images/navbar2.png"),
                     ),
                     SizedBox(
-                      width: 39,
-                      height: 38,
+                      width: 53,
+                      height: 52,
                       child: Image.asset("assets/images/navbar3.png"),
                     ),
                     SizedBox(
-                      width: 38,
-                      height: 38,
+                      width: 42,
+                      height: 35,
                       child: Image.asset("assets/images/navbar4.png"),
                     ),
                   ],
                 ),
+                SizedBox(height: 34,)
               ],
             )));
   }
