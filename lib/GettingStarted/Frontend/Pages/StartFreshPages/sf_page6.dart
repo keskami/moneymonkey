@@ -26,9 +26,14 @@ class StartFreshPage6 extends StatelessWidget {
               trianglePosition: TrianglePosition.bottom,
               borderWidth: 1,
             ),
-            Image.asset(
-              "assets/images/money_monkey.png",
-              height: 225,
+            Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+              errorBuilder: (context, error, stackTrace) => const SizedBox(
+                height: 250,
+                child: Center(
+                  child: Text('Unable to fetch Image.'),
+                ),
+              ),
             ),
             const SizedBox(
               height: 25,

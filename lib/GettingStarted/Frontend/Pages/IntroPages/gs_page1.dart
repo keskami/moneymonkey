@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,14 @@ void toNextPage() {
 }
 
 class GettingStartedPage1State extends State<GettingStartedPage1> {
+  final storageRef = FirebaseStorage.instance.ref();
+  String? imageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void toLoginPage() {
     //To Login Page
     // Navigator.push(
@@ -38,17 +47,12 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(
-            height: 17,
-          ),
-          Image.asset(
-            "assets/images/gs_home_title.png",
-          ),
-          const SizedBox(
-            height: 45,
-          ),
-          Image.asset(
-            "assets/images/getting_started_home.png",
+          const SizedBox(height: 17),
+          Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fgs_home_title.png?alt=media&token=e07fe466-46a3-4bbe-8d23-ff197ec67ce8"),
+          const SizedBox(height: 45),
+          Image.network(
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fgetting_started_home.png?alt=media&token=c16b00a6-23b1-486b-bdb6-71effbf4fb24",
             errorBuilder: (context, error, stackTrace) => const SizedBox(
               height: 230,
               width: 367,
@@ -57,9 +61,7 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Text(
             "Financial Literacy,\nlasts a lifetime",
             textAlign: TextAlign.center,
@@ -68,9 +70,7 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
               fontSize: 24,
             ),
           ),
-          const SizedBox(
-            height: 24,
-          ),
+          const SizedBox(height: 24),
           Text(
             "Don’t settle for financial confusion\njoin the Money Monkey Revolution",
             textAlign: TextAlign.center,
@@ -79,9 +79,7 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
               color: Colors.black,
             ),
           ),
-          const SizedBox(
-            height: 64,
-          ),
+          const Spacer(),
           Custombutton(
             text: 'Get Started',
             color: LightTheme().primaryBlue,
@@ -94,6 +92,7 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
             isBordered: true,
             toNextPage: toLoginPage,
           ),
+          const Spacer(),
         ],
       ),
     );

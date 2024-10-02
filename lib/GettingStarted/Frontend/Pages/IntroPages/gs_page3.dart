@@ -31,7 +31,8 @@ class GettingStartedPage3 extends StatelessWidget {
           const SizedBox(
             height: 25,
           ),
-          Image.asset("assets/images/gs_blackboard.png"),
+          Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fgs_blackboard.png?alt=media&token=08191299-2a7a-41e3-8965-3e6ee3e52eeb"),
           const SizedBox(
             height: 25,
           ),

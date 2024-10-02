@@ -43,6 +43,7 @@ dependencies:
   get: ^4.6.6
   sign_in_with_apple: ^6.1.2
   google_fonts: ^6.2.1
+  firebase_storage: ^12.3.2
 
 dev_dependencies:
   flutter_test:
@@ -72,17 +73,14 @@ flutter:
     - assets/images/money_monkey.png
     - assets/images/gs_blackboard.png
     - assets/images/nextButton.png
-    - assets/images/monkey.png
-    - assets/images/image.png
-    - assets/images/image2.png
     - assets/images/rework.png
     - assets/images/blue_icon.png
     - assets/images/magnifying_glass.png
-    - assets/images/one.png
+    - assets/images/one_banner.png
     - assets/images/watch.png
-    - assets/images/apple.png
-    - assets/images/google.png
-    - assets/images/facebook.png
+    - assets/images/apple_logo.png
+    - assets/images/google_logo.png
+    - assets/images/facebook_logo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
