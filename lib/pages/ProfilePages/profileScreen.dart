@@ -45,13 +45,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       if(type == "Income"){
         QuerySnapshot querySnapshot = await transactionsRef
       .limit(3)
-      .where('Type', isEqualTo: 'Income')
+      .where('income or expense', isEqualTo: 'Income')
       .get();
       return querySnapshot.docs;
       }else if (type == "Expenses"){
         QuerySnapshot querySnapshot = await transactionsRef
       .limit(3)
-      .where('Type', isEqualTo: 'Expense')
+      .where('income or expense', isEqualTo: 'Expense')
       .get();
       return querySnapshot.docs;
       }else{
@@ -69,28 +69,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     List<DocumentSnapshot> transactions = await _getTransactions(type);
     transactionWidgets.clear();
     if (transactions.isEmpty) {
-    print("No transactions found.");
     transactionWidgets.add(
-      Center(child: Text("No transactions found.")), 
+      const Center(child: Text("No transactions found.")), 
     );
   } else {
     for (var doc in transactions) { 
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>; 
-      String title = data['Type'] ?? 'No title'; 
-      String SorD = data['Source/Destination'] ?? "N/A";
+      String sourceOrDestination = data['Source/Destination'];
       String amount = data['Amount']?.toString() ?? '0'; 
-      String subtitle = "Paid From $SorD" ;
+      String subtitle = "Paid From $sourceOrDestination" ;
       String imageUrl =  'assets/images/banana.png'; 
+      String type = data['Type'];
       transactionWidgets.add(
         transactionItem(
-          icon: Icons.savings_outlined, 
-          title: title,
+          icon: type == "Savings" ? Icons.savings_outlined : Icons.trending_up, 
+          title: type,
           subtitle: subtitle,
           amount: amount,
           imageUrl: imageUrl,
         ),
       );
-      print("added");
      
     }
      
@@ -141,14 +139,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           });
         } else {
           setState(() {
-            print("Didn't work");
             isLoading = false;
           });
         }
       } catch (e) {
         setState(() {
           isLoading = false;
-          print(e);
         });
       }
     }
@@ -510,7 +506,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         ),
                                       ),
                                     ] else ...[
-                                      Center(
+                                      const Center(
                                         child: Text(
                                           'No Transactions',
                                           style: TextStyle(
