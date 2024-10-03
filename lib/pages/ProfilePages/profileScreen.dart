@@ -42,18 +42,32 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       .collection('profile')
       .doc('Portfolio')
       .collection('Transactions');
-
-  QuerySnapshot querySnapshot = await transactionsRef
+      if(type == "Income"){
+        QuerySnapshot querySnapshot = await transactionsRef
+      .limit(3)
+      .where('Type', isEqualTo: 'Income')
+      .get();
+      return querySnapshot.docs;
+      }else if (type == "Expenses"){
+        QuerySnapshot querySnapshot = await transactionsRef
+      .limit(3)
+      .where('Type', isEqualTo: 'Expense')
+      .get();
+      return querySnapshot.docs;
+      }else{
+        QuerySnapshot querySnapshot = await transactionsRef
       .limit(3)
       .get();
-
       return querySnapshot.docs;
+      }
+
+  
+      
   }
 
   void _setTransaction(String type) async {
     List<DocumentSnapshot> transactions = await _getTransactions(type);
     transactionWidgets.clear();
-    print(transactions);
     if (transactions.isEmpty) {
     print("No transactions found.");
     transactionWidgets.add(
@@ -64,8 +78,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>; 
       String title = data['Type'] ?? 'No title'; 
       String SorD = data['Source/Destination'] ?? "N/A";
-      String subtitle = "Paid from $SorD" ;
       String amount = data['Amount']?.toString() ?? '0'; 
+      String subtitle = "Paid From $SorD" ;
       String imageUrl =  'assets/images/banana.png'; 
       transactionWidgets.add(
         transactionItem(
@@ -77,10 +91,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
       );
       print("added");
-      setState(() {}); 
+     
     }
+     
   }
-    
+    setState(() {}); 
     
   }
 
@@ -398,6 +413,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   child: TextButton(
                                     onPressed: () {
                                       _updateButton("Income");
+                                      _setTransaction("Income");
                                     },
                                     child: Text(
                                       "Income",
@@ -431,6 +447,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   child: TextButton(
                                     onPressed: () {
                                       _updateButton("Expenses");
+                                      _setTransaction("Expenses");
                                     },
                                     child: Text(
                                       "Expenses",
