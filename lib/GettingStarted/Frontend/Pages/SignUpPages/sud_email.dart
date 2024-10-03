@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/Backend/Services/auth_service.dart';
+import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/empty_login_page.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/sign_in_button.dart';

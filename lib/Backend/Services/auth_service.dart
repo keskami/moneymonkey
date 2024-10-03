@@ -121,10 +121,11 @@ class AuthService {
       'Age': gettingStartedController.age.value, // Ensure value is not null
       'Knowledge Level': gettingStartedController.knowledgeLevel.value,
       'Learning Goal Per Day': startFreshController.learningGoal.value,
+      'Starting level': gettingStartedController.knowledgeLevel.value,
     });
 
     await userDocRef.collection('profile').doc('userProfile').set({
-      'Full Name': 'Your Name Here',
+      'Full Name': signUpController.name.value,
       'Username': 'Your Name Here',
       'Number of Followers': 0,
       'Following': 0,

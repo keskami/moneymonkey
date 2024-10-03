@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import this for SystemChrome
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/Backend/Models/user_data.dart';
-import 'package:money_monkey/GettingStarted/Backend/Services/auth_service.dart';
-import 'package:money_monkey/GettingStarted/Backend/Services/firestore_service.dart';
+import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/empty_login_page.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/progress_bar.dart';
@@ -20,21 +18,6 @@ class SignUpDetailsHome extends StatefulWidget {
 class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
   final SignUpController signUpController = Get.put(SignUpController());
 
-  void fetchUserData() async {
-    FirestoreService firestoreService = FirestoreService();
-
-    // Pass the user's ID (you might fetch it from FirebaseAuth.currentUser.uid)
-    UserData? userData = await firestoreService.getUserData('someUserId');
-
-    if (userData != null) {
-      print("User Email: ${userData.email}");
-      print("User Age: ${userData.age}");
-      print("User Profile Name: ${userData.profile.fullName}");
-    } else {
-      print("User data not found.");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Set system UI overlay style
@@ -44,7 +27,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    fetchUserData();
     void toNextPage() async {
       int currentIndex = signUpController.pageIndex.value;
 
