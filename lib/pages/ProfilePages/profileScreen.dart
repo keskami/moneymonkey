@@ -27,10 +27,61 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   String _currButton = "All";
   bool isExpanded = false;
 
+  List<Widget> transactionWidgets = [];
+
   void _updateButton(String buttonText) {
     setState(() {
       _currButton = buttonText;
     });
+  }
+
+  Future<List<DocumentSnapshot>> _getTransactions(String type) async{
+     CollectionReference transactionsRef = FirebaseFirestore.instance
+      .collection('Users')
+      .doc(userID)
+      .collection('profile')
+      .doc('Portfolio')
+      .collection('Transactions');
+
+  QuerySnapshot querySnapshot = await transactionsRef
+      .limit(3)
+      .get();
+
+      return querySnapshot.docs;
+  }
+
+  void _setTransaction(String type) async {
+    List<DocumentSnapshot> transactions = await _getTransactions(type);
+    transactionWidgets.clear();
+    print(transactions);
+    if (transactions.isEmpty) {
+    print("No transactions found.");
+    transactionWidgets.add(
+      Center(child: Text("No transactions found.")), 
+    );
+  } else {
+    for (var doc in transactions) { 
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>; 
+      String title = data['Type'] ?? 'No title'; 
+      String SorD = data['Source/Destination'] ?? "N/A";
+      String subtitle = "Paid from $SorD" ;
+      String amount = data['Amount']?.toString() ?? '0'; 
+      String imageUrl =  'assets/images/banana.png'; 
+      transactionWidgets.add(
+        transactionItem(
+          icon: Icons.savings_outlined, 
+          title: title,
+          subtitle: subtitle,
+          amount: amount,
+          imageUrl: imageUrl,
+        ),
+      );
+      print("added");
+      setState(() {}); 
+    }
+  }
+    
+    
   }
 
   @override
@@ -43,6 +94,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
     _fetchUserProfile();
+    _setTransaction("ALL");
   }
 
   Future<void> _fetchUserProfile() async {
@@ -61,17 +113,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             balance = profileData?['Balance'];
             totalBanans = profileData?['Total Bananas'];
             int netGain = profileData?['Weekly net gain'];
-            int lastWeek = balance!- netGain;
+            int lastWeek = balance! - netGain;
             double percentChange = ((balance! - lastWeek) / lastWeek) * 100;
-            double roundedPercentChange = double.parse(percentChange.toStringAsFixed(2));
+            double roundedPercentChange =
+                double.parse(percentChange.toStringAsFixed(2));
             _changePercentage = roundedPercentChange;
 
-            
             totalBananstring =
                 NumberFormat('#,###').format(totalBanans?.toInt() ?? 0);
             balanceString = NumberFormat('#,###').format(balance?.toInt() ?? 0);
             isLoading = false;
-
           });
         } else {
           setState(() {
@@ -153,7 +204,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ],
                 ),
               ),
-              const SizedBox( 
+              const SizedBox(
                 height: 15,
               ),
               Center(
@@ -313,7 +364,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   child: TextButton(
                                     onPressed: () {
                                       _updateButton("All");
-                                      _fetchUserProfile();
+                                      _setTransaction("ALL");
                                     },
                                     child: Text(
                                       "All",
@@ -394,15 +445,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     ),
                                   ),
                                 ),
-                          
-                                
                               ],
-
                             ),
                           ),
-                          
                         ),
-                      
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 90, 0, 0),
                           child: Column(
@@ -422,28 +468,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 height: 175,
                                 child: Column(
                                   children: [
-                                    transactionItem(
-                                      icon: Icons.savings_outlined,
-                                      title: 'Savings',
-                                      subtitle: 'Paid From Balance',
-                                      amount: '-200',
-                                      imageUrl: 'assets/images/banana.png',
-                                    ),
-                                    transactionItem(
-                                      icon: Icons.savings_outlined,
-                                      title: 'Savings',
-                                      subtitle: 'Paid From Balance',
-                                      amount: '-200',
-                                      imageUrl: 'assets/images/banana.png',
-                                    ),
-                                    transactionItem(
-                                      icon: Icons.trending_up_outlined,
-                                      title: 'Investment',
-                                      subtitle: 'Paid From Balance',
-                                      amount: '-300',
-                                      imageUrl: 'assets/images/banana.png',
-                                    ),
-                                    Padding(
+                                    if (transactionWidgets.isNotEmpty) ...[
+                                      ...transactionWidgets,
+                                      Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 1, 0, 0),
                                         child: Container(
@@ -452,20 +479,32 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                           decoration: const BoxDecoration(
                                             color: Color.fromRGBO(0, 0, 0, .3),
                                           ),
-                                        )),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Text(
-                                        "View All >",
-                                        style: GoogleFonts.baloo2(fontSize: 18),
+                                        ),
                                       ),
-                                    )
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Text(
+                                          "View All >",
+                                          style:
+                                              GoogleFonts.baloo2(fontSize: 18),
+                                        ),
+                                      ),
+                                    ] else ...[
+                                      Center(
+                                        child: Text(
+                                          'No Transactions',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         )
@@ -648,8 +687,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
           ),
           Text(amount,
-              style: GoogleFonts.baloo2(fontSize: screenHeight * .0275,
-              fontWeight: FontWeight.w500)),
+              style: GoogleFonts.baloo2(
+                  fontSize: screenHeight * .0275, fontWeight: FontWeight.w500)),
           SizedBox(width: screenWidth * .03),
           Image.asset(imageUrl, height: screenHeight * .0367),
         ],
