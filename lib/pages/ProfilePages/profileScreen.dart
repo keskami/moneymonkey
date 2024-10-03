@@ -60,9 +60,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             profileData = profileSnapshot.data() as Map<String, dynamic>?;
             balance = profileData?['Balance'];
             totalBanans = profileData?['Total Bananas'];
-            double? netGain =  profileData?['Weekly net gain'];
-            _changePercentage = ((balance! - (balance! - netGain!)) / (balance! - netGain)) * 100;
-            _changePercentage = double.parse(_changePercentage.toStringAsFixed(2));
+            int netGain = profileData?['Weekly net gain'];
+            int lastWeek = balance!- netGain;
+            double percentChange = ((balance! - lastWeek) / lastWeek) * 100;
+            double roundedPercentChange = double.parse(percentChange.toStringAsFixed(2));
+            _changePercentage = roundedPercentChange;
+
+            
             totalBananstring =
                 NumberFormat('#,###').format(totalBanans?.toInt() ?? 0);
             balanceString = NumberFormat('#,###').format(balance?.toInt() ?? 0);
@@ -71,12 +75,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           });
         } else {
           setState(() {
+            print("Didn't work");
             isLoading = false;
           });
         }
       } catch (e) {
         setState(() {
           isLoading = false;
+          print(e);
         });
       }
     }
@@ -147,7 +153,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ],
                 ),
               ),
-              const SizedBox(
+              const SizedBox( 
                 height: 15,
               ),
               Center(
@@ -307,6 +313,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   child: TextButton(
                                     onPressed: () {
                                       _updateButton("All");
+                                      _fetchUserProfile();
                                     },
                                     child: Text(
                                       "All",
@@ -387,10 +394,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     ),
                                   ),
                                 ),
+                          
+                                
                               ],
+
                             ),
                           ),
+                          
                         ),
+                      
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20, 90, 0, 0),
                           child: Column(
