@@ -126,7 +126,7 @@ class AuthService {
 
     await userDocRef.collection('profile').doc('userProfile').set({
       'Full Name': signUpController.name.value,
-      'Username': 'Your Name Here',
+      'Username': signUpController.name.value,
       'Number of Followers': 0,
       'Following': 0,
       'Top Achievements': 0,
