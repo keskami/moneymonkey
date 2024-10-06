@@ -34,7 +34,10 @@ class CustomStat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.ac_unit),
+          Image.network(
+            iconURL,
+            width: 35,
+          ),
           RichText(
             text: TextSpan(
                 text: "$number\n",
