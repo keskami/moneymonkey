@@ -182,35 +182,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ],
                             ),
-                            SingleChildScrollView(
-                              padding: const EdgeInsets.all(10),
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    size: 45,
-                                    color: LightTheme().primaryGreen,
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Icon(
-                                    Icons.add,
-                                    size: 45,
-                                    color: LightTheme().primaryGreen,
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Icon(
-                                    Icons.add,
-                                    size: 45,
-                                    color: LightTheme().primaryGreen,
-                                  ),
-                                ],
-                              ),
+                            Row(
+                              //Temporary Icons until Achievements are figured out.
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  size: screenHeight * 0.07,
+                                  color: LightTheme().primaryGreen,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Icon(
+                                  Icons.add,
+                                  size: screenHeight * 0.07,
+                                  color: LightTheme().primaryGreen,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Icon(
+                                  Icons.add,
+                                  size: screenHeight * 0.07,
+                                  color: LightTheme().primaryGreen,
+                                ),
+                              ],
                             ),
                             const Text(
                               "Overall Stats",
@@ -282,24 +279,36 @@ class _ProfilePageState extends State<ProfilePage> {
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (value) {},
         selectedIndex: 3,
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.abc),
+            icon: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FLesson%20Page.png?alt=media&token=1e20b2e4-ee49-49cc-bc01-dcf08b21104b",
+              width: screenWidth * 0.12,
+            ),
             enabled: false,
             label: "Page1",
           ),
           NavigationDestination(
-            icon: Icon(Icons.abc),
+            icon: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FPortfolio.png?alt=media&token=d2012e7d-19fb-4766-9777-ce09231e4021",
+              width: screenWidth * 0.12,
+            ),
             enabled: false,
             label: "Page2",
           ),
           NavigationDestination(
-            icon: Icon(Icons.abc),
+            icon: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FTrading.png?alt=media&token=2037e6b1-6fb6-48af-aecf-5f288c2159b0",
+              width: screenWidth * 0.12,
+            ),
             enabled: false,
             label: "Page3",
           ),
           NavigationDestination(
-            icon: Icon(Icons.abc),
+            icon: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FProfile.png?alt=media&token=80ec6904-46b7-4f76-85e1-dc21531e7a7c",
+              width: screenWidth * 0.12,
+            ),
             enabled: true,
             label: "Profile",
           ),
