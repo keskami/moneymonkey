@@ -37,6 +37,21 @@ class CustomStat extends StatelessWidget {
           Image.network(
             iconURL,
             width: 35,
+            loadingBuilder: (BuildContext context, Widget child,
+                ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null) {
+                // If loadingProgress is null, the image has fully loaded
+                return child;
+              }
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
           ),
           RichText(
             text: TextSpan(

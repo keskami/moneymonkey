@@ -31,7 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void getUserInfo() async {
     userData = (await firebaseService.getUser(widget.userID)) as UserData?;
-
     setState(() {
       isLoading = false; // Set loading to false once data is fetched
     });
@@ -74,6 +73,26 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Image.network(
                                 "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FProfile%20Page%2FNoProfilePicture.png?alt=media&token=454be09c-518a-42d5-bee7-e64e4cc44376",
                                 height: screenHeight / 4.5,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    // If loadingProgress is null, the image has fully loaded
+                                    return child;
+                                  }
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             Text(

@@ -104,6 +104,24 @@ class AuthService {
     }
   }
 
+  // Check if username exists within the Profile map
+  Future<bool> checkUsernameExists(String username) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('Profile.Username', isEqualTo: username)
+          .get();
+
+      // Check if any document exists with the provided username
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      // Log the error for debugging purposes
+      print("Error checking username existence: $e");
+      // Handle error appropriately; you may choose to throw an exception or return false
+      return false; // Assuming false if an error occurs
+    }
+  }
+
   //Add User Details
   Future<void> addUserDetails(String userId, String email) async {
     final userDocRef =
@@ -114,7 +132,6 @@ class AuthService {
       return;
     }
 
-    //
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
@@ -122,17 +139,19 @@ class AuthService {
       'Knowledge Level': gettingStartedController.knowledgeLevel.value,
       'Learning Goal Per Day': startFreshController.learningGoal.value,
       'Starting level': gettingStartedController.knowledgeLevel.value,
-    });
-
-    await userDocRef.collection('profile').doc('userProfile').set({
-      'Full Name': signUpController.name.value,
-      'Username': signUpController.name.value,
-      'Number of Followers': 0,
-      'Following': 0,
-      'Top Achievements': 0,
-      'Streak': 0,
-      'Total Profit': 0,
-      'Average Monthly Growth': 0,
+      'Profile': {
+        // Storing profile information as a map within the user document
+        'Full Name': signUpController.name.value,
+        'Username':
+            signUpController.name.value, // Updated to use the correct field
+        'Number of Followers': 0,
+        'Following': 0,
+        'Top Achievements': 0,
+        'Streak': 0,
+        'Total Profit': 0,
+        'Average Monthly Growth': 0,
+        'Portfolio Score': 0, // Add any other fields needed
+      },
     });
   }
 
