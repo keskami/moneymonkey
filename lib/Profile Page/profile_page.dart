@@ -205,26 +205,17 @@ class _ProfilePageState extends State<ProfilePage> {
                               //Temporary Icons until Achievements are figured out.
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.add,
-                                  size: screenHeight * 0.07,
-                                  color: LightTheme().primaryGreen,
+                                Image.network(
+                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Achievements%2Fachievement_1.png?alt=media&token=976c4a31-8935-4577-8371-ecc87513e2c5",
+                                  width: screenWidth * 0.25,
                                 ),
-                                const SizedBox(
-                                  width: 20,
+                                Image.network(
+                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Achievements%2Fachievement_2.png?alt=media&token=5949c906-f8db-401c-902e-e3fc9d46ec7d",
+                                  width: screenWidth * 0.25,
                                 ),
-                                Icon(
-                                  Icons.add,
-                                  size: screenHeight * 0.07,
-                                  color: LightTheme().primaryGreen,
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Icon(
-                                  Icons.add,
-                                  size: screenHeight * 0.07,
-                                  color: LightTheme().primaryGreen,
+                                Image.network(
+                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Achievements%2Fachievement_3.png?alt=media&token=5541600c-da47-4c45-b5e0-aab024bb8076",
+                                  width: screenWidth * 0.25,
                                 ),
                               ],
                             ),
