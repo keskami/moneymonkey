@@ -90,12 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final userSnapshot = await userDocRef.get();
 
     if (userSnapshot.exists) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const UserProfileScreen(),
-          ),
-        );
+      return;
     }
 
     await userDocRef.set({
