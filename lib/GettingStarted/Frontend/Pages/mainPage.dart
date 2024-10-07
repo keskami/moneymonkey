@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/pages/LoginPages/login.dart';
-import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/empty_login_page.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
 
 // ignore: camel_case_types
-class main_page extends StatelessWidget {
-  const main_page({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +16,13 @@ class main_page extends StatelessWidget {
           if (snapshot.hasData) {
             User? user = FirebaseAuth.instance.currentUser;
             String userId = user?.uid ?? '';
-            if(userId.isEmpty){
-              return const LoginScreen();
-            }else{
-               return const LoginScreen();
+            if (userId.isEmpty) {
+              return GettingStartedHome();
+            } else {
+              return const EmptyLoggedInPage();
             }
           } else {
-            return const LoginScreen();
+            return GettingStartedHome();
           }
         },
       ),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
 import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -89,7 +90,12 @@ class _LoginScreenState extends State<LoginScreen> {
     final userSnapshot = await userDocRef.get();
 
     if (userSnapshot.exists) {
-      return;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UserProfileScreen(),
+          ),
+        );
     }
 
     await userDocRef.set({
@@ -422,7 +428,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const UserProfileScreen(),
+                                                           GettingStartedHome(),
                                                     ),
                                                   );
                                                 },
