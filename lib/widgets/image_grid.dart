@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:moneymonkey/controller/controller.dart';
 
 import 'package:moneymonkey/widgets/question_feedback_dialog.dart';
 
@@ -62,6 +65,8 @@ class ImageGrid extends StatelessWidget {
   }
 
   void _showCorrectDialog(BuildContext context) {
+    ProgressController progressController =  Get.find<ProgressController>(); 
+     progressController.setQuizCompleted();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -76,6 +81,16 @@ class ImageGrid extends StatelessWidget {
       builder: (BuildContext context) {
         return const QuestionFeedbackDialog(isCorrect: false);
       },
-    );
+    ).then((_) {
+      // Once the dialog is dismissed, mark the quiz as completed
+       ProgressController progressController = Get.find<ProgressController>(); 
+      progressController.setQuizCompleted(); // Inform controller that the quiz is done
+    });;
+  }
+
+    // Call this function when the user submits a correct answer
+  void onCorrectAnswer() {
+    _showCorrectDialog(Get.context!); // Pass the context and show the dialog
   }
 }
+

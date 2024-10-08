@@ -25,7 +25,7 @@ class CardTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "BEGINNER UNIT 2",
+            "BEGINNER UNIT 1",
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,

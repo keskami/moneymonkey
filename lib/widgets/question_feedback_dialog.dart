@@ -65,6 +65,7 @@ class QuestionFeedbackDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
+              
               child: const Text(
                 'Got it',
                 style: TextStyle(fontSize: 18, color: Colors.white),

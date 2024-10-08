@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moneymonkey/controller/controller.dart';
 import 'package:moneymonkey/models/arrowclipper.dart';
 import 'package:moneymonkey/routes/app_routes.dart';
 import 'package:moneymonkey/widgets/card_title.dart';
-import 'package:moneymonkey/widgets/grid_screenshot.dart';
+//import 'package:moneymonkey/widgets/grid_screenshot.dart';
 import 'package:moneymonkey/widgets/top_bar.dart';
 
 class HomePage extends StatefulWidget {
   
-   const HomePage({super.key});
+  
+    HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  String? userID;
+late ProgressController progressController;
+    @override
+  void initState() {
+    super.initState();
+    // Initialize ProgressController
+    progressController = Get.put(ProgressController());
+  }
    int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -27,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-            const TopBar(),
+            TopBar(userId: 'userID',progressController: progressController),
               const SizedBox(height: 16),
               CardTitle(),
               const SizedBox(height: 20),

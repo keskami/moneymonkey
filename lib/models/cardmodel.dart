@@ -8,12 +8,14 @@ class CardModel {
   final Color color;
   final String frontText;
   final Widget backWidget;
+  bool isFlipped;
   GlobalKey<FlipCardState> cardKey;
 
   CardModel({
     required this.color,
     required this.frontText,
     required this.backWidget,
+   this.isFlipped= false
   }) : cardKey = GlobalKey<FlipCardState>();
 }
 
@@ -34,8 +36,8 @@ class _DetailNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 310,
-      height: 545,
+      width: 350,
+      height: 605,
       child: Container(
         decoration: BoxDecoration(
           color: color,

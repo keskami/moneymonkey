@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:moneymonkey/pages/ProfilePages/profileScreen.dart';
+import 'package:moneymonkey/screens/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  
   @override
   void initState() {
     super.initState();
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
-        } else if (e.code == 'newtwork-request-failed') {
+        } else if (e.code == 'network-request-failed') {
           if (!mounted) {
             return;
           }
@@ -84,34 +86,82 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> addUserDetails(String userId, String email) async {
-    final userDocRef =
-        FirebaseFirestore.instance.collection('Users').doc(userId);
+Future<void> createUserInFirestore(String userId, String email) async {
+  try {
+    final userDocRef = FirebaseFirestore.instance.collection('Users').doc(userId);
     final userSnapshot = await userDocRef.get();
 
-    if (userSnapshot.exists) {
-      return;
+    if (!userSnapshot.exists) {
+      // Adding user details to Firestore if not already present
+      await addUserDetails(userId, email);
+    } else {
+      // If user exists, still ensure Progression sub-collection exists
+      await ensureProgressionExists(userDocRef);
+    }
+  } catch (e) {
+    print("Error creating user in Firestore: $e");
+  }
+}
+
+Future<void> addUserDetails(String userId, String email) async {
+  try {
+    final userDocRef = FirebaseFirestore.instance.collection('Users').doc(userId);
+    final userSnapshot = await userDocRef.get();
+
+    if (!userSnapshot.exists) {
+      // Add user details
+      await userDocRef.set({
+        'User ID': userId,
+        'Email': email,
+        'Age': 0,
+        'Knowledge Level': 0,
+        'Learning Goal Per Day': 0
+      });
+
+      // Add profile sub-collection
+      await userDocRef.collection('profile').doc('userProfile').set({
+        'Full Name': 'Your Name Here',
+        'Username': 'Your Name Here',
+        'Number of Followers': 0,
+        'Following': 0,
+        'Top Achievements': 0,
+        'Streak': 0,
+        'Total Profit': 0,
+        'Average Monthly Growth': 0,
+      });
     }
 
-    await userDocRef.set({
-      'User ID': userId,
-      'Email': email,
-      'Age': 0,
-      'Knowledge Level': 0,
-      'Learning Goal Per Day': 0
-    });
-
-    await userDocRef.collection('profile').doc('userProfile').set({
-      'Full Name': 'Your Name Here',
-      'Username': 'Your Name Here',
-      'Number of Followers': 0,
-      'Following': 0,
-      'Top Achievements': 0,
-      'Streak': 0,
-      'Total Profit': 0,
-      'Average Monthly Growth': 0,
-    });
+    // Ensure the Progression sub-collection is created
+    await ensureProgressionExists(userDocRef);
+  } catch (e) {
+    print("Error adding user details: $e");
   }
+}
+// Function to ensure Progression sub-collection exists
+Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
+  try {
+    final progressionCollectionRef = userDocRef.collection('Progression');
+    final progressionSnapshot = await progressionCollectionRef.get();
+
+    if (progressionSnapshot.docs.isEmpty) {
+      await progressionCollectionRef.doc('progression1').set({
+        'Level': 1,
+        'Unit': 1,
+        'Lesson': 'Earning and Saving',
+        'Progress': 0,
+        'Quiz Scores': [],
+        'Earnings from Lesson': {
+          'Monkeys': 0,
+          'Diamonds': 0,
+          'Bananas': 0,
+        },
+      });
+      print("Progression sub-collection created for user.");
+    }
+  } catch (e) {
+    print("Error ensuring progression sub-collection: $e");
+  }
+}
 
   Future<void> logIn() async {
     try {
@@ -121,14 +171,16 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _loginPasswordController.text.trim(),
       );
       String userId = userCredential.user?.uid ?? '';
-      if (userId.isNotEmpty) {
+        String email = userCredential.user?.email ?? '';
+      if (userId.isNotEmpty && email.isNotEmpty) {
+         await createUserInFirestore(userId, email);
         if (!mounted) {
           return;
         }
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const UserProfileScreen(),
+            builder: (context) =>  HomePage(),
           ),
         );
       }
@@ -164,6 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
       }
     }
+    
   }
 
   Future googleAuth() async {
@@ -362,6 +415,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     fontSize: 16,
                                                   ),
                                                 ),
+                                                
                                               )),
                                         ),
                                         SizedBox(

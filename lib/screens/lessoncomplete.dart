@@ -1,143 +1,249 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
-class LessonCompleteScreen extends StatelessWidget {
+class LessonCompleteScreen extends StatefulWidget {
+  @override
+  _LessonCompleteScreenState createState() => _LessonCompleteScreenState();
+}
+
+class _LessonCompleteScreenState extends State<LessonCompleteScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late ConfettiController _confettiController;
+  bool _bananaClicked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.7).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    );
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 1));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  void _onBananaTap() {
+    setState(() {
+      _bananaClicked = true;
+    });
+    _controller.forward();
+    _confettiController.play();
+  }
+
+  void _onScreenTap() {
+    if (_bananaClicked) {
+      setState(() {
+        _bananaClicked = false;
+      });
+      _controller.reset();
+      _confettiController.stop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // Wrapping the Stack in a SizedBox with height constraint
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6, // Limit the height to 60% of the screen height
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none, // Allow overflow
+        body: GestureDetector(
+          onTap: _onScreenTap, // Detect tap anywhere on the screen
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  // Full hanging image with ropes
-                  Positioned(
-                    top: 0, // Start the ropes from the top of the screen
-                    child: Image.asset(
-                      'assets/images/hang.png', // Your image with ropes
-                     // width: MediaQuery.of(context).size.width * 0.9, // Adjust size to fill 90% width
-                     height: 598
-            ,
-                      width: 598, // Specify a fixed width, e.g., 400 pixels
-  
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  // Position stars inside the image
-                  Positioned(
-                    top: 300, // Adjust to control the stars' vertical position
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      clipBehavior: Clip.none,
                       children: [
-                        Image.asset(
-                          'assets/images/star.png', // Replace with correct path
-                          height: 60, // Size of the stars
+                        Positioned(
+                          top: 0,
+                          child: Image.asset(
+                            'assets/images/hang.png',
+                            height: 598,
+                            width: 598,
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                        SizedBox(width: 10), // Space between stars
-                        Image.asset(
-                          'assets/images/star.png', // Replace with correct path
-                          height: 60,
+                        Positioned(
+                          top: 300,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/star.png',
+                                height: 60,
+                              ),
+                              SizedBox(width: 10),
+                              Image.asset(
+                                'assets/images/star.png',
+                                height: 60,
+                              ),
+                              SizedBox(width: 10),
+                              Image.asset(
+                                'assets/images/star.png',
+                                height: 60,
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(width: 10),
-                        Image.asset(
-                          'assets/images/star.png', // Replace with correct path
-                          height: 60,
+                        Positioned(
+                          top: 60,
+                          child: Text(
+                            "Lesson\n Complete!",
+                            style: TextStyle(
+                              fontFamily: "Baloo 2",
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 130,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Add your continue button logic
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 40,
+                                vertical: 12,
+                              ),
+                              backgroundColor: Color(0xFF87CEEB),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              'CONTINUE',
+                              style: TextStyle(
+                                fontFamily: "Baloo 2",
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  // Place Lesson Complete text between ropes and stars
-                  Positioned(
-                    top: 60, // Adjust to control vertical position of the text
-                    child: Text(
-                      "Lesson\n Complete!",
-                      style: TextStyle(
-                        fontFamily: "Baloo 2",
-                        fontSize: 40, // Larger text size
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                  SizedBox(height: 80),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    // Center both items in the row
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Banana Container with text
+                      GestureDetector(
+                        onTap: _onBananaTap,
+                        child: Column(
+                          // Wrap in a Column to align the image and text vertically
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.green, width: 2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.all(8),
+                              child: Image.asset(
+                                'assets/images/bigbanana.png',
+                                height: 90,
+                              ),
+                            ),
+                            SizedBox(
+                                height:
+                                    0), // Add some space between the image and the text
+                            if (_bananaClicked)
+                              Text(
+                                "+10 Bananas!",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                      SizedBox(width: 20),
+                      // Treasure Chest Container
+                      GestureDetector(
+                        onTap: () {
+                          // Add action for treasure chest
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.green, width: 2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.all(8),
+                          child: Image.asset(
+                            'assets/images/bigtreasure.png',
+                            height: 90,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  // Center the Continue button within the image
-                  Positioned(
-                    bottom: 90, // Adjust to place the button inside the image
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add your continue button logic
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 12,
-                        ),
-                        backgroundColor: Color(0xFF87CEEB), // Light blue button color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+                  if (_bananaClicked)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
                       child: Text(
-                        'CONTINUE',
+                        "",
                         style: TextStyle(
-                          fontFamily: "Baloo 2",
-                          fontSize: 20,
+                          fontSize: 24,
+                          color: Colors.orange,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
-            ),
-            SizedBox(height: 80), // Adjust height to position the bottom icons better
-            // Banana and treasure images at the bottom
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    // Add action for banana
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.all(8),
-                    child: Image.asset(
-                      'assets/images/bigbanana.png', // Replace with correct path
-                      height: 90, // Larger images
+              // Confetti animation
+              Align(
+                alignment: Alignment.topCenter,
+                child: ConfettiWidget(
+                  confettiController: _confettiController,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  shouldLoop: false,
+                  colors: [Colors.yellow, Colors.orange, Colors.green],
+                  numberOfParticles: 30,
+                ),
+              ),
+              // Lottie Animation for extra cool effect
+              if (_bananaClicked)
+                Center(
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: Lottie.asset(
+                      'assets/images/specsbanana.json', // Add your Lottie file path
+                      width: 200,
+                      height: 200,
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {
-                    // Add action for treasure chest
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.all(8),
-                    child: Image.asset(
-                      'assets/images/bigtreasure.png', // Replace with correct path
-                      height: 90, // Larger images
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

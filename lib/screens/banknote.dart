@@ -107,6 +107,13 @@ class _BankNotePageState extends State<BankNotePage> {
       _cardRotation = 0.0;
       _isDragging = false;
       _cards.insert(0, swipedCard);
+
+
+      print("carddds");
+        // Check if all cards have been flipped and swiped
+    if (_cards.every((card) => card.isFlipped)) {
+      progressController.setCardsCompleted();  // Inform controller that cards are flipped and swiped
+    }
     });
   }
 
@@ -116,13 +123,19 @@ class _BankNotePageState extends State<BankNotePage> {
       flipOnTouch: true,
       front: _buildCardContent(cardModel),
       back: cardModel.backWidget,
+       onFlipDone: (bool flipped) {
+        if(flipped && !cardModel.isFlipped){   //ensure that isFlipped is only marked true if the card is flipped for the first time.
+           cardModel.isFlipped = true; 
+        }
+      // Track card flipping
+    },
     );
   }
 
   Widget _buildCardContent(CardModel cardModel) {
     return SizedBox(
-      width: 310,
-      height: 545,
+      width: 350,
+      height: 605,
       child: Container(
         decoration: BoxDecoration(
           color: cardModel.color,
