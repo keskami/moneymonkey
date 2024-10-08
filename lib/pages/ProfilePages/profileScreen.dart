@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -152,6 +153,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidthUnit = MediaQuery.of(context).size.width / 390;
+    double screenHeightUnit = MediaQuery.of(context).size.height / 880;
     return Scaffold(
         body: SingleChildScrollView(
           child: Column(
@@ -165,7 +168,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 13,
+                      height:  screenHeightUnit * 13,
                       child: Text(
                         "Total asset value",
                         style: GoogleFonts.baloo2(
@@ -173,7 +176,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 47,
+                      height:  screenHeightUnit * 47,
                       child: Text(
                         '$totalBananstring🍌',
                         style: const TextStyle(
@@ -183,7 +186,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 18,
+                      height:  screenHeightUnit * 18,
                       child: Row(
                         children: [
                           Icon(
@@ -215,13 +218,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 15,
+              SizedBox(
+                height:  screenHeightUnit * 15,
               ),
               Center(
                 child: SizedBox(
-                  width: 320,
-                  height: 164,
+                  width:  screenWidthUnit *  320,
+                  height:  screenHeightUnit * 164,
                   child: Container(
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(135, 206, 235, 1),
@@ -254,8 +257,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           child: Container(
                             padding: const EdgeInsets.only(top: 15, right: 17),
                             child: SizedBox(
-                              height: 39,
-                              width: 41,
+                              height:  screenHeightUnit * 39,
+                              width:  screenWidthUnit *  41,
                               child: Image.asset('assets/images/bank.png'),
                             ),
                           ),
@@ -303,11 +306,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 33),
+              SizedBox(height:  screenHeightUnit * 33),
               Center(
                 child: SizedBox(
-                  width: 366,
-                  height: 300,
+                  width:  screenWidthUnit *  366,
+                  height:  screenHeightUnit * 300,
                   child: Container(
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(255, 255, 255, 1),
@@ -357,8 +360,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: 29,
-                                  width: 69,
+                                  height:  screenHeightUnit * 29,
+                                  width:  screenWidthUnit *  69,
                                   padding: const EdgeInsets.all(0),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -369,7 +372,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                       color: Colors.lightBlue,
-                                      width: _currButton == "All" ? 2 : 0,
+                                      width: _currButton == "All" ? screenWidthUnit * 2 : screenWidthUnit * 0,
                                     ),
                                   ),
                                   child: TextButton(
@@ -385,15 +388,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         fontWeight: _currButton == "All"
                                             ? FontWeight.bold
                                             : FontWeight.normal,
-                                        height: -.01,
+                                        height:  screenHeightUnit * -.01,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width:  screenWidthUnit *  10),
                                 Container(
-                                  height: 29,
-                                  width: 89,
+                                  height:  screenHeightUnit * 29,
+                                  width:  screenWidthUnit *  89,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: _currButton == "Income"
@@ -403,7 +406,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                       color: Colors.lightBlue,
-                                      width: _currButton == "Income" ? 2 : 0,
+                                      width:    _currButton == "Income" ? screenWidthUnit * 2 : screenWidthUnit * 0,
                                     ),
                                   ),
                                   child: TextButton(
@@ -419,15 +422,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         fontWeight: _currButton == "Income"
                                             ? FontWeight.bold
                                             : FontWeight.normal,
-                                        height: -.01,
+                                        height:  screenHeightUnit * -.01,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width:  screenWidthUnit *  10),
                                 Container(
-                                  height: 29,
-                                  width: 89,
+                                  height:  screenHeightUnit * 29,
+                                  width:  screenWidthUnit *  89,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: _currButton == "Expenses"
@@ -437,7 +440,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                       color: Colors.lightBlue,
-                                      width: _currButton == "Expenses" ? 2 : 0,
+                                      width:    _currButton == "Expenses" ? screenWidthUnit * 2 : screenWidthUnit * 0,
                                     ),
                                   ),
                                   child: TextButton(
@@ -453,7 +456,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         fontWeight: _currButton == "Expenses"
                                             ? FontWeight.bold
                                             : FontWeight.normal,
-                                        height: -.01,
+                                        height:  screenHeightUnit * -.01,
                                       ),
                                     ),
                                   ),
@@ -470,15 +473,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 29, 0, 0),
                                   child: Container(
-                                    height: 1,
-                                    width: 332,
+                                    height:  screenHeightUnit * 1,
+                                    width:  screenWidthUnit *  332,
                                     decoration: const BoxDecoration(
                                       color: Color.fromRGBO(0, 0, 0, .3),
                                     ),
                                   )),
                               SizedBox(
-                                width: 332,
-                                height: 175,
+                                width:  screenWidthUnit *  332,
+                                height:  screenHeightUnit * 175,
                                 child: Column(
                                   children: [
                                     if (transactionWidgets.isNotEmpty) ...[
@@ -487,15 +490,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 1, 0, 0),
                                         child: Container(
-                                          height: 1,
-                                          width: 332,
+                                          height:  screenHeightUnit * 1,
+                                          width:  screenWidthUnit *  332,
                                           decoration: const BoxDecoration(
                                             color: Color.fromRGBO(0, 0, 0, .3),
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 4,
+                                      SizedBox(
+                                        height:  screenHeightUnit * 4,
                                       ),
                                       Align(
                                         alignment: Alignment.bottomRight,
@@ -530,20 +533,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
-            height: isExpanded ? 205 : 172,
+            height:   isExpanded ? screenHeightUnit * 205 : screenHeightUnit * 172,
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: isExpanded ? 80 : 52,
-                    width: 500,
+                    height:   isExpanded ? screenHeightUnit * 80 : screenHeightUnit * 52,
+                    width:  screenWidthUnit *  500,
                     color: Colors.white,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(
-                          width: 15,
+                        SizedBox(
+                          width:  screenWidthUnit *  15,
                         ),
                         Column(
                           children: [
@@ -556,8 +559,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ),
                             Row(
                               children: [
-                                const SizedBox(
-                                  width: 20,
+                                 SizedBox(
+                                  width:  screenWidthUnit *  20,
                                 ),
                                 Text(
                                   "$balanceString🍌",
@@ -570,8 +573,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             )
                           ],
                         ),
-                        const SizedBox(
-                          width: 30,
+                        SizedBox(
+                          width:  screenWidthUnit *  30,
                         ),
                         Flexible(
                           child: GestureDetector(
@@ -582,8 +585,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             },
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 0),
-                              width: 191,
-                              height: isExpanded ? 72 : 52,
+                              width:  screenWidthUnit *  191,
+                              height:   isExpanded ? screenHeightUnit * 72 : screenHeightUnit * 52,
                               decoration: BoxDecoration(
                                 color: const Color.fromRGBO(135, 206, 235, 1),
                                 borderRadius: BorderRadius.circular(10),
@@ -628,40 +631,39 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ],
                     )),
-                const SizedBox(height: 10),
+                 SizedBox(height:  screenHeightUnit * 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: 39,
-                      height: 38,
+                      width:  screenWidthUnit *  39,
+                      height:  screenHeightUnit * 38,
                       child: Image.asset("assets/images/navbar1.png"),
                     ),
                     SizedBox(
-                      width: 39,
-                      height: 39,
+                      width:  screenWidthUnit *  39,
+                      height:  screenHeightUnit * 39,
                       child: Image.asset("assets/images/navbar2.png"),
                     ),
                     SizedBox(
-                      width: 53,
-                      height: 52,
+                      width:  screenWidthUnit *  53,
+                      height:  screenHeightUnit * 52,
                       child: Image.asset("assets/images/navbar3.png"),
                     ),
                     SizedBox(
-                      width: 42,
-                      height: 35,
+                      width:  screenWidthUnit *  42,
+                      height:  screenHeightUnit * 35,
                       child: Image.asset("assets/images/navbar4.png"),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 34,
-                )
+                
               ],
             )));
   }
 
   Widget transactionItem({
+    
     required IconData icon,
     required String title,
     required String subtitle,
@@ -682,7 +684,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             padding: const EdgeInsets.all(8),
             child: Icon(icon, size: 15),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width:  screenHeight * .08 ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -702,8 +704,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           Text(amount,
               style: GoogleFonts.baloo2(
                   fontSize: screenHeight * .0275, fontWeight: FontWeight.w500)),
-          SizedBox(width: screenWidth * .03),
-          Image.asset(imageUrl, height: screenHeight * .0367),
+          SizedBox(width:   screenWidth * .03),
+          Image.asset(imageUrl, height:   screenHeight * .0367),
         ],
       ),
     );

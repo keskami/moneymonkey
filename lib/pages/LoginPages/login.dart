@@ -221,25 +221,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidthUnit = MediaQuery.of(context).size.width / 400;
+    double screenHeightUnit = MediaQuery.of(context).size.height / 880;
+
     return SafeArea(
       child: Scaffold(
         body: SizedBox(
-          width: double.infinity,
+          width:  screenWidthUnit *  double.infinity,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 19),
+                SizedBox(height:  screenWidthUnit *  19),
                 SizedBox(
-                  height: 1144,
-                  width: 390,
+                  height:  screenWidthUnit *  1144,
+                  width:  screenWidthUnit *  380,
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                      const SizedBox(height: 19),
+                      SizedBox(height:  screenWidthUnit *  19),
                       Image.asset(
                         'assets/images/monkey.png',
-                        height: 390,
-                        width: 390,
+                        height:  screenWidthUnit *  390,
+                        width:  screenWidthUnit *  390,
                         alignment: Alignment.topCenter,
                       ),
                       Positioned(
@@ -253,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.white,
                             border: Border.all(
                               color: Colors.grey.withOpacity(.5),
-                              width: 3,
+                              width:  screenWidthUnit *  3,
                             ),
                             borderRadius: BorderRadius.circular(30),
                             boxShadow: [
@@ -308,8 +311,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(28, 29, 0, 0),
                                     child: SizedBox(
-                                      width: 314,
-                                      height: 49,
+                                      width:  screenWidthUnit *  314,
+                                      height:  screenWidthUnit *  49,
                                       child: TextField(
                                         controller: _loginEmailController,
                                         decoration: InputDecoration(
@@ -325,8 +328,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(29, 9, 0, 0),
                                     child: SizedBox(
-                                      width: 314,
-                                      height: 49,
+                                      width:  screenWidthUnit *  314,
+                                      height:  screenWidthUnit *  49,
                                       child: TextField(
                                         controller: _loginPasswordController,
                                         decoration: InputDecoration(
@@ -339,11 +342,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 13),
+                                  SizedBox(height:  screenWidthUnit *  13),
                                   Center(
                                     child: SizedBox(
-                                        width: 220,
-                                        height: 49,
+                                        width:  screenWidthUnit *  220,
+                                        height:  screenWidthUnit *  49,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             logIn();
@@ -370,7 +373,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         )),
                                   ),
-                                  const SizedBox(height: 30),
+                                  SizedBox(height:  screenWidthUnit *  30),
                                   Center(
                                       child: Text(
                                     "Or sign in with",
@@ -379,7 +382,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color:
                                             const Color.fromRGBO(0, 0, 0, 1)),
                                   )),
-                                  const SizedBox(height: 19),
+                                   SizedBox(height:  screenWidthUnit *  19),
                                   Align(
                                     alignment: Alignment.center,
                                     child: Column(
@@ -390,8 +393,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: IconButton(
                                             icon: Image.asset(
                                               "assets/images/apple.png",
-                                              height: 34,
-                                              width: 220,
+                                              height:  screenWidthUnit *  34,
+                                              width:  screenWidthUnit *  220,
                                             ),
                                             onPressed: () {
                                               appleAuth();
@@ -402,8 +405,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: IconButton(
                                             icon: Image.asset(
                                               "assets/images/google.png",
-                                              height: 34,
-                                              width: 220,
+                                              height:  screenWidthUnit *  34,
+                                              width:  screenWidthUnit *  220,
                                             ),
                                             onPressed: () {
                                               googleAuth();
