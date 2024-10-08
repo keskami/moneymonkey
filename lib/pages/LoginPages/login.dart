@@ -231,17 +231,17 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height:  screenWidthUnit *  19),
+                SizedBox(height:  screenHeightUnit   *  19),
                 SizedBox(
-                  height:  screenWidthUnit *  1144,
-                  width:  screenWidthUnit *  380,
+                  height:  screenHeightUnit   *  1144,
+                  width:  screenWidthUnit *  390,
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                      SizedBox(height:  screenWidthUnit *  19),
+                      SizedBox(height:  screenHeightUnit   *  19),
                       Image.asset(
                         'assets/images/monkey.png',
-                        height:  screenWidthUnit *  390,
+                        height:  screenHeightUnit   *  390,
                         width:  screenWidthUnit *  390,
                         alignment: Alignment.topCenter,
                       ),
@@ -265,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 blurRadius: 10.0,
                                 spreadRadius: 3.0,
                                 offset: const Offset(
-                                    0, 4), // Changes the position of the shadow
+                                    0, 4), 
                               ),
                             ],
                           ),
@@ -276,7 +276,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(26, 22, 0, 0),
+                                    padding: const EdgeInsets.fromLTRB(26, 16, 0, 0),
                                     child: Text(
                                       'Welcome Back',
                                       style: GoogleFonts.baloo2(
@@ -312,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     padding: const EdgeInsets.fromLTRB(28, 29, 0, 0),
                                     child: SizedBox(
                                       width:  screenWidthUnit *  314,
-                                      height:  screenWidthUnit *  49,
+                                      height:  screenHeightUnit   *  49,
                                       child: TextField(
                                         controller: _loginEmailController,
                                         decoration: InputDecoration(
@@ -329,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     padding: const EdgeInsets.fromLTRB(29, 9, 0, 0),
                                     child: SizedBox(
                                       width:  screenWidthUnit *  314,
-                                      height:  screenWidthUnit *  49,
+                                      height:  screenHeightUnit   *  49,
                                       child: TextField(
                                         controller: _loginPasswordController,
                                         decoration: InputDecoration(
@@ -342,11 +342,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height:  screenWidthUnit *  13),
+                                  SizedBox(height:  screenHeightUnit   *  13),
                                   Center(
                                     child: SizedBox(
                                         width:  screenWidthUnit *  220,
-                                        height:  screenWidthUnit *  49,
+                                        height:  screenHeightUnit   *  49,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             logIn();
@@ -373,7 +373,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         )),
                                   ),
-                                  SizedBox(height:  screenWidthUnit *  30),
+                                  SizedBox(height:  screenHeightUnit   *  30),
                                   Center(
                                       child: Text(
                                     "Or sign in with",
@@ -382,7 +382,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color:
                                             const Color.fromRGBO(0, 0, 0, 1)),
                                   )),
-                                   SizedBox(height:  screenWidthUnit *  19),
+                                   SizedBox(height:  screenHeightUnit   *  19),
                                   Align(
                                     alignment: Alignment.center,
                                     child: Column(
@@ -393,7 +393,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: IconButton(
                                             icon: Image.asset(
                                               "assets/images/apple.png",
-                                              height:  screenWidthUnit *  34,
+                                              height:  screenHeightUnit   *  34,
                                               width:  screenWidthUnit *  220,
                                             ),
                                             onPressed: () {
@@ -405,7 +405,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: IconButton(
                                             icon: Image.asset(
                                               "assets/images/google.png",
-                                              height:  screenWidthUnit *  34,
+                                              height:  screenHeightUnit   *  34,
                                               width:  screenWidthUnit *  220,
                                             ),
                                             onPressed: () {
