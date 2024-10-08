@@ -533,7 +533,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
-            height:   isExpanded ? screenHeightUnit * 205 : screenHeightUnit * 172,
+            height:   screenHeightUnit * 172,
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
