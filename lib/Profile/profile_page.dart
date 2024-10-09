@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
-import 'package:money_monkey/Profile%20Page/Widgets/add_friends_button.dart';
-import 'package:money_monkey/Profile%20Page/Widgets/share_button.dart';
+import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
+import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import 'Widgets/custom_stat.dart';

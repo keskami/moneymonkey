@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Profile%20Page/profile_page.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override

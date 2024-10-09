@@ -94,6 +94,9 @@ class AuthService {
         password: password,
       );
     } catch (e) {
+      if (!context.mounted) {
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Container(
               color: Colors.red[100],
