@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Profile%20Page/profile_page.dart';
-import 'package:money_monkey/pages/LoginPages/login.dart';
-import 'package:money_monkey/Pages/ProfilePages/profileScreen.dart';
-
+import 'package:money_monkey/InvestSectionPages/invest1.dart';
+import 'package:money_monkey/LoginPages/login.dart';
 // ignore: camel_case_types
 class main_page extends StatelessWidget {
   const main_page({super.key});
@@ -20,7 +18,7 @@ class main_page extends StatelessWidget {
             if(userId.isEmpty){
               return const LoginScreen();
             }else{
-               return const UserProfileScreen();
+               return const Invest1();
             }
           } else {
             return const LoginScreen();

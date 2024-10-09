@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/pages/LoginPages/main_page.dart';
+import 'LoginPages/main_page.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
