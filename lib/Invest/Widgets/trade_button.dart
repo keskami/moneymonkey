@@ -12,7 +12,7 @@ class TradeButton extends StatefulWidget {
 
 class _TradeButtonState extends State<TradeButton> {
   bool isExpanded = false;
-  bool showOptions = false; // New variable to control the display of options
+  bool showOptions = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _TradeButtonState extends State<TradeButton> {
               onTap: () {
                 setState(() {
                   isExpanded = false;
-                  showOptions = false; // Hide options when collapsing
+                  showOptions = false;
                 });
               },
               behavior: HitTestBehavior.translucent,
@@ -37,14 +37,14 @@ class _TradeButtonState extends State<TradeButton> {
 
         // The TradeButton itself
         Align(
-          alignment: Alignment.bottomRight, // Adjust alignment as needed
+          alignment: Alignment.bottomRight,
           child: GestureDetector(
             onTap: () {
               if (isExpanded) {
                 // Collapse action
                 setState(() {
                   isExpanded = false;
-                  showOptions = false; // Hide options immediately
+                  showOptions = false;
                 });
               } else {
                 // Expand action
@@ -54,7 +54,7 @@ class _TradeButtonState extends State<TradeButton> {
                 // Delay showing options until the expansion animation is complete
                 Future.delayed(const Duration(milliseconds: 200), () {
                   setState(() {
-                    showOptions = true; // Show options after delay
+                    showOptions = true;
                   });
                 });
               }
@@ -86,37 +86,37 @@ class _TradeButtonState extends State<TradeButton> {
                 child: IntrinsicHeight(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: isExpanded
+                    children: isExpanded && showOptions
                         ? [
-                            if (showOptions) ...[
-                              const Text(
+                            GestureDetector(
+                              onTap: () {
+                                // Action for Buy
+                              },
+                              child: const Text(
                                 'Buy',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Divider(
-                                color: Colors.white,
-                                thickness: 1,
-                                height: 8,
-                              ),
-                              const Text(
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                              thickness: 1,
+                              height: 8,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Action for Sell
+                              },
+                              child: const Text(
                                 'Sell',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ] else ...[
-                              const Text(
-                                'Trade',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                            ),
                           ]
                         : [
                             const Text(

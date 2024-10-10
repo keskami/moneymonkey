@@ -44,6 +44,7 @@ dependencies:
   sign_in_with_apple: ^6.1.2
   google_fonts: ^6.2.1
   firebase_storage: ^12.3.2
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:

@@ -1,16 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Invest/Widgets/line_chart_widget.dart';
 import 'package:money_monkey/Invest/Widgets/stocks_list.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class InvestmentPage extends StatelessWidget {
+import '../Backend/Models/stock_data.dart';
+import '../Backend/Services/stock_service.dart';
+
+class InvestmentPage extends StatefulWidget {
   const InvestmentPage({super.key});
+
+  @override
+  State<InvestmentPage> createState() => _InvestmentPageState();
+}
+
+class _InvestmentPageState extends State<InvestmentPage> {
+  final StockService _stockService = StockService();
+  List<StockData> _stockDataList = [];
+  String symbol = "JPM";
+  Future<void> _loadStockData() async {
+    try {
+      final data = await _stockService.fetchStockData(symbol);
+      setState(() {
+        _stockDataList = data;
+      });
+    } catch (e) {
+      // Handle error (e.g., show a snackbar or an error message)
+      print('Error fetching data: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStockData();
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: LightTheme().primaryBackgroundColor,
       appBar: AppBar(
@@ -49,23 +80,15 @@ class InvestmentPage extends StatelessWidget {
             SizedBox(
               width: screenWidth,
               height: screenHeight * 0.35,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      LightTheme().primaryBlue,
-                      LightTheme().primaryBackgroundColor,
-                    ],
-                  ),
-                ),
-                child: const Center(
-                  child: Text(
-                    "*Graph to be inserted.*",
-                  ),
-                ),
-              ),
+              child: _stockDataList.isEmpty
+                  ? Center(
+                      child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: const CircularProgressIndicator()))
+                  : LineChartWidget(
+                      stockData: _stockDataList,
+                    ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
