@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Invest/Widgets/stocks_list.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -10,7 +12,9 @@ class InvestmentPage extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: LightTheme().primaryBackgroundColor,
       appBar: AppBar(
+        backgroundColor: LightTheme().primaryBackgroundColor,
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(
@@ -24,11 +28,11 @@ class InvestmentPage extends StatelessWidget {
           children: [
             Text(
               "Stocks Value",
-              style: TextStyle(
+              style: GoogleFonts.baloo2(
                 fontSize: 18,
               ),
             ),
-            Text(
+            const Text(
               "🍌3000",
               style: TextStyle(
                 fontSize: 30,
@@ -37,14 +41,14 @@ class InvestmentPage extends StatelessWidget {
             ),
             Text(
               "🍌0.00 0.00% Today >",
-              style: TextStyle(
+              style: GoogleFonts.baloo2(
                 fontSize: 17,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(
               width: screenWidth,
-              height: screenHeight * 0.4,
+              height: screenHeight * 0.35,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -60,6 +64,76 @@ class InvestmentPage extends StatelessWidget {
                   child: Text(
                     "*Graph to be inserted.*",
                   ),
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "1M",
+                    style: GoogleFonts.baloo2(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "3M",
+                    style: GoogleFonts.baloo2(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "6M",
+                    style: GoogleFonts.baloo2(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "1Y",
+                    style: GoogleFonts.baloo2(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
+            const StocksList(),
+            const Spacer(),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.05,
+                    vertical: screenHeight * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text("Buying Power >"),
+                    Text(
+                      "🍌7,630",
+                      style: GoogleFonts.baloo2(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
