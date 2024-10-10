@@ -18,7 +18,7 @@ class main_page extends StatelessWidget {
             if(userId.isEmpty){
               return const LoginScreen();
             }else{
-               return const Invest1();
+               return const LoginScreen();
             }
           } else {
             return const LoginScreen();

@@ -178,7 +178,12 @@ class _LoginScreenState extends State<LoginScreen> {
     String userId = userCredential.user?.uid ?? '';
     String email = userCredential.user?.email ?? '';
     if (email.isNotEmpty) {
-      addUserDetails(userId, email);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UserProfileScreen(),
+          ),
+        );
     }
   }
 
