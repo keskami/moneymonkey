@@ -9,11 +9,14 @@ class StockRow extends StatelessWidget {
     required this.growthValue,
     required this.stockValue,
     this.isSelected = false,
+    this.isLoading = false,
   });
+
   final String stockName;
   final double growthValue;
   final double stockValue;
   final bool isSelected;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +30,7 @@ class StockRow extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: isSelected
-            ? Border.all(
-                color: LightTheme().primaryBlue,
-                width: 1,
-              )
+            ? Border.all(color: LightTheme().primaryBlue, width: 1)
             : null,
         borderRadius: BorderRadius.circular(20),
         color: isSelected ? Colors.white : LightTheme().primaryBackgroundColor,
@@ -42,41 +42,54 @@ class StockRow extends StatelessWidget {
             flex: 1,
             child: Text(
               stockName,
-              style: GoogleFonts.baloo2(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style:
+                  GoogleFonts.baloo2(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
             flex: 1,
-            child: Icon(
-              growthValue >= 0 ? Icons.trending_up : Icons.trending_down,
-              color: growthValue >= 0 ? Colors.green : Colors.red,
-            ),
+            child: isLoading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Icon(
+                    growthValue > 0 ? Icons.trending_up : Icons.trending_down,
+                    color: growthValue > 0 ? Colors.green : Colors.red,
+                  ),
           ),
           Expanded(
             flex: 3,
-            child: Text(
-              "${growthValue.toStringAsFixed(2)}%",
-              style: GoogleFonts.baloo2(
-                fontSize: 12,
-                color: growthValue >= 0 ? Colors.green : Colors.red,
-              ),
-              textAlign: TextAlign.right,
-            ),
+            child: isLoading
+                ? Text(
+                    "Loading...",
+                    style: GoogleFonts.baloo2(fontSize: 12, color: Colors.grey),
+                    textAlign: TextAlign.right,
+                  )
+                : Text(
+                    "${growthValue.toStringAsFixed(2)}%",
+                    style: GoogleFonts.baloo2(
+                        fontSize: 12,
+                        color: growthValue > 0 ? Colors.green : Colors.red),
+                    textAlign: TextAlign.right,
+                  ),
           ),
           const SizedBox(width: 10),
           Expanded(
             flex: 2,
-            child: Text(
-              "🍌${stockValue.toStringAsFixed(2)}",
-              style: GoogleFonts.baloo2(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.right,
-            ),
+            child: isLoading
+                ? const Text(
+                    "Loading...",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    textAlign: TextAlign.right,
+                  )
+                : Text(
+                    "🍌${stockValue.toStringAsFixed(2)}",
+                    style: GoogleFonts.baloo2(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.right,
+                  ),
           ),
         ],
       ),
