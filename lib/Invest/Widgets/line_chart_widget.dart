@@ -1,65 +1,40 @@
-import 'dart:convert';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:money_monkey/themes/color_themes.dart';
 
 import '../../Backend/Models/stock_data.dart';
+import '../../themes/color_themes.dart';
 
 class LineChartWidget extends StatelessWidget {
-  final List<StockData> stockData;
-  final String symbol;
+  final List<StockData> stockData; // Receive stock data from InvestmentPage
   final int duration;
 
-  LineChartWidget({
+  const LineChartWidget({
+    Key? key,
     required this.stockData,
-    required this.symbol,
     required this.duration,
-  });
+  }) : super(key: key);
 
-  // Function to load data from a local JSON file
-  static Future<List<StockData>> loadStockData() async {
-    try {
-      // Load the JSON file from assets
-      final String response =
-          await rootBundle.loadString('assets/sample_stock_data.json');
-      final Map<String, dynamic> jsonMap = json.decode(response);
-
-      // Extract the "Time Series (Daily)" data
-      Map<String, dynamic> timeSeries = jsonMap["Time Series (Daily)"];
-      print(timeSeries.isEmpty);
-      // Map the entries to StockData objects
-      List<StockData> loadedStockData = timeSeries.entries.map((entry) {
-        return StockData.fromJson(entry.value, entry.key);
-      }).toList();
-
-      return loadedStockData; // Return the loaded stock data
-    } catch (e) {
-      print("Error loading data from JSON file: $e");
-      return []; // Return an empty list if there's an error
-    }
+  // Function to calculate the percentage change
+  double calculateChange(double open, double close) {
+    return ((close - open) / open) * 100;
   }
 
   @override
   Widget build(BuildContext context) {
-    // Filter data to include only the last year
     DateTime oneYearAgo = DateTime.now().subtract(Duration(days: duration));
 
-    // Create FlSpot list from stock data
+    // Filter stock data based on the selected duration
     List<FlSpot> spots = stockData
-        .where((data) =>
-            data.date.isAfter(oneYearAgo)) // Ensure 'data' is StockData
+        .where((data) => data.date.isAfter(oneYearAgo))
         .toList()
         .asMap()
         .entries
         .map((entry) => FlSpot(
               entry.key.toDouble(),
-              entry.value.close, // Access the close price correctly
+              entry.value.close,
             ))
         .toList();
 
-    // Check for empty data
     if (spots.isEmpty) {
       return Center(child: Text("No data available for the selected period."));
     }
@@ -76,34 +51,63 @@ class LineChartWidget extends StatelessWidget {
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  LightTheme()
-                      .primaryBlue
-                      .withOpacity(0.4), // Blue gradient at the top
-                  Colors.white, // Fade to white at the bottom
+                  LightTheme().primaryBlue.withOpacity(0.4),
+                  Colors.white,
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
             ),
-            dotData: FlDotData(show: false), // Hide dots on the line
+            dotData: FlDotData(show: false),
           ),
         ],
         titlesData: FlTitlesData(
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false), // No left axis labels
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false), // No bottom axis labels
-          ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false), // No right axis labels
-          ),
-          topTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false), // No top axis labels
+          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        ),
+        gridData: FlGridData(show: false),
+        borderData: FlBorderData(show: false),
+        lineTouchData: LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+            tooltipMargin: 8,
+            getTooltipItems: (touchedSpots) {
+              return touchedSpots.map((touchedSpot) {
+                final index = touchedSpot.spotIndex;
+                final dataPoint = stockData[index];
+                final change = calculateChange(dataPoint.open, dataPoint.close);
+                final arrow = change >= 0 ? '+' : '';
+
+                return LineTooltipItem(
+                  '${dataPoint.date.month}/${dataPoint.date.day}/${dataPoint.date.year}\n',
+                  TextStyle(
+                    color: Colors.white,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '🍌${dataPoint.close.toStringAsFixed(2)} ',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '$arrow ${change.toStringAsFixed(2)}%',
+                          style: TextStyle(
+                            color: Colors.black,
+                            backgroundColor: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  textAlign: TextAlign.left,
+                );
+              }).toList();
+            },
           ),
         ),
-        gridData: FlGridData(show: false), // No grid lines
-        borderData: FlBorderData(show: false), // No borders around the chart
       ),
     );
   }

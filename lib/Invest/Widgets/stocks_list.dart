@@ -1,56 +1,22 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:money_monkey/Invest/Widgets/stock_row.dart';
 
 import '../../Backend/Models/stock_data.dart';
 
-class StocksList extends StatefulWidget {
-  const StocksList({super.key});
+class StocksList extends StatelessWidget {
+  final List<StockData> stockDataList;
 
-  @override
-  State<StocksList> createState() => _StocksListState();
-}
-
-class _StocksListState extends State<StocksList> {
-  List<StockData> _stockDataList = [];
-
-  Future<void> _loadStockData() async {
-    try {
-      final String response =
-          await rootBundle.loadString('assets/sample_stock_data.json');
-      final Map<String, dynamic> jsonMap = json.decode(response);
-
-      Map<String, dynamic> timeSeries = jsonMap["Time Series (Daily)"];
-      List<StockData> loadedStockData = timeSeries.entries.map((entry) {
-        return StockData.fromJson(entry.value, entry.key);
-      }).toList();
-
-      setState(() {
-        _stockDataList = loadedStockData;
-      });
-    } catch (e) {
-      print("Error loading data from JSON file: $e");
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadStockData(); // Load stock data from JSON file on init
-  }
+  const StocksList({super.key, required this.stockDataList});
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    // List of stock symbols
     final List<String> stockSymbols = ["AAPL", "PG", "JNJ", "JPM"];
 
     return Container(
       height: screenHeight * 0.25,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
@@ -58,11 +24,9 @@ class _StocksListState extends State<StocksList> {
         itemCount: stockSymbols.length,
         itemBuilder: (context, index) {
           final stockSymbol = stockSymbols[index];
-
-          // Get stock data for AAPL or set defaults for others
           StockData stockData = stockSymbol == "AAPL"
-              ? _stockDataList.isNotEmpty
-                  ? _stockDataList[0]
+              ? stockDataList.isNotEmpty
+                  ? stockDataList[0]
                   : StockData(
                       date: DateTime.now(),
                       open: 0,
@@ -92,7 +56,7 @@ class _StocksListState extends State<StocksList> {
   }
 
   double calculateGrowthValue(StockData stockData) {
-    if (stockData.open == 0) return 0; // Avoid division by zero
+    if (stockData.open == 0) return 0;
     return ((stockData.close - stockData.open) / stockData.open) * 100;
   }
 }

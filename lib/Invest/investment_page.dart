@@ -50,7 +50,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
     }
   }
 
-  // Existing function to load data from the StockService
+  // Function to load data from the StockService
   Future<void> _loadStockData() async {
     try {
       final data = await _stockService.fetchStockData(symbol);
@@ -70,10 +70,9 @@ class _InvestmentPageState extends State<InvestmentPage> {
   @override
   void initState() {
     super.initState();
-    // Temporarily load local stock data
+    // Load both local and API data
     _loadLocalStockData();
-    // If you want to load data from StockService, uncomment this line
-    // _loadStockData();
+    _loadStockData();
   }
 
   @override
@@ -100,42 +99,41 @@ class _InvestmentPageState extends State<InvestmentPage> {
               "Stocks Value",
               style: GoogleFonts.baloo2(fontSize: 18),
             ),
-            Text(
-              _stockDataList[0].open.toString(),
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+            if (_stockDataList.isNotEmpty)
+              Text(
+                _stockDataList[0].open.toString(),
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Text(
-              "🍌${_stockDataList[0].close.toString()}% Today >",
-              style: GoogleFonts.baloo2(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
+            if (_stockDataList.isNotEmpty)
+              Text(
+                "🍌${_stockDataList[0].close.toString()}% Today >",
+                style: GoogleFonts.baloo2(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ClipRect(
-              clipBehavior: Clip.hardEdge,
-              child: SizedBox(
-                width: screenWidth,
-                height: screenHeight * 0.35,
-                child: _isLoading
-                    ? Center(
-                        child: SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      )
-                    : LineChartWidget(
+            const SizedBox(height: 10),
+            SizedBox(
+              width: screenWidth,
+              height: screenHeight * 0.35,
+              child: _isLoading
+                  ? Center(
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: const CircularProgressIndicator(),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: LineChartWidget(
                         duration: duration,
-                        symbol: symbol,
                         stockData: _stockDataList,
                       ),
-              ),
+                    ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +144,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                     setState(() {
                       duration = 30;
                     });
-                  }, // Implement the functionality for different time ranges
+                  },
                   child: Text(
                     "1M",
                     style: GoogleFonts.baloo2(fontSize: 16),
@@ -191,7 +189,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 const Spacer(),
               ],
             ),
-            const StocksList(),
+            StocksList(stockDataList: _stockDataList), // Pass loaded data
             const Spacer(),
             Align(
               alignment: Alignment.bottomLeft,
@@ -206,7 +204,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                   children: [
                     const Text("Buying Power >"),
                     Text(
-                      "🍌7,630",
+                      "🍌7,630", // This value can be updated as needed
                       style: GoogleFonts.baloo2(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -223,5 +221,3 @@ class _InvestmentPageState extends State<InvestmentPage> {
     );
   }
 }
-
-bool isExpanded = false;
