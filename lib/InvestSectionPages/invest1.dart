@@ -253,7 +253,7 @@ class _Invest1State extends State<Invest1> {
                     style: GoogleFonts.baloo2(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(87, 99, 101, 1)),
+                        color: Colors.black),
                   ),
                 ),
                 TextButton(
