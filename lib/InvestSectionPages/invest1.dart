@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/PortfolioPages/profileScreen.dart';
 
 class Invest1 extends StatefulWidget {
   const Invest1({super.key});
@@ -53,7 +54,14 @@ class _Invest1State extends State<Invest1> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserProfileScreen(),
+                          ),
+                        );
+                      },
                       child: Icon(
                         Icons.arrow_back,
                         color: Colors.black,
@@ -122,7 +130,7 @@ class _Invest1State extends State<Invest1> {
           Positioned(
             bottom: screenHeightUnit * -20,
             child: Container(
-              height: screenHeightUnit * 610,
+              height: screenHeightUnit * 650,
               width: screenWidthUnit * 390,
               decoration: BoxDecoration(
                 color: Color.fromRGBO(241, 244, 248, 1),
@@ -179,7 +187,7 @@ class _Invest1State extends State<Invest1> {
                   SizedBox(height: 13 * screenHeightUnit),
                   Center(
                     child: Container(
-                      height: 240 * screenHeightUnit,
+                      height: 260 * screenHeightUnit,
                       width: 340 * screenWidthUnit,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -198,7 +206,7 @@ class _Invest1State extends State<Invest1> {
                             height: screenHeightUnit * 9,
                           ),
                           Container(
-                            height: 85 * screenHeightUnit,
+                            height: 100 * screenHeightUnit,
                             width: 303 * screenWidthUnit,
                             decoration: BoxDecoration(
                               color: Color.fromRGBO(241, 244, 248, 1),
@@ -232,7 +240,7 @@ class _Invest1State extends State<Invest1> {
         ],
       ),
       bottomNavigationBar: Container(
-          height: 89 * screenHeightUnit,
+          
           color: Colors.white,
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

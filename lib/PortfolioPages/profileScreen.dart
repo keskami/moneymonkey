@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:money_monkey/InvestSectionPages/invest1.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -527,11 +528,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 children: [
                   SizedBox(
                     width: screenWidthUnit * 15,
-                    
                   ),
                   Column(
                     children: [
-                      SizedBox(height:  screenHeightUnit * 20),
+                      SizedBox(height: screenHeightUnit * 20),
                       Text(
                         "Buying Power  >",
                         style: GoogleFonts.baloo2(
@@ -577,12 +577,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                   SizedBox(
                     width: screenWidthUnit * 39,
-                    height: screenHeightUnit * 39,
+                    height: screenHeightUnit * 38,
                     child: Image.asset("assets/images/navbar2.png"),
                   ),
                   SizedBox(
                     width: screenWidthUnit * 53,
-                    height: screenHeightUnit * 52,
+                    height: screenHeightUnit * 51,
                     child: Image.asset("assets/images/navbar3.png"),
                   ),
                   SizedBox(
@@ -594,18 +594,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ],
           )),
-        
-      floatingActionButton: 
-      GestureDetector(
+      floatingActionButton: GestureDetector(
         onTap: () {
           setState(() {
             isExpanded = !isExpanded;
           });
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 0),
+          duration: Duration(milliseconds: 0),
           width: 191,
-          height: isExpanded ? 72 : 52,
+          height: isExpanded ? screenHeightUnit * 105 : screenHeightUnit * 52,
           decoration: BoxDecoration(
             color: const Color.fromRGBO(135, 206, 235, 1),
             borderRadius: BorderRadius.circular(10),
@@ -614,24 +612,37 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Invest',
-                      style: GoogleFonts.fredoka(
-                        color: Colors.white,
-                        fontSize: 19,
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Invest1(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Invest',
+                        style: GoogleFonts.fredoka(
+                          color: Colors.white,
+                          fontSize: 19,
+                        ),
                       ),
                     ),
                     const Divider(
                       color: Colors.white,
                       thickness: 1,
                     ),
-                    Text(
-                      'Save',
-                      style: GoogleFonts.fredoka(
-                        color: Colors.white,
-                        fontSize: 19,
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Save',
+                        style: GoogleFonts.fredoka(
+                          color: Colors.white,
+                          fontSize: 19,
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 )
               : Align(

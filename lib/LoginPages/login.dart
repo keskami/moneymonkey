@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
+import 'package:money_monkey/InvestSectionPages/invest1.dart';
 import 'package:money_monkey/PortfolioPages/profileScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -179,11 +180,11 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = userCredential.user?.email ?? '';
     if (email.isNotEmpty) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const UserProfileScreen(),
-          ),
-        );
+        context,
+        MaterialPageRoute(
+          builder: (context) => const UserProfileScreen(),
+        ),
+      );
     }
   }
 
@@ -232,22 +233,22 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         body: SizedBox(
-          width:  screenWidthUnit *  double.infinity,
+          width: screenWidthUnit * double.infinity,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height:  screenHeightUnit   *  19),
+                SizedBox(height: screenHeightUnit * 19),
                 SizedBox(
-                  height:  screenHeightUnit   *  1144,
-                  width:  screenWidthUnit *  390,
+                  height: screenHeightUnit * 1144,
+                  width: screenWidthUnit * 390,
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                      SizedBox(height:  screenHeightUnit   *  19),
+                      SizedBox(height: screenHeightUnit * 19),
                       Image.asset(
                         'assets/images/monkey.png',
-                        height:  screenHeightUnit   *  390,
-                        width:  screenWidthUnit *  390,
+                        height: screenHeightUnit * 390,
+                        width: screenWidthUnit * 390,
                         alignment: Alignment.topCenter,
                       ),
                       Positioned(
@@ -261,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.white,
                             border: Border.all(
                               color: Colors.grey.withOpacity(.5),
-                              width:  screenWidthUnit *  3,
+                              width: screenWidthUnit * 3,
                             ),
                             borderRadius: BorderRadius.circular(30),
                             boxShadow: [
@@ -269,8 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Colors.black.withOpacity(0.1),
                                 blurRadius: 10.0,
                                 spreadRadius: 3.0,
-                                offset: const Offset(
-                                    0, 4), 
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
@@ -281,7 +281,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(26, 16, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(26, 16, 0, 0),
                                     child: Text(
                                       'Welcome Back',
                                       style: GoogleFonts.baloo2(
@@ -292,7 +293,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(26, 9, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(26, 9, 0, 0),
                                     child: Text(
                                       'Fill out the information below in order',
                                       style: GoogleFonts.baloo2(
@@ -303,7 +305,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(26, 2, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(26, 2, 0, 0),
                                     child: Text(
                                       'to access your account.',
                                       style: GoogleFonts.baloo2(
@@ -314,10 +317,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(28, 29, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(28, 29, 0, 0),
                                     child: SizedBox(
-                                      width:  screenWidthUnit *  314,
-                                      height:  screenHeightUnit   *  49,
+                                      width: screenWidthUnit * 314,
+                                      height: screenHeightUnit * 49,
                                       child: TextField(
                                         controller: _loginEmailController,
                                         decoration: InputDecoration(
@@ -331,10 +335,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(29, 9, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(29, 9, 0, 0),
                                     child: SizedBox(
-                                      width:  screenWidthUnit *  314,
-                                      height:  screenHeightUnit   *  49,
+                                      width: screenWidthUnit * 314,
+                                      height: screenHeightUnit * 49,
                                       child: TextField(
                                         controller: _loginPasswordController,
                                         decoration: InputDecoration(
@@ -347,11 +352,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height:  screenHeightUnit   *  13),
+                                  SizedBox(height: screenHeightUnit * 13),
                                   Center(
                                     child: SizedBox(
-                                        width:  screenWidthUnit *  220,
-                                        height:  screenHeightUnit   *  49,
+                                        width: screenWidthUnit * 220,
+                                        height: screenHeightUnit * 49,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             logIn();
@@ -378,7 +383,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         )),
                                   ),
-                                  SizedBox(height:  screenHeightUnit   *  30),
+                                  SizedBox(height: screenHeightUnit * 30),
                                   Center(
                                       child: Text(
                                     "Or sign in with",
@@ -387,7 +392,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color:
                                             const Color.fromRGBO(0, 0, 0, 1)),
                                   )),
-                                   SizedBox(height:  screenHeightUnit   *  19),
+                                  SizedBox(height: screenHeightUnit * 19),
                                   Align(
                                     alignment: Alignment.center,
                                     child: Column(
@@ -398,8 +403,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: IconButton(
                                             icon: Image.asset(
                                               "assets/images/apple.png",
-                                              height:  screenHeightUnit   *  34,
-                                              width:  screenWidthUnit *  220,
+                                              height: screenHeightUnit * 34,
+                                              width: screenWidthUnit * 220,
                                             ),
                                             onPressed: () {
                                               appleAuth();
@@ -410,8 +415,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: IconButton(
                                             icon: Image.asset(
                                               "assets/images/google.png",
-                                              height:  screenHeightUnit   *  34,
-                                              width:  screenWidthUnit *  220,
+                                              height: screenHeightUnit * 34,
+                                              width: screenWidthUnit * 220,
                                             ),
                                             onPressed: () {
                                               googleAuth();
@@ -419,8 +424,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         ),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.fromLTRB(0, 19, 0, 0),
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 19, 0, 0),
                                           child: Center(
                                             child: TextButton(
                                                 onPressed: () {
@@ -431,7 +436,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                           GettingStartedHome(),
+                                                          GettingStartedHome(),
                                                     ),
                                                   );
                                                 },
