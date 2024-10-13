@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Invest/Widgets/line_chart_widget.dart';
-import 'package:money_monkey/Invest/Widgets/stocks_list.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import '../Backend/Models/stock_data.dart';
 import '../Backend/Services/stock_service.dart';
+import 'Widgets/stocks_list.dart';
 
 class InvestmentPage extends StatefulWidget {
   const InvestmentPage({super.key});
@@ -20,10 +20,10 @@ class InvestmentPage extends StatefulWidget {
 
 class _InvestmentPageState extends State<InvestmentPage> {
   final StockService _stockService = StockService();
-  List<StockData> _stockDataList = [];
-  String symbol = "AAPL";
-  bool _isLoading = true; // Track loading state
-  int duration = 30;
+  Map<String, List<StockData>> _stockDataMap = {};
+  String _selectedSymbol = "AAPL";
+  bool _isLoading = true;
+  int _duration = 30;
 
   // Function to load data from the local JSON asset
   Future<void> _loadLocalStockData() async {
@@ -33,36 +33,43 @@ class _InvestmentPageState extends State<InvestmentPage> {
       final Map<String, dynamic> jsonMap = json.decode(response);
       Map<String, dynamic> timeSeries = jsonMap["Time Series (Daily)"];
 
-      // Map entries to StockData objects
       List<StockData> loadedStockData = timeSeries.entries.map((entry) {
         return StockData.fromJson(entry.value, entry.key);
       }).toList();
 
+      // Store loaded data for the AAPL symbol, replace as needed for multiple stocks
       setState(() {
-        _stockDataList = loadedStockData; // Set loaded data
-        _isLoading = false; // Set loading to false after loading data
+        _stockDataMap["AAPL"] = loadedStockData;
+        _isLoading = false;
       });
+      print('Local data loaded successfully');
     } catch (e) {
       print("Error loading data from JSON file: $e");
       setState(() {
-        _isLoading = false; // Set loading to false even if there's an error
+        _isLoading = false;
       });
     }
   }
 
-  // Function to load data from the StockService
-  Future<void> _loadStockData() async {
+  // Function to load data from the StockService for all symbols
+  Future<void> _loadStockDataForAllSymbols() async {
+    List<String> symbols = ["AAPL", "PG", "JNJ", "JPM"];
     try {
-      final data = await _stockService.fetchStockData(symbol);
-      print(data.length);
+      for (String symbol in symbols) {
+        final data = await _stockService.fetchStockData(symbol);
+        setState(() {
+          _stockDataMap[symbol] = data;
+        });
+        print('Loaded data for $symbol: ${data.length} entries');
+      }
+
       setState(() {
-        _stockDataList = data;
-        _isLoading = false; // Set loading to false when data is fetched
+        _isLoading = false;
       });
     } catch (e) {
       print('Error fetching data: $e');
       setState(() {
-        _isLoading = false; // Set loading to false even if there's an error
+        _isLoading = false;
       });
     }
   }
@@ -70,9 +77,15 @@ class _InvestmentPageState extends State<InvestmentPage> {
   @override
   void initState() {
     super.initState();
-    // Load both local and API data
-    _loadLocalStockData();
-    _loadStockData();
+    // _loadLocalStockData();
+    _loadStockDataForAllSymbols();
+  }
+
+  // Function to update the selected symbol and reload the graph
+  void _updateSelectedSymbol(String symbol) {
+    setState(() {
+      _selectedSymbol = symbol;
+    });
   }
 
   @override
@@ -86,7 +99,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
         backgroundColor: LightTheme().primaryBackgroundColor,
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop(); // Go back when pressed
+            Navigator.of(context).pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -99,17 +112,17 @@ class _InvestmentPageState extends State<InvestmentPage> {
               "Stocks Value",
               style: GoogleFonts.baloo2(fontSize: 18),
             ),
-            if (_stockDataList.isNotEmpty)
+            if (_stockDataMap[_selectedSymbol]?.isNotEmpty ?? false)
               Text(
-                _stockDataList[0].open.toString(),
+                _stockDataMap[_selectedSymbol]![0].open.toString(),
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            if (_stockDataList.isNotEmpty)
+            if (_stockDataMap[_selectedSymbol]?.isNotEmpty ?? false)
               Text(
-                "🍌${_stockDataList[0].close.toString()}% Today >",
+                "🍌${_stockDataMap[_selectedSymbol]![0].close.toString()}% Today >",
                 style: GoogleFonts.baloo2(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
@@ -121,17 +134,13 @@ class _InvestmentPageState extends State<InvestmentPage> {
               height: screenHeight * 0.35,
               child: _isLoading
                   ? Center(
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: const CircularProgressIndicator(),
-                      ),
+                      child: const CircularProgressIndicator(),
                     )
                   : Padding(
                       padding: const EdgeInsets.only(top: 30.0),
                       child: LineChartWidget(
-                        duration: duration,
-                        stockData: _stockDataList,
+                        duration: _duration,
+                        stockData: _stockDataMap[_selectedSymbol] ?? [],
                       ),
                     ),
             ),
@@ -142,7 +151,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      duration = 30;
+                      _duration = 30;
                     });
                   },
                   child: Text(
@@ -154,7 +163,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      duration = 90;
+                      _duration = 90;
                     });
                   },
                   child: Text(
@@ -166,7 +175,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      duration = 180;
+                      _duration = 180;
                     });
                   },
                   child: Text(
@@ -178,7 +187,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      duration = 365;
+                      _duration = 365;
                     });
                   },
                   child: Text(
@@ -189,7 +198,12 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 const Spacer(),
               ],
             ),
-            StocksList(stockDataList: _stockDataList), // Pass loaded data
+            if (!_stockDataMap.isEmpty)
+              StocksList(
+                stockDataList:
+                    _stockDataMap.values.expand((data) => data).toList(),
+                onStockSelected: _updateSelectedSymbol,
+              ),
             const Spacer(),
             Align(
               alignment: Alignment.bottomLeft,
@@ -204,7 +218,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                   children: [
                     const Text("Buying Power >"),
                     Text(
-                      "🍌7,630", // This value can be updated as needed
+                      "🍌7,630",
                       style: GoogleFonts.baloo2(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

@@ -1,54 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Invest/Widgets/stock_row.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 import '../../Backend/Models/stock_data.dart';
 
-class StocksList extends StatelessWidget {
+class StocksList extends StatefulWidget {
   final List<StockData> stockDataList;
+  final void Function(String) onStockSelected; // Callback for stock selection
 
-  const StocksList({super.key, required this.stockDataList});
+  const StocksList({
+    super.key,
+    required this.stockDataList,
+    required this.onStockSelected,
+  });
+
+  @override
+  _StocksListState createState() => _StocksListState();
+}
+
+class _StocksListState extends State<StocksList> {
+  String _selectedStockSymbol =
+      'AAPL'; // State variable to hold the selected stock symbol
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-
     final List<String> stockSymbols = ["AAPL", "PG", "JNJ", "JPM"];
 
     return Container(
-      height: screenHeight * 0.25,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      height: screenHeight * 0.27,
+      padding: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.005,
+      ),
+      decoration: BoxDecoration(
+        color: LightTheme().primaryBackgroundColor,
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
       child: ListView.builder(
         itemCount: stockSymbols.length,
         itemBuilder: (context, index) {
           final stockSymbol = stockSymbols[index];
-          StockData stockData = stockSymbol == "AAPL"
-              ? stockDataList.isNotEmpty
-                  ? stockDataList[0]
-                  : StockData(
-                      date: DateTime.now(),
-                      open: 0,
-                      high: 0,
-                      low: 0,
-                      close: 0,
-                      volume: 0,
-                    )
-              : StockData(
-                  date: DateTime.now(),
-                  open: 0,
-                  high: 0,
-                  low: 0,
-                  close: 0,
-                  volume: 0,
-                );
+          // Fetch the appropriate stock data based on the symbol
+          StockData stockData = widget.stockDataList[index];
 
-          return StockRow(
-            stockName: stockSymbol,
-            growthValue: calculateGrowthValue(stockData),
-            stockValue: stockData.close,
-            isSelected: index == 0,
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedStockSymbol =
+                    stockSymbol; // Update selected stock symbol
+              });
+              widget.onStockSelected(stockSymbol); // Trigger callback
+            },
+            child: StockRow(
+              stockName: stockSymbol,
+              growthValue: calculateGrowthValue(stockData),
+              stockValue: stockData.close,
+              isSelected: _selectedStockSymbol ==
+                  stockSymbol, // Set isSelected based on current selection
+            ),
           );
         },
       ),

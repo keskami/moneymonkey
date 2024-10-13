@@ -72,14 +72,7 @@ class _TradeButtonState extends State<TradeButton> {
                     blurRadius: 3,
                   ),
                 ],
-                gradient: LinearGradient(
-                  colors: [
-                    LightTheme().primaryBlue,
-                    Colors.white,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: LightTheme().primaryBlue,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(

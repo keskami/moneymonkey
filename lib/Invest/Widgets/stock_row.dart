@@ -70,26 +70,23 @@ class StockRow extends StatelessWidget {
                 : Text(
                     "${growthValue.toStringAsFixed(2)}%",
                     style: GoogleFonts.baloo2(
-                        fontSize: 12,
-                        color: growthValue > 0 ? Colors.green : Colors.red),
+                      fontSize: 12,
+                      color: growthValue > 0 ? Colors.green : Colors.red,
+                    ),
                     textAlign: TextAlign.right,
                   ),
           ),
-          const SizedBox(width: 10),
           Expanded(
-            flex: 2,
-            child: isLoading
-                ? const Text(
-                    "Loading...",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                    textAlign: TextAlign.right,
-                  )
-                : Text(
-                    "🍌${stockValue.toStringAsFixed(2)}",
-                    style: GoogleFonts.baloo2(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.right,
-                  ),
+            flex: 3,
+            child: Text(
+              "🍌${stockValue.toStringAsFixed(2)}",
+              style: GoogleFonts.baloo2(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.right,
+            ),
           ),
         ],
       ),

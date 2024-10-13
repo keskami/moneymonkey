@@ -11,24 +11,44 @@ class StockService {
   Future<List<StockData>> fetchStockData(String symbol) async {
     final url = Uri.parse(
         '$baseUrl?function=TIME_SERIES_DAILY&symbol=$symbol&outputsize=full&apikey=$apiKey');
-    final response = await http.get(url);
+    try {
+      final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
-      final Map<String, dynamic> timeSeries =
-          jsonResponse['Time Series (Daily)'];
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-      List<StockData> stockDataList = [];
-      timeSeries.forEach((date, data) {
-        stockDataList.add(StockData.fromJson(data, date));
-      });
+        // Check if there's an error message or missing 'Time Series (Daily)'
+        if (jsonResponse.containsKey('Error Message')) {
+          print('Error from API: ${jsonResponse['Error Message']}');
+          throw Exception('Error fetching stock data for $symbol');
+        } else if (!jsonResponse.containsKey('Time Series (Daily)')) {
+          print(
+              'No time series data in the response for $symbol: $jsonResponse');
+          throw Exception('No stock data available for $symbol');
+        }
 
-      // Sort list by date in ascending order
-      stockDataList.sort((a, b) => a.date.compareTo(b.date));
+        final Map<String, dynamic>? timeSeries =
+            jsonResponse['Time Series (Daily)'] as Map<String, dynamic>?;
 
-      return stockDataList;
-    } else {
-      throw Exception('Failed to load stock data');
+        if (timeSeries == null) {
+          throw Exception('Time series data is null for $symbol');
+        }
+
+        List<StockData> stockDataList = timeSeries.entries.map((entry) {
+          return StockData.fromJson(entry.value, entry.key);
+        }).toList();
+
+        // Sort list by date in ascending order
+        stockDataList.sort((a, b) => a.date.compareTo(b.date));
+
+        return stockDataList;
+      } else {
+        print('Failed to load stock data: ${response.statusCode}');
+        throw Exception('Failed to load stock data');
+      }
+    } catch (e) {
+      print('Exception occurred while fetching stock data: $e');
+      throw Exception('Error fetching stock data for $symbol');
     }
   }
 }
