@@ -58,7 +58,7 @@ class LineChartWidget extends StatelessWidget {
                 end: Alignment.bottomCenter,
               ),
             ),
-            dotData: FlDotData(show: false),
+            dotData: FlDotData(show: false), // Disable default dots
           ),
         ],
         titlesData: FlTitlesData(
@@ -71,7 +71,13 @@ class LineChartWidget extends StatelessWidget {
         borderData: FlBorderData(show: false),
         lineTouchData: LineTouchData(
           touchTooltipData: LineTouchTooltipData(
+            getTooltipColor: (group) => Colors.black,
             tooltipMargin: 8,
+            tooltipRoundedRadius: 10,
+            tooltipPadding: EdgeInsets.symmetric(
+              horizontal: 5,
+              vertical: 3,
+            ),
             getTooltipItems: (touchedSpots) {
               return touchedSpots.map((touchedSpot) {
                 final index = touchedSpot.spotIndex;
@@ -82,21 +88,23 @@ class LineChartWidget extends StatelessWidget {
                 return LineTooltipItem(
                   '${dataPoint.date.month}/${dataPoint.date.day}/${dataPoint.date.year}\n',
                   TextStyle(
+                    fontSize: 16,
                     color: Colors.white,
                   ),
                   children: [
                     TextSpan(
                       text: '🍌${dataPoint.close.toStringAsFixed(2)} ',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                       children: [
                         TextSpan(
                           text: '$arrow ${change.toStringAsFixed(2)}%',
                           style: TextStyle(
-                            color: Colors.black,
                             backgroundColor: Colors.white,
-                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -107,6 +115,25 @@ class LineChartWidget extends StatelessWidget {
               }).toList();
             },
           ),
+          getTouchedSpotIndicator: (barData, indicators) {
+            return indicators.map((int index) {
+              return TouchedSpotIndicatorData(
+                FlLine(
+                  color: Colors.transparent,
+                  strokeWidth: 0,
+                ), // No vertical line
+                FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) =>
+                      FlDotCirclePainter(
+                    radius: 6,
+                    color: Colors.black,
+                    strokeColor: Colors.black,
+                  ),
+                ),
+              );
+            }).toList();
+          },
         ),
       ),
     );

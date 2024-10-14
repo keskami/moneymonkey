@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Invest/Widgets/chat_bubble.dart';
 import 'package:money_monkey/Invest/Widgets/line_chart_widget.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -25,32 +23,6 @@ class _InvestmentPageState extends State<InvestmentPage> {
   bool _isLoading = true;
   int _duration = 30;
 
-  // Function to load data from the local JSON asset
-  Future<void> _loadLocalStockData() async {
-    try {
-      final String response =
-          await rootBundle.loadString('assets/sample_stock_data.json');
-      final Map<String, dynamic> jsonMap = json.decode(response);
-      Map<String, dynamic> timeSeries = jsonMap["Time Series (Daily)"];
-
-      List<StockData> loadedStockData = timeSeries.entries.map((entry) {
-        return StockData.fromJson(entry.value, entry.key);
-      }).toList();
-
-      // Store loaded data for the AAPL symbol, replace as needed for multiple stocks
-      setState(() {
-        _stockDataMap["AAPL"] = loadedStockData;
-        _isLoading = false;
-      });
-      print('Local data loaded successfully');
-    } catch (e) {
-      print("Error loading data from JSON file: $e");
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   // Function to load data from the StockService for all symbols
   Future<void> _loadStockDataForAllSymbols() async {
     List<String> symbols = ["AAPL", "PG", "JNJ", "JPM"];
@@ -62,7 +34,6 @@ class _InvestmentPageState extends State<InvestmentPage> {
         });
         print('Loaded data for $symbol: ${data.length} entries');
       }
-
       setState(() {
         _isLoading = false;
       });
@@ -77,7 +48,6 @@ class _InvestmentPageState extends State<InvestmentPage> {
   @override
   void initState() {
     super.initState();
-    // _loadLocalStockData();
     _loadStockDataForAllSymbols();
   }
 
@@ -86,6 +56,16 @@ class _InvestmentPageState extends State<InvestmentPage> {
     setState(() {
       _selectedSymbol = symbol;
     });
+  }
+
+  // Calculate the percentage change for a given duration
+  double _calculateChangeForDuration(int days) {
+    List<StockData> data = _stockDataMap[_selectedSymbol] ?? [];
+    if (data.isEmpty || data.length <= days) return 0.0;
+
+    double currentValue = data[0].close;
+    double pastValue = data[days].close;
+    return ((currentValue - pastValue) / pastValue) * 100;
   }
 
   @override
@@ -121,11 +101,51 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 ),
               ),
             if (_stockDataMap[_selectedSymbol]?.isNotEmpty ?? false)
-              Text(
-                "🍌${_stockDataMap[_selectedSymbol]![0].close.toString()}% Today >",
-                style: GoogleFonts.baloo2(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SimpleDialog(
+                        children: [
+                          Row(
+                            children: [
+                              Image.network(
+                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2FmonkeyNoText.png?alt=media&token=d364a03e-40c7-48c8-a97b-887f1a180e2a",
+                                height: 100,
+                              ),
+                              ChatBubbleContainer(
+                                borderWidth: 1,
+                                trianglePosition: TrianglePosition.left,
+                                childWidget: Text(
+                                  "${_duration == 30 ? 'Today' : 'Change over past ${_duration == 90 ? '3M' : _duration == 180 ? '6M' : '1Y'}'}",
+                                  style: GoogleFonts.baloo2(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "${_stockDataMap[_selectedSymbol]![_duration].open.toStringAsFixed(2)} "
+                              "to ${_stockDataMap[_selectedSymbol]![0].close.toStringAsFixed(2)}",
+                              style: GoogleFonts.baloo2(fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text(
+                  "🍌${_stockDataMap[_selectedSymbol]![_duration == 30 ? 0 : _duration].open.toString()} ${_duration == 30 ? 'Today >' : ' ${_calculateChangeForDuration(_duration).toStringAsFixed(2)}% >'}",
+                  style: GoogleFonts.baloo2(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             const SizedBox(height: 10),
