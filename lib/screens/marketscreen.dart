@@ -23,8 +23,8 @@ class _MarketScreenState extends State<MarketScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchStockData(); // Fetch stock data when the screen loads
-    _fetchNewsData();  // Fetch the latest news when the screen loads
+    _fetchStockData(); 
+    _fetchNewsData();  
   }
 
   // Function to fetch stock data for Tesla and Apple
@@ -84,20 +84,20 @@ class _MarketScreenState extends State<MarketScreen> {
                             children: [
                               MarketCard(
                                 title: 'Tesla',
-                                value: teslaStockData?['Time Series (Daily)']?['2024-10-11']?['4. close'] ?? 'N/A',
-                                change: _calculateChange(teslaStockData), // Calculate dynamically
+                                value: teslaStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+                                change: _calculateChange(teslaStockData), 
                                 isPositive: _isPositive(teslaStockData),
                               ),
                               MarketCard(
                                 title: 'Apple',
-                                value: appleStockData?['Time Series (Daily)']?['2024-10-11']?['4. close'] ?? 'N/A',
-                                change: _calculateChange(appleStockData), // Calculate dynamically
+                                value: appleStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+                                change: _calculateChange(appleStockData), 
                                 isPositive: _isPositive(appleStockData),
                               ),
                               MarketCard(
                                 title: 'Google',
-                                value: googleStockData?['Time Series (Daily)']?['2024-10-11']?['4. close'] ?? 'N/A',
-                                change: _calculateChange(googleStockData), // Calculate dynamically
+                                value: googleStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+                                change: _calculateChange(googleStockData), 
                                 isPositive: _isPositive(googleStockData),
                               ),
                             ],
@@ -625,29 +625,4 @@ class SectionTitle extends StatelessWidget {
     );
   }
 }
-
-
- // Replace with your actual API key
-
-  // Fetch stock data
-  // Future<void> fetchStockData(String symbol) async {
-  //     final String apiKey = '4L9AN2G6OVNXRY23';
-  //   final String url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=$symbol&apikey=$apiKey';
-
-  //   try {
-  //     final response = await http.get(Uri.parse(url));
-
-  //     if (response.statusCode == 200) {
-  //       // Parse the JSON data
-  //       final data = json.decode(response.body);
-        
-  //       // Print the data to the console
-  //       print("API Response: $data");
-  //     } else {
-  //       print('Failed to load stock data: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error occurred: $e');
-  //   }
-  // }
 
