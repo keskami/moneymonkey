@@ -112,8 +112,8 @@ class _MarketScreenState extends State<MarketScreen> {
                         GestureDetector(
                           onTap: () {
                             // Navigate to more stocks
-                            print("sex");
-                            fetchStockData("TSLA");
+                           
+                           // _fetchStockData("TSLA");
                           },
                           child: const Text(
                             'View all >',
@@ -630,24 +630,24 @@ class SectionTitle extends StatelessWidget {
  // Replace with your actual API key
 
   // Fetch stock data
-  Future<void> fetchStockData(String symbol) async {
-      final String apiKey = '53090LJ6HW4RM4VH';
-    final String url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=$symbol&apikey=$apiKey';
+  // Future<void> fetchStockData(String symbol) async {
+  //     final String apiKey = '4L9AN2G6OVNXRY23';
+  //   final String url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=$symbol&apikey=$apiKey';
 
-    try {
-      final response = await http.get(Uri.parse(url));
+  //   try {
+  //     final response = await http.get(Uri.parse(url));
 
-      if (response.statusCode == 200) {
-        // Parse the JSON data
-        final data = json.decode(response.body);
+  //     if (response.statusCode == 200) {
+  //       // Parse the JSON data
+  //       final data = json.decode(response.body);
         
-        // Print the data to the console
-        print("API Response: $data");
-      } else {
-        print('Failed to load stock data: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error occurred: $e');
-    }
-  }
+  //       // Print the data to the console
+  //       print("API Response: $data");
+  //     } else {
+  //       print('Failed to load stock data: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Error occurred: $e');
+  //   }
+  // }
 

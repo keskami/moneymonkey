@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class StockService {
-  final String apiKey = '53090LJ6HW4RM4VH'; // Replace with your Alpha Vantage API key
+  final String apiKey = '4L9AN2G6OVNXRY23'; 
 
   // Function to fetch stock data for a specific symbol
   Future<Map<String, dynamic>> fetchStockData(String symbol) async {

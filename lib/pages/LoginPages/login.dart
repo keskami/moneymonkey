@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:moneymonkey/pages/ProfilePages/profileScreen.dart';
+import 'package:moneymonkey/screens/home.dart';
 
 import 'package:moneymonkey/screens/marketscreen.dart';
 
