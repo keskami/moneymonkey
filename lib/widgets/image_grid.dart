@@ -17,6 +17,7 @@ class ImageGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProgressController progressController = Get.find<ProgressController>();
     return Expanded(
       child: GridView.builder(
         padding: const EdgeInsets.all(16),
@@ -32,8 +33,10 @@ class ImageGrid extends StatelessWidget {
             onTap: () {
               // Handle selection logic
               if (titles[index] == 'Coins') {
+                progressController.setCorrectSelection(true);
                 _showCorrectDialog(context);
               } else {
+                progressController.setCorrectSelection(false);
                 _showIncorrectDialog(context);
               }
             },

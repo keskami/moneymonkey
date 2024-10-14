@@ -80,6 +80,17 @@ late ProgressController progressController;
 
   // Widget to create each grid item
   Widget _buildGridItem(BuildContext context, int index) {
+     final screenSize = MediaQuery.of(context).size;
+    
+
+     double screenWidth= screenSize.width*0.3;
+  
+     double screenHeight= screenSize.height*0.12
+     ;
+
+
+    // double gridItemSize= screenSize.width*0.3;
+    
     // Array of image paths for the icons
     final List<String> images = [
       "assets/images/img_screenshot_2024_08_26.png",  // First item
@@ -97,8 +108,8 @@ late ProgressController progressController;
         }
       },
       child: SizedBox(
-        height: 100, // Adjust size of the items
-        width: 100,
+        height: screenHeight, // Adjust size of the items
+        width: screenWidth,
         child: Image.asset(
           images[index], // Select the image based on index
           fit: BoxFit.contain, // Ensure the image fits without distortion
@@ -279,10 +290,14 @@ void _showDialog(BuildContext context) {
 
   // Build each navigation item with custom behavior for selected state
   BottomNavigationBarItem _buildNavItem(String iconPath, int index) {
+     final screenSize = MediaQuery.of(context).size;
+  double iconSize = screenSize.width * 0.13; // Make icons 10% of screen width
+
     return BottomNavigationBarItem(
       icon: Container(
-        width: 50,
-        height: 50,
+        width: iconSize,
+      
+        height: iconSize,
         decoration: BoxDecoration(
           border: _currentIndex == index
               ? Border.all(color: Colors.blue, width: 3) // Border for the selected item

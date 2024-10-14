@@ -6,6 +6,8 @@ class ProgressController extends GetxController {
   var progress = 0.0.obs;  // Initial progress value
   var cardsCompleted = false.obs;
     var quizCompleted = false.obs;
+    var isCorrectSelected = false.obs;
+     var attempts = 0.obs; // Track the number of attempts
 
     
    void setCardsCompleted() {
@@ -13,6 +15,20 @@ class ProgressController extends GetxController {
     print("All cards have been flipped and swiped.");
     // You can add additional logic here, like updating the user's progress in Firestore.
       checkCompletion(); // Ensure this is checked after setting the flag
+  }
+
+    // Call this method when the correct answer is selected
+  void setCorrectSelection(bool isCorrect) {
+    isCorrectSelected.value = isCorrect;
+  }
+// Method to record an attempt
+  void recordAttempt(bool isCorrect) {
+    if (!isCorrect) {
+      attempts.value += 1;  // Increment the attempts only for incorrect answers
+    }
+  }
+   void resetAttempts() {
+    attempts.value = 0;  // Reset the attempts when the quiz starts or is retried
   }
 
 

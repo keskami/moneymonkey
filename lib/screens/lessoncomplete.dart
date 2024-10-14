@@ -1,6 +1,8 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moneymonkey/controller/controller.dart';
 
 class LessonCompleteScreen extends StatefulWidget {
   @override
@@ -55,6 +57,12 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Access the progress controller to get the number of attempts
+    final ProgressController progressController = Get.find<ProgressController>();
+    
+    // Determine how many stars based on the number of attempts
+    int stars = progressController.attempts.value == 1 ? 3 : 2;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -80,26 +88,20 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                             fit: BoxFit.contain,
                           ),
                         ),
+                        // Display stars based on attempts
                         Positioned(
                           top: 300,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/star.png',
-                                height: 60,
-                              ),
-                              SizedBox(width: 10),
-                              Image.asset(
-                                'assets/images/star.png',
-                                height: 60,
-                              ),
-                              SizedBox(width: 10),
-                              Image.asset(
-                                'assets/images/star.png',
-                                height: 60,
-                              ),
-                            ],
+                            children: List.generate(stars, (index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: Image.asset(
+                                  'assets/images/star.png',
+                                  height: 60,
+                                ),
+                              );
+                            }),
                           ),
                         ),
                         Positioned(
@@ -148,20 +150,16 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                   SizedBox(height: 80),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    // Center both items in the row
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Banana Container with text
                       GestureDetector(
                         onTap: _onBananaTap,
                         child: Column(
-                          // Wrap in a Column to align the image and text vertically
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.green, width: 2),
+                                border: Border.all(color: Colors.green, width: 2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.all(8),
@@ -170,9 +168,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                                 height: 90,
                               ),
                             ),
-                            SizedBox(
-                                height:
-                                    0), // Add some space between the image and the text
+                            SizedBox(height: 0),
                             if (_bananaClicked)
                               Text(
                                 "+10 Bananas!",
@@ -186,7 +182,6 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                         ),
                       ),
                       SizedBox(width: 20),
-                      // Treasure Chest Container
                       GestureDetector(
                         onTap: () {
                           // Add action for treasure chest
@@ -230,7 +225,6 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                   numberOfParticles: 30,
                 ),
               ),
-              // Lottie Animation for extra cool effect
               if (_bananaClicked)
                 Center(
                   child: ScaleTransition(

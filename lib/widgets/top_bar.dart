@@ -71,6 +71,11 @@ class _TopBarState extends State<TopBar> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize= MediaQuery.of(context).size;
+
+    double iconSize= screenSize.width*0.12;
+    double textSize= screenSize.height*0.02;
+    print(screenSize);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Obx(() {
@@ -85,29 +90,29 @@ class _TopBarState extends State<TopBar> {
           children: [
             Row(
               children: [
-                Image.asset('assets/images/img_transparent_logo.png', height: 40),
+                Image.asset('assets/images/img_transparent_logo.png', height: iconSize),
                 const SizedBox(width: 8),
               ],
             ),
             Row(
               children: [
-                Image.asset('assets/images/img_monkeymoney_50.png', height: 40),
+                Image.asset('assets/images/img_monkeymoney_50.png', height: iconSize),
                 const SizedBox(width: 8),
-                Text('$monkeys', style: const TextStyle(fontSize: 18)),
+                Text('$monkeys', style: TextStyle(fontSize: textSize,fontWeight: FontWeight.bold)),
               ],
             ),
             Row(
               children: [
-                Image.asset('assets/images/img_monkeymoney_51.png', height: 40),
+                Image.asset('assets/images/img_monkeymoney_51.png', height: iconSize),
                 const SizedBox(width: 8),
-                Text('$diamonds', style: const TextStyle(fontSize: 18)),
+                Text('$diamonds', style: TextStyle(fontSize: textSize,fontWeight: FontWeight.bold)),
               ],
             ),
             Row(
               children: [
-                Image.asset('assets/images/img_monkeymoney_52.png', height: 40),
+                Image.asset('assets/images/img_monkeymoney_52.png', height: iconSize),
                 const SizedBox(width: 8),
-                Text('$bananas', style: const TextStyle(fontSize: 18)),
+                Text('$bananas', style:  TextStyle(fontSize: textSize,fontWeight: FontWeight.bold)),
               ],
             ),
           ],

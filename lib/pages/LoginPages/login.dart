@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:moneymonkey/pages/ProfilePages/profileScreen.dart';
-import 'package:moneymonkey/screens/home.dart';
+
+import 'package:moneymonkey/screens/marketscreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -180,7 +181,7 @@ Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  HomePage(),
+            builder: (context) =>  MarketScreen(),
           ),
         );
       }
