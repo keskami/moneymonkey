@@ -39,7 +39,7 @@ class StockService {
         }).toList();
 
         // Sort list by date in ascending order
-        stockDataList.sort((a, b) => a.date.compareTo(b.date));
+        stockDataList.sort((a, b) => b.date.compareTo(a.date));
 
         return stockDataList;
       } else {

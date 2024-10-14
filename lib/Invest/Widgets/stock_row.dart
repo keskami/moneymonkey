@@ -25,8 +25,8 @@ class StockRow extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.1,
-        vertical: screenHeight * 0.017,
+        horizontal: screenWidth * 0.05,
+        vertical: screenHeight * 0.015,
       ),
       decoration: BoxDecoration(
         border: isSelected
@@ -38,14 +38,19 @@ class StockRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Stock Name
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Text(
               stockName,
-              style:
-                  GoogleFonts.baloo2(fontSize: 16, fontWeight: FontWeight.bold),
+              style: GoogleFonts.baloo2(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
+          // Growth Indicator
           Expanded(
             flex: 1,
             child: isLoading
@@ -57,14 +62,19 @@ class StockRow extends StatelessWidget {
                 : Icon(
                     growthValue > 0 ? Icons.trending_up : Icons.trending_down,
                     color: growthValue > 0 ? Colors.green : Colors.red,
+                    size: 20,
                   ),
           ),
+          // Growth Value
           Expanded(
-            flex: 3,
+            flex: 7,
             child: isLoading
                 ? Text(
                     "Loading...",
-                    style: GoogleFonts.baloo2(fontSize: 12, color: Colors.grey),
+                    style: GoogleFonts.baloo2(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
                     textAlign: TextAlign.right,
                   )
                 : Text(
@@ -76,12 +86,13 @@ class StockRow extends StatelessWidget {
                     textAlign: TextAlign.right,
                   ),
           ),
+          // Stock Value
           Expanded(
             flex: 3,
             child: Text(
-              "🍌${stockValue.toStringAsFixed(2)}",
+              isLoading ? "Loading..." : "🍌${stockValue.toStringAsFixed(2)}",
               style: GoogleFonts.baloo2(
-                fontSize: 12,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

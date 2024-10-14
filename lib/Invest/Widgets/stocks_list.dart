@@ -5,12 +5,12 @@ import 'package:money_monkey/themes/color_themes.dart';
 import '../../Backend/Models/stock_data.dart';
 
 class StocksList extends StatefulWidget {
-  final List<StockData> stockDataList;
+  final Map<String, List<StockData>> stockDataMap;
   final void Function(String) onStockSelected; // Callback for stock selection
 
   const StocksList({
     super.key,
-    required this.stockDataList,
+    required this.stockDataMap,
     required this.onStockSelected,
   });
 
@@ -41,7 +41,7 @@ class _StocksListState extends State<StocksList> {
         itemBuilder: (context, index) {
           final stockSymbol = stockSymbols[index];
           // Fetch the appropriate stock data based on the symbol
-          StockData stockData = widget.stockDataList[index];
+          final stockData = widget.stockDataMap[stockSymbol]?.first;
 
           return GestureDetector(
             onTap: () {
@@ -51,13 +51,15 @@ class _StocksListState extends State<StocksList> {
               });
               widget.onStockSelected(stockSymbol); // Trigger callback
             },
-            child: StockRow(
-              stockName: stockSymbol,
-              growthValue: calculateGrowthValue(stockData),
-              stockValue: stockData.close,
-              isSelected: _selectedStockSymbol ==
-                  stockSymbol, // Set isSelected based on current selection
-            ),
+            child: stockData != null
+                ? StockRow(
+                    stockName: stockSymbol,
+                    growthValue: calculateGrowthValue(stockData),
+                    stockValue: stockData.close,
+                    isSelected: _selectedStockSymbol ==
+                        stockSymbol, // Set isSelected based on current selection
+                  )
+                : const SizedBox(),
           );
         },
       ),

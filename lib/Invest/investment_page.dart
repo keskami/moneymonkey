@@ -200,8 +200,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
             ),
             if (!_stockDataMap.isEmpty)
               StocksList(
-                stockDataList:
-                    _stockDataMap.values.expand((data) => data).toList(),
+                stockDataMap: _stockDataMap,
                 onStockSelected: _updateSelectedSymbol,
               ),
             const Spacer(),
