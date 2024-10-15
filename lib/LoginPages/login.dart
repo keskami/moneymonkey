@@ -112,18 +112,49 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       'Portfolio': {
         'Total Bananas': 0,
-        'Balence': 0,
+        'Balance': 0,
         'Weekly net gain': 0,
-        'Transactions': {
-          'Transaction 1': {
-            'Source/Destination': 'Test Source',
-            'Amount': 200,
-            'Date': FieldValue.serverTimestamp(),
-            'type': "Income"
-          }
-        }
       }
     });
+
+    final transactionsRef = userDocRef.collection('Transactions');
+
+    await transactionsRef.add(
+      {
+        'Source/Destination': 'Test Source',
+        'Amount': 200,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Income"
+      },
+    );
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 2',
+      'Amount': 150,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 1',
+      'Amount': -100,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 2',
+      'Amount': -50,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 3',
+      'Amount': 300,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
   }
 
   Future<void> logIn() async {
@@ -202,13 +233,9 @@ class _LoginScreenState extends State<LoginScreen> {
             FirebaseFirestore.instance.collection('Users').doc(userId);
         final userSnapshot = await userDocRef.get();
 
-        // If the user does not exist in Firestore, add them
         if (!userSnapshot.exists) {
           await addUserDetails(userId, email);
-          print('New user added to Firestore: $userId');
-        } else {
-          print('User already exists in Firestore: $userId');
-        }
+        } else {}
 
         if (context.mounted) {
           Navigator.push(

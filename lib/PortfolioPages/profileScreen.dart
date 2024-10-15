@@ -37,40 +37,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<List<DocumentSnapshot>> _getTransactions(String type) async {
-    CollectionReference transactionsRef = FirebaseFirestore.instance
-        .collection('Users')
-        .doc(userID)
-        .collection('Profile')
-        .doc('Portfolio')
-        .collection('Transactions');
-      print("HEREHEHEH");
-      print(transactionsRef);
+  CollectionReference transactionsRef = FirebaseFirestore.instance
+      .collection('Users')
+      .doc(userID)
+      .collection('Transactions');
 
-    Query query;
+  Query query = transactionsRef;
 
-    if (type == "Income") {
-      query = transactionsRef
-          .where('income or expense', isEqualTo: 'Income')
-          //.orderBy('Date',
-              //descending: true) 
-          .limit(3);
-    } else if (type == "Expenses") {
-      query = transactionsRef
-          .where('income or expense', isEqualTo: 'Expense')
-          .orderBy('Date',
-              descending: true) 
-          .limit(3);
-    } else {
-      query = transactionsRef
-          //.orderBy('Date',
-              //descending: true) 
-          .limit(3);
-    }
-
-    // Execute the query
-    QuerySnapshot querySnapshot = await query.get();
-    return querySnapshot.docs; // Return the list of document snapshots
+  if (type == "Income") {
+    query = query
+        .where('Type', isEqualTo: 'Income')
+        .orderBy('Date', descending: true).limit(3);
+  } else if (type == "Expenses") {
+    query = query
+        .where('Type', isEqualTo: 'Expense')
+        .orderBy('Date', descending: true).limit(3);
+  } else {
+    query = query.orderBy('Date', descending: true).limit(3);
   }
+  QuerySnapshot querySnapshot = await query.get();
+  return querySnapshot.docs;
+}
+
 
   void _setTransaction(String type) async {
     List<DocumentSnapshot> transactions = await _getTransactions(type);
@@ -130,8 +118,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
 
             if (portfolioData != null) {
-              balance = portfolioData?['Balence'] ?? 0;
-
+              balance = portfolioData?['Balance'] ?? 0;
               totalBanans = portfolioData?['Total Bananas'] ?? 0;
               int netGain = portfolioData?['Weekly net gain'] ?? 0;
               int lastWeek = balance! - netGain;

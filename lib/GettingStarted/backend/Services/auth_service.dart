@@ -114,24 +114,67 @@ class AuthService {
       return;
     }
 
-    //
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
       'Age': 0,
       'Knowledge Level': 0,
       'Learning Goal Per Day': 0,
-      'Profile':{
+      'Profile': {
         'Full Name': 'Your Name Here',
-      'Username': 'Your Name Here',
-      'Number of Followers': 0,
-      'Following': 0,
-      'Top Achievements': 0,
-      'Streak': 0,
-      'Total Profit': 0,
-      'Average Monthly Growth': 0,
+        'Username': 'Your Name Here',
+        'Number of Followers': 0,
+        'Following': 0,
+        'Top Achievements': 0,
+        'Streak': 0,
+        'Total Profit': 0,
+        'Average Monthly Growth': 0,
+      },
+      'Portfolio': {
+        'Total Bananas': 0,
+        'Balance': 0,
+        'Weekly net gain': 0,
       }
     });
+
+    final transactionsRef = userDocRef.collection('Transactions');
+
+    await transactionsRef.add(
+      {
+        'Source/Destination': 'Test Source',
+        'Amount': 200,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Income"
+      },
+    );
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 2',
+      'Amount': 150,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 1',
+      'Amount': -100,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 2',
+      'Amount': -50,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 3',
+      'Amount': 300,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
   }
 
   // Function to sign out the user
