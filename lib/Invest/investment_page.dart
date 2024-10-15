@@ -250,7 +250,9 @@ class _InvestmentPageState extends State<InvestmentPage> {
           ],
         ),
       ),
-      floatingActionButton: const TradeButton(),
+      floatingActionButton: TradeButton(
+        selectedSymbol: _selectedSymbol,
+      ),
     );
   }
 }

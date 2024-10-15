@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/Invest/Widgets/buy_pop.dart';
+import 'package:money_monkey/Invest/Widgets/sell_pop.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class TradeButton extends StatefulWidget {
   const TradeButton({
     super.key,
+    required this.selectedSymbol,
   });
-
+  final String selectedSymbol;
   @override
   State<TradeButton> createState() => _TradeButtonState();
 }
@@ -83,7 +86,13 @@ class _TradeButtonState extends State<TradeButton> {
                         ? [
                             GestureDetector(
                               onTap: () {
-                                // Action for Buy
+                                // Action for Buys
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => BuyPopUp(
+                                    selectedSymbol: widget.selectedSymbol,
+                                  ),
+                                );
                               },
                               child: const Text(
                                 'Buy',
@@ -101,6 +110,12 @@ class _TradeButtonState extends State<TradeButton> {
                             GestureDetector(
                               onTap: () {
                                 // Action for Sell
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => SellPopUp(
+                                    selectedSymbol: widget.selectedSymbol,
+                                  ),
+                                );
                               },
                               child: const Text(
                                 'Sell',
