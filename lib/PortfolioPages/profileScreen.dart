@@ -23,7 +23,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   bool isLoading = true;
   String balanceString = '0';
   String totalBananstring = '0';
-  Map<String, dynamic>? profileData;
+  Map<String, dynamic>? portfolioData;
   double _changePercentage = 0;
   String _currButton = "All";
   bool isExpanded = false;
@@ -43,22 +43,33 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         .collection('Profile')
         .doc('Portfolio')
         .collection('Transactions');
+      print("HEREHEHEH");
+      print(transactionsRef);
+
+    Query query;
+
     if (type == "Income") {
-      QuerySnapshot querySnapshot = await transactionsRef
-          .limit(3)
+      query = transactionsRef
           .where('income or expense', isEqualTo: 'Income')
-          .get();
-      return querySnapshot.docs;
+          //.orderBy('Date',
+              //descending: true) 
+          .limit(3);
     } else if (type == "Expenses") {
-      QuerySnapshot querySnapshot = await transactionsRef
-          .limit(3)
+      query = transactionsRef
           .where('income or expense', isEqualTo: 'Expense')
-          .get();
-      return querySnapshot.docs;
+          .orderBy('Date',
+              descending: true) 
+          .limit(3);
     } else {
-      QuerySnapshot querySnapshot = await transactionsRef.limit(3).get();
-      return querySnapshot.docs;
+      query = transactionsRef
+          //.orderBy('Date',
+              //descending: true) 
+          .limit(3);
     }
+
+    // Execute the query
+    QuerySnapshot querySnapshot = await query.get();
+    return querySnapshot.docs; // Return the list of document snapshots
   }
 
   void _setTransaction(String type) async {
@@ -105,59 +116,53 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<void> _fetchUserProfile() async {
-  if (userID != null) {
-    try {
-      // Fetch the user's document from Firestore
-      DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(userID)
-          .get();
+    if (userID != null) {
+      try {
+        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userID)
+            .get();
 
-      if (profileSnapshot.exists) {
-        setState(() {
-          final data = profileSnapshot.data() as Map<String, dynamic>?;
-        
+        if (profileSnapshot.exists) {
+          setState(() {
+            final data = profileSnapshot.data() as Map<String, dynamic>?;
 
+            portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
 
-          profileData = data?['Portfolio'] as Map<String, dynamic>?;
-         
+            if (portfolioData != null) {
+              balance = portfolioData?['Balence'] ?? 0;
 
-          if (profileData != null) {
-            print(profileData);
-            balance = profileData?['Balence'] ?? 0;
-            print("Balance");
-            print(balance);
-            totalBanans = profileData?['Total Bananas'] ?? 0;
-            int netGain = profileData?['Weekly net gain'] ?? 0;
-            int lastWeek = balance! - netGain;
-            if (lastWeek != 0) {
-              double percentChange = ((balance! - lastWeek) / lastWeek) * 100;
-              _changePercentage = double.parse(percentChange.toStringAsFixed(2));
-            } else {
-              _changePercentage = 0.0;
+              totalBanans = portfolioData?['Total Bananas'] ?? 0;
+              int netGain = portfolioData?['Weekly net gain'] ?? 0;
+              int lastWeek = balance! - netGain;
+              if (lastWeek != 0) {
+                double percentChange = ((balance! - lastWeek) / lastWeek) * 100;
+                _changePercentage =
+                    double.parse(percentChange.toStringAsFixed(2));
+              } else {
+                _changePercentage = 0.0;
+              }
+
+              totalBananstring =
+                  NumberFormat('#,###').format(totalBanans?.toInt() ?? 0);
+              balanceString =
+                  NumberFormat('#,###').format(balance?.toInt() ?? 0);
             }
 
-            totalBananstring =
-                NumberFormat('#,###').format(totalBanans?.toInt() ?? 0);
-            balanceString = NumberFormat('#,###').format(balance?.toInt() ?? 0);
-          }
-
-          isLoading = false;
-        });
-      } else {
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } catch (e) {
         setState(() {
           isLoading = false;
         });
       }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Error fetching user profile: $e');
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
