@@ -40,7 +40,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     CollectionReference transactionsRef = FirebaseFirestore.instance
         .collection('Users')
         .doc(userID)
-        .collection('profile')
+        .collection('Profile')
         .doc('Portfolio')
         .collection('Transactions');
     if (type == "Income") {
@@ -105,44 +105,59 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .collection('profile')
-            .doc('Portfolio')
-            .get();
+  if (userID != null) {
+    try {
+      // Fetch the user's document from Firestore
+      DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userID)
+          .get();
 
-        if (profileSnapshot.exists) {
-          setState(() {
-            profileData = profileSnapshot.data() as Map<String, dynamic>?;
-            balance = profileData?['Balance'];
-            totalBanans = profileData?['Total Bananas'];
-            int netGain = profileData?['Weekly net gain'];
+      if (profileSnapshot.exists) {
+        setState(() {
+          final data = profileSnapshot.data() as Map<String, dynamic>?;
+        
+
+
+          profileData = data?['Portfolio'] as Map<String, dynamic>?;
+         
+
+          if (profileData != null) {
+            print(profileData);
+            balance = profileData?['Balence'] ?? 0;
+            print("Balance");
+            print(balance);
+            totalBanans = profileData?['Total Bananas'] ?? 0;
+            int netGain = profileData?['Weekly net gain'] ?? 0;
             int lastWeek = balance! - netGain;
-            double percentChange = ((balance! - lastWeek) / lastWeek) * 100;
-            double roundedPercentChange =
-                double.parse(percentChange.toStringAsFixed(2));
-            _changePercentage = roundedPercentChange;
+            if (lastWeek != 0) {
+              double percentChange = ((balance! - lastWeek) / lastWeek) * 100;
+              _changePercentage = double.parse(percentChange.toStringAsFixed(2));
+            } else {
+              _changePercentage = 0.0;
+            }
 
             totalBananstring =
                 NumberFormat('#,###').format(totalBanans?.toInt() ?? 0);
             balanceString = NumberFormat('#,###').format(balance?.toInt() ?? 0);
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
+          }
+
+          isLoading = false;
+        });
+      } else {
         setState(() {
           isLoading = false;
         });
       }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching user profile: $e');
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -367,7 +382,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                
                                   _updateButton("All");
                                   _setTransaction("ALL");
                                 },
