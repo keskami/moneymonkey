@@ -32,7 +32,7 @@ class ProfilePage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 color: LightTheme()
                     .primaryBackgroundColor, // Semi-transparent color
-                child: Column(),
+                child: const Column(),
               ),
             ),
           ],

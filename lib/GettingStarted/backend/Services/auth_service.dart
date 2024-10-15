@@ -131,10 +131,26 @@ class AuthService {
         'Average Monthly Growth': 0,
       },
       'Portfolio': {
-        'Total Bananas': 0,
-        'Balance': 0,
-        'Weekly net gain': 0,
+        'Total Bananas': 8976,
+        'Balance': 908,
+        'Weekly net gain': -90,
+      },
+      'Invest Page (Discover)': {
+        'Total Invested (Stocks)': 100,
+        'Total Profit (Stocks)': 50,
+        'Total Invested (ETFs)': 300,
+        'Total Profit (ETFs)': -50,
+        'Total Invested (Mutual Funds)': 500,
+        'Total Profit (Mutual Funds)': 600,
+        'Total Invested (Bonds)': 234,
+        'Total Profit (Bonds)': -10,
+        'Total invested Bananas' : 7089,
+        'Profit from Invested Bananas (Current Month)' : 890,
+        'Username':"Josh5"
+
+
       }
+
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
@@ -176,7 +192,6 @@ class AuthService {
     });
 
   }
-
   // Function to sign out the user
   Future<void> signOut(BuildContext context) async {
     try {
