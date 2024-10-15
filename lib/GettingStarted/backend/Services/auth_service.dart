@@ -118,13 +118,11 @@ class AuthService {
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
-      'Age': gettingStartedController.age.value, // Ensure value is not null
-      'Knowledge Level': gettingStartedController.knowledgeLevel.value,
-      'Learning Goal Per Day': startFreshController.learningGoal.value,
-    });
-
-    await userDocRef.collection('profile').doc('userProfile').set({
-      'Full Name': 'Your Name Here',
+      'Age': 0,
+      'Knowledge Level': 0,
+      'Learning Goal Per Day': 0,
+      'Profile':{
+        'Full Name': 'Your Name Here',
       'Username': 'Your Name Here',
       'Number of Followers': 0,
       'Following': 0,
@@ -132,6 +130,7 @@ class AuthService {
       'Streak': 0,
       'Total Profit': 0,
       'Average Monthly Growth': 0,
+      }
     });
   }
 

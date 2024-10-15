@@ -99,10 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
       'Email': email,
       'Age': 0,
       'Knowledge Level': 0,
-      'Learning Goal Per Day': 0
-    });
-
-    await userDocRef.collection('profile').doc('userProfile').set({
+      'Learning Goal Per Day': 0,
+      'Profile':{
       'Full Name': 'Your Name Here',
       'Username': 'Your Name Here',
       'Number of Followers': 0,
@@ -111,7 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
       'Streak': 0,
       'Total Profit': 0,
       'Average Monthly Growth': 0,
+      }
     });
+
   }
 
   Future<void> logIn() async {
@@ -180,6 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = userCredential.user?.email ?? '';
     if (email.isNotEmpty) {
       Navigator.push(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => const UserProfileScreen(),
