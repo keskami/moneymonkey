@@ -367,6 +367,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
+                                
                                   _updateButton("All");
                                   _setTransaction("ALL");
                                 },
@@ -602,7 +603,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         },
         child: AnimatedContainer(
           duration: Duration(milliseconds: 0),
-          width: 191,
+          width: 191 * screenWidthUnit,
           height: isExpanded ? screenHeightUnit * 105 : screenHeightUnit * 52,
           decoration: BoxDecoration(
             color: const Color.fromRGBO(135, 206, 235, 1),
@@ -612,34 +613,48 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Invest1(),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Invest1(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(135, 206, 235, 1),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        );
-                      },
-                      child: Text(
-                        'Invest',
-                        style: GoogleFonts.fredoka(
-                          color: Colors.white,
-                          fontSize: 19,
-                        ),
-                      ),
-                    ),
+                          width: 191 * screenWidthUnit,
+                          height: screenHeightUnit * 40,
+                          child: Text(
+                            'Invest',
+                            style: GoogleFonts.fredoka(
+                              color: Colors.white,
+                              fontSize: 19,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )),
                     const Divider(
                       color: Colors.white,
                       thickness: 1,
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Save',
-                        style: GoogleFonts.fredoka(
-                          color: Colors.white,
-                          fontSize: 19,
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        color: const Color.fromRGBO(135, 206, 235, 1),
+                        width: 191 * screenWidthUnit,
+                        height: screenHeightUnit * 40,
+                        child: Text(
+                          'Save',
+                          style: GoogleFonts.fredoka(
+                            color: Colors.white,
+                            fontSize: 19,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     )
