@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
-import 'package:money_monkey/InvestSectionPages/invest1.dart';
 import 'package:money_monkey/PortfolioPages/profileScreen.dart';
 
 class LoginScreen extends StatefulWidget {

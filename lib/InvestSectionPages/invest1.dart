@@ -34,7 +34,7 @@ class _Invest1State extends State<Invest1> {
   int monthyAmount = 0;
   bool loading = true;
 
-  TextEditingController _askHereText = TextEditingController();
+   TextEditingController _askHereText = TextEditingController();
 
   @override
   void dispose() {
@@ -107,10 +107,10 @@ class _Invest1State extends State<Invest1> {
     double screenHeightUnit = MediaQuery.of(context).size.height / 880;
 
     return Scaffold(
-      backgroundColor: Color.fromRGBO(137, 220, 142, 1),
+      backgroundColor: const Color.fromRGBO(137, 220, 142, 1),
       body: loading
           ? Container(
-              color: Color.fromRGBO(137, 220, 142, 1),
+              color: const Color.fromRGBO(137, 220, 142, 1),
             )
           : Stack(
               children: [
@@ -208,7 +208,7 @@ class _Invest1State extends State<Invest1> {
                     height: screenHeightUnit * 650,
                     width: screenWidthUnit * 390,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(241, 244, 248, 1),
+                      color: const Color.fromRGBO(241, 244, 248, 1),
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     child: Column(
@@ -284,7 +284,7 @@ class _Invest1State extends State<Invest1> {
                                   height: 100 * screenHeightUnit,
                                   width: 303 * screenWidthUnit,
                                   decoration: BoxDecoration(
-                                    color: Color.fromRGBO(241, 244, 248, 1),
+                                    color: const Color.fromRGBO(241, 244, 248, 1),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: TextField(
@@ -338,7 +338,7 @@ class _Invest1State extends State<Invest1> {
                     style: GoogleFonts.baloo2(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(87, 99, 101, 1)),
+                        color: const Color.fromRGBO(87, 99, 101, 1)),
                   ),
                 ),
                 TextButton(
@@ -348,7 +348,7 @@ class _Invest1State extends State<Invest1> {
                     style: GoogleFonts.baloo2(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(87, 99, 101, 1)),
+                        color: const Color.fromRGBO(87, 99, 101, 1)),
                   ),
                 )
               ])),
@@ -369,7 +369,7 @@ Widget _buildInvestmentCard(Map<String, dynamic> data, double screenWidthUnit,
           color: Colors.grey.withOpacity(0.2),
           spreadRadius: 1,
           blurRadius: 5,
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
         ),
       ],
     ),
@@ -409,11 +409,11 @@ Widget _buildInvestmentCard(Map<String, dynamic> data, double screenWidthUnit,
             Row(
               children: [
                 data['change']! > 0
-                    ? Icon(
+                    ? const Icon(
                         Icons.arrow_upward_sharp,
                         color: Colors.green,
                       )
-                    : Icon(color: Colors.red, Icons.arrow_downward_sharp),
+                    : const Icon(color: Colors.red, Icons.arrow_downward_sharp),
                 Text(
                   '🍌${data['change']}',
                   style: GoogleFonts.baloo2(

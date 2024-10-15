@@ -608,7 +608,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           });
         },
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 0),
+          duration: const Duration(milliseconds: 0),
           width: 191 * screenWidthUnit,
           height: isExpanded ? screenHeightUnit * 105 : screenHeightUnit * 52,
           decoration: BoxDecoration(
