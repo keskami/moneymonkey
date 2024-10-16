@@ -53,6 +53,19 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
           whySuggested: "",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
+           friendSuggestion(
+          name: "",
+          image: "assets/images/magGlass.png",
+          whySuggested: "",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+           friendSuggestion(
+          name: "",
+          image: "assets/images/magGlass.png",
+          whySuggested: "",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+           
     ];
 
     return Scaffold(
@@ -138,9 +151,22 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
     required double screenWidthUnit,
   }) {
     return name.isEmpty
-        ? Container()
+        ? Container(
+            height: screenHeightUnit * 75,
+            width: screenWidthUnit * 350,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  height: screenHeightUnit * 1,
+                  width: screenWidthUnit * 380,
+                  color: Colors.black,
+                )
+              ],
+            ),
+          )
         : Container(
-            height: screenHeightUnit * 72,
+            height: screenHeightUnit * 75,
             width: screenWidthUnit * 350,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -156,7 +182,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                       height: screenHeightUnit * 46,
                       width: screenHeightUnit * 46,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(200, 200, 200, 1),
+                        color: Color.fromRGBO(220, 220, 220, 1),
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -221,7 +247,11 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                   ],
                 ),
                 Spacer(),
-                Container(height: screenHeightUnit * 1, width: screenWidthUnit * 380,color: Colors.black, )
+                Container(
+                  height: screenHeightUnit * 1,
+                  width: screenWidthUnit * 380,
+                  color: Colors.black,
+                )
               ],
             ));
   }
