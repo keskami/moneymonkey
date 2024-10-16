@@ -70,8 +70,7 @@ class _FriendsHomeState extends State<FriendsHome> {
         children: [
           SizedBox(height: screenHeightUnit * 57),
           Padding(
-              padding: EdgeInsets.fromLTRB(
-                  screenHeightUnit * 4, screenHeightUnit * 4, 0, 0),
+              padding: EdgeInsets.fromLTRB(screenHeightUnit * 4, 0, 0, 0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -112,7 +111,12 @@ class _FriendsHomeState extends State<FriendsHome> {
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),));
+                  },
                   child: Text(
                     "view all",
                     style: GoogleFonts.inter(
@@ -130,7 +134,7 @@ class _FriendsHomeState extends State<FriendsHome> {
             children: [if (friendsRowWidgets.isNotEmpty) ...friendsRowWidgets],
           ),
           SizedBox(
-            height: screenHeightUnit * 34,
+            height: screenHeightUnit * 40,
           )
         ],
       ),
@@ -316,3 +320,4 @@ class _FriendsHomeState extends State<FriendsHome> {
     ));
   }
 }
+

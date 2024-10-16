@@ -1,0 +1,26 @@
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LoginPages/login.dart';
+
+
+class FriendsSuggestions extends StatefulWidget {
+  const FriendsSuggestions({super.key});
+
+  @override
+  State<FriendsSuggestions> createState() => _FriendsSuggestionsState();
+}
+
+class _FriendsSuggestionsState extends State<FriendsSuggestions> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: Colors.white, 
+        child
+      
+      ),
+    );
+  }
+}
