@@ -23,24 +23,35 @@ class _InvestmentPageState extends State<InvestmentPage> {
   bool _isLoading = true;
   String _duration = "24H";
 
-  // Function to load data from the StockService for all symbols
   Future<void> _loadStockDataForAllSymbols() async {
     List<String> symbols = ["AAPL", "PG", "JNJ", "JPM"];
+    setState(() {
+      _isLoading = true; // Show loading indicator while fetching data
+    });
+
     try {
       for (String symbol in symbols) {
+        // Preload data for each symbol
         await _stockService.preloadStockData(symbol);
+
+        // Determine the type of data (intraday or daily) based on duration
+        String dataType = _duration == "24H" ? 'intraday' : 'daily';
+
+        // Get cached data based on the selected symbol and duration
+        var cachedData =
+            _stockService.getCachedData(symbol, dataType, _duration);
+
+        // Only update the map if data is not null
         setState(() {
-          _stockDataMap[symbol] = _stockService.getCachedData(
-              symbol, _duration == 24 ? 'intraday' : 'daily', _duration);
+          _stockDataMap[symbol] = cachedData;
         });
       }
-      setState(() {
-        _isLoading = false;
-      });
     } catch (e) {
+      // Log the error and update UI accordingly
       print('Error fetching data: $e');
+    } finally {
       setState(() {
-        _isLoading = false;
+        _isLoading = false; // Hide loading indicator
       });
     }
   }
@@ -69,6 +80,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -90,12 +102,13 @@ class _InvestmentPageState extends State<InvestmentPage> {
           children: [
             TitleRow(
               selectedSymbol: _selectedSymbol,
-              stockValue: _stockDataMap[_selectedSymbol] == null
-                  ? 233.86
-                  : _stockDataMap[_selectedSymbol]![0].open,
-              changePercentage: _stockDataMap[_selectedSymbol] == null
-                  ? 3
-                  : _stockDataMap[_selectedSymbol]![0].close,
+              stockValue: _stockDataMap[_selectedSymbol]?.isNotEmpty == true
+                  ? _stockDataMap[_selectedSymbol]![0].open
+                  : 0.0, // Default value if data is unavailable
+              changePercentage:
+                  _stockDataMap[_selectedSymbol]?.isNotEmpty == true
+                      ? _stockDataMap[_selectedSymbol]![0].close
+                      : 0.0, // Default value if data is unavailable
             ),
             const SizedBox(height: 10),
             SizedBox(
@@ -105,13 +118,20 @@ class _InvestmentPageState extends State<InvestmentPage> {
                   ? Center(
                       child: const CircularProgressIndicator(),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: LineChartWidget(
-                        duration: _duration,
-                        stockData: _stockDataMap[_selectedSymbol] ?? [],
-                      ),
-                    ),
+                  : _stockDataMap[_selectedSymbol]?.isNotEmpty == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 30.0),
+                          child: LineChartWidget(
+                            duration: _duration,
+                            stockData: _stockDataMap[_selectedSymbol]!,
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            "No data available",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +151,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 const Spacer(),
               ],
             ),
-            if (!_stockDataMap.isEmpty)
+            if (_stockDataMap.isEmpty)
               StocksList(
                 stockDataMap: _stockDataMap,
                 onStockSelected: _updateSelectedSymbol,
@@ -170,28 +190,39 @@ class _InvestmentPageState extends State<InvestmentPage> {
   }
 
   Widget _buildDurationButton(String label) {
-    return TextButton(
-      onPressed: () {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Duration set to $label")));
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.15,
+      height: MediaQuery.of(context).size.height * 0.06,
+      decoration: label == _duration
+          ? BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black12),
+              borderRadius: BorderRadius.circular(10),
+            )
+          : null,
+      child: TextButton(
+        onPressed: () {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Duration set to $label")));
 
-        setState(() {
-          _duration = label;
+          setState(() {
+            _duration = label;
 
-          _stockDataMap[_selectedSymbol] = _stockService.getCachedData(
-              _selectedSymbol,
-              _duration == 24 ? 'intraday' : 'daily',
-              _duration);
-        });
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Duration set to $label")));
-      },
-      child: Text(
-        label,
-        style: GoogleFonts.baloo2(
-          fontSize: 16,
-          color: Colors.black,
+            _stockDataMap[_selectedSymbol] = _stockService.getCachedData(
+                _selectedSymbol,
+                _duration == 24 ? 'intraday' : 'daily',
+                _duration);
+          });
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Duration set to $label")));
+        },
+        child: Text(
+          label,
+          style: GoogleFonts.baloo2(
+            fontSize: 16,
+            color: Colors.black,
+          ),
         ),
       ),
     );

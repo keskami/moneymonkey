@@ -9,10 +9,10 @@ class LineChartWidget extends StatelessWidget {
   final String duration;
 
   const LineChartWidget({
-    Key? key,
+    super.key,
     required this.stockData,
     required this.duration,
-  }) : super(key: key);
+  });
 
   // Function to calculate the percentage change
   double calculateChange(double open, double close) {
@@ -70,20 +70,20 @@ class LineChartWidget extends StatelessWidget {
             dotData: FlDotData(show: false), // Disable default dots
           ),
         ],
-        titlesData: FlTitlesData(
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        titlesData: const FlTitlesData(
+          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
           bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
-        gridData: FlGridData(show: false),
+        gridData: const FlGridData(show: false),
         borderData: FlBorderData(show: false),
         lineTouchData: LineTouchData(
           touchTooltipData: LineTouchTooltipData(
             getTooltipColor: (group) => Colors.black,
             tooltipMargin: 8,
             tooltipRoundedRadius: 10,
-            tooltipPadding: EdgeInsets.symmetric(
+            tooltipPadding: const EdgeInsets.symmetric(
               horizontal: 5,
               vertical: 3,
             ),
@@ -96,20 +96,20 @@ class LineChartWidget extends StatelessWidget {
 
                 return LineTooltipItem(
                   '${dataPoint.date.month}/${dataPoint.date.day}/${dataPoint.date.year}\n',
-                  TextStyle(
+                  const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
                   ),
                   children: [
                     TextSpan(
                       text: '🍌${dataPoint.close.toStringAsFixed(2)} ',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                       ),
                       children: [
                         TextSpan(
                           text: '$arrow ${change.toStringAsFixed(2)}%',
-                          style: TextStyle(
+                          style: const TextStyle(
                             backgroundColor: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,

@@ -47,6 +47,21 @@ class BuyPopUp extends StatelessWidget {
                   imageUrl[selectedSymbol]!,
                   height: MediaQuery.of(context).size.width *
                       0.5, // Adjust the image size as needed
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      // If loadingProgress is null, the image has fully loaded
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
                 ),
                 IconButton(
                   onPressed: () {},
