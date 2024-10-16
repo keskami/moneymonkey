@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSuggestion';
 import 'package:money_monkey/LoginPages/login.dart';
 
 class FriendsHome extends StatefulWidget {
@@ -115,7 +116,7 @@ class _FriendsHomeState extends State<FriendsHome> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),));
+                            builder: (context) => FriendsSuggestions(),));
                   },
                   child: Text(
                     "view all",

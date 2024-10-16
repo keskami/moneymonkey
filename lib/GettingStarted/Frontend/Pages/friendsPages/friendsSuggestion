@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LoginPages/login.dart';
-
 
 class FriendsSuggestions extends StatefulWidget {
   const FriendsSuggestions({super.key});
@@ -16,10 +14,16 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white, 
-        child
-      
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start, 
+        children: [ 
+          SizedBox(height: 100),
+          Text(
+            "here",
+            style: GoogleFonts.openSans(fontSize: 24),
+          ),
+
+        ],
       ),
     );
   }
