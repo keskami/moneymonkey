@@ -17,7 +17,42 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
     double screenWidthUnit = MediaQuery.of(context).size.width / 390;
     double screenHeightUnit = MediaQuery.of(context).size.height / 844;
     List<Widget> friendsColumnWidgets = [
-      friendSuggestion(name: "Josh Feenberg", image: "assets/images/magGlass.png", whySuggested: "", screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit)
+      friendSuggestion(
+          name: "Josh Feenberg",
+          image: "assets/images/magGlass.png",
+          whySuggested: "You may know each other",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+      friendSuggestion(
+          name: "Kestan Kamei",
+          image: "assets/images/magGlass.png",
+          whySuggested: "Followed by Jacob Lee",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+      friendSuggestion(
+          name: "",
+          image: "assets/images/magGlass.png",
+          whySuggested: "",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+      friendSuggestion(
+          name: "",
+          image: "assets/images/magGlass.png",
+          whySuggested: "",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+      friendSuggestion(
+          name: "",
+          image: "assets/images/magGlass.png",
+          whySuggested: "",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+      friendSuggestion(
+          name: "",
+          image: "assets/images/magGlass.png",
+          whySuggested: "",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
     ];
 
     return Scaffold(
@@ -99,10 +134,95 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
     required String name,
     required String image,
     required String whySuggested,
-
     required double screenHeightUnit,
     required double screenWidthUnit,
   }) {
-    return Container(child: Text(name));
+    return name.isEmpty
+        ? Container()
+        : Container(
+            height: screenHeightUnit * 72,
+            width: screenWidthUnit * 350,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 10 * screenWidthUnit,
+                    ),
+                    Container(
+                      height: screenHeightUnit * 46,
+                      width: screenHeightUnit * 46,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(200, 200, 200, 1),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 13 * screenWidthUnit,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: GoogleFonts.fredoka(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                        Text(
+                          whySuggested,
+                          style: GoogleFonts.baloo2(
+                            fontSize: 13,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      child: Container(
+                        height: 23 * screenHeightUnit,
+                        width: 95 * screenWidthUnit,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(135, 206, 235, 1),
+                          borderRadius:
+                              BorderRadius.circular(screenHeightUnit * 8),
+                          border: Border.all(
+                              color: Colors.black, width: screenWidthUnit * 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(1),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          "Follow",
+                          style: GoogleFonts.fredoka(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: screenWidthUnit * 18,
+                    )
+                  ],
+                ),
+                Spacer(),
+                Container(height: screenHeightUnit * 1, width: screenWidthUnit * 380,color: Colors.black, )
+              ],
+            ));
   }
 }
