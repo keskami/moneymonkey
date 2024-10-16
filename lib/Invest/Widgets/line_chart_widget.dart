@@ -6,7 +6,7 @@ import '../../themes/color_themes.dart';
 
 class LineChartWidget extends StatelessWidget {
   final List<StockData> stockData; // Receive stock data from InvestmentPage
-  final int duration;
+  final String duration;
 
   const LineChartWidget({
     Key? key,
@@ -21,7 +21,16 @@ class LineChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime oneYearAgo = DateTime.now().subtract(Duration(days: duration));
+    final Map<String, int> days = {
+      "24H": 24,
+      "7D": 24,
+      "1M": 30,
+      "3M": 90,
+      "1Y": 365,
+      "ALL": 366,
+    };
+    DateTime oneYearAgo =
+        DateTime.now().subtract(Duration(days: days[duration]!));
 
     // Filter stock data based on the selected duration
     List<FlSpot> spots = stockData

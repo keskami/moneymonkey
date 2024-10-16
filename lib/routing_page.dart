@@ -23,7 +23,7 @@ class MainPage extends StatelessWidget {
               //   userID: userId,
               //   user: user!,
               // );
-              return const InvestmentPage();
+              return InvestmentPage();
             }
           } else {
             return GettingStartedHome();

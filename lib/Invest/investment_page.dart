@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Invest/Widgets/chat_bubble.dart';
 import 'package:money_monkey/Invest/Widgets/line_chart_widget.dart';
+import 'package:money_monkey/Invest/Widgets/title_row.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -21,18 +21,18 @@ class _InvestmentPageState extends State<InvestmentPage> {
   Map<String, List<StockData>> _stockDataMap = {};
   String _selectedSymbol = "AAPL";
   bool _isLoading = true;
-  int _duration = 30;
+  String _duration = "24H";
 
   // Function to load data from the StockService for all symbols
   Future<void> _loadStockDataForAllSymbols() async {
     List<String> symbols = ["AAPL", "PG", "JNJ", "JPM"];
     try {
       for (String symbol in symbols) {
-        final data = await _stockService.fetchStockData(symbol);
+        await _stockService.preloadStockData(symbol);
         setState(() {
-          _stockDataMap[symbol] = data;
+          _stockDataMap[symbol] = _stockService.getCachedData(
+              symbol, _duration == 24 ? 'intraday' : 'daily', _duration);
         });
-        print('Loaded data for $symbol: ${data.length} entries');
       }
       setState(() {
         _isLoading = false;
@@ -88,66 +88,15 @@ class _InvestmentPageState extends State<InvestmentPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "Stocks Value",
-              style: GoogleFonts.baloo2(fontSize: 18),
+            TitleRow(
+              selectedSymbol: _selectedSymbol,
+              stockValue: _stockDataMap[_selectedSymbol] == null
+                  ? 233.86
+                  : _stockDataMap[_selectedSymbol]![0].open,
+              changePercentage: _stockDataMap[_selectedSymbol] == null
+                  ? 3
+                  : _stockDataMap[_selectedSymbol]![0].close,
             ),
-            if (_stockDataMap[_selectedSymbol]?.isNotEmpty ?? false)
-              Text(
-                _stockDataMap[_selectedSymbol]![0].open.toString(),
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            if (_stockDataMap[_selectedSymbol]?.isNotEmpty ?? false)
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SimpleDialog(
-                        children: [
-                          Row(
-                            children: [
-                              Image.network(
-                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2FmonkeyNoText.png?alt=media&token=d364a03e-40c7-48c8-a97b-887f1a180e2a",
-                                height: 100,
-                              ),
-                              ChatBubbleContainer(
-                                borderWidth: 1,
-                                trianglePosition: TrianglePosition.left,
-                                childWidget: Text(
-                                  "${_duration == 30 ? 'Today' : 'Change over past ${_duration == 90 ? '3M' : _duration == 180 ? '6M' : '1Y'}'}",
-                                  style: GoogleFonts.baloo2(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "${_stockDataMap[_selectedSymbol]![_duration].open.toStringAsFixed(2)} "
-                              "to ${_stockDataMap[_selectedSymbol]![0].close.toStringAsFixed(2)}",
-                              style: GoogleFonts.baloo2(fontSize: 16),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Text(
-                  "🍌${_stockDataMap[_selectedSymbol]![_duration == 30 ? 0 : _duration].open.toString()} ${_duration == 30 ? 'Today >' : ' ${_calculateChangeForDuration(_duration).toStringAsFixed(2)}% >'}",
-                  style: GoogleFonts.baloo2(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
             const SizedBox(height: 10),
             SizedBox(
               width: screenWidth,
@@ -168,53 +117,17 @@ class _InvestmentPageState extends State<InvestmentPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _duration = 30;
-                    });
-                  },
-                  child: Text(
-                    "1M",
-                    style: GoogleFonts.baloo2(fontSize: 16),
-                  ),
-                ),
+                _buildDurationButton("24H"),
                 const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _duration = 90;
-                    });
-                  },
-                  child: Text(
-                    "3M",
-                    style: GoogleFonts.baloo2(fontSize: 16),
-                  ),
-                ),
+                _buildDurationButton("7D"),
                 const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _duration = 180;
-                    });
-                  },
-                  child: Text(
-                    "6M",
-                    style: GoogleFonts.baloo2(fontSize: 16),
-                  ),
-                ),
+                _buildDurationButton("1M"),
                 const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _duration = 365;
-                    });
-                  },
-                  child: Text(
-                    "1Y",
-                    style: GoogleFonts.baloo2(fontSize: 16),
-                  ),
-                ),
+                _buildDurationButton("3M"),
+                const Spacer(),
+                _buildDurationButton("1Y"),
+                const Spacer(),
+                _buildDurationButton("ALL"),
                 const Spacer(),
               ],
             ),
@@ -252,6 +165,34 @@ class _InvestmentPageState extends State<InvestmentPage> {
       ),
       floatingActionButton: TradeButton(
         selectedSymbol: _selectedSymbol,
+      ),
+    );
+  }
+
+  Widget _buildDurationButton(String label) {
+    return TextButton(
+      onPressed: () {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Duration set to $label")));
+
+        setState(() {
+          _duration = label;
+
+          _stockDataMap[_selectedSymbol] = _stockService.getCachedData(
+              _selectedSymbol,
+              _duration == 24 ? 'intraday' : 'daily',
+              _duration);
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Duration set to $label")));
+      },
+      child: Text(
+        label,
+        style: GoogleFonts.baloo2(
+          fontSize: 16,
+          color: Colors.black,
+        ),
       ),
     );
   }
