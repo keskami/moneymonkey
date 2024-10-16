@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSuggestion';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSuggestion.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 
 class FriendsHome extends StatefulWidget {
@@ -71,7 +71,7 @@ class _FriendsHomeState extends State<FriendsHome> {
         children: [
           SizedBox(height: screenHeightUnit * 57),
           Padding(
-              padding: EdgeInsets.fromLTRB(screenHeightUnit * 4, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(screenWidthUnit * 6, 0, 0, 0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
