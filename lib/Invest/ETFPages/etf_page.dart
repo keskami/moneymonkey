@@ -5,61 +5,61 @@ import 'package:money_monkey/Invest/Widgets/title_row.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../Backend/Models/stock_data.dart';
-import '../Backend/Services/stock_service.dart';
-import 'Widgets/stocks_list.dart';
+import '../../Backend/Models/stock_data.dart';
+import '../../Backend/Services/stock_service.dart';
+import '../Widgets/investment_options_list.dart';
 
-class InvestmentPage extends StatefulWidget {
-  const InvestmentPage({super.key});
+class ETFHomePage extends StatefulWidget {
+  const ETFHomePage({super.key});
 
   @override
-  State<InvestmentPage> createState() => _InvestmentPageState();
+  State<ETFHomePage> createState() => _ETFHomePageState();
 }
 
-class _InvestmentPageState extends State<InvestmentPage> {
+class _ETFHomePageState extends State<ETFHomePage> {
   final StockService _stockService = StockService();
-  Map<String, List<StockData>> _stockDataMap = {};
-  String _selectedSymbol = "AAPL";
-  bool _isLoading = true;
+  Map<String, List<StockData>> _etfDataMap = {};
+  String _selectedSymbol = "SPY";
+  bool _isLoading = false;
   String _duration = "24H";
 
-  Future<void> _loadStockDataForAllSymbols() async {
-    List<String> symbols = ["AAPL", "PG", "JNJ", "JPM"];
-    setState(() {
-      _isLoading = true; // Show loading indicator while fetching data
-    });
-
-    try {
-      for (String symbol in symbols) {
-        // Preload data for each symbol
-        await _stockService.preloadStockData(symbol);
-
-        // Determine the type of data (intraday or daily) based on duration
-        String dataType = _duration == "24H" ? 'intraday' : 'daily';
-
-        // Get cached data based on the selected symbol and duration
-        var cachedData =
-            _stockService.getCachedData(symbol, dataType, _duration);
-
-        // Only update the map if data is not null
-        setState(() {
-          _stockDataMap[symbol] = cachedData;
-        });
-      }
-    } catch (e) {
-      // Log the error and update UI accordingly
-      print('Error fetching data: $e');
-    } finally {
-      setState(() {
-        _isLoading = false; // Hide loading indicator
-      });
-    }
-  }
+  // Future<void> _loadStockDataForAllSymbols() async {
+  //   List<String> symbols = ["AAPL", "PG", "JNJ", "JPM"];
+  //   setState(() {
+  //     _isLoading = true; // Show loading indicator while fetching data
+  //   });
+  //
+  //   try {
+  //     for (String symbol in symbols) {
+  //       // Preload data for each symbol
+  //       await _stockService.preloadStockData(symbol);
+  //
+  //       // Determine the type of data (intraday or daily) based on duration
+  //       String dataType = _duration == "24H" ? 'intraday' : 'daily';
+  //
+  //       // Get cached data based on the selected symbol and duration
+  //       var cachedData =
+  //           _stockService.getCachedData(symbol, dataType, _duration);
+  //
+  //       // Only update the map if data is not null
+  //       setState(() {
+  //         _stockDataMap[symbol] = cachedData;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     // Log the error and update UI accordingly
+  //     print('Error fetching data: $e');
+  //   } finally {
+  //     setState(() {
+  //       _isLoading = false; // Hide loading indicator
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    _loadStockDataForAllSymbols();
+    // _loadStockDataForAllSymbols();
   }
 
   // Function to update the selected symbol and reload the graph
@@ -71,14 +71,14 @@ class _InvestmentPageState extends State<InvestmentPage> {
   }
 
   // Calculate the percentage change for a given duration
-  double _calculateChangeForDuration(int days) {
-    List<StockData> data = _stockDataMap[_selectedSymbol] ?? [];
-    if (data.isEmpty || data.length <= days) return 0.0;
-
-    double currentValue = data[0].close;
-    double pastValue = data[days].close;
-    return ((currentValue - pastValue) / pastValue) * 100;
-  }
+  // double _calculateChangeForDuration(int days) {
+  //   List<StockData> data = _stockDataMap[_selectedSymbol] ?? [];
+  //   if (data.isEmpty || data.length <= days) return 0.0;
+  //
+  //   double currentValue = data[0].close;
+  //   double pastValue = data[days].close;
+  //   return ((currentValue - pastValue) / pastValue) * 100;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +101,14 @@ class _InvestmentPageState extends State<InvestmentPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TitleRow(
+              page: "ETF",
               selectedSymbol: _selectedSymbol,
-              stockValue: _stockDataMap[_selectedSymbol]?.isNotEmpty == true
-                  ? _stockDataMap[_selectedSymbol]![0].open
+              investmentValue: _etfDataMap[_selectedSymbol]?.isNotEmpty == true
+                  ? _etfDataMap[_selectedSymbol]![0].open
                   : 0.0, // Default value if data is unavailable
-              changePercentage:
-                  _stockDataMap[_selectedSymbol]?.isNotEmpty == true
-                      ? _stockDataMap[_selectedSymbol]![0].close
-                      : 0.0, // Default value if data is unavailable
+              changePercentage: _etfDataMap[_selectedSymbol]?.isNotEmpty == true
+                  ? _etfDataMap[_selectedSymbol]![0].close
+                  : 0.0, // Default value if data is unavailable
             ),
             const SizedBox(height: 10),
             SizedBox(
@@ -118,12 +118,12 @@ class _InvestmentPageState extends State<InvestmentPage> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : _stockDataMap[_selectedSymbol]?.isNotEmpty == true
+                  : _etfDataMap[_selectedSymbol]?.isNotEmpty == true
                       ? Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: LineChartWidget(
                             duration: _duration,
-                            stockData: _stockDataMap[_selectedSymbol]!,
+                            stockData: _etfDataMap[_selectedSymbol]!,
                           ),
                         )
                       : const Center(
@@ -151,9 +151,9 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 const Spacer(),
               ],
             ),
-            StocksList(
-              stockDataMap: _stockDataMap,
-              onStockSelected: _updateSelectedSymbol,
+            InvestmentOptionsList(
+              dataMap: _etfDataMap,
+              onInvestmentSelected: _updateSelectedSymbol,
             ),
             const Spacer(),
             Align(
@@ -203,12 +203,13 @@ class _InvestmentPageState extends State<InvestmentPage> {
         onPressed: () {
           setState(() {
             _duration = label;
-            _stockDataMap[_selectedSymbol] = _stockService.getCachedData(
-              _selectedSymbol,
-              _duration == "24H" ? 'intraday' : 'daily',
-              _duration,
-            );
+            // _etfDataMap[_selectedSymbol] = _stockService.getCachedData(
+            //   _selectedSymbol,
+            //   _duration == "24H" ? 'intraday' : 'daily',
+            //   _duration,
+            // );
           });
+          ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Duration set to $label")),
           );

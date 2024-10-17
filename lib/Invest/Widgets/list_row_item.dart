@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class StockRow extends StatelessWidget {
-  const StockRow({
+class InvestmentOptionItem extends StatelessWidget {
+  const InvestmentOptionItem({
     super.key,
-    required this.stockName,
+    required this.investmentName,
     required this.growthValue,
-    required this.stockValue,
+    required this.investmentValue,
     this.isSelected = false,
     this.isLoading = false,
   });
 
-  final String stockName;
+  final String investmentName;
   final double growthValue;
-  final double stockValue;
+  final double investmentValue;
   final bool isSelected;
   final bool isLoading;
 
@@ -24,6 +24,7 @@ class StockRow extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
+      height: screenHeight * 0.07,
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.05,
         vertical: screenHeight * 0.015,
@@ -42,7 +43,7 @@ class StockRow extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Text(
-              stockName,
+              investmentName,
               style: GoogleFonts.baloo2(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -90,7 +91,9 @@ class StockRow extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Text(
-              isLoading ? "Loading..." : "🍌${stockValue.toStringAsFixed(2)}",
+              isLoading
+                  ? "Loading..."
+                  : "🍌${investmentValue.toStringAsFixed(2)}",
               style: GoogleFonts.baloo2(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

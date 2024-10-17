@@ -59,7 +59,7 @@ class SellPopUp extends StatelessWidget {
               ],
             ),
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15),
                   bottomRight: Radius.circular(15),
