@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Invest/Widgets/stock_row.dart';
-import 'package:money_monkey/themes/color_themes.dart';
 
 import '../../Backend/Models/stock_data.dart';
+import '../../themes/color_themes.dart';
 
 class StocksList extends StatefulWidget {
   final Map<String, List<StockData>> stockDataMap;
@@ -19,13 +19,12 @@ class StocksList extends StatefulWidget {
 }
 
 class _StocksListState extends State<StocksList> {
-  String _selectedStockSymbol =
-      'AAPL'; // State variable to hold the selected stock symbol
+  String _selectedStockSymbol = 'AAPL';
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    final List<String> stockSymbols = ["AAPL", "PG", "JNJ", "JPM"];
+    final List<String> stockSymbols = widget.stockDataMap.keys.toList();
 
     return Container(
       height: screenHeight * 0.27,
@@ -40,26 +39,28 @@ class _StocksListState extends State<StocksList> {
         itemCount: stockSymbols.length,
         itemBuilder: (context, index) {
           final stockSymbol = stockSymbols[index];
-          // Fetch the appropriate stock data based on the symbol
-          final stockData = widget.stockDataMap[stockSymbol]?.first;
+          final stockDataList = widget.stockDataMap[stockSymbol];
+
+          if (stockDataList == null || stockDataList.isEmpty) {
+            return const SizedBox(); // Skip if no data available
+          }
+
+          // Assume we want the latest data point for the stock row
+          final stockData = stockDataList.first;
 
           return GestureDetector(
             onTap: () {
               setState(() {
-                _selectedStockSymbol =
-                    stockSymbol; // Update selected stock symbol
+                _selectedStockSymbol = stockSymbol;
               });
-              widget.onStockSelected(stockSymbol); // Trigger callback
+              widget.onStockSelected(stockSymbol);
             },
-            child: stockData != null
-                ? StockRow(
-                    stockName: stockSymbol,
-                    growthValue: calculateGrowthValue(stockData),
-                    stockValue: stockData.close,
-                    isSelected: _selectedStockSymbol ==
-                        stockSymbol, // Set isSelected based on current selection
-                  )
-                : const SizedBox(),
+            child: StockRow(
+              stockName: stockSymbol,
+              growthValue: calculateGrowthValue(stockData),
+              stockValue: stockData.close,
+              isSelected: _selectedStockSymbol == stockSymbol,
+            ),
           );
         },
       ),

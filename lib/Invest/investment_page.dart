@@ -66,6 +66,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
   void _updateSelectedSymbol(String symbol) {
     setState(() {
       _selectedSymbol = symbol;
+      _duration = "24H";
     });
   }
 
@@ -79,7 +80,6 @@ class _InvestmentPageState extends State<InvestmentPage> {
     return ((currentValue - pastValue) / pastValue) * 100;
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -115,8 +115,8 @@ class _InvestmentPageState extends State<InvestmentPage> {
               width: screenWidth,
               height: screenHeight * 0.35,
               child: _isLoading
-                  ? Center(
-                      child: const CircularProgressIndicator(),
+                  ? const Center(
+                      child: CircularProgressIndicator(),
                     )
                   : _stockDataMap[_selectedSymbol]?.isNotEmpty == true
                       ? Padding(
@@ -126,7 +126,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                             stockData: _stockDataMap[_selectedSymbol]!,
                           ),
                         )
-                      : Center(
+                      : const Center(
                           child: Text(
                             "No data available",
                             style: TextStyle(color: Colors.grey),
@@ -151,11 +151,10 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 const Spacer(),
               ],
             ),
-            if (_stockDataMap.isEmpty)
-              StocksList(
-                stockDataMap: _stockDataMap,
-                onStockSelected: _updateSelectedSymbol,
-              ),
+            StocksList(
+              stockDataMap: _stockDataMap,
+              onStockSelected: _updateSelectedSymbol,
+            ),
             const Spacer(),
             Align(
               alignment: Alignment.bottomLeft,
@@ -202,20 +201,17 @@ class _InvestmentPageState extends State<InvestmentPage> {
           : null,
       child: TextButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Duration set to $label")));
-
           setState(() {
             _duration = label;
-
             _stockDataMap[_selectedSymbol] = _stockService.getCachedData(
-                _selectedSymbol,
-                _duration == 24 ? 'intraday' : 'daily',
-                _duration);
+              _selectedSymbol,
+              _duration == "24H" ? 'intraday' : 'daily',
+              _duration,
+            );
           });
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Duration set to $label")));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Duration set to $label")),
+          );
         },
         child: Text(
           label,

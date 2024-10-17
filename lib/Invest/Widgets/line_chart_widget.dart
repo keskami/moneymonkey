@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../Backend/Models/stock_data.dart';
 import '../../themes/color_themes.dart';
@@ -27,25 +28,35 @@ class LineChartWidget extends StatelessWidget {
       "1M": 30,
       "3M": 90,
       "1Y": 365,
-      "ALL": 366,
+      "ALL": 3650,
     };
     DateTime oneYearAgo =
         DateTime.now().subtract(Duration(days: days[duration]!));
 
-    // Filter stock data based on the selected duration
-    List<FlSpot> spots = stockData
-        .where((data) => data.date.isAfter(oneYearAgo))
-        .toList()
-        .asMap()
-        .entries
-        .map((entry) => FlSpot(
-              entry.key.toDouble(),
-              entry.value.close,
-            ))
-        .toList();
+// Adjust the data filtering to load all data if the duration is "ALL"
+    List<FlSpot> spots = duration == "ALL"
+        ? stockData
+            .asMap()
+            .entries
+            .map((entry) => FlSpot(
+                  entry.key.toDouble(),
+                  entry.value.close,
+                ))
+            .toList()
+        : stockData
+            .where((data) => data.date.isAfter(oneYearAgo))
+            .toList()
+            .asMap()
+            .entries
+            .map((entry) => FlSpot(
+                  entry.key.toDouble(),
+                  entry.value.close,
+                ))
+            .toList();
 
     if (spots.isEmpty) {
-      return Center(child: Text("No data available for the selected period."));
+      return const Center(
+          child: Text("No data available for the selected period."));
     }
 
     return LineChart(
@@ -67,14 +78,37 @@ class LineChartWidget extends StatelessWidget {
                 end: Alignment.bottomCenter,
               ),
             ),
-            dotData: FlDotData(show: false), // Disable default dots
+            dotData: const FlDotData(show: false), // Disable default dots
           ),
         ],
-        titlesData: const FlTitlesData(
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
-          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        titlesData: FlTitlesData(
+          show: true,
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize:
+                  30, // Adjust this value based on how much space you need
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  value.toStringAsFixed(0),
+                  style: GoogleFonts.baloo2().copyWith(
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                );
+              },
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
         ),
         gridData: const FlGridData(show: false),
         borderData: FlBorderData(show: false),
