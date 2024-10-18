@@ -8,11 +8,13 @@ class InvestmentOptionsList extends StatefulWidget {
   final Map<String, List<StockData>> dataMap;
   final void Function(String)
       onInvestmentSelected; // Callback for stock selection
+  final defaultSelectedSymbol;
 
   const InvestmentOptionsList({
     super.key,
     required this.dataMap,
     required this.onInvestmentSelected,
+    required this.defaultSelectedSymbol,
   });
 
   @override
@@ -20,7 +22,12 @@ class InvestmentOptionsList extends StatefulWidget {
 }
 
 class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
-  String _selectedInvestmentSymbol = 'AAPL';
+  String _selectedInvestmentSymbol = '';
+  @override
+  void initState() {
+    super.initState();
+    _selectedInvestmentSymbol = widget.defaultSelectedSymbol;
+  }
 
   // Define a temporary list to display if dataMap is empty
   final Map<String, List<StockData>> _tempDataMap = {
@@ -95,6 +102,8 @@ class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
               growthValue: calculateGrowthValue(investmentData),
               investmentValue: investmentData.close,
               isSelected: _selectedInvestmentSymbol == investmentSymbol,
+              isLoading:
+                  false, // Set this to true if you want to show a loading state
             ),
           );
         },

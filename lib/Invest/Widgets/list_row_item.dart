@@ -39,7 +39,7 @@ class InvestmentOptionItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Stock Name
+          // Investment Name
           Expanded(
             flex: 2,
             child: Text(
@@ -51,7 +51,7 @@ class InvestmentOptionItem extends StatelessWidget {
               ),
             ),
           ),
-          // Growth Indicator
+          // Growth Indicator (Trending Up/Down Icon)
           Expanded(
             flex: 1,
             child: isLoading
@@ -87,7 +87,7 @@ class InvestmentOptionItem extends StatelessWidget {
                     textAlign: TextAlign.right,
                   ),
           ),
-          // Stock Value
+          // Investment Value
           Expanded(
             flex: 3,
             child: Text(

@@ -5,61 +5,36 @@ import 'package:money_monkey/Invest/Widgets/title_row.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../../Backend/Models/stock_data.dart';
-import '../../Backend/Services/stock_service.dart';
-import '../Widgets/investment_options_list.dart';
+import '../Backend/Models/stock_data.dart';
+import 'Widgets/investment_options_list.dart';
 
-class ETFHomePage extends StatefulWidget {
-  const ETFHomePage({super.key});
+class InvestmentPage extends StatefulWidget {
+  final String investmentType; // e.g., "Stocks", "ETFs", "Bonds"
+  final dynamic investmentService; // Could be StockService, BondService, etc.
+  final String defaultSymbol;
+  const InvestmentPage({
+    super.key,
+    required this.investmentType,
+    required this.investmentService,
+    required this.defaultSymbol,
+  });
 
   @override
-  State<ETFHomePage> createState() => _ETFHomePageState();
+  State<InvestmentPage> createState() => _InvestmentPageState();
 }
 
-class _ETFHomePageState extends State<ETFHomePage> {
-  final StockService _stockService = StockService();
-  Map<String, List<StockData>> _etfDataMap = {};
-  String _selectedSymbol = "SPY";
-  bool _isLoading = false;
+class _InvestmentPageState extends State<InvestmentPage> {
+  Map<String, List<StockData>> _investmentDataMap = {};
+  String _selectedSymbol = "";
+  bool _isLoading = true;
   String _duration = "24H";
-
-  // Future<void> _loadStockDataForAllSymbols() async {
-  //   List<String> symbols = ["AAPL", "PG", "JNJ", "JPM"];
-  //   setState(() {
-  //     _isLoading = true; // Show loading indicator while fetching data
-  //   });
-  //
-  //   try {
-  //     for (String symbol in symbols) {
-  //       // Preload data for each symbol
-  //       await _stockService.preloadStockData(symbol);
-  //
-  //       // Determine the type of data (intraday or daily) based on duration
-  //       String dataType = _duration == "24H" ? 'intraday' : 'daily';
-  //
-  //       // Get cached data based on the selected symbol and duration
-  //       var cachedData =
-  //           _stockService.getCachedData(symbol, dataType, _duration);
-  //
-  //       // Only update the map if data is not null
-  //       setState(() {
-  //         _stockDataMap[symbol] = cachedData;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     // Log the error and update UI accordingly
-  //     print('Error fetching data: $e');
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false; // Hide loading indicator
-  //     });
-  //   }
-  // }
 
   @override
   void initState() {
     super.initState();
-    // _loadStockDataForAllSymbols();
+    _selectedSymbol = widget.defaultSymbol;
+    // You can load data similarly for any investment type
+    // _loadInvestmentDataForAllSymbols();
   }
 
   // Function to update the selected symbol and reload the graph
@@ -69,16 +44,6 @@ class _ETFHomePageState extends State<ETFHomePage> {
       _duration = "24H";
     });
   }
-
-  // Calculate the percentage change for a given duration
-  // double _calculateChangeForDuration(int days) {
-  //   List<StockData> data = _stockDataMap[_selectedSymbol] ?? [];
-  //   if (data.isEmpty || data.length <= days) return 0.0;
-  //
-  //   double currentValue = data[0].close;
-  //   double pastValue = data[days].close;
-  //   return ((currentValue - pastValue) / pastValue) * 100;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +66,16 @@ class _ETFHomePageState extends State<ETFHomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TitleRow(
-              page: "ETF",
+              page: widget.investmentType, // Dynamic investment type
               selectedSymbol: _selectedSymbol,
-              investmentValue: _etfDataMap[_selectedSymbol]?.isNotEmpty == true
-                  ? _etfDataMap[_selectedSymbol]![0].open
-                  : 0.0, // Default value if data is unavailable
-              changePercentage: _etfDataMap[_selectedSymbol]?.isNotEmpty == true
-                  ? _etfDataMap[_selectedSymbol]![0].close
-                  : 0.0, // Default value if data is unavailable
+              investmentValue:
+                  _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
+                      ? _investmentDataMap[_selectedSymbol]![0].open
+                      : 0.0, // Default value if data is unavailable
+              changePercentage:
+                  _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
+                      ? _investmentDataMap[_selectedSymbol]![0].close
+                      : 0.0, // Default value if data is unavailable
             ),
             const SizedBox(height: 10),
             SizedBox(
@@ -118,12 +85,12 @@ class _ETFHomePageState extends State<ETFHomePage> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : _etfDataMap[_selectedSymbol]?.isNotEmpty == true
+                  : _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
                       ? Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: LineChartWidget(
                             duration: _duration,
-                            stockData: _etfDataMap[_selectedSymbol]!,
+                            stockData: _investmentDataMap[_selectedSymbol]!,
                           ),
                         )
                       : const Center(
@@ -152,8 +119,9 @@ class _ETFHomePageState extends State<ETFHomePage> {
               ],
             ),
             InvestmentOptionsList(
-              dataMap: _etfDataMap,
+              dataMap: _investmentDataMap,
               onInvestmentSelected: _updateSelectedSymbol,
+              defaultSelectedSymbol: _selectedSymbol,
             ),
             const Spacer(),
             Align(
@@ -167,7 +135,7 @@ class _ETFHomePageState extends State<ETFHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text("Buying Power >"),
+                    Text("${widget.investmentType} Power >"), // Dynamic label
                     Text(
                       "🍌7,630",
                       style: GoogleFonts.baloo2(
@@ -203,11 +171,6 @@ class _ETFHomePageState extends State<ETFHomePage> {
         onPressed: () {
           setState(() {
             _duration = label;
-            // _etfDataMap[_selectedSymbol] = _stockService.getCachedData(
-            //   _selectedSymbol,
-            //   _duration == "24H" ? 'intraday' : 'daily',
-            //   _duration,
-            // );
           });
           ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
