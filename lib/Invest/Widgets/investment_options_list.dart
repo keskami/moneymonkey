@@ -30,7 +30,7 @@ class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
   }
 
   // Define a temporary list to display if dataMap is empty
-  final Map<String, List<StockData>> _tempDataMap = {
+  final Map<String, List<StockData>> _tempETFDataMap = {
     'SPY': [
       StockData(
           date: DateTime.now(),
@@ -58,6 +58,53 @@ class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
           low: 108.0,
           volume: 95000)
     ],
+    'QUAL': [
+      StockData(
+          date: DateTime.now(),
+          open: 110.0,
+          close: 115.0,
+          high: 118.0,
+          low: 108.0,
+          volume: 95000)
+    ],
+  };
+  final Map<String, List<StockData>> _tempStockDataMap = {
+    'AAPL': [
+      StockData(
+          date: DateTime.now(),
+          open: 100.0,
+          close: 120.0,
+          high: 125.0,
+          low: 95.0,
+          volume: 100000)
+    ],
+    'PG': [
+      StockData(
+          date: DateTime.now(),
+          open: 90.0,
+          close: 85.0,
+          high: 92.0,
+          low: 80.0,
+          volume: 80000)
+    ],
+    'JNJ': [
+      StockData(
+          date: DateTime.now(),
+          open: 110.0,
+          close: 115.0,
+          high: 118.0,
+          low: 108.0,
+          volume: 95000)
+    ],
+    'JPM': [
+      StockData(
+          date: DateTime.now(),
+          open: 110.0,
+          close: 115.0,
+          high: 118.0,
+          low: 108.0,
+          volume: 95000)
+    ],
   };
 
   @override
@@ -65,7 +112,14 @@ class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     // Use tempDataMap if widget.dataMap is empty
-    final dataMap = widget.dataMap.isEmpty ? _tempDataMap : widget.dataMap;
+    final dataMap = widget.dataMap.isEmpty
+        ? (_selectedInvestmentSymbol == 'AAPL' ||
+                _selectedInvestmentSymbol == 'PG' ||
+                _selectedInvestmentSymbol == 'JNJ' ||
+                _selectedInvestmentSymbol == 'JPM'
+            ? _tempStockDataMap
+            : _tempETFDataMap)
+        : widget.dataMap;
     final List<String> investmentSymbols = dataMap.keys.toList();
 
     return Container(
