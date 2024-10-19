@@ -7,6 +7,7 @@ class BuyPopUp extends StatelessWidget {
   });
 
   final String selectedSymbol;
+
   final Map<String, String> imageUrl = const {
     "AAPL":
         "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2Fapple.png?alt=media&token=ad6a644b-60a7-48ef-adc9-e4e865589d50",
@@ -20,6 +21,9 @@ class BuyPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Check if the selected symbol has a corresponding image URL
+    final String? selectedImageUrl = imageUrl[selectedSymbol];
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -43,26 +47,31 @@ class BuyPopUp extends StatelessWidget {
                     size: MediaQuery.of(context).size.width * 0.1,
                   ),
                 ),
-                Image.network(
-                  imageUrl[selectedSymbol]!,
-                  height: MediaQuery.of(context).size.width *
-                      0.5, // Adjust the image size as needed
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      // If loadingProgress is null, the image has fully loaded
-                      return child;
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
-                ),
+                // Check if imageUrl is valid, otherwise show a placeholder or error
+                selectedImageUrl != null
+                    ? Image.network(
+                        selectedImageUrl,
+                        height: MediaQuery.of(context).size.width * 0.5,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                      )
+                    : const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 50,
+                      ), // Show an error icon or placeholder
                 IconButton(
                   onPressed: () {},
                   icon: Icon(
@@ -75,11 +84,11 @@ class BuyPopUp extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(15),
                   bottomRight: Radius.circular(15),
                 ),
-                color: Color.fromARGB(
+                color: const Color.fromARGB(
                   255,
                   137,
                   220,

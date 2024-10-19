@@ -147,7 +147,11 @@ class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                _selectedInvestmentSymbol = investmentSymbol;
+                if (_selectedInvestmentSymbol == investmentSymbol) {
+                  _selectedInvestmentSymbol = "";
+                } else {
+                  _selectedInvestmentSymbol = investmentSymbol;
+                }
               });
               widget.onInvestmentSelected(investmentSymbol);
             },

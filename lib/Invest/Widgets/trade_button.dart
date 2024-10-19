@@ -17,6 +17,16 @@ class _TradeButtonState extends State<TradeButton> {
   bool isExpanded = false;
   bool showOptions = false;
 
+  // Function to display a SnackBar when no symbol is selected
+  void _showNoSelectionMessage() {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please select an investment type before trading.'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -86,13 +96,17 @@ class _TradeButtonState extends State<TradeButton> {
                         ? [
                             GestureDetector(
                               onTap: () {
-                                // Action for Buys
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => BuyPopUp(
-                                    selectedSymbol: widget.selectedSymbol,
-                                  ),
-                                );
+                                // Check if a symbol is selected before showing Buy dialog
+                                if (widget.selectedSymbol.isEmpty) {
+                                  _showNoSelectionMessage();
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => BuyPopUp(
+                                      selectedSymbol: widget.selectedSymbol,
+                                    ),
+                                  );
+                                }
                               },
                               child: const Text(
                                 'Buy',
@@ -109,13 +123,17 @@ class _TradeButtonState extends State<TradeButton> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // Action for Sell
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => SellPopUp(
-                                    selectedSymbol: widget.selectedSymbol,
-                                  ),
-                                );
+                                // Check if a symbol is selected before showing Sell dialog
+                                if (widget.selectedSymbol.isEmpty) {
+                                  _showNoSelectionMessage();
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => SellPopUp(
+                                      selectedSymbol: widget.selectedSymbol,
+                                    ),
+                                  );
+                                }
                               },
                               child: const Text(
                                 'Sell',

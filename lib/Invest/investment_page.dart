@@ -25,14 +25,15 @@ class InvestmentPage extends StatefulWidget {
 
 class _InvestmentPageState extends State<InvestmentPage> {
   Map<String, List<StockData>> _investmentDataMap = {};
-  String _selectedSymbol = "";
+  String _selectedSymbol = ""; // Start with no selected stock
   bool _isLoading = true;
   String _duration = "24H";
 
   @override
   void initState() {
     super.initState();
-    _selectedSymbol = widget.defaultSymbol;
+    // Initially no stock is selected
+    _selectedSymbol = "";
     // You can load data similarly for any investment type
     // _loadInvestmentDataForAllSymbols();
   }
@@ -40,7 +41,11 @@ class _InvestmentPageState extends State<InvestmentPage> {
   // Function to update the selected symbol and reload the graph
   void _updateSelectedSymbol(String symbol) {
     setState(() {
-      _selectedSymbol = symbol;
+      if (symbol == _selectedSymbol) {
+        _selectedSymbol = ""; // Deselect if tapped again
+      } else {
+        _selectedSymbol = symbol;
+      }
       _duration = "24H";
     });
   }
@@ -64,19 +69,26 @@ class _InvestmentPageState extends State<InvestmentPage> {
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TitleRow(
-              page: widget.investmentType, // Dynamic investment type
-              selectedSymbol: _selectedSymbol,
-              investmentValue:
-                  _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
-                      ? _investmentDataMap[_selectedSymbol]![0].open
-                      : 0.0, // Default value if data is unavailable
-              changePercentage:
-                  _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
-                      ? _investmentDataMap[_selectedSymbol]![0].close
-                      : 0.0, // Default value if data is unavailable
-            ),
+            if (_selectedSymbol == '')
+              const Text(
+                "Show default Portfolio Scores and\n Investments", // Display when no stock is selected
+                style: TextStyle(fontSize: 24, color: Colors.grey),
+              )
+            else
+              TitleRow(
+                page: widget.investmentType, // Dynamic investment type
+                selectedSymbol: _selectedSymbol,
+                investmentValue:
+                    _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
+                        ? _investmentDataMap[_selectedSymbol]![0].open
+                        : 0.0, // Default value if data is unavailable
+                changePercentage:
+                    _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
+                        ? _investmentDataMap[_selectedSymbol]![0].close
+                        : 0.0, // Default value if data is unavailable
+              ),
             const SizedBox(height: 10),
             SizedBox(
               width: screenWidth,
@@ -85,7 +97,9 @@ class _InvestmentPageState extends State<InvestmentPage> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
+                  : _selectedSymbol != '' &&
+                          _investmentDataMap[_selectedSymbol]?.isNotEmpty ==
+                              true
                       ? Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: LineChartWidget(
@@ -121,7 +135,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
             InvestmentOptionsList(
               dataMap: _investmentDataMap,
               onInvestmentSelected: _updateSelectedSymbol,
-              defaultSelectedSymbol: _selectedSymbol,
+              defaultSelectedSymbol: widget.defaultSymbol,
             ),
             const Spacer(),
             Align(
