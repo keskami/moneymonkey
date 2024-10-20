@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsFromContacts.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSearch.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSuggestion.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 
@@ -275,7 +276,10 @@ class _FriendsHomeState extends State<FriendsHome> {
                         MaterialPageRoute(
                             builder: (context) => const FriendsFromContacts(),));
             } else if (words == "Enter Phone Number") {
-              print("Enter Phone");
+               Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FriendsFromSearch(),));
             } else {
               print("share");
             }
