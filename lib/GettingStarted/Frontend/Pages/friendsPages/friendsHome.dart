@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsFromContacts.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSuggestion.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 
@@ -269,7 +270,10 @@ class _FriendsHomeState extends State<FriendsHome> {
         GestureDetector(
           onTap: () {
             if (words == "Choose from contacts") {
-              print("Contacts");
+              Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FriendsFromContacts(),));
             } else if (words == "Enter Phone Number") {
               print("Enter Phone");
             } else {
