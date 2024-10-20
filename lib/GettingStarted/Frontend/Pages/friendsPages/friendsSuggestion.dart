@@ -29,43 +29,49 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-      friendSuggestion(
-          name: "",
+       friendSuggestion(
+          name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
-          whySuggested: "",
-          screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
-      friendSuggestion(
-          name: "",
-          image: "assets/images/magGlass.png",
-          whySuggested: "",
-          screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
-      friendSuggestion(
-          name: "",
-          image: "assets/images/magGlass.png",
-          whySuggested: "",
-          screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
-      friendSuggestion(
-          name: "",
-          image: "assets/images/magGlass.png",
-          whySuggested: "",
+          whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
            friendSuggestion(
-          name: "",
+          name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
-          whySuggested: "",
+          whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
            friendSuggestion(
-          name: "",
+          name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
-          whySuggested: "",
+          whySuggested: "Followed by Jacob Lee",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+           friendSuggestion(
+          name: "Kestan Kamei",
+          image: "assets/images/magGlass.png",
+          whySuggested: "Followed by Jacob Lee",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+           friendSuggestion(
+          name: "Kestan Kamei",
+          image: "assets/images/magGlass.png",
+          whySuggested: "Followed by Jacob Lee",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
+           friendSuggestion(
+          name: "Kestan Kamei",
+          image: "assets/images/magGlass.png",
+          whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
            
+            friendSuggestion(
+          name: "Kestan Kamei",
+          image: "assets/images/magGlass.png",
+          whySuggested: "Followed by Jacob Lee",
+          screenHeightUnit: screenHeightUnit,
+          screenWidthUnit: screenWidthUnit),
     ];
 
     return Scaffold(
@@ -110,7 +116,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
           Container(
             height: screenHeightUnit * 1,
             width: double.infinity,
-            color: Color.fromRGBO(255, 255, 255, 1),
+            color: Color.fromRGBO(0, 0, 0, 1),
           ),
           SizedBox(
             height: screenHeightUnit * 20,
@@ -125,7 +131,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
               borderRadius: BorderRadius.circular(screenWidthUnit * 20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withOpacity(0.05),
                   spreadRadius: 1,
                   blurRadius: 5,
                   offset: const Offset(3, 3),
@@ -152,7 +158,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
   }) {
     return name.isEmpty
         ? Container(
-            height: screenHeightUnit * 75,
+            height: screenHeightUnit * 66,
             width: screenWidthUnit * 350,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -166,7 +172,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
             ),
           )
         : Container(
-            height: screenHeightUnit * 75,
+            height: screenHeightUnit * 72,
             width: screenWidthUnit * 350,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
