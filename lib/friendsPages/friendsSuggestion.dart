@@ -29,44 +29,43 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-       friendSuggestion(
+      friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-           friendSuggestion(
+      friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-           friendSuggestion(
+      friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-           friendSuggestion(
+      friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-           friendSuggestion(
+      friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-           friendSuggestion(
+      friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
-           
-            friendSuggestion(
+      friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
@@ -184,12 +183,20 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                     SizedBox(
                       width: 10 * screenWidthUnit,
                     ),
-                    Container(
-                      height: screenHeightUnit * 46,
-                      width: screenHeightUnit * 46,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(220, 220, 220, 1),
-                        shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const FriendsHome()));
+                      },
+                      child: Container(
+                        height: screenHeightUnit * 46,
+                        width: screenHeightUnit * 46,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(220, 220, 220, 1),
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     ),
                     SizedBox(
