@@ -83,6 +83,11 @@ flutter:
     - assets/images/magGlass.png
     - assets/images/contacts.png
     - assets/images/shareProfile.png
+    - assets/images/textMessage.png
+    - assets/images/whatsApp.png
+    - assets/images/snapchat.png
+    - assets/images/copyProfile.png
+
 
     
 

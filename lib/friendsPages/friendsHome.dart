@@ -25,6 +25,138 @@ class _FriendsHomeState extends State<FriendsHome> {
     super.initState();
   }
 
+  void _showBottomSheet(
+      BuildContext context, double screenHeightUnit, double screenWidthUnit) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            padding: EdgeInsets.all(0),
+            height: 175 * screenHeightUnit,
+            width: 390 * screenWidthUnit,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(217, 217, 217, 1),
+              borderRadius: BorderRadius.circular(screenWidthUnit * 15)
+
+            ),
+            
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          screenWidthUnit * 0, screenHeightUnit * 13, 0, 0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: screenHeightUnit * 39,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(0, screenHeightUnit * 11, 0, 0),
+                      child: Text(
+                        "Follow me on Money Monkey!",
+                        style: GoogleFonts.baloo2(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Color.fromRGBO(0, 0, 0, .62)),
+                      ),
+                    ),
+                    SizedBox(
+                      width: screenHeightUnit * 39,
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(screenWidthUnit * 26,
+                      screenHeightUnit * 20, screenWidthUnit * 26, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/textMessage.png",
+                            height: screenHeightUnit * 64,
+                            width: screenWidthUnit * 58,
+                          ),
+                          Text(
+                            "iMessage",
+                            style: GoogleFonts.baloo2(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      ),
+                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/whatsApp.png",
+                            height: screenHeightUnit * 64,
+                            width: screenWidthUnit * 58,
+                          ),
+                          Text(
+                            "Whatsapp",
+                            style: GoogleFonts.baloo2(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      ),
+                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/snapchat.png",
+                            height: screenHeightUnit * 64,
+                            width: screenWidthUnit * 58,
+                          ),
+                          Text(
+                            "Snapchat",
+                            style: GoogleFonts.baloo2(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      ),
+                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/copyProfile.png",
+                            height: screenHeightUnit * 64,
+                            width: screenWidthUnit * 58,
+                          ),
+                          Text(
+                            "Copy",
+                            style: GoogleFonts.baloo2(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidthUnit = MediaQuery.of(context).size.width / 390;
@@ -118,7 +250,8 @@ class _FriendsHomeState extends State<FriendsHome> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => FriendsSuggestions(),));
+                          builder: (context) => FriendsSuggestions(),
+                        ));
                   },
                   child: Text(
                     "view all",
@@ -272,16 +405,18 @@ class _FriendsHomeState extends State<FriendsHome> {
           onTap: () {
             if (words == "Choose from contacts") {
               Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FriendsFromContacts(),));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FriendsFromContacts(),
+                  ));
             } else if (words == "Search by name") {
-               Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FriendsFromSearch(),));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FriendsFromSearch(),
+                  ));
             } else {
-              print("share");
+              _showBottomSheet(context, screenHeightUnit, screenWidthUnit);
             }
           },
           child: Container(
@@ -329,4 +464,3 @@ class _FriendsHomeState extends State<FriendsHome> {
     ));
   }
 }
-
