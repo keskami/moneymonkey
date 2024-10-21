@@ -37,7 +37,7 @@ class _FriendsHomeState extends State<FriendsHome> {
           screenWidthUnit: screenWidthUnit),
       friendsColumnWidget(
           image: "assets/images/magGlass.png",
-          words: "Enter Phone Number",
+          words: "Search by name",
           screenHeightUnit: screenHeightUnit,
           screenWidthUnit: screenWidthUnit),
       friendsColumnWidget(
@@ -275,7 +275,7 @@ class _FriendsHomeState extends State<FriendsHome> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const FriendsFromContacts(),));
-            } else if (words == "Enter Phone Number") {
+            } else if (words == "Search by name") {
                Navigator.push(
                         context,
                         MaterialPageRoute(
