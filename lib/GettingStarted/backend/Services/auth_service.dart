@@ -1,0 +1,211 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
+
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final SignUpController signUpController = Get.find();
+  final StartFreshController startFreshController = Get.find();
+  String user = "";
+  //Google Sign In
+  Future<void> googleAuth(BuildContext context) async {
+    try {
+      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return; // User cancelled sign-in
+
+      GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
+      user = googleUser.displayName!;
+
+      AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      String userId = userCredential.user?.uid ?? '';
+      String email = userCredential.user?.email ?? '';
+
+      if (email.isNotEmpty) {
+        addUserDetails(userId, email);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error during Google Sign In: $e",
+              ))));
+      // Handle error and inform the user (e.g., show a snackbar)
+    }
+  }
+
+  // Function to create a new user
+  Future<void> signUpUser(BuildContext context) async {
+    try {
+      // Get the user input from the controller
+      String name = signUpController.name.value;
+      String email = signUpController.email.value;
+      String password = signUpController.password.value;
+
+      // Create the user in Firebase Authentication
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      String userId = userCredential.user!.uid;
+      addUserDetails(userId, signUpController.email.value.trim());
+      // Get the current user
+      User? user = userCredential.user;
+
+      if (user != null) {
+        // Save additional user details (like name) in Firestore
+        await _firestore.collection('users').doc(user.uid).set({
+          'userId': user.uid,
+          'name': name,
+          'email': email,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+        // You can set other fields, like 'age', 'knowledgeLevel', etc. if needed.
+      }
+    } catch (e) {
+      // Handle errors such as invalid email, weak password, etc.
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error during Google Sign In: $e",
+              ))));
+      rethrow;
+    }
+  }
+
+  // Function to sign in an existing user
+  Future<void> signInUser(
+      String email, String password, BuildContext context) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error Signing In: $e",
+              ))));
+      rethrow;
+    }
+  }
+
+  //Add User Details
+  Future<void> addUserDetails(String userId, String email) async {
+    final userDocRef =
+        FirebaseFirestore.instance.collection('Users').doc(userId);
+    final userSnapshot = await userDocRef.get();
+
+    if (userSnapshot.exists) {
+      return;
+    }
+
+    await userDocRef.set({
+      'User ID': userId,
+      'Email': email,
+      'Age': 0,
+      'Knowledge Level': 0,
+      'Learning Goal Per Day': 0,
+      'Profile': {
+        'Full Name': 'Your Name Here',
+        'Username': 'Your Name Here',
+        'Number of Followers': 0,
+        'Following': 0,
+        'Top Achievements': 0,
+        'Streak': 0,
+        'Total Profit': 0,
+        'Average Monthly Growth': 0,
+      },
+      'Portfolio': {
+        'Total Bananas': 8976,
+        'Balance': 908,
+        'Weekly net gain': -90,
+      },
+      'Invest Page (Discover)': {
+        'Total Invested (Stocks)': 100,
+        'Total Profit (Stocks)': 50,
+        'Total Invested (ETFs)': 300,
+        'Total Profit (ETFs)': -50,
+        'Total Invested (Mutual Funds)': 500,
+        'Total Profit (Mutual Funds)': 600,
+        'Total Invested (Bonds)': 234,
+        'Total Profit (Bonds)': -10,
+        'Total invested Bananas' : 7089,
+        'Profit from Invested Bananas (Current Month)' : 890,
+        'Username':"Josh5"
+
+
+      }
+
+    });
+
+    final transactionsRef = userDocRef.collection('Transactions');
+
+    await transactionsRef.add(
+      {
+        'Source/Destination': 'Test Source',
+        'Amount': 200,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Income"
+      },
+    );
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 2',
+      'Amount': 150,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 1',
+      'Amount': -100,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 2',
+      'Amount': -50,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 3',
+      'Amount': 300,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
+  }
+  // Function to sign out the user
+  Future<void> signOut(BuildContext context) async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Container(
+              color: Colors.red[100],
+              child: Text(
+                "Error during Signing Out: $e",
+              ))));
+      rethrow;
+    }
+  }
+}
