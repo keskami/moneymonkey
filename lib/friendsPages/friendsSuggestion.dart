@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LoginPages/login.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsHome.dart';
+import 'package:money_monkey/friendsPages/friendsHome.dart';
 
 class FriendsSuggestions extends StatefulWidget {
   const FriendsSuggestions({super.key});

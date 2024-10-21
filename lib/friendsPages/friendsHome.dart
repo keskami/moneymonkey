@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsFromContacts.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSearch.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/friendsPages/friendsSuggestion.dart';
+import 'package:money_monkey/friendsPages/friendsFromContacts.dart';
+import 'package:money_monkey/friendsPages/friendsSearch.dart';
+import 'package:money_monkey/friendsPages/friendsSuggestion.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 
 class FriendsHome extends StatefulWidget {
