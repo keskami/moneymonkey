@@ -68,7 +68,7 @@ late ProgressController progressController;
                 mainAxisAlignment:
                     isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
                 children: [
-                  _buildGridItem(context, index), // Pass context to the item builder
+                  _buildGridItem(context, index), 
                 ],
               ),
             );
@@ -89,7 +89,7 @@ late ProgressController progressController;
      ;
 
 
-    // double gridItemSize= screenSize.width*0.3;
+ 
     
     // Array of image paths for the icons
     final List<String> images = [
@@ -131,7 +131,7 @@ void _showDialog(BuildContext context) {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            // Dialog content
+        
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -162,7 +162,7 @@ void _showDialog(BuildContext context) {
                   ),
                   const SizedBox(height: 10),
                   
-                  // Subtitle
+              
                   const Text(
                     'Lesson 1 of 4',
                     style: TextStyle(
@@ -173,7 +173,7 @@ void _showDialog(BuildContext context) {
                   ),
                   const SizedBox(height: 20),
                   
-                  // Start Button
+         
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -183,7 +183,7 @@ void _showDialog(BuildContext context) {
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12), 
-                        backgroundColor: const Color(0xFF87CEEB), // Light blue color
+                        backgroundColor: const Color(0xFF87CEEB),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -199,7 +199,7 @@ void _showDialog(BuildContext context) {
                   ),
                   const SizedBox(height: 20),
                   
-                  // Rewards section
+           
                   Row(
                     children: [
                       const Text(
@@ -232,7 +232,7 @@ void _showDialog(BuildContext context) {
                       Row(
                         children: [
                           Image.asset(
-                            'assets/images/rewardbanana.png', // Your banana reward icon path
+                            'assets/images/rewardbanana.png', 
                             height: 40,
                           ),
                           const SizedBox(width: 4),
@@ -244,8 +244,7 @@ void _showDialog(BuildContext context) {
                 ],
               ),
             ),
-            
-            // Arrow pointing up
+       
             Positioned(
               top: -12,
               left: 90,
@@ -267,10 +266,10 @@ void _showDialog(BuildContext context) {
 
  Widget _buildBottomBar(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: _currentIndex, // Set the current index
+      currentIndex: _currentIndex, 
       onTap: (index) {
         setState(() {
-          _currentIndex = index; // Update the selected index
+          _currentIndex = index; 
         });
       },
       backgroundColor: Colors.white,
@@ -278,7 +277,7 @@ void _showDialog(BuildContext context) {
       selectedItemColor: Colors.blue, // Color for the selected item
       unselectedItemColor: Colors.grey, // Color for unselected items
       showSelectedLabels: false, // Hide the labels
-      showUnselectedLabels: false, // Hide the labels
+      showUnselectedLabels: false, 
       items: [
         _buildNavItem('assets/images/globemonkey.png', 0),
         _buildNavItem('assets/images/treasure.png', 1),
@@ -302,7 +301,7 @@ void _showDialog(BuildContext context) {
           border: _currentIndex == index
               ? Border.all(color: Colors.blue, width: 3) // Border for the selected item
               : null,
-          borderRadius: BorderRadius.circular(12), // Rounded corners for the border
+          borderRadius: BorderRadius.circular(12), 
         ),
         padding: const EdgeInsets.all(8),
         child: Image.asset(

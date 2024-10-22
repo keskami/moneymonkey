@@ -91,9 +91,9 @@ class ImageGrid extends StatelessWidget {
     });;
   }
 
-    // Call this function when the user submits a correct answer
+   
   void onCorrectAnswer() {
-    _showCorrectDialog(Get.context!); // Pass the context and show the dialog
+    _showCorrectDialog(Get.context!); 
   }
 }
 

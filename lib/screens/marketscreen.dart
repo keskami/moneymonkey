@@ -1,7 +1,7 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:moneymonkey/backend/models/alpha_vantage_services.dart';
+import 'package:moneymonkey/screens/webview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MarketScreen extends StatefulWidget {
@@ -18,7 +18,10 @@ class _MarketScreenState extends State<MarketScreen> {
   Map<String, dynamic>? teslaStockData;
   Map<String, dynamic>? appleStockData;
     Map<String, dynamic>?googleStockData;
-  List<dynamic>? newsData; // Variable to hold the fetched news data
+    Map<String,dynamic>?nasdaqStockData;
+    Map<String,dynamic>?dowStockData;
+     Map<String,dynamic>?nyseStockData;
+  List<dynamic>? newsData; 
 
   @override
   void initState() {
@@ -27,27 +30,37 @@ class _MarketScreenState extends State<MarketScreen> {
     _fetchNewsData();  
   }
 
-  // Function to fetch stock data for Tesla and Apple
+  
   void _fetchStockData() async {
     try {
       final teslaData = await _stockService.fetchStockData('TSLA'); 
       final appleData = await _stockService.fetchStockData('AAPL'); 
       final googleData = await _stockService.fetchStockData("GOOGL");
+       final nasdaqData = await _stockService.fetchGlobalQuoteData('MSFT'); 
+    final dowData = await _stockService.fetchStockData('DJI'); // Fetch DOW data
+     final nyseData = await _stockService.fetchStockData('AACG'); 
+
+     print(nasdaqData);
+
+    
 
       setState(() {
         teslaStockData = teslaData;
         appleStockData = appleData;
         googleStockData= googleData;
+         nasdaqStockData = nasdaqData;
+      dowStockData = dowData;
+      nyseStockData=nyseData;
       });
     } catch (e) {
       print('Error fetching stock data: $e');
     }
   }
 
-  // Function to fetch the latest news
+  //
   void _fetchNewsData() async {
     try {
-      final news = await _stockService.fetchLatestNews(); // Fetch news data
+      final news = await _stockService.fetchLatestNews(); 
       setState(() {
         newsData = news;
       });
@@ -61,10 +74,10 @@ class _MarketScreenState extends State<MarketScreen> {
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F3F4), // Light background color
+      backgroundColor: const Color(0xFFF1F3F4), 
       body: Column(
         children: [
-          // Add the new curved header with back button
+         
           CurvedHeader(),
           Expanded(
             child: SingleChildScrollView(
@@ -94,12 +107,30 @@ class _MarketScreenState extends State<MarketScreen> {
                                 change: _calculateChange(appleStockData), 
                                 isPositive: _isPositive(appleStockData),
                               ),
+                              // MarketCard(
+                              //   title: 'Google',
+                              //   value: googleStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+                              //   change: _calculateChange(googleStockData), 
+                              //   isPositive: _isPositive(googleStockData),
+                              // ),
+    //                             MarketCard(
+    //   title: 'NYSE',
+    //   value: nyseStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+    //   change: _calculateChange(nyseStockData), 
+    //   isPositive: _isPositive(nyseStockData),
+    // ),
                               MarketCard(
-                                title: 'Google',
-                                value: googleStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
-                                change: _calculateChange(googleStockData), 
-                                isPositive: _isPositive(googleStockData),
-                              ),
+      title: 'NASDAQ',
+      value: nasdaqStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+      change: _calculateChange(nasdaqStockData), 
+      isPositive: _isPositive(nasdaqStockData),
+    ),
+    //  MarketCard(
+    //   title: 'DOW',
+    //   value: dowStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+    //   change: _calculateChange(dowStockData), 
+    //   isPositive: _isPositive(dowStockData),
+    // ),
                             ],
                           ),
                     const SizedBox(height: 20),
@@ -111,9 +142,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         const SectionTitle(title: 'Top 2 Stocks'),
                         GestureDetector(
                           onTap: () {
-                            // Navigate to more stocks
-                           
-                           // _fetchStockData("TSLA");
+                         
                           },
                           child: const Text(
                             'View all >',
@@ -164,12 +193,12 @@ class _MarketScreenState extends State<MarketScreen> {
                     (newsData==null)?Center(child: CircularProgressIndicator(),):
                   Column(
                             children: newsData!
-                                .take(3) // Show top 3 news articles
+                                .take(6) // Show top 3 news articles
                                 .map((article) => TrendingCard(
                                       title: article['title'] ?? 'No Title',
                                       source: article['source'] ?? 'Unknown Source',
                                       timeAgo: article['time_published'] ?? 'Unknown Time',
-                                      url: article["url"]??"gay",
+                                      url: article["url"]??"N/A",
                                     ))
                                 .toList(),
                           ),
@@ -182,13 +211,12 @@ class _MarketScreenState extends State<MarketScreen> {
         ],
       ),
 
-      // Bottom Navigation Bar
  bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1, // Set the active tab
         selectedItemColor: Colors.black, 
         unselectedItemColor: Colors.grey, 
         showUnselectedLabels: true,
-        backgroundColor: Colors.white, // Background color
+        backgroundColor: Colors.white,
         selectedLabelStyle: const TextStyle(
           fontSize: 20,
           fontFamily: "Baloo 2",
@@ -218,7 +246,7 @@ class _MarketScreenState extends State<MarketScreen> {
     );
   }
 }
-  // Function to calculate the percentage change in stock price
+
   String _calculateChange(Map<String, dynamic>? stockData) {
     if (stockData == null || stockData['Time Series (Daily)'] == null) return 'N/A';
 
@@ -240,7 +268,7 @@ class _MarketScreenState extends State<MarketScreen> {
     return 'N/A';
   }
 
-  // Function to determine if the stock price change is positive
+  
   bool _isPositive(Map<String, dynamic>? stockData) {
     if (stockData == null || stockData['Time Series (Daily)'] == null) return false;
 
@@ -262,7 +290,7 @@ class _MarketScreenState extends State<MarketScreen> {
   }
 
 
-// Custom Widget for the Market Card (used for futures and stocks)
+
 class MarketCard extends StatelessWidget {
   final String title;
   final String value;
@@ -284,6 +312,7 @@ class MarketCard extends StatelessWidget {
     double cardHeight = screenSize.height * 0.10; 
 
     return Container(
+      
       width: cardWidth,
       height: cardHeight,
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -356,7 +385,7 @@ class TopStocks extends StatelessWidget{
  @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    double cardWidth = screenSize.width * 0.4; // Adjust card width
+    double cardWidth = screenSize.width * 0.4; 
     double cardHeight = screenSize.height * 0.08; 
 
     return Container(
@@ -421,7 +450,7 @@ class TopStocks extends StatelessWidget{
 }
 
 
-// Custom Widget for Bonds
+
 class BondCard extends StatelessWidget {
   final String title;
   final String percentage;
@@ -481,7 +510,7 @@ class BondCard extends StatelessWidget {
   }
 }
 
-// Custom Widget for the Trending Section
+
 class TrendingCard extends StatelessWidget {
   final String title;
   final String source;
@@ -503,11 +532,12 @@ class TrendingCard extends StatelessWidget {
 
     return GestureDetector(
       onTap:() async{
-         if (await canLaunch(url)) {
-          await launch(url);  // Open the URL in the browser
-        } else {
-          throw 'Could not launch $url';
-        }
+         Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WebViewApp(url: url),
+          ),
+        );
       },
       child: Container(
         width: double.infinity,
@@ -561,31 +591,31 @@ class CurvedHeader extends StatelessWidget {
     return Container(
       height: 150, // Height of the header
       decoration: BoxDecoration(
-        color: const Color(0xFFFFEB99), // Yellow background
+        color: const Color(0xFFFFEB99), 
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(0), // Rounded corner on the top left
-          topRight: Radius.circular(0), // Rounded corner on the top right
+          topLeft: Radius.circular(0), 
+          topRight: Radius.circular(0), 
         ),
       ),
       child: Stack(
         children: [
           Positioned(
-            top: 40, // Adjust top padding for the back button
-            left: 16, // Left padding for the back button
+            top: 40, 
+            left: 16, 
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context); // Navigate back on button tap
+                Navigator.pop(context); 
               },
               child: Icon(
                 Icons.arrow_back,
                 color: Colors.black,
-                size: 28, // Icon size
+                size: 28, 
               ),
             ),
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 60.0), // Adjust top padding for the title
+              padding: const EdgeInsets.only(top: 60.0), 
               child: Text(
                 'Market',
                 style: TextStyle(

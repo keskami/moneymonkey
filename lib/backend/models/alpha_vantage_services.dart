@@ -22,6 +22,32 @@ class StockService {
       throw Exception('Error occurred: $e');
     }
   }
+Future<Map<String, dynamic>> fetchGlobalQuoteData(String symbol) async {
+  final url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=$symbol&apikey=$apiKey';
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    final responseBody = response.body;
+    print('Response: $responseBody'); 
+    final data = json.decode(responseBody);
+
+    if (data.containsKey("Note")) {
+      throw Exception("API rate limit exceeded. ${data["Note"]}");
+    }
+
+    if (data.containsKey("Error Message")) {
+      throw Exception("Invalid API request. ${data["Error Message"]}");
+    }
+
+    if (data['Global Quote'] != null && data['Global Quote'].isNotEmpty) {
+      return data['Global Quote'];
+    } else {
+      throw Exception('No data available for $symbol');
+    }
+  } else {
+    throw Exception('Failed to load global quote data');
+  }
+}
 
   // Function to fetch the latest news
   Future<List<dynamic>> fetchLatestNews() async {

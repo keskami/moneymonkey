@@ -182,7 +182,7 @@ Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  MarketScreen(),
+            builder: (context) =>  HomePage(),
           ),
         );
       }
