@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/custom_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/intro_pages_controller.dart';
+import 'package:money_monkey/temporary_login.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class GettingStartedPage1 extends StatefulWidget {
@@ -32,7 +33,13 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
     super.initState();
   }
 
-  void toLoginPage() {
+  void toLoginPage() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ));
+
     //To Login Page
     // Navigator.push(
     //     context,
