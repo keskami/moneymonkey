@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/LoginPages/login.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+
+import 'login.dart';
+
 // ignore: camel_case_types
 class main_page extends StatelessWidget {
   const main_page({super.key});
@@ -14,10 +17,10 @@ class main_page extends StatelessWidget {
           if (snapshot.hasData) {
             User? user = FirebaseAuth.instance.currentUser;
             String userId = user?.uid ?? '';
-            if(userId.isEmpty){
+            if (userId.isEmpty) {
               return const LoginScreen();
-            }else{
-               return const LoginScreen();
+            } else {
+              return const PortfolioScreen();
             }
           } else {
             return const LoginScreen();

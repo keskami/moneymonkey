@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:money_monkey/InvestSectionPages/invest1.dart';
+import 'package:money_monkey/InvestSectionPages/discover_page.dart';
 
-class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+class PortfolioScreen extends StatefulWidget {
+  const PortfolioScreen({super.key});
 
   @override
-  State<UserProfileScreen> createState() => _UserProfileScreenState();
+  State<PortfolioScreen> createState() => _PortfolioScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _PortfolioScreenState extends State<PortfolioScreen> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   int? balance;
@@ -37,28 +37,29 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<List<DocumentSnapshot>> _getTransactions(String type) async {
-  CollectionReference transactionsRef = FirebaseFirestore.instance
-      .collection('Users')
-      .doc(userID)
-      .collection('Transactions');
+    CollectionReference transactionsRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userID)
+        .collection('Transactions');
 
-  Query query = transactionsRef;
+    Query query = transactionsRef;
 
-  if (type == "Income") {
-    query = query
-        .where('Type', isEqualTo: 'Income')
-        .orderBy('Date', descending: true).limit(3);
-  } else if (type == "Expenses") {
-    query = query
-        .where('Type', isEqualTo: 'Expense')
-        .orderBy('Date', descending: true).limit(3);
-  } else {
-    query = query.orderBy('Date', descending: true).limit(3);
+    if (type == "Income") {
+      query = query
+          .where('Type', isEqualTo: 'Income')
+          .orderBy('Date', descending: true)
+          .limit(3);
+    } else if (type == "Expenses") {
+      query = query
+          .where('Type', isEqualTo: 'Expense')
+          .orderBy('Date', descending: true)
+          .limit(3);
+    } else {
+      query = query.orderBy('Date', descending: true).limit(3);
+    }
+    QuerySnapshot querySnapshot = await query.get();
+    return querySnapshot.docs;
   }
-  QuerySnapshot querySnapshot = await query.get();
-  return querySnapshot.docs;
-}
-
 
   void _setTransaction(String type) async {
     List<DocumentSnapshot> transactions = await _getTransactions(type);
@@ -624,7 +625,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Invest1(),
+                              builder: (context) => const DiscoverPage(),
                             ),
                           );
                         },

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:money_monkey/GettingStarted/Backend/Models/user_data.dart';
+import 'package:money_monkey/Backend/Models/user_data.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;

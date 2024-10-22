@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_final_fields
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_monkey/friendsPages/friendsHome.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
-import 'package:money_monkey/PortfolioPages/profileScreen.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -124,13 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
         'Total Profit (Mutual Funds)': 600,
         'Total Invested (Bonds)': 234,
         'Total Profit (Bonds)': -10,
-        'Total invested Bananas' : 7089,
-        'Profit from Invested Bananas (Current Month)' : 890,
-        'Username':"Josh5"
-
-
+        'Total invested Bananas': 7089,
+        'Profit from Invested Bananas (Current Month)': 890,
+        'Username': "Josh5"
       }
-
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
@@ -170,7 +166,6 @@ class _LoginScreenState extends State<LoginScreen> {
       'Date': FieldValue.serverTimestamp(),
       'Type': "Income"
     });
-
   }
 
   Future<void> logIn() async {
@@ -188,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const FriendsHome(),
+            builder: (context) => const PortfolioScreen(),
           ),
         );
       }
@@ -257,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const FriendsHome(),
+              builder: (context) => const PortfolioScreen(),
             ),
           );
         }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/sign_in_button.dart';
-import 'package:money_monkey/GettingStarted/backend/Services/auth_service.dart';
+import 'package:money_monkey/backend/Services/auth_service.dart';
 
 class EmptyLoggedInPage extends StatefulWidget {
   const EmptyLoggedInPage({super.key});

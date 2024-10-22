@@ -2,16 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/PortfolioPages/profileScreen.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
-class Invest1 extends StatefulWidget {
-  const Invest1({super.key});
+class DiscoverPage extends StatefulWidget {
+  const DiscoverPage({super.key});
 
   @override
-  State<Invest1> createState() => _Invest1State();
+  State<DiscoverPage> createState() => _DiscoverPageState();
 }
 
-class _Invest1State extends State<Invest1> {
+class _DiscoverPageState extends State<DiscoverPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   String? name = '';
@@ -34,7 +34,7 @@ class _Invest1State extends State<Invest1> {
   int monthyAmount = 0;
   bool loading = true;
 
-   TextEditingController _askHereText = TextEditingController();
+  TextEditingController _askHereText = TextEditingController();
 
   @override
   void dispose() {
@@ -132,8 +132,7 @@ class _Invest1State extends State<Invest1> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const UserProfileScreen(),
+                                  builder: (context) => const PortfolioScreen(),
                                 ),
                               );
                             },
@@ -284,7 +283,8 @@ class _Invest1State extends State<Invest1> {
                                   height: 100 * screenHeightUnit,
                                   width: 303 * screenWidthUnit,
                                   decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(241, 244, 248, 1),
+                                    color:
+                                        const Color.fromRGBO(241, 244, 248, 1),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: TextField(
