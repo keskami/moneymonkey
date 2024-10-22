@@ -57,19 +57,21 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBMEuO6TrDPBHgkOdTyL-40ZWRFwzywuZc',
-    appId: '1:921136508610:android:50d2adc6531ea952bf555b',
-    messagingSenderId: '921136508610',
-    projectId: 'money-monkey-3bd68',
-    storageBucket: 'money-monkey-3bd68.appspot.com',
+    apiKey: 'AIzaSyCyFYwBCkYWF4fDMheevh66mJeO89sCeQQ',
+    appId: '1:851718603804:android:da547fd5aa807baf458bd9',
+    messagingSenderId: '851718603804',
+    projectId: 'money-monkey-f4d73',
+    databaseURL: 'https://money-monkey-f4d73-default-rtdb.firebaseio.com',
+    storageBucket: 'money-monkey-f4d73.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCWwV4_HFqwLfDILD7iDzL49DFVl6ODS0Y',
-    appId: '1:921136508610:ios:4282f4f06b3ddf44bf555b',
-    messagingSenderId: '921136508610',
-    projectId: 'money-monkey-3bd68',
-    storageBucket: 'money-monkey-3bd68.appspot.com',
+    apiKey: 'AIzaSyDIMPvOB3MypmDch70fNsroXmWGh3aMMw0',
+    appId: '1:851718603804:ios:93ee6341a4d42da0458bd9',
+    messagingSenderId: '851718603804',
+    projectId: 'money-monkey-f4d73',
+    databaseURL: 'https://money-monkey-f4d73-default-rtdb.firebaseio.com',
+    storageBucket: 'money-monkey-f4d73.appspot.com',
     iosBundleId: 'com.example.moneyMonkey',
   );
 }

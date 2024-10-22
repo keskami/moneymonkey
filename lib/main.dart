@@ -4,15 +4,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/routing_page.dart';
 
 import 'firebase_options.dart';
+import 'package:flutter/material.dart';
 
+import 'package:moneymonkey/firebase_options.dart';
+import 'package:moneymonkey/pages/LoginPages/login.dart';
+
+//import 'package:moneymonkey/pages/LoginPages/login.dart';
+import 'routes/app_routes.dart';
+import 'package:get/get.dart';
+
+var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
+void main() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: 'com.example.moneyMonkey',
+    name: "com.example.moneyMonkey",
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Run the app
   runApp(const MyApp());
 }
 
@@ -21,12 +29,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      title: 'Money Monkey',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        textTheme: GoogleFonts.fredokaTextTheme(),
+        fontFamily: "Baloo2"
       ),
-      home: const MainPage(),
+      debugShowCheckedModeBanner: false,
+
+
+      home: LoginScreen(),
+      initialRoute: AppRoutes.initialRoute,
+      getPages: AppRoutes.routes,
+      scaffoldMessengerKey: globalMessengerKey
     );
   }
 }
