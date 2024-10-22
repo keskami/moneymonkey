@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moneymonkey/controller/controller.dart';
-import 'package:moneymonkey/routes/app_routes.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/lessoncomplete.dart';
+import 'package:money_monkey/controller/controller.dart';
 
 class ContinueButtonSection extends StatelessWidget {
   const ContinueButtonSection({Key? key}) : super(key: key);
@@ -9,7 +9,8 @@ class ContinueButtonSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch the ProgressController
-    final ProgressController progressController = Get.find<ProgressController>();
+    final ProgressController progressController =
+        Get.find<ProgressController>();
 
     return Obx(() {
       return Container(
@@ -27,17 +28,24 @@ class ContinueButtonSection extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: progressController.isCorrectSelected.value
                       ? const Color(0XFF87CEEB) // Light blue when enabled
-                      : Colors.grey,            // Grey when disabled
+                      : Colors.grey, // Grey when disabled
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                  visualDensity:
+                      const VisualDensity(vertical: -4, horizontal: -4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 2),
                 ),
                 // Only allow the button to be pressed if the correct answer is selected
                 onPressed: progressController.isCorrectSelected.value
                     ? () {
-                        Get.toNamed(AppRoutes.lessonCompletePageRoute);
+                        // Get.toNamed(AppRoutes.lessonCompletePageRoute)
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => LessonCompleteScreen(),
+                          ),
+                        );
                       }
                     : null, // Disable the button if the correct answer is not selected
                 child: const Text(

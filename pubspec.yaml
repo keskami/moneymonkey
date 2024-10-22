@@ -12,9 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^5.4.4
   firebase_core: ^3.5.0
-  firebase_auth: ^5.3.1
   cloud_firestore: ^5.4.2  # Downgrade to this version
 
   firebase_auth: ^5.3.0
@@ -35,7 +33,6 @@ dependencies:
   cached_network_image: ^3.3.0
   flutter_svg: ^2.0.9
   get: ^4.6.6
-  firebase_core: ^3.4.1
   swipable_stack: ^0.2.1
   flip_card: ^0.7.0
   swipeable_card_stack: ^0.0.5
@@ -51,8 +48,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-  uses-material-design: true
-
   assets:
     - assets/
     - assets/images/banknote.png
@@ -107,6 +102,8 @@ flutter:
     - assets/images/snapchat.png
     - assets/images/copyProfile.png
     - assets/sample_stock_data.json
+    - assets/images/banana_reward.json
+    - assets/images/specsbanana.json
 
   fonts:
     - family: Baloo 2
@@ -118,8 +115,6 @@ flutter:
 
 
 
-    - assets/images/banana_reward.json
-    - assets/images/specsbanana.json
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

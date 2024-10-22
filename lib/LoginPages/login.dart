@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -166,6 +166,32 @@ class _LoginScreenState extends State<LoginScreen> {
       'Date': FieldValue.serverTimestamp(),
       'Type': "Income"
     });
+    await ensureProgressionExists(userDocRef);
+  }
+
+  Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
+    try {
+      final progressionCollectionRef = userDocRef.collection('Progression');
+      final progressionSnapshot = await progressionCollectionRef.get();
+
+      if (progressionSnapshot.docs.isEmpty) {
+        await progressionCollectionRef.doc('progression1').set({
+          'Level': 1,
+          'Unit': 1,
+          'Lesson': 'Earning and Saving',
+          'Progress': 0,
+          'Quiz Scores': [],
+          'Earnings from Lesson': {
+            'Monkeys': 0,
+            'Diamonds': 0,
+            'Bananas': 0,
+          },
+        });
+        print("Progression sub-collection created for user.");
+      }
+    } catch (e) {
+      print("Error ensuring progression sub-collection: $e");
+    }
   }
 
   Future<void> logIn() async {
@@ -183,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const PortfolioScreen(),
+            builder: (context) => HomePage(),
           ),
         );
       }
@@ -252,7 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const PortfolioScreen(),
+              builder: (context) => HomePage(),
             ),
           );
         }

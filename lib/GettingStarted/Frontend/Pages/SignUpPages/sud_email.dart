@@ -4,7 +4,7 @@ import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/sign_in_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 
 class SUDetailsEmailPage extends StatefulWidget {
   const SUDetailsEmailPage({super.key});
@@ -82,7 +82,7 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
                   toNextPage: () async {
                     await authService.googleAuth(context);
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const PortfolioScreen(),
+                      builder: (context) => HomePage(),
                     ));
                   },
                   child: Row(

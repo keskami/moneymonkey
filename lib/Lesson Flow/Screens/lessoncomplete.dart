@@ -2,7 +2,8 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:moneymonkey/controller/controller.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/controller/controller.dart';
 
 class LessonCompleteScreen extends StatefulWidget {
   @override
@@ -58,8 +59,9 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
   @override
   Widget build(BuildContext context) {
     // Access the progress controller to get the number of attempts
-    final ProgressController progressController = Get.find<ProgressController>();
-    
+    final ProgressController progressController =
+        Get.find<ProgressController>();
+
     // Determine how many stars based on the number of attempts
     int stars = progressController.attempts.value == 1 ? 3 : 2;
 
@@ -95,7 +97,8 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(stars, (index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
                                 child: Image.asset(
                                   'assets/images/star.png',
                                   height: 60,
@@ -118,10 +121,16 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                           ),
                         ),
                         Positioned(
-                          bottom: 130,
+                          bottom: 100,
                           child: ElevatedButton(
                             onPressed: () {
                               // Add your continue button logic
+
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(
@@ -147,7 +156,9 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                       ],
                     ),
                   ),
-                  SizedBox(height: 80),
+                  SizedBox(
+                    height: 80,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,7 +170,8 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.green, width: 2),
+                                border:
+                                    Border.all(color: Colors.green, width: 2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.all(8),

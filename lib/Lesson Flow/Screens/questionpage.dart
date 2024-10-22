@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moneymonkey/controller/controller.dart';
-import 'package:moneymonkey/widgets/custom_app_bar.dart';
-import 'package:moneymonkey/widgets/image_grid.dart';
-import 'package:moneymonkey/widgets/continue_button.dart';
+import 'package:money_monkey/Lesson%20Flow/Widgets/continue_button.dart';
+import 'package:money_monkey/Lesson%20Flow/Widgets/custom_app_bar.dart';
+import 'package:money_monkey/Lesson%20Flow/Widgets/image_grid.dart';
+import 'package:money_monkey/controller/controller.dart';
 
 class QuestionPage extends StatelessWidget {
-  final ProgressController progressController = Get.put(ProgressController()); // Initializing ProgressController
+  final ProgressController progressController =
+      Get.put(ProgressController()); // Initializing ProgressController
 
   QuestionPage({Key? key}) : super(key: key);
 
@@ -42,7 +43,8 @@ class QuestionPage extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: const ContinueButtonSection(), // Moved to its own widget
+        bottomNavigationBar:
+            const ContinueButtonSection(), // Moved to its own widget
       ),
     );
   }

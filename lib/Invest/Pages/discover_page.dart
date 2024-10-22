@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/stock_service.dart';
 import 'package:money_monkey/Invest/Pages/investment_page.dart';
+import 'package:money_monkey/Invest/Pages/market_screen.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -354,7 +355,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MarketScreen(),
+                    ));
+                  },
                   child: Text(
                     "Markets",
                     style: GoogleFonts.baloo2(

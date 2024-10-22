@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/LoginPages/login.dart';
 
 import 'Backend/Models/stock_data.dart';
 
@@ -63,7 +63,7 @@ class MainPage extends StatelessWidget {
               //   userID: userId,
               //   user: user!,
               // );
-              return PortfolioScreen();
+              return LoginScreen();
             }
           } else {
             return GettingStartedHome();

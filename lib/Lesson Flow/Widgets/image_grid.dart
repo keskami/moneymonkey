@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:moneymonkey/controller/controller.dart';
-
-import 'package:moneymonkey/widgets/question_feedback_dialog.dart';
+import 'package:money_monkey/Lesson%20Flow/Widgets/question_feedback_dialog.dart';
+import 'package:money_monkey/controller/controller.dart';
 
 class ImageGrid extends StatelessWidget {
   final List<String> imagePaths = [
@@ -56,7 +54,8 @@ class ImageGrid extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     titles[index],
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -68,8 +67,8 @@ class ImageGrid extends StatelessWidget {
   }
 
   void _showCorrectDialog(BuildContext context) {
-    ProgressController progressController =  Get.find<ProgressController>(); 
-     progressController.setQuizCompleted();
+    ProgressController progressController = Get.find<ProgressController>();
+    progressController.setQuizCompleted();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -86,14 +85,14 @@ class ImageGrid extends StatelessWidget {
       },
     ).then((_) {
       // Once the dialog is dismissed, mark the quiz as completed
-       ProgressController progressController = Get.find<ProgressController>(); 
-      progressController.setQuizCompleted(); // Inform controller that the quiz is done
-    });;
+      ProgressController progressController = Get.find<ProgressController>();
+      progressController
+          .setQuizCompleted(); // Inform controller that the quiz is done
+    });
+    ;
   }
 
-   
   void onCorrectAnswer() {
-    _showCorrectDialog(Get.context!); 
+    _showCorrectDialog(Get.context!);
   }
 }
-

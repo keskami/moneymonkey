@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
@@ -50,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
     getUserInfo();
   }
 
+  int _currentIndex = 3;
   @override
   Widget build(BuildContext context) {
     // Screen width and height
@@ -300,68 +302,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       //Temporary Bottom Navigation Bar
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.white,
-        indicatorColor: Colors.transparent,
-        onDestinationSelected: (value) {
-          if (value == 2) {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const ProfilePage(),
-            ));
-          }
-        },
-        selectedIndex: 1,
-        destinations: [
-          NavigationDestination(
-            icon: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FLesson%20Page.png?alt=media&token=1e20b2e4-ee49-49cc-bc01-dcf08b21104b",
-              width: screenWidth * 0.12,
-            ),
-            enabled: false,
-            label: "",
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const PortfolioScreen(),
-              ));
-            },
-            child: NavigationDestination(
-              icon: Image.network(
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FPortfolio.png?alt=media&token=d2012e7d-19fb-4766-9777-ce09231e4021",
-                width: screenWidth * 0.12,
-              ),
-              enabled: false,
-              label: "",
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ProfilePage(),
-              ));
-            },
-            child: NavigationDestination(
-              icon: Image.network(
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FTrading.png?alt=media&token=2037e6b1-6fb6-48af-aecf-5f288c2159b0",
-                width: screenWidth * 0.12,
-              ),
-              enabled: false,
-              label: "",
-            ),
-          ),
-          NavigationDestination(
-            icon: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FProfile.png?alt=media&token=80ec6904-46b7-4f76-85e1-dc21531e7a7c",
-              width: screenWidth * 0.12,
-            ),
-            enabled: true,
-            label: "",
-          ),
-        ],
-        height: 80,
-      ),
-
+      bottomNavigationBar: _buildBottomBar(context),
       floatingActionButton: IconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -374,6 +315,69 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+    );
+  }
+
+  Widget _buildBottomBar(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+        if (_currentIndex == 0) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ));
+        } else if (_currentIndex == 1) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PortfolioScreen(),
+          ));
+        }
+        if (_currentIndex == 3) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProfilePage(),
+          ));
+        }
+      },
+      backgroundColor: Colors.white,
+      type: BottomNavigationBarType.fixed, // Fixed items
+      selectedItemColor: Colors.blue, // Color for the selected item
+      unselectedItemColor: Colors.grey, // Color for unselected items
+      showSelectedLabels: false, // Hide the labels
+      showUnselectedLabels: false,
+      items: [
+        _buildNavItem('assets/images/globemonkey.png', 0),
+        _buildNavItem('assets/images/treasure.png', 1),
+        _buildNavItem('assets/images/bottommonkey.png', 2),
+        _buildNavItem('assets/images/bluemonkey.png', 3),
+      ],
+    );
+  }
+
+  // Build each navigation item with custom behavior for selected state
+  BottomNavigationBarItem _buildNavItem(String iconPath, int index) {
+    final screenSize = MediaQuery.of(context).size;
+    double iconSize = screenSize.width * 0.13; // Make icons 10% of screen width
+
+    return BottomNavigationBarItem(
+      icon: Container(
+        width: iconSize,
+        height: iconSize,
+        decoration: BoxDecoration(
+          border: _currentIndex == index
+              ? Border.all(
+                  color: Colors.blue, width: 3) // Border for the selected item
+              : null,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Image.asset(
+          iconPath,
+          fit: BoxFit.contain,
+        ),
+      ),
+      label: '', // No label
     );
   }
 }
