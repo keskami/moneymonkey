@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
-import 'package:money_monkey/Backend/Services/crud.dart';
+import 'package:money_monkey/Backend/Services/firestore_service.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Settings/settings.dart';
@@ -13,11 +14,7 @@ import 'Widgets/custom_stat.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({
     super.key,
-    required this.userID,
-    required this.user,
   });
-  final String userID;
-  final User user;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -25,16 +22,26 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final int pageIndex = 0;
+  final User? user = FirebaseAuth.instance.currentUser;
+  final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
   UserData? userData; // Make userData nullable
   bool isLoading = true; // Track loading state
-  final FirebaseService firebaseService = FirebaseService();
+  final FirestoreService firestoreService = FirestoreService();
 
   void getUserInfo() async {
-    userData = (await firebaseService.getUser(widget.userID)) as UserData?;
-    setState(() {
-      isLoading = false; // Set loading to false once data is fetched
-    });
+    try {
+      userData = await firestoreService.getUserData(userID!);
+      if (userData == null) {
+        print("User data is null for userID: ${userID!}");
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -281,7 +288,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               TextButton(
                                   onPressed: () {
-                                    firebaseService.signOut();
+                                    // firestoreService.signOut();
                                   },
                                   child:
                                       const Text("Temporary Sign Out Button.")),
@@ -294,8 +301,16 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       //Temporary Bottom Navigation Bar
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (value) {},
-        selectedIndex: 3,
+        backgroundColor: Colors.white,
+        indicatorColor: Colors.transparent,
+        onDestinationSelected: (value) {
+          if (value == 2) {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const ProfilePage(),
+            ));
+          }
+        },
+        selectedIndex: 1,
         destinations: [
           NavigationDestination(
             icon: Image.network(
@@ -303,23 +318,37 @@ class _ProfilePageState extends State<ProfilePage> {
               width: screenWidth * 0.12,
             ),
             enabled: false,
-            label: "Page1",
+            label: "",
           ),
-          NavigationDestination(
-            icon: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FPortfolio.png?alt=media&token=d2012e7d-19fb-4766-9777-ce09231e4021",
-              width: screenWidth * 0.12,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const PortfolioScreen(),
+              ));
+            },
+            child: NavigationDestination(
+              icon: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FPortfolio.png?alt=media&token=d2012e7d-19fb-4766-9777-ce09231e4021",
+                width: screenWidth * 0.12,
+              ),
+              enabled: false,
+              label: "",
             ),
-            enabled: false,
-            label: "Page2",
           ),
-          NavigationDestination(
-            icon: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FTrading.png?alt=media&token=2037e6b1-6fb6-48af-aecf-5f288c2159b0",
-              width: screenWidth * 0.12,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ProfilePage(),
+              ));
+            },
+            child: NavigationDestination(
+              icon: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FTrading.png?alt=media&token=2037e6b1-6fb6-48af-aecf-5f288c2159b0",
+                width: screenWidth * 0.12,
+              ),
+              enabled: false,
+              label: "",
             ),
-            enabled: false,
-            label: "Page3",
           ),
           NavigationDestination(
             icon: Image.network(
@@ -327,7 +356,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: screenWidth * 0.12,
             ),
             enabled: true,
-            label: "Profile",
+            label: "",
           ),
         ],
         height: 80,

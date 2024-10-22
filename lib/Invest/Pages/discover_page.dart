@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Services/stock_service.dart';
+import 'package:money_monkey/Invest/Pages/investment_page.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -218,10 +220,20 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            _buildInvestmentCard(investmentData[0],
-                                screenWidthUnit, screenHeightUnit, 20),
-                            _buildInvestmentCard(investmentData[1],
-                                screenWidthUnit, screenHeightUnit, 20),
+                            _buildInvestmentCard(
+                              investmentData[0],
+                              screenWidthUnit,
+                              screenHeightUnit,
+                              20,
+                              context,
+                            ),
+                            _buildInvestmentCard(
+                              investmentData[1],
+                              screenWidthUnit,
+                              screenHeightUnit,
+                              20,
+                              context,
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -230,10 +242,20 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            _buildInvestmentCard(investmentData[2],
-                                screenWidthUnit, screenHeightUnit, 18),
-                            _buildInvestmentCard(investmentData[3],
-                                screenWidthUnit, screenHeightUnit, 20),
+                            _buildInvestmentCard(
+                              investmentData[2],
+                              screenWidthUnit,
+                              screenHeightUnit,
+                              18,
+                              context,
+                            ),
+                            _buildInvestmentCard(
+                              investmentData[3],
+                              screenWidthUnit,
+                              screenHeightUnit,
+                              20,
+                              context,
+                            ),
                           ],
                         ),
                         Align(
@@ -357,75 +379,96 @@ class _DiscoverPageState extends State<DiscoverPage> {
 }
 
 Widget _buildInvestmentCard(Map<String, dynamic> data, double screenWidthUnit,
-    double screenHeightUnit, double fontSize) {
-  return Container(
-    height: screenHeightUnit * 90,
-    width: screenWidthUnit * 160,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(15),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.2),
-          spreadRadius: 1,
-          blurRadius: 5,
-          offset: const Offset(0, 3),
-        ),
-      ],
-    ),
-    padding: const EdgeInsets.all(16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${data['title']}',
-              style: GoogleFonts.baloo2(
-                fontSize: fontSize,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Icon(
-              data['icon'],
-              size: screenWidthUnit * 18,
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '🍌${data['value']}',
-              style: GoogleFonts.baloo2(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Row(
-              children: [
-                data['change']! > 0
-                    ? const Icon(
-                        Icons.arrow_upward_sharp,
-                        color: Colors.green,
-                      )
-                    : const Icon(color: Colors.red, Icons.arrow_downward_sharp),
-                Text(
-                  '🍌${data['change']}',
-                  style: GoogleFonts.baloo2(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: data['change']! > 0 ? Colors.green : Colors.red),
+    double screenHeightUnit, double fontSize, BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      if (data['title'] == 'Stocks') {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => InvestmentPage(
+              investmentType: 'Stocks',
+              investmentService: StockService(),
+              defaultSymbol: 'AAPL'),
+        ));
+      }
+      if (data['title'] == 'ETFs') {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => InvestmentPage(
+              investmentType: 'ETFs',
+              investmentService: StockService(),
+              defaultSymbol: 'SPY'),
+        ));
+      }
+    },
+    child: Container(
+      height: screenHeightUnit * 90,
+      width: screenWidthUnit * 160,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${data['title']}',
+                style: GoogleFonts.baloo2(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w500,
                 ),
-              ],
-            )
-          ],
-        )
-      ],
+              ),
+              Icon(
+                data['icon'],
+                size: screenWidthUnit * 18,
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '🍌${data['value']}',
+                style: GoogleFonts.baloo2(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Row(
+                children: [
+                  data['change']! > 0
+                      ? const Icon(
+                          Icons.arrow_upward_sharp,
+                          color: Colors.green,
+                        )
+                      : const Icon(
+                          color: Colors.red, Icons.arrow_downward_sharp),
+                  Text(
+                    '🍌${data['change']}',
+                    style: GoogleFonts.baloo2(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: data['change']! > 0 ? Colors.green : Colors.red),
+                  ),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
     ),
   );
 }

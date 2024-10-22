@@ -22,12 +22,29 @@ class UserData {
     return UserData(
       userId: id,
       email: data['Email'] ?? '',
-      age: data['Age'] ?? 0,
-      knowledgeLevel: data['Knowledge Level'] ?? 0, // Adjusted to int
-      learningGoalPerDay: data['Learning Goal Per Day'] ?? 0,
-      startingLevel:
-          data['Starting level'] ?? 0, // Adjust key for Starting Level
-      profile: ProfileData.fromFirestore(data['Profile'] ?? {}), // Correct key
+      age: data['Age'] is int ? data['Age'] : 0,
+      knowledgeLevel: data['Knowledge Level'] is int
+          ? data['Knowledge Level']
+          : 0, // Adjusted to int
+      learningGoalPerDay: data['Learning Goal Per Day'] is int
+          ? data['Learning Goal Per Day']
+          : 0,
+      startingLevel: data['Starting Level'] is int
+          ? data['Starting Level']
+          : 0, // Consistent key usage
+      profile: data['Profile'] != null
+          ? ProfileData.fromFirestore(data['Profile'])
+          : ProfileData(
+              // Handle null profile case
+              fullName: '',
+              username: 'Your Name Here',
+              numberOfFollowers: 0,
+              following: 0,
+              topAchievements: 0,
+              streak: 0,
+              totalProfit: 0.0,
+              portfolioScore: 0.0,
+              averageMonthlyGrowth: 0.0),
     );
   }
 
@@ -38,8 +55,8 @@ class UserData {
       'Age': age,
       'Knowledge Level': knowledgeLevel,
       'Learning Goal Per Day': learningGoalPerDay,
-      'Starting level': startingLevel, // Correct key
-      'Profile': profile.toFirestore(), // Correct key
+      'Starting Level': startingLevel, // Consistent key usage
+      'Profile': profile.toFirestore(), // Profile conversion
     };
   }
 }
@@ -72,13 +89,22 @@ class ProfileData {
     return ProfileData(
       fullName: data['Full Name'] ?? '',
       username: data['Username'] ?? 'Your Name Here', // Default username
-      numberOfFollowers: data['Number of Followers'] ?? 0,
-      following: data['Following'] ?? 0,
-      topAchievements: data['Top Achievements'] ?? 0, // Adjusted to int
-      streak: data['Streak'] ?? 0,
-      totalProfit: (data['Total Profit'] ?? 0).toDouble(),
-      portfolioScore: (data['Portfolio Score'] ?? 0).toDouble(),
-      averageMonthlyGrowth: (data['Average Monthly Growth'] ?? 0).toDouble(),
+      numberOfFollowers:
+          data['Number of Followers'] is int ? data['Number of Followers'] : 0,
+      following: data['Following'] is int ? data['Following'] : 0,
+      topAchievements: data['Top Achievements'] is int
+          ? data['Top Achievements']
+          : 0, // Adjusted to int
+      streak: data['Streak'] is int ? data['Streak'] : 0,
+      totalProfit:
+          (data['Total Profit'] is num ? data['Total Profit'] : 0).toDouble(),
+      portfolioScore:
+          (data['Portfolio Score'] is num ? data['Portfolio Score'] : 0)
+              .toDouble(),
+      averageMonthlyGrowth: (data['Average Monthly Growth'] is num
+              ? data['Average Monthly Growth']
+              : 0)
+          .toDouble(),
     );
   }
 

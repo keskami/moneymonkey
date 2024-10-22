@@ -48,7 +48,6 @@ dependencies:
   sign_in_with_apple: ^6.1.2
   intl: ^0.19.0
   google_fonts: ^6.2.1
-  firebase_storage: ^12.3.2
   fl_chart: ^0.69.0
 
 dev_dependencies:
@@ -89,6 +88,7 @@ flutter:
     - assets/images/whatsApp.png
     - assets/images/snapchat.png
     - assets/images/copyProfile.png
+    - assets/sample_stock_data.json
 
 
 
@@ -100,8 +100,7 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/sample_stock_data.json
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

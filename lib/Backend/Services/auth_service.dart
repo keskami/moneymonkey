@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
 
@@ -67,7 +66,7 @@ class AuthService {
 
       if (user != null) {
         // Save additional user details (like name) in Firestore
-        await _firestore.collection('users').doc(user.uid).set({
+        await _firestore.collection('Users').doc(user.uid).set({
           'userId': user.uid,
           'name': name,
           'email': email,
@@ -146,13 +145,10 @@ class AuthService {
         'Total Profit (Mutual Funds)': 600,
         'Total Invested (Bonds)': 234,
         'Total Profit (Bonds)': -10,
-        'Total invested Bananas' : 7089,
-        'Profit from Invested Bananas (Current Month)' : 890,
-        'Username':"Josh5"
-
-
+        'Total invested Bananas': 7089,
+        'Profit from Invested Bananas (Current Month)': 890,
+        'Username': "Josh5"
       }
-
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
@@ -192,8 +188,8 @@ class AuthService {
       'Date': FieldValue.serverTimestamp(),
       'Type': "Income"
     });
-
   }
+
   // Function to sign out the user
   Future<void> signOut(BuildContext context) async {
     try {

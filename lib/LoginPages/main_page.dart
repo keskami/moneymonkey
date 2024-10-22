@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
 import 'login.dart';
 
@@ -20,7 +19,7 @@ class main_page extends StatelessWidget {
             if (userId.isEmpty) {
               return const LoginScreen();
             } else {
-              return const PortfolioScreen();
+              return const LoginScreen();
             }
           } else {
             return const LoginScreen();

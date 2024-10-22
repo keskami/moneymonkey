@@ -9,7 +9,7 @@ class FirestoreService {
     try {
       // Reference the document in Firestore using the userId
       DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await _db.collection('users').doc(userId).get();
+          await _db.collection('Users').doc(userId).get();
 
       if (snapshot.exists) {
         // Convert the Firestore document into a UserData object

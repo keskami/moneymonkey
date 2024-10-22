@@ -5,8 +5,8 @@ import 'package:money_monkey/Invest/Widgets/title_row.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../Backend/Models/stock_data.dart';
-import 'Widgets/investment_options_list.dart';
+import '../../Backend/Models/stock_data.dart';
+import '../Widgets/investment_options_list.dart';
 
 class InvestmentPage extends StatefulWidget {
   final String investmentType; // e.g., "Stocks", "ETFs", "Bonds"

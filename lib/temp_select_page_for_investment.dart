@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Backend/Services/stock_service.dart';
-import 'Invest/investment_page.dart';
+import 'Invest/Pages/investment_page.dart';
 
 class TemporarySelectPage extends StatelessWidget {
   const TemporarySelectPage({super.key});

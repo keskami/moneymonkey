@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:money_monkey/InvestSectionPages/discover_page.dart';
+import 'package:money_monkey/Invest/Pages/discover_page.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
 
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({super.key});
@@ -156,6 +157,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   Widget build(BuildContext context) {
     double screenWidthUnit = MediaQuery.of(context).size.width / 390;
     double screenHeightUnit = MediaQuery.of(context).size.height / 880;
+
+    final double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -570,38 +573,62 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               )),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: screenWidthUnit * 39,
-                    height: screenHeightUnit * 38,
-                    child: Image.asset("assets/images/navbar1.png"),
-                  ),
-                  SizedBox(
-                    width: screenWidthUnit * 39,
-                    height: screenHeightUnit * 38,
-                    child: Image.asset("assets/images/navbar2.png"),
-                  ),
-                  SizedBox(
-                    width: screenWidthUnit * 53,
-                    height: screenHeightUnit * 51,
-                    child: Image.asset("assets/images/navbar3.png"),
-                  ),
-                  SizedBox(
-                    width: screenWidthUnit * 42,
-                    height: screenHeightUnit * 35,
-                    child: Image.asset("assets/images/navbar4.png"),
-                  ),
-                ],
+      bottomNavigationBar: NavigationBar(
+        indicatorColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        onDestinationSelected: (value) {},
+        selectedIndex: 2,
+        destinations: [
+          NavigationDestination(
+            icon: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FLesson%20Page.png?alt=media&token=1e20b2e4-ee49-49cc-bc01-dcf08b21104b",
+              width: screenW * 0.12,
+            ),
+            enabled: false,
+            label: "",
+          ),
+          GestureDetector(
+            onTap: () {
+              // print("test");
+              // Navigator.of(context).push(MaterialPageRoute(
+              //   builder: (context) => const ProfilePage(),
+              // ));
+            },
+            child: NavigationDestination(
+              icon: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FPortfolio.png?alt=media&token=d2012e7d-19fb-4766-9777-ce09231e4021",
+                width: screenW * 0.12,
               ),
-            ],
-          )),
+              enabled: false,
+              label: "",
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ProfilePage(),
+              ));
+            },
+            child: NavigationDestination(
+              icon: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FTrading.png?alt=media&token=2037e6b1-6fb6-48af-aecf-5f288c2159b0",
+                width: screenW * 0.12,
+              ),
+              enabled: false,
+              label: "",
+            ),
+          ),
+          NavigationDestination(
+            icon: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FProfile.png?alt=media&token=80ec6904-46b7-4f76-85e1-dc21531e7a7c",
+              width: screenW * 0.12,
+            ),
+            enabled: true,
+            label: "",
+          ),
+        ],
+        height: 80,
+      ),
       floatingActionButton: GestureDetector(
         onTap: () {
           setState(() {
@@ -703,7 +730,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             padding: const EdgeInsets.all(8),
             child: Icon(icon, size: 15),
           ),
-          SizedBox(width: screenHeight * .08),
+          SizedBox(width: screenWidth * 0.06),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
