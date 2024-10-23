@@ -86,25 +86,31 @@ class StartFreshPage5 extends StatelessWidget {
                     },
                     width: 100,
                   ),
-                  RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: "Start from scratch",
-                        style: GoogleFonts.fredoka().copyWith(
-                          fontSize: 22,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  Flexible(
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Start from scratch",
+                            style: GoogleFonts.fredoka().copyWith(
+                              fontSize: 22,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                "\nTake the easiest lesson of our financial literacy course",
+                            style: GoogleFonts.fredoka().copyWith(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                      TextSpan(
-                        text:
-                            "\nTake the easiest lesson of our\nfinancial literacy course",
-                        style: GoogleFonts.fredoka().copyWith(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ]),
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                    ),
                   )
                 ],
               ),
@@ -136,25 +142,29 @@ class StartFreshPage5 extends StatelessWidget {
                     },
                     width: 95,
                   ),
-                  RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: "Find my level",
-                        style: GoogleFonts.fredoka().copyWith(
-                          fontSize: 22,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: "Find my level",
+                          style: GoogleFonts.fredoka().copyWith(
+                            fontSize: 22,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      TextSpan(
-                        text:
-                            "\nLet Money Monkey recommend\nwhere you should start learning",
-                        style: GoogleFonts.fredoka().copyWith(
-                          fontSize: 16,
-                          color: Colors.black,
+                        TextSpan(
+                          text:
+                              "\nLet Money Monkey recommend where you should start learning",
+                          style: GoogleFonts.fredoka().copyWith(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                    ]),
+                      ]),
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                    ),
                   )
                 ],
               ),

@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'LoginPages/main_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/routing_page.dart';
+
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -9,6 +11,8 @@ Future<void> main() async {
     name: 'com.example.moneyMonkey',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Run the app
   runApp(const MyApp());
 }
 
@@ -17,10 +21,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
-    return const MaterialApp(
-      title: "Money Monkey",
-      home: main_page(),
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.fredokaTextTheme(),
+      ),
+      home: const MainPage(),
     );
   }
 }

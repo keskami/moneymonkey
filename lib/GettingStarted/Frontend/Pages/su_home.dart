@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import this for SystemChrome
 import 'package:get/get.dart';
-import 'package:money_monkey/GettingStarted/Backend/Models/user_data.dart';
-import 'package:money_monkey/GettingStarted/Backend/Services/auth_service.dart';
-import 'package:money_monkey/GettingStarted/Backend/Services/firestore_service.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/empty_login_page.dart';
+import 'package:money_monkey/Backend/Models/user_data.dart';
+import 'package:money_monkey/Backend/Services/auth_service.dart';
+import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class SignUpDetailsHome extends StatefulWidget {
@@ -76,9 +76,9 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (c) => const PopScope(
+            builder: (c) => PopScope(
               canPop: false,
-              child: EmptyLoggedInPage(),
+              child: HomePage(),
             ),
           ),
         );
