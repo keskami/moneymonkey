@@ -275,14 +275,12 @@ class _LoginScreenState extends State<LoginScreen> {
           await addUserDetails(userId, email);
         } else {}
 
-        if (context.mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FriendsHome(),
-            ),
-          );
-        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FriendsHome(),
+          ),
+        );
       }
     }
   }

@@ -6,12 +6,12 @@ import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
-import 'package:money_monkey/Profile/Widgets/custom_stat.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Settings/settings.dart';
 import 'package:money_monkey/friendsPages/Widgets/add_friends_button_friends.dart';
-import 'package:money_monkey/friendsPages/Widgets/custom_stat._friendsdart';
 import 'package:money_monkey/themes/color_themes.dart';
+import 'package:money_monkey/friendsPages/Widgets/custom_stat_friends.dart';
+
 
 
 class friendProfile extends StatefulWidget {
