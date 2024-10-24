@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/friendsPages/friendsHome.dart';
+import 'package:money_monkey/friendsPages/friendsProfile.dart';
 
 class FriendsSuggestions extends StatefulWidget {
   const FriendsSuggestions({super.key});
@@ -188,7 +189,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const FriendsHome()));
+                                builder: (context) => friendProfile()));
                       },
                       child: Container(
                         height: screenHeightUnit * 46,
