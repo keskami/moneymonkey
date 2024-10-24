@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class CustomStat extends StatelessWidget {
-  const CustomStat({
+class CustomStatFriends extends StatelessWidget {
+  const CustomStatFriends({
     super.key,
     required this.accent,
     required this.title,

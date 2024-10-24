@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class ShareButton extends StatelessWidget {
-  const ShareButton({
+class ShareButtonFriends extends StatelessWidget {
+  const ShareButtonFriends({
     super.key,
   });
   @override

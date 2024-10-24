@@ -6,14 +6,16 @@ import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
+import 'package:money_monkey/Profile/Widgets/custom_stat.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Settings/settings.dart';
+import 'package:money_monkey/friendsPages/Widgets/add_friends_button_friends.dart';
+import 'package:money_monkey/friendsPages/Widgets/custom_stat._friendsdart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import 'Widgets/custom_stat.dart';
 
 class friendProfile extends StatefulWidget {
-  const friendProfile({
+   friendProfile({
     super.key,
   });
 
@@ -185,9 +187,9 @@ class _friendProfileState extends State<friendProfile> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Row(
+                               Row(
                                 children: [
-                                  AddFriendsButton(),
+                                  AddFriendsButtonFriends(follows: false,),
                                   Spacer(),
                                   ShareButton(),
                                 ],
@@ -246,7 +248,7 @@ class _friendProfileState extends State<friendProfile> {
                               ),
                               Row(
                                 children: [
-                                  CustomStat(
+                                  CustomStatFriends(
                                     accent: Colors.yellow,
                                     title: "Day Streak",
                                     number: userData!.profile.streak.toString(),
@@ -254,7 +256,7 @@ class _friendProfileState extends State<friendProfile> {
                                         "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FProfile%20Page%2FStreak.png?alt=media&token=10fcb0c5-887d-4719-8c1d-21f9abbc93c7",
                                   ),
                                   const Spacer(),
-                                  CustomStat(
+                                  CustomStatFriends(
                                     accent: Colors.yellow,
                                     title: "Total Profit",
                                     iconURL:
@@ -269,7 +271,7 @@ class _friendProfileState extends State<friendProfile> {
                               ),
                               Row(
                                 children: [
-                                  CustomStat(
+                                  CustomStatFriends(
                                     accent: LightTheme().primaryGreen,
                                     title: "Portfolio Score",
                                     iconURL:
@@ -278,7 +280,7 @@ class _friendProfileState extends State<friendProfile> {
                                         "${userData!.profile.portfolioScore.toString().substring(0, userData!.profile.portfolioScore.toString().lastIndexOf('.'))}/100",
                                   ),
                                   const Spacer(),
-                                  CustomStat(
+                                  CustomStatFriends(
                                     accent: LightTheme().primaryBlue,
                                     title: "Avg. Monthly Growth",
                                     iconURL:
