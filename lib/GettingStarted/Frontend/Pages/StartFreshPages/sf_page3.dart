@@ -9,100 +9,85 @@ class StartFreshPage3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StartFreshController startFreshController = Get.find();
-    final List<Widget> learningGoals = [
-      GestureDetector(
-          onTap: () {
-            startFreshController.learningGoal.value = 5;
+    void onTapGoal(int val) {
+      print('Value: ${val * 5}');
+      startFreshController.learningGoal.value = val * 5;
+      startFreshController.pageIndex += 1;
+    }
 
-            startFreshController.pageIndex += 1;
-          },
-          child: const Row(
-            children: [
-              Text(
-                "5 min / day",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ),
-              Spacer(),
-              Text(
-                "Casual",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          )),
-      GestureDetector(
-          onTap: () {
-            startFreshController.learningGoal.value = 10;
-            startFreshController.pageIndex += 1;
-          },
-          child: const Row(
-            children: [
-              Text(
-                "10 min / day",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ),
-              Spacer(),
-              Text(
-                "Regular",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          )),
-      GestureDetector(
-          onTap: () {
-            startFreshController.learningGoal.value = 15;
-            startFreshController.pageIndex += 1;
-          },
-          child: const Row(
-            children: [
-              Text(
-                "15 min / day",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ),
-              Spacer(),
-              Text(
-                "Serious",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          )),
-      GestureDetector(
-          onTap: () {
-            startFreshController.learningGoal.value = 20;
-            startFreshController.pageIndex += 1;
-          },
-          child: const Row(
-            children: [
-              Text(
-                "20 min / day",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ),
-              Spacer(),
-              Text(
-                "Intense",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          )),
+    final List<Widget> learningGoals = [
+      const Row(
+        children: [
+          Text(
+            "5 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Casual",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+      const Row(
+        children: [
+          Text(
+            "10 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Regular",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+      const Row(
+        children: [
+          Text(
+            "15 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Serious",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+      const Row(
+        children: [
+          Text(
+            "20 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Intense",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
     ];
     return Center(
       child: Column(
@@ -156,13 +141,16 @@ class StartFreshPage3 extends StatelessWidget {
           Flexible(
             child: ListView.builder(
               itemCount: learningGoals.length,
-              itemBuilder: (context, index) => CustomOptionTile(
-                childWidget: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 5,
-                    ),
-                    child: learningGoals[index]),
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () => onTapGoal(index + 1),
+                child: CustomOptionTile(
+                  childWidget: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 5,
+                      ),
+                      child: learningGoals[index]),
+                ),
               ),
             ),
           ),

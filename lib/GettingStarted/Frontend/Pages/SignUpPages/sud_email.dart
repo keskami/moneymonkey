@@ -17,9 +17,9 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
   final TextEditingController emailController = TextEditingController();
   final AuthService authService =
       AuthService(); // Create an instance of AuthService
-
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     Future<void> submitEmail(String val) async {
       signUpController.email.value = val;
     }
@@ -105,13 +105,13 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
                             ),
                           );
                         },
-                        height: 41,
+                        height: screenWidth * 0.1,
                       ),
                       const SizedBox(width: 20),
                       const Text(
                         "Sign in with Google",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 21,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
@@ -144,12 +144,12 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
                             ),
                           );
                         },
-                        height: 41,
+                        height: screenWidth * 0.1,
                       ),
                       const Text(
                         "Sign in with Facebook",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 21,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
@@ -182,13 +182,13 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
                           );
                         },
                         "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fapple_logo.png?alt=media&token=151b1835-0e40-4bf7-b6d2-61dc70de963b",
-                        height: 41,
+                        height: screenWidth * 0.1,
                       ),
                       const SizedBox(width: 10),
                       const Text(
                         "Sign in with Apple",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 21,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),

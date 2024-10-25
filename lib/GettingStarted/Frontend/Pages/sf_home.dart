@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import this for SystemChrome
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/su_home.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
@@ -14,13 +14,13 @@ class StartFreshHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Set system UI overlay style
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: LightTheme().primaryGreen,
         statusBarIconBrightness: Brightness.light,
       ),
     );
+
     void toNextPage() {
       int currentIndex = startFreshController.pageIndex.value;
       if (currentIndex == 2 && startFreshController.learningGoal.value == 0) {
@@ -49,14 +49,15 @@ class StartFreshHome extends StatelessWidget {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset:
+          false, // Prevent layout shift when keyboard opens
       backgroundColor: LightTheme().primaryBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.start, // Distribute space between widgets
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
                   onPressed: toPreviousPage,
@@ -70,9 +71,7 @@ class StartFreshHome extends StatelessWidget {
                     page: 0,
                   ),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
+                const SizedBox(width: 20),
               ],
             ),
             Expanded(
@@ -92,11 +91,15 @@ class StartFreshHome extends StatelessWidget {
         () => startFreshController.pageIndex.value >= 0 &&
                 startFreshController.pageIndex.value <
                     startFreshController.pages.length
-            ? Container(
-                margin: const EdgeInsets.only(bottom: 50),
-                child: NextButton(
-                  pages: 1,
-                  nextPage: toNextPage,
+            ? Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin:
+                      const EdgeInsets.only(bottom: 50), // Adjust to your needs
+                  child: NextButton(
+                    pages: 1,
+                    nextPage: toNextPage,
+                  ),
                 ),
               )
             : const SizedBox.shrink(),

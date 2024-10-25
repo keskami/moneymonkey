@@ -12,96 +12,55 @@ class GettingStartedPage6 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onKnowledgeTap(int val) {
+      gettingStartedController.knowledgeLevel.value = val;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StartFreshHome(),
+          ));
+    }
+
     final List<Widget> knowledgeOptions = [
       SizedBox(
         height: 60, // Match height with multi-line text
         child: Center(
-          child: GestureDetector(
-            onTap: () {
-              gettingStartedController.knowledgeLevel.value = 0;
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StartFreshHome(),
-                  ));
-            },
-            child: const Text(
-              "I'm new",
-              style: TextStyle(
-                fontSize: 23,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
+          child: const Text(
+            "I'm new",
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
       ),
-      GestureDetector(
-        onTap: () {
-          gettingStartedController.knowledgeLevel.value = 1;
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StartFreshHome(),
-              ));
-        },
-        child: const Text(
-          "I have a basic\nunderstanding",
-          style: TextStyle(
-            fontSize: 23,
-            fontWeight: FontWeight.bold,
-          ),
+      const Text(
+        "I have a basic\nunderstanding",
+        style: TextStyle(
+          fontSize: 23,
+          fontWeight: FontWeight.bold,
         ),
       ),
-      GestureDetector(
-        onTap: () {
-          gettingStartedController.knowledgeLevel.value = 2;
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StartFreshHome(),
-              ));
-        },
-        child: const Text(
-          "I am moderately\nknowledgeable",
-          style: TextStyle(
-            fontSize: 23,
-            fontWeight: FontWeight.bold,
-          ),
+      const Text(
+        "I am moderately\nknowledgeable",
+        style: TextStyle(
+          fontSize: 23,
+          fontWeight: FontWeight.bold,
         ),
       ),
-      GestureDetector(
-        onTap: () {
-          gettingStartedController.knowledgeLevel.value = 3;
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StartFreshHome(),
-              ));
-        },
-        child: const Text(
-          "I have a good\nunderstanding",
-          style: TextStyle(
-            fontSize: 23,
-            fontWeight: FontWeight.bold,
-          ),
+      const Text(
+        "I have a good\nunderstanding",
+        style: TextStyle(
+          fontSize: 23,
+          fontWeight: FontWeight.bold,
         ),
       ),
-      GestureDetector(
-        onTap: () {
-          gettingStartedController.knowledgeLevel.value = 4;
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StartFreshHome(),
-              ));
-        },
-        child: const Text(
-          "I am very\nknowledgeable",
-          style: TextStyle(
-            fontSize: 23,
-            fontWeight: FontWeight.bold,
-          ),
+      const Text(
+        "I am very\nknowledgeable",
+        style: TextStyle(
+          fontSize: 23,
+          fontWeight: FontWeight.bold,
         ),
       ),
     ];
@@ -160,13 +119,19 @@ class GettingStartedPage6 extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: knowledgeOptions.length,
-                itemBuilder: (context, index) => CustomOptionTile(
-                  childWidget: Row(
-                    children: [
-                      KnowledgeBar(strength: index),
-                      const SizedBox(width: 20),
-                      knowledgeOptions[index],
-                    ],
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    print("Test");
+                    onKnowledgeTap(index);
+                  },
+                  child: CustomOptionTile(
+                    childWidget: Row(
+                      children: [
+                        KnowledgeBar(strength: index),
+                        const SizedBox(width: 20),
+                        knowledgeOptions[index],
+                      ],
+                    ),
                   ),
                 ),
               ),

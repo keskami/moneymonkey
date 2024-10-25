@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import this for SystemChrome
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/auth_service.dart';
@@ -19,7 +20,7 @@ class SignUpDetailsHome extends StatefulWidget {
 
 class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
   final SignUpController signUpController = Get.put(SignUpController());
-
+  bool _isKeyboardVisible = false;
   void fetchUserData() async {
     FirestoreService firestoreService = FirestoreService();
 
@@ -33,6 +34,16 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     } else {
       print("User data not found.");
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    KeyboardVisibilityController().onChange.listen((bool visible) {
+      setState(() {
+        _isKeyboardVisible = visible;
+      });
+    });
   }
 
   @override
@@ -132,7 +143,8 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         ),
       ),
       floatingActionButton: Obx(
-        () => signUpController.pageIndex.value >= 0 &&
+        () => !_isKeyboardVisible &&
+                signUpController.pageIndex.value >= 0 &&
                 signUpController.pageIndex.value < signUpController.pages.length
             ? Container(
                 margin: const EdgeInsets.only(bottom: 50),

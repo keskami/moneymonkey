@@ -10,6 +10,7 @@ class CustomProgressBar extends StatelessWidget {
     required this.page,
   });
   final int page;
+
   double getProgress() {
     double progress = 0;
     if (page == 0) {
@@ -27,7 +28,7 @@ class CustomProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        // Dynamically calculate progress based on page index (assuming 7 pages)
+        // Dynamically calculate progress based on page index
         double progress = getProgress();
 
         return Container(
@@ -46,14 +47,15 @@ class CustomProgressBar extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              // Progress section (blue)
-              FractionallySizedBox(
-                widthFactor: progress, // Based on page index / total pages
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: LightTheme().primaryBlue,
-                  ),
+              // Animated progress section
+              AnimatedContainer(
+                duration:
+                    const Duration(milliseconds: 300), // Animation duration
+                curve: Curves.easeInOut, // Smooth curve for animation
+                width: MediaQuery.of(context).size.width * progress,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(200),
+                  color: LightTheme().primaryBlue,
                 ),
               ),
             ],
