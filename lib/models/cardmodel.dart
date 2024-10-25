@@ -61,6 +61,7 @@ class _DetailNote extends StatelessWidget {
                 color: Color(0xFF000000),
                 fontSize: 35,
                 fontFamily: 'Baloo 2',
+                decoration: TextDecoration.none,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -73,6 +74,7 @@ class _DetailNote extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
+                  decoration: TextDecoration.none,
                   color: Color(0xFF000000),
                   fontSize: 20,
                   fontFamily: 'Baloo 2',
@@ -87,17 +89,18 @@ class _DetailNote extends StatelessWidget {
                 height: 200,
               ),
             const SizedBox(height: 20),
-            // Add button image for navigation
-            GestureDetector(
-              onTap: () {
-                Get.toNamed("/questionPageRoute");
-              },
-              child: Image.asset(
-                'assets/images/button.png', // Your provided button image path
-                height: 60,
-                width: 200,
-              ),
-            ),
+            
+
+            // GestureDetector(
+            //   onTap: () {
+            //     Get.toNamed("/questionPageRoute");
+            //   },
+            //   child: Image.asset(
+            //     'assets/images/button.png', 
+            //     height: 60,
+            //     width: 200,
+            //   ),
+            // ),
           ],
         ),
       ),

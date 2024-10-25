@@ -72,7 +72,9 @@ class _MarketScreenState extends State<MarketScreen> {
 
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
+  
+  final double screenWidth = screenSize.width;
+    final double screenHeight = screenSize.height;
     return Scaffold(
       backgroundColor: const Color(0xFFF1F3F4), 
       body: Column(
@@ -82,11 +84,11 @@ class _MarketScreenState extends State<MarketScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                   SizedBox(height: screenHeight * 0.02),
                       
                     // Market Futures Section
                     const SectionTitle(title: 'Market futures'),
@@ -107,24 +109,26 @@ class _MarketScreenState extends State<MarketScreen> {
                                 change: _calculateChange(appleStockData), 
                                 isPositive: _isPositive(appleStockData),
                               ),
-                              // MarketCard(
-                              //   title: 'Google',
-                              //   value: googleStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
-                              //   change: _calculateChange(googleStockData), 
-                              //   isPositive: _isPositive(googleStockData),
-                              // ),
+                              MarketCard(
+                                title: 'Google',
+                                value: googleStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+                                change: _calculateChange(googleStockData), 
+                                isPositive: _isPositive(googleStockData),
+                                
+                              ),
     //                             MarketCard(
     //   title: 'NYSE',
     //   value: nyseStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
     //   change: _calculateChange(nyseStockData), 
     //   isPositive: _isPositive(nyseStockData),
+    // // ),
+    //                           MarketCard(
+    //   title: 'NASDAQ',
+    //   value: nasdaqStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
+    //   change: _calculateChange(nasdaqStockData), 
+    //   isPositive: _isPositive(nasdaqStockData),
+      
     // ),
-                              MarketCard(
-      title: 'NASDAQ',
-      value: nasdaqStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
-      change: _calculateChange(nasdaqStockData), 
-      isPositive: _isPositive(nasdaqStockData),
-    ),
     //  MarketCard(
     //   title: 'DOW',
     //   value: dowStockData?['Time Series (Daily)']?['2024-10-14']?['4. close'] ?? 'N/A',
@@ -133,7 +137,7 @@ class _MarketScreenState extends State<MarketScreen> {
     // ),
                             ],
                           ),
-                    const SizedBox(height: 20),
+                     SizedBox(height: screenHeight * 0.03),
                       
                     // Top 2 Stocks Section
                     Row(
@@ -174,7 +178,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                     SizedBox(height: screenHeight*0.03),
                       
                     // Bonds Section
                     const SectionTitle(title: 'Bonds'),
@@ -186,7 +190,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         BondCard(title: '9M', percentage: '4.81%'),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                     SizedBox(height: screenHeight * 0.03),
                       
                     // What's Trending Section
                     const SectionTitle(title: "What's Trending"),
@@ -202,7 +206,7 @@ class _MarketScreenState extends State<MarketScreen> {
                                     ))
                                 .toList(),
                           ),
-                    const SizedBox(height: 20),
+                   SizedBox(height:screenHeight * 0.02),
                   ],
                 ),
               ),
@@ -217,15 +221,15 @@ class _MarketScreenState extends State<MarketScreen> {
         unselectedItemColor: Colors.grey, 
         showUnselectedLabels: true,
         backgroundColor: Colors.white,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 20,
+        selectedLabelStyle:  TextStyle(
+          fontSize: screenWidth * 0.05,
           fontFamily: "Baloo 2",
           fontWeight: FontWeight.bold,
           
         ),
-        unselectedLabelStyle: const TextStyle(
+        unselectedLabelStyle: TextStyle(
           fontFamily: "Baloo 2",
-          fontSize: 20,
+          fontSize: screenWidth * 0.05,
         ),
         items: const [
           BottomNavigationBarItem(
@@ -308,59 +312,61 @@ class MarketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    double cardWidth = screenSize.width * 0.3; // Adjust card width
-    double cardHeight = screenSize.height * 0.10; 
+  final double screenWidth = screenSize.width;
+    final double screenHeight = screenSize.height;
 
     return Container(
       
-      width: cardWidth,
-      height: cardHeight,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(8),
+      width: screenWidth * 0.3,
+      height: screenHeight * 0.12,
+      margin:  EdgeInsets.symmetric(vertical:  screenHeight * 0.01),
+      padding: EdgeInsets.all( screenHeight * 0.02),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        borderRadius: BorderRadius.circular(screenWidth * 0.03),
+        boxShadow:  [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 1),
+            blurRadius:  screenWidth * 0.02,
+            offset: Offset(0, screenHeight * 0.005),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-                   fontFamily: "Baloo 2"
+      child: Flexible(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+                     fontFamily: "Baloo 2"
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-             color: Color(0xFFFF5963),
-                   fontFamily: "Baloo 2"
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+               color: Color(0xFFFF5963),
+                     fontFamily: "Baloo 2"
+              ),
             ),
-          ),
-          SizedBox(height: 2,),
-          Text(
-            change,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: isPositive ? Colors.green : Colors.red,
-              fontFamily: "Baloo 2"
+            SizedBox(height: 2,),
+            Text(
+              change,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: isPositive ? Colors.green : Colors.red,
+                fontFamily: "Baloo 2"
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

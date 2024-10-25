@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class QuestionFeedbackDialog extends StatelessWidget {
   final bool isCorrect;
@@ -63,7 +65,14 @@ class QuestionFeedbackDialog extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+
+                if(isCorrect){
+                  Get.toNamed("/lessonCompletePageRoute");
+                }
+                else{
+                  Navigator.of(context).pop(); // Close the dialog
+                }
+                
               },
               
               child: const Text(

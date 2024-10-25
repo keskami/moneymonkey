@@ -60,6 +60,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
     // Access the progress controller to get the number of attempts
     final ProgressController progressController = Get.find<ProgressController>();
     
+    
     // Determine how many stars based on the number of attempts
     int stars = progressController.attempts.value == 1 ? 3 : 2;
 
@@ -117,11 +118,11 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Positioned(
+                        Positioned(     
                           bottom: 130,
                           child: ElevatedButton(
                             onPressed: () {
-                              // Add your continue button logic
+                              Get.toNamed("/HomePage");
                             },
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(

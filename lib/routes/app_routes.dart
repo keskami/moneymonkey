@@ -34,5 +34,7 @@ class AppRoutes {
     ),
     GetPage(name: MarketScreenRoute, page: ()=>  MarketScreen(),
     ),
+    GetPage(name: HomePageRoute, page: ()=>  HomePage()),
+    
   ];
 }

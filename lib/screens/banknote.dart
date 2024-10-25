@@ -16,6 +16,7 @@ class _BankNotePageState extends State<BankNotePage> {
   Offset _cardOffset = Offset.zero;
   double _cardRotation = 0.0;
   bool _isDragging = false;
+  bool _showButton= false;  
 
   @override
   void initState() {
@@ -113,19 +114,43 @@ class _BankNotePageState extends State<BankNotePage> {
         // Check if all cards have been flipped and swiped
     if (_cards.every((card) => card.isFlipped)) {
       progressController.setCardsCompleted();  // Inform controller that cards are flipped and swiped
+      _showButton=true;
     }
     });
   }
 
   Widget _buildFlipCard(CardModel cardModel) {
+    bool isTopCard = cardModel == _cards.last;
     return FlipCard(
       key: cardModel.cardKey,
       flipOnTouch: true,
-      front: _buildCardContent(cardModel),
+      front: Stack(
+        children: [
+          _buildCardContent(cardModel,),
+          if(_showButton && isTopCard)
+          Positioned(
+            bottom: 60,
+            left: 50,
+            right: 50,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed("/questionPageRoute");
+              },
+              child: Image.asset(
+                'assets/images/button.png',
+                height: 60,
+                width: 200,
+              ),
+            ),
+          ),
+        ],
+      ),
       back: cardModel.backWidget,
        onFlipDone: (bool flipped) {
         if(flipped && !cardModel.isFlipped){   //ensure that isFlipped is only marked true if the card is flipped for the first time.
            cardModel.isFlipped = true; 
+
+         
         }
       // Track card flipping
     },
@@ -153,9 +178,11 @@ class _BankNotePageState extends State<BankNotePage> {
           child: Text(
             cardModel.frontText,
             textAlign: TextAlign.center,
+            
             style: const TextStyle(
               color: Color(0xFF000000),
               fontSize: 45,
+              decoration: TextDecoration.none,
               fontFamily: 'Baloo 2',
               fontWeight: FontWeight.bold,
             ),

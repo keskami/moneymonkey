@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore imports
 import 'package:firebase_auth/firebase_auth.dart';   // Firebase auth imports
+import 'package:moneymonkey/widgets/monkeyanimation.dart';
 import '../controller/controller.dart'; // Import the controller
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -77,15 +78,28 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(right: 12.0),
-              child: Obx(() => ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: LinearProgressIndicator(
-                  value: widget.progressController.progress.value, // Use progress value
-                  backgroundColor: const Color(0xFFF0F0F0), // Light gray background
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.lightBlue),
-                  minHeight: 20,
-                ),
-              )),
+              child: Obx((){
+                   return TweenAnimationBuilder<double>(
+                  tween: Tween<double>(
+                      begin: 0, end: widget.progressController.progress.value),
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  builder: (context, value, child) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: LinearProgressIndicator(
+                        value: value, // Animated progress value
+                        backgroundColor: const Color(0xFFF0F0F0),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Colors.lightBlue),
+                        minHeight: 20,
+                  
+             ),
+                    );
+                  },
+                );
+              }),
+           // child: MonkeyProgressWidget(progressController:widget.progressController),
             ),
           ),
           Row(
