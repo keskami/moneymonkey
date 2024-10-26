@@ -7,10 +7,18 @@ import 'package:money_monkey/GettingStarted/Frontend/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class StartFreshHome extends StatelessWidget {
+class StartFreshHome extends StatefulWidget {
   StartFreshHome({super.key});
+
+  @override
+  State<StartFreshHome> createState() => _StartFreshHomeState();
+}
+
+class _StartFreshHomeState extends State<StartFreshHome> {
   final StartFreshController startFreshController =
       Get.put(StartFreshController());
+
+  bool _isNextButtonEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +31,22 @@ class StartFreshHome extends StatelessWidget {
 
     void toNextPage() {
       int currentIndex = startFreshController.pageIndex.value;
+      print(_isNextButtonEnabled);
+      print(currentIndex);
+      if (currentIndex + 1 == 2 &&
+          startFreshController.learningGoal.value == 0) {
+        setState(() {
+          _isNextButtonEnabled = false;
+        });
+      } else {
+        _isNextButtonEnabled = true;
+      }
       if (currentIndex == 2 && startFreshController.learningGoal.value == 0) {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Pick a learning goal.")));
+          const SnackBar(
+            content: Text("Pick a learning goal."),
+          ),
+        );
         return;
       }
       if (currentIndex + 1 > 6) {
@@ -87,23 +108,38 @@ class StartFreshHome extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: Obx(
-        () => startFreshController.pageIndex.value >= 0 &&
-                startFreshController.pageIndex.value <
-                    startFreshController.pages.length
-            ? Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  margin:
-                      const EdgeInsets.only(bottom: 50), // Adjust to your needs
-                  child: NextButton(
-                    pages: 1,
-                    nextPage: toNextPage,
-                  ),
-                ),
-              )
-            : const SizedBox.shrink(),
-      ),
+      floatingActionButton: Obx(() {
+        if (startFreshController.pageIndex.value == 2 &&
+            startFreshController.learningGoal.value == 0) {
+          return Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 50),
+              child: NextButton(
+                pages: 1,
+                isEnabled: false,
+                nextPage: toNextPage,
+              ),
+            ),
+          );
+        } else if (startFreshController.pageIndex.value >= 0 &&
+            startFreshController.pageIndex.value <
+                startFreshController.pages.length) {
+          return Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 50),
+              child: NextButton(
+                pages: 1,
+                isEnabled: true,
+                nextPage: toNextPage,
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

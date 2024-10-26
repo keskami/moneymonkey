@@ -21,6 +21,7 @@ class SignUpDetailsHome extends StatefulWidget {
 class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
   final SignUpController signUpController = Get.put(SignUpController());
   bool _isKeyboardVisible = false;
+
   void fetchUserData() async {
     FirestoreService firestoreService = FirestoreService();
 
@@ -64,9 +65,9 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Enter a Name.")));
         return;
-      } else if (currentIndex == 1 && !signUpController.email.value.isEmail) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Enter a valid email.")));
+      } else if (currentIndex == 1 &&
+          !(await AuthService()
+              .checkEmailUsed(signUpController.email.value, context))) {
         return;
       } else if (currentIndex == 2 &&
           (signUpController.password.value.isEmpty ||
@@ -142,19 +143,57 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           ],
         ),
       ),
-      floatingActionButton: Obx(
-        () => !_isKeyboardVisible &&
-                signUpController.pageIndex.value >= 0 &&
-                signUpController.pageIndex.value < signUpController.pages.length
-            ? Container(
-                margin: const EdgeInsets.only(bottom: 50),
-                child: NextButton(
-                  pages: 2,
-                  nextPage: toNextPage,
-                ),
-              )
-            : const SizedBox.shrink(),
-      ),
+      floatingActionButton: Obx(() {
+        if (!_isKeyboardVisible &&
+            signUpController.pageIndex.value == 0 &&
+            signUpController.name.value.isEmpty) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 50),
+            child: NextButton(
+              pages: 2,
+              isEnabled: false,
+              nextPage: toNextPage,
+            ),
+          );
+        } else if (!_isKeyboardVisible &&
+            signUpController.pageIndex.value == 2 &&
+            (signUpController.pageIndex.value == 1 ||
+                signUpController.email.value.isEmpty) &&
+            !signUpController.email.value.isEmail) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 50),
+            child: NextButton(
+              pages: 2,
+              isEnabled: false,
+              nextPage: toNextPage,
+            ),
+          );
+        } else if (!_isKeyboardVisible &&
+            signUpController.pageIndex.value == 2 &&
+            (signUpController.pageIndex.value == 2 ||
+                signUpController.password.value.isEmpty) &&
+            signUpController.password.value.length < 6) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 50),
+            child: NextButton(
+              pages: 2,
+              isEnabled: false,
+              nextPage: toNextPage,
+            ),
+          );
+        } else if (!_isKeyboardVisible) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 50),
+            child: NextButton(
+              pages: 2,
+              isEnabled: true,
+              nextPage: toNextPage,
+            ),
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

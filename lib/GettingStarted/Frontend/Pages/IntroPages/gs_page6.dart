@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
-import 'package:money_monkey/GettingStarted/Frontend/Pages/sf_home.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/knowledge_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
@@ -14,11 +13,6 @@ class GettingStartedPage6 extends StatelessWidget {
   Widget build(BuildContext context) {
     void onKnowledgeTap(int val) {
       gettingStartedController.knowledgeLevel.value = val;
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StartFreshHome(),
-          ));
     }
 
     final List<Widget> knowledgeOptions = [

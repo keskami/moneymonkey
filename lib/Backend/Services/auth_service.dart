@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:money_monkey/GettingStarted/Frontend/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
 
@@ -13,6 +14,7 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SignUpController signUpController = Get.find();
   final StartFreshController startFreshController = Get.find();
+  final GettingStartedController gettingStartedController = Get.find();
   String user = "";
   //Google Sign In
   Future<void> googleAuth(BuildContext context) async {
@@ -45,7 +47,36 @@ class AuthService {
     }
   }
 
-  // Function to create a new user
+  Future<bool> checkEmailUsed(String email, BuildContext context) async {
+    // Validate email format
+    if (!email.isEmail) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Enter a valid email.")));
+      return false;
+    }
+
+    try {
+      final emailSnapshot = await _firestore
+          .collection('Users')
+          .where('Email', isEqualTo: email)
+          .get();
+
+      if (emailSnapshot.docs.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Email already associated with a user.")));
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error checking email: $e"),
+        backgroundColor: Colors.red[100],
+      ));
+      return false;
+    }
+  }
+
   Future<void> signUpUser(BuildContext context) async {
     try {
       // Get the user input from the controller
@@ -118,11 +149,11 @@ class AuthService {
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
-      'Age': 0,
-      'Knowledge Level': 0,
+      'Age': gettingStartedController.age.value,
+      'Knowledge Level': gettingStartedController.knowledgeLevel.value,
       'Learning Goal Per Day': 0,
       'Profile': {
-        'Full Name': 'Your Name Here',
+        'Full Name': signUpController.name.value,
         'Username': 'Your Name Here',
         'Number of Followers': 0,
         'Following': 0,

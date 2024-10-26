@@ -1,21 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class NextButton extends StatelessWidget {
-  const NextButton({
+  NextButton({
     super.key,
     required this.pages,
     required this.nextPage,
+    required this.isEnabled,
   });
   final int pages;
   final Function() nextPage;
+  bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: nextPage,
-      child: Image.network(
-        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FnextButton.png?alt=media&token=a949a38d-4c8d-4965-ac5e-f4bf143514ca",
-      ),
-    );
+        onTap: nextPage,
+        child: Container(
+          decoration: BoxDecoration(
+            color: isEnabled ? LightTheme().primaryBlue : Colors.grey,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 12,
+          ),
+          margin: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
+          ),
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height * 0.07,
+          child: Center(
+            child: Text(
+              "CONTINUE",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ));
   }
 }

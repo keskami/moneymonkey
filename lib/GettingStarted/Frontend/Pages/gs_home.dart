@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/GettingStarted/Frontend/Pages/sf_home.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -31,8 +32,12 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
 
   void toNextPage() {
     int currentIndex = gettingStartedController.pageIndex.value;
-    if (currentIndex + 1 > 6) {
-      return;
+    if (currentIndex + 1 == 6) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StartFreshHome(),
+          ));
     }
     gettingStartedController.pageIndex.value += 1;
   }
@@ -60,23 +65,39 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
           }
         }),
       ),
-      floatingActionButton: Obx(
-        () => !_isKeyboardVisible &&
-                gettingStartedController.pageIndex.value >= 1 &&
-                gettingStartedController.pageIndex.value <= 4 &&
-                (gettingStartedController.pageIndex.value != 4 ||
-                    gettingStartedController.age.value != 0)
-            ? Container(
-                margin: const EdgeInsets.only(
-                  bottom: 50,
-                ),
-                child: NextButton(
-                  nextPage: toNextPage,
-                  pages: 0,
-                ),
-              )
-            : const SizedBox.shrink(),
-      ),
+      floatingActionButton: Obx(() {
+        if (!_isKeyboardVisible &&
+            gettingStartedController.pageIndex.value == 5 &&
+            gettingStartedController.knowledgeLevel.value == 0) {
+          return Container(
+            margin: const EdgeInsets.only(
+              bottom: 50,
+            ),
+            child: NextButton(
+              nextPage: toNextPage,
+              isEnabled: false,
+              pages: 0,
+            ),
+          );
+        } else if (!_isKeyboardVisible &&
+            gettingStartedController.pageIndex.value >= 1 &&
+            gettingStartedController.pageIndex.value <= 5 &&
+            (gettingStartedController.pageIndex.value != 5 ||
+                gettingStartedController.age.value != 0)) {
+          return Container(
+            margin: const EdgeInsets.only(
+              bottom: 50,
+            ),
+            child: NextButton(
+              nextPage: toNextPage,
+              isEnabled: true,
+              pages: 0,
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

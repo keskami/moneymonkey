@@ -12,7 +12,6 @@ class StartFreshPage3 extends StatelessWidget {
     void onTapGoal(int val) {
       print('Value: ${val * 5}');
       startFreshController.learningGoal.value = val * 5;
-      startFreshController.pageIndex += 1;
     }
 
     final List<Widget> learningGoals = [
