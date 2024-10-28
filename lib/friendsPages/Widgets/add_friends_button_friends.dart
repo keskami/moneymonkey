@@ -33,7 +33,7 @@ class _AddFriendsButtonFriendsState extends State<AddFriendsButtonFriends> {
           setState(() {
             widget.follows = !widget.follows;
           });
-          print(widget.follows);
+        
         },
         child: widget.follows ?  Row(
           crossAxisAlignment: CrossAxisAlignment.center,

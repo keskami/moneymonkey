@@ -303,12 +303,14 @@ class _friendProfileState extends State<friendProfile> {
       //Temporary Bottom Navigation Bar
       bottomNavigationBar: _buildBottomBar(context),
       floatingActionButton: IconButton(
+        padding: EdgeInsets.only(top: 20),
         onPressed: () {
           Navigator.of(context).pop();
         },
         icon: const Icon(
           Icons.arrow_back,
           size: 40,
+          color: Colors.black,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
