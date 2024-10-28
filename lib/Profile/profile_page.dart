@@ -7,7 +7,7 @@ import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
-import 'package:money_monkey/Settings/settings.dart';
+import 'package:money_monkey/Settings/Pages/settings.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import 'Widgets/custom_stat.dart';

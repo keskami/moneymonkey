@@ -43,6 +43,7 @@ class _SUDetailsPasswordPageState extends State<SUDetailsPasswordPage> {
             height: 20,
           ),
           CustomOptionTile(
+            isSelected: false,
             childWidget: TextField(
               autofocus: true,
               onChanged: (value) {

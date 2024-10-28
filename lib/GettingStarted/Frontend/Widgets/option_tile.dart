@@ -1,17 +1,23 @@
 import 'package:flutter/widgets.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomOptionTile extends StatelessWidget {
   const CustomOptionTile({
     super.key,
+    required this.isSelected,
     required this.childWidget,
   });
+  final bool isSelected;
   final Widget childWidget;
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: const Color.fromARGB(255, 178, 182, 182),
+          width: isSelected ? 2 : 1,
+          color: isSelected
+              ? LightTheme().primaryBlue
+              : Color.fromARGB(255, 178, 182, 182),
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(

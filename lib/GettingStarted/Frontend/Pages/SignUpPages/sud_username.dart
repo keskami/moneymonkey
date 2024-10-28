@@ -3,24 +3,24 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
 
-class SUDetailsNamePage extends StatefulWidget {
-  SUDetailsNamePage({
+class SUDetailsUsernamePage extends StatefulWidget {
+  SUDetailsUsernamePage({
     super.key,
   });
 
   @override
-  State<SUDetailsNamePage> createState() => _SUDetailsNamePageState();
+  State<SUDetailsUsernamePage> createState() => _SUDetailsUsernamePageState();
 }
 
-class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
+class _SUDetailsUsernamePageState extends State<SUDetailsUsernamePage> {
   final TextEditingController nameController = TextEditingController();
 
   final SignUpController signUpController = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {
-    void submitName(String val) {
-      signUpController.name.value = val;
+    void submitUsername(String val) {
+      signUpController.username.value = val;
     }
 
     return Container(
@@ -34,7 +34,7 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
           const Padding(
             padding: EdgeInsets.only(left: 22),
             child: Text(
-              "What is your name?",
+              "Choose a Username",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -49,7 +49,7 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
             childWidget: TextField(
               controller: nameController,
               onChanged: (value) {
-                submitName(value);
+                submitUsername(value);
               },
               autofocus: true,
               decoration: InputDecoration(
@@ -66,7 +66,7 @@ class _SUDetailsNamePageState extends State<SUDetailsNamePage> {
                 fontWeight: FontWeight.bold,
               ),
               onSubmitted: (value) {
-                submitName(value);
+                submitUsername(value);
               },
             ),
           )

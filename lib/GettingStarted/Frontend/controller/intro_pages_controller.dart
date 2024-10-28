@@ -17,5 +17,5 @@ class GettingStartedController extends GetxController {
     const GettingStartedPage6(),
   ];
   RxInt age = 0.obs;
-  RxInt knowledgeLevel = 0.obs;
+  RxInt knowledgeLevel = 6.obs;
 }

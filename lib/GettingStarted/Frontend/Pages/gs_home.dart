@@ -68,7 +68,7 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
       floatingActionButton: Obx(() {
         if (!_isKeyboardVisible &&
             gettingStartedController.pageIndex.value == 5 &&
-            gettingStartedController.knowledgeLevel.value == 0) {
+            gettingStartedController.knowledgeLevel.value > 4) {
           return Container(
             margin: const EdgeInsets.only(
               bottom: 50,

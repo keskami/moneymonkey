@@ -122,6 +122,19 @@ class _StartFreshHomeState extends State<StartFreshHome> {
               ),
             ),
           );
+        } else if (startFreshController.pageIndex.value == 4 &&
+            startFreshController.startingFresh.value == 0) {
+          return Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 50),
+              child: NextButton(
+                pages: 1,
+                isEnabled: false,
+                nextPage: toNextPage,
+              ),
+            ),
+          );
         } else if (startFreshController.pageIndex.value >= 0 &&
             startFreshController.pageIndex.value <
                 startFreshController.pages.length) {

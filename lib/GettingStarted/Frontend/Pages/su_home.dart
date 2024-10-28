@@ -65,17 +65,17 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Enter a Name.")));
         return;
-      } else if (currentIndex == 1 &&
+      } else if (currentIndex == 2 &&
           !(await AuthService()
               .checkEmailUsed(signUpController.email.value, context))) {
         return;
-      } else if (currentIndex == 2 &&
+      } else if (currentIndex == 3 &&
           (signUpController.password.value.isEmpty ||
               signUpController.password.value.length < 6)) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Enter a valid password (min 6 characters).")));
         return;
-      } else if (currentIndex + 1 == 3) {
+      } else if (currentIndex + 1 == 4) {
         try {
           await AuthService().signUpUser(context);
 
@@ -108,6 +108,16 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: toPreviousPage,
+            icon: Icon(
+              Icons.arrow_back,
+            ),
+          ),
+        ],
+      ),
       backgroundColor: LightTheme().primaryBackgroundColor,
       body: SafeArea(
         child: Column(
@@ -156,10 +166,8 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
             ),
           );
         } else if (!_isKeyboardVisible &&
-            signUpController.pageIndex.value == 2 &&
-            (signUpController.pageIndex.value == 1 ||
-                signUpController.email.value.isEmpty) &&
-            !signUpController.email.value.isEmail) {
+            signUpController.pageIndex.value == 1 &&
+            signUpController.username.value.isEmpty) {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
@@ -171,6 +179,19 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         } else if (!_isKeyboardVisible &&
             signUpController.pageIndex.value == 2 &&
             (signUpController.pageIndex.value == 2 ||
+                signUpController.email.value.isEmpty) &&
+            !signUpController.email.value.isEmail) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 50),
+            child: NextButton(
+              pages: 2,
+              isEnabled: false,
+              nextPage: toNextPage,
+            ),
+          );
+        } else if (!_isKeyboardVisible &&
+            signUpController.pageIndex.value == 3 &&
+            (signUpController.pageIndex.value == 3 ||
                 signUpController.password.value.isEmpty) &&
             signUpController.password.value.length < 6) {
           return Container(

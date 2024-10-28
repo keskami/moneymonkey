@@ -48,6 +48,7 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
                 ),
                 const SizedBox(height: 20),
                 CustomOptionTile(
+                  isSelected: false,
                   childWidget: TextField(
                     onChanged: (value) {
                       submitEmail(value);

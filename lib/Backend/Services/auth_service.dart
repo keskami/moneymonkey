@@ -151,10 +151,10 @@ class AuthService {
       'Email': email,
       'Age': gettingStartedController.age.value,
       'Knowledge Level': gettingStartedController.knowledgeLevel.value,
-      'Learning Goal Per Day': 0,
+      'Learning Goal Per Day': startFreshController.learningGoal.value,
       'Profile': {
         'Full Name': signUpController.name.value,
-        'Username': 'Your Name Here',
+        'Username': signUpController.username.value,
         'Number of Followers': 0,
         'Following': 0,
         'Top Achievements': 0,
@@ -179,19 +179,51 @@ class AuthService {
         'Total invested Bananas': 7089,
         'Profit from Invested Bananas (Current Month)': 890,
         'Username': "Josh5"
+      },
+      'Settings': {
+        'Preferences': {
+          'Sound Effects': true,
+          'Audio': false,
+          'Dark Mode': false,
+        },
+        'Profile Settings': {
+          'Name': signUpController.username.value,
+          'Username': signUpController.name.value,
+          'Password': signUpController.password.value,
+          'Email': signUpController.email.value,
+          'Phone Number': '123-456-7890',
+        },
+        'Notifications': {
+          'Reminders': {
+            'Reminder Enabled': true,
+            'Reminder Time': '08:00 AM',
+            'Practice Time': 'Email',
+            'Weekly Progress': 'Email',
+          },
+          'Friends': {
+            'New Follower': 'Phone',
+            'Friend Activity': 'Email',
+          },
+          'Announcements': {
+            'Marketing Notifications': 'Email',
+            'Educational Tips': 'Phone',
+          },
+        },
+        'Privacy Settings': {
+          'Public Profile': true,
+        },
       }
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
 
-    await transactionsRef.add(
-      {
-        'Source/Destination': 'Test Source',
-        'Amount': 200,
-        'Date': FieldValue.serverTimestamp(),
-        'Type': "Income"
-      },
-    );
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source',
+      'Amount': 200,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
     await transactionsRef.add({
       'Source/Destination': 'Test Source 2',
       'Amount': 150,

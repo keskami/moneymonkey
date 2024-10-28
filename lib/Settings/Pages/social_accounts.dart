@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Settings/Widgets/custom_list_tile.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class SocialAccountsSettingsPage extends StatelessWidget {
+  const SocialAccountsSettingsPage({super.key});
 
   // Define common text style to avoid repetition
   TextStyle _sectionTitleStyle() {
@@ -34,7 +34,7 @@ class SettingsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Account",
+                  "Lesson Preferences",
                   style: _sectionTitleStyle(),
                 ),
                 const SizedBox(
@@ -43,7 +43,7 @@ class SettingsPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(30),
                       color: const Color.fromARGB(255, 250, 250, 250),
                       boxShadow: const [
                         BoxShadow(
@@ -53,37 +53,31 @@ class SettingsPage extends StatelessWidget {
                           color: Colors.grey,
                         )
                       ]),
-                  child: const Column(
+                  child: Column(
                     children: [
                       CustomListTile(
-                        title: "Preferences",
+                        title: "Difficulty Level",
+                        isToggle: false,
+                        onTap: () {},
                       ),
                       Divider(),
                       CustomListTile(
-                        title: "Profile",
+                        title: "Sound Effects",
+                        isToggle: true,
+                        onTap: () {},
                       ),
                       Divider(),
                       CustomListTile(
-                        title: "Notifications",
-                      ),
-                      Divider(),
-                      CustomListTile(
-                        title: "Privacy Settings",
-                      ),
-                      Divider(),
-                      CustomListTile(
-                        title: "Subscription",
-                      ),
-                      Divider(),
-                      CustomListTile(
-                        title: "Social Accounts",
+                        title: "Audio",
+                        isToggle: true,
+                        onTap: () {},
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "Support",
+                  "Appearance",
                   style: _sectionTitleStyle(),
                 ),
                 const SizedBox(
@@ -92,7 +86,7 @@ class SettingsPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(35),
                       color: const Color.fromARGB(255, 250, 250, 250),
                       boxShadow: const [
                         BoxShadow(
@@ -101,14 +95,12 @@ class SettingsPage extends StatelessWidget {
                           color: Colors.grey,
                         )
                       ]),
-                  child: const Column(
+                  child: Column(
                     children: [
                       CustomListTile(
-                        title: "Help Center",
-                      ),
-                      Divider(),
-                      CustomListTile(
-                        title: "Feedback",
+                        title: "Dark Mode",
+                        isToggle: true,
+                        onTap: () {},
                       ),
                     ],
                   ),

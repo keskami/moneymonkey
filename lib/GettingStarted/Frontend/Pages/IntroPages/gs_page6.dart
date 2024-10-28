@@ -4,11 +4,18 @@ import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/knowledge_bar.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 
-class GettingStartedPage6 extends StatelessWidget {
+class GettingStartedPage6 extends StatefulWidget {
   const GettingStartedPage6({
     super.key,
   });
 
+  @override
+  State<GettingStartedPage6> createState() => _GettingStartedPage6State();
+}
+
+int selectedIndex = 6;
+
+class _GettingStartedPage6State extends State<GettingStartedPage6> {
   @override
   Widget build(BuildContext context) {
     void onKnowledgeTap(int val) {
@@ -116,9 +123,13 @@ class GettingStartedPage6 extends StatelessWidget {
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
                     print("Test");
+                    setState(() {
+                      selectedIndex = index;
+                    });
                     onKnowledgeTap(index);
                   },
                   child: CustomOptionTile(
+                    isSelected: index == selectedIndex,
                     childWidget: Row(
                       children: [
                         KnowledgeBar(strength: index),

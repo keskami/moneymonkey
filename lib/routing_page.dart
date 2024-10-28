@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
 
 import 'Backend/Models/stock_data.dart';
 
@@ -62,7 +63,7 @@ class MainPage extends StatelessWidget {
               //   userID: userId,
               //   user: user!,
               // );
-              return GettingStartedHome();
+              return ProfilePage();
             }
           } else {
             return GettingStartedHome();

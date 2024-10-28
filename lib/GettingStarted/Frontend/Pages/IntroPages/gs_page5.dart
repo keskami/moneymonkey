@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/IntroPages/gs_page1.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
@@ -66,28 +67,33 @@ class GettingStartedPage5 extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            CustomOptionTile(
-              childWidget: TextField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: gettingStartedController.age.value == 0
-                      ? "Age"
-                      : gettingStartedController.age.value.toString(),
-                  hintStyle: const TextStyle(
-                    fontSize: 23,
+            Obx(
+              () {
+                return CustomOptionTile(
+                  isSelected: gettingStartedController.age.value != 0,
+                  childWidget: TextField(
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: gettingStartedController.age.value == 0
+                          ? "Age"
+                          : gettingStartedController.age.value.toString(),
+                      hintStyle: const TextStyle(
+                        fontSize: 23,
+                      ),
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(),
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 178, 182, 182),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onSubmitted: (value) {
+                      submitAge(int.parse(value));
+                    },
                   ),
-                ),
-                keyboardType: const TextInputType.numberWithOptions(),
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 178, 182, 182),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                onSubmitted: (value) {
-                  submitAge(int.parse(value));
-                },
-              ),
+                );
+              },
             )
           ],
         ),

@@ -4,8 +4,15 @@ import 'package:money_monkey/GettingStarted/Frontend/Widgets/chat_bubble.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
 
-class StartFreshPage3 extends StatelessWidget {
+class StartFreshPage3 extends StatefulWidget {
   const StartFreshPage3({super.key});
+
+  @override
+  State<StartFreshPage3> createState() => _StartFreshPage3State();
+}
+
+class _StartFreshPage3State extends State<StartFreshPage3> {
+  int selectedIndex = 5;
   @override
   Widget build(BuildContext context) {
     StartFreshController startFreshController = Get.find();
@@ -141,8 +148,14 @@ class StartFreshPage3 extends StatelessWidget {
             child: ListView.builder(
               itemCount: learningGoals.length,
               itemBuilder: (context, index) => GestureDetector(
-                onTap: () => onTapGoal(index + 1),
+                onTap: () {
+                  onTapGoal(index + 1);
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
                 child: CustomOptionTile(
+                  isSelected: selectedIndex == index,
                   childWidget: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 5,
