@@ -94,6 +94,19 @@ class _LoginScreenState extends State<LoginScreen> {
     if (userSnapshot.exists) {
       return;
     }
+  List<String> following = [
+    '0K5qbpt2arTOIXhRGOVUsisZTY33',
+    '1GeIwS8kzsXFYT3Me6nq2yOxI2T2',
+    '2e0qIa2xG0eG7yo5ry5dibjpFav2'
+  ];
+
+  List<String> followers = [
+    '0K5qbpt2arTOIXhRGOVUsisZTY33',
+    '1GeIwS8kzsXFYT3Me6nq2yOxI2T2',
+    '2e0qIa2xG0eG7yo5ry5dibjpFav2',
+    '49lMaLKlCKb2giqqiE62mD0Imrr1'
+  ];
+
 
     await userDocRef.set({
       'User ID': userId,
@@ -128,7 +141,10 @@ class _LoginScreenState extends State<LoginScreen> {
         'Total invested Bananas': 7089,
         'Profit from Invested Bananas (Current Month)': 890,
         'Username': "Josh5"
-      }
+      },
+
+    'following': following, 
+    'followers': followers,  
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
