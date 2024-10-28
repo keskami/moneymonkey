@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/friendsPages/friendsHome.dart';
 
 class LoginScreen extends StatefulWidget {

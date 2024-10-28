@@ -2,5 +2,6 @@
   "C_Cpp.errorSquiggles": "enabled",
   "cmake.sourceDirectory": "/Users/kk/Desktop/Github/moneymonkey/Money-Monkey/money_monkey/linux",
   "java.configuration.updateBuildConfiguration": "automatic",
-  "cmake.ignoreCMakeListsMissing": true
+  "cmake.ignoreCMakeListsMissing": true,
+  "java.compile.nullAnalysis.mode": "automatic"
 }

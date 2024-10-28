@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/friendsPages/friendsHome.dart';
+import 'package:money_monkey/friendsPages/friendsProfile.dart';
 
 class FriendsFromContacts extends StatefulWidget {
   const FriendsFromContacts({super.key});
@@ -190,12 +191,20 @@ class _FriendsFromContactsState extends State<FriendsFromContacts> {
                     SizedBox(
                       width: 10 * screenWidthUnit,
                     ),
-                    Container(
-                      height: screenHeightUnit * 46,
-                      width: screenHeightUnit * 46,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(220, 220, 220, 1),
-                        shape: BoxShape.circle,
+                     GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => friendProfile()));
+                      },
+                      child: Container(
+                        height: screenHeightUnit * 46,
+                        width: screenHeightUnit * 46,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(220, 220, 220, 1),
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     ),
                     SizedBox(

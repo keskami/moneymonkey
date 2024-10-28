@@ -12,10 +12,8 @@ import 'package:money_monkey/friendsPages/Widgets/add_friends_button_friends.dar
 import 'package:money_monkey/themes/color_themes.dart';
 import 'package:money_monkey/friendsPages/Widgets/custom_stat_friends.dart';
 
-
-
 class friendProfile extends StatefulWidget {
-   friendProfile({
+  friendProfile({
     super.key,
   });
 
@@ -28,8 +26,8 @@ class _friendProfileState extends State<friendProfile> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  UserData? userData; 
-  bool isLoading = true; 
+  UserData? userData;
+  bool isLoading = true;
   final FirestoreService firestoreService = FirestoreService();
 
   void getUserInfo() async {
@@ -68,12 +66,9 @@ class _friendProfileState extends State<friendProfile> {
               width: MediaQuery.of(context).size.width,
               color: LightTheme().primaryBackgroundColor,
               child: isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator()) 
+                  ? const Center(child: CircularProgressIndicator())
                   : userData == null
-                      ? const Center(
-                          child:
-                              Text("Error loading user data")) 
+                      ? const Center(child: Text("Error loading user data"))
                       : Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 15,
@@ -187,9 +182,11 @@ class _friendProfileState extends State<friendProfile> {
                               const SizedBox(
                                 height: 10,
                               ),
-                               Row(
+                              Row(
                                 children: [
-                                  AddFriendsButtonFriends(follows: false,),
+                                  AddFriendsButtonFriends(
+                                    follows: false,
+                                  ),
                                   Spacer(),
                                   ShareButton(),
                                 ],
@@ -307,16 +304,14 @@ class _friendProfileState extends State<friendProfile> {
       bottomNavigationBar: _buildBottomBar(context),
       floatingActionButton: IconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const SettingsPage(),
-          ));
+          Navigator.of(context).pop();
         },
         icon: const Icon(
-          Icons.settings,
+          Icons.arrow_back,
           size: 40,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
     );
   }
 
