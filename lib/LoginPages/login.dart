@@ -94,19 +94,16 @@ class _LoginScreenState extends State<LoginScreen> {
     if (userSnapshot.exists) {
       return;
     }
-  List<String> following = [
-    '0K5qbpt2arTOIXhRGOVUsisZTY33',
-    '1GeIwS8kzsXFYT3Me6nq2yOxI2T2',
-    '2e0qIa2xG0eG7yo5ry5dibjpFav2'
-  ];
+    List<String> following = [
+      "QofNULUkjTRKL0cQccTNrwuri5I3",
+      '7dj9N77S66anoMSzGc442iItH2u1',
+    ];
 
-  List<String> followers = [
-    '0K5qbpt2arTOIXhRGOVUsisZTY33',
-    '1GeIwS8kzsXFYT3Me6nq2yOxI2T2',
-    '2e0qIa2xG0eG7yo5ry5dibjpFav2',
-    '49lMaLKlCKb2giqqiE62mD0Imrr1'
-  ];
-
+    List<String> followers = [
+      "QofNULUkjTRKL0cQccTNrwuri5I3",
+      'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
+      '6mMH88Ebp4aiYWIT3jGfBDyxxRB2'
+    ];
 
     await userDocRef.set({
       'User ID': userId,
@@ -142,9 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
         'Profit from Invested Bananas (Current Month)': 890,
         'Username': "Josh5"
       },
-
-    'following': following, 
-    'followers': followers,  
+      'following': following,
+      'followers': followers,
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
@@ -184,7 +180,6 @@ class _LoginScreenState extends State<LoginScreen> {
       'Date': FieldValue.serverTimestamp(),
       'Type': "Income"
     });
-    await ensureProgressionExists(userDocRef);
   }
 
   Future<void> ensureProgressionExists(DocumentReference userDocRef) async {

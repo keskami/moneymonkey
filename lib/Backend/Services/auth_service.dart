@@ -106,7 +106,7 @@ class AuthService {
   }
 
   //Add User Details
-  Future<void> addUserDetails(String userId, String email) async {
+   Future<void> addUserDetails(String userId, String email) async {
     final userDocRef =
         FirebaseFirestore.instance.collection('Users').doc(userId);
     final userSnapshot = await userDocRef.get();
@@ -114,6 +114,21 @@ class AuthService {
     if (userSnapshot.exists) {
       return;
     }
+  List<String> following = [
+    //"QofNULUkjTRKL0cQccTNrwuri5I3",
+    'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
+    '6mMH88Ebp4aiYWIT3jGfBDyxxRB2',
+  ];
+
+  List<String> followers = [
+    "QofNULUkjTRKL0cQccTNrwuri5I3",
+    'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
+    '6mMH88Ebp4aiYWIT3jGfBDyxxRB2'
+
+
+ 
+  ];
+
 
     await userDocRef.set({
       'User ID': userId,
@@ -148,7 +163,10 @@ class AuthService {
         'Total invested Bananas': 7089,
         'Profit from Invested Bananas (Current Month)': 890,
         'Username': "Josh5"
-      }
+      },
+
+    'following': following, 
+    'followers': followers,  
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
