@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Settings/Widgets/custom_list_tile.dart';
+import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 
 class HelpCenter extends StatelessWidget {
   const HelpCenter({super.key});
@@ -55,21 +55,18 @@ class HelpCenter extends StatelessWidget {
                       ]),
                   child: Column(
                     children: [
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Difficulty Level",
-                        isToggle: false,
                         onTap: () {},
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Sound Effects",
-                        isToggle: true,
                         onTap: () {},
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Audio",
-                        isToggle: true,
                         onTap: () {},
                       ),
                     ],
@@ -97,9 +94,8 @@ class HelpCenter extends StatelessWidget {
                       ]),
                   child: Column(
                     children: [
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Dark Mode",
-                        isToggle: true,
                         onTap: () {},
                       ),
                     ],

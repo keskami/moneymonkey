@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Settings/Widgets/custom_list_tile.dart';
+import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
+import 'package:money_monkey/Settings/Widgets/custom_list_switch_tile.dart';
 
-class PreferencesSettingsPage extends StatelessWidget {
+class PreferencesSettingsPage extends StatefulWidget {
   const PreferencesSettingsPage({super.key});
 
+  @override
+  State<PreferencesSettingsPage> createState() =>
+      _PreferencesSettingsPageState();
+}
+
+class _PreferencesSettingsPageState extends State<PreferencesSettingsPage> {
   // Define common text style to avoid repetition
   TextStyle _sectionTitleStyle() {
     return GoogleFonts.baloo2(
@@ -12,6 +19,10 @@ class PreferencesSettingsPage extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
   }
+
+  bool audio = true;
+  bool darkMode = true;
+  bool soundEffect = true;
 
   @override
   Widget build(BuildContext context) {
@@ -55,22 +66,29 @@ class PreferencesSettingsPage extends StatelessWidget {
                       ]),
                   child: Column(
                     children: [
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Difficulty Level",
-                        isToggle: false,
                         onTap: () {},
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListSwitchTile(
                         title: "Sound Effects",
-                        isToggle: true,
-                        onTap: () {},
+                        val: soundEffect,
+                        onTap: () {
+                          setState(() {
+                            soundEffect = !soundEffect;
+                          });
+                        },
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListSwitchTile(
                         title: "Audio",
-                        isToggle: true,
-                        onTap: () {},
+                        val: audio,
+                        onTap: () {
+                          setState(() {
+                            audio = !audio;
+                          });
+                        },
                       ),
                     ],
                   ),
@@ -97,10 +115,14 @@ class PreferencesSettingsPage extends StatelessWidget {
                       ]),
                   child: Column(
                     children: [
-                      CustomListTile(
+                      CustomListSwitchTile(
                         title: "Dark Mode",
-                        isToggle: true,
-                        onTap: () {},
+                        val: darkMode,
+                        onTap: () {
+                          setState(() {
+                            darkMode = !darkMode;
+                          });
+                        },
                       ),
                     ],
                   ),

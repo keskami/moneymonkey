@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Settings/Widgets/custom_list_tile.dart';
+
+import '../../themes/color_themes.dart';
 
 class ProfileSettingsPage extends StatelessWidget {
   const ProfileSettingsPage({super.key});
@@ -33,61 +34,55 @@ class ProfileSettingsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Lesson Preferences",
-                  style: _sectionTitleStyle(),
-                ),
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: const Color.fromARGB(255, 250, 250, 250),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 5,
-                          spreadRadius: BorderSide.strokeAlignOutside,
-                          offset: Offset(2, 2),
-                          color: Colors.grey,
-                        )
-                      ]),
+                Center(
                   child: Column(
                     children: [
-                      CustomListTile(
-                        title: "Difficulty Level",
-                        isToggle: false,
-                        onTap: () {},
+                      Image.network(
+                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FSettings%2Fno_pfp.png?alt=media&token=183f93b2-ae78-470f-9935-b04c14180bbe",
                       ),
-                      Divider(),
-                      CustomListTile(
-                        title: "Sound Effects",
-                        isToggle: true,
-                        onTap: () {},
+                      const SizedBox(
+                        height: 10,
                       ),
-                      Divider(),
-                      CustomListTile(
-                        title: "Audio",
-                        isToggle: true,
-                        onTap: () {},
+                      Text(
+                        "Change Image",
+                        style: TextStyle(
+                          color: LightTheme().primaryBlue,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
                 Text(
-                  "Appearance",
+                  "Name",
                   style: _sectionTitleStyle(),
                 ),
-                const SizedBox(
-                  height: 20,
+                Text(
+                  "Username",
+                  style: _sectionTitleStyle(),
+                ),
+                Text(
+                  "Password",
+                  style: _sectionTitleStyle(),
+                ),
+                Text(
+                  "Email",
+                  style: _sectionTitleStyle(),
+                ),
+                Text(
+                  "Phone Number",
+                  style: _sectionTitleStyle(),
                 ),
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(35),
-                      color: const Color.fromARGB(255, 250, 250, 250),
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color.fromARGB(255, 240, 240, 240),
                       boxShadow: const [
                         BoxShadow(
                           blurRadius: 5,
@@ -95,14 +90,15 @@ class ProfileSettingsPage extends StatelessWidget {
                           color: Colors.grey,
                         )
                       ]),
-                  child: Column(
-                    children: [
-                      CustomListTile(
-                        title: "Dark Mode",
-                        isToggle: true,
-                        onTap: () {},
+                  child: Center(
+                    child: Text(
+                      "Delete Account",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],

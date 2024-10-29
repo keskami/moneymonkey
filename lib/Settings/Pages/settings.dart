@@ -8,13 +8,12 @@ import 'package:money_monkey/Settings/Pages/privacy_settings.dart';
 import 'package:money_monkey/Settings/Pages/profile.dart';
 import 'package:money_monkey/Settings/Pages/social_accounts.dart';
 import 'package:money_monkey/Settings/Pages/subscription.dart';
-import 'package:money_monkey/Settings/Widgets/custom_list_tile.dart';
+import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
-  // Define common text style to avoid repetition
   TextStyle _sectionTitleStyle() {
     return GoogleFonts.baloo2(
       fontSize: 24,
@@ -25,11 +24,14 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: LightTheme().primaryBackgroundColor,
       appBar: AppBar(
+        backgroundColor: LightTheme().primaryBackgroundColor,
         centerTitle: true,
         title: Text(
           "Settings",
           style: GoogleFonts.inter(
+            color: Colors.black,
             fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
@@ -64,9 +66,8 @@ class SettingsPage extends StatelessWidget {
                       ]),
                   child: Column(
                     children: [
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Preferences",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -77,9 +78,8 @@ class SettingsPage extends StatelessWidget {
                         },
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Profile",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -90,9 +90,8 @@ class SettingsPage extends StatelessWidget {
                         },
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Notifications",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -103,9 +102,8 @@ class SettingsPage extends StatelessWidget {
                         },
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Privacy Settings",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -116,9 +114,8 @@ class SettingsPage extends StatelessWidget {
                         },
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Subscription",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -129,9 +126,8 @@ class SettingsPage extends StatelessWidget {
                         },
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Social Accounts",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -167,9 +163,8 @@ class SettingsPage extends StatelessWidget {
                       ]),
                   child: Column(
                     children: [
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Help Center",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -180,9 +175,8 @@ class SettingsPage extends StatelessWidget {
                         },
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Feedback",
-                        isToggle: false,
                         onTap: () {
                           Navigator.push(
                             context,

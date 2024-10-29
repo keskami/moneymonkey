@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Settings/Widgets/custom_list_tile.dart';
+import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 
 class NotificationSettingsPage extends StatelessWidget {
   const NotificationSettingsPage({super.key});
@@ -51,21 +51,18 @@ class NotificationSettingsPage extends StatelessWidget {
                       ]),
                   child: Column(
                     children: [
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Reminders",
-                        isToggle: false,
                         onTap: () {},
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Friends",
-                        isToggle: false,
                         onTap: () {},
                       ),
                       Divider(),
-                      CustomListTile(
+                      CustomListButtonTile(
                         title: "Announcements",
-                        isToggle: false,
                         onTap: () {},
                       ),
                     ],

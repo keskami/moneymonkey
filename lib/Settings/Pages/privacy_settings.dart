@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PrivacySettingsPage extends StatelessWidget {
+class PrivacySettingsPage extends StatefulWidget {
   const PrivacySettingsPage({super.key});
 
+  @override
+  State<PrivacySettingsPage> createState() => _PrivacySettingsPageState();
+}
+
+class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
   // Define common text style to avoid repetition
   TextStyle _sectionTitleStyle() {
     return GoogleFonts.baloo2(
@@ -11,6 +16,8 @@ class PrivacySettingsPage extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
   }
+
+  bool val = true;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +60,12 @@ class PrivacySettingsPage extends StatelessWidget {
                         ),
                       ),
                       trailing: Switch(
-                        value: true,
-                        onChanged: (value) {},
+                        value: val,
+                        onChanged: (value) {
+                          setState(() {
+                            val = !val;
+                          });
+                        },
                       ),
                     )
                   ],

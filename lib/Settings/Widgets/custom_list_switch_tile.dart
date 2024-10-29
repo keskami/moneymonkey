@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomListTile extends StatelessWidget {
-  const CustomListTile({
+class CustomListSwitchTile extends StatelessWidget {
+  const CustomListSwitchTile({
     super.key,
     required this.title,
-    required this.isToggle,
     required this.onTap,
+    required this.val,
   });
   final String title;
-  final bool isToggle;
+  final bool val;
   final void Function() onTap;
   @override
   Widget build(BuildContext context) {
@@ -22,19 +22,13 @@ class CustomListTile extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      trailing: isToggle
-          ? Switch(
-              value: true,
-              onChanged: (value) {},
-            )
-          : IconButton(
-              onPressed: onTap,
-              icon: Icon(
-                Icons.arrow_forward,
-                color: Colors.black,
-                size: 30,
-              )),
+      trailing: Switch(
+        value: val,
+        activeColor: Colors.grey,
+        onChanged: (value) {
+          onTap();
+        },
+      ),
     );
-    ;
   }
 }
