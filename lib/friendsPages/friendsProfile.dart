@@ -58,6 +58,8 @@ class _friendProfileState extends State<friendProfile> {
   }
 
   int _currentIndex = 3;
+  
+
   @override
   Widget build(BuildContext context) {
     // Screen width and height
@@ -193,6 +195,7 @@ class _friendProfileState extends State<friendProfile> {
                                 children: [
                                   AddFriendsButtonFriends(
                                     follows: isFollowing,
+                                    otherID: widget.otherID,
                                   ),
                                   Spacer(),
                                   ShareButton(),

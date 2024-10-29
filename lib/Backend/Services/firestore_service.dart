@@ -39,16 +39,14 @@ class FirestoreService {
       if (data != null) {
 
         List<String>? userFollowing = List<String>.from(data['following'] ?? []);
-        print(userFollowing);
-        print(otherID);
-        print(userFollowing.contains(otherID));
+        
         return userFollowing.contains(otherID);
       }
     }
-    return false; // User document doesn't exist or following list is empty
+    return false;
   } catch (e) {
     print("Error fetching user data: $e");
-    return false; // Return false on error
+    return false; 
   }
 }
 
