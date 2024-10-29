@@ -114,8 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
       'Profile': {
         'Full Name': 'Your Name Here',
         'Username': 'Your Name Here',
-        'Number of Followers': 0,
-        'Following': 0,
+        'Number of Followers': 3,
+        'Following': 2,
         'Top Achievements': 0,
         'Streak': 0,
         'Total Profit': 0,

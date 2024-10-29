@@ -23,55 +23,74 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
           image: "assets/images/magGlass.png",
           whySuggested: "You may know each other",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: 'X8VCqOuUYHcVj15wodH8uuEmV393',
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: "yUx6lW8G1xW6BoxiMQWwGKMdxi93"
+          
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: "yUx6lW8G1xW6BoxiMQWwGKMdxi93"
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: "yUx6lW8G1xW6BoxiMQWwGKMdxi93"
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: 'yUx6lW8G1xW6BoxiMQWwGKMdxi93'
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: 'yUx6lW8G1xW6BoxiMQWwGKMdxi93'
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: 'yUx6lW8G1xW6BoxiMQWwGKMdxi93'
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: 'yUx6lW8G1xW6BoxiMQWwGKMdxi93'
+          ),
       friendSuggestion(
           name: "Kestan Kamei",
           image: "assets/images/magGlass.png",
           whySuggested: "Followed by Jacob Lee",
           screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
+          screenWidthUnit: screenWidthUnit,
+          otherID: '"yUx6lW8G1xW6BoxiMQWwGKMdxi93"'
+          ),
     ];
 
     return Scaffold(
@@ -155,6 +174,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
     required String whySuggested,
     required double screenHeightUnit,
     required double screenWidthUnit,
+    required String otherID,
   }) {
     return name.isEmpty
         ? Container(
@@ -189,7 +209,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => friendProfile()));
+                                builder: (context) => friendProfile(otherID: otherID,)));
                       },
                       child: Container(
                         height: screenHeightUnit * 46,

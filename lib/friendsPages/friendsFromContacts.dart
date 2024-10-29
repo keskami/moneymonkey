@@ -196,7 +196,7 @@ class _FriendsFromContactsState extends State<FriendsFromContacts> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => friendProfile()));
+                                builder: (context) => friendProfile(otherID: 'lll',)));
                       },
                       child: Container(
                         height: screenHeightUnit * 46,

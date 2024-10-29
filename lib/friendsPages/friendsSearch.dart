@@ -211,7 +211,7 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => friendProfile()));
+                                builder: (context) => friendProfile(otherID: '',)));
                       },
                       child: Container(
                         height: screenHeightUnit * 46,

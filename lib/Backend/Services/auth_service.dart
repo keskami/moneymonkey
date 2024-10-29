@@ -115,9 +115,8 @@ class AuthService {
       return;
     }
   List<String> following = [
-    //"QofNULUkjTRKL0cQccTNrwuri5I3",
+    "QofNULUkjTRKL0cQccTNrwuri5I3",
     'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
-    '6mMH88Ebp4aiYWIT3jGfBDyxxRB2',
   ];
 
   List<String> followers = [
@@ -139,8 +138,8 @@ class AuthService {
       'Profile': {
         'Full Name': 'Your Name Here',
         'Username': 'Your Name Here',
-        'Number of Followers': 0,
-        'Following': 0,
+        'Number of Followers': 3,
+        'Following': 2,
         'Top Achievements': 0,
         'Streak': 0,
         'Total Profit': 0,

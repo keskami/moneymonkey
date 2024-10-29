@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 
 class FirestoreService {
@@ -24,4 +25,31 @@ class FirestoreService {
       return null;
     }
   }
+
+  Future<bool> isFollowing(String userId, String otherID) async {
+   
+  try {
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _db.collection('Users').doc(userId).get();
+       
+    if (snapshot.exists) {
+      Map<String, dynamic>? data = snapshot.data();
+
+      
+      if (data != null) {
+
+        List<String>? userFollowing = List<String>.from(data['following'] ?? []);
+        print(userFollowing);
+        print(otherID);
+        print(userFollowing.contains(otherID));
+        return userFollowing.contains(otherID);
+      }
+    }
+    return false; // User document doesn't exist or following list is empty
+  } catch (e) {
+    print("Error fetching user data: $e");
+    return false; // Return false on error
+  }
+}
+
 }

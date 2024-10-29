@@ -7,14 +7,17 @@ import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
 import 'package:money_monkey/Settings/settings.dart';
 import 'package:money_monkey/friendsPages/Widgets/add_friends_button_friends.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'package:money_monkey/friendsPages/Widgets/custom_stat_friends.dart';
 
 class friendProfile extends StatefulWidget {
+  final String otherID;
   friendProfile({
     super.key,
+     required this.otherID
   });
 
   @override
@@ -28,13 +31,16 @@ class _friendProfileState extends State<friendProfile> {
 
   UserData? userData;
   bool isLoading = true;
+  late bool isFollowing = false;
   final FirestoreService firestoreService = FirestoreService();
 
   void getUserInfo() async {
     try {
-      userData = await firestoreService.getUserData(userID!);
+      userData = await firestoreService.getUserData(widget.otherID!);
+      isFollowing = await firestoreService.isFollowing(userID!, widget.otherID);
+      
       if (userData == null) {
-        print("User data is null for userID: ${userID!}");
+        print("User data is null for userID: ${widget.otherID!!}");
       }
     } catch (e) {
       print("Error fetching user data: $e");
@@ -68,7 +74,7 @@ class _friendProfileState extends State<friendProfile> {
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : userData == null
-                      ? const Center(child: Text("Error loading user data"))
+                      ? const Center(child: Text("loading user data"))
                       : Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 15,
@@ -103,6 +109,7 @@ class _friendProfileState extends State<friendProfile> {
                                   },
                                 ),
                               ),
+                             
                               Text(
                                 userData!.profile.fullName,
                                 style: const TextStyle(
@@ -185,7 +192,7 @@ class _friendProfileState extends State<friendProfile> {
                               Row(
                                 children: [
                                   AddFriendsButtonFriends(
-                                    follows: false,
+                                    follows: isFollowing,
                                   ),
                                   Spacer(),
                                   ShareButton(),
@@ -335,7 +342,7 @@ class _friendProfileState extends State<friendProfile> {
         }
         if (_currentIndex == 3) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => friendProfile(),
+            builder: (context) => ProfilePage(),
           ));
         }
       },
