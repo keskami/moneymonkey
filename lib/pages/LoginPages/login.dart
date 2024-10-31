@@ -1,14 +1,12 @@
 // ignore_for_file: prefer_final_fields
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'package:moneymonkey/pages/ProfilePages/profileScreen.dart';
 import 'package:moneymonkey/screens/home.dart';
-
-import 'package:moneymonkey/screens/marketscreen.dart';
+// import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
+// import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,7 +17,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  
   @override
   void initState() {
     super.initState();
@@ -72,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red,
           ));
-        } else if (e.code == 'network-request-failed') {
+        } else if (e.code == 'newtwork-request-failed') {
           if (!mounted) {
             return;
           }
@@ -88,40 +85,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-Future<void> createUserInFirestore(String userId, String email) async {
-  try {
-    final userDocRef = FirebaseFirestore.instance.collection('Users').doc(userId);
+  Future<void> addUserDetails(String userId, String email) async {
+    final userDocRef =
+        FirebaseFirestore.instance.collection('Users').doc(userId);
     final userSnapshot = await userDocRef.get();
 
-    if (!userSnapshot.exists) {
-      // Adding user details to Firestore if not already present
-      await addUserDetails(userId, email);
-    } else {
-      // If user exists, still ensure Progression sub-collection exists
-      await ensureProgressionExists(userDocRef);
+    if (userSnapshot.exists) {
+      return;
     }
-  } catch (e) {
-    print("Error creating user in Firestore: $e");
-  }
-}
 
-Future<void> addUserDetails(String userId, String email) async {
-  try {
-    final userDocRef = FirebaseFirestore.instance.collection('Users').doc(userId);
-    final userSnapshot = await userDocRef.get();
-
-    if (!userSnapshot.exists) {
-      // Add user details
-      await userDocRef.set({
-        'User ID': userId,
-        'Email': email,
-        'Age': 0,
-        'Knowledge Level': 0,
-        'Learning Goal Per Day': 0
-      });
-
-      // Add profile sub-collection
-      await userDocRef.collection('profile').doc('userProfile').set({
+    await userDocRef.set({
+      'User ID': userId,
+      'Email': email,
+      'Age': 0,
+      'Knowledge Level': 0,
+      'Learning Goal Per Day': 0,
+      'Profile': {
         'Full Name': 'Your Name Here',
         'Username': 'Your Name Here',
         'Number of Followers': 0,
@@ -130,40 +109,91 @@ Future<void> addUserDetails(String userId, String email) async {
         'Streak': 0,
         'Total Profit': 0,
         'Average Monthly Growth': 0,
-      });
-    }
+      },
+      'Portfolio': {
+        'Total Bananas': 8976,
+        'Balance': 908,
+        'Weekly net gain': -90,
+      },
+      'Invest Page (Discover)': {
+        'Total Invested (Stocks)': 100,
+        'Total Profit (Stocks)': 50,
+        'Total Invested (ETFs)': 300,
+        'Total Profit (ETFs)': -50,
+        'Total Invested (Mutual Funds)': 500,
+        'Total Profit (Mutual Funds)': 600,
+        'Total Invested (Bonds)': 234,
+        'Total Profit (Bonds)': -10,
+        'Total invested Bananas': 7089,
+        'Profit from Invested Bananas (Current Month)': 890,
+        'Username': "Josh5"
+      }
+    });
 
-    // Ensure the Progression sub-collection is created
+    final transactionsRef = userDocRef.collection('Transactions');
+
+    await transactionsRef.add(
+      {
+        'Source/Destination': 'Test Source',
+        'Amount': 200,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Income"
+      },
+    );
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 2',
+      'Amount': 150,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 1',
+      'Amount': -100,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Expense Source 2',
+      'Amount': -50,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Expense"
+    });
+
+    await transactionsRef.add({
+      'Source/Destination': 'Test Source 3',
+      'Amount': 300,
+      'Date': FieldValue.serverTimestamp(),
+      'Type': "Income"
+    });
     await ensureProgressionExists(userDocRef);
-  } catch (e) {
-    print("Error adding user details: $e");
   }
-}
-// Function to ensure Progression sub-collection exists
-Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
-  try {
-    final progressionCollectionRef = userDocRef.collection('Progression');
-    final progressionSnapshot = await progressionCollectionRef.get();
 
-    if (progressionSnapshot.docs.isEmpty) {
-      await progressionCollectionRef.doc('progression1').set({
-        'Level': 1,
-        'Unit': 1,
-        'Lesson': 'Earning and Saving',
-        'Progress': 0,
-        'Quiz Scores': [],
-        'Earnings from Lesson': {
-          'Monkeys': 0,
-          'Diamonds': 0,
-          'Bananas': 0,
-        },
-      });
-      print("Progression sub-collection created for user.");
+  Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
+    try {
+      final progressionCollectionRef = userDocRef.collection('Progression');
+      final progressionSnapshot = await progressionCollectionRef.get();
+
+      if (progressionSnapshot.docs.isEmpty) {
+        await progressionCollectionRef.doc('progression1').set({
+          'Level': 1,
+          'Unit': 1,
+          'Lesson': 'Earning and Saving',
+          'Progress': 0,
+          'Quiz Scores': [],
+          'Earnings from Lesson': {
+            'Monkeys': 0,
+            'Diamonds': 0,
+            'Bananas': 0,
+          },
+        });
+        print("Progression sub-collection created for user.");
+      }
+    } catch (e) {
+      print("Error ensuring progression sub-collection: $e");
     }
-  } catch (e) {
-    print("Error ensuring progression sub-collection: $e");
   }
-}
 
   Future<void> logIn() async {
     try {
@@ -173,16 +203,14 @@ Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
         password: _loginPasswordController.text.trim(),
       );
       String userId = userCredential.user?.uid ?? '';
-        String email = userCredential.user?.email ?? '';
-      if (userId.isNotEmpty && email.isNotEmpty) {
-         await createUserInFirestore(userId, email);
+      if (userId.isNotEmpty) {
         if (!mounted) {
           return;
         }
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  HomePage(),
+            builder: (context) => HomePage(),
           ),
         );
       }
@@ -218,22 +246,44 @@ Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
         ));
       }
     }
-    
   }
 
-  Future googleAuth() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<void> googleAuth(BuildContext context) async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signInSilently();
 
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    googleUser ??= await GoogleSignIn().signIn();
 
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    String userId = userCredential.user?.uid ?? '';
-    String email = userCredential.user?.email ?? '';
-    if (email.isNotEmpty) {
-      addUserDetails(userId, email);
+    if (googleUser != null) {
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      String userId = userCredential.user?.uid ?? '';
+      String email = userCredential.user?.email ?? '';
+      if (userId.isNotEmpty) {
+        final userDocRef =
+            FirebaseFirestore.instance.collection('Users').doc(userId);
+        final userSnapshot = await userDocRef.get();
+
+        if (!userSnapshot.exists) {
+          await addUserDetails(userId, email);
+        } else {}
+
+        if (context.mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -249,7 +299,6 @@ Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
   }
 
   // Index for create or login
-  int _selectedIndex = 1;
   // Text editing controllers
   TextEditingController _createPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
@@ -277,227 +326,236 @@ Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
 
   @override
   Widget build(BuildContext context) {
-    
+    double screenWidthUnit = MediaQuery.of(context).size.width / 400;
+    double screenHeightUnit = MediaQuery.of(context).size.height / 880;
+
     return SafeArea(
       child: Scaffold(
         body: SizedBox(
-          width: double.infinity,
+          width: screenWidthUnit * double.infinity,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 10),
+                SizedBox(height: screenHeightUnit * 19),
                 SizedBox(
-                  height: 700,
-                  width: double.infinity,
+                  height: screenHeightUnit * 1144,
+                  width: screenWidthUnit * 390,
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
+                      SizedBox(height: screenHeightUnit * 19),
                       Image.asset(
                         'assets/images/monkey.png',
-                        height: 600,
-                        width: double.infinity,
+                        height: screenHeightUnit * 390,
+                        width: screenWidthUnit * 390,
                         alignment: Alignment.topCenter,
                       ),
                       Positioned(
-                        top: 170,
-                        left: 10,
-                        right: 10,
+                        top: 210,
+                        left: 0,
+                        right: 0,
                         bottom: 0,
                         child: Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.fromLTRB(13, 16, 0, 0),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(
                               color: Colors.grey.withOpacity(.5),
-                              width: 2,
+                              width: screenWidthUnit * 3,
                             ),
                             borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 10.0,
+                                spreadRadius: 3.0,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                  height: 10), 
-                               Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Welcome Back',
-                                          style: GoogleFonts.baloo2(
-                                            fontSize:
-                                                26, 
-                                            color: const Color.fromRGBO(
-                                                0, 0, 0, 1),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(26, 16, 0, 0),
+                                    child: Text(
+                                      'Welcome Back',
+                                      style: GoogleFonts.baloo2(
+                                        fontSize: 26,
+                                        color: const Color.fromRGBO(0, 0, 0, 1),
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(26, 9, 0, 0),
+                                    child: Text(
+                                      'Fill out the information below in order',
+                                      style: GoogleFonts.baloo2(
+                                        fontSize: 14,
+                                        color: const Color.fromRGBO(0, 0, 0, 1),
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(26, 2, 0, 0),
+                                    child: Text(
+                                      'to access your account.',
+                                      style: GoogleFonts.baloo2(
+                                        fontSize: 14,
+                                        color: const Color.fromRGBO(0, 0, 0, 1),
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(28, 29, 0, 0),
+                                    child: SizedBox(
+                                      width: screenWidthUnit * 314,
+                                      height: screenHeightUnit * 49,
+                                      child: TextField(
+                                        controller: _loginEmailController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
                                           ),
-                                          textAlign: TextAlign.left,
+                                          labelText: 'Email',
                                         ),
-                                        SizedBox(height: 10),
-
-                                        Text(
-                                          'Fill out the information below in order',
-                                          style: GoogleFonts.baloo2(
-                                            fontSize: 14,
-                                            color: const Color.fromRGBO(
-                                                0, 0, 0, 1),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(29, 9, 0, 0),
+                                    child: SizedBox(
+                                      width: screenWidthUnit * 314,
+                                      height: screenHeightUnit * 49,
+                                      child: TextField(
+                                        controller: _loginPasswordController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
                                           ),
-                                          textAlign: TextAlign.left,
+                                          labelText: 'Password',
                                         ),
-                                        Text(
-                                          'to access your account.',
-                                          style: GoogleFonts.baloo2(
-                                            fontSize: 14,
-                                            color: const Color.fromRGBO(
-                                                0, 0, 0, 1),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: screenHeightUnit * 13),
+                                  Center(
+                                    child: SizedBox(
+                                        width: screenWidthUnit * 220,
+                                        height: screenHeightUnit * 49,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            logIn();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    135, 206, 235, 1),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 5),
+                                            elevation: 8,
                                           ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                        SizedBox(
-                                            height: 30), 
-                                        SizedBox(
-                                          width: 330, 
-                                          height: 50, 
-                                          child: TextField(
-                                            controller: _loginEmailController,
-                                            decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius
-                                                    .circular(30), 
-                                              ),
-                                              labelText: 'Email',
+                                          child: const Text(
+                                            'Log in',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  252, 252, 252, 252),
+                                              fontSize: 16,
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                            height: 10), 
-                                        SizedBox(
-                                          width: 330, 
-                                          height: 50, 
-                                          child: TextField(
-                                            controller:
-                                                _loginPasswordController,
-                                            decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius
-                                                    .circular(30), 
-                                              ),
-                                              labelText: 'Password',
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            height: 12), 
-                                        Center(
-                                          child: SizedBox(
-                                              width: 
-                                                  240,
-                                              height: 47,
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  logIn();
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      const Color.fromRGBO(
-                                                          135, 206, 235, 1),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius
-                                                        .circular(30), 
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10, 
-                                                      vertical: 5), 
-                                                  elevation: 8,
-                                                ),
-                                                child: const Text(
-                                                  'Log in',
-                                                  style: TextStyle(
-                                                    color: Color.fromARGB(
-                                                        252, 252, 252, 252),
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                
-                                              )),
-                                        ),
-                                        SizedBox(
-                                            height:5), // 2% of screen height
-                                        Center(
-                                            child: Text(
-                                          "Or sign in with",
-                                          style: GoogleFonts.baloo2(
-                                              fontSize: 14,
-                                              color: const Color.fromRGBO(
-                                                  0, 0, 0, 1)),
                                         )),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Center(
-                                                child: SizedBox(
-                                                  width: 
-                                                      240, 
-                                                  height: 47,
-                                                  child: IconButton(
-                                                    icon: Image.asset(
-                                                        "assets/images/apple.png"),
-                                                    onPressed: () {
-                                                      appleAuth();
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              Center(
-                                                child: SizedBox(
-                                                  width: 240, 
-                                                  height: 47,
-                                                  child: IconButton(
-                                                    icon: Image.asset(
-                                                        "assets/images/google.png"),
-                                                    onPressed: () {
-                                                      googleAuth();
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.fromLTRB(0, 0, 50, 5),
-                                  
-                                                child: TextButton(
-                                                    onPressed: () {
-                                                      if (!mounted) {
-                                                        return;
-                                                      }
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const UserProfileScreen(),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Text(
-                                                      "If you are new, create a new account here",
-                                                      style: GoogleFonts.baloo2(
-                                                        fontSize:
-                                                            14,
-                                                        color: const Color
-                                                            .fromRGBO(
-                                                            0, 0, 0, 1),
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      ),
-                                                    )),
-                                              ),
-                                            ],
+                                  ),
+                                  SizedBox(height: screenHeightUnit * 30),
+                                  Center(
+                                      child: Text(
+                                    "Or sign in with",
+                                    style: GoogleFonts.baloo2(
+                                        fontSize: 14,
+                                        color:
+                                            const Color.fromRGBO(0, 0, 0, 1)),
+                                  )),
+                                  SizedBox(height: screenHeightUnit * 19),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Center(
+                                          child: IconButton(
+                                            icon: Image.asset(
+                                              "assets/images/apple.png",
+                                              height: screenHeightUnit * 34,
+                                              width: screenWidthUnit * 220,
+                                            ),
+                                            onPressed: () {
+                                              appleAuth();
+                                            },
                                           ),
-                                        )
+                                        ),
+                                        Center(
+                                          child: IconButton(
+                                            icon: Image.asset(
+                                              "assets/images/google.png",
+                                              height: screenHeightUnit * 34,
+                                              width: screenWidthUnit * 220,
+                                            ),
+                                            onPressed: () {
+                                              googleAuth(context);
+                                            },
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 19, 0, 0),
+                                          child: Center(
+                                            child: TextButton(
+                                                onPressed: () {
+                                                  if (!mounted) {
+                                                    return;
+                                                  }
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   MaterialPageRoute(
+                                                  //     builder: (context) =>
+                                                  //         GettingStartedHome(),
+                                                  //   ),
+                                                  // );
+                                                },
+                                                child: Text(
+                                                  "If you are new, create a new account here",
+                                                  style: GoogleFonts.baloo2(
+                                                    fontSize: 14,
+                                                    color: const Color.fromRGBO(
+                                                        0, 0, 0, 1),
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                  ),
+                                                )),
+                                          ),
+                                        ),
                                       ],
                                     ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ),

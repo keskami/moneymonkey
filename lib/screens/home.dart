@@ -41,7 +41,8 @@ late ProgressController progressController;
               const SizedBox(height: 16),
               CardTitle(),
               const SizedBox(height: 20),
-              _buildGridScreenshot(context)
+             // _buildGridScreenshot(context)
+             _buildZigzagGrid()
             ],
           ),
         ),
@@ -52,86 +53,250 @@ late ProgressController progressController;
 
   
 
-  // Grid with icons
-  Widget _buildGridScreenshot(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 36),
-        child: ListView.builder(
-          itemCount: 5, // Number of items to display
+  
+
+
+
+Widget _buildZigzagGrid() {
+  final List<String> images = [
+    "assets/images/img_screenshot_2024_08_26.png",  // First item
+    "assets/images/img_screenshot_2024_08_26_94x110.png", // Second item
+    "assets/images/img_screenshot_2024_08_26_94x110.png", // Third item
+    "assets/images/img_treasure_chest.png",         // Fourth item
+    "assets/images/img_screenshot_2024_08_26_1.png",        // Fifth item
+  ];
+
+  return Expanded(
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        double screenWidth = constraints.maxWidth;
+        double screenHeight = constraints.maxHeight;
+
+        // Scale values based on screen width and height
+        double horizontalOffsetLeft = screenWidth * 0.3; // Adjust as needed
+        double horizontalOffsetRight = screenWidth * 0.2; // Adjust as needed
+        double verticalSpacing = screenHeight * 0.02; // 2% of screen height
+        double imageWidth = screenWidth * 0.3; // 20% of screen width
+        double imageHeight = screenHeight * 0.2; // 10% of screen height
+
+        return ListView.builder(
+          itemCount: images.length,
           itemBuilder: (context, index) {
-            // Alternate alignment for zigzag effect
-            bool isEven = index % 2 == 0;
+            bool isLeftAligned = index % 2 == 0;
+             bool isEnabled = index <= progressController.currentLessonIndex.value;
+
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8), // Space between rows
+              padding: EdgeInsets.symmetric(vertical: verticalSpacing),
               child: Row(
                 mainAxisAlignment:
-                    isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
+                    isLeftAligned ? MainAxisAlignment.start : MainAxisAlignment.end,
                 children: [
-                  _buildGridItem(context, index), 
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: isLeftAligned ? horizontalOffsetLeft : 0,
+                      right: isLeftAligned ? 0 : horizontalOffsetRight,
+                    ),
+                    child: GestureDetector(
+                      onTapDown: isEnabled ? (TapDownDetails details) {
+                        // Call the _showDialog function when the icon is tapped
+                        _showDialog(context,index,details.globalPosition);
+                      }:null,
+                      child: Opacity(
+                        opacity: isEnabled ? 1.0 : 0.5,
+                        child: Image.asset(
+                          images[index],
+                          width: imageWidth,
+                          height: imageHeight,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );
           },
-        ),
-      ),
-    );
-  }
-
-  // Widget to create each grid item
-  Widget _buildGridItem(BuildContext context, int index) {
-     final screenSize = MediaQuery.of(context).size;
-    
-
-     double screenWidth= screenSize.width*0.3;
-  
-     double screenHeight= screenSize.height*0.12
-     ;
-
-
- 
-    
-    // Array of image paths for the icons
-    final List<String> images = [
-      "assets/images/img_screenshot_2024_08_26.png",  // First item
-      "assets/images/img_screenshot_2024_08_26_94x110.png", // Second item
-      "assets/images/img_screenshot_2024_08_26_94x110.png", // Third item
-      "assets/images/img_treasure_chest.png",         // Fourth item
-      "assets/images/img_screenshot_2024_08_26_1.png",        // Fifth item
-    ];
-
-    // Detect tap on a specific item (e.g., Banana)
-    return GestureDetector(
-      onTap: () {
-        if (index == 0) { // Assume index 0 is the banana you want
-          _showDialog(context);
-        }
+        );
       },
-      child: SizedBox(
-        height: screenHeight, // Adjust size of the items
-        width: screenWidth,
-        child: Image.asset(
-          images[index], // Select the image based on index
-          fit: BoxFit.contain, // Ensure the image fits without distortion
-        ),
-      ),
-    );
-  }
+    ),
+  );
+}
+
+
+
+
+
+
+
+      
+       
+
+
+
+
 
   // Show dialog when tapping the banana item
-void _showDialog(BuildContext context) {
+// void _showDialog(BuildContext context,int index) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return Dialog(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(20),
+//         ),
+//         insetPadding: const EdgeInsets.symmetric(horizontal: 26, vertical: 24),
+//         child: Stack(
+//           clipBehavior: Clip.none,
+//           children: [
+        
+//             Container(
+//               padding: const EdgeInsets.all(16),
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(20),
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: Colors.black.withOpacity(0.1),
+//                     blurRadius: 8,
+//                     spreadRadius: 2,
+//                     offset: const Offset(0, 4),
+//                   ),
+//                 ],
+//               ),
+//               child: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   // Title
+//                   Text(
+//                     'Money and Currencies',
+//                     style: TextStyle(
+//                       fontFamily: "Baloo2",
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 18,
+//                       color: Colors.grey[700],
+//                     ),
+//                   ),
+//                   const SizedBox(height: 10),
+                  
+              
+//                    Text(
+//                     'Lesson ${index + 1} of 4',
+//                     style: TextStyle(
+//                       fontSize: 16,
+//                       color: Colors.black,
+//                       fontWeight: FontWeight.w900,
+//                     ),
+//                   ),
+//                   const SizedBox(height: 20),
+                  
+         
+//                   SizedBox(
+//                     width: double.infinity,
+//                     child: ElevatedButton(
+//                       onPressed: () {
+//                         Get.toNamed(AppRoutes.lessonScreen);
+//                        // Navigator.of(context).pop(); // Close the dialog
+//                       },
+//                       style: ElevatedButton.styleFrom(
+//                         padding: const EdgeInsets.symmetric(vertical: 12), 
+//                         backgroundColor: const Color(0xFF87CEEB),
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.circular(12),
+//                         ),
+//                       ),
+//                       child: const Text(
+//                         'Start',
+//                         style: TextStyle(
+//                           fontSize: 16,
+//                           color: Colors.white,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 20),
+                  
+           
+//                   Row(
+//                     children: [
+//                       const Text(
+//                         'Rewards:',
+//                         style: TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 16,
+//                           color: Colors.green,
+//                         ),
+//                       ),
+//                       const SizedBox(width: 10),
+                      
+//                       // Reward Mystery Icon
+//                       Container(
+//                         width: 40,
+//                         height: 40,
+//                         decoration: BoxDecoration(
+//                           borderRadius: BorderRadius.circular(10),
+//                           border: Border.all(color: Colors.black26, width: 2),
+//                         ),
+//                         child: Image.asset(
+//                           'assets/images/rewardmonkey.png',
+//                           //height: 30, // Your mystery icon path
+//                           fit: BoxFit.contain,
+//                         ),
+//                       ),
+//                       const SizedBox(width: 16),
+                      
+//                       // Banana Reward
+//                       Row(
+//                         children: [
+//                           Image.asset(
+//                             'assets/images/rewardbanana.png', 
+//                             height: 40,
+//                           ),
+//                           const SizedBox(width: 4),
+                       
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+       
+//             Positioned(
+//               top: -12,
+//               left: 90,
+//               child: ClipPath(
+//                 clipper: ArrowClipper(),
+//                 child: Container(
+//                   height: 24,
+//                   width: 24,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       );
+//     },
+//   );
+// }
+
+
+
+void _showDialog(BuildContext context, int index, Offset position) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      double screenWidth = MediaQuery.of(context).size.width;
+      double horizontalPadding = (screenWidth - 250) / 2;
+
       return Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 26, vertical: 24),
+        insetPadding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-        
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -150,7 +315,6 @@ void _showDialog(BuildContext context) {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
                   Text(
                     'Money and Currencies',
                     style: TextStyle(
@@ -161,10 +325,8 @@ void _showDialog(BuildContext context) {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  
-              
-                  const Text(
-                    'Lesson 1 of 4',
+                  Text(
+                    'Lesson ${index + 1} of 4',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -172,17 +334,14 @@ void _showDialog(BuildContext context) {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
-         
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
                         Get.toNamed(AppRoutes.lessonScreen);
-                       // Navigator.of(context).pop(); // Close the dialog
                       },
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12), 
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         backgroundColor: const Color(0xFF87CEEB),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -198,8 +357,6 @@ void _showDialog(BuildContext context) {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
-           
                   Row(
                     children: [
                       const Text(
@@ -211,8 +368,6 @@ void _showDialog(BuildContext context) {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      
-                      // Reward Mystery Icon
                       Container(
                         width: 40,
                         height: 40,
@@ -222,21 +377,17 @@ void _showDialog(BuildContext context) {
                         ),
                         child: Image.asset(
                           'assets/images/rewardmonkey.png',
-                          //height: 30, // Your mystery icon path
                           fit: BoxFit.contain,
                         ),
                       ),
                       const SizedBox(width: 16),
-                      
-                      // Banana Reward
                       Row(
                         children: [
                           Image.asset(
-                            'assets/images/rewardbanana.png', 
+                            'assets/images/rewardbanana.png',
                             height: 40,
                           ),
                           const SizedBox(width: 4),
-                       
                         ],
                       ),
                     ],
@@ -244,10 +395,9 @@ void _showDialog(BuildContext context) {
                 ],
               ),
             ),
-       
             Positioned(
               top: -12,
-              left: 90,
+              left: screenWidth / 2 - horizontalPadding,
               child: ClipPath(
                 clipper: ArrowClipper(),
                 child: Container(
@@ -263,6 +413,7 @@ void _showDialog(BuildContext context) {
     },
   );
 }
+
 
  Widget _buildBottomBar(BuildContext context) {
     return BottomNavigationBar(

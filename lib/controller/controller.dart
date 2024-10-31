@@ -9,6 +9,8 @@ class ProgressController extends GetxController {
     var isCorrectSelected = false.obs;
      var attempts = 0.obs; // Track the number of attempts
 
+    var currentLessonIndex=0.obs;
+
     
    void setCardsCompleted() {
     cardsCompleted.value = true;
@@ -38,6 +40,12 @@ class ProgressController extends GetxController {
     }
   }
 
+  void decrementProgress(){
+    if(progress.value<1){
+      progress.value -= 0.2;
+    }
+  }
+
     void setQuizCompleted() {
     quizCompleted.value = true;
     print("Quiz Completed");
@@ -46,6 +54,8 @@ class ProgressController extends GetxController {
   void checkCompletion() {
     if (cardsCompleted.isTrue && quizCompleted.isTrue) {
       awardBananas();  // All conditions met, award bananas
+      moveToNextLesson();
+      print("Lesson Completed");
     }
   }
   Future<void> fetchProgressFromFirestore() async {
@@ -69,37 +79,84 @@ class ProgressController extends GetxController {
 }
 
 
-    Future<void> awardBananas() async {
-    var currentUser = FirebaseAuth.instance.currentUser;
-    String? userId = currentUser?.uid;
+//     Future<void> awardBananas() async {
+//     var currentUser = FirebaseAuth.instance.currentUser;
+//     String? userId = currentUser?.uid;
 
-    if (userId != null) {
-      // Reference to the user's Progression sub-collection
-      try{
-      final progressionRef = FirebaseFirestore.instance
-          .collection('Users')
-          .doc(userId)
-          .collection('Progression')
-          .doc('progression1');
+//     if (userId != null) {
+//       // Reference to the user's Progression sub-collection
+//       try{
+//       final progressionRef = FirebaseFirestore.instance
+//           .collection('Users')
+//           .doc(userId)
+//           .collection('Progression')
+//           .doc('progression1');
 
-      final docSnapshot = await progressionRef.get();
+//       final docSnapshot = await progressionRef.get();
 
-      if (docSnapshot.exists) {
-         final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
-         final currentBananas = earnings['Bananas'] ?? 0;
+//       if (docSnapshot.exists) {
+//          final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
+//          final currentBananas = earnings['Bananas'] ?? 0;
 
-        await progressionRef.update({
-          'Earnings from Lesson.Bananas': currentBananas + 10,
-        });
+//         await progressionRef.update({
+//           'Earnings from Lesson.Bananas': currentBananas + 10,
+//         });
         
+//         // Update progress bar or notify UI
+//         progress.value = 1.0;
+//       }else{
+//           print('Document does not exist');
+//       }
+//       } catch(e){
+//          print('Error awarding bananas: $e');
+//       }
+//     }
+//   }
+// }
+
+Future<void> awardBananas() async {
+  var currentUser = FirebaseAuth.instance.currentUser;
+  String? userId = currentUser?.uid;
+
+  if (userId != null) {
+    try {
+      // Reference to the user's Progression and Portfolio fields
+      final userDocRef = FirebaseFirestore.instance.collection('Users').doc(userId);
+      final progressionRef = userDocRef.collection('Progression').doc('progression1');
+
+      // Fetch current values
+      final docSnapshot = await progressionRef.get();
+      final userSnapshot = await userDocRef.get();
+
+      if (docSnapshot.exists && userSnapshot.exists) {
+        // Update 'Earnings from Lesson.Bananas'
+        final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
+        final currentLessonBananas = earnings['Bananas'] ?? 0;
+        await progressionRef.update({
+          'Earnings from Lesson.Bananas': currentLessonBananas + 10,
+        });
+
+        // Update 'Portfolio.Total Bananas'
+        final portfolio = userSnapshot.data()?['Portfolio'] ?? {};
+        final currentTotalBananas = portfolio['Total Bananas'] ?? 0;
+        await userDocRef.update({
+          'Portfolio.Total Bananas': currentTotalBananas + 10,
+        });
+
         // Update progress bar or notify UI
         progress.value = 1.0;
-      }else{
-          print('Document does not exist');
+      } else {
+        print('Document or User data does not exist');
       }
-      } catch(e){
-         print('Error awarding bananas: $e');
-      }
+    } catch (e) {
+      print('Error awarding bananas: $e');
     }
   }
+}
+
+ void moveToNextLesson() {
+    currentLessonIndex.value += 1;
+    
+  }
+
 }

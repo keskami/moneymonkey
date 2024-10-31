@@ -49,7 +49,7 @@ class _TopBarState extends State<TopBar> {
           .collection('Progression')
           .doc('progression1'); // Assuming you're using 'progression1'
 
-      print("Fetching earnings for user: $userId");
+     // print("Fetching earnings for user: $userId");
       final docSnapshot = await progressionRef.get();
 
       if (docSnapshot.exists) {

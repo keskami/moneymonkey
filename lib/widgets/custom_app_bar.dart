@@ -67,9 +67,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.close, color: Colors.black),
+        icon: const Icon(Icons.arrow_back_sharp, color: Colors.black),
         onPressed: () {
-          Get.back(); // Close the screen
+       
+          final ProgressController progressController = Get.find<ProgressController>();
+          progressController.decrementProgress();
+              Navigator.pop(context);
         },
       ),
       titleSpacing: 0,
@@ -99,7 +102,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   },
                 );
               }),
-           // child: MonkeyProgressWidget(progressController:widget.progressController),
+            //child: MonkeyProgressWidget(progressController:widget.progressController),
             ),
           ),
           Row(

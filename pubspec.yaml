@@ -89,6 +89,7 @@ flutter:
     - assets/images/navbar4.png
     - assets/images/banana_reward.json
     - assets/images/specsbanana.json
+    - assets/images/swinging_monkey.json
 
   fonts:
     - family: Baloo 2

@@ -314,20 +314,20 @@ class MarketCard extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
   final double screenWidth = screenSize.width;
     final double screenHeight = screenSize.height;
-
+double textScaleFactor = MediaQuery.of(context).textScaleFactor;
     return Container(
       
       width: screenWidth * 0.3,
       height: screenHeight * 0.12,
       margin:  EdgeInsets.symmetric(vertical:  screenHeight * 0.01),
-      padding: EdgeInsets.all( screenHeight * 0.02),
+      padding: EdgeInsets.all( screenHeight * 0.012),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(screenWidth * 0.03),
         boxShadow:  [
           BoxShadow(
             color: Colors.black12,
-            blurRadius:  screenWidth * 0.02,
+            blurRadius:  screenWidth * 0.02*textScaleFactor,
             offset: Offset(0, screenHeight * 0.005),
           ),
         ],
@@ -391,17 +391,19 @@ class TopStocks extends StatelessWidget{
  @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    double cardWidth = screenSize.width * 0.4; 
-    double cardHeight = screenSize.height * 0.08; 
+    // double cardWidth = screenSize.width * 0.4; 
+    // double cardHeight = screenSize.height * 0.08; 
+      final double screenWidth = screenSize.width;
+    final double screenHeight = screenSize.height;
 
     return Container(
-      width: cardWidth,
-      height: cardHeight,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(8),
+      width: screenWidth*0.43,
+      height: screenHeight*0.1,
+      margin:  EdgeInsets.symmetric(vertical: screenHeight * 0.0),
+      padding:  EdgeInsets.all(screenHeight * 0.014),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(screenWidth * 0.03),
         boxShadow: const [
           BoxShadow(
             color: Colors.black12,
@@ -415,21 +417,21 @@ class TopStocks extends StatelessWidget{
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 20,
+            style:  TextStyle(
+              fontSize: screenHeight*0.02,
               fontWeight: FontWeight.bold,
               color: Colors.black,
               fontFamily: "Baloo 2"
             ),
           ),
-          const SizedBox(height: 8),
+           SizedBox(height: screenHeight*0.01),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 value,
-                style: const TextStyle(
-                  fontSize: 17,
+                style:  TextStyle(
+                  fontSize: screenHeight*0.02,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFFF5963),
                   fontFamily: "Baloo 2"
@@ -439,7 +441,7 @@ class TopStocks extends StatelessWidget{
               Text(
             change,
             style: TextStyle(
-              fontSize: 15,
+              fontSize: screenHeight * 0.018,
               fontWeight: FontWeight.bold,
               color: isPositive ? Colors.green : Colors.red,
               fontFamily: "Baloo 2"
@@ -535,6 +537,9 @@ class TrendingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     double cardHeight = screenSize.height * 0.12;
+    
+    double paddingSize = screenSize.width * 0.03; // Relative padding
+
 
     return GestureDetector(
       onTap:() async{
@@ -548,16 +553,16 @@ class TrendingCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: cardHeight,
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.all(12),
+        margin:  EdgeInsets.symmetric(vertical: screenSize.height*0.01),
+        padding:  EdgeInsets.all(paddingSize),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
+          borderRadius: BorderRadius.circular(screenSize.width*0.03),
+          boxShadow:  [
             BoxShadow(
               color: Colors.black12,
-              blurRadius: 4,
-              offset: Offset(0, 2),
+              blurRadius: screenSize.width * 0.02,
+              offset: Offset(0, screenSize.height * 0.002),
             ),
           ],
         ),
@@ -568,8 +573,8 @@ class TrendingCard extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 20,
+              style:  TextStyle(
+                fontSize: screenSize.height * 0.022,
                 fontWeight: FontWeight.bold,
                 fontFamily: "Baloo 2"
               ),
@@ -577,8 +582,8 @@ class TrendingCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               '$source - $timeAgo',
-              style: const TextStyle(
-                fontSize: 18,
+              style:  TextStyle(
+                fontSize: screenSize.height * 0.015,
                 color: Colors.grey,
                 fontFamily: "Baloo 2"
               ),
@@ -594,8 +599,9 @@ class TrendingCard extends StatelessWidget {
 class CurvedHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final screenSize= MediaQuery.of(context).size;
     return Container(
-      height: 150, // Height of the header
+      height: screenSize.height * 0.15, // Height of the header
       decoration: BoxDecoration(
         color: const Color(0xFFFFEB99), 
         borderRadius: BorderRadius.only(
@@ -647,12 +653,13 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      final screenSize = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding:  EdgeInsets.symmetric(vertical: screenSize.height * 0.01),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 20,
+        style:  TextStyle(
+          fontSize: screenSize.height * 0.025,
           fontWeight: FontWeight.bold,
           color: Colors.black,
           fontFamily: "Baloo 2"
