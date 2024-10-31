@@ -222,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PortfolioScreen(),
+            builder: (context) => FriendsHome(),
           ),
         );
       }
@@ -290,7 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PortfolioScreen(),
+            builder: (context) => FriendsHome(),
           ),
         );
       }
