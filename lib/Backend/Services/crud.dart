@@ -172,7 +172,45 @@ class FirebaseService {
 
   // 6. Social and Community Features
 
-  Future<void> unfollow(String userId, String otherID) async {}
+  Future<void> unfollow(String userId, String otherID) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await _firestore.collection('Users').doc(userId).get();
+
+      DocumentSnapshot<Map<String, dynamic>> otherSnapshot =
+          await _firestore.collection('Users').doc(otherID).get();
+
+      if (userSnapshot.exists && otherSnapshot.exists) {
+        Map<String, dynamic>? userData = userSnapshot.data();
+        Map<String, dynamic>? otherData = otherSnapshot.data();
+
+        if (userData != null && otherData != null) {
+          List<String>? otherFollowers =
+              List<String>.from(otherData['followers'] ?? []);
+          int otherCurrentFollowers =
+              otherData['Profile']['Number of Followers'] ?? 0;
+          otherFollowers.remove(userId);
+          await _firestore.collection('Users').doc(otherID).update({
+            'followers': otherFollowers,
+            'Profile.Number of Followers': otherCurrentFollowers - 1,
+          });
+
+          List<String>? userFollowing =
+              List<String>.from(userData['following'] ?? []);
+          int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
+          userFollowing.remove(otherID);
+          await _firestore.collection('Users').doc(userId).update({
+            'following': userFollowing,
+            'Profile.Following': userCurrentFollowing - 1,
+          });
+        }
+      }
+      return null;
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return null;
+    }
+  }
 
   Future<UserData?> follow(String userId, String otherId) async {
     try {
@@ -187,34 +225,24 @@ class FirebaseService {
         Map<String, dynamic>? otherData = otherSnapshot.data();
 
         if (userData != null && otherData != null) {
-
-            List<String>? otherFollowers =
+          List<String>? otherFollowers =
               List<String>.from(otherData['followers'] ?? []);
-          int otherCurrentFollowers = otherData['Profile']['Number of Followers'] ?? 0;
+          int otherCurrentFollowers =
+              otherData['Profile']['Number of Followers'] ?? 0;
           otherFollowers.add(userId);
           await _firestore.collection('Users').doc(otherId).update({
             'followers': otherFollowers,
             'Profile.Number of Followers': otherCurrentFollowers + 1,
           });
 
-
-
           List<String>? userFollowing =
               List<String>.from(userData['following'] ?? []);
           int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
-           userFollowing.add(otherId);
-           await _firestore.collection('Users').doc(userId).update({
+          userFollowing.add(otherId);
+          await _firestore.collection('Users').doc(userId).update({
             'following': userFollowing,
             'Profile.Following': userCurrentFollowing + 1,
           });
-
-         
-
-        
-
-          
-
-         
         }
       }
       return null;
