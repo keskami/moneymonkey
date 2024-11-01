@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Settings/Pages/announcements.dart';
+import 'package:money_monkey/Settings/Pages/friends.dart';
+import 'package:money_monkey/Settings/Pages/reminders.dart';
 import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 
 class NotificationSettingsPage extends StatelessWidget {
@@ -29,7 +32,10 @@ class NotificationSettingsPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 15.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -53,17 +59,38 @@ class NotificationSettingsPage extends StatelessWidget {
                     children: [
                       CustomListButtonTile(
                         title: "Reminders",
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RemindersSettingsPage(),
+                            ),
+                          );
+                        },
                       ),
                       Divider(),
                       CustomListButtonTile(
                         title: "Friends",
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FriendsSettingsPage(),
+                            ),
+                          );
+                        },
                       ),
                       Divider(),
                       CustomListButtonTile(
                         title: "Announcements",
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AnnouncementsSettingsPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

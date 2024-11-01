@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_monkey/GettingStarted/Frontend/controller/intro_pages_controller.dart';
-import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
-import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -149,6 +149,7 @@ class AuthService {
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
+      'Phone Number': signUpController.phoneNumber.value ?? "",
       'Age': gettingStartedController.age.value,
       'Knowledge Level': gettingStartedController.knowledgeLevel.value,
       'Learning Goal Per Day': startFreshController.learningGoal.value,

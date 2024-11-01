@@ -3,6 +3,7 @@ import 'package:money_monkey/Backend/Models/settings.dart';
 class UserData {
   String userId;
   String email;
+  String phoneNumber; // New phone number field
   int age;
   int knowledgeLevel;
   int learningGoalPerDay;
@@ -13,6 +14,7 @@ class UserData {
   UserData({
     required this.userId,
     required this.email,
+    required this.phoneNumber, // Initialize phone number
     required this.age,
     required this.knowledgeLevel,
     required this.learningGoalPerDay,
@@ -25,6 +27,7 @@ class UserData {
     return UserData(
       userId: id,
       email: data['Email'] ?? '',
+      phoneNumber: data['Phone Number'] ?? '', // Retrieve phone number
       age: data['Age'] is int ? data['Age'] : 0,
       knowledgeLevel:
           data['Knowledge Level'] is int ? data['Knowledge Level'] : 0,
@@ -41,6 +44,7 @@ class UserData {
   Map<String, dynamic> toFirestore() {
     return {
       'Email': email,
+      'Phone Number': phoneNumber, // Save phone number
       'Age': age,
       'Knowledge Level': knowledgeLevel,
       'Learning Goal Per Day': learningGoalPerDay,
@@ -56,7 +60,7 @@ class ProfileData {
   String username;
   int numberOfFollowers;
   int following;
-  int topAchievements; // Change to int since it's stored as a number
+  int topAchievements; // Adjusted to int since it's stored as a number
   int streak;
   double totalProfit;
   double portfolioScore;
