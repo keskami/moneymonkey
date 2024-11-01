@@ -46,12 +46,11 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         nameController.text = userData!.profile.fullName;
         usernameController.text = userData!.profile.username;
         emailController.text = userData!.email;
-        phoneNumberController.text = userData!.phoneNumber ?? '';
-        //Initializing the Original Values to check if Save button is to be displayed or not.
+        phoneNumberController.text = userData!.phoneNumber;
         initName = userData!.profile.fullName;
         initUsername = userData!.profile.username;
         initEmail = userData!.email;
-        initPhone = userData!.phoneNumber ?? '';
+        initPhone = userData!.phoneNumber;
       } else {
         print("User data is null for userID: ${userID!}");
       }

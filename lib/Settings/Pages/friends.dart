@@ -8,18 +8,9 @@ import '../Widgets/custom_row_tile_button.dart';
 class FriendsSettingsPage extends StatelessWidget {
   const FriendsSettingsPage({super.key});
 
-  // Define common text style to avoid repetition
-  TextStyle _sectionTitleStyle() {
-    return GoogleFonts.baloo2(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

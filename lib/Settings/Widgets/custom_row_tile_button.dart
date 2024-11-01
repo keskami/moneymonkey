@@ -13,9 +13,7 @@ class CustomRowTileButton extends StatelessWidget {
   final List<Widget> rowChildren;
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
-    bool val = true;
     return ListTile(
       leading: Text(
         title,
@@ -33,6 +31,5 @@ class CustomRowTileButton extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

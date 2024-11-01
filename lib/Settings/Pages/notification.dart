@@ -8,14 +8,6 @@ import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 class NotificationSettingsPage extends StatelessWidget {
   const NotificationSettingsPage({super.key});
 
-  // Define common text style to avoid repetition
-  TextStyle _sectionTitleStyle() {
-    return GoogleFonts.baloo2(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

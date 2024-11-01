@@ -10,7 +10,7 @@ class NextButton extends StatelessWidget {
   });
   final int pages;
   final Function() nextPage;
-  bool isEnabled;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {

@@ -9,14 +9,6 @@ class PrivacySettingsPage extends StatefulWidget {
 }
 
 class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
-  // Define common text style to avoid repetition
-  TextStyle _sectionTitleStyle() {
-    return GoogleFonts.baloo2(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-    );
-  }
-
   bool val = true;
 
   @override

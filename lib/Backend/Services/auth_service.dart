@@ -149,7 +149,7 @@ class AuthService {
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
-      'Phone Number': signUpController.phoneNumber.value ?? "",
+      'Phone Number': signUpController.phoneNumber.value,
       'Age': gettingStartedController.age.value,
       'Knowledge Level': gettingStartedController.knowledgeLevel.value,
       'Learning Goal Per Day': startFreshController.learningGoal.value,
