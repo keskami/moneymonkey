@@ -13,13 +13,12 @@ class FriendsSuggestions extends StatefulWidget {
 }
 
 class _FriendsSuggestionsState extends State<FriendsSuggestions> {
-  // List to hold friend suggestions
   List<Map<String, String>> friends = [
     {
       "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOYHcVj15wodH8uuEmV393',
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Kestan Kamei",
