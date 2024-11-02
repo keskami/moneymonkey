@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
@@ -172,55 +174,100 @@ class FirebaseService {
 
   // 6. Social and Community Features
 
-  Future<List<Map<String, String>>> findFriends(String userId) async {
-    List<String> friends = [];
-    DocumentSnapshot<Map<String, dynamic>> userSnapshot =
-        await _firestore.collection('Users').doc(userId).get();
-
-    if (userSnapshot.exists) {
-      Map<String, dynamic>? userData = userSnapshot.data();
-
-      if (userData != null) {
-        List<String>? userFollowing =
-            List<String>.from(userData['following'] ?? []);
 
 
-        for (String id in userFollowing) {
+Future<List<Map<String, String>>> findFriends(String userId) async {
+  Map<String, int> mutualCounts = {}; 
+  Map<String, List<String>> mutualConnections = {}; 
+  List<Map<String, String>> mutualFriends = [];
+  DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+      await _firestore.collection('Users').doc(userId).get();
 
-          DocumentSnapshot<Map<String, dynamic>> followeduserSnapshot =
-              await _firestore.collection('Users').doc(id).get();
+  if (userSnapshot.exists) {
+    Map<String, dynamic>? userData = userSnapshot.data();
 
-          if (followeduserSnapshot.exists) {
-        
-            Map<String, dynamic>? suggestionData = followeduserSnapshot.data();
-            if(suggestionData != null){
-              List<String>? newData = List<String>.from(suggestionData['following'] ?? []);
-              print("here");
-              for(String sugesstionID in newData){
-                 DocumentSnapshot<Map<String, dynamic>> sugUserSnapshot =
-              await _firestore.collection('Users').doc(id).get();
+    if (userData != null) {
+      List<String>? userFollowing = List<String>.from(userData['following'] ?? []);
 
-              if(sugUserSnapshot.exists){
-                Map<String, dynamic>? sugData = followeduserSnapshot.data();
-                if(sugData != null){
-                 
-                  print(sugData['following'] ?? []);
-                }
+      for (String followedUserId in userFollowing) {
+        DocumentSnapshot<Map<String, dynamic>> followedUserSnapshot =
+            await _firestore.collection('Users').doc(followedUserId).get();
 
+        if (followedUserSnapshot.exists) {
+          Map<String, dynamic>? followedUserData = followedUserSnapshot.data();
+          if (followedUserData != null) {
+            List<String>? followedUserFollowing =
+                List<String>.from(followedUserData['following'] ?? []);
+
+            for (String potentialMutualId in followedUserFollowing) {
+              if (potentialMutualId != userId && potentialMutualId != followedUserId) {
+                mutualCounts[potentialMutualId] =
+                    (mutualCounts[potentialMutualId] ?? 0) + 1;
+
+                mutualConnections.putIfAbsent(potentialMutualId, () => []);
+                mutualConnections[potentialMutualId]!.add(followedUserId);
               }
-
-              }
-              print(id);
-
             }
-            
           }
         }
       }
-    }
 
-    return [];
+      Random random = Random();
+      for (String mutualId in mutualCounts.keys) {
+        DocumentSnapshot<Map<String, dynamic>> mutualUserSnapshot =
+            await _firestore.collection('Users').doc(mutualId).get();
+
+        if (mutualUserSnapshot.exists && !userFollowing.contains(mutualId)) {
+          Map<String, dynamic>? mutualUserData = mutualUserSnapshot.data();
+          if (mutualUserData != null) {
+            List<String> connections = mutualConnections[mutualId] ?? [];
+            String randomConnectionId = connections.isNotEmpty
+                ? connections[random.nextInt(connections.length)]
+                : 'Unknown';
+
+            String randomConnectionName = 'Unknown';
+            if (randomConnectionId != 'Unknown') {
+              DocumentSnapshot<Map<String, dynamic>> randomConnectionSnapshot =
+                  await _firestore.collection('Users').doc(randomConnectionId).get();
+              if (randomConnectionSnapshot.exists) {
+                Map<String, dynamic>? randomConnectionData = randomConnectionSnapshot.data();
+                randomConnectionName = randomConnectionData?['Profile']['Full Name'] ?? 'Unknown';
+              }
+            }
+
+            mutualFriends.add({
+              'otherID': mutualId,
+              'name': mutualUserData['Profile']['Full Name'] ?? 'Unknown',
+              'count': mutualCounts[mutualId].toString(),
+              'randomConnection': randomConnectionName,
+              'whySuggested': 'Followed by $randomConnectionName'
+            });
+          }
+        }
+      }
+
+      mutualFriends.sort((a, b) {
+        int countComparison = int.parse(b['count']!).compareTo(int.parse(a['count']!));
+        if (countComparison != 0) {
+          return countComparison;
+        } else {
+          return a['name']!.compareTo(b['name']!);
+        }
+      });
+
+      if (mutualFriends.length > 9) {
+        mutualFriends = mutualFriends.sublist(0, 9);
+      }
+    }
   }
+
+  print(mutualFriends);
+  return mutualFriends;
+}
+
+
+
+
 
   Future<void> unfollow(String userId, String otherID) async {
     try {

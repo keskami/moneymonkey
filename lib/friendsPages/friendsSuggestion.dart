@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Services/crud.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/friendsPages/friendsHome.dart';
 import 'package:money_monkey/friendsPages/friendsProfile.dart';
@@ -13,58 +15,53 @@ class FriendsSuggestions extends StatefulWidget {
 }
 
 class _FriendsSuggestionsState extends State<FriendsSuggestions> {
+  final FirebaseService crud = FirebaseService();
+  final User? user = FirebaseAuth.instance.currentUser;
+  final String? userID = FirebaseAuth.instance.currentUser?.uid;
+
   List<Map<String, String>> friends = [
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
       "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
       "whySuggested": "You may know each other",
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
@@ -149,7 +146,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                   for (var friend in friends)
                     friendSuggestion(
                       name: friend["name"]!,
-                      image: friend["image"]!,
+                      
                       whySuggested: friend["whySuggested"]!,
                       screenHeightUnit: screenHeightUnit,
                       screenWidthUnit: screenWidthUnit,
@@ -166,6 +163,8 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
   }
 
   void removeFriend(String otherID) {
+    //add follow
+    crud.follow(userID!,otherID);
     setState(() {
       friends.removeWhere((friend) => friend["otherID"] == otherID);
     });
@@ -173,7 +172,6 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
 
   Widget friendSuggestion({
     required String name,
-    required String image,
     required String whySuggested,
     required double screenHeightUnit,
     required double screenWidthUnit,
