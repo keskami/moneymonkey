@@ -120,14 +120,14 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
       signUpController.pageIndex.value += 1;
     }
 
-    void toPreviousPage() {
-      int currentIndex = signUpController.pageIndex.value;
-      if (currentIndex > 0) {
-        signUpController.pageIndex.value -= 1;
-      } else {
-        Navigator.pop(context);
-      }
-    }
+    // void toPreviousPage() {
+    //   int currentIndex = signUpController.pageIndex.value;
+    //   if (currentIndex > 0) {
+    //     signUpController.pageIndex.value -= 1;
+    //   } else {
+    //     Navigator.pop(context);
+    //   }
+    // }
 
     return Scaffold(
       // appBar: AppBar(
