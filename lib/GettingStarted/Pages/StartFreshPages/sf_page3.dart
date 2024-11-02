@@ -150,12 +150,16 @@ class _StartFreshPage3State extends State<StartFreshPage3> {
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
                   onTapGoal(index + 1);
+                  print(index);
+                  print(startFreshController.learningGoal.value);
                   setState(() {
                     selectedIndex = index;
                   });
                 },
                 child: CustomOptionTile(
-                  isSelected: selectedIndex == index,
+                  isSelected: selectedIndex == index ||
+                      (startFreshController.learningGoal.value / 5) - 1 ==
+                          index,
                   childWidget: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 5,

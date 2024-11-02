@@ -25,8 +25,7 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset:
-          true, // Automatically resize when keyboard pops up
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

@@ -230,11 +230,9 @@ class SettingsPage extends StatelessWidget {
                       child: TextButton(
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainPage(),
-                            ),
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => MainPage()),
+                            (Route<dynamic> route) => false,
                           );
                         },
                         child: Text(

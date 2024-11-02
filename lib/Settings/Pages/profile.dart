@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Services/settings_service.dart';
 import 'package:money_monkey/Settings/Widgets/custom_container.dart';
 
 import '../../Backend/Models/user_data.dart';
@@ -39,6 +40,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   String initUsername = "";
   String initEmail = "";
   String initPhone = "";
+
   void getUserInfo() async {
     try {
       userData = await firestoreService.getUserData(userID!);
@@ -71,6 +73,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    SettingsService settingsService = SettingsService();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -197,12 +200,29 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                                 )
                               ]),
                           child: Center(
-                            child: Text(
-                              "Save Details",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                            child: TextButton(
+                              onPressed: () async {
+                                await settingsService.updateProfileSettings(
+                                  userId: userID!,
+                                  name: nameController.text,
+                                  username: usernameController.text,
+                                  email: emailController.text,
+                                  phoneNumber: phoneNumberController.text,
+                                );
+                                setState(() {
+                                  initUsername = usernameController.text;
+                                  initPhone = phoneNumberController.text;
+                                  initEmail = emailController.text;
+                                  initName = nameController.text;
+                                });
+                              },
+                              child: Text(
+                                "Save Details",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -303,35 +323,50 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             left: 20,
             right: 20,
             top: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
           ),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.6,
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Center(
+                  child: Text(
+                    'Change Password',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Text(
-                  'Change Password',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  "Current Password",
+                  style: _sectionTitleStyle().copyWith(fontSize: 20),
+                ),
+                SizedBox(height: 16),
+                CustomContainer(
+                  child: TextField(
+                    controller: currentPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
                 SizedBox(height: 16),
-                TextField(
-                  controller: currentPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Current Password',
-                    border: OutlineInputBorder(),
-                  ),
+                Text(
+                  "New Password",
+                  style: _sectionTitleStyle().copyWith(fontSize: 20),
                 ),
                 SizedBox(height: 16),
-                TextField(
-                  controller: newPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'New Password',
-                    border: OutlineInputBorder(),
+                CustomContainer(
+                  child: TextField(
+                    controller: newPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
                 SizedBox(height: 24),
@@ -340,9 +375,19 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Cancel'),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                            Theme.of(context).primaryColor),
+                      ),
                       onPressed: () async {
                         final currentPassword = currentPasswordController.text;
                         final newPassword = newPasswordController.text;
@@ -370,7 +415,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                           );
                         }
                       },
-                      child: Text('Change'),
+                      child: Text(
+                        'Change',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -77,24 +77,30 @@ class _StartFreshHomeState extends State<StartFreshHome> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  onPressed: toPreviousPage,
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 37,
-                  ),
-                ),
-                const Expanded(
-                  child: CustomProgressBar(
-                    page: 0,
-                  ),
-                ),
-                const SizedBox(width: 20),
-              ],
-            ),
+            Obx(() {
+              if (startFreshController.pageIndex < 5) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      onPressed: toPreviousPage,
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 37,
+                      ),
+                    ),
+                    const Expanded(
+                      child: CustomProgressBar(
+                        page: 0,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                  ],
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            }),
             Expanded(
               child: Obx(() {
                 int pageIndex = startFreshController.pageIndex.value;

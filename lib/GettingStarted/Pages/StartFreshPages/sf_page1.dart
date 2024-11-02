@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 
 class StartFreshPage1 extends StatelessWidget {
   const StartFreshPage1({super.key});
 
   @override
   Widget build(BuildContext context) {
+    GettingStartedController gettingStartedController = Get.find();
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,17 +44,25 @@ class StartFreshPage1 extends StatelessWidget {
                   ),
                 ),
               ),
-              const ChatBubbleContainer(
+              ChatBubbleContainer(
                 trianglePosition: TrianglePosition.left,
                 borderRadius: 12,
                 borderWidth: 1,
-                childWidget: Text(
-                  "Okay, we'll start fresh!",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
+                childWidget: gettingStartedController.knowledgeLevel.value == 0
+                    ? Text(
+                        "Okay, we'll start fresh!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      )
+                    : Text(
+                        "Okay, We'll build on\nwhat you know!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
               ),
             ],
           ),

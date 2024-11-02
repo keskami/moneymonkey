@@ -1,12 +1,10 @@
 class SettingsData {
   Preferences preferences;
-  ProfileSettings profileSettings;
   Notifications notifications; // Updated with Notifications
   PrivacySettings privacySettings;
 
   SettingsData({
     required this.preferences,
-    required this.profileSettings,
     required this.notifications, // Notifications initialized
     required this.privacySettings,
   });
@@ -14,8 +12,6 @@ class SettingsData {
   factory SettingsData.fromFirestore(Map<String, dynamic> data) {
     return SettingsData(
       preferences: Preferences.fromFirestore(data['Preferences'] ?? {}),
-      profileSettings:
-          ProfileSettings.fromFirestore(data['Profile Settings'] ?? {}),
       notifications: Notifications.fromFirestore(
           data['Notifications'] ?? {}), // Notifications retrieval
       privacySettings:
@@ -26,7 +22,6 @@ class SettingsData {
   Map<String, dynamic> toFirestore() {
     return {
       'Preferences': preferences.toFirestore(),
-      'Profile Settings': profileSettings.toFirestore(),
       'Notifications': notifications.toFirestore(), // Notifications saving
       'Privacy Settings': privacySettings.toFirestore(),
     };
@@ -57,42 +52,6 @@ class Preferences {
       'Sound Effects': soundEffects,
       'Audio': audio,
       'Dark Mode': darkMode,
-    };
-  }
-}
-
-class ProfileSettings {
-  String name;
-  String username;
-  String password;
-  String email;
-  String phoneNumber;
-
-  ProfileSettings({
-    required this.name,
-    required this.username,
-    required this.password,
-    required this.email,
-    required this.phoneNumber,
-  });
-
-  factory ProfileSettings.fromFirestore(Map<String, dynamic> data) {
-    return ProfileSettings(
-      name: data['Name'] ?? '',
-      username: data['Username'] ?? '',
-      password: data['Password'] ?? '',
-      email: data['Email'] ?? '',
-      phoneNumber: data['Phone Number'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toFirestore() {
-    return {
-      'Name': name,
-      'Username': username,
-      'Password': password,
-      'Email': email,
-      'Phone Number': phoneNumber,
     };
   }
 }

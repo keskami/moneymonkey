@@ -187,13 +187,6 @@ class AuthService {
           'Audio': false,
           'Dark Mode': false,
         },
-        'Profile Settings': {
-          'Name': signUpController.username.value,
-          'Username': signUpController.name.value,
-          'Password': signUpController.password.value,
-          'Email': signUpController.email.value,
-          'Phone Number': '123-456-7890',
-        },
         'Notifications': {
           'Reminders': {
             'Reminder Enabled': true,

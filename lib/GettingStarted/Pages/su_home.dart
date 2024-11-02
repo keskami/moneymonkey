@@ -130,16 +130,16 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: toPreviousPage,
-            icon: Icon(
-              Icons.arrow_back,
-            ),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   actions: [
+      //     IconButton(
+      //       onPressed: toPreviousPage,
+      //       icon: Icon(
+      //         Icons.arrow_back,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       backgroundColor: LightTheme().primaryBackgroundColor,
       body: SafeArea(
         child: Column(

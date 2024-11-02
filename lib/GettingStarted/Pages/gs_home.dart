@@ -37,6 +37,7 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
           MaterialPageRoute(
             builder: (context) => StartFreshHome(),
           ));
+      return;
     }
     gettingStartedController.pageIndex.value += 1;
   }

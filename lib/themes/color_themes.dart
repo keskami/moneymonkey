@@ -12,6 +12,7 @@ class AppThemes {
     ),
     scaffoldBackgroundColor: const Color.fromARGB(255, 244, 247, 249),
     appBarTheme: AppBarTheme(
+      backgroundColor: const Color.fromARGB(255, 244, 247, 249),
       titleTextStyle: TextStyle(
         color: Colors.black,
       ),

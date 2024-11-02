@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
 
+import '../../../themes/color_themes.dart';
+
 class SUDetailsUsernamePage extends StatefulWidget {
   SUDetailsUsernamePage({
     super.key,
@@ -24,7 +26,7 @@ class _SUDetailsUsernamePageState extends State<SUDetailsUsernamePage> {
     }
 
     return Container(
-      color: Colors.white,
+      color: LightTheme().primaryBackgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
