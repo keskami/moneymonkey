@@ -198,11 +198,13 @@ class FirebaseService {
           List<String>? userFollowing =
               List<String>.from(userData['following'] ?? []);
           int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
-          userFollowing.remove(otherID);
-          await _firestore.collection('Users').doc(userId).update({
-            'following': userFollowing,
-            'Profile.Following': userCurrentFollowing - 1,
-          });
+          if (userFollowing.contains(otherID)) {
+            userFollowing.remove(otherID);
+            await _firestore.collection('Users').doc(userId).update({
+              'following': userFollowing,
+              'Profile.Following': userCurrentFollowing - 1,
+            });
+          }
         }
       }
       return null;
@@ -238,11 +240,13 @@ class FirebaseService {
           List<String>? userFollowing =
               List<String>.from(userData['following'] ?? []);
           int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
-          userFollowing.add(otherId);
-          await _firestore.collection('Users').doc(userId).update({
-            'following': userFollowing,
-            'Profile.Following': userCurrentFollowing + 1,
-          });
+          if (!userFollowing.contains(otherId)) {
+            userFollowing.add(otherId);
+            await _firestore.collection('Users').doc(userId).update({
+              'following': userFollowing,
+              'Profile.Following': userCurrentFollowing + 1,
+            });
+          }
         }
       }
       return null;
