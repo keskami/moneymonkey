@@ -172,6 +172,56 @@ class FirebaseService {
 
   // 6. Social and Community Features
 
+  Future<List<Map<String, String>>> findFriends(String userId) async {
+    List<String> friends = [];
+    DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        await _firestore.collection('Users').doc(userId).get();
+
+    if (userSnapshot.exists) {
+      Map<String, dynamic>? userData = userSnapshot.data();
+
+      if (userData != null) {
+        List<String>? userFollowing =
+            List<String>.from(userData['following'] ?? []);
+
+
+        for (String id in userFollowing) {
+
+          DocumentSnapshot<Map<String, dynamic>> followeduserSnapshot =
+              await _firestore.collection('Users').doc(id).get();
+
+          if (followeduserSnapshot.exists) {
+        
+            Map<String, dynamic>? suggestionData = followeduserSnapshot.data();
+            if(suggestionData != null){
+              List<String>? newData = List<String>.from(suggestionData['following'] ?? []);
+              print("here");
+              for(String sugesstionID in newData){
+                 DocumentSnapshot<Map<String, dynamic>> sugUserSnapshot =
+              await _firestore.collection('Users').doc(id).get();
+
+              if(sugUserSnapshot.exists){
+                Map<String, dynamic>? sugData = followeduserSnapshot.data();
+                if(sugData != null){
+                 
+                  print(sugData['following'] ?? []);
+                }
+
+              }
+
+              }
+              print(id);
+
+            }
+            
+          }
+        }
+      }
+    }
+
+    return [];
+  }
+
   Future<void> unfollow(String userId, String otherID) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> userSnapshot =

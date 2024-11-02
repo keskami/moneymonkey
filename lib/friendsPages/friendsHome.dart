@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Services/crud.dart';
 import 'package:money_monkey/friendsPages/friendsFromContacts.dart';
 import 'package:money_monkey/friendsPages/friendsSearch.dart';
 import 'package:money_monkey/friendsPages/friendsSuggestion.dart';
@@ -14,6 +16,10 @@ class FriendsHome extends StatefulWidget {
 }
 
 class _FriendsHomeState extends State<FriendsHome> {
+final FirebaseService crud = FirebaseService();
+final User? user = FirebaseAuth.instance.currentUser;
+  final String? userID = FirebaseAuth.instance.currentUser?.uid;
+
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(
@@ -247,6 +253,8 @@ class _FriendsHomeState extends State<FriendsHome> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    crud.findFriends(userID!);
+                    
                     Navigator.push(
                         context,
                         MaterialPageRoute(

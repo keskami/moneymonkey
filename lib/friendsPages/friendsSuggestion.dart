@@ -21,53 +21,54 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
       "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW1xW6BoxiMQWwGKMdxi93"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lG1xW6BoxiMQWwGKMdxi93"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8GW6BoxiMQWwGKMdxi93"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G6BoxiMQWwGKMdxi93"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G16BoxiMQWwGKMdxi93"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G16BoxiMQWwGKMdxi92"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G1xW6BoxiMQWwGMdxi93"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
     {
-      "name": "Kestan Kamei",
+      "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G1xW6BoxiMQWwGKMdi93"
+      "whySuggested": "You may know each other",
+      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
     },
+
     
    
   ];
