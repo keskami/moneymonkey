@@ -1,9 +1,8 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
-import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/friendsPages/friendsHome.dart';
 import 'package:money_monkey/friendsPages/friendsProfile.dart';
 
@@ -19,56 +18,22 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  List<Map<String, String>> friends = [
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Josh Feenberg",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOuUYHcVj15wodH8uuEmV393',
-    },
+  List<Map<String, String>> friends = [];
 
-    
-   
-  ];
+  @override
+  void initState() {
+    super.initState();
+    loadFriendSuggestions();
+  }
+
+  Future<void> loadFriendSuggestions() async {
+    if (userID != null) {
+      List<Map<String, String>> fetchedFriends = await crud.findFriends(userID!,9);
+      setState(() {
+        friends = fetchedFriends;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,47 +55,40 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const FriendsHome()));
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const FriendsHome()
+                        ));
                       },
                       child: Icon(
                         Icons.arrow_back,
                         size: screenHeightUnit * 37,
                       ),
                     ),
-                    SizedBox(
-                      width: screenWidthUnit * 20,
-                    ),
+                    SizedBox(width: screenWidthUnit * 20),
                     Text(
                       "Friend Suggestions",
                       style: GoogleFonts.fredoka(
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                        fontSize: 24, fontWeight: FontWeight.bold
+                      ),
                     )
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(
-            height: screenHeightUnit * 8,
-          ),
+          SizedBox(height: screenHeightUnit * 8),
           Container(
             height: screenHeightUnit * 1,
             width: double.infinity,
             color: Color.fromRGBO(0, 0, 0, 1),
           ),
-          SizedBox(
-            height: screenHeightUnit * 20,
-          ),
+          SizedBox(height: screenHeightUnit * 20),
           Center(
             child: Container(
               height: screenHeightUnit * 676,
               width: screenWidthUnit * 350,
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: Colors.black, width: screenWidthUnit * 2),
+                border: Border.all(color: Colors.black, width: screenWidthUnit * 2),
                 borderRadius: BorderRadius.circular(screenWidthUnit * 20),
                 boxShadow: [
                   BoxShadow(
@@ -142,18 +100,16 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                 ],
               ),
               child: Column(
-                children: [
-                  for (var friend in friends)
-                    friendSuggestion(
+                children: friends.isEmpty
+                  ? [Center(child: CircularProgressIndicator())]
+                  : friends.map((friend) => friendSuggestion(
                       name: friend["name"]!,
-                      
                       whySuggested: friend["whySuggested"]!,
                       screenHeightUnit: screenHeightUnit,
                       screenWidthUnit: screenWidthUnit,
                       otherID: friend["otherID"]!,
                       onRemove: () => removeFriend(friend["otherID"]!),
-                    ),
-                ],
+                    )).toList(),
               ),
             ),
           )
@@ -163,8 +119,8 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
   }
 
   void removeFriend(String otherID) {
-    //add follow
-    crud.follow(userID!,otherID);
+    // Add follow logic here
+    crud.follow(userID!, otherID);
     setState(() {
       friends.removeWhere((friend) => friend["otherID"] == otherID);
     });
@@ -191,12 +147,9 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
               SizedBox(width: 10 * screenWidthUnit),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => friendProfile(
-                                otherID: otherID,
-                              )));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => friendProfile(otherID: otherID),
+                  ));
                 },
                 child: Container(
                   height: screenHeightUnit * 46,
@@ -218,15 +171,12 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
-                    textAlign: TextAlign.start,
                   ),
                   Text(
                     whySuggested,
                     style: GoogleFonts.baloo2(
                       fontSize: 13,
-                      fontWeight: FontWeight.normal,
                     ),
-                    textAlign: TextAlign.start,
                   ),
                 ],
               ),
@@ -237,10 +187,9 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                   height: 23 * screenHeightUnit,
                   width: 95 * screenWidthUnit,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(135, 206, 235, 1), 
+                    color: Color.fromRGBO(135, 206, 235, 1),
                     borderRadius: BorderRadius.circular(screenHeightUnit * 8),
-                    border: Border.all(
-                        color: Colors.black, width: screenWidthUnit * 1),
+                    border: Border.all(color: Colors.black, width: screenWidthUnit * 1),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(1),
@@ -250,14 +199,15 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
                       ),
                     ],
                   ),
-                  child: Text(
-                    "Follow",
-                    style: GoogleFonts.fredoka(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, 
+                  child: Center(
+                    child: Text(
+                      "Follow",
+                      style: GoogleFonts.fredoka(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
@@ -269,7 +219,7 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
             height: screenHeightUnit * 1,
             width: screenWidthUnit * 380,
             color: Colors.black,
-          )
+          ),
         ],
       ),
     );

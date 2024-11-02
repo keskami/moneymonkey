@@ -176,7 +176,7 @@ class FirebaseService {
 
 
 
-Future<List<Map<String, String>>> findFriends(String userId) async {
+Future<List<Map<String, String>>> findFriends(String userId, int howManyWanted) async {
   Map<String, int> mutualCounts = {}; 
   Map<String, List<String>> mutualConnections = {}; 
   List<Map<String, String>> mutualFriends = [];
@@ -256,7 +256,7 @@ Future<List<Map<String, String>>> findFriends(String userId) async {
       });
 
       if (mutualFriends.length > 9) {
-        mutualFriends = mutualFriends.sublist(0, 9);
+        mutualFriends = mutualFriends.sublist(0, howManyWanted);
       }
     }
   }

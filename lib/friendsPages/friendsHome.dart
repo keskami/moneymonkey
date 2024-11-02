@@ -253,7 +253,7 @@ final User? user = FirebaseAuth.instance.currentUser;
                 ),
                 GestureDetector(
                   onTap: () {
-                    crud.findFriends(userID!);
+                    crud.findFriends(userID!,9);
                     
                     Navigator.push(
                         context,
