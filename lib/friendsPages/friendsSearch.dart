@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Services/crud.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/friendsPages/friendsHome.dart';
 import 'package:money_monkey/friendsPages/friendsProfile.dart';
@@ -14,58 +16,53 @@ class FriendsFromSearch extends StatefulWidget {
 
 class _FriendsFromSearchState extends State<FriendsFromSearch> {
   TextEditingController _searchController = TextEditingController();
-  List<Map<String, String>> friends = [
-    {
-      "name": "Josh Feenberg",
-      "image": "assets/images/magGlass.png",
-      "whySuggested": "You may know each other",
-      "otherID": 'X8VCqOYHcVj15wodH8uuEmV393',
-    },
-    {
-      "name": "Kestan Kamei",
-      "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW1xW6BoxiMQWwGKMdxi93"
-    },
-    {
-      "name": "Kestan Kamei",
-      "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lG1xW6BoxiMQWwGKMdxi93"
-    },
-    {
-      "name": "Kestan Kamei",
-      "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8GW6BoxiMQWwGKMdxi93"
-    },
-    {
-      "name": "Kestan Kamei",
-      "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G6BoxiMQWwGKMdxi93"
-    },
-    {
-      "name": "Kestan Kamei",
-      "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G16BoxiMQWwGKMdxi93"
-    },
-    {
-      "name": "Kestan Kamei",
-      "image": "assets/images/magGlass.png",
-      "whySuggested": "Followed by Jacob Lee",
-      "otherID": "yUx6lW8G16BoxiMQWwGKMdxi92"
-    },
-   
-    
-   
-  ];
+  List<Map<String, String>> friends = [];
+  final FirebaseService crud = FirebaseService();
+  final User? user = FirebaseAuth.instance.currentUser;
+  final String? userID = FirebaseAuth.instance.currentUser?.uid;
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    onTextChanged('');
+  }
+
+  Future<void> onTextChanged(String searchText) async {
+    setState(() {
+      loading = true;
+    });
+
+   List<Map<String, String>> fetchedFriends =
+        await crud.findFriendsFromSearch(searchText, 8, userID!) ;
+    setState(() {
+      friends = fetchedFriends;
+    });
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> loadFriendSuggestions() async {
+    if (userID != null) {
+      List<Map<String, String>> fetchedFriends =
+          await crud.findFriends(userID!, 8);
+      setState(() {
+        friends = fetchedFriends;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidthUnit = MediaQuery.of(context).size.width / 390;
     double screenHeightUnit = MediaQuery.of(context).size.height / 844;
-   
 
     return Scaffold(
         body: SingleChildScrollView(
@@ -118,6 +115,7 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
               ),
               child: TextField(
                 controller: _searchController,
+                onChanged: onTextChanged,
                 textAlign: TextAlign.start,
                 style: GoogleFonts.baloo2(
                   fontSize: 15,
@@ -125,11 +123,11 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
                 ),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
-                    Icons.search, 
+                    Icons.search,
                     size: 27 * screenHeightUnit,
                     color: Colors.black,
                   ),
-                  hintText: 'Name or Username',
+                  hintText: 'Username',
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.fromLTRB(
                       15 * screenWidthUnit, 12 * screenHeightUnit, 0, 0),
@@ -158,19 +156,19 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
               ],
             ),
             child: Column(
-                children: [
-                  for (var friend in friends)
-                    friendSuggestion(
-                      name: friend["name"]!,
-                      image: friend["image"]!,
-                      whySuggested: friend["whySuggested"]!,
-                      screenHeightUnit: screenHeightUnit,
-                      screenWidthUnit: screenWidthUnit,
-                      otherID: friend["otherID"]!,
-                      onRemove: () => removeFriend(friend["otherID"]!),
-                    ),
-                ],
-              ),
+              children: friends.isEmpty || loading
+                  ? [Center(child: CircularProgressIndicator())]
+                  : friends
+                      .map((friend) => friendSuggestion(
+                            name: friend["name"]!,
+                            whySuggested: friend["whySuggested"]!,
+                            screenHeightUnit: screenHeightUnit,
+                            screenWidthUnit: screenWidthUnit,
+                            otherID: friend["otherID"]!,
+                            onRemove: () => removeFriend(friend["otherID"]!),
+                          ))
+                      .toList(),
+            ),
           ))
         ],
       ),
@@ -178,14 +176,13 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
   }
 
   void removeFriend(String otherID) {
-    setState(() {
-      friends.removeWhere((friend) => friend["otherID"] == otherID);
-    });
+    crud.follow(userID!, otherID);
+    
+    onTextChanged(_searchController.text);
   }
 
   Widget friendSuggestion({
     required String name,
-    required String image,
     required String whySuggested,
     required double screenHeightUnit,
     required double screenWidthUnit,
@@ -251,7 +248,7 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
                   height: 23 * screenHeightUnit,
                   width: 95 * screenWidthUnit,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(135, 206, 235, 1), 
+                    color: Color.fromRGBO(135, 206, 235, 1),
                     borderRadius: BorderRadius.circular(screenHeightUnit * 8),
                     border: Border.all(
                         color: Colors.black, width: screenWidthUnit * 1),
@@ -269,7 +266,7 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
                     style: GoogleFonts.fredoka(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black, 
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),

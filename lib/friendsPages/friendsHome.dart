@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
+import 'package:money_monkey/friendsPages/comingSoonPage.dart';
 import 'package:money_monkey/friendsPages/friendsFromContacts.dart';
 import 'package:money_monkey/friendsPages/friendsProfile.dart';
 import 'package:money_monkey/friendsPages/friendsSearch.dart';
@@ -33,7 +34,7 @@ class _FriendsHomeState extends State<FriendsHome> {
     );
 
     loadFriendSuggestions(3, '');
-    print(friends);
+  
 
     super.initState();
   }
@@ -445,7 +446,7 @@ class _FriendsHomeState extends State<FriendsHome> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FriendsFromContacts(),
+                    builder: (context) => const ComingSoonPage(),
                   ));
             } else if (words == "Search by name") {
               Navigator.push(
