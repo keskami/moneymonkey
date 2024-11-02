@@ -255,7 +255,7 @@ Future<List<Map<String, String>>> findFriends(String userId, int howManyWanted) 
         }
       });
 
-      if (mutualFriends.length > 9) {
+      if (mutualFriends.length > howManyWanted) {
         mutualFriends = mutualFriends.sublist(0, howManyWanted);
       }
     }

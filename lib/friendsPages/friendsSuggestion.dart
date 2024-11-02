@@ -119,11 +119,11 @@ class _FriendsSuggestionsState extends State<FriendsSuggestions> {
   }
 
   void removeFriend(String otherID) {
-    // Add follow logic here
     crud.follow(userID!, otherID);
     setState(() {
-      friends.removeWhere((friend) => friend["otherID"] == otherID);
+      friends = [];
     });
+    loadFriendSuggestions();
   }
 
   Widget friendSuggestion({

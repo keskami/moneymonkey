@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
 import 'package:money_monkey/friendsPages/friendsFromContacts.dart';
+import 'package:money_monkey/friendsPages/friendsProfile.dart';
 import 'package:money_monkey/friendsPages/friendsSearch.dart';
 import 'package:money_monkey/friendsPages/friendsSuggestion.dart';
 import 'package:money_monkey/LoginPages/login.dart';
@@ -16,9 +17,11 @@ class FriendsHome extends StatefulWidget {
 }
 
 class _FriendsHomeState extends State<FriendsHome> {
-final FirebaseService crud = FirebaseService();
-final User? user = FirebaseAuth.instance.currentUser;
+  final FirebaseService crud = FirebaseService();
+  final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
+
+  List<Map<String, String>> friends = [];
 
   @override
   void initState() {
@@ -28,7 +31,26 @@ final User? user = FirebaseAuth.instance.currentUser;
         statusBarIconBrightness: Brightness.light,
       ),
     );
+
+    loadFriendSuggestions(3, '');
+    print(friends);
+
     super.initState();
+  }
+
+  Future<void> loadFriendSuggestions(int amount, String remove) async {
+    if (userID != null) {
+      List<Map<String, String>> fetchedFriends =
+          await crud.findFriends(userID!, amount);
+
+          
+
+      fetchedFriends.removeWhere((friend) => friend["otherID"] == remove);
+
+      setState(() {
+        friends = fetchedFriends;
+      });
+    }
   }
 
   void _showBottomSheet(
@@ -41,11 +63,8 @@ final User? user = FirebaseAuth.instance.currentUser;
             height: 175 * screenHeightUnit,
             width: 390 * screenWidthUnit,
             decoration: BoxDecoration(
-              color: Color.fromRGBO(217, 217, 217, 1),
-              borderRadius: BorderRadius.circular(screenWidthUnit * 15)
-
-            ),
-            
+                color: Color.fromRGBO(217, 217, 217, 1),
+                borderRadius: BorderRadius.circular(screenWidthUnit * 15)),
             child: Column(
               children: [
                 Row(
@@ -97,13 +116,11 @@ final User? user = FirebaseAuth.instance.currentUser;
                           Text(
                             "iMessage",
                             style: GoogleFonts.baloo2(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold
-                            ),
+                                fontSize: 12, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
-                       Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image.asset(
@@ -114,13 +131,11 @@ final User? user = FirebaseAuth.instance.currentUser;
                           Text(
                             "Whatsapp",
                             style: GoogleFonts.baloo2(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold
-                            ),
+                                fontSize: 12, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
-                       Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image.asset(
@@ -131,13 +146,11 @@ final User? user = FirebaseAuth.instance.currentUser;
                           Text(
                             "Snapchat",
                             style: GoogleFonts.baloo2(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold
-                            ),
+                                fontSize: 12, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
-                       Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image.asset(
@@ -148,9 +161,7 @@ final User? user = FirebaseAuth.instance.currentUser;
                           Text(
                             "Copy",
                             style: GoogleFonts.baloo2(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold
-                            ),
+                                fontSize: 12, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
@@ -185,23 +196,6 @@ final User? user = FirebaseAuth.instance.currentUser;
           screenWidthUnit: screenWidthUnit),
     ];
 
-    List<Widget> friendsRowWidgets = [
-      friendsRowWidget(
-          image: "assets/images/contacts.png",
-          name: "Josh Feenberg",
-          screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
-      friendsRowWidget(
-          image: "assets/images/magGlass.png",
-          name: "Daniel Lee",
-          screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
-      friendsRowWidget(
-          image: "",
-          name: "",
-          screenHeightUnit: screenHeightUnit,
-          screenWidthUnit: screenWidthUnit),
-    ];
     return Scaffold(
         body: Container(
       color: Colors.white,
@@ -253,8 +247,6 @@ final User? user = FirebaseAuth.instance.currentUser;
                 ),
                 GestureDetector(
                   onTap: () {
-                    crud.findFriends(userID!,9);
-                    
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -275,7 +267,17 @@ final User? user = FirebaseAuth.instance.currentUser;
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [if (friendsRowWidgets.isNotEmpty) ...friendsRowWidgets],
+            children: friends.isEmpty
+                ? [Center(child: CircularProgressIndicator())]
+                : friends
+                    .map((friend) => friendsRowWidget(
+                          name: friend["name"]!,
+                          screenHeightUnit: screenHeightUnit,
+                          screenWidthUnit: screenWidthUnit,
+                          otherID: friend["otherID"]!,
+                          onRemove: () => removeFriend(friend["otherID"]!),
+                        ))
+                    .toList(),
           ),
           SizedBox(
             height: screenHeightUnit * 40,
@@ -285,11 +287,29 @@ final User? user = FirebaseAuth.instance.currentUser;
     ));
   }
 
+  void removeFriend(String otherID) {
+    crud.follow(userID!, otherID);
+    setState(() {
+      friends = [];
+    });
+
+    loadFriendSuggestions(3, '');
+  }
+
+  void removeFriendNotFollow(String otherID) {
+    setState(() {
+      friends = [];
+    });
+
+    loadFriendSuggestions(4, otherID);
+  }
+
   Widget friendsRowWidget({
-    required String image,
     required String name,
     required double screenHeightUnit,
     required double screenWidthUnit,
+    required String otherID,
+    required onRemove,
   }) {
     return Container(
       height: screenHeightUnit * 150,
@@ -318,7 +338,7 @@ final User? user = FirebaseAuth.instance.currentUser;
                     children: [
                       GestureDetector(
                         onTap: () {
-                          print("close");
+                          removeFriendNotFollow(otherID);
                         },
                         child: Icon(
                           Icons.close,
@@ -328,17 +348,26 @@ final User? user = FirebaseAuth.instance.currentUser;
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Center(
-                      child: Container(
-                    height: screenHeightUnit * 46,
-                    width: screenHeightUnit * 46,
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(200, 200, 200, 1),
-                      shape: BoxShape.circle,
-                    ),
-                  )),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => friendProfile(otherID: otherID),
+                        ));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Center(
+                        child: Container(
+                      height: screenHeightUnit * 46,
+                      width: screenHeightUnit * 46,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(200, 200, 200, 1),
+                        shape: BoxShape.circle,
+                      ),
+                    )),
+                  ),
                 ),
                 Padding(
                     padding: EdgeInsets.fromLTRB(0, screenHeightUnit * 7, 0, 0),
@@ -365,6 +394,7 @@ final User? user = FirebaseAuth.instance.currentUser;
                   padding: EdgeInsets.fromLTRB(0, screenHeightUnit * 3, 0, 0),
                   child: Center(
                       child: GestureDetector(
+                    onTap: onRemove,
                     child: Container(
                       height: 15 * screenHeightUnit,
                       width: 71 * screenWidthUnit,
