@@ -8,9 +8,9 @@ class ProgressController extends GetxController {
     var quizCompleted = false.obs;
     var isCorrectSelected = false.obs;
      var attempts = 0.obs; // Track the number of attempts
-
+ var isOptionSelected = false.obs;
     var currentLessonIndex=0.obs;
-
+ var isDialogShown = false.obs;
     
    void setCardsCompleted() {
     cardsCompleted.value = true;
@@ -18,10 +18,18 @@ class ProgressController extends GetxController {
     // You can add additional logic here, like updating the user's progress in Firestore.
       checkCompletion(); // Ensure this is checked after setting the flag
   }
-
+void setOptionSelected(bool value) {
+    isOptionSelected.value = value;
+  }
     // Call this method when the correct answer is selected
   void setCorrectSelection(bool isCorrect) {
     isCorrectSelected.value = isCorrect;
+     if (!isCorrect) {
+      isDialogShown.value = false; // Reset dialog shown status for incorrect answers
+    }
+  }
+   void setDialogShown(bool value) {
+    isDialogShown.value = value;
   }
 // Method to record an attempt
   void recordAttempt(bool isCorrect) {
