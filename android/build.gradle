@@ -8,7 +8,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.4.2' // Ensure this is the latest version; you can update to a newer version if available
 
         // Add other necessary classpath dependencies for your project
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0" // Kotlin plugin if needed
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21" // Kotlin plugin if needed
         classpath 'com.android.tools.build:gradle:8.0.0'
     }
 }

@@ -94,17 +94,6 @@ class AuthService {
       addUserDetails(userId, signUpController.email.value.trim());
       // Get the current user
       User? user = userCredential.user;
-
-      if (user != null) {
-        // Save additional user details (like name) in Firestore
-        await _firestore.collection('users').doc(user.uid).set({
-          'userId': user.uid,
-          'name': name,
-          'email': email,
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-        // You can set other fields, like 'age', 'knowledgeLevel', etc. if needed.
-      }
     } catch (e) {
       // Handle errors such as invalid email, weak password, etc.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
