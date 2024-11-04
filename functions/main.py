@@ -3,17 +3,21 @@ from firebase_admin import initialize_app, firestore
 from flask import make_response, Flask
 import threading
 import time
+from statistics import mean
+import random
 
-# Initialize the Firebase Admin SDK
-initialize_app()  # Ensure your project is correctly set up in Firebase
 
-# Create a Firestore client
+
+
+initialize_app()  
 db = firestore.client()
-
-# Create a Flask application
 app = Flask(__name__)
 
-def periodic_run():
+def pickValue(values):
+    return random.uniform(0.95, 1.05) * mean(values)
+
+#this is what starts the market when on_request_example is called
+def start():
     while True:
         with app.app_context():  
             on_request_example(None)  
@@ -23,12 +27,14 @@ def periodic_run():
 def on_request_example(req: https_fn.Request) -> https_fn.Response:
     value = 100
     try:
-        doc_ref = db.collection('TestAdding').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
+        vals = []
+        doc_ref = db.collection('TestAdding').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(30).get()
         if doc_ref:
             for doc in doc_ref:
-                doc_data = doc.to_dict()  
-                value = doc_data.get('value') + 1  
-                print(f"Retrieved document value: {value},")
+                doc_data = doc.to_dict()   
+                vals.append(doc_data.get('value')) 
+        value = round(pickValue(vals),2)
+        
     except Exception as e:
         print(e)
 
@@ -43,9 +49,9 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         response = make_response("Document added to Firestore!", 200)
         return response
     except Exception as e:
-        print(f"Error details: {e}")  # Log the error for debugging
+        print(f"Error details: {e}") 
         response = make_response(f"Error adding document: {e}", 500)
         return response
 
 # Start the periodic thread
-threading.Thread(target=periodic_run, daemon=True).start()
+threading.Thread(target=start, daemon=True).start()
