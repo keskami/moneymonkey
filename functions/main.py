@@ -13,10 +13,12 @@ initialize_app()
 db = firestore.client()
 app = Flask(__name__)
 
-def pickValue(values):
-    return random.uniform(0.95, 1.05) * mean(values)
+def pickValue(values, stock):
+    if stock == 'BananaTech':
+        return random.uniform(0.975, 1.03) * mean(values)
+    elif stock == 'HealthyChimp':
+        return random.uniform(0.985, 1.016) * mean(values)
 
-#this is what starts the market when on_request_example is called
 def start():
     while True:
         with app.app_context():  
@@ -25,27 +27,53 @@ def start():
 
 @https_fn.on_request()
 def on_request_example(req: https_fn.Request) -> https_fn.Response:
-    value = 100
+    BananaTechValue = 0
+    HealthyChimpValue = 0
     try:
-        vals = []
-        doc_ref = db.collection('TestAdding').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(30).get()
-        if doc_ref:
-            for doc in doc_ref:
+        BananaTechVals = []
+        HealthyChimpVals = []
+        banana_ref = db.collection('BananaTech').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(30).get()
+        chimp_ref = db.collection('HealthyChimp').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(30).get()
+        if banana_ref:
+            for doc in banana_ref:
                 doc_data = doc.to_dict()   
-                vals.append(doc_data.get('value')) 
-        value = round(pickValue(vals),2)
+                BananaTechVals.append(doc_data.get('value')) 
+        if chimp_ref:
+            for doc in chimp_ref:
+                doc_data = doc.to_dict() 
+                HealthyChimpVals.append(doc_data.get('value'))
         
+        HealthyChimpValue
+        if BananaTechVals:
+            BananaTechValue = round(pickValue(BananaTechVals, 'BananaTech'), 2)
+        if HealthyChimpVals:
+            HealthyChimpValue = round(pickValue(HealthyChimpVals, 'HealthyChimp'), 2)
     except Exception as e:
+        BananaTechValue = 124
+        HealthyChimpValue = 64
         print(e)
 
-    data_to_add = {
-        'value': value,
+    BananaTech_data_to_add = {
+        'value': BananaTechValue,
         'timestamp': firestore.SERVER_TIMESTAMP
     }
-    print(f"Attempting to add data: {data_to_add}")
+
+    HealthyChimp_data_to_add = {
+        'value': HealthyChimpValue,
+        'timestamp': firestore.SERVER_TIMESTAMP
+    }
+
+    stocksData = {
+        'value': HealthyChimpValue + BananaTechValue,
+        'timestamp': firestore.SERVER_TIMESTAMP
+    }
+
+
+    print(f"Attempting to add data: {BananaTech_data_to_add}")
     try:
-        # Add data to Firestore
-        db.collection('TestAdding').add(data_to_add)
+        db.collection('BananaTech').add(BananaTech_data_to_add)
+        db.collection('HealthyChimp').add(HealthyChimp_data_to_add)
+        db.collection('Stocks').add(stocksData)
         response = make_response("Document added to Firestore!", 200)
         return response
     except Exception as e:
@@ -53,5 +81,4 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         response = make_response(f"Error adding document: {e}", 500)
         return response
 
-# Start the periodic thread
 threading.Thread(target=start, daemon=True).start()
