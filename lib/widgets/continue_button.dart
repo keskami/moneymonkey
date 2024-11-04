@@ -31,46 +31,42 @@ class ContinueButtonSection extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isOptionSelected
-                      ? const Color(0XFF87CEEB) // Light blue when enabled
-                      : Colors.grey,            // Grey when disabled
+                      ? const Color(0XFF87CEEB)
+                      : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 onPressed: isOptionSelected
                     ? () {
-                        if (!isCorrectSelected) {
-                          // Show feedback dialog on "Check" button press for incorrect answer
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return QuestionFeedbackDialog(
-                                isCorrect: false,
-                              );
-                            },
-                          ).then((_) {
-                            // Reset selection to allow retry with "Check" button
-                            progressController.setOptionSelected(false);
-                          });
-                        } else if (!progressController.isDialogShown.value) {
-                          // Show correct answer dialog on "Check" button press for correct answer
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const QuestionFeedbackDialog(
-                                isCorrect: true,
-                              );
-                            },
-                          ).then((_) {
-                            // After showing the dialog, change "Check" to "Continue"
-                            progressController.setDialogShown(true);
-                          });
-                        } else {
-                          // Navigate to the next screen when "Continue" is pressed
-                          Get.toNamed("/lessonCompletePageRoute");
-                        }
+                         if (isCorrectSelected) {
+            // Mark quiz as completed if the correct answer is confirmed
+            progressController.setQuizCompleted(); 
+
+            // Show correct answer dialog
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const QuestionFeedbackDialog(isCorrect: true);
+              },
+            ).then((_) {
+              // After showing the dialog, update dialog shown state
+              progressController.setDialogShown(true);
+            });
+        } else {
+            // Show incorrect answer dialog without marking quiz completion
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const QuestionFeedbackDialog(isCorrect: false);
+              },
+            ).then((_) {
+              // Reset option selection for retry
+              progressController.setOptionSelected(false);
+            });
+        }
                       }
-                    : null, // Disable button if no option is selected
+                    : null,
                 child: Text(
                   buttonText,
                   style: const TextStyle(

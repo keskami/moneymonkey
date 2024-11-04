@@ -24,6 +24,7 @@ void setOptionSelected(bool value) {
     // Call this method when the correct answer is selected
   void setCorrectSelection(bool isCorrect) {
     isCorrectSelected.value = isCorrect;
+    print("Correct option selected: $isCorrect");
      if (!isCorrect) {
       isDialogShown.value = false; // Reset dialog shown status for incorrect answers
     }
@@ -31,6 +32,26 @@ void setOptionSelected(bool value) {
    void setDialogShown(bool value) {
     isDialogShown.value = value;
   }
+
+  
+   void setQuizCompleted() {
+    quizCompleted.value = true;
+    print("Quiz Completed");
+    checkCompletion();
+}
+
+void checkCompletion() {
+    print("Checking completion...");
+    print("cardsCompleted: ${cardsCompleted.value}");
+    print("quizCompleted: ${quizCompleted.value}");
+
+    if (cardsCompleted.isTrue && quizCompleted.isTrue) {
+      print("Conditions met, awarding bananas...");
+      awardBananas();
+      //moveToNextLesson();
+      print("Lesson Completed");
+    }
+}
 // Method to record an attempt
   void recordAttempt(bool isCorrect) {
     if (!isCorrect) {
@@ -54,18 +75,6 @@ void setOptionSelected(bool value) {
     }
   }
 
-    void setQuizCompleted() {
-    quizCompleted.value = true;
-    print("Quiz Completed");
-    checkCompletion();
-  }
-  void checkCompletion() {
-    if (cardsCompleted.isTrue && quizCompleted.isTrue) {
-      awardBananas();  // All conditions met, award bananas
-      moveToNextLesson();
-      print("Lesson Completed");
-    }
-  }
   Future<void> fetchProgressFromFirestore() async {
   var currentUser = FirebaseAuth.instance.currentUser;
   String? userId = currentUser?.uid;
@@ -162,9 +171,9 @@ Future<void> awardBananas() async {
   }
 }
 
- void moveToNextLesson() {
-    currentLessonIndex.value += 1;
+//  void moveToNextLesson() {
+//     currentLessonIndex.value += 1;
     
-  }
+//   }
 
 }
