@@ -25,6 +25,7 @@ class ContinueButtonSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
+              
               width: double.maxFinite,
               height: 38,
               margin: const EdgeInsets.only(bottom: 12),

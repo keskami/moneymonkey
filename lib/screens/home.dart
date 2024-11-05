@@ -66,54 +66,66 @@ Widget _buildZigzagGrid() {
     "assets/images/img_screenshot_2024_08_26_1.png",        // Fifth item
   ];
 
+  final int itemsPerSection = images.length;
+  final int numberOfSections = 3;
+
   return Expanded(
     child: LayoutBuilder(
       builder: (context, constraints) {
         double screenWidth = constraints.maxWidth;
         double screenHeight = constraints.maxHeight;
 
-        // Scale values based on screen width and height
-        double horizontalOffsetLeft = screenWidth * 0.3; // Adjust as needed
-        double horizontalOffsetRight = screenWidth * 0.2; // Adjust as needed
-        double verticalSpacing = screenHeight * 0.02; // 2% of screen height
-        double imageWidth = screenWidth * 0.3; // 20% of screen width
-        double imageHeight = screenHeight * 0.2; // 10% of screen height
+        // Use the original values for scaling
+        double horizontalOffsetLeft = screenWidth * 0.3; // Original left offset
+        double horizontalOffsetRight = screenWidth * 0.2; // Original right offset
+        double verticalSpacing = screenHeight * 0.02; // Original vertical spacing
+        double imageWidth = screenWidth * 0.3; // Original image width scaling
+        double imageHeight = screenHeight * 0.2; // Original image height scaling
 
         return ListView.builder(
-          itemCount: images.length,
+          itemCount: numberOfSections * (itemsPerSection + 1),
           itemBuilder: (context, index) {
-            bool isLeftAligned = index % 2 == 0;
-             bool isEnabled = index <= progressController.currentLessonIndex.value;
+            bool isHeader = index % (itemsPerSection + 1) == 0;
+            int sectionIndex = index ~/ (itemsPerSection + 1);
+            int itemIndex = index % (itemsPerSection + 1) - 1;
 
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: verticalSpacing),
-              child: Row(
-                mainAxisAlignment:
-                    isLeftAligned ? MainAxisAlignment.start : MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: isLeftAligned ? horizontalOffsetLeft : 0,
-                      right: isLeftAligned ? 0 : horizontalOffsetRight,
-                    ),
-                    child: GestureDetector(
-                      onTapDown: isEnabled ? (TapDownDetails details) {
-                        // Call the _showDialog function when the icon is tapped
-                        _showDialog(context,index,details.globalPosition);
-                      }:null,
-                      child: Opacity(
-                        opacity: isEnabled ? 1.0 : 0.5,
-                        child: Image.asset(
-                          images[index],
-                          width: imageWidth,
-                          height: imageHeight,
+            if (isHeader) {
+              // Render the section header
+              return _buildSectionHeader("Section ${sectionIndex + 1}");
+            } else if (itemIndex >= 0 && itemIndex < images.length) {
+              bool isLeftAligned = itemIndex % 2 == 0;
+              bool isEnabled = itemIndex <= progressController.currentLessonIndex.value;
+
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: verticalSpacing),
+                child: Row(
+                  mainAxisAlignment: isLeftAligned ? MainAxisAlignment.start : MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: isLeftAligned ? horizontalOffsetLeft : 0,
+                        right: isLeftAligned ? 0 : horizontalOffsetRight,
+                      ),
+                      child: GestureDetector(
+                        onTapDown: isEnabled ? (TapDownDetails details) {
+                          _showDialog(context, itemIndex, details.globalPosition);
+                        } : null,
+                        child: Opacity(
+                          opacity: isEnabled ? 1.0 : 0.5,
+                          child: Image.asset(
+                            images[itemIndex],
+                            width: imageWidth,
+                            height: imageHeight,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
           },
         );
       },
@@ -126,12 +138,11 @@ Widget _buildZigzagGrid() {
 
 
 
-
       
        
 
 
-
+                                                                                                                                                                             
 
 
   // Show dialog when tapping the banana item
@@ -411,6 +422,37 @@ void _showDialog(BuildContext context, int index, Offset position) {
         ),
       );
     },
+  );
+}
+Widget _buildSectionHeader(String title) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 16.0),
+    child: Row(
+      children: <Widget>[
+        Expanded(
+          child: Divider(
+            color: Colors.grey,
+            thickness: 1,
+            endIndent: 10, // Space between divider and text
+          ),
+        ),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey[600],
+          ),
+        ),
+        Expanded(
+          child: Divider(
+            color: Colors.grey,
+            thickness: 1,
+            indent: 10, // Space between text and divider
+          ),
+        ),
+      ],
+    ),
   );
 }
 

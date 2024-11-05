@@ -41,6 +41,7 @@ void setOptionSelected(bool value) {
 }
 
 void checkCompletion() {
+
     print("Checking completion...");
     print("cardsCompleted: ${cardsCompleted.value}");
     print("quizCompleted: ${quizCompleted.value}");
@@ -48,10 +49,15 @@ void checkCompletion() {
     if (cardsCompleted.isTrue && quizCompleted.isTrue) {
       print("Conditions met, awarding bananas...");
       awardBananas();
-      //moveToNextLesson();
+      moveToNextLesson();
       print("Lesson Completed");
     }
 }
+
+
+  void moveToNextLesson() {
+    currentLessonIndex.value += 1;
+  }
 // Method to record an attempt
   void recordAttempt(bool isCorrect) {
     if (!isCorrect) {
