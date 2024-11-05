@@ -1,6 +1,6 @@
 from firebase_functions import https_fn
 from firebase_admin import initialize_app, firestore
-from flask import make_response, Flask
+from flask import make_response, Flask, jsonify
 import threading
 import time
 from statistics import mean
@@ -8,41 +8,77 @@ import random
 from datetime import datetime, timedelta, timezone
 from collections import deque
 
+
+
 initialize_app()  
 db = firestore.client()
 app = Flask(__name__)
+
+allStockVals = deque(maxlen=60)
+allStockHourly = deque(maxlen=24)
+allStockWeekly= deque(maxlen = 7)
+allStockMonthly = deque(maxlen= 31)
+
 
 BananaTechVals = deque(maxlen=60)
 HealthyChimpVals = deque(maxlen=60)
 EcoVineVals = deque(maxlen=60)
 JungleGoodsVals = deque(maxlen=60)
-
-
-
-BananaTechDailyVals = deque(maxlen=24)
+BananaTechHourlyVals = deque(maxlen=24)
 BananaTechWeeklyVals = deque(maxlen=7)
 BananaTechMonthlyVals = deque(maxlen=31)
-
-
-HealthyChimpDailyVals = deque(maxlen=24)
+HealthyChimpHourlyVals = deque(maxlen=24)
 HealthyChimpWeeklyVals = deque(maxlen=7)
 HealthyChimpMonthlyVals = deque(maxlen=31)
-
-
-EcoVineDailyVals = deque(maxlen=24)
+EcoVineHourlyVals = deque(maxlen=24)
 EcoVineWeeklyVals = deque(maxlen=7)
 EcoVineMonthlyVals = deque(maxlen=31)
-
-
-JungleGoodsDailyVals = deque(maxlen=24)
+JungleGoodsHourlyVals = deque(maxlen=24)
 JungleGoodsWeeklyVals = deque(maxlen=7)
 JungleGoodsMonthlyVals = deque(maxlen=31)
-
-hours_passed = 0
-days_passed = 0
-
+currenthour = datetime.now().hour
+stocksNowData = {}
 
 
+def addHour():
+    global HealthyChimpVals, BananaTechVals, EcoVineVals, JungleGoodsVals, allStockVals
+    global HealthyChimpHourlyVals, BananaTechHourlyVals, JungleGoodsHourlyVals, EcoVineHourlyVals, allStockHourly
+    print("ADDING HOUR")
+
+    if allStockVals:
+        allStockHourly.append(round(mean(allStockVals),2))
+    else:
+        print("LLLLL")
+    
+    if HealthyChimpVals:
+        HealthyChimpHourlyVals.append(round(mean(HealthyChimpVals), 2))
+    else:
+        print("HealthyChimpVals is empty.")
+    
+    if BananaTechVals:
+        BananaTechHourlyVals.append(round(mean(BananaTechVals), 2))
+    else:
+        print("BananaTechVals is empty.")
+    
+    if EcoVineVals:
+        EcoVineHourlyVals.append(round(mean(EcoVineVals), 2))
+    else:
+        print("EcoVineVals is empty.")
+    
+    if JungleGoodsVals:
+        JungleGoodsHourlyVals.append(round(mean(JungleGoodsVals), 2))
+    else:
+        print("JungleGoodsVals is empty.")
+    HealthyChimpVals = deque(list(HealthyChimpVals)[-5:])  
+    BananaTechVals = deque(list(BananaTechVals)[-5:])
+    EcoVineVals = deque(list(EcoVineVals)[-5:])
+    JungleGoodsVals = deque(list(JungleGoodsVals)[-5:])
+    print(f"HealthyChimp Hourly Values: {list(HealthyChimpHourlyVals)}")
+    print(f"BananaTech Hourly Values: {list(BananaTechHourlyVals)}")
+    print(f"EcoVine Hourly Values: {list(EcoVineHourlyVals)}")
+    print(f"JungleGoods Hourly Values: {list(JungleGoodsHourlyVals)}")
+    print(f"Allstock Hourly Values: {list(allStockHourly)}")
+    return allStockVals, allStockHourly, EcoVineVals, EcoVineHourlyVals, BananaTechVals, BananaTechHourlyVals, JungleGoodsVals, JungleGoodsHourlyVals, HealthyChimpVals, HealthyChimpHourlyVals
 
 def pickValue(values, stock):
     if stock == 'BananaTech':
@@ -54,128 +90,26 @@ def pickValue(values, stock):
     elif stock == 'JungleGoods':
         return random.uniform(0.98, 1.02) * mean(values)
 
-def consolidate_data():
-    global hours_passed
-    global days_passed
-    print("CONSOLODATING")
-    now = datetime.now(timezone.utc)
-    hourly_timestamp = now.replace(minute=0, second=0, microsecond=0)
-    daily_timestamp = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    weekly_timestamp = now.replace(day = 1 + (days_passed % 30)  , hour=0, minute=0, second=0, microsecond=0)
-    monthly_timestamp = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    yearly_timestamp = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
-    while True:
-        time.sleep(600)
-        try:
-            hourly_banana_value = round(mean(BananaTechVals), 2)
-            BananaTechDailyVals.append(hourly_banana_value)
-            hourly_chimp_value = round(mean(HealthyChimpVals), 2)
-            HealthyChimpDailyVals.append(hourly_chimp_value)
-            hourly_ecovine_value = round(mean(EcoVineVals), 2)
-            EcoVineDailyVals.append(hourly_ecovine_value)
-            hourly_jungle_value = round(mean(JungleGoodsVals), 2)
-            JungleGoodsDailyVals.append(hourly_jungle_value)
-            stockVal = hourly_banana_value + hourly_chimp_value + hourly_ecovine_value + hourly_jungle_value
-            hourly_data = {
-                'BananaTech': hourly_banana_value,
-                'HealthyChimp': hourly_chimp_value,
-                'EcoVine': hourly_ecovine_value,
-                'JungleGoods': hourly_jungle_value,
-                'Stocks' : stockVal,
-                'timestamp': hourly_timestamp
-            }
-            db.collection('hourly_data').add(hourly_data)
-            
-            if hours_passed % 24 == 0:
-                days_passed += 1
-                daily_banana_value = round(mean(BananaTechDailyVals), 2)
-                BananaTechWeeklyVals.append(daily_banana_value)
-                BananaTechMonthlyVals.append(daily_banana_value)
 
-                daily_chimp_value = round(mean(HealthyChimpDailyVals), 2)
-                HealthyChimpWeeklyVals.append(daily_chimp_value)
-                HealthyChimpMonthlyVals.append(daily_chimp_value)
-
-                daily_ecovine_value = round(mean(EcoVineDailyVals), 2)
-                EcoVineWeeklyVals.append(daily_ecovine_value)
-                EcoVineMonthlyVals.append(daily_ecovine_value)
-
-
-                daily_jungle_value = round(mean(JungleGoodsDailyVals), 2)
-                JungleGoodsWeeklyVals.append(daily_jungle_value)
-                JungleGoodsMonthlyVals.append(daily_jungle_value)
-
-
-                stocks = daily_banana_value  +daily_chimp_value + daily_ecovine_value + daily_jungle_value
-                daily_data = {
-                    'banana': daily_banana_value,
-                    'chimp': daily_chimp_value,
-                    'ecovine': daily_ecovine_value,
-                    'jungle': daily_jungle_value,
-                    'timestamp': daily_timestamp
-                }
-                db.collection('daily_data').add(daily_data)
-
-            if days_passed % 7 == 0:
-
-                weekly_banana_value = round(mean(BananaTechWeeklyVals), 2)
-                weekly_chimp_value = round(mean(HealthyChimpWeeklyVals), 2)
-                weekly_ecovine_value = round(mean(EcoVineWeeklyVals), 2)
-                weekly_jungle_value = round(mean(JungleGoodsWeeklyVals), 2)
-                Stocks = weekly_banana_value + weekly_chimp_value + weekly_ecovine_value + weekly_jungle_value
-
-                weekly_data = {
-                    'banana': weekly_banana_value,
-                    'chimp': weekly_chimp_value,
-                    'ecovine': weekly_ecovine_value,
-                    'jungle': weekly_jungle_value,
-                    "Stocks": stocks,
-                    'timestamp': weekly_timestamp
-                }
-
-
-                db.collection('weekly_data').add(weekly_data)
-
-            if days_passed % 31 == 0:
-
-                monthly_banana_value = round(mean(BananaTechMonthlyVals), 2)
-                monthly_chimp_value = round(mean(HealthyChimpMonthlyVals), 2)
-                monthly_ecovine_value = round(mean(EcoVineMonthlyVals), 2)
-                monthly_jungle_value = round(mean(JungleGoodsMonthlyVals), 2)
-                stocks = monthly_banana_value + monthly_chimp_value + monthly_ecovine_value + monthly_jungle_value
-
-                monthly_data = {
-                    'banana': monthly_banana_value,
-                    'chimp': monthly_chimp_value,
-                    'ecovine': monthly_ecovine_value,
-                    'jungle': monthly_jungle_value,
-                    'Stocks' : stocks,
-                    'timestamp': monthly_timestamp
-                }
-                db.collection('monthly_data').add(monthly_data)
-
-            
-
-        except Exception as e:
-            print(f"Error consolidating data: {e}")
-
-        time.sleep(3000)
-        hours_passed += 1
 
 def start():
     while True:
         with app.app_context():  
             on_request_example(None)  
-        time.sleep(60)  
+        time.sleep(20)  
+
+
 
 @https_fn.on_request()
 def on_request_example(req: https_fn.Request) -> https_fn.Response:
-    global lastBanana, lastChimp, LastEconVine, LastJungle
+    global lastBanana, lastChimp, LastEconVine, LastJungle, stocksNowData
+    global EcoVineVals, HealthyChimpVals, JungleGoodsVals, BananaTechVals, allStockVals
+    global currenthour
+
     BananaTechValue = 124
     HealthyChimpValue = 64
     EcoVineValue = 80
     JungleGoodsValue = 55
-
     try:
         if len(HealthyChimpVals) >= 1 and len(BananaTechVals) >= 1 and len(EcoVineVals) >= 1 and len(JungleGoodsVals) >= 1:
             BananaTechVals.append(lastBanana)
@@ -245,44 +179,41 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         JungleGoodsValue = round(pickValue(JungleGoodsVals, 'JungleGoods'), 2)
         print(e)
 
-    stocksPrintData = {
-        'banana': BananaTechValue,
-        'chimp': HealthyChimpValue,
-        'ecovine': EcoVineValue,
-        'jungle': JungleGoodsValue,
-        'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
-        'timestamp': firestore.SERVER_TIMESTAMP
-    }
-
-    stocksData = {
-        'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
-        'timestamp': firestore.SERVER_TIMESTAMP
-    }
-
-    bananaData = {
-        'value': BananaTechValue,
-        'timestamp' : firestore.SERVER_TIMESTAMP,
-    }
-    chimpData = {
-        'value': HealthyChimpValue,
-        'timestamp' : firestore.SERVER_TIMESTAMP,
-    }
-    ecoData = {
-        'value': EcoVineValue,
-        'timestamp' : firestore.SERVER_TIMESTAMP,
-    }
-    jungleData = {
-        'value': JungleGoodsValue,
-        'timestamp' : firestore.SERVER_TIMESTAMP,
-    }
     
-
-
     lastBanana = BananaTechValue
     lastChimp = HealthyChimpValue
     LastEconVine = EcoVineValue
     LastJungle = JungleGoodsValue
-    print(f"Adding stocks {stocksPrintData}")
+    stocksNowData = {
+        'BananaTechValue': BananaTechValue,
+        'HealthyChimpValue': HealthyChimpValue,
+        'EcoVineValue': EcoVineValue,
+        'JungleGoodsValue': JungleGoodsValue,
+        'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
+        'timestamp': datetime.now()
+    }
+
+    allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
+
+    if currenthour != datetime.now().hour:
+        allStockVals, allStockHourly, EcoVineVals, EcoVineHourlyVals, BananaTechVals, BananaTechHourlyVals, JungleGoodsVals, JungleGoodsHourlyVals, HealthyChimpVals, HealthyChimpHourlyVals  = addHour()
+        currenthour =  datetime.now().hour
+
+
+    print("LENGTH", len(EcoVineVals))
+
+
+    print(f"Updated stocks {stocksNowData}")
+    return make_response("OK", 200)
+    
+
+    
+
+'''@app.route('/get_stocks_now', methods=['GET'])
+def get_stocks_now():
+    print("HERERERERE", stocksNowData)
+    return jsonify(stocksNowData),
+   
 
     try:
         db.collection('BananaTech').add(bananaData)
@@ -295,7 +226,9 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
     except Exception as e:
         print(f"Error adding document: {e}") 
         response = make_response(f"Error adding document: {e}", 500)
-        return response
+        return response'''
 
 threading.Thread(target=start, daemon=True).start()
-threading.Thread(target=consolidate_data, daemon=True).start()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)
+#threading.Thread(target=consolidate_data, daemon=True).start()
