@@ -2,7 +2,14 @@
 import 'package:flutter/material.dart';
 
 class CardTitle extends StatelessWidget {
-  const CardTitle({super.key});
+  final int unitNumber;
+  final String titleText;
+
+  const CardTitle({
+    super.key,
+    required this.unitNumber,
+    required this.titleText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +28,21 @@ class CardTitle extends StatelessWidget {
           )
         ],
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "BEGINNER UNIT 1",
-            style: TextStyle(
+            "BEGINNER UNIT $unitNumber",
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
-            "Earning and Saving",
-            style: TextStyle(
+            titleText,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.w500,

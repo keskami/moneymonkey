@@ -16,14 +16,59 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   String? userID;
+  late AnimationController _chestAnimationController;
 late ProgressController progressController;
+late ScrollController _scrollController;
+String  _titleText = "Earning and Saving";
+int _currentSection = 1;
+ bool _isAnimationControllerInitialized = false;
+
+   @override
+void initState() {
+  super.initState();
+  _scrollController = ScrollController()..addListener(_onScroll);
+  progressController = Get.put(ProgressController());
+  _chestAnimationController = AnimationController(
+    duration: const Duration(seconds: 2), // Slower duration for testing
+    vsync: this,
+     lowerBound: 1.0, // Start scale at 1.0 to ensure the chest is visible initially
+  upperBound: 1.5, // Scale up to 1.5 when animated
+  )..addStatusListener((status) {
+    if (status == AnimationStatus.completed) {
+     // _chestAnimationController.reset(); // Reset after animation completes
+    }
+  })..addListener(() {
+    print("Animation progress: ${_chestAnimationController.value}");
+  });
+  _isAnimationControllerInitialized = true;
+}
+  void _onScroll() {
+    double offset = _scrollController.offset;
+    int newSection = (offset / 300).floor() + 1; // Adjust 300 as per the height of each section
+
+    if (newSection != _currentSection) {
+      setState(() {
+        _currentSection = newSection;
+        if (_currentSection == 1) {
+          _titleText = "Earning and Saving";
+        } else if (_currentSection == 2) {
+          _titleText = "Buying Assets";
+        } else if (_currentSection == 3) {
+          _titleText = "Buy Stocks";
+        }
+      });
+    }
+  }
+
     @override
-  void initState() {
-    super.initState();
-    // Initialize ProgressController
-    progressController = Get.put(ProgressController());
+  void dispose() {
+    _scrollController.dispose();
+     if (_isAnimationControllerInitialized) {
+      _chestAnimationController.dispose(); // Dispose only if initialized
+    }
+    super.dispose();
   }
    int _currentIndex = 0;
   @override
@@ -39,7 +84,7 @@ late ProgressController progressController;
             children: [
             TopBar(userId: 'userID',progressController: progressController),
               const SizedBox(height: 16),
-              CardTitle(),
+              CardTitle(unitNumber: _currentSection,titleText: _titleText,),
               const SizedBox(height: 20),
              // _buildGridScreenshot(context)
              _buildZigzagGrid()
@@ -83,6 +128,7 @@ Widget _buildZigzagGrid() {
         double imageHeight = screenHeight * 0.2; // Original image height scaling
 
         return ListView.builder(
+          controller: _scrollController,
           itemCount: numberOfSections * (itemsPerSection + 1),
           itemBuilder: (context, index) {
             bool isHeader = index % (itemsPerSection + 1) == 0;
@@ -107,12 +153,32 @@ Widget _buildZigzagGrid() {
                         right: isLeftAligned ? 0 : horizontalOffsetRight,
                       ),
                       child: GestureDetector(
-                        onTapDown: isEnabled ? (TapDownDetails details) {
-                          _showDialog(context, itemIndex, details.globalPosition);
-                        } : null,
+                        onTap: isEnabled ? () {
+
+                                 // Debugging: Check if the item is enabled
+    print("ItemIndex: $itemIndex, isEnabled: $isEnabled");
+
+    // Debugging: Check the current lesson index value
+    print("Current lesson index: ${progressController.currentLessonIndex.value}");
+
+                                if (itemIndex == 3 && 
+                                    progressController.currentLessonIndex.value >= 3) {
+                                  // Play the animation if the treasure chest is reached
+                                 // print("ItemIndex: $itemIndex, isEnabled: $isEnabled");
+                                  print("bruhhhh");
+                                  _chestAnimationController.forward();
+                                } else if (itemIndex != 3) {
+                                  _showDialog(context, itemIndex, Offset.zero); // For regular items
+                                }
+                              } : null,
                         child: Opacity(
                           opacity: isEnabled ? 1.0 : 0.5,
-                          child: Image.asset(
+                          child:
+                          itemIndex==3 && _isAnimationControllerInitialized? ScaleTransition(scale: _chestAnimationController,child: Image.asset(
+                                    images[itemIndex],
+                                    width: imageWidth,
+                                    height: imageHeight,),):
+                           Image.asset(
                             images[itemIndex],
                             width: imageWidth,
                             height: imageHeight,

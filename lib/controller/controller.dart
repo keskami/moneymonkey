@@ -11,6 +11,7 @@ class ProgressController extends GetxController {
  var isOptionSelected = false.obs;
     var currentLessonIndex=0.obs;
  var isDialogShown = false.obs;
+ var isChestUnlocked = false.obs;
     
    void setCardsCompleted() {
     cardsCompleted.value = true;
@@ -56,6 +57,10 @@ void checkCompletion() {
 
 
   void moveToNextLesson() {
+    if (currentLessonIndex.value == 2) {
+      isChestUnlocked.value = true; // Unlock the chest after completing the third lesson
+    }
+    
     currentLessonIndex.value += 1;
   }
 // Method to record an attempt
@@ -177,9 +182,5 @@ Future<void> awardBananas() async {
   }
 }
 
-//  void moveToNextLesson() {
-//     currentLessonIndex.value += 1;
-    
-//   }
 
 }
