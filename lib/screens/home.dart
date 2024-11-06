@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     progressController = Get.put(ProgressController());
+     print("Initial lesson index: ${progressController.currentLessonIndex.value}");
     _chestAnimationController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -166,7 +167,7 @@ Widget _buildZigzagGrid() {
                         left: isLeftAligned ? horizontalOffsetLeft : 0,
                         right: isLeftAligned ? 0 : horizontalOffsetRight,
                       ),
-                      child: _buildImageItem(itemIndex, images[itemIndex]),
+                      child: _buildImageItem(itemIndex, images[itemIndex],sectionIndex),
                     ),
                   ],
                 ),
@@ -181,19 +182,75 @@ Widget _buildZigzagGrid() {
   );
 }
 
-Widget _buildImageItem(int itemIndex, String imagePath) {
-  bool isEnabled = itemIndex <= progressController.currentLessonIndex.value;
+// Widget _buildImageItem(int itemIndex, String imagePath) {
+//   bool isEnabled = itemIndex <= progressController.currentLessonIndex.value;
 
-  // Get screen dimensions for scaling
+//   // Get screen dimensions for scaling
+//   double screenWidth = MediaQuery.of(context).size.width;
+//   double screenHeight = MediaQuery.of(context).size.height;
+//   double iconWidth = screenWidth * 0.27;
+//   double iconHeight = screenHeight * 0.12;
+
+//   // Set the image path based on lesson completion
+//   String displayImage = isEnabled
+//       ? 'assets/images/img_screenshot_2024_08_26.png' // Path for the completed lesson icon (blue background)
+//       : imagePath; // Original path for incomplete lesson
+
+//   return GestureDetector(
+//     onTap: isEnabled
+//         ? () {
+//             if (itemIndex == 3 && progressController.currentLessonIndex.value >= 3) {
+//               _chestAnimationController.forward();
+//             } else if (itemIndex != 3) {
+//               _showDialog(context, itemIndex, Offset.zero);
+//             }
+//           }
+//         : null,
+//     child: Opacity(
+//       opacity: isEnabled ? 1.0 : 0.5,
+//       child: Image.asset(
+//         displayImage,
+//         width: iconWidth, // Set width based on screen size
+//         height: iconHeight, // Set height based on screen size
+//       ),
+//     ),
+//   );
+// }
+Widget _buildImageItem(int itemIndex, String imagePath, int sectionIndex) {
+  bool isEnabled;
+  int itemsPerSection =5;
+  // Calculate whether the item should be enabled based on the progressController.currentLessonIndex.value
+  int startLessonIndexForSection = sectionIndex * itemsPerSection;
+  int endLessonIndexForSection = startLessonIndexForSection + itemsPerSection - 1;
+
+  if (sectionIndex == 0) {
+    // For section 1, enable items directly based on the progress index
+    isEnabled = itemIndex <= progressController.currentLessonIndex.value;
+  } else {
+    // For sections beyond the first, only enable items if the last item in the previous section is completed
+    bool previousSectionLastItemCompleted = progressController.currentLessonIndex.value >= (sectionIndex * itemsPerSection - 1);
+    
+    if (itemIndex == 0) {
+      // Enable the first item in the new section only if the last item in the previous section is completed
+      isEnabled = previousSectionLastItemCompleted;
+    } else {
+      // For other items in the section, enable only if the previous item in the same section is completed
+      isEnabled = progressController.currentLessonIndex.value >= (startLessonIndexForSection + itemIndex - 1);
+    }
+  }
+
   double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(context).size.height;
+
   double iconWidth = screenWidth * 0.27;
   double iconHeight = screenHeight * 0.12;
 
-  // Set the image path based on lesson completion
-  String displayImage = isEnabled
-      ? 'assets/images/img_screenshot_2024_08_26.png' // Path for the completed lesson icon (blue background)
-      : imagePath; // Original path for incomplete lesson
+  // Use treasure_chest image specifically for the fourth item in each section
+  String displayImage = itemIndex == 3
+      ? 'assets/images/img_treasure_chest.png' // Use treasure chest for the fourth item
+      : isEnabled
+          ? 'assets/images/img_screenshot_2024_08_26.png' // Completed icon for other enabled items
+          : imagePath; // Original image path for incomplete items
 
   return GestureDetector(
     onTap: isEnabled
@@ -209,12 +266,14 @@ Widget _buildImageItem(int itemIndex, String imagePath) {
       opacity: isEnabled ? 1.0 : 0.5,
       child: Image.asset(
         displayImage,
-        width: iconWidth, // Set width based on screen size
-        height: iconHeight, // Set height based on screen size
+        width: iconWidth, // Set size as needed
+        height: iconHeight,
       ),
     ),
   );
 }
+
+
 
 
   void _showDialog(BuildContext context, int index, Offset position) {
