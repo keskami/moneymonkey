@@ -73,9 +73,9 @@ class _HomePageState extends State<HomePage>
         if (_currentSection == 1) {
           _titleText = "Earning and Saving";
         } else if (_currentSection == 2) {
-          _titleText = "Buying Assets";
+          _titleText = "Investing";
         } else if (_currentSection == 3) {
-          _titleText = "Buy Stocks";
+          _titleText = "Budgeting";
         }
       });
     }
@@ -255,6 +255,8 @@ Widget _buildImageItem(int itemIndex, String imagePath, int sectionIndex) {
   return GestureDetector(
     onTap: isEnabled
         ? () {
+          RenderBox renderBox = context.findRenderObject() as RenderBox;
+          Offset position = renderBox.localToGlobal(Offset.zero);
             if (itemIndex == 3 && progressController.currentLessonIndex.value >= 3) {
               _chestAnimationController.forward();
             } else if (itemIndex != 3) {
