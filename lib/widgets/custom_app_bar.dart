@@ -32,6 +32,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
       }
     });
   }
+  @override
+void dispose() {
+  // Cancel any listeners or subscriptions here if needed
+  super.dispose();
+}
 
   Future<void> fetchBananas() async {
     try {

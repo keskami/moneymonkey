@@ -14,7 +14,7 @@ class ImageGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProgressController progressController = Get.find<ProgressController>();
+    final ProgressController progressController = Get.find<ProgressController>();
 
     return Expanded(
       child: GridView.builder(
@@ -29,18 +29,22 @@ class ImageGrid extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              // Set option as selected and determine if it’s correct
-              progressController.setOptionSelected(true);
-              bool isCorrect = titles[index] == 'Coins'; // Replace with the correct answer logic
+              // Set selected option and determine if it’s correct
+              progressController.setSelectedOptionIndex(index);  // Update selected option index
+              bool isCorrect = titles[index] == 'Coins'; // Replace with correct answer logic
               progressController.setCorrectSelection(isCorrect);
             },
-            child: Container(
+            child: Obx(() => Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: progressController.selectedOptionIndex.value == index
+                    ? Colors.blue[100] // Highlight if selected
+                    : Colors.grey[200], // Default color if not selected
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.transparent,
+                  color: progressController.selectedOptionIndex.value == index
+                      ? Colors.blue // Border color if selected
+                      : Colors.transparent,
                   width: 2,
                 ),
               ),
@@ -54,7 +58,7 @@ class ImageGrid extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            )),
           );
         },
       ),

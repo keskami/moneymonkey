@@ -12,6 +12,7 @@ class ProgressController extends GetxController {
     var currentLessonIndex=0.obs;
  var isDialogShown = false.obs;
  var isChestUnlocked = false.obs;
+ var selectedOptionIndex = (-1).obs;
     
    void setCardsCompleted() {
     cardsCompleted.value = true;
@@ -19,6 +20,19 @@ class ProgressController extends GetxController {
     // You can add additional logic here, like updating the user's progress in Firestore.
       checkCompletion(); // Ensure this is checked after setting the flag
   }
+
+  // Update selected option index
+void setSelectedOptionIndex(int index) {
+  selectedOptionIndex.value = index;
+  isOptionSelected.value = true;  // Set that an option is selected
+  print("option selected");
+}
+// Reset selection
+void resetSelection() {
+  selectedOptionIndex.value = -1;  // Deselect all options
+  isOptionSelected.value = false;  // Indicate no option is selected
+}
+
 void setOptionSelected(bool value) {
     isOptionSelected.value = value;
   }
@@ -62,6 +76,9 @@ void checkCompletion() {
     }
     
     currentLessonIndex.value += 1;
+   // progress.value=0.0;
+    //progress.refresh();
+   // print("Progress after moving to next lesson: ${progress.value}");
   }
 // Method to record an attempt
   void recordAttempt(bool isCorrect) {

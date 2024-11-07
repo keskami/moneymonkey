@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:moneymonkey/controller/controller.dart';
 
 class QuestionFeedbackDialog extends StatelessWidget {
   final bool isCorrect;
@@ -9,6 +10,9 @@ class QuestionFeedbackDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final ProgressController progressController = Get.find<ProgressController>();
+
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -72,7 +76,7 @@ class QuestionFeedbackDialog extends StatelessWidget {
                 else{
                   Navigator.of(context).pop(); // Close the dialog
                 }
-                
+               progressController.resetSelection();
               },
               
               child: const Text(
