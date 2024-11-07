@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Settings/Pages/announcements.dart';
-import 'package:money_monkey/Settings/Pages/friends.dart';
-import 'package:money_monkey/Settings/Pages/reminders.dart';
+import 'package:money_monkey/Settings/Pages/Notification%20Pages/announcements.dart';
+import 'package:money_monkey/Settings/Pages/Notification%20Pages/friends.dart';
+import 'package:money_monkey/Settings/Pages/Notification%20Pages/reminders.dart';
 import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 
 class NotificationSettingsPage extends StatelessWidget {

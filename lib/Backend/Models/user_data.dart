@@ -3,24 +3,24 @@ import 'package:money_monkey/Backend/Models/settings.dart';
 class UserData {
   String userId;
   String email;
-  String phoneNumber; // New phone number field
+  String phoneNumber;
   int age;
   int knowledgeLevel;
   int learningGoalPerDay;
   int startingLevel;
   ProfileData profile;
-  SettingsData settings; // New settings field
+  SettingsData settings;
 
   UserData({
     required this.userId,
     required this.email,
-    required this.phoneNumber, // Initialize phone number
+    required this.phoneNumber,
     required this.age,
     required this.knowledgeLevel,
     required this.learningGoalPerDay,
     required this.startingLevel,
     required this.profile,
-    required this.settings, // Initialize settings
+    required this.settings,
   });
 
   factory UserData.fromFirestore(Map<String, dynamic> data, String id) {

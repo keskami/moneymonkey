@@ -30,9 +30,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         darkTheme: AppThemes.darkTheme,
         theme: AppThemes.lightTheme,
-        themeMode: MediaQuery.of(context).platformBrightness == Brightness.dark
-            ? ThemeMode.dark
-            : ThemeMode.light,
+        themeMode: ThemeMode.light,
         home: const MainPage(),
       ),
     );

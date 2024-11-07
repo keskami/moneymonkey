@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../Backend/Services/settings_service.dart';
-import '../Widgets/custom_list_button_tile.dart';
-import '../Widgets/custom_list_switch_tile.dart';
+import '../../../Backend/Services/settings_service.dart';
+import '../../Widgets/custom_list_button_tile.dart';
+import '../../Widgets/custom_list_switch_tile.dart';
 
 class PreferencesSettingsPage extends StatefulWidget {
   const PreferencesSettingsPage({super.key});

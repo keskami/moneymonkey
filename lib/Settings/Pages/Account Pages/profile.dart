@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/settings_service.dart';
 import 'package:money_monkey/Settings/Widgets/custom_container.dart';
 
-import '../../Backend/Models/user_data.dart';
-import '../../Backend/Services/firestore_service.dart';
-import '../../themes/color_themes.dart';
+import '../../../Backend/Models/user_data.dart';
+import '../../../Backend/Services/firestore_service.dart';
+import '../../../themes/color_themes.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});

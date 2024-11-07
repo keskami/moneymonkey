@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Models/settings.dart';
+
 class SettingsService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Reference to user document
   DocumentReference<Map<String, dynamic>> getUserDocRef(String userId) {
     return _firestore.collection('Users').doc(userId);
   }
 
-  // Update Preferences (Sound Effects, Audio, Dark Mode)
   Future<void> updatePreferences({
     required String userId,
     bool? soundEffects,
@@ -25,24 +25,10 @@ class SettingsService {
     });
   }
 
-  // Get Preferences
   Future<Map<String, dynamic>> getPreferences(String userId) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await getUserDocRef(userId).get();
-      if (snapshot.exists) {
-        // Access preferences if they exist in the document
-        return snapshot.data()?['Settings']['Preferences'] ?? {};
-      } else {
-        return {}; // Return an empty map if no document found
-      }
-    } catch (e) {
-      print('Error fetching preferences: $e');
-      return {}; // Return empty map on error
-    }
+    return await _getSubCollectionData(userId, ['Settings', 'Preferences']);
   }
 
-  // Update Profile Settings (Name, Username, Password, Email, Phone Number)
   Future<void> updateProfileSettings({
     required String userId,
     required String name,
@@ -50,19 +36,14 @@ class SettingsService {
     required String email,
     required String phoneNumber,
   }) async {
-    // Set FullName and Username under Profile
     Map<String, dynamic> profileUpdates = {
       'Full Name': name,
       'Username': username,
     };
-
-    // Set Email and Phone Number directly under UserId
     Map<String, dynamic> userUpdates = {
       'Email': email,
       'Phone Number': phoneNumber,
     };
-
-    // Update Profile map and root-level fields separately
     await getUserDocRef(userId).set({
       'Profile': profileUpdates,
       ...userUpdates,
@@ -70,36 +51,120 @@ class SettingsService {
   }
 
   Future<Map<String, dynamic>> getPrivacySettings(String userId) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await getUserDocRef(userId).get();
-      if (snapshot.exists) {
-        // Access preferences if they exist in the document
-        return snapshot.data()?['Settings']['Privacy Settings'] ?? {};
-      } else {
-        return {}; // Return an empty map if no document found
-      }
-    } catch (e) {
-      print('Error fetching preferences: $e');
-      return {}; // Return empty map on error
-    }
+    return await _getSubCollectionData(
+        userId, ['Settings', 'Privacy Settings']);
   }
 
   Future<void> updatePrivacySettings({
     required String userId,
     required bool public,
   }) async {
-    await getUserDocRef(userId).set(
+    await getUserDocRef(userId).update(
       {
-        'Settings': {
-          'Privacy Settings': {
-            'Public Profile': public,
-          },
-        }
+        'Settings.Privacy Settings.Public Profile': public,
       },
-      SetOptions(
-        merge: true,
-      ),
     );
+  }
+
+  Future<void> updateNotificationSettings<T>({
+    required String userId,
+    required String category,
+    required T settings,
+  }) async {
+    await getUserDocRef(userId).update({
+      'Settings.Notifications.$category': (settings as dynamic).toFirestore(),
+    });
+  }
+
+  Future<T> getNotificationSettings<T>(
+      {required String userId,
+      required String category,
+      required T Function(Map<String, dynamic>) fromFirestore}) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+          await getUserDocRef(userId).get();
+      Map<String, dynamic> data =
+          snapshot.data()?['Settings']['Notifications'][category] ?? {};
+      return fromFirestore(data);
+    } catch (e) {
+      print('Error fetching $category notifications: $e');
+      return fromFirestore({});
+    }
+  }
+
+  Future<void> updateRemindersNotifications({
+    required String userId,
+    required RemindersNotifications settings,
+  }) async {
+    Map<String, dynamic> reminderUpdates = {
+      'Practice Email': settings.practiceEmail,
+      'Practice Phone': settings.practicePhone,
+      'Weekly Progress': settings.weeklyProgress,
+      'Reminder Time': settings.reminderTime,
+    };
+    await getUserDocRef(userId).update({
+      'Settings.Notifications.Reminders': reminderUpdates,
+    });
+  }
+
+  Future<RemindersNotifications> getRemindersNotifications(
+      String userId) async {
+    return await getNotificationSettings(
+      userId: userId,
+      category: 'Reminders',
+      fromFirestore: (data) => RemindersNotifications.fromFirestore(data),
+    );
+  }
+
+  Future<void> updateFriendsNotifications(
+      String userId, FriendsNotifications settings) async {
+    await updateNotificationSettings(
+      userId: userId,
+      category: 'Friends',
+      settings: settings,
+    );
+  }
+
+  Future<FriendsNotifications> getFriendsNotifications(String userId) async {
+    return await getNotificationSettings(
+      userId: userId,
+      category: 'Friends',
+      fromFirestore: (data) => FriendsNotifications.fromFirestore(data),
+    );
+  }
+
+  Future<void> updateAnnouncementsNotifications(
+      String userId, AnnouncementsNotifications settings) async {
+    await updateNotificationSettings(
+      userId: userId,
+      category: 'Announcements',
+      settings: settings,
+    );
+  }
+
+  Future<AnnouncementsNotifications> getAnnouncementsNotifications(
+      String userId) async {
+    return await getNotificationSettings(
+      userId: userId,
+      category: 'Announcements',
+      fromFirestore: (data) => AnnouncementsNotifications.fromFirestore(data),
+    );
+  }
+
+  Future<Map<String, dynamic>> _getSubCollectionData(
+      String userId, List<String> path) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+          await getUserDocRef(userId).get();
+      Map<String, dynamic>? data = snapshot.data();
+      for (String segment in path) {
+        if (data == null) return {};
+        data = data[segment];
+      }
+      return data ?? {};
+    } catch (e) {
+      print('Error fetching data for path $path: $e');
+      return {};
+    }
   }
 }

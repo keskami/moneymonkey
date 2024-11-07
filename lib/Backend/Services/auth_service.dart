@@ -125,7 +125,6 @@ class AuthService {
     }
   }
 
-  //Add User Details
   Future<void> addUserDetails(String userId, String email) async {
     final userDocRef =
         FirebaseFirestore.instance.collection('Users').doc(userId);
@@ -178,18 +177,22 @@ class AuthService {
         },
         'Notifications': {
           'Reminders': {
-            'Reminder Enabled': true,
-            'Reminder Time': '08:00 AM',
-            'Practice Time': 'Email',
-            'Weekly Progress': 'Email',
+            'Reminder Time': "08:00 AM",
+            'Practice Email': true,
+            'Practice Phone': false,
+            'Weekly Progress': false,
           },
           'Friends': {
-            'New Follower': 'Phone',
-            'Friend Activity': 'Email',
+            'New Follower Email': true,
+            'New Follower Phone': false,
+            'Friend Activity Email': true,
+            'Friend Activity Phone': false,
           },
           'Announcements': {
-            'Marketing Notifications': 'Email',
-            'Educational Tips': 'Phone',
+            'Marketing Notifications Email': true,
+            'Marketing Notifications Phone': false,
+            'Educational Tips Email': true,
+            'Educational Tips Phone': false,
           },
         },
         'Privacy Settings': {

@@ -2,17 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
-import 'package:money_monkey/Settings/Pages/feedback.dart';
-import 'package:money_monkey/Settings/Pages/help_center.dart';
-import 'package:money_monkey/Settings/Pages/notification.dart';
-import 'package:money_monkey/Settings/Pages/preferences.dart';
-import 'package:money_monkey/Settings/Pages/privacy_settings.dart';
-import 'package:money_monkey/Settings/Pages/profile.dart';
-import 'package:money_monkey/Settings/Pages/social_accounts.dart';
-import 'package:money_monkey/Settings/Pages/subscription.dart';
+import 'package:money_monkey/Settings/Pages/Account Pages/privacy_settings.dart';
+import 'package:money_monkey/Settings/Pages/Account Pages/subscription.dart';
+import 'package:money_monkey/Settings/Pages/Account%20Pages/preferences.dart';
+import 'package:money_monkey/Settings/Pages/Account%20Pages/profile.dart';
+import 'package:money_monkey/Settings/Pages/Account%20Pages/social_accounts.dart';
+import 'package:money_monkey/Settings/Pages/Notification%20Pages/notification.dart';
+import 'package:money_monkey/Settings/Pages/Support%20Pages/help_center.dart';
 import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 import 'package:money_monkey/routing_page.dart';
 import 'package:money_monkey/themes/color_themes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -26,6 +26,24 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _launchEmail() async {
+      final Uri emailLaunchUri = Uri.parse(
+          "mailto:moneymonkeyinqueries@gmail.com?subject=Feedback&body=Your feedback is very precious to us. We go bananas for them!");
+
+      try {
+        bool canLaunchResult = await canLaunchUrl(emailLaunchUri);
+        print('Can launch: $canLaunchResult');
+
+        if (canLaunchResult) {
+          await launchUrl(emailLaunchUri);
+        } else {
+          print('No app found to handle mailto scheme');
+        }
+      } catch (e) {
+        print('Error launching email: $e');
+      }
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: LightTheme().primaryBackgroundColor,
@@ -198,13 +216,8 @@ class SettingsPage extends StatelessWidget {
                         Divider(),
                         CustomListButtonTile(
                           title: "Feedback",
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FeedbackPage(),
-                              ),
-                            );
+                          onTap: () async {
+                            _launchEmail();
                           },
                         ),
                       ],
