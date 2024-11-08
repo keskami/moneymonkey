@@ -36,6 +36,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   toggle_switch: ^2.3.0
   url_launcher: ^6.3.1
+  aligned_dialog: ^0.0.7
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +99,20 @@ flutter:
     - assets/sample_stock_data.json
     - assets/images/banana_reward.json
     - assets/images/specsbanana.json
+    - assets/real_estate/airport.png
+    - assets/real_estate/bakery.png
+    - assets/real_estate/center1.png
+    - assets/real_estate/center2.png
+    - assets/real_estate/center3.png
+    - assets/real_estate/center4.png
+    - assets/real_estate/donut_bakery.png
+    - assets/real_estate/hotel.png
+    - assets/real_estate/hotel_2.png
+    - assets/real_estate/restaurant.png
+    - assets/real_estate/house.png
+    - assets/real_estate/office.png
+    - assets/real_estate/shopping_mall.png
+    - assets/real_estate/stadium.png
 
   fonts:
     - family: Baloo 2

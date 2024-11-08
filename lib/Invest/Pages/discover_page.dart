@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/stock_service.dart';
+import 'package:money_monkey/Invest/Pages/Real%20Estate%20Pages/real_estate_home.dart';
 import 'package:money_monkey/Invest/Pages/investment_page.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
@@ -369,7 +370,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RealEstateHome(),
+                        ));
+                  },
                   child: Text(
                     "Real Estate",
                     style: GoogleFonts.baloo2(
