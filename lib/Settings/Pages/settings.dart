@@ -26,21 +26,18 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _launchEmail() async {
-      final Uri emailLaunchUri = Uri.parse(
-          "mailto:moneymonkeyinqueries@gmail.com?subject=Feedback&body=Your feedback is very precious to us. We go bananas for them!");
+    void _email() async {
+      final Uri params = Uri(
+        scheme: 'mailto',
+        path: 'moneymonkeyinqueries@gmail.com',
+        query:
+            'subject=App Feedback&body=Your feedback is very precious to us. We go bananas for them! Write it here!',
+      );
 
-      try {
-        bool canLaunchResult = await canLaunchUrl(emailLaunchUri);
-        print('Can launch: $canLaunchResult');
-
-        if (canLaunchResult) {
-          await launchUrl(emailLaunchUri);
-        } else {
-          print('No app found to handle mailto scheme');
-        }
-      } catch (e) {
-        print('Error launching email: $e');
+      if (await canLaunchUrl(params)) {
+        await launchUrl(params);
+      } else {
+        throw 'Could not launch $params';
       }
     }
 
@@ -217,7 +214,7 @@ class SettingsPage extends StatelessWidget {
                         CustomListButtonTile(
                           title: "Feedback",
                           onTap: () async {
-                            _launchEmail();
+                            _email();
                           },
                         ),
                       ],
