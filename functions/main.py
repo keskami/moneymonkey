@@ -15,70 +15,116 @@ db = firestore.client()
 app = Flask(__name__)
 
 allStockVals = deque(maxlen=60)
-allStockHourly = deque(maxlen=24)
-allStockWeekly= deque(maxlen = 7)
+allStock5MinsforDay = deque(maxlen=288)
+allStock30for5= deque(maxlen = 240)
 allStockMonthly = deque(maxlen= 31)
 
 
 BananaTechVals = deque(maxlen=60)
-HealthyChimpVals = deque(maxlen=60)
-EcoVineVals = deque(maxlen=60)
-JungleGoodsVals = deque(maxlen=60)
-BananaTechHourlyVals = deque(maxlen=24)
-BananaTechWeeklyVals = deque(maxlen=7)
+BananaTech5MinsforDay = deque(maxlen=288)
+BananaTech30for5 = deque(maxlen=240)
 BananaTechMonthlyVals = deque(maxlen=31)
-HealthyChimpHourlyVals = deque(maxlen=24)
-HealthyChimpWeeklyVals = deque(maxlen=7)
+
+
+HealthyChimpVals = deque(maxlen=60)
+HealthyChimp5MinsforDay = deque(maxlen=289)
+HealthyChimp30for5 = deque(maxlen=240)
 HealthyChimpMonthlyVals = deque(maxlen=31)
-EcoVineHourlyVals = deque(maxlen=24)
-EcoVineWeeklyVals = deque(maxlen=7)
+
+
+EcoVineVals = deque(maxlen=60)
+EcoVine5MinsforDay = deque(maxlen=289)
+EcoVine30for5 = deque(maxlen=240)
 EcoVineMonthlyVals = deque(maxlen=31)
-JungleGoodsHourlyVals = deque(maxlen=24)
-JungleGoodsWeeklyVals = deque(maxlen=7)
+
+JungleGoodsVals = deque(maxlen=60)
+JungleGoods5MinsforDay = deque(maxlen=289)
+JungleGoods30for5 = deque(maxlen=240)
 JungleGoodsMonthlyVals = deque(maxlen=31)
+
+
+
+
 currenthour = datetime.now().hour
+currentminute = datetime.now().minute
+currentminute5 = (currentminute // 5) * 5
+currentminute30 = (currentminute // 30) * 30
 stocksNowData = {}
 
-
-def addHour():
+def add30mins():
     global HealthyChimpVals, BananaTechVals, EcoVineVals, JungleGoodsVals, allStockVals
-    global HealthyChimpHourlyVals, BananaTechHourlyVals, JungleGoodsHourlyVals, EcoVineHourlyVals, allStockHourly
-    print("ADDING HOUR")
-
+    global HealthyChimp30for5, BananaTech30for5, JungleGoods30for5, EcoVine30for5, allStock30for5
+    print("Adding 30")
     if allStockVals:
-        allStockHourly.append(round(mean(allStockVals),2))
+        allStock30for5.append(round(mean(list(allStockVals)[-30:]), 2))
     else:
-        print("LLLLL")
+        print("allStockVals is empty.")
     
     if HealthyChimpVals:
-        HealthyChimpHourlyVals.append(round(mean(HealthyChimpVals), 2))
+        HealthyChimp30for5.append(round(mean(list(HealthyChimpVals)[-30:]), 2))
     else:
         print("HealthyChimpVals is empty.")
     
     if BananaTechVals:
-        BananaTechHourlyVals.append(round(mean(BananaTechVals), 2))
+        BananaTech30for5.append(round(mean(list(BananaTechVals)[-30:]), 2))
     else:
         print("BananaTechVals is empty.")
     
     if EcoVineVals:
-        EcoVineHourlyVals.append(round(mean(EcoVineVals), 2))
+        EcoVine30for5.append(round(mean(list(EcoVineVals)[-30:]), 2))
     else:
         print("EcoVineVals is empty.")
     
     if JungleGoodsVals:
-        JungleGoodsHourlyVals.append(round(mean(JungleGoodsVals), 2))
+        JungleGoods30for5.append(round(mean(list(JungleGoodsVals)[-30:]), 2))
     else:
         print("JungleGoodsVals is empty.")
-    HealthyChimpVals = deque(list(HealthyChimpVals)[-2:])  
-    BananaTechVals = deque(list(BananaTechVals)[-2:])
-    EcoVineVals = deque(list(EcoVineVals)[-2:])
-    JungleGoodsVals = deque(list(JungleGoodsVals)[-2:])
-    print(f"HealthyChimp Hourly Values: {list(HealthyChimpHourlyVals)}")
-    print(f"BananaTech Hourly Values: {list(BananaTechHourlyVals)}")
-    print(f"EcoVine Hourly Values: {list(EcoVineHourlyVals)}")
-    print(f"JungleGoods Hourly Values: {list(JungleGoodsHourlyVals)}")
-    print(f"Allstock Hourly Values: {list(allStockHourly)}")
-    return allStockVals, allStockHourly, EcoVineVals, EcoVineHourlyVals, BananaTechVals, BananaTechHourlyVals, JungleGoodsVals, JungleGoodsHourlyVals, HealthyChimpVals, HealthyChimpHourlyVals
+    
+    print(f"HealthyChimp30min Vals: {list(HealthyChimp30for5)}")
+    print(f"BananaTech30min Vals: {list(BananaTech30for5)}")
+    print(f"EcoVine30min Vals: {list(EcoVine30for5)}")
+    print(f"JungleGoods30min Vals: {list(JungleGoods30for5)}")
+    print(f"Allstock30min Vals: {list(allStock30for5)}")
+    
+    return allStockVals, allStock30for5, EcoVineVals, EcoVine30for5, BananaTechVals, BananaTech30for5, JungleGoodsVals, JungleGoods30for5, HealthyChimpVals, HealthyChimp30for5
+
+    
+
+def add5min():
+    global HealthyChimpVals, BananaTechVals, EcoVineVals, JungleGoodsVals, allStockVals
+    global HealthyChimp5MinsforDay, BananaTech5MinsforDay, JungleGoods5MinsforDay, EcoVine5MinsforDay, allStock5MinsforDay
+    print("ADDING 5 minutes")
+
+    if allStockVals:
+        allStock5MinsforDay.append(round(mean(list(allStockVals)[-5:]),2))
+    else:
+        print("LLLLL")
+    
+    if HealthyChimpVals:
+        HealthyChimp5MinsforDay.append(round(mean(list(HealthyChimpVals)[-5:]), 2))
+    else:
+        print("HealthyChimpVals is empty.")
+    
+    if BananaTechVals:
+        BananaTech5MinsforDay.append(round(mean(list(BananaTechVals)[-5:]), 2))
+    else:
+        print("BananaTechVals is empty.")
+    
+    if EcoVineVals:
+        EcoVine5MinsforDay.append(round(mean(list(EcoVineVals)[-5:]), 2))
+    else:
+        print("EcoVineVals is empty.")
+    
+    if JungleGoodsVals:
+        JungleGoods5MinsforDay.append(round(mean(list(JungleGoodsVals)[-5:]), 2))
+    else:
+        print("JungleGoodsVals is empty.")
+    print(f"HealthyChimp5min Vals: {list(HealthyChimp5MinsforDay)}")
+    print(f"BananaTech5min Vals: {list(BananaTech5MinsforDay)}")
+    print(f"EcoVine5min Vals: {list(EcoVine5MinsforDay)}")
+    print(f"JungleGoods5min Vals: {list(JungleGoods5MinsforDay)}")
+    print(f"Allstock5min Vals: {list(allStock5MinsforDay)}")
+    return allStockVals, allStock5MinsforDay, EcoVineVals, EcoVine5MinsforDay, BananaTechVals, BananaTech5MinsforDay, JungleGoodsVals, JungleGoods5MinsforDay, HealthyChimpVals, HealthyChimp5MinsforDay
 
 def pickValue(values, stock):
     if stock == 'BananaTech':
@@ -104,7 +150,8 @@ def start():
 def on_request_example(req: https_fn.Request) -> https_fn.Response:
     global lastBanana, lastChimp, LastEconVine, LastJungle, stocksNowData
     global EcoVineVals, HealthyChimpVals, JungleGoodsVals, BananaTechVals, allStockVals
-    global currenthour
+    global currenthour, currentminute, currentminute5, currentminute30
+    global EcoVine5MinsforDay, EcoVine30for5
 
     BananaTechValue = 124
     HealthyChimpValue = 64
@@ -195,12 +242,29 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
 
     allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
 
-    if currenthour != datetime.now().hour:
-        allStockVals, allStockHourly, EcoVineVals, EcoVineHourlyVals, BananaTechVals, BananaTechHourlyVals, JungleGoodsVals, JungleGoodsHourlyVals, HealthyChimpVals, HealthyChimpHourlyVals = addHour()
-        currenthour =  datetime.now().hour
+    if currentminute5 == 60:
+        if datetime.now().minute == 60 or datetime.now().minute < 10:  
+            currentminute5 = 5
+            allStockVals, allStock5MinsforDay, EcoVineVals, EcoVine5MinsforDay, BananaTechVals, BananaTech5MinsforDay, JungleGoodsVals, JungleGoods5MinsforDay, HealthyChimpVals, HealthyChimp5MinsforDay  = add5min() 
+    elif currentminute5 + 5 <= datetime.now().minute:
+        currentminute5 += 5
+        allStockVals, allStock5MinsforDay, EcoVineVals, EcoVine5MinsforDay, BananaTechVals, BananaTech5MinsforDay, JungleGoodsVals, JungleGoods5MinsforDay, HealthyChimpVals, HealthyChimp5MinsforDay  = add5min() 
+    
+    if currentminute30 == 60:
+        if datetime.now().minute < 60:
+            currentminute30 = 30
+            allStockVals, allStock30for5, EcoVineVals, EcoVine30for5, BananaTechVals, BananaTech30for5, JungleGoodsVals, JungleGoods30for5, HealthyChimpVals, HealthyChimp30for5 = add30mins()
+    elif currentminute30 + 30 <= datetime.now().minute:
+        currentminute30 += 30
+        allStockVals, allStock30for5, EcoVineVals, EcoVine30for5, BananaTechVals, BananaTech30for5, JungleGoodsVals, JungleGoods30for5, HealthyChimpVals, HealthyChimp30for5 = add30mins()
+
+    
 
 
-    print("LENGTH", len(EcoVineVals))
+    print(EcoVineVals)
+    print(EcoVine5MinsforDay)
+    print(EcoVine30for5)
+
 
 
     print(f"Updated stocks {stocksNowData}")
