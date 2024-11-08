@@ -228,7 +228,9 @@ Widget _buildImageItem(int itemIndex, String imagePath, int sectionIndex) {
           // RenderBox renderBox = context.findRenderObject() as RenderBox;
           // Offset position = renderBox.localToGlobal(Offset.zero);
             if (itemIndex == 3 && progressController.currentLessonIndex.value >= 3) {
-              _chestAnimationController.forward();
+             // _chestAnimationController.forward();
+             _showFloatingGif(context);
+
             } else if (itemIndex != 3) {
               _showDialog(context, itemIndex, iconKey,_scrollController);
             }
@@ -245,6 +247,28 @@ Widget _buildImageItem(int itemIndex, String imagePath, int sectionIndex) {
   );
 }
 
+void _showFloatingGif(BuildContext context) {
+  double screenWidth = MediaQuery.of(context).size.width;
+  double screenHeight = MediaQuery.of(context).size.height;
+  OverlayState? overlayState = Overlay.of(context);
+  OverlayEntry overlayEntry = OverlayEntry(
+    builder: (context) => Center(
+      child: Image.asset(
+        'assets/images/Treasure_chest.gif',
+        width: screenWidth*0.8,
+        height: screenHeight*0.8,
+        fit: BoxFit.contain,
+      ),
+    ),
+  );
+
+  overlayState?.insert(overlayEntry);
+
+  // Optionally remove the overlay after a duration
+  Future.delayed(const Duration(seconds: 3), () {
+    overlayEntry.remove();
+  });
+}
 
 
 

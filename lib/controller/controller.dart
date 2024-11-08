@@ -76,9 +76,10 @@ void checkCompletion() {
     }
     
     currentLessonIndex.value += 1;
-   // progress.value=0.0;
-    //progress.refresh();
-   // print("Progress after moving to next lesson: ${progress.value}");
+    // progress.value=0.0;
+    // progress.refresh();
+    // print("Progress after moving to next lesson: ${progress.value}");
+  
   }
 // Method to record an attempt
   void recordAttempt(bool isCorrect) {

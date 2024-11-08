@@ -71,12 +71,14 @@ class QuestionFeedbackDialog extends StatelessWidget {
               onPressed: () {
 
                 if(isCorrect){
-                  Get.toNamed("/lessonCompletePageRoute");
+                 // Get.toNamed("/lessonCompletePageRoute");
+                  Navigator.of(context).pop(); // Close the dialog
                 }
                 else{
                   Navigator.of(context).pop(); // Close the dialog
+                   progressController.resetSelection();
                 }
-               progressController.resetSelection();
+              
               },
               
               child: const Text(

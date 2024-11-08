@@ -13,9 +13,10 @@ class ContinueButtonSection extends StatelessWidget {
     return Obx(() {
       bool isOptionSelected = progressController.isOptionSelected.value;
       bool isCorrectSelected = progressController.isCorrectSelected.value;
-      String buttonText = isCorrectSelected && progressController.isDialogShown.value
-          ? "Continue"
-          : "Check";
+      bool isDialogShown = progressController.isDialogShown.value;
+
+      // Update button text based on current state
+      String buttonText = isCorrectSelected && isDialogShown ? "Continue" : "Check";
 
       return Container(
         height: 50,
@@ -25,7 +26,6 @@ class ContinueButtonSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              
               width: double.maxFinite,
               height: 38,
               margin: const EdgeInsets.only(bottom: 12),
@@ -40,32 +40,34 @@ class ContinueButtonSection extends StatelessWidget {
                 ),
                 onPressed: isOptionSelected
                     ? () {
-                         if (isCorrectSelected) {
-            // Mark quiz as completed if the correct answer is confirmed
-            progressController.setQuizCompleted(); 
-
-            // Show correct answer dialog
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const QuestionFeedbackDialog(isCorrect: true);
-              },
-            ).then((_) {
-              // After showing the dialog, update dialog shown state
-              progressController.setDialogShown(true);
-            });
-        } else {
-            // Show incorrect answer dialog without marking quiz completion
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const QuestionFeedbackDialog(isCorrect: false);
-              },
-            ).then((_) {
-              // Reset option selection for retry
-              progressController.setOptionSelected(false);
-            });
-        }
+                        if (isCorrectSelected && !isDialogShown) {
+                          // Show correct answer dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const QuestionFeedbackDialog(isCorrect: true);
+                            },
+                          ).then((_) {
+                            // After showing the dialog, update dialog shown state
+                            progressController.setDialogShown(true);
+                            // Mark quiz as completed
+                            progressController.setQuizCompleted();
+                          });
+                        } else if (isCorrectSelected && isDialogShown) {
+                          // Navigate to the next page if "Continue" is clicked
+                          Get.toNamed("/lessonCompletePageRoute");
+                        } else {
+                          // Show incorrect answer dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const QuestionFeedbackDialog(isCorrect: false);
+                            },
+                          ).then((_) {
+                            // Reset option selection for retry
+                            progressController.setOptionSelected(false);
+                          });
+                        }
                       }
                     : null,
                 child: Text(
