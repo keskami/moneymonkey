@@ -69,10 +69,10 @@ def addHour():
         JungleGoodsHourlyVals.append(round(mean(JungleGoodsVals), 2))
     else:
         print("JungleGoodsVals is empty.")
-    HealthyChimpVals = deque(list(HealthyChimpVals)[-5:])  
-    BananaTechVals = deque(list(BananaTechVals)[-5:])
-    EcoVineVals = deque(list(EcoVineVals)[-5:])
-    JungleGoodsVals = deque(list(JungleGoodsVals)[-5:])
+    HealthyChimpVals = deque(list(HealthyChimpVals)[-2:])  
+    BananaTechVals = deque(list(BananaTechVals)[-2:])
+    EcoVineVals = deque(list(EcoVineVals)[-2:])
+    JungleGoodsVals = deque(list(JungleGoodsVals)[-2:])
     print(f"HealthyChimp Hourly Values: {list(HealthyChimpHourlyVals)}")
     print(f"BananaTech Hourly Values: {list(BananaTechHourlyVals)}")
     print(f"EcoVine Hourly Values: {list(EcoVineHourlyVals)}")
@@ -196,7 +196,7 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
     allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
 
     if currenthour != datetime.now().hour:
-        allStockVals, allStockHourly, EcoVineVals, EcoVineHourlyVals, BananaTechVals, BananaTechHourlyVals, JungleGoodsVals, JungleGoodsHourlyVals, HealthyChimpVals, HealthyChimpHourlyVals  = addHour()
+        allStockVals, allStockHourly, EcoVineVals, EcoVineHourlyVals, BananaTechVals, BananaTechHourlyVals, JungleGoodsVals, JungleGoodsHourlyVals, HealthyChimpVals, HealthyChimpHourlyVals = addHour()
         currenthour =  datetime.now().hour
 
 
