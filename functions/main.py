@@ -17,30 +17,36 @@ app = Flask(__name__)
 allStockVals = deque(maxlen=60)
 allStock5MinsforDay = deque(maxlen=288)
 allStock30for5= deque(maxlen = 240)
-allStockMonthly = deque(maxlen= 31)
+allStock31days= deque(maxlen= 31)
+allStock365days = deque(maxlen=365)
 
 
 BananaTechVals = deque(maxlen=60)
 BananaTech5MinsforDay = deque(maxlen=288)
 BananaTech30for5 = deque(maxlen=240)
-BananaTechMonthlyVals = deque(maxlen=31)
+BananaTech31days = deque(maxlen=31)
+BananaTech365days = deque(maxlen =365)
 
 
 HealthyChimpVals = deque(maxlen=60)
 HealthyChimp5MinsforDay = deque(maxlen=289)
 HealthyChimp30for5 = deque(maxlen=240)
-HealthyChimpMonthlyVals = deque(maxlen=31)
+HealthyChimp31days = deque(maxlen=31)
+HealthyChimp365days = deque(maxlen=365)
+
 
 
 EcoVineVals = deque(maxlen=60)
 EcoVine5MinsforDay = deque(maxlen=289)
 EcoVine30for5 = deque(maxlen=240)
-EcoVineMonthlyVals = deque(maxlen=31)
+EcoVine31days = deque(maxlen=31)
+EcoVine365days = deque(maxlen=365)
 
 JungleGoodsVals = deque(maxlen=60)
 JungleGoods5MinsforDay = deque(maxlen=289)
 JungleGoods30for5 = deque(maxlen=240)
-JungleGoodsMonthlyVals = deque(maxlen=31)
+JungleGoods31days = deque(maxlen=31)
+JungleGoods365days = deque(maxlen=365)
 
 
 
@@ -49,7 +55,32 @@ currenthour = datetime.now().hour
 currentminute = datetime.now().minute
 currentminute5 = (currentminute // 5) * 5
 currentminute30 = (currentminute // 30) * 30
+currentDate = datetime.now().date()
 stocksNowData = {}
+
+
+def newDay():
+    global HealthyChimpVals, BananaTechVals, EcoVineVals, JungleGoodsVals, allStockVals
+    global HealthyChimp31days, HealthyChimp365days, BananaTech31days, BananaTech365days
+    global JungleGoods31days, JungleGoods365days, EcoVine31days, EcoVine365days
+    global allStock31days, allStock365days, allStock30for5, EcoVine30for5
+    global BananaTech30for5, JungleGoods30for5, HealthyChimp30for5
+    global allStock5MinsforDay, EcoVine5MinsforDay, BananaTech5MinsforDay
+    global JungleGoods5MinsforDay, HealthyChimp5MinsforDay
+    print("New Day")
+    def updateForDay(stockVals, stock31, stock365, stock5forday):
+        if stockVals:
+            stock31.append(round(mean(list(stock5forday)), 2))
+            stock365.append(round(mean(list(stock5forday)), 2))
+            stock5forday = list(stock5forday)[-1:]
+        return stock31, stock365, stock5forday
+
+    allStock31days, allStock365days, allStock5MinsforDay = updateForDay(allStockVals, allStock31days, allStock365days, allStock5MinsforDay)
+    HealthyChimp31days, HealthyChimp365days, HealthyChimp5MinsforDay = updateForDay(HealthyChimpVals, HealthyChimp31days, HealthyChimp365days, HealthyChimp5MinsforDay)
+    BananaTech31days, BananaTech365days, BananaTech5MinsforDay = updateForDay(BananaTechVals, BananaTech31days, BananaTech365days, BananaTech5MinsforDay)
+    JungleGoods31days, JungleGoods365days, JungleGoods5MinsforDay = updateForDay(JungleGoodsVals, JungleGoods31days, JungleGoods365days, JungleGoods5MinsforDay)
+    EcoVine31days, EcoVine365days, EcoVine5MinsforDay = updateForDay(EcoVineVals, EcoVine31days, EcoVine365days, EcoVine5MinsforDay)
+
 
 def add30mins():
     global HealthyChimpVals, BananaTechVals, EcoVineVals, JungleGoodsVals, allStockVals
@@ -150,7 +181,7 @@ def start():
 def on_request_example(req: https_fn.Request) -> https_fn.Response:
     global lastBanana, lastChimp, LastEconVine, LastJungle, stocksNowData
     global EcoVineVals, HealthyChimpVals, JungleGoodsVals, BananaTechVals, allStockVals
-    global currenthour, currentminute, currentminute5, currentminute30
+    global currenthour, currentminute, currentminute5, currentminute30, currentDate
     global EcoVine5MinsforDay, EcoVine30for5
 
     BananaTechValue = 124
@@ -257,6 +288,10 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
     elif currentminute30 + 30 <= datetime.now().minute:
         currentminute30 += 30
         allStockVals, allStock30for5, EcoVineVals, EcoVine30for5, BananaTechVals, BananaTech30for5, JungleGoodsVals, JungleGoods30for5, HealthyChimpVals, HealthyChimp30for5 = add30mins()
+
+    if currentDate < datetime.now().date() and datetime.now().hour >= 9 and datetime.now().minute >= 30:
+        currentDate = datetime.now().date()
+        newDay()
 
     
 
