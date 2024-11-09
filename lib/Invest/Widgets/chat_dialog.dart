@@ -5,8 +5,8 @@ class ChatDialogContainer extends StatelessWidget {
     super.key,
     required this.childWidget,
     this.trianglePosition = TrianglePosition.bottom,
-    this.borderWidth = 2, // Default border width
-    this.borderRadius = 16, // Default border radius
+    this.borderWidth = 2,
+    this.borderRadius = 16,
   });
 
   final Widget childWidget;
@@ -64,7 +64,6 @@ class ChatBubblePainter extends CustomPainter {
     double containerHeight = size.height;
 
     if (trianglePosition == TrianglePosition.bottom) {
-      // Draw rounded rectangle without triangle
       path.addRRect(RRect.fromRectAndCorners(
         Rect.fromLTRB(0, 0, containerWidth, containerHeight - triangleHeight),
         topLeft: Radius.circular(borderRadius),

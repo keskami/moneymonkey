@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:money_monkey/Invest/Pages/Real%20Estate%20Pages/property_details.dart';
 import 'package:money_monkey/Invest/Widgets/chat_dialog.dart';
 import 'package:money_monkey/Invest/Widgets/continue_btn.dart';
 
@@ -54,12 +55,12 @@ class RealEstateItem extends StatelessWidget {
   }
 
   Offset _calculateOffset(int index) {
-    double baseRadius = 95;
+    double baseRadius = neighbours.length <= 2 ? 100 : 80;
     double radius = baseRadius + (neighbours.length - 2) * 20;
 
     double angleStep = pi / neighbours.length;
     double angle =
-        start ? (angleStep * index) + 5.5 : (pi - angleStep * index) - 5.5;
+        start ? (angleStep * index) + 5.6 : (pi - angleStep * index) - 5.4;
 
     return Offset(radius * cos(angle), radius * sin(angle));
   }
@@ -94,11 +95,26 @@ WidgetBuilder get _localDialogBuilder {
               ),
               Align(
                 alignment: Alignment.center,
-                child: Image.asset("assets/real_estate/house.png"),
+                child: Image.asset(
+                  "assets/real_estate/house.png",
+                  height: MediaQuery.of(context).size.width * 0.4,
+                  fit: BoxFit.contain,
+                ),
               ),
               ContinueButton(
                 pages: 0,
-                nextPage: () {},
+                nextPage: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PropertyDetails(
+                        property: "Modern Loft",
+                        address:
+                            "1234 Martin Luther King Jr Blvd, Detroit, MI 48208",
+                      ),
+                    ),
+                  );
+                },
                 isEnabled: true,
               ),
             ],

@@ -31,18 +31,31 @@ class _RealEstateHomeState extends State<RealEstateHome> {
       "assets/real_estate/shopping_mall.png",
       "assets/real_estate/office.png",
     ],
+    "assets/real_estate/center4_copy.png": [
+      "assets/real_estate/house.png",
+      "assets/real_estate/stadium.png",
+      "assets/real_estate/shopping_mall.png",
+      "assets/real_estate/office.png",
+    ],
+    "assets/real_estate/center3_copy.png": [
+      "assets/real_estate/house.png",
+      "assets/real_estate/stadium.png",
+      "assets/real_estate/shopping_mall.png",
+      "assets/real_estate/office.png",
+    ],
   };
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 137, 220, 142),
-        body: Column(
-          children: [
-            _buildGridScreenshot(context),
-          ],
-        ),
+        backgroundColor: const Color.fromARGB(255, 137, 220, 142),
+        body: _buildGridScreenshot(context),
         bottomNavigationBar: _buildBottomNavigationBar(),
       ),
     );
@@ -53,39 +66,48 @@ class _RealEstateHomeState extends State<RealEstateHome> {
     double screenWidth = MediaQuery.of(context).size.width;
     final itemEntries = items.entries.toList();
 
-    return Expanded(
-      child: ListView.builder(
-        itemCount: itemEntries.length,
-        itemBuilder: (context, index) {
-          bool isEven = index % 2 == 0;
-          final item = itemEntries[index];
-
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: screenHeight * 0.04,
-            ),
-            child: Row(
-              mainAxisAlignment:
-                  isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
-              children: [
-                if (isEven)
-                  SizedBox(
-                    width: screenWidth * 0.27,
-                  ),
-                RealEstateItem(
-                  center: item.key,
-                  neighbours: item.value,
-                  start: !isEven,
-                ),
-                if (!isEven)
-                  SizedBox(
-                    width: screenWidth * 0.33,
-                  ),
-              ],
-            ),
-          );
-        },
+    return ListView.builder(
+      padding: EdgeInsets.fromLTRB(
+        0,
+        screenHeight * 0.07,
+        0,
+        screenHeight * 0.2,
       ),
+      itemCount: itemEntries.length,
+      itemBuilder: (context, index) {
+        bool isEven = index % 2 == 0;
+        final item = itemEntries[index];
+
+        return Padding(
+          padding: EdgeInsets.only(
+            top: screenHeight * 0.04,
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment:
+                    isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    width: screenWidth * 0.29,
+                  ),
+                  RealEstateItem(
+                    center: item.key,
+                    neighbours: item.value,
+                    start: !isEven,
+                  ),
+                  SizedBox(
+                    width: screenWidth * 0.29,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: item.value.length.toDouble() * 25,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
