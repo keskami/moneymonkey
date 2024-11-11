@@ -400,7 +400,7 @@ def updateStocks():
     global EcoVine5MinsforDay, EcoVine30for5, EcoVine31days
 
     while True:
-        time.sleep(9.9)
+        time.sleep(59.9)
 
         BananaTechValue = 124
         HealthyChimpValue = 64
