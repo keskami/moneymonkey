@@ -8,25 +8,20 @@ import random
 from datetime import datetime, timedelta, timezone
 from collections import deque
 
-
-
 initialize_app()  
 db = firestore.client()
 app = Flask(__name__)
-
 allStockVals = deque(maxlen=60)
 allStock5MinsforDay = deque(maxlen=288)
 allStock30for5= deque(maxlen = 240)
 allStock31days= deque(maxlen= 31)
 allStock365days = deque(maxlen=365)
 
-
 BananaTechVals = deque(maxlen=60)
 BananaTech5MinsforDay = deque(maxlen=288)
 BananaTech30for5 = deque(maxlen=240)
 BananaTech31days = deque(maxlen=31)
 BananaTech365days = deque(maxlen =365)
-
 
 HealthyChimpVals = deque(maxlen=60)
 HealthyChimp5MinsforDay = deque(maxlen=289)
@@ -173,138 +168,140 @@ def start():
     while True:
         with app.app_context():  
             on_request_example(None)  
-        time.sleep(20)  
+        time.sleep(20) 
 
-
-
-@https_fn.on_request()
-def on_request_example(req: https_fn.Request) -> https_fn.Response:
+def updateStocks():
     global lastBanana, lastChimp, LastEconVine, LastJungle, stocksNowData
     global EcoVineVals, HealthyChimpVals, JungleGoodsVals, BananaTechVals, allStockVals
     global currenthour, currentminute, currentminute5, currentminute30, currentDate
     global EcoVine5MinsforDay, EcoVine30for5
 
-    BananaTechValue = 124
-    HealthyChimpValue = 64
-    EcoVineValue = 80
-    JungleGoodsValue = 55
-    try:
-        if len(HealthyChimpVals) >= 1 and len(BananaTechVals) >= 1 and len(EcoVineVals) >= 1 and len(JungleGoodsVals) >= 1:
-            BananaTechVals.append(lastBanana)
-            HealthyChimpVals.append(lastChimp)
-            EcoVineVals.append(LastEconVine)
-            JungleGoodsVals.append(LastJungle)
-            BananaTechValue = round(pickValue(BananaTechVals, 'BananaTech'), 2)
-            HealthyChimpValue = round(pickValue(HealthyChimpVals, 'HealthyChimp'), 2)
-            EcoVineValue = round(pickValue(EcoVineVals, 'EcoVine'), 2)
-            JungleGoodsValue = round(pickValue(JungleGoodsVals, 'JungleGoods'), 2)
-        else:
-            print("WARNING READING")
-            banana_ref = db.collection('BananaTech').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
-            chimp_ref = db.collection('HealthyChimp').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
-            ecovine_ref = db.collection('EcoVine').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
-            jungle_ref = db.collection('JungleGoods').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
-            
-            if banana_ref:
-                for doc in banana_ref:
-                    doc_data = doc.to_dict()
-                    value = doc_data.get('value')
-                    if value not in BananaTechVals:   
-                        BananaTechVals.append(value)
-                lastBanana = value
-            if chimp_ref:
-                for doc in chimp_ref:
-                    doc_data = doc.to_dict()
-                    value = doc_data.get('value')
-                    if value not in HealthyChimpVals:
-                        HealthyChimpVals.append(value)
-                lastChimp = value
-            if ecovine_ref:
-                for doc in ecovine_ref:
-                    doc_data = doc.to_dict()
-                    value = doc_data.get('value')
-                    if value not in EcoVineVals:
-                        EcoVineVals.append(value)
-                LastEconVine = value
-            if jungle_ref:
-                for doc in jungle_ref:
-                    doc_data = doc.to_dict()
-                    value = doc_data.get('value')
-                    if value not in JungleGoodsVals:
-                        JungleGoodsVals.append(doc_data.get('value'))
-                LastJungle = value
-        
-            BananaTechValue = round(pickValue(BananaTechVals, 'BananaTech'), 2)
-            HealthyChimpValue = round(pickValue(HealthyChimpVals, 'HealthyChimp'), 2)
-            EcoVineValue = round(pickValue(EcoVineVals, 'EcoVine'), 2)
-            JungleGoodsValue = round(pickValue(JungleGoodsVals, 'JungleGoods'), 2)
-    except Exception as e:
+    while True:
+        time.sleep(20)
+
         BananaTechValue = 124
-        BananaTechVals.append(BananaTechValue)
-        lastBanana = BananaTechValue
         HealthyChimpValue = 64
-        HealthyChimpVals.append(HealthyChimpValue)
-        lastChimp = HealthyChimpValue
         EcoVineValue = 80
-        EcoVineVals.append(EcoVineValue)
-        LastEconVine = EcoVineValue
         JungleGoodsValue = 55
-        JungleGoodsVals.append(JungleGoodsValue)
+        try:
+            if len(HealthyChimpVals) >= 1 and len(BananaTechVals) >= 1 and len(EcoVineVals) >= 1 and len(JungleGoodsVals) >= 1:
+                BananaTechVals.append(lastBanana)
+                HealthyChimpVals.append(lastChimp)
+                EcoVineVals.append(LastEconVine)
+                JungleGoodsVals.append(LastJungle)
+                BananaTechValue = round(pickValue(BananaTechVals, 'BananaTech'), 2)
+                HealthyChimpValue = round(pickValue(HealthyChimpVals, 'HealthyChimp'), 2)
+                EcoVineValue = round(pickValue(EcoVineVals, 'EcoVine'), 2)
+                JungleGoodsValue = round(pickValue(JungleGoodsVals, 'JungleGoods'), 2)
+            else:
+                print("WARNING READING")
+                banana_ref = db.collection('BananaTech').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
+                chimp_ref = db.collection('HealthyChimp').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
+                ecovine_ref = db.collection('EcoVine').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
+                jungle_ref = db.collection('JungleGoods').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).get()
+                
+                if banana_ref:
+                    for doc in banana_ref:
+                        doc_data = doc.to_dict()
+                        value = doc_data.get('value')
+                        if value not in BananaTechVals:   
+                            BananaTechVals.append(value)
+                    lastBanana = value
+                if chimp_ref:
+                    for doc in chimp_ref:
+                        doc_data = doc.to_dict()
+                        value = doc_data.get('value')
+                        if value not in HealthyChimpVals:
+                            HealthyChimpVals.append(value)
+                    lastChimp = value
+                if ecovine_ref:
+                    for doc in ecovine_ref:
+                        doc_data = doc.to_dict()
+                        value = doc_data.get('value')
+                        if value not in EcoVineVals:
+                            EcoVineVals.append(value)
+                    LastEconVine = value
+                if jungle_ref:
+                    for doc in jungle_ref:
+                        doc_data = doc.to_dict()
+                        value = doc_data.get('value')
+                        if value not in JungleGoodsVals:
+                            JungleGoodsVals.append(doc_data.get('value'))
+                    LastJungle = value
+            
+                BananaTechValue = round(pickValue(BananaTechVals, 'BananaTech'), 2)
+                HealthyChimpValue = round(pickValue(HealthyChimpVals, 'HealthyChimp'), 2)
+                EcoVineValue = round(pickValue(EcoVineVals, 'EcoVine'), 2)
+                JungleGoodsValue = round(pickValue(JungleGoodsVals, 'JungleGoods'), 2)
+        except Exception as e:
+            BananaTechValue = 124
+            BananaTechVals.append(BananaTechValue)
+            lastBanana = BananaTechValue
+            HealthyChimpValue = 64
+            HealthyChimpVals.append(HealthyChimpValue)
+            lastChimp = HealthyChimpValue
+            EcoVineValue = 80
+            EcoVineVals.append(EcoVineValue)
+            LastEconVine = EcoVineValue
+            JungleGoodsValue = 55
+            JungleGoodsVals.append(JungleGoodsValue)
+            LastJungle = JungleGoodsValue
+            BananaTechValue = round(pickValue(BananaTechVals, 'BananaTech'), 2)
+            HealthyChimpValue = round(pickValue(HealthyChimpVals, 'HealthyChimp'), 2)
+            EcoVineValue = round(pickValue(EcoVineVals, 'EcoVine'), 2)
+            JungleGoodsValue = round(pickValue(JungleGoodsVals, 'JungleGoods'), 2)
+            print(e)
+
+        
+        lastBanana = BananaTechValue
+        lastChimp = HealthyChimpValue
+        LastEconVine = EcoVineValue
         LastJungle = JungleGoodsValue
-        BananaTechValue = round(pickValue(BananaTechVals, 'BananaTech'), 2)
-        HealthyChimpValue = round(pickValue(HealthyChimpVals, 'HealthyChimp'), 2)
-        EcoVineValue = round(pickValue(EcoVineVals, 'EcoVine'), 2)
-        JungleGoodsValue = round(pickValue(JungleGoodsVals, 'JungleGoods'), 2)
-        print(e)
+        stocksNowData = {
+            'BananaTechValue': BananaTechValue,
+            'HealthyChimpValue': HealthyChimpValue,
+            'EcoVineValue': EcoVineValue,
+            'JungleGoodsValue': JungleGoodsValue,
+            'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
+            'timestamp': datetime.now()
+        }
 
-    
-    lastBanana = BananaTechValue
-    lastChimp = HealthyChimpValue
-    LastEconVine = EcoVineValue
-    LastJungle = JungleGoodsValue
-    stocksNowData = {
-        'BananaTechValue': BananaTechValue,
-        'HealthyChimpValue': HealthyChimpValue,
-        'EcoVineValue': EcoVineValue,
-        'JungleGoodsValue': JungleGoodsValue,
-        'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
-        'timestamp': datetime.now()
-    }
+        allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
 
-    allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
-
-    if currentminute5 == 60:
-        if datetime.now().minute == 60 or datetime.now().minute < 10:  
-            currentminute5 = 5
+        if currentminute5 == 60:
+            if datetime.now().minute == 60 or datetime.now().minute < 10:  
+                currentminute5 = 5
+                allStockVals, allStock5MinsforDay, EcoVineVals, EcoVine5MinsforDay, BananaTechVals, BananaTech5MinsforDay, JungleGoodsVals, JungleGoods5MinsforDay, HealthyChimpVals, HealthyChimp5MinsforDay  = add5min() 
+        elif currentminute5 + 5 <= datetime.now().minute:
+            currentminute5 += 5
             allStockVals, allStock5MinsforDay, EcoVineVals, EcoVine5MinsforDay, BananaTechVals, BananaTech5MinsforDay, JungleGoodsVals, JungleGoods5MinsforDay, HealthyChimpVals, HealthyChimp5MinsforDay  = add5min() 
-    elif currentminute5 + 5 <= datetime.now().minute:
-        currentminute5 += 5
-        allStockVals, allStock5MinsforDay, EcoVineVals, EcoVine5MinsforDay, BananaTechVals, BananaTech5MinsforDay, JungleGoodsVals, JungleGoods5MinsforDay, HealthyChimpVals, HealthyChimp5MinsforDay  = add5min() 
-    
-    if currentminute30 == 60:
-        if datetime.now().minute < 60:
-            currentminute30 = 30
+        
+        if currentminute30 == 60:
+            if datetime.now().minute < 60:
+                currentminute30 = 30
+                allStockVals, allStock30for5, EcoVineVals, EcoVine30for5, BananaTechVals, BananaTech30for5, JungleGoodsVals, JungleGoods30for5, HealthyChimpVals, HealthyChimp30for5 = add30mins()
+        elif currentminute30 + 30 <= datetime.now().minute:
+            currentminute30 += 30
             allStockVals, allStock30for5, EcoVineVals, EcoVine30for5, BananaTechVals, BananaTech30for5, JungleGoodsVals, JungleGoods30for5, HealthyChimpVals, HealthyChimp30for5 = add30mins()
-    elif currentminute30 + 30 <= datetime.now().minute:
-        currentminute30 += 30
-        allStockVals, allStock30for5, EcoVineVals, EcoVine30for5, BananaTechVals, BananaTech30for5, JungleGoodsVals, JungleGoods30for5, HealthyChimpVals, HealthyChimp30for5 = add30mins()
 
-    if currentDate < datetime.now().date() and datetime.now().hour >= 9 and datetime.now().minute >= 30:
-        currentDate = datetime.now().date()
-        newDay()
+        if currentDate < datetime.now().date() and datetime.now().hour >= 9 and datetime.now().minute >= 30:
+            currentDate = datetime.now().date()
+            newDay()
 
-    
+        
 
 
-    print(EcoVineVals)
-    print(EcoVine5MinsforDay)
-    print(EcoVine30for5)
+        print(EcoVineVals)
+        print(EcoVine5MinsforDay)
+        print(EcoVine30for5)
 
 
 
-    print(f"Updated stocks {stocksNowData}")
-    return make_response("OK", 200)
-    
+        print(f"Updated stocks {stocksNowData}")
+
+
+
+
 
     
 
@@ -327,7 +324,22 @@ def get_stocks_now():
         response = make_response(f"Error adding document: {e}", 500)
         return response'''
 
-threading.Thread(target=start, daemon=True).start()
+def start_background_tasks():
+    update_thread = threading.Thread(target=updateStocks, daemon=True)
+    update_thread.start()
+
+@app.route('/api/stocks', methods=['GET'])
+def get_stocks():
+    return jsonify(stocksNowData)
+
+@https_fn.on_request()
+def on_request_example(req: https_fn.Request) -> https_fn.Response:
+    if req.method == 'GET':
+        return jsonify(stocksNowData)
+    return make_response("OK", 200)
+
+# Start the background tasks when the application starts
+start_background_tasks()
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
-#threading.Thread(target=consolidate_data, daemon=True).start()
+    app.run(host='0.0.0.0', port=8080, debug=False)
