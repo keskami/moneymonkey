@@ -177,7 +177,7 @@ def updateStocks():
     global EcoVine5MinsforDay, EcoVine30for5
 
     while True:
-        time.sleep(20)
+        time.sleep(59.9)
 
         BananaTechValue = 124
         HealthyChimpValue = 64
@@ -338,7 +338,6 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         return jsonify(stocksNowData)
     return make_response("OK", 200)
 
-# Start the background tasks when the application starts
 start_background_tasks()
 
 if __name__ == '__main__':
