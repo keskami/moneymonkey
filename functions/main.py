@@ -7,7 +7,7 @@ from statistics import mean
 import random
 from datetime import datetime, timedelta, timezone
 from collections import deque
-est = timezone(timedelta(hours=-5)) #change to 8 to test at 11:30
+est = timezone(timedelta(hours=-5)) #change to 9 to test at 12:30
 
 initialize_app()  
 db = firestore.client()
@@ -19,6 +19,9 @@ allStock5MinsforDay = deque(maxlen=288)
 allStock30for5= deque(maxlen = 240)
 allStock31days= deque(maxlen= 31)
 allStock365days = deque(maxlen=365)
+
+stockdailyapi = deque(maxlen=288)
+stock5dayapi = deque(maxlen = 240)
 
 BananaTechVals = deque(maxlen=60)
 BananaTech5MinsforDay = deque(maxlen=288)
@@ -77,6 +80,9 @@ allETFS30for5= deque(maxlen = 240)
 allETFS31days= deque(maxlen= 31)
 allETFS365days = deque(maxlen=365)
 
+etfdailyapi = deque(maxlen=288)
+etf5dayapi = deque(maxlen = 240)
+
 # Mutual Funds
 APEGrowthVals = deque(maxlen=60)
 APEGrowth5MinsforDay = deque(maxlen=288)
@@ -108,6 +114,10 @@ allMutualFunds30for5 = deque(maxlen=240)
 allMutualFunds31days = deque(maxlen=31)
 allMutualFunds365days = deque(maxlen=365)
 
+mfdailyapi = deque(maxlen=288)
+mf5dayapi = deque(maxlen = 240)
+
+
 
 
 
@@ -115,9 +125,9 @@ allMutualFunds365days = deque(maxlen=365)
 
 currenthour = datetime.now(est).hour
 currentminute = datetime.now(est).minute
-currentminute5 = (currentminute // 5) * 5
-currentminute30 = (currentminute // 30) * 30
-currentDate = datetime.now(est).date()
+nextincof5 = ((currentminute // 5) * 5) + 5
+nextincof30 = ((currentminute // 30) * 30) + 30
+currentDate = datetime.now(est).date()    #timedelta(hours=-33) intsead of est to test at 12:30
 
 print(datetime.now(est))
 stocksNowData = {}
@@ -143,6 +153,7 @@ def newDay():
     global BananaIncomeVals, BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay
     global JungleSectorVals, JungleSector31days, JungleSector365days, JungleSector5MinsforDay
     global allMutualFundsVals, allMutualFunds31days, allMutualFunds365days, allMutualFunds5MinsforDay
+    global stockdailyapi
 
     print("New Day")
 
@@ -173,6 +184,8 @@ def newDay():
     BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay = updateForDay(BananaIncomeVals, BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay)
     JungleSector31days, JungleSector365days, JungleSector5MinsforDay = updateForDay(JungleSectorVals, JungleSector31days, JungleSector365days, JungleSector5MinsforDay)
 
+    stockdailyapi = deque(list(stockdailyapi)[-1:], maxlen=stockdailyapi.maxlen)
+
 
 
 def add30mins():
@@ -182,83 +195,86 @@ def add30mins():
     global TechTree30for5, MonkeyMed30for5, GreenLeaf30for5, GorillaGoods30for5, allETFS30for5
     global APEGrowthVals, BalancedBananaVals, BananaIncomeVals, JungleSectorVals, allMutualFundsVals
     global APEGrowth30for5, BalancedBanana30for5, BananaIncome30for5, JungleSector30for5, allMutualFunds30for5
+    global mf5dayapi, etf5dayapi, stock5dayapi
 
     print("Adding 30")
 
     if allStockVals:
         allStock30for5.append(round(mean(list(allStockVals)[-30:]), 2))
-    else:
-        print("allStockVals is empty.")
+   
     
     if HealthyChimpVals:
         HealthyChimp30for5.append(round(mean(list(HealthyChimpVals)[-30:]), 2))
-    else:
-        print("HealthyChimpVals is empty.")
-    
     if BananaTechVals:
         BananaTech30for5.append(round(mean(list(BananaTechVals)[-30:]), 2))
-    else:
-        print("BananaTechVals is empty.")
     
     if EcoVineVals:
         EcoVine30for5.append(round(mean(list(EcoVineVals)[-30:]), 2))
-    else:
-        print("EcoVineVals is empty.")
     
     if JungleGoodsVals:
         JungleGoods30for5.append(round(mean(list(JungleGoodsVals)[-30:]), 2))
-    else:
-        print("JungleGoodsVals is empty.")
     
     if TechTreeVals:
         TechTree30for5.append(round(mean(list(TechTreeVals)[-30:]), 2))
-    else:
-        print("TechTreeVals is empty.")
-    
+
     if MonkeyMedVals:
         MonkeyMed30for5.append(round(mean(list(MonkeyMedVals)[-30:]), 2))
-    else:
-        print("MonkeyMedVals is empty.")
-    
+   
     if GreenLeafVals:
         GreenLeaf30for5.append(round(mean(list(GreenLeafVals)[-30:]), 2))
-    else:
-        print("GreenLeafVals is empty.")
-    
+   
     if GorillaGoodsVals:
         GorillaGoods30for5.append(round(mean(list(GorillaGoodsVals)[-30:]), 2))
-    else:
-        print("GorillaGoodsVals is empty.")
-    
+   
     if allETFVals:
         allETFS30for5.append(round(mean(list(allETFVals)[-30:]), 2))
-    else:
-        print("allETFVals is empty.")
-
+   
     if APEGrowthVals:
         APEGrowth30for5.append(round(mean(list(APEGrowthVals)[-30:]), 2))
-    else:
-        print("APEGrowthVals is empty.")
-    
+   
     if BalancedBananaVals:
         BalancedBanana30for5.append(round(mean(list(BalancedBananaVals)[-30:]), 2))
-    else:
-        print("BalancedBananaVals is empty.")
-    
+ 
     if BananaIncomeVals:
         BananaIncome30for5.append(round(mean(list(BananaIncomeVals)[-30:]), 2))
-    else:
-        print("BananaIncomeVals is empty.")
-    
+   
     if JungleSectorVals:
         JungleSector30for5.append(round(mean(list(JungleSectorVals)[-30:]), 2))
-    else:
-        print("JungleSectorVals is empty.")
     
     if allMutualFundsVals:
         allMutualFunds30for5.append(round(mean(list(allMutualFundsVals)[-30:]), 2))
-    else:
-        print("allMutualFundsVals is empty.")
+   
+    now = datetime.now(est)
+    rounded_time = now - timedelta(minutes=now.minute % 30, seconds=now.second, microseconds=now.microsecond)
+
+    stockdailydata = {
+         str(rounded_time) : {'BananaTechValue': round(mean(list(BananaTechVals)[-30:]), 2),
+            'HealthyChimpValue': round(mean(list(HealthyChimpVals)[-30:]), 2),
+            'EcoVineValue': round(mean(list(EcoVineVals)[-30:]), 2),
+            'JungleGoodsValue': round(mean(list(BananaTechVals)[-30:]), 2),
+            'Stocks': round(mean(list(allStockVals)[-30:]), 2)}
+            }
+    stock5dayapi.append(stockdailydata)
+    etfdailydata = {
+         str(rounded_time) : {'TechTreeValue': round(mean(list(TechTreeVals)[-30:]), 2),
+            'MonkeyMedValue': round(mean(list(MonkeyMedVals)[-30:]), 2),
+            'GreenLeafPowerValue': round(mean(list(GreenLeafVals)[-30:]), 2),
+            'GorillaGoodsValue': round(mean(list(GorillaGoodsVals)[-30:]), 2),
+            'ETFs': round(mean(list(allETFVals)[-30:]), 2)}
+            }
+
+    etf5dayapi.append(etfdailydata)
+    mfdailydata = {
+        str(rounded_time): {
+            'APEGrowthValue': round(mean(list(APEGrowthVals)[-30:]), 2),
+            'BalancedBananaValue': round(mean(list(BalancedBananaVals)[-30:]), 2),
+            'BananaIncomeValue': round(mean(list(BananaIncomeVals)[-30:]), 2),
+            'JungleSectorValue': round(mean(list(JungleSectorVals)[-30:]), 2),
+            'MutualFunds': round(mean(list(allMutualFundsVals)[-30:]), 2)
+        }
+    }
+    mf5dayapi.append(mfdailydata)
+
 
     
     
@@ -270,118 +286,118 @@ def add5min():
     global TechTree5MinsforDay, MonkeyMed5MinsforDay, GreenLeaf5MinsforDay, GorillaGoods5MinsforDay, allETFS5MinsforDay
     global APEGrowthVals, BalancedBananaVals, BananaIncomeVals, JungleSectorVals, allMutualFundsVals
     global APEGrowth5MinsforDay, BalancedBanana5MinsforDay, BananaIncome5MinsforDay, JungleSector5MinsforDay, allMutualFunds5MinsforDay
+    global stockdailyapi, etfdailyapi, mfdailyapi
     
     print("ADDING 5 minutes")
     
     # Stocks
     if allStockVals:
         allStock5MinsforDay.append(round(mean(list(allStockVals)[-5:]), 2))
-    else:
-        print("allStockVals is empty.")
-    
+   
     if HealthyChimpVals:
         HealthyChimp5MinsforDay.append(round(mean(list(HealthyChimpVals)[-5:]), 2))
-    else:
-        print("HealthyChimpVals is empty.")
-    
+  
     if BananaTechVals:
         BananaTech5MinsforDay.append(round(mean(list(BananaTechVals)[-5:]), 2))
-    else:
-        print("BananaTechVals is empty.")
-    
+   
     if EcoVineVals:
         EcoVine5MinsforDay.append(round(mean(list(EcoVineVals)[-5:]), 2))
-    else:
-        print("EcoVineVals is empty.")
-    
+   
     if JungleGoodsVals:
         JungleGoods5MinsforDay.append(round(mean(list(JungleGoodsVals)[-5:]), 2))
-    else:
-        print("JungleGoodsVals is empty.")
     
     # ETFs
     if TechTreeVals:
         TechTree5MinsforDay.append(round(mean(list(TechTreeVals)[-5:]), 2))
-    else:
-        print("TechTreeVals is empty.")
-    
+   
     if MonkeyMedVals:
         MonkeyMed5MinsforDay.append(round(mean(list(MonkeyMedVals)[-5:]), 2))
-    else:
-        print("MonkeyMedVals is empty.")
     
     if GreenLeafVals:
         GreenLeaf5MinsforDay.append(round(mean(list(GreenLeafVals)[-5:]), 2))
-    else:
-        print("GreenLeafVals is empty.")
-    
+   
     if GorillaGoodsVals:
         GorillaGoods5MinsforDay.append(round(mean(list(GorillaGoodsVals)[-5:]), 2))
-    else:
-        print("GorillaGoodsVals is empty.")
-    
+   
     if allETFVals:
         allETFS5MinsforDay.append(round(mean(list(allETFVals)[-5:]), 2))
-    else:
-        print("allETFVals is empty.")
-
+   
     # Mutual Funds
     if APEGrowthVals:
         APEGrowth5MinsforDay.append(round(mean(list(APEGrowthVals)[-5:]), 2))
-    else:
-        print("APEGrowthVals is empty.")
-    
+   
     if BalancedBananaVals:
         BalancedBanana5MinsforDay.append(round(mean(list(BalancedBananaVals)[-5:]), 2))
-    else:
-        print("BalancedBananaVals is empty.")
-    
+   
     if BananaIncomeVals:
         BananaIncome5MinsforDay.append(round(mean(list(BananaIncomeVals)[-5:]), 2))
-    else:
-        print("BananaIncomeVals is empty.")
     
     if JungleSectorVals:
         JungleSector5MinsforDay.append(round(mean(list(JungleSectorVals)[-5:]), 2))
-    else:
-        print("JungleSectorVals is empty.")
-    
+   
     if allMutualFundsVals:
         allMutualFunds5MinsforDay.append(round(mean(list(allMutualFundsVals)[-5:]), 2))
-    else:
-        print("allMutualFundsVals is empty.")
+    
+
+    now = datetime.now(est)
+    rounded_time = now - timedelta(minutes=now.minute % 5, seconds=now.second, microseconds=now.microsecond)
+    stockdailydata = {
+         str(rounded_time) : {'BananaTechValue': round(mean(list(BananaTechVals)[-5:]), 2),
+            'HealthyChimpValue': round(mean(list(HealthyChimpVals)[-5:]), 2),
+            'EcoVineValue': round(mean(list(EcoVineVals)[-5:]), 2),
+            'JungleGoodsValue': round(mean(list(BananaTechVals)[-5:]), 2),
+            'Stocks': round(mean(list(allStockVals)[-5:]), 2)}
+            }
+    stockdailyapi.append(stockdailydata)
+
+    etfdailydata = {
+         str(rounded_time) : {'TechTreeValue': round(mean(list(TechTreeVals)[-5:]), 2),
+            'MonkeyMedValue': round(mean(list(MonkeyMedVals)[-5:]), 2),
+            'GreenLeafPowerValue': round(mean(list(GreenLeafVals)[-5:]), 2),
+            'GorillaGoodsValue': round(mean(list(GorillaGoodsVals)[-5:]), 2),
+            'ETFs': round(mean(list(allETFVals)[-5:]), 2)}
+            }
+
+    etfdailyapi.append(etfdailydata)
+    mfdailydata = {
+        str(rounded_time): {
+            'APEGrowthValue': round(mean(list(APEGrowthVals)[-5:]), 2),
+            'BalancedBananaValue': round(mean(list(BalancedBananaVals)[-5:]), 2),
+            'BananaIncomeValue': round(mean(list(BananaIncomeVals)[-5:]), 2),
+            'JungleSectorValue': round(mean(list(JungleSectorVals)[-5:]), 2),
+            'MutualFunds': round(mean(list(allMutualFundsVals)[-5:]), 2)
+        }
+    }
+    mfdailyapi.append(mfdailydata)
+
 
    
 
 def pickValue(values, stock):
     if stock == 'BananaTech':
-        return random.uniform(0.975, 1.03) * mean(values)
+        return random.uniform(0.9975, 1.003) * mean(values)
     elif stock == 'HealthyChimp':
-        return random.uniform(0.985, 1.016) * mean(values) 
+        return random.uniform(0.9985, 1.0016) * mean(values) 
     elif stock == 'EcoVine':
-        return random.uniform(0.97, 1.025) * mean(values) 
+        return random.uniform(0.997, 1.0035) * mean(values) 
     elif stock == 'JungleGoods':
-        return random.uniform(0.98, 1.02) * mean(values)
+        return random.uniform(0.998, 1.002) * mean(values)
     elif stock == "TreeTech":
-         return random.uniform(0.9, 1.11) * mean(values)
+         return random.uniform(0.99, 1.011) * mean(values)
     elif stock == "MonkeyMed":
-         return random.uniform(0.992, 1.085) * mean(values)
+         return random.uniform(0.9992, 1.0085) * mean(values)
     elif stock == "GreenLeaf":
-         return random.uniform(0.983, 1.05) * mean(values)
+         return random.uniform(0.9983, 1.00225) * mean(values)
     elif stock == "GorillaGoods":
-         return random.uniform(0.983, 1.02) * mean(values)
-
+         return random.uniform(0.9983, 1.002) * mean(values)
     elif stock == "APEGrowth":
-         return random.uniform(0.85, 1.16) * mean(values)
-
+         return random.uniform(0.985, 1.016) * mean(values)
     elif stock == "BananaIncome":
-         return random.uniform(0.998, 1.023) * mean(values)
-
+         return random.uniform(0.9998, 1.0023) * mean(values)
     elif stock == "BalancedBanana":
          return random.uniform(0.995, 1.0055) * mean(values)
-
     elif stock == "JungleSector":
-         return random.uniform(0.98, 1.02) * mean(values)
+         return random.uniform(0.998, 1.002) * mean(values)
 
          
 
@@ -396,7 +412,7 @@ def updateStocks():
     global EcoVineVals, HealthyChimpVals, JungleGoodsVals, BananaTechVals, allStockVals
     global TechTreeVals, MonkeyMedVals, GreenLeafVals, GorillaGoodsVals, allETFVals
     global APEGrowthVals, BalancedBananaVals, BananaIncomeVals, JungleSectorVals, allMutualFundsVals
-    global currenthour, currentminute, currentminute5, currentminute30, currentDate
+    global currenthour, currentminute, nextincof5, nextincof30, currentDate
     global EcoVine5MinsforDay, EcoVine30for5, EcoVine31days
 
     while True:
@@ -628,21 +644,24 @@ def updateStocks():
 
 
 
-        if currentminute5 == 60:
-            if datetime.now(est).minute == 60 or datetime.now(est).minute < 10:  
-                currentminute5 = 5
-                add5min() 
-        elif currentminute5 + 5 <= datetime.now(est).minute:
-            currentminute5 += 5
-            add5min() 
         
-        if currentminute30 == 60:
-            if datetime.now(est).minute < 60:
-                currentminute30 = 30
-                add30mins()
-        elif currentminute30 + 30 <= datetime.now(est).minute:
-            currentminute30 += 30
+        if datetime.now(est).hour != currenthour:
+            print("NEW HOUR")
+            add5min()
             add30mins()
+            currenthour = datetime.now(est).hour
+            nextincof5 = 5
+            nextincof30 = 30
+        else:
+            if int(datetime.now(est).minute) > nextincof5: 
+                print("NEW 5") 
+                nextincof5 += 5
+                add5min() 
+
+            if int(datetime.now(est).minute)  > nextincof30:
+                print("NEW 30")
+                nextincof30 += 30
+                add30mins() 
 
         if currentDate < datetime.now(est).date() and datetime.now(est).hour >= 9 and datetime.now(est).minute >= 30:
             print("ADDING DAY")
@@ -661,9 +680,6 @@ def updateStocks():
 
 
 
-        print(f"Updated stocks {stocksNowData}")
-        print(f"Updated ETFs {etfsNowData}")
-        print(f"Updated mfs {mfNowData}")
 
 
 def start_background_tasks():
@@ -682,7 +698,18 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
             return jsonify(etfsNowData)
         elif path == '/api/mfs':
             return jsonify(mfNowData)
-        
+        elif path == '/api/stocks/daily':
+            return jsonify(list(stockdailyapi))
+        elif path == '/api/etfs/daily':
+            return jsonify(list(etfdailyapi))
+        elif path == '/api/mfs/daily':
+            return jsonify(list(mfdailyapi))
+        elif path == '/api/stocks/5day':
+            return jsonify(list(stock5dayapi))
+        elif path == '/api/etfs/5day':
+            return jsonify(list(etf5dayapi))
+        elif path == '/api/mfs/5day':
+            return jsonify(list(mf5dayapi))
         else:
             return make_response("Not Found", 404)
     return make_response("OK", 200)
