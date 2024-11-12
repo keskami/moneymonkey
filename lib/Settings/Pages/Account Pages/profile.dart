@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 import 'package:money_monkey/Backend/Services/settings_service.dart';
 import 'package:money_monkey/Settings/Widgets/custom_container.dart';
 
@@ -107,6 +108,29 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                           children: [
                             Image.network(
                               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FSettings%2Fno_pfp.png?alt=media&token=183f93b2-ae78-470f-9935-b04c14180bbe",
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  // Image has fully loaded, return the image
+                                  return child;
+                                } else {
+                                  // Show shimmer effect while loading
+                                  return Center(
+                                    child: ShimmerContainer(
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                  );
+                                }
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: ShimmerContainer(
+                                    height: 100,
+                                    width: 100,
+                                  ),
+                                );
+                              },
                             ),
                             const SizedBox(
                               height: 10,

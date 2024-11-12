@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
+import '../../Backend/Loading Widgets/shimmer_loading_container.dart';
+
 class CustomStat extends StatelessWidget {
   const CustomStat({
     super.key,
@@ -49,6 +51,14 @@ class CustomStat extends StatelessWidget {
                       ? loadingProgress.cumulativeBytesLoaded /
                           loadingProgress.expectedTotalBytes!
                       : null,
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return Center(
+                child: ShimmerContainer(
+                  height: 35,
+                  width: 35,
                 ),
               );
             },

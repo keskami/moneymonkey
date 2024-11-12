@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
@@ -72,8 +73,12 @@ class _ProfilePageState extends State<ProfilePage> {
             width: MediaQuery.of(context).size.width,
             color: LightTheme().primaryBackgroundColor,
             child: isLoading
-                ? const Center(
-                    child: CircularProgressIndicator()) // Loading indicator
+                ? Center(
+                    child: ShimmerContainer(
+                      height: screenHeight / 4.5,
+                      width: screenHeight / 4.5,
+                    ),
+                  ) // Loading indicator
                 : userData == null
                     ? const Center(
                         child:
@@ -94,19 +99,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Widget child,
                                     ImageChunkEvent? loadingProgress) {
                                   if (loadingProgress == null) {
-                                    // If loadingProgress is null, the image has fully loaded
                                     return child;
                                   }
                                   return Center(
-                                    child: CircularProgressIndicator(
-                                      value:
-                                          loadingProgress.expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
+                                    child: ShimmerContainer(
+                                      height: screenHeight / 4.5,
+                                      width: screenHeight / 4.5,
+                                    ),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Center(
+                                    child: ShimmerContainer(
+                                      height: screenHeight / 4.5,
+                                      width: double.infinity,
                                     ),
                                   );
                                 },
@@ -225,14 +231,83 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Image.network(
                                   "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Achievements%2Fachievement_1.png?alt=media&token=976c4a31-8935-4577-8371-ecc87513e2c5",
                                   width: screenWidth * 0.25,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      return Center(
+                                        child: ShimmerContainer(
+                                          height: screenWidth * 0.25,
+                                          width: screenWidth * 0.25,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Center(
+                                      child: ShimmerContainer(
+                                        height: screenWidth * 0.25,
+                                        width: screenWidth * 0.25,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(
+                                  width: 20,
                                 ),
                                 Image.network(
                                   "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Achievements%2Fachievement_2.png?alt=media&token=5949c906-f8db-401c-902e-e3fc9d46ec7d",
                                   width: screenWidth * 0.25,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      return Center(
+                                        child: ShimmerContainer(
+                                          height: screenWidth * 0.25,
+                                          width: screenWidth * 0.25,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Center(
+                                      child: ShimmerContainer(
+                                        height: screenWidth * 0.25,
+                                        width: screenWidth * 0.25,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(
+                                  width: 20,
                                 ),
                                 Image.network(
                                   "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Achievements%2Fachievement_3.png?alt=media&token=5541600c-da47-4c45-b5e0-aab024bb8076",
                                   width: screenWidth * 0.25,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      return Center(
+                                        child: ShimmerContainer(
+                                          height: screenWidth * 0.25,
+                                          width: screenWidth * 0.25,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Center(
+                                      child: ShimmerContainer(
+                                        height: screenWidth * 0.25,
+                                        width: screenWidth * 0.25,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
