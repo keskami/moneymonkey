@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class CardTitle extends StatelessWidget {
   final int unitNumber;
   final String titleText;
+  final Color color;
 
   const CardTitle({
     super.key,
     required this.unitNumber,
     required this.titleText,
+    required this.color
   });
 
   @override
@@ -17,7 +19,8 @@ class CardTitle extends StatelessWidget {
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF87CEEB),
+     
+        color: color,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(

@@ -7,25 +7,39 @@ import 'package:get/get.dart';
 class CardModel {
   final Color color;
   final String frontText;
-  final Widget backWidget;
+  final String backText;
   bool isFlipped;
   GlobalKey<FlipCardState> cardKey;
 
   CardModel({
     required this.color,
     required this.frontText,
-    required this.backWidget,
-   this.isFlipped= false
-  }) : cardKey = GlobalKey<FlipCardState>();
+    required this.backText,
+   this.isFlipped= false,
+   required this.cardKey
+  });
+
+  /// Factory method to create CardModel from a Firebase data map
+  factory CardModel.fromMap(Map<String, dynamic> data, Color color) {
+    return CardModel(
+      color: color,
+      frontText: data['front'] ?? 'Front Text',
+      backText: data['back'] ?? 'Back Text',
+      cardKey: GlobalKey<FlipCardState>(), // Create a new GlobalKey for each card
+    );
+  }
 }
 
-class _DetailNote extends StatelessWidget {
+  
+
+
+class DetailNote extends StatelessWidget {
   final Color color;
   final String title;
   final String details;
   final String imagePath;
 
-  const _DetailNote({
+  const DetailNote({
     Key? key,
     required this.color,
     required this.title,
@@ -33,6 +47,7 @@ class _DetailNote extends StatelessWidget {
     required this.imagePath,
   }) : super(key: key);
 
+  
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -91,16 +106,7 @@ class _DetailNote extends StatelessWidget {
             const SizedBox(height: 20),
             
 
-            // GestureDetector(
-            //   onTap: () {
-            //     Get.toNamed("/questionPageRoute");
-            //   },
-            //   child: Image.asset(
-            //     'assets/images/button.png', 
-            //     height: 60,
-            //     width: 200,
-            //   ),
-            // ),
+           
           ],
         ),
       ),
@@ -108,37 +114,3 @@ class _DetailNote extends StatelessWidget {
   }
 }
 
-List <CardModel> getCards(){
-  return [
-     CardModel(
-        color: const Color(0xFF89DC8E), // Green card
-        frontText: "Banknote",
-        backWidget: _DetailNote(
-          color: const Color(0xFF89DC8E), // Green background
-          title: "Banknote",
-          details: "Introduced in 7th century\nChina, banknotes today\nfacilitate everyday purchases.",
-          imagePath: "assets/images/monkeywithnote.png",
-        ),
-      ),
-      CardModel(
-        color: const Color(0xFF87CEEB), // Blue card
-        frontText: "Coin",
-        backWidget: _DetailNote(
-          color: const Color(0xFF87CEEB), // Blue background
-          title: "Coin",
-          details: "First used in ancient Lydia,\ncoins have been a staple of currency systems.",
-          imagePath: "assets/images/monkeywithnote.png",
-        ),
-      ),
-      CardModel(
-        color: const Color(0xFFFFE792), // Yellow card
-        frontText: "Credit Card",
-        backWidget: _DetailNote(
-          color: const Color(0xFFFFE792), // Yellow background
-          title: "Credit Card",
-          details: "First issued in 1950, credit cards revolutionized the way we handle money.",
-          imagePath: "assets/images/monkeywithnote.png",
-        ),
-      ),
-  ];
-}

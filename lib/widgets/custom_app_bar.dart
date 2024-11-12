@@ -87,25 +87,21 @@ void dispose() {
             child: Padding(
               padding: const EdgeInsets.only(right: 12.0),
               child: Obx((){
-                   return TweenAnimationBuilder<double>(
-                  tween: Tween<double>(
-                      begin: 0, end: widget.progressController.progress.value),
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                  builder: (context, value, child) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: LinearProgressIndicator(
-                        value: value, // Animated progress value
-                        backgroundColor: const Color(0xFFF0F0F0),
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                            Colors.lightBlue),
-                        minHeight: 20,
-                  
-             ),
-                    );
-                  },
-                );
+                print("Building progress bar with value: ${widget.progressController.progress.value}");
+
+                   return ClipRRect(
+                     borderRadius: BorderRadius.circular(20),
+                     child: LinearProgressIndicator(
+                       key: ValueKey(widget.progressController.progress.value), // Force rebuild
+                       value: widget.progressController.progress.value, // Animated progress value
+                       
+                       backgroundColor: const Color(0xFFF0F0F0),
+                       valueColor: const AlwaysStoppedAnimation<Color>(
+                           Colors.lightBlue),
+                       minHeight: 20,
+                                     
+                                ),
+                   );
               }),
             //child: MonkeyProgressWidget(progressController:widget.progressController),
             ),

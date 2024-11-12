@@ -11,91 +11,130 @@ class BankNotePage extends StatefulWidget {
 }
 
 class _BankNotePageState extends State<BankNotePage> {
-    final ProgressController progressController = Get.put(ProgressController());
+  final ProgressController progressController = Get.put(ProgressController());
   late List<CardModel> _cards;
   Offset _cardOffset = Offset.zero;
   double _cardRotation = 0.0;
   bool _isDragging = false;
-  bool _showButton= false;  
+  bool _showButton = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the cards
-    _cards = getCards();
+    _cards = [];
+    _loadFlashcards();
+  }
+
+  Future<void> _loadFlashcards() async {
+    String lessonId = 'lesson${progressController.currentLessonIndex.value + 1}';
+    await progressController.fetchFlashcards(lessonId);
+
+    try {
+      // Generate CardModels from fetched data
+      _cards = progressController.flashcards.asMap().entries.map((entry) {
+        int index = entry.key;
+        Map<String, dynamic> flashcard = entry.value;
+
+        // Safely extract 'front' and 'back' text
+        String frontText = flashcard['front']?.toString() ?? 'No Front Text';
+        String backText = flashcard['back']?.toString() ?? 'No Back Text';
+
+        // Assign card color based on index
+        Color cardColor;
+        switch (index % 3) {
+          case 0:
+            cardColor = const Color(0xFF89DC8E); // Green
+            break;
+          case 1:
+            cardColor = const Color(0xFF87CEEB); // Blue
+            break;
+          default:
+            cardColor = const Color(0xFFFFE792); // Yellow
+        }
+
+        return CardModel(
+          frontText: frontText,
+          backText: backText,
+          color: cardColor,
+          cardKey: GlobalKey<FlipCardState>(),
+        );
+      }).toList().reversed.toList();
+    } catch (e) {
+      print('Error while mapping flashcards: $e');
+      _cards = [];
+    }
+
+    setState(() {});
   }
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      appBar:CustomAppBar(progressController: progressController),
+      appBar: CustomAppBar(progressController: progressController),
       body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: _cards.map((card) {
-            int index = _cards.indexOf(card);
-            return _buildDraggableCard(card, index);
-          }).toList(),
-        ),
+        child: _cards.isEmpty
+            ? const CircularProgressIndicator()
+            : Stack(
+                alignment: Alignment.center,
+                children: _cards.map((card) {
+                  int index = _cards.indexOf(card);
+                  return _buildDraggableCard(card, index);
+                }).toList(),
+              ),
       ),
     );
   }
 
   Widget _buildDraggableCard(CardModel cardModel, int index) {
     bool isTopCard = index == _cards.length - 1;
-    double verticalOffset = 20.0 * index; // Vertical offset for stacking
-    double scale = 1.0;
+    double verticalOffset = 20.0 * index;
 
     return Transform.translate(
       offset: Offset(0, verticalOffset),
-      child: Transform.scale(
-        scale: scale,
-        child: Draggable(
-          feedback: Transform.translate(
-            offset: _cardOffset,
-            child: Transform.rotate(
-              angle: _cardRotation,
-              child: _buildFlipCard(cardModel),
-            ),
+      child: Draggable(
+        feedback: Transform.translate(
+          offset: _cardOffset,
+          child: Transform.rotate(
+            angle: _cardRotation,
+            child: _buildFlipCard(cardModel),
           ),
-          childWhenDragging: Container(),
-          onDragStarted: () {
-            if (!isTopCard) return;
-            setState(() {
-              _isDragging = true;
-            });
-          },
-          onDragUpdate: (details) {
-            if (!isTopCard) return;
-            setState(() {
-              _cardOffset += details.delta;
-              _cardRotation = 0.01 * _cardOffset.dx;
-            });
-          },
-          onDragEnd: (details) {
-            if (!isTopCard) return;
-            if (_cardOffset.distance > 100) {
-              _onCardSwiped();
-            } else {
-              setState(() {
-                _cardOffset = Offset.zero;
-                _cardRotation = 0.0;
-                _isDragging = false;
-              });
-            }
-          },
-          child: _isDragging && isTopCard
-              ? Container()
-              : Transform.translate(
-                  offset: isTopCard ? _cardOffset : Offset.zero,
-                  child: Transform.rotate(
-                    angle: isTopCard ? _cardRotation : 0.0,
-                    child: _buildFlipCard(cardModel),
-                  ),
-                ),
         ),
+        childWhenDragging: Container(),
+        onDragStarted: () {
+          if (!isTopCard) return;
+          setState(() {
+            _isDragging = true;
+          });
+        },
+        onDragUpdate: (details) {
+          if (!isTopCard) return;
+          setState(() {
+            _cardOffset += details.delta;
+            _cardRotation = 0.01 * _cardOffset.dx;
+          });
+        },
+        onDragEnd: (details) {
+          if (!isTopCard) return;
+          if (_cardOffset.distance > 100) {
+            _onCardSwiped();
+          } else {
+            setState(() {
+              _cardOffset = Offset.zero;
+              _cardRotation = 0.0;
+              _isDragging = false;
+            });
+          }
+        },
+        child: _isDragging && isTopCard
+            ? Container()
+            : Transform.translate(
+                offset: isTopCard ? _cardOffset : Offset.zero,
+                child: Transform.rotate(
+                  angle: isTopCard ? _cardRotation : 0.0,
+                  child: _buildFlipCard(cardModel),
+                ),
+              ),
       ),
     );
   }
@@ -109,13 +148,10 @@ class _BankNotePageState extends State<BankNotePage> {
       _isDragging = false;
       _cards.insert(0, swipedCard);
 
-
-      print("carddds");
-        // Check if all cards have been flipped and swiped
-    if (_cards.every((card) => card.isFlipped)) {
-      progressController.setCardsCompleted();  // Inform controller that cards are flipped and swiped
-      _showButton=true;
-    }
+      if (_cards.every((card) => card.isFlipped)) {
+        progressController.setCardsCompleted();
+        _showButton = true;
+      }
     });
   }
 
@@ -126,34 +162,38 @@ class _BankNotePageState extends State<BankNotePage> {
       flipOnTouch: true,
       front: Stack(
         children: [
-          _buildCardContent(cardModel,),
-          if(_showButton && isTopCard)
-          Positioned(
-            bottom: 60,
-            left: 50,
-            right: 50,
-            child: GestureDetector(
-              onTap: () {
-                Get.toNamed("/questionPageRoute");
-              },
-              child: Image.asset(
-                'assets/images/button.png',
-                height: 60,
-                width: 200,
+          _buildCardContent(cardModel),
+          if (_showButton && isTopCard)
+            Positioned(
+              bottom: 60,
+              left: 50,
+              right: 50,
+              child: GestureDetector(
+                onTap: () {
+                  Get.toNamed("/questionPageRoute");
+                },
+                child: Image.asset(
+                  'assets/images/button.png',
+                  height: 60,
+                  width: 200,
+                ),
               ),
             ),
-          ),
         ],
       ),
-      back: cardModel.backWidget,
-       onFlipDone: (bool flipped) {
-        if(flipped && !cardModel.isFlipped){   //ensure that isFlipped is only marked true if the card is flipped for the first time.
-           cardModel.isFlipped = true; 
-
-         
+      back: DetailNote(
+        color: cardModel.color,
+        title: "",
+        details: cardModel.backText,
+        imagePath:  'assets/images/monkeywithnote.png',
+      ),
+      onFlipDone: (bool flipped) {
+        if (flipped && !cardModel.isFlipped) {
+          setState(() {
+            cardModel.isFlipped = true;
+          });
         }
-      // Track card flipping
-    },
+      },
     );
   }
 
@@ -178,7 +218,6 @@ class _BankNotePageState extends State<BankNotePage> {
           child: Text(
             cardModel.frontText,
             textAlign: TextAlign.center,
-            
             style: const TextStyle(
               color: Color(0xFF000000),
               fontSize: 45,
@@ -191,9 +230,4 @@ class _BankNotePageState extends State<BankNotePage> {
       ),
     );
   }
-
-
-
-
-
 }
