@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/friendsPages/friendsHome.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -92,6 +94,16 @@ class _LoginScreenState extends State<LoginScreen> {
     if (userSnapshot.exists) {
       return;
     }
+    List<String> following = [
+      "QofNULUkjTRKL0cQccTNrwuri5I3",
+      '7dj9N77S66anoMSzGc442iItH2u1',
+    ];
+
+    List<String> followers = [
+      "QofNULUkjTRKL0cQccTNrwuri5I3",
+      'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
+      '6mMH88Ebp4aiYWIT3jGfBDyxxRB2'
+    ];
 
     await userDocRef.set({
       'User ID': userId,
@@ -102,8 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
       'Profile': {
         'Full Name': 'Your Name Here',
         'Username': 'Your Name Here',
-        'Number of Followers': 0,
-        'Following': 0,
+        'Number of Followers': 3,
+        'Following': 2,
         'Top Achievements': 0,
         'Streak': 0,
         'Total Profit': 0,
@@ -126,7 +138,9 @@ class _LoginScreenState extends State<LoginScreen> {
         'Total invested Bananas': 7089,
         'Profit from Invested Bananas (Current Month)': 890,
         'Username': "Josh5"
-      }
+      },
+      'following': following,
+      'followers': followers,
     });
 
     final transactionsRef = userDocRef.collection('Transactions');
@@ -166,7 +180,6 @@ class _LoginScreenState extends State<LoginScreen> {
       'Date': FieldValue.serverTimestamp(),
       'Type': "Income"
     });
-    await ensureProgressionExists(userDocRef);
   }
 
   Future<void> ensureProgressionExists(DocumentReference userDocRef) async {
@@ -209,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => FriendsHome(),
           ),
         );
       }
@@ -274,14 +287,12 @@ class _LoginScreenState extends State<LoginScreen> {
           await addUserDetails(userId, email);
         } else {}
 
-        if (context.mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-          );
-        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FriendsHome(),
+          ),
+        );
       }
     }
   }

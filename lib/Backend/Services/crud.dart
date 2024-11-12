@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:money_monkey/Backend/Models/user_data.dart';
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -171,31 +174,239 @@ class FirebaseService {
 
   // 6. Social and Community Features
 
-  Future<void> addFriend(
-      String userId, String friendId, String friendUsername) async {
-    await _firestore
-        .collection('Social')
-        .doc(userId)
-        .collection('Friends')
-        .doc(friendId)
-        .set({'username': friendUsername});
+  Future<List<Map<String, String>>> findFriendsFromSearch(
+      String search, int howManyWanted, String userId) async {
+    List<Map<String, String>> users = [];
+
+    try {
+      final String searchTermLower = search;
+      final String endSearchTerm = searchTermLower + '\uf8ff';
+
+      print("Searching for usernames containing: $searchTermLower");
+
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('Profile.Username', isGreaterThanOrEqualTo: searchTermLower)
+          .where('Profile.Username', isLessThanOrEqualTo: endSearchTerm)
+          .get();
+
+      print("Snapshot retrieved: ${snapshot.docs.length} documents found");
+
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await _firestore.collection('Users').doc(userId).get();
+      Map<String, dynamic>? userData = userSnapshot.data();
+
+      List<String>? userFollowing =
+          List<String>.from(userData?['following'] ?? []);
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('Profile')) {
+          final profile = data['Profile'] as Map<String, dynamic>?;
+          if (profile != null && !userFollowing.contains(doc.id)) {
+            Map<String, String> user = {
+              'name': profile['Full Name'] ?? 'Unknown',
+              'username': profile['Username'] ?? 'Unknown',
+              'whySuggested': 'Username: ' + profile['Username'],
+              'otherID': doc.id
+            };
+
+            users.add(user);
+            if (users.length >= howManyWanted) {
+              break;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      print("Error finding friends: $error");
+    }
+    print(users);
+
+    return users;
   }
 
-  Future<QuerySnapshot> getFriends(String userId) async {
-    return await _firestore
-        .collection('Social')
-        .doc(userId)
-        .collection('Friends')
-        .get();
+  Future<List<Map<String, String>>> findFriends(
+      String userId, int howManyWanted) async {
+    Map<String, int> mutualCounts = {};
+    Map<String, List<String>> mutualConnections = {};
+    List<Map<String, String>> mutualFriends = [];
+    DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        await _firestore.collection('Users').doc(userId).get();
+
+    if (userSnapshot.exists) {
+      Map<String, dynamic>? userData = userSnapshot.data();
+
+      if (userData != null) {
+        List<String>? userFollowing =
+            List<String>.from(userData['following'] ?? []);
+
+        for (String followedUserId in userFollowing) {
+          DocumentSnapshot<Map<String, dynamic>> followedUserSnapshot =
+              await _firestore.collection('Users').doc(followedUserId).get();
+
+          if (followedUserSnapshot.exists) {
+            Map<String, dynamic>? followedUserData =
+                followedUserSnapshot.data();
+            if (followedUserData != null) {
+              List<String>? followedUserFollowing =
+                  List<String>.from(followedUserData['following'] ?? []);
+
+              for (String potentialMutualId in followedUserFollowing) {
+                if (potentialMutualId != userId &&
+                    potentialMutualId != followedUserId) {
+                  mutualCounts[potentialMutualId] =
+                      (mutualCounts[potentialMutualId] ?? 0) + 1;
+
+                  mutualConnections.putIfAbsent(potentialMutualId, () => []);
+                  mutualConnections[potentialMutualId]!.add(followedUserId);
+                }
+              }
+            }
+          }
+        }
+
+        Random random = Random();
+        for (String mutualId in mutualCounts.keys) {
+          DocumentSnapshot<Map<String, dynamic>> mutualUserSnapshot =
+              await _firestore.collection('Users').doc(mutualId).get();
+
+          if (mutualUserSnapshot.exists && !userFollowing.contains(mutualId)) {
+            Map<String, dynamic>? mutualUserData = mutualUserSnapshot.data();
+            if (mutualUserData != null) {
+              List<String> connections = mutualConnections[mutualId] ?? [];
+              String randomConnectionId = connections.isNotEmpty
+                  ? connections[random.nextInt(connections.length)]
+                  : 'Unknown';
+
+              String randomConnectionName = 'Unknown';
+              if (randomConnectionId != 'Unknown') {
+                DocumentSnapshot<Map<String, dynamic>>
+                    randomConnectionSnapshot = await _firestore
+                        .collection('Users')
+                        .doc(randomConnectionId)
+                        .get();
+                if (randomConnectionSnapshot.exists) {
+                  Map<String, dynamic>? randomConnectionData =
+                      randomConnectionSnapshot.data();
+                  randomConnectionName = randomConnectionData?['Profile']
+                          ['Full Name'] ??
+                      'Unknown';
+                }
+              }
+
+              mutualFriends.add({
+                'otherID': mutualId,
+                'name': mutualUserData['Profile']['Full Name'] ?? 'Unknown',
+                'count': mutualCounts[mutualId].toString(),
+                'randomConnection': randomConnectionName,
+                'whySuggested': 'Followed by $randomConnectionName'
+              });
+            }
+          }
+        }
+
+        mutualFriends.sort((a, b) {
+          int countComparison =
+              int.parse(b['count']!).compareTo(int.parse(a['count']!));
+          if (countComparison != 0) {
+            return countComparison;
+          } else {
+            return a['name']!.compareTo(b['name']!);
+          }
+        });
+
+        if (mutualFriends.length > howManyWanted) {
+          mutualFriends = mutualFriends.sublist(0, howManyWanted);
+        }
+      }
+    }
+
+    return mutualFriends;
   }
 
-  Future<void> deleteFriend(String userId, String friendId) async {
-    await _firestore
-        .collection('Social')
-        .doc(userId)
-        .collection('Friends')
-        .doc(friendId)
-        .delete();
+  Future<void> unfollow(String userId, String otherID) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await _firestore.collection('Users').doc(userId).get();
+
+      DocumentSnapshot<Map<String, dynamic>> otherSnapshot =
+          await _firestore.collection('Users').doc(otherID).get();
+
+      if (userSnapshot.exists && otherSnapshot.exists) {
+        Map<String, dynamic>? userData = userSnapshot.data();
+        Map<String, dynamic>? otherData = otherSnapshot.data();
+
+        if (userData != null && otherData != null) {
+          List<String>? otherFollowers =
+              List<String>.from(otherData['followers'] ?? []);
+          int otherCurrentFollowers =
+              otherData['Profile']['Number of Followers'] ?? 0;
+          otherFollowers.remove(userId);
+          await _firestore.collection('Users').doc(otherID).update({
+            'followers': otherFollowers,
+            'Profile.Number of Followers': otherCurrentFollowers - 1,
+          });
+
+          List<String>? userFollowing =
+              List<String>.from(userData['following'] ?? []);
+          int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
+          if (userFollowing.contains(otherID)) {
+            userFollowing.remove(otherID);
+            await _firestore.collection('Users').doc(userId).update({
+              'following': userFollowing,
+              'Profile.Following': userCurrentFollowing - 1,
+            });
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return null;
+    }
+  }
+
+  Future<UserData?> follow(String userId, String otherId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await _firestore.collection('Users').doc(userId).get();
+
+      DocumentSnapshot<Map<String, dynamic>> otherSnapshot =
+          await _firestore.collection('Users').doc(otherId).get();
+
+      if (userSnapshot.exists && otherSnapshot.exists) {
+        Map<String, dynamic>? userData = userSnapshot.data();
+        Map<String, dynamic>? otherData = otherSnapshot.data();
+
+        if (userData != null && otherData != null) {
+          List<String>? otherFollowers =
+              List<String>.from(otherData['followers'] ?? []);
+          int otherCurrentFollowers =
+              otherData['Profile']['Number of Followers'] ?? 0;
+          otherFollowers.add(userId);
+          await _firestore.collection('Users').doc(otherId).update({
+            'followers': otherFollowers,
+            'Profile.Number of Followers': otherCurrentFollowers + 1,
+          });
+
+          List<String>? userFollowing =
+              List<String>.from(userData['following'] ?? []);
+          int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
+          if (!userFollowing.contains(otherId)) {
+            userFollowing.add(otherId);
+            await _firestore.collection('Users').doc(userId).update({
+              'following': userFollowing,
+              'Profile.Following': userCurrentFollowing + 1,
+            });
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return null;
+    }
   }
 
   // 7. Settings and Notifications
