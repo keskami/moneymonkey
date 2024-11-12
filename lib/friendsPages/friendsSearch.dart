@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
-import 'package:money_monkey/LoginPages/login.dart';
-import 'package:money_monkey/friendsPages/friendsHome.dart';
 import 'package:money_monkey/friendsPages/friendsProfile.dart';
 
 class FriendsFromSearch extends StatefulWidget {
@@ -33,8 +30,8 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
       loading = true;
     });
 
-   List<Map<String, String>> fetchedFriends =
-        await crud.findFriendsFromSearch(searchText, 8, userID!) ;
+    List<Map<String, String>> fetchedFriends =
+        await crud.findFriendsFromSearch(searchText, 8, userID!);
     setState(() {
       friends = fetchedFriends;
     });
@@ -65,119 +62,104 @@ class _FriendsFromSearchState extends State<FriendsFromSearch> {
     double screenHeightUnit = MediaQuery.of(context).size.height / 844;
 
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: screenHeightUnit * 37,
+            ),
+          ),
+          title: Text(
+            "Search for friends",
+            style:
+                GoogleFonts.fredoka(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
         body: SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: screenHeightUnit * 57),
-          Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: screenHeightUnit * 40),
               Padding(
-                padding: EdgeInsets.fromLTRB(screenWidthUnit * 18, 0, 0, 0),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const FriendsHome()));
-                    },
-                    child: Icon(
-                      Icons.arrow_back,
-                      size: screenHeightUnit * 37,
+                padding: EdgeInsets.fromLTRB(screenWidthUnit * 14, 0, 0, 0),
+                child: Container(
+                  height: 45 * screenHeightUnit,
+                  width: 348 * screenWidthUnit,
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(217, 217, 217, 1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: onTextChanged,
+                    textAlign: TextAlign.start,
+                    style: GoogleFonts.baloo2(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: 27 * screenHeightUnit,
+                        color: Colors.black,
+                      ),
+                      hintText: 'Username',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.fromLTRB(
+                          15 * screenWidthUnit, 12 * screenHeightUnit, 0, 0),
                     ),
                   ),
-                  SizedBox(
-                    width: screenWidthUnit * 20,
-                  ),
-                  Text(
-                    "Search for friends",
-                    style: GoogleFonts.fredoka(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  )
-                ]),
+                ),
               ),
+              SizedBox(
+                height: screenHeightUnit * 34,
+              ),
+              Center(
+                  child: Container(
+                height: screenHeightUnit * 610,
+                width: screenWidthUnit * 350,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Colors.black, width: screenWidthUnit * 2),
+                  borderRadius: BorderRadius.circular(screenWidthUnit * 20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.05),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(3, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: friends.isEmpty || loading
+                      ? [Center(child: CircularProgressIndicator())]
+                      : friends
+                          .map((friend) => friendSuggestion(
+                                name: friend["name"]!,
+                                whySuggested: friend["whySuggested"]!,
+                                screenHeightUnit: screenHeightUnit,
+                                screenWidthUnit: screenWidthUnit,
+                                otherID: friend["otherID"]!,
+                                onRemove: () =>
+                                    removeFriend(friend["otherID"]!),
+                              ))
+                          .toList(),
+                ),
+              ))
             ],
           ),
-          SizedBox(
-            height: screenHeightUnit * 17,
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(screenWidthUnit * 14, 0, 0, 0),
-            child: Container(
-              height: 45 * screenHeightUnit,
-              width: 348 * screenWidthUnit,
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(217, 217, 217, 1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: TextField(
-                controller: _searchController,
-                onChanged: onTextChanged,
-                textAlign: TextAlign.start,
-                style: GoogleFonts.baloo2(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 27 * screenHeightUnit,
-                    color: Colors.black,
-                  ),
-                  hintText: 'Username',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.fromLTRB(
-                      15 * screenWidthUnit, 12 * screenHeightUnit, 0, 0),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: screenHeightUnit * 34,
-          ),
-          Center(
-              child: Container(
-            height: screenHeightUnit * 610,
-            width: screenWidthUnit * 350,
-            decoration: BoxDecoration(
-              border:
-                  Border.all(color: Colors.black, width: screenWidthUnit * 2),
-              borderRadius: BorderRadius.circular(screenWidthUnit * 20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.05),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(3, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              children: friends.isEmpty || loading
-                  ? [Center(child: CircularProgressIndicator())]
-                  : friends
-                      .map((friend) => friendSuggestion(
-                            name: friend["name"]!,
-                            whySuggested: friend["whySuggested"]!,
-                            screenHeightUnit: screenHeightUnit,
-                            screenWidthUnit: screenWidthUnit,
-                            otherID: friend["otherID"]!,
-                            onRemove: () => removeFriend(friend["otherID"]!),
-                          ))
-                      .toList(),
-            ),
-          ))
-        ],
-      ),
-    ));
+        ));
   }
 
   void removeFriend(String otherID) {
     crud.follow(userID!, otherID);
-    
+
     onTextChanged(_searchController.text);
   }
 

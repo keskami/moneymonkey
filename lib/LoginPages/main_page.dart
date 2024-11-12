@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 
 @override
@@ -14,7 +15,7 @@ Widget build(BuildContext context) {
           if (userId.isEmpty) {
             return const LoginScreen();
           } else {
-            return const LoginScreen();
+            return HomePage();
           }
         } else {
           return const LoginScreen();

@@ -31,18 +31,6 @@ class _RealEstateHomeState extends State<RealEstateHome> {
       "assets/real_estate/shopping_mall.png",
       "assets/real_estate/office.png",
     ],
-    "assets/real_estate/center4_copy.png": [
-      "assets/real_estate/house.png",
-      "assets/real_estate/stadium.png",
-      "assets/real_estate/shopping_mall.png",
-      "assets/real_estate/office.png",
-    ],
-    "assets/real_estate/center3_copy.png": [
-      "assets/real_estate/house.png",
-      "assets/real_estate/stadium.png",
-      "assets/real_estate/shopping_mall.png",
-      "assets/real_estate/office.png",
-    ],
   };
 
   @override
@@ -89,7 +77,7 @@ class _RealEstateHomeState extends State<RealEstateHome> {
                     isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
                 children: [
                   SizedBox(
-                    width: screenWidth * 0.29,
+                    width: screenWidth * 0.25,
                   ),
                   RealEstateItem(
                     center: item.key,
@@ -102,7 +90,7 @@ class _RealEstateHomeState extends State<RealEstateHome> {
                 ],
               ),
               SizedBox(
-                height: item.value.length.toDouble() * 25,
+                height: item.value.length.toDouble() * 12,
               ),
             ],
           ),

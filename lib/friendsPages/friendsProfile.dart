@@ -5,20 +5,15 @@ import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
-import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
-import 'package:money_monkey/Settings/settings.dart';
 import 'package:money_monkey/friendsPages/Widgets/add_friends_button_friends.dart';
-import 'package:money_monkey/themes/color_themes.dart';
 import 'package:money_monkey/friendsPages/Widgets/custom_stat_friends.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class friendProfile extends StatefulWidget {
   final String otherID;
-  friendProfile({
-    super.key,
-     required this.otherID
-  });
+  friendProfile({super.key, required this.otherID});
 
   @override
   State<friendProfile> createState() => _friendProfileState();
@@ -38,7 +33,7 @@ class _friendProfileState extends State<friendProfile> {
     try {
       userData = await firestoreService.getUserData(widget.otherID!);
       isFollowing = await firestoreService.isFollowing(userID!, widget.otherID);
-      
+
       if (userData == null) {
         print("User data is null for userID: ${widget.otherID!!}");
       }
@@ -58,7 +53,6 @@ class _friendProfileState extends State<friendProfile> {
   }
 
   int _currentIndex = 3;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +105,7 @@ class _friendProfileState extends State<friendProfile> {
                                   },
                                 ),
                               ),
-                             
+
                               Text(
                                 userData!.profile.fullName,
                                 style: const TextStyle(

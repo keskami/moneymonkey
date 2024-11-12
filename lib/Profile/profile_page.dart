@@ -12,6 +12,7 @@ import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Settings/Pages/settings.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
+import '../friendsPages/friendsHome.dart';
 import 'Widgets/custom_stat.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -193,9 +194,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                AddFriendsButton(),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => FriendsHome(),
+                                          ));
+                                    },
+                                    child: AddFriendsButton()),
                                 Spacer(),
                                 ShareButton(),
                               ],
