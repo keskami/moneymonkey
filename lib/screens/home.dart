@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage>
 
               if (isHeader) {
                 // Render the section header
-                return _buildSectionHeader("Section ${sectionIndex + 1}");
+                return _buildSectionHeader(sectionIndex);
               } else if (itemIndex >= 0 && itemIndex < images.length) {
                 bool isLeftAligned = itemIndex % 2 == 0;
 
@@ -266,7 +266,10 @@ bool _isLessonEnabled(int itemIndex, int sectionIndex) {
               if (itemIndex == 3 &&
                   progressController.currentLessonIndex.value >= 3) {
                 // _chestAnimationController.forward();
-                _showFloatingGif(context);
+                if(!progressController.isChestOpened.value){
+                  _showFloatingGif(context);
+                }
+                
               } else if (itemIndex != 3) {
                 _showDialog(context, itemIndex, iconKey, _scrollController);
               }
@@ -304,6 +307,7 @@ bool _isLessonEnabled(int itemIndex, int sectionIndex) {
     Future.delayed(const Duration(seconds: 3), () {
       overlayEntry.remove();
      // progressController.moveToNextLesson();
+     progressController.isChestOpened.value = true; // Mark the chest as opened
       progressController.update();
     });
   }
@@ -505,7 +509,20 @@ bool _isLessonEnabled(int itemIndex, int sectionIndex) {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(int sectionIndex) {
+
+    final sectionTitles =[
+      "Introduction to Money",
+      "Savings and Spendings Basics",
+      "Understanding Banks"
+    ];
+
+     // Fallback to "Section X" if the index is out of range
+  final title = sectionIndex < sectionTitles.length
+      ? sectionTitles[sectionIndex]
+      : "Section ${sectionIndex + 1}";
+
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(

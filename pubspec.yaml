@@ -92,6 +92,8 @@ flutter:
     - assets/images/specsbanana.json
     - assets/images/swinging_monkey.json
     - assets/images/Treasure_chest.gif
+    - assets/images/opened_treasure.png
+    
 
   fonts:
     - family: Baloo 2

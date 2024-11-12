@@ -16,6 +16,8 @@ class ProgressController extends GetxController {
   var flashcards = <Map<String, dynamic>>[].obs;
   var currentLessonTitle= ''.obs;
   var unitTitle = ''.obs;
+  var isChestOpened = false.obs; // Track if the chest is opened
+
 
   void setCardsCompleted() {
     cardsCompleted.value = true;
