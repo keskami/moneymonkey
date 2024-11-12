@@ -5,7 +5,6 @@ import 'package:money_monkey/Backend/Models/user_data.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // Fetch User Data from Firestore
   Future<UserData?> getUserData(String userId) async {
     try {
       // Reference the document in Firestore using the userId
