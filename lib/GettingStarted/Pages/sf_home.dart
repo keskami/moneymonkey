@@ -77,30 +77,32 @@ class _StartFreshHomeState extends State<StartFreshHome> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Obx(() {
-              if (startFreshController.pageIndex < 5) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      onPressed: toPreviousPage,
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        size: 37,
+            Obx(
+              () {
+                if (startFreshController.pageIndex < 5) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: toPreviousPage,
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          size: 37,
+                        ),
                       ),
-                    ),
-                    const Expanded(
-                      child: CustomProgressBar(
-                        page: 0,
+                      const Expanded(
+                        child: CustomProgressBar(
+                          page: 0,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 20),
-                  ],
-                );
-              } else {
-                return SizedBox.shrink();
-              }
-            }),
+                      const SizedBox(width: 20),
+                    ],
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
             Expanded(
               child: Obx(() {
                 int pageIndex = startFreshController.pageIndex.value;
@@ -116,7 +118,6 @@ class _StartFreshHomeState extends State<StartFreshHome> {
       ),
       floatingActionButton: Obx(
         () {
-          //For Compulsory Learning Goal
           if (startFreshController.pageIndex.value == 2 &&
               startFreshController.learningGoal.value > 20) {
             return Align(
@@ -124,22 +125,18 @@ class _StartFreshHomeState extends State<StartFreshHome> {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
-                  pages: 1,
                   isEnabled: false,
                   nextPage: toNextPage,
                 ),
               ),
             );
-          }
-          // FOr
-          else if (startFreshController.pageIndex.value == 4 &&
+          } else if (startFreshController.pageIndex.value == 4 &&
               startFreshController.startingFresh.value == 0) {
             return Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
-                  pages: 1,
                   isEnabled: false,
                   nextPage: toNextPage,
                 ),
@@ -153,7 +150,6 @@ class _StartFreshHomeState extends State<StartFreshHome> {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
-                  pages: 1,
                   isEnabled: true,
                   nextPage: toNextPage,
                 ),

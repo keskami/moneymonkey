@@ -69,7 +69,6 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
             child: NextButton(
               nextPage: toNextPage,
               isEnabled: false,
-              pages: 0,
             ),
           );
         } else if (!_isKeyboardVisible &&
@@ -82,7 +81,6 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
             child: NextButton(
               nextPage: toNextPage,
               isEnabled: false,
-              pages: 0,
             ),
           );
         } else if (!_isKeyboardVisible &&
@@ -97,7 +95,6 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
             child: NextButton(
               nextPage: toNextPage,
               isEnabled: true,
-              pages: 0,
             ),
           );
         } else {

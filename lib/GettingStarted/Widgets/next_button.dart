@@ -4,11 +4,9 @@ import 'package:money_monkey/themes/color_themes.dart';
 class NextButton extends StatelessWidget {
   NextButton({
     super.key,
-    required this.pages,
     required this.nextPage,
     required this.isEnabled,
   });
-  final int pages;
   final Function() nextPage;
   final bool isEnabled;
 

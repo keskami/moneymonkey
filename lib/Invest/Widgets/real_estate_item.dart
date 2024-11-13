@@ -12,11 +12,23 @@ class RealEstateItem extends StatelessWidget {
     required this.center,
     required this.neighbours,
     required this.start,
+    required this.isFin,
   });
-
+  final bool isFin;
   final bool start;
   final String center;
   final List<String> neighbours;
+
+  Offset getClusterOffset() {
+    if (!start) {
+      return Offset(-80, -80);
+    } else {
+      if (neighbours.length >= 3) {
+        return Offset(90, -60);
+      }
+      return Offset(70, -70);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,33 +47,60 @@ class RealEstateItem extends StatelessWidget {
               );
             },
             child: CircleAvatar(
-              radius: 50,
+              radius: 45,
               backgroundImage: AssetImage(center),
               backgroundColor: Colors.transparent,
             ),
           ),
-          for (int i = 0; i < neighbours.length; i++)
+          //Cluster
+          Transform.translate(
+            offset: getClusterOffset(),
+            child: Stack(
+              children: [
+                for (int i = 0; i < neighbours.length; i++)
+                  Transform.translate(
+                    offset: _calculateCircularOffset(i),
+                    child: CircleAvatar(
+                      radius: 45,
+                      backgroundImage: AssetImage(neighbours[i]),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          //Path
+          if (!isFin)
             Transform.translate(
-              offset: _calculateOffset(i),
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage(neighbours[i]),
-                backgroundColor: Colors.transparent,
-              ),
+              offset: start ? Offset(45, 80) : Offset(-35, 85),
+              child: !start
+                  ? Image.asset(
+                      "assets/real_estate/path3.png",
+                    )
+                  : Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi),
+                      child: Image.asset(
+                        "assets/real_estate/path3.png",
+                      ),
+                    ),
             ),
         ],
       ),
     );
   }
 
-  Offset _calculateOffset(int index) {
-    double baseRadius = neighbours.length <= 2 ? 100 : 80;
-    double radius = baseRadius + (neighbours.length - 2) * 20;
-
-    double angleStep = pi / neighbours.length;
-    double angle =
-        start ? (angleStep * index) + 5.6 : (pi - angleStep * index) - 5.4;
-
+  Offset _calculateCircularOffset(int index) {
+    double radius = 55;
+    double angleStep = (2 * pi) / neighbours.length;
+    double angleOffset = (start && neighbours.length >= 3)
+        ? -pi / 4
+        : (start && neighbours.length >= 2)
+            ? pi / 6
+            : (!start && neighbours.length >= 2)
+                ? -pi / 7
+                : 0;
+    double angle = angleStep * index + angleOffset;
     return Offset(radius * cos(angle), radius * sin(angle));
   }
 }
@@ -76,7 +115,8 @@ WidgetBuilder get _localDialogBuilder {
         borderWidth: 0,
         trianglePosition: TrianglePosition.top,
         childWidget: Container(
-          width: MediaQuery.of(context).size.width * 0.69,
+          width: MediaQuery.of(context).size.width * 0.65,
+          height: MediaQuery.of(context).size.height * 0.25,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +137,7 @@ WidgetBuilder get _localDialogBuilder {
                 alignment: Alignment.center,
                 child: Image.asset(
                   "assets/real_estate/house.png",
-                  height: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.width * 0.3,
                   fit: BoxFit.contain,
                 ),
               ),

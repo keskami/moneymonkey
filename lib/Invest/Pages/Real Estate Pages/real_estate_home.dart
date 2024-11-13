@@ -26,11 +26,11 @@ class _RealEstateHomeState extends State<RealEstateHome> {
       "assets/real_estate/donut_bakery.png",
     ],
     "assets/real_estate/center4.png": [
-      "assets/real_estate/house.png",
       "assets/real_estate/stadium.png",
       "assets/real_estate/shopping_mall.png",
-      "assets/real_estate/office.png",
+      "assets/real_estate/airport.png",
     ],
+    "assets/real_estate/center_complete.png": [],
   };
 
   @override
@@ -57,7 +57,7 @@ class _RealEstateHomeState extends State<RealEstateHome> {
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(
         0,
-        screenHeight * 0.07,
+        screenHeight * 0.12,
         0,
         screenHeight * 0.2,
       ),
@@ -68,9 +68,10 @@ class _RealEstateHomeState extends State<RealEstateHome> {
 
         return Padding(
           padding: EdgeInsets.only(
-            top: screenHeight * 0.04,
+            top: screenHeight * 0.02,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment:
@@ -83,15 +84,20 @@ class _RealEstateHomeState extends State<RealEstateHome> {
                     center: item.key,
                     neighbours: item.value,
                     start: !isEven,
+                    isFin: index > item.value.length,
                   ),
                   SizedBox(
-                    width: screenWidth * 0.29,
+                    width: screenWidth * 0.26,
                   ),
                 ],
               ),
-              SizedBox(
-                height: item.value.length.toDouble() * 12,
-              ),
+              index != item.value.length
+                  ? SizedBox(
+                      height: item.value.length.toDouble() * 12,
+                    )
+                  : SizedBox(
+                      height: item.value.length.toDouble() * 6,
+                    ),
             ],
           ),
         );
