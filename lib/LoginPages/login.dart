@@ -284,8 +284,12 @@ class _LoginScreenState extends State<LoginScreen> {
         final userSnapshot = await userDocRef.get();
 
         if (!userSnapshot.exists) {
-          await addUserDetails(userId, email);
-        } else {}
+         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("No account linked to Google Account. Please Sign Up."),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ));
+        } 
 
         Navigator.push(
           context,
@@ -450,8 +454,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       width: screenWidthUnit * 314,
                                       height: screenHeightUnit * 49,
                                       child: TextField(
-                                        obscureText: true,
+
                                         controller: _loginPasswordController,
+                                        obscureText: true,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                             borderRadius:
