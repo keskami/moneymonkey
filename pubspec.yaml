@@ -93,6 +93,8 @@ flutter:
     - assets/images/swinging_monkey.json
     - assets/images/Treasure_chest.gif
     - assets/images/opened_treasure.png
+    - assets/images/quizMonkey.png
+    - assets/images/speech_bubble.png
     
 
   fonts:

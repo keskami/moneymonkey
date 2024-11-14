@@ -69,6 +69,8 @@ class _BankNotePageState extends State<BankNotePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth= MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: CustomAppBar(progressController: progressController),
@@ -170,6 +172,7 @@ class _BankNotePageState extends State<BankNotePage> {
               right: 50,
               child: GestureDetector(
                 onTap: () {
+                   progressController.incrementProgress();
                   Get.toNamed("/questionPageRoute");
                 },
                 child: Image.asset(
