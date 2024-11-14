@@ -7,7 +7,7 @@ from statistics import mean
 import random
 from datetime import datetime, timedelta, timezone
 from collections import deque
-est = timezone(timedelta(hours=-5)) #change to 9 to test at 12:30
+est = timezone(timedelta(hours=-6)) #change to 9 to test at 12:30
 
 initialize_app()  
 db = firestore.client()
@@ -127,7 +127,7 @@ currenthour = datetime.now(est).hour
 currentminute = datetime.now(est).minute
 nextincof5 = ((currentminute // 5) * 5) + 5
 nextincof30 = ((currentminute // 30) * 30) + 30
-currentDate = datetime.now(est).date()    #timedelta(hours=-33) intsead of est to test at 12:30
+currentDate = (datetime.now(est)).date()    #timedelta(hours=-33) intsead of est to test at 12:30
 
 print(datetime.now(est))
 stocksNowData = {}
@@ -153,9 +153,44 @@ def newDay():
     global BananaIncomeVals, BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay
     global JungleSectorVals, JungleSector31days, JungleSector365days, JungleSector5MinsforDay
     global allMutualFundsVals, allMutualFunds31days, allMutualFunds365days, allMutualFunds5MinsforDay
-    global stockdailyapi
-
+    global stockdailyapi, etfdailyapi, mfdailyapi
     print("New Day")
+
+
+    stockdailydata =  {"createdAt" : firestore.SERVER_TIMESTAMP ,
+    'BananaTechValue': round(mean(list(BananaIncome5MinsforDay)), 2),
+            'HealthyChimpValue': round(mean(list(HealthyChimp5MinsforDay)), 2),
+            'EcoVineValue': round(mean(list(EcoVine5MinsforDay)), 2),
+            'JungleGoodsValue': round(mean(list(JungleGoods5MinsforDay)), 2),
+            'Stocks': round(mean(list(allStock5MinsforDay)), 2)
+            }
+
+    etfdailydata = {
+         "createdAt" : firestore.SERVER_TIMESTAMP,
+         'TechTreeValue': round(mean(list(TechTree5MinsforDay)), 2),
+            'MonkeyMedValue': round(mean(list(MonkeyMed5MinsforDay)), 2),
+            'GreenLeafPowerValue': round(mean(list(GreenLeaf5MinsforDay)), 2),
+            'GorillaGoodsValue': round(mean(list(GorillaGoods5MinsforDay)), 2),
+            'ETFs': round(mean(list(allETFS5MinsforDay)), 2)
+            }
+
+    mfdailydata = {
+        "createdAt" : firestore.SERVER_TIMESTAMP,
+            'APEGrowthValue': round(mean(list(APEGrowth5MinsforDay)), 2),
+            'BalancedBananaValue': round(mean(list(BalancedBanana5MinsforDay)), 2),
+            'BananaIncomeValue': round(mean(list(BananaIncome5MinsforDay)), 2),
+            'JungleSectorValue': round(mean(list(JungleSector5MinsforDay)), 2),
+            'MutualFunds': round(mean(list(allMutualFunds5MinsforDay)), 2)
+    }
+
+    try:
+        db.collection('StocksDaily').add(stockdailydata)
+        db.collection('ETFsDaily').add(etfdailydata)
+        db.collection('MutualFundsDaily').add(mfdailydata)
+        print("Added Day!!!!!!!!!!!!")
+    except Exception as e:
+        print(f"Error adding document: {e}") 
+        
 
     def updateForDay(stockVals, stock31, stock365, stock5forday):
         if stockVals:
@@ -184,7 +219,14 @@ def newDay():
     BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay = updateForDay(BananaIncomeVals, BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay)
     JungleSector31days, JungleSector365days, JungleSector5MinsforDay = updateForDay(JungleSectorVals, JungleSector31days, JungleSector365days, JungleSector5MinsforDay)
 
+  
+    
+    
+
     stockdailyapi = deque(list(stockdailyapi)[-1:], maxlen=stockdailyapi.maxlen)
+    etfdailyapi = deque(list(etfdailyapi)[-1:], maxlen=etfdailyapi.maxlen)
+    mfdailyapi = deque(list(mfdailyapi)[-1:], maxlen=mfdailyapi.maxlen)
+
 
 
 
@@ -345,7 +387,7 @@ def add5min():
          str(rounded_time) : {'BananaTechValue': round(mean(list(BananaTechVals)[-5:]), 2),
             'HealthyChimpValue': round(mean(list(HealthyChimpVals)[-5:]), 2),
             'EcoVineValue': round(mean(list(EcoVineVals)[-5:]), 2),
-            'JungleGoodsValue': round(mean(list(BananaTechVals)[-5:]), 2),
+            'JungleGoodsValue': round(mean(list(JungleGoodsVals)[-5:]), 2),
             'Stocks': round(mean(list(allStockVals)[-5:]), 2)}
             }
     stockdailyapi.append(stockdailydata)
@@ -375,13 +417,13 @@ def add5min():
 
 def pickValue(values, stock):
     if stock == 'BananaTech':
-        return random.uniform(0.9975, 1.003) * mean(values)
+        return random.uniform(0.975, 1.03) * mean(values)
     elif stock == 'HealthyChimp':
-        return random.uniform(0.9985, 1.0016) * mean(values) 
+        return random.uniform(0.9965, 1.0036) * mean(values) 
     elif stock == 'EcoVine':
-        return random.uniform(0.997, 1.0035) * mean(values) 
+        return random.uniform(0.990, 1.0011) * mean(values) 
     elif stock == 'JungleGoods':
-        return random.uniform(0.998, 1.002) * mean(values)
+        return random.uniform(0.997, 1.0031) * mean(values)
     elif stock == "TreeTech":
          return random.uniform(0.99, 1.011) * mean(values)
     elif stock == "MonkeyMed":
@@ -544,10 +586,6 @@ def updateStocks():
                 JungleSectorVals.append(lastJungleSector)
                 JungleSectorValue = lastJungleSector
 
-                
-
-
-
         except Exception as e:
             BananaTechValue = 124
             BananaTechVals.append(BananaTechValue)
@@ -646,19 +684,18 @@ def updateStocks():
 
         
         if datetime.now(est).hour != currenthour:
-            print("NEW HOUR")
             add5min()
             add30mins()
             currenthour = datetime.now(est).hour
             nextincof5 = 5
             nextincof30 = 30
         else:
-            if int(datetime.now(est).minute) > nextincof5: 
+            if int(datetime.now(est).minute) >= nextincof5: 
                 print("NEW 5") 
                 nextincof5 += 5
                 add5min() 
 
-            if int(datetime.now(est).minute)  > nextincof30:
+            if int(datetime.now(est).minute)  >= nextincof30:
                 print("NEW 30")
                 nextincof30 += 30
                 add30mins() 
@@ -724,18 +761,7 @@ if __name__ == '__main__':
     
 
 '''
-    try:
-        db.collection('BananaTech').add(bananaData)
-        db.collection('HealthyChimp').add(chimpData)
-        db.collection('EcoVine').add(ecoData)
-        db.collection('JungleGoods').add(jungleData)
-        db.collection('Stocks').add(stocksData)
-        response = make_response("Document added to Firestore!", 200)
-        return response
-    except Exception as e:
-        print(f"Error adding document: {e}") 
-        response = make_response(f"Error adding document: {e}", 500)
-        return response
+    
         
         
         def start():
