@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage>
             break;
           case 2:
             progressController.unitTitle.value = "Saving and Spending Basics";
-            _titleColor = const Color(0xFFB8E6E1);
+            _titleColor = const Color(0xFFFF6B6B1);
             break;
           case 3:
             progressController.unitTitle.value = "Understanding Banks";

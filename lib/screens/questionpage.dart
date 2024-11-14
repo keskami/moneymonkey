@@ -73,34 +73,4 @@ class QuestionPage extends StatelessWidget {
   }
 }
 
-class SpeechBubblePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.grey[200]!
-      ..style = PaintingStyle.fill;
-
-    final path = Path()
-      ..moveTo(20, 0)
-      ..lineTo(size.width - 20, 0)
-      ..arcToPoint(Offset(size.width, 20), radius: const Radius.circular(20))
-      ..lineTo(size.width, size.height - 20)
-      ..arcToPoint(Offset(size.width - 20, size.height), radius: const Radius.circular(20))
-      ..lineTo(size.width / 2 + 10, size.height) // Position arrow near the center
-      ..lineTo(size.width / 2, size.height + 10) // Arrow tip
-      ..lineTo(size.width / 2 - 10, size.height) // Arrow base
-      ..lineTo(20, size.height)
-      ..arcToPoint(Offset(0, size.height - 20), radius: const Radius.circular(20))
-      ..lineTo(0, 20)
-      ..arcToPoint(Offset(20, 0), radius: const Radius.circular(20))
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
 

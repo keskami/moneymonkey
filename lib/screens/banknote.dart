@@ -188,7 +188,7 @@ class _BankNotePageState extends State<BankNotePage> {
         color: cardModel.color,
         title: "",
         details: cardModel.backText,
-        imagePath:  'assets/images/monkeywithnote.png',
+        imagePath:  'assets/images/monkeywithcap.png',
       ),
       onFlipDone: (bool flipped) {
         if (flipped && !cardModel.isFlipped) {
