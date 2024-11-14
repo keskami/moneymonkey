@@ -415,14 +415,15 @@ def add5min():
 
 
    
-
+ecoVineBonus = 0
 def pickValue(values, stock):
+    global ecoVineBonus
     if stock == 'BananaTech':
         return random.uniform(0.975, 1.03) * mean(values)
     elif stock == 'HealthyChimp':
         return random.uniform(0.9965, 1.0036) * mean(values) 
     elif stock == 'EcoVine':
-        return random.uniform(0.990, 1.0011) * mean(values) 
+        return (random.uniform(0.990, 1.0011) * mean(values)) 
     elif stock == 'JungleGoods':
         return random.uniform(0.997, 1.0031) * mean(values)
     elif stock == "TreeTech":
@@ -457,9 +458,10 @@ def updateStocks():
     global APEGrowthVals, BalancedBananaVals, BananaIncomeVals, JungleSectorVals, allMutualFundsVals
     global currenthour, currentminute, nextincof5, nextincof30, currentDate
     global EcoVine5MinsforDay, EcoVine30for5, EcoVine31days,  TIMEDIFF, chnageFromUTC
+    global ecoVineBonus
 
     while True:
-        time.sleep(59.9)
+        time.sleep(5.9)
 
         BananaTechValue = 124
         HealthyChimpValue = 64
@@ -486,6 +488,9 @@ def updateStocks():
                 BananaTechVals.append(lastBanana)
                 HealthyChimpVals.append(lastChimp)
                 EcoVineVals.append(LastEconVine)
+                
+
+
                 JungleGoodsVals.append(LastJungle)
 
                 TechTreeVals.append(LastJungle)
@@ -633,7 +638,11 @@ def updateStocks():
             JungleSectorValue = lastJungleSector
             print(e)
 
+
+
+
         
+
         lastBanana = BananaTechValue
         lastChimp = HealthyChimpValue
         LastEconVine = EcoVineValue
@@ -646,6 +655,7 @@ def updateStocks():
             'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
             'timestamp': datetime.now(TIMEDIFF)
         }
+        
         allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
 
         lastTreeTech = TreeTechValue
@@ -756,23 +766,32 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         
 
     elif req.method == 'POST':
+        global ecoVineBonus
         print("POST request received")
         if path == "/api/change/Time":
             data = req.get_json()
             if data:
                 isSavings = data["EST"]
-                print(data)
-                print(isSavings)
                 if isSavings == "True":
                     chnageFromUTC = -6
                 else:
                     chnageFromUTC = -7
                 TIMEDIFF = timezone(timedelta(hours=-chnageFromUTC))
-                print(TIMEDIFF)
-                
+            
                 return jsonify({"status": "success", "message": "Data received", "data": data}), 200
             else:
                 return make_response("Invalid data", 400)
+        elif path == "/api/change/Value":
+            data = req.get_json()
+            if data:
+                value = data["Value"]
+                amount = data["Amount"]
+                if value == "EcoVine":
+                    ecoVineBonus = amount
+                    print(ecoVineBonus)
+                return jsonify({"status": "success", "message": "Data received", "data": data}), 200
+            else:
+             return make_response("Invalid data", 400)
         
         return make_response("Not Found", 404)
 
