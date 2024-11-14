@@ -7,7 +7,8 @@ from statistics import mean
 import random
 from datetime import datetime, timedelta, timezone
 from collections import deque
-est = timezone(timedelta(hours=-6)) #change to 9 to test at 12:30
+chnageFromUTC = -6
+TIMEDIFF = timezone(timedelta(hours=-chnageFromUTC)) #change to 9 to test at 12:30
 
 initialize_app()  
 db = firestore.client()
@@ -123,13 +124,13 @@ mf5dayapi = deque(maxlen = 240)
 
 
 
-currenthour = datetime.now(est).hour
-currentminute = datetime.now(est).minute
+currenthour = datetime.now(TIMEDIFF).hour
+currentminute = datetime.now(TIMEDIFF).minute
 nextincof5 = ((currentminute // 5) * 5) + 5
 nextincof30 = ((currentminute // 30) * 30) + 30
-currentDate = (datetime.now(est)).date()    #timedelta(hours=-33) intsead of est to test at 12:30
+currentDate = (datetime.now(TIMEDIFF)).date()    #timedelta(hours=-33) intsead of est to test at 12:30
 
-print(datetime.now(est))
+
 stocksNowData = {}
 etfsNowData = {}
 mfNowData = []
@@ -187,7 +188,7 @@ def newDay():
         db.collection('StocksDaily').add(stockdailydata)
         db.collection('ETFsDaily').add(etfdailydata)
         db.collection('MutualFundsDaily').add(mfdailydata)
-        print("Added Day!!!!!!!!!!!!")
+        
     except Exception as e:
         print(f"Error adding document: {e}") 
         
@@ -286,7 +287,7 @@ def add30mins():
     if allMutualFundsVals:
         allMutualFunds30for5.append(round(mean(list(allMutualFundsVals)[-30:]), 2))
    
-    now = datetime.now(est)
+    now = datetime.now(TIMEDIFF)
     rounded_time = now - timedelta(minutes=now.minute % 30, seconds=now.second, microseconds=now.microsecond)
 
     stockdailydata = {
@@ -381,7 +382,7 @@ def add5min():
         allMutualFunds5MinsforDay.append(round(mean(list(allMutualFundsVals)[-5:]), 2))
     
 
-    now = datetime.now(est)
+    now = datetime.now(TIMEDIFF)
     rounded_time = now - timedelta(minutes=now.minute % 5, seconds=now.second, microseconds=now.microsecond)
     stockdailydata = {
          str(rounded_time) : {'BananaTechValue': round(mean(list(BananaTechVals)[-5:]), 2),
@@ -455,7 +456,7 @@ def updateStocks():
     global TechTreeVals, MonkeyMedVals, GreenLeafVals, GorillaGoodsVals, allETFVals
     global APEGrowthVals, BalancedBananaVals, BananaIncomeVals, JungleSectorVals, allMutualFundsVals
     global currenthour, currentminute, nextincof5, nextincof30, currentDate
-    global EcoVine5MinsforDay, EcoVine30for5, EcoVine31days
+    global EcoVine5MinsforDay, EcoVine30for5, EcoVine31days,  TIMEDIFF, chnageFromUTC
 
     while True:
         time.sleep(59.9)
@@ -643,7 +644,7 @@ def updateStocks():
             'EcoVineValue': EcoVineValue,
             'JungleGoodsValue': JungleGoodsValue,
             'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
-            'timestamp': datetime.now(est)
+            'timestamp': datetime.now(TIMEDIFF)
         }
         allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
 
@@ -660,7 +661,7 @@ def updateStocks():
             "GreenLeafValue": GreenLeafValue,
             "GorillaGoodsValue": GorillaGoodsValue,
             "ETFS" : etfVal,
-            "timestamp": datetime.now(est)
+            "timestamp": datetime.now(TIMEDIFF)
         }
 
 
@@ -677,32 +678,32 @@ def updateStocks():
         "BananaIncomeValue": BananaIncomeValue,
         "JungleSectorValue": JungleSectorValue,
         "MuturalFuds" : mutualFundsVal,
-        "timestamp": datetime.now(est)
+        "timestamp": datetime.now(TIMEDIFF)
         }
 
 
 
         
-        if datetime.now(est).hour != currenthour:
+        if datetime.now(TIMEDIFF).hour != currenthour:
             add5min()
             add30mins()
-            currenthour = datetime.now(est).hour
+            currenthour = datetime.now(TIMEDIFF).hour
             nextincof5 = 5
             nextincof30 = 30
         else:
-            if int(datetime.now(est).minute) >= nextincof5: 
+            if int(datetime.now(TIMEDIFF).minute) >= nextincof5: 
                 print("NEW 5") 
                 nextincof5 += 5
                 add5min() 
 
-            if int(datetime.now(est).minute)  >= nextincof30:
+            if int(datetime.now(TIMEDIFF).minute)  >= nextincof30:
                 print("NEW 30")
                 nextincof30 += 30
                 add30mins() 
 
-        if currentDate < datetime.now(est).date() and datetime.now(est).hour >= 9 and datetime.now(est).minute >= 30:
+        if currentDate < datetime.now(TIMEDIFF).date() and datetime.now(TIMEDIFF).hour >= 9 and datetime.now(TIMEDIFF).minute >= 30:
             print("ADDING DAY")
-            currentDate = datetime.now(est).date()
+            currentDate = datetime.now(TIMEDIFF).date()
             newDay()
 
       
@@ -714,6 +715,7 @@ def updateStocks():
         print(EcoVine5MinsforDay)
         print(EcoVine30for5)
         print(EcoVine31days)
+        print(TIMEDIFF)
 
 
 
@@ -727,7 +729,9 @@ def start_background_tasks():
 
 @https_fn.on_request()
 def on_request_example(req: https_fn.Request) -> https_fn.Response:
-    path = req.path  
+    path = req.path
+    global TIMEDIFF, chnageFromUTC
+
     if req.method == 'GET':
         if path == '/api/stocks':
             return jsonify(stocksNowData)
@@ -749,7 +753,32 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
             return jsonify(list(mf5dayapi))
         else:
             return make_response("Not Found", 404)
-    return make_response("OK", 200)
+        
+
+    elif req.method == 'POST':
+        print("POST request received")
+        if path == "/api/change/Time":
+            data = req.get_json()
+            if data:
+                isSavings = data["EST"]
+                print(data)
+                print(isSavings)
+                if isSavings == "True":
+                    chnageFromUTC = -6
+                else:
+                    chnageFromUTC = -7
+                TIMEDIFF = timezone(timedelta(hours=-chnageFromUTC))
+                print(TIMEDIFF)
+                
+                return jsonify({"status": "success", "message": "Data received", "data": data}), 200
+            else:
+                return make_response("Invalid data", 400)
+        
+        return make_response("Not Found", 404)
+
+    return make_response("Method Not Allowed", 405)
+        
+    
 
 start_background_tasks()
 
@@ -760,16 +789,3 @@ if __name__ == '__main__':
 
     
 
-'''
-    
-        
-        
-        def start():
-    while True:
-        with app.app_context():  
-            on_request_example(None)  
-        time.sleep(20) 
-
-        
-        
-        '''
