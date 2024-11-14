@@ -6,7 +6,9 @@ class NextButton extends StatelessWidget {
     super.key,
     required this.nextPage,
     required this.isEnabled,
+    this.text = "CONTINUE",
   });
+  final String text;
   final Function() nextPage;
   final bool isEnabled;
 
@@ -31,7 +33,7 @@ class NextButton extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.065,
           child: Center(
             child: Text(
-              "CONTINUE",
+              text,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 25,
