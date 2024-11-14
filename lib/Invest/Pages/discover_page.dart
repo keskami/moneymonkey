@@ -158,7 +158,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             children: [
                               SizedBox(width: screenWidthUnit * 20),
                               Text(
-                                '$_balance',
+                                '🍌$_balance',
                                 style: GoogleFonts.baloo2(
                                   fontSize: 32,
                                   fontWeight: FontWeight.w500,
