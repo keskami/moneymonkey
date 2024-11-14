@@ -168,7 +168,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           setState(() {
             isExpanded = false;
           });
-          
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -517,13 +516,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                     SizedBox(
                                       height: screenHeightUnit * 4,
                                     ),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Text(
-                                        "View All >",
-                                        style: GoogleFonts.baloo2(fontSize: 18),
-                                      ),
-                                    ),
                                   ] else ...[
                                     const Center(
                                       child: Text(
@@ -538,7 +530,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             ),
                           ],
                         ),
-                      )
+                      ),
+                      Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0,
+                                screenWidthUnit * 25, screenHeightUnit * 7),
+                            child: Text(
+                              "View All >",
+                              style: GoogleFonts.baloo2(fontSize: 18),
+                            ),
+                          ))
                     ],
                   ),
                 ),
