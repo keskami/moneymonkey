@@ -17,6 +17,9 @@ class ProgressController extends GetxController {
   var currentLessonTitle= ''.obs;
   var unitTitle = ''.obs;
   var isChestOpened = false.obs; // Track if the chest is opened
+  var quizOptions = <String>[].obs;
+   var quizQuestion = ''.obs;
+   var correctAnswer = ''.obs;
 
 
   void setCardsCompleted() {
@@ -123,6 +126,37 @@ void moveToNextLesson() {
   void decrementProgress() {
     if (progress.value < 1) {
       progress.value -= 0.2;
+    }
+  }
+
+    // Fetch quiz data from Firestore based on the current lesson
+  Future<void> fetchQuizData(String lessonId) async {
+    try {
+      final lessonDoc = await FirebaseFirestore.instance
+          .collection('lessons')
+          .doc(lessonId)
+          .get();
+
+      if (lessonDoc.exists) {
+        final quizData = lessonDoc.data()?['quiz'] as List<dynamic>?;
+
+        if (quizData != null && quizData.isNotEmpty) {
+          // Assuming you want the first quiz question for simplicity
+          final quiz = quizData[0];
+          quizQuestion.value = quiz['question'] ?? 'No question available';
+          correctAnswer.value = quiz['CorrectAnswer'] ?? '';
+          
+          // Extract options
+          quizOptions.value = [
+            quiz['option']['option1'] ?? '',
+            quiz['option']['option2'] ?? '',
+            quiz['option']['option3'] ?? '',
+            quiz['option']['option4'] ?? '',
+          ];
+        }
+      }
+    } catch (e) {
+      print('Error fetching quiz data: $e');
     }
   }
 
