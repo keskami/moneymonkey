@@ -38,6 +38,7 @@ dependencies:
   url_launcher: ^6.3.1
   aligned_dialog: ^0.0.7
   shimmer: ^3.0.0
+  syncfusion_flutter_gauges: ^27.1.58
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +47,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+    - assets/sample_stock_data.json
     - assets/images/banknote.png
     - assets/images/bigbanana.png
     - assets/images/bigtreasure.png

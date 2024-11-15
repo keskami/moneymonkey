@@ -5,17 +5,21 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../Backend/Models/stock_data.dart';
 import '../../themes/color_themes.dart';
 
-class LineChartWidget extends StatelessWidget {
-  final List<StockData> stockData; // Receive stock data from InvestmentPage
+class LineChartWidget extends StatefulWidget {
+  final List<StockData> stockData;
   final String duration;
 
   const LineChartWidget({
-    super.key,
+    Key? key,
     required this.stockData,
     required this.duration,
-  });
+  }) : super(key: key);
 
-  // Function to calculate the percentage change
+  @override
+  State<LineChartWidget> createState() => _LineChartWidgetState();
+}
+
+class _LineChartWidgetState extends State<LineChartWidget> {
   double calculateChange(double open, double close) {
     return ((close - open) / open) * 100;
   }
@@ -23,42 +27,35 @@ class LineChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, int> days = {
-      "24H": 24,
-      "7D": 24,
-      "1M": 30,
-      "3M": 90,
+      "24H": 40,
+      "7D": 45,
+      "1M": 90,
+      "3M": 150,
       "1Y": 365,
-      "ALL": 3650,
+      "ALL": widget.stockData.length,
     };
-    DateTime oneYearAgo =
-        DateTime.now().subtract(Duration(days: days[duration]!));
-
-// Adjust the data filtering to load all data if the duration is "ALL"
-    List<FlSpot> spots = duration == "ALL"
-        ? stockData
-            .asMap()
-            .entries
-            .map((entry) => FlSpot(
-                  entry.key.toDouble(),
-                  entry.value.close,
-                ))
-            .toList()
-        : stockData
-            .where((data) => data.date.isAfter(oneYearAgo))
-            .toList()
-            .asMap()
-            .entries
-            .map((entry) => FlSpot(
-                  entry.key.toDouble(),
-                  entry.value.close,
-                ))
-            .toList();
+    DateTime cutOffDate =
+        DateTime.now().subtract(Duration(days: days[widget.duration]!));
+    List<FlSpot> spots = widget.stockData
+        .where(
+          (data) => data.date.isAfter(cutOffDate),
+        )
+        .toList()
+        .toList()
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(
+              entry.key.toDouble(),
+              entry.value.close,
+            ))
+        .toList();
 
     if (spots.isEmpty) {
-      return const Center(
-          child: Text("No data available for the selected period."));
+      spots = [FlSpot(0, widget.stockData.first.close)];
+      print(
+          'No data available for ${widget.duration} range. Showing default data point.');
     }
-
+    print(spots);
     return LineChart(
       LineChartData(
         lineBarsData: [
@@ -78,7 +75,7 @@ class LineChartWidget extends StatelessWidget {
                 end: Alignment.bottomCenter,
               ),
             ),
-            dotData: const FlDotData(show: false), // Disable default dots
+            dotData: const FlDotData(show: false),
           ),
         ],
         titlesData: FlTitlesData(
@@ -86,16 +83,16 @@ class LineChartWidget extends StatelessWidget {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize:
-                  30, // Adjust this value based on how much space you need
+              reservedSize: 30,
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toStringAsFixed(0),
                   style: GoogleFonts.baloo2().copyWith(
                     color: Colors.black,
                     fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 );
               },
             ),
@@ -124,7 +121,7 @@ class LineChartWidget extends StatelessWidget {
             getTooltipItems: (touchedSpots) {
               return touchedSpots.map((touchedSpot) {
                 final index = touchedSpot.spotIndex;
-                final dataPoint = stockData[index];
+                final dataPoint = widget.stockData[index];
                 final change = calculateChange(dataPoint.open, dataPoint.close);
                 final arrow = change >= 0 ? '+' : '';
 
@@ -136,21 +133,18 @@ class LineChartWidget extends StatelessWidget {
                   ),
                   children: [
                     TextSpan(
-                      text: '🍌${dataPoint.close.toStringAsFixed(2)} ',
+                      text: 'Price: ${dataPoint.close.toStringAsFixed(2)}\n',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
-                      children: [
-                        TextSpan(
-                          text: '$arrow ${change.toStringAsFixed(2)}%',
-                          style: const TextStyle(
-                            backgroundColor: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                    ),
+                    TextSpan(
+                      text: 'Change: $arrow ${change.toStringAsFixed(2)}%',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
                     ),
                   ],
                   textAlign: TextAlign.left,
@@ -164,7 +158,7 @@ class LineChartWidget extends StatelessWidget {
                 FlLine(
                   color: Colors.transparent,
                   strokeWidth: 0,
-                ), // No vertical line
+                ),
                 FlDotData(
                   show: true,
                   getDotPainter: (spot, percent, barData, index) =>
