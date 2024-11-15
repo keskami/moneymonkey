@@ -7,11 +7,7 @@ class OptionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProgressController progressController = Get.find<ProgressController>();
 
-    // Fetch quiz data when the widget is built
-    progressController.fetchQuizData('lesson${progressController.currentLessonIndex.value + 1}');
-
     return Obx(() {
-      // Check if options are still being fetched
       if (progressController.quizOptions.isEmpty) {
         return const Center(child: CircularProgressIndicator());
       }
@@ -25,23 +21,20 @@ class OptionsList extends StatelessWidget {
 
           return GestureDetector(
             onTap: () {
-              // Set selected option and determine if it’s correct
               progressController.setSelectedOptionIndex(index);
-              bool isCorrect = optionText == progressController.correctAnswer.value;
-              progressController.setCorrectSelection(isCorrect);
             },
             child: Obx(() => Container(
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: progressController.selectedOptionIndex.value == index
-                        ? Colors.blue[50]
+                    color: progressController.isOptionSelected.value &&
+                            progressController.quizOptions[index] ==
+                                progressController.correctAnswer.value
+                        ? Colors.blue[150]
                         : Colors.grey[200],
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: progressController.selectedOptionIndex.value == index
-                          ? Colors.blue
-                          : Colors.black26,
+                      color: Colors.black26,
                       width: 2,
                     ),
                   ),

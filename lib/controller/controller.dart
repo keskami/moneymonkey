@@ -20,6 +20,7 @@ class ProgressController extends GetxController {
   var quizOptions = <String>[].obs;
    var quizQuestion = ''.obs;
    var correctAnswer = ''.obs;
+   var quizQuestions = <Map<String, dynamic>>[].obs;
 
 
   void setCardsCompleted() {
@@ -30,11 +31,11 @@ class ProgressController extends GetxController {
   }
 
   // Update selected option index
-  void setSelectedOptionIndex(int index) {
-    selectedOptionIndex.value = index;
-    isOptionSelected.value = true; // Set that an option is selected
-    print("option selected");
-  }
+  // void setSelectedOptionIndex(int index) {
+  //   selectedOptionIndex.value = index;
+  //   isOptionSelected.value = true; // Set that an option is selected
+  //   print("option selected");
+  // }
 
 // Reset selection
   void resetSelection() {
@@ -63,6 +64,7 @@ class ProgressController extends GetxController {
   void setQuizCompleted() {
     quizCompleted.value = true;
     print("Quiz Completed");
+    update();
     checkCompletion();
   }
 
@@ -129,7 +131,9 @@ void moveToNextLesson() {
     }
   }
 
-    // Fetch quiz data from Firestore based on the current lesson
+  var currentQuestionIndex = 0.obs;
+
+   // Fetch quiz data from Firestore for the current lesson
   Future<void> fetchQuizData(String lessonId) async {
     try {
       final lessonDoc = await FirebaseFirestore.instance
@@ -141,24 +145,82 @@ void moveToNextLesson() {
         final quizData = lessonDoc.data()?['quiz'] as List<dynamic>?;
 
         if (quizData != null && quizData.isNotEmpty) {
-          // Assuming you want the first quiz question for simplicity
-          final quiz = quizData[0];
-          quizQuestion.value = quiz['question'] ?? 'No question available';
-          correctAnswer.value = quiz['CorrectAnswer'] ?? '';
-          
-          // Extract options
-          quizOptions.value = [
-            quiz['option']['option1'] ?? '',
-            quiz['option']['option2'] ?? '',
-            quiz['option']['option3'] ?? '',
-            quiz['option']['option4'] ?? '',
-          ];
+          quizQuestions.value =
+              quizData.map((item) => item as Map<String, dynamic>).toList();
+          currentQuestionIndex.value = 0;
+          loadQuestion();
         }
       }
     } catch (e) {
       print('Error fetching quiz data: $e');
     }
   }
+
+ // Load the current question and options
+void loadQuestion() {
+  if (currentQuestionIndex.value < quizQuestions.length) {
+    final currentQuestion = quizQuestions[currentQuestionIndex.value];
+
+    // Extract question text
+    quizQuestion.value = currentQuestion['question'] ?? 'No question available';
+
+    // Extract correct answer
+    correctAnswer.value = currentQuestion['correctAnswer'] ?? currentQuestion['CorrectAnswer'] ?? '';
+
+    // Clear previous options
+    quizOptions.clear();
+
+    // Extract options and update the list
+   // quizOptions.value = currentQuestion['option'].values.map((e) => e.toString()).toList();
+   quizOptions.value = List<String>.from(currentQuestion['option'].values.map((e) => e.toString()));
+
+
+    // Reset selection for the new question
+    resetSelection();
+    setDialogShown(false);
+    isCorrectSelected.value = false;
+
+    // Debug logs
+    print("Loaded Question: ${quizQuestion.value}");
+    print("Correct Answer: ${correctAnswer.value}");
+    print("Options: ${quizOptions}");
+  } else {
+    // If all questions are answered, navigate to lesson completion page
+    Get.toNamed("/lessonCompletePageRoute");
+  }
+}
+
+
+  // Move to the next question
+void nextQuestion() {
+  if (currentQuestionIndex.value < quizQuestions.length - 1) {
+    // Increment question index
+    currentQuestionIndex.value += 1;
+    // Load the next question
+    loadQuestion();
+  } else {
+    // Mark quiz as completed
+    setQuizCompleted();
+
+    // Award bananas and move to next lesson
+    awardBananas().then((_) {
+      print("Bananas awarded, moving to the next lesson...");
+      moveToNextLesson();
+    });
+  }
+
+  // Reset dialog shown state
+  setDialogShown(false);
+}
+
+
+  // Set the selected option index
+  void setSelectedOptionIndex(int index) {
+    isOptionSelected.value = true;
+    bool isCorrect = quizOptions[index] == correctAnswer.value;
+    isCorrectSelected.value = isCorrect;
+  }
+
 
  Future<void> fetchUnitTitle(String unitId) async {
     try {
@@ -230,40 +292,7 @@ void moveToNextLesson() {
     }
   }
 
-//     Future<void> awardBananas() async {
-//     var currentUser = FirebaseAuth.instance.currentUser;
-//     String? userId = currentUser?.uid;
 
-//     if (userId != null) {
-//       // Reference to the user's Progression sub-collection
-//       try{
-//       final progressionRef = FirebaseFirestore.instance
-//           .collection('Users')
-//           .doc(userId)
-//           .collection('Progression')
-//           .doc('progression1');
-
-//       final docSnapshot = await progressionRef.get();
-
-//       if (docSnapshot.exists) {
-//          final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
-//          final currentBananas = earnings['Bananas'] ?? 0;
-
-//         await progressionRef.update({
-//           'Earnings from Lesson.Bananas': currentBananas + 10,
-//         });
-
-//         // Update progress bar or notify UI
-//         progress.value = 1.0;
-//       }else{
-//           print('Document does not exist');
-//       }
-//       } catch(e){
-//          print('Error awarding bananas: $e');
-//       }
-//     }
-//   }
-// }
 
   Future<void> awardBananas() async {
     var currentUser = FirebaseAuth.instance.currentUser;
