@@ -48,7 +48,7 @@ class QuestionPage extends StatelessWidget {
                       children: [
                         Image.asset(
                           'assets/images/speech_bubble.png',
-                          width: screenWidth * 0.6,
+                          width: screenWidth * 0.62,
                           fit: BoxFit.contain,
                         ),
                         Padding(

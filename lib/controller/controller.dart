@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProgressController extends GetxController {
@@ -12,7 +13,8 @@ class ProgressController extends GetxController {
   var currentLessonIndex = 0.obs;
   var isDialogShown = false.obs;
   var isChestUnlocked = false.obs;
-  var selectedOptionIndex = (-1).obs;
+ // var selectedOptionIndex = (-1).obs;
+ 
   var flashcards = <Map<String, dynamic>>[].obs;
   var currentLessonTitle= ''.obs;
   var unitTitle = ''.obs;
@@ -41,6 +43,9 @@ class ProgressController extends GetxController {
   void resetSelection() {
     selectedOptionIndex.value = -1; // Deselect all options
     isOptionSelected.value = false; // Indicate no option is selected
+    //selectedOptionIndex.refresh(); // Force UI to update
+  //update();
+    print("Selection has been reset.");
   }
 
   void setOptionSelected(bool value) {
@@ -102,6 +107,15 @@ void moveToNextLesson() {
   // Update progress and UI
   progress.refresh();
   update();
+   // Reset quiz state
+  currentQuestionIndex.value = 0;
+  selectedOptionIndex.value = -1;
+  quizCompleted.value = false;
+
+  // Fetch quiz data for the new lesson
+  fetchQuizData('lesson${currentLessonIndex.value + 1}');
+  print("Fetching quiz data for lesson${currentLessonIndex.value + 1}");
+
 
   // Fetch the flashcards for the new lesson
   fetchFlashcards('lesson${currentLessonIndex.value + 1}');
@@ -121,7 +135,7 @@ void moveToNextLesson() {
 
   void incrementProgress() {
     if (progress.value < 1) {
-      progress.value += 0.2; // Increase progress by 20%
+      progress.value += 0.1; // Increase progress by 20%
     }
   }
 
@@ -158,6 +172,7 @@ void moveToNextLesson() {
 
  // Load the current question and options
 void loadQuestion() {
+   resetSelection();
   if (currentQuestionIndex.value < quizQuestions.length) {
     final currentQuestion = quizQuestions[currentQuestionIndex.value];
 
@@ -180,6 +195,8 @@ void loadQuestion() {
     setDialogShown(false);
     isCorrectSelected.value = false;
 
+     
+
     // Debug logs
     print("Loaded Question: ${quizQuestion.value}");
     print("Correct Answer: ${correctAnswer.value}");
@@ -193,6 +210,7 @@ void loadQuestion() {
 
   // Move to the next question
 void nextQuestion() {
+  resetSelection();
   if (currentQuestionIndex.value < quizQuestions.length - 1) {
     // Increment question index
     currentQuestionIndex.value += 1;
@@ -212,13 +230,15 @@ void nextQuestion() {
   // Reset dialog shown state
   setDialogShown(false);
 }
-
-
+  
+ var selectedOptionIndex = ValueNotifier<int>(-1);
   // Set the selected option index
   void setSelectedOptionIndex(int index) {
+    selectedOptionIndex.value = index;
     isOptionSelected.value = true;
     bool isCorrect = quizOptions[index] == correctAnswer.value;
     isCorrectSelected.value = isCorrect;
+     print("Selected option index: $index, Correct: $isCorrect");
   }
 
 
