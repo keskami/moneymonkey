@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/GettingStarted/Pages/QuizPages/questions.dart';
 import 'package:money_monkey/GettingStarted/Pages/su_home.dart';
 import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -18,10 +20,11 @@ class _StartFreshHomeState extends State<StartFreshHome> {
   final StartFreshController startFreshController =
       Get.put(StartFreshController());
 
-  bool _isNextButtonEnabled = true;
+  bool _isNextButtonEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+    GettingStartedController gettingStartedController = Get.find();
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: LightTheme().primaryGreen,
@@ -33,23 +36,27 @@ class _StartFreshHomeState extends State<StartFreshHome> {
       int currentIndex = startFreshController.pageIndex.value;
       print(_isNextButtonEnabled);
       print(currentIndex);
-      if (currentIndex + 1 == 2 &&
-          startFreshController.learningGoal.value == 0) {
+      if (currentIndex + 1 == 1 &&
+          startFreshController.learningGoal.value > 20) {
         setState(() {
           _isNextButtonEnabled = false;
         });
       } else {
         _isNextButtonEnabled = true;
       }
-      if (currentIndex == 2 && startFreshController.learningGoal.value == 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Pick a learning goal."),
-          ),
-        );
-        return;
+      if (currentIndex + 1 == 3) {
+        if (startFreshController.startingFresh.value == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => QuizHome(),
+            ),
+          );
+        } else if (startFreshController.startingFresh.value == 1) {
+          gettingStartedController.knowledgeLevel.value = 1;
+        }
       }
-      if (currentIndex + 1 > 6) {
+      if (currentIndex + 1 > 4) {
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -70,8 +77,7 @@ class _StartFreshHomeState extends State<StartFreshHome> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset:
-          false, // Prevent layout shift when keyboard opens
+      resizeToAvoidBottomInset: false,
       backgroundColor: LightTheme().primaryBackgroundColor,
       body: SafeArea(
         child: Column(
@@ -118,7 +124,7 @@ class _StartFreshHomeState extends State<StartFreshHome> {
       ),
       floatingActionButton: Obx(
         () {
-          if (startFreshController.pageIndex.value == 2 &&
+          if (startFreshController.pageIndex.value == 0 &&
               startFreshController.learningGoal.value > 20) {
             return Align(
               alignment: Alignment.bottomCenter,
@@ -130,7 +136,7 @@ class _StartFreshHomeState extends State<StartFreshHome> {
                 ),
               ),
             );
-          } else if (startFreshController.pageIndex.value == 4 &&
+          } else if (startFreshController.pageIndex.value == 2 &&
               startFreshController.startingFresh.value == 0) {
             return Align(
               alignment: Alignment.bottomCenter,
@@ -138,6 +144,17 @@ class _StartFreshHomeState extends State<StartFreshHome> {
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
                   isEnabled: false,
+                  nextPage: toNextPage,
+                ),
+              ),
+            );
+          } else if (startFreshController.pageIndex.value == 2) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 50),
+                child: NextButton(
+                  isEnabled: true,
                   nextPage: toNextPage,
                 ),
               ),
