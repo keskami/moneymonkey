@@ -135,7 +135,7 @@ void moveToNextLesson() {
 
   void incrementProgress() {
     if (progress.value < 1) {
-      progress.value += 0.1; // Increase progress by 20%
+      progress.value += 0.15; // Increase progress by 20%
     }
   }
 

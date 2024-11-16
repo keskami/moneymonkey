@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:moneymonkey/screens/home.dart';
+import 'package:moneymonkey/screens/portfolio.dart';
 // import 'package:money_monkey/GettingStarted/Frontend/Pages/gs_home.dart';
 // import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 
@@ -210,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => TransfersScreen(),
           ),
         );
       }
