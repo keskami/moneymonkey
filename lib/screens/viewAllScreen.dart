@@ -83,7 +83,7 @@ class _TransfersScreenState extends State<TransfersScreen> {
                     Text(
                       '7,464',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 34,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Baloo 2',
                       ),

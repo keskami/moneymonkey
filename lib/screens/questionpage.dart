@@ -4,6 +4,7 @@ import 'package:moneymonkey/controller/controller.dart';
 import 'package:moneymonkey/widgets/custom_app_bar.dart';
 import 'package:moneymonkey/widgets/continue_button.dart';
 import '../widgets/optionsList.dart';
+import '../widgets/image_grid.dart'; // Import the ImageGrid widget
 
 class QuestionPage extends StatelessWidget {
   final ProgressController progressController = Get.put(ProgressController());
@@ -15,7 +16,7 @@ class QuestionPage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    // Fetch quiz data
+    // Fetch quiz data for the current lesson
     progressController.fetchQuizData('lesson${progressController.currentLessonIndex.value + 1}');
 
     return SafeArea(
@@ -25,6 +26,16 @@ class QuestionPage extends StatelessWidget {
         body: Obx(() {
           if (progressController.quizOptions.isEmpty) {
             return const Center(child: CircularProgressIndicator());
+          }
+
+          // Conditionally render the quiz question UI based on the question index
+          Widget questionWidget;
+          if (progressController.currentQuestionIndex.value >= 2) {
+            // For questions 3 and 4, use the ImageGrid format
+            questionWidget = ImageGrid();
+          } else {
+            // For questions 1 and 2, use the regular options list
+            questionWidget = OptionsList();
           }
 
           return ListView(
@@ -69,7 +80,7 @@ class QuestionPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              OptionsList(),
+              questionWidget, // Display the correct widget based on the question index
             ],
           );
         }),

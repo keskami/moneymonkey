@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:moneymonkey/controller/controller.dart';
 
 class QuestionFeedbackDialog extends StatelessWidget {
@@ -10,8 +9,11 @@ class QuestionFeedbackDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final ProgressController progressController = Get.find<ProgressController>();
+    final ProgressController progressController = Get.find<ProgressController>();
 
+    // Get the correct and incorrect messages from Firestore data
+    final String correctMessage = progressController.quizQuestions[progressController.currentQuestionIndex.value]['correctMessage'] ?? "Well done!";
+    final String incorrectMessage = progressController.quizQuestions[progressController.currentQuestionIndex.value]['incorrectMessage'] ?? "Better luck next time!";
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -37,8 +39,8 @@ class QuestionFeedbackDialog extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  isCorrect ? Icons.check_circle : Icons.cancel, 
-                  color: isCorrect ? const Color(0xFF85DC40) : const Color(0xFFFF0000), 
+                  isCorrect ? Icons.check_circle : Icons.cancel,
+                  color: isCorrect ? const Color(0xFF85DC40) : const Color(0xFFFF0000),
                   size: 32,
                 ),
                 const SizedBox(width: 10),
@@ -54,33 +56,26 @@ class QuestionFeedbackDialog extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              isCorrect
-                  ? "You're right! Coins have been used since around 600 B.C., making them the oldest form of money still in use."
-                  : "Correct Answer: Coins have been used since around 600 B.C., making them the oldest form of money still in use.",
+              isCorrect ? correctMessage : incorrectMessage,
               style: const TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15), 
-                backgroundColor: isCorrect ? const Color(0xFF85DC40) : const Color(0xFFFF0000), 
+                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                backgroundColor: isCorrect ? const Color(0xFF85DC40) : const Color(0xFFFF0000),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               onPressed: () {
-
-                if(isCorrect){
-                 // Get.toNamed("/lessonCompletePageRoute");
-                  Navigator.of(context).pop(); // Close the dialog
+                // Close the dialog and reset the selection if the answer is incorrect
+                Navigator.of(context).pop();
+                if (!isCorrect) {
+                  progressController.resetSelection();
                 }
-                else{
-                  Navigator.of(context).pop(); // Close the dialog
-                   progressController.resetSelection();
-                }
-              
               },
-              
               child: const Text(
                 'Got it',
                 style: TextStyle(fontSize: 18, color: Colors.white),

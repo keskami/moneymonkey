@@ -23,6 +23,7 @@ class ProgressController extends GetxController {
    var quizQuestion = ''.obs;
    var correctAnswer = ''.obs;
    var quizQuestions = <Map<String, dynamic>>[].obs;
+   var useImageGridFormat = false.obs;
 
 
   void setCardsCompleted() {
@@ -172,40 +173,34 @@ void moveToNextLesson() {
 
  // Load the current question and options
 void loadQuestion() {
-   resetSelection();
+  resetSelection();
+  
+  // Switch to image grid format for questions 3 and 4
+  if (currentQuestionIndex.value == 2 || currentQuestionIndex.value == 3) {
+    useImageGridFormat.value = true;
+  } else {
+    useImageGridFormat.value = false;
+  }
+
   if (currentQuestionIndex.value < quizQuestions.length) {
     final currentQuestion = quizQuestions[currentQuestionIndex.value];
 
-    // Extract question text
     quizQuestion.value = currentQuestion['question'] ?? 'No question available';
-
-    // Extract correct answer
     correctAnswer.value = currentQuestion['correctAnswer'] ?? currentQuestion['CorrectAnswer'] ?? '';
+    quizOptions.value = List<String>.from(currentQuestion['option'].values.map((e) => e.toString()));
 
-    // Clear previous options
-    quizOptions.clear();
-
-    // Extract options and update the list
-   // quizOptions.value = currentQuestion['option'].values.map((e) => e.toString()).toList();
-   quizOptions.value = List<String>.from(currentQuestion['option'].values.map((e) => e.toString()));
-
-
-    // Reset selection for the new question
     resetSelection();
     setDialogShown(false);
     isCorrectSelected.value = false;
 
-     
-
-    // Debug logs
     print("Loaded Question: ${quizQuestion.value}");
     print("Correct Answer: ${correctAnswer.value}");
     print("Options: ${quizOptions}");
   } else {
-    // If all questions are answered, navigate to lesson completion page
     Get.toNamed("/lessonCompletePageRoute");
   }
 }
+
 
 
   // Move to the next question
