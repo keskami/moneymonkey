@@ -41,7 +41,7 @@ class ContinueButtonSection extends StatelessWidget {
                 onPressed: isOptionSelected
                     ? () {
                         if (isCorrectSelected && !isDialogShown) {
-                          // Show correct answer dialog
+                         
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {

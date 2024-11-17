@@ -52,7 +52,7 @@ class QuestionPage extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  const SizedBox(width: 3),
+                  const SizedBox(width: 2),
                   Expanded(
                     child: Stack(
                       alignment: Alignment.center,
@@ -80,7 +80,7 @@ class QuestionPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              questionWidget, // Display the correct widget based on the question index
+              questionWidget, 
             ],
           );
         }),

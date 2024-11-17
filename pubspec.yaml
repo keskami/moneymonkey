@@ -104,6 +104,12 @@ flutter:
     - assets/images/coins.svg
     - assets/images/piggy-bank.svg
     - assets/images/dollar-cash.svg
+    - assets/images/trade.svg
+    - assets/images/wallet.svg
+    - assets/images/money-trade.svg
+    - assets/images/money-manager.svg
+    - assets/images/savings-jar.svg
+    - assets/images/price-tags.svg
     
 
   fonts:

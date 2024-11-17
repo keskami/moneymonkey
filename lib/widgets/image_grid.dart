@@ -15,15 +15,6 @@ class ImageGrid extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // Get the image options and the correct answer
-        final List<String> imagePaths = [
-          progressController.quizOptions[0],
-          progressController.quizOptions[1],
-          progressController.quizOptions[2],
-          progressController.quizOptions[3],
-        ];
-        final String correctImage = progressController.correctAnswer.value;
-
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SizedBox(
@@ -36,15 +27,16 @@ class ImageGrid extends StatelessWidget {
                 mainAxisSpacing: 16,
                 childAspectRatio: 0.85,
               ),
-              itemCount: imagePaths.length,
+              itemCount: progressController.quizOptions.length,
               itemBuilder: (context, index) {
                 final bool isSelected = selectedIndex == index;
-                final String imagePath = 'assets/images/${imagePaths[index]}';
+                final String imagePath = 'assets/images/${progressController.quizOptions[index]}';
+                final String title = _formatTitle(progressController.quizOptions[index]);
 
                 return GestureDetector(
                   onTap: () {
                     progressController.setSelectedOptionIndex(index);
-                    bool isCorrect = imagePaths[index] == correctImage;
+                    bool isCorrect = progressController.quizOptions[index] == progressController.correctAnswer.value;
                     progressController.setCorrectSelection(isCorrect);
                   },
                   child: Container(
@@ -75,6 +67,14 @@ class ImageGrid extends StatelessWidget {
                             fit: BoxFit.contain,
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -85,5 +85,21 @@ class ImageGrid extends StatelessWidget {
         );
       },
     );
+  }
+
+  // Helper method to format the title from the image filename
+  String _formatTitle(String filename) {
+    // Remove the file extension (.svg)
+    String nameWithoutExtension = filename.replaceAll('.svg', '');
+    // Replace hyphens with spaces and capitalize each word
+    List<String> words = nameWithoutExtension.split('-').map((word) => _capitalize(word)).toList();
+    // Join the words with a space
+    return words.join(' ');
+  }
+
+  // Helper method to capitalize the first letter of each word
+  String _capitalize(String word) {
+    if (word.isEmpty) return word;
+    return word[0].toUpperCase() + word.substring(1);
   }
 }

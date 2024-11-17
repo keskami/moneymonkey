@@ -11,7 +11,7 @@ class QuestionFeedbackDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProgressController progressController = Get.find<ProgressController>();
 
-    // Get the correct and incorrect messages from Firestore data
+  
     final String correctMessage = progressController.quizQuestions[progressController.currentQuestionIndex.value]['correctMessage'] ?? "Well done!";
     final String incorrectMessage = progressController.quizQuestions[progressController.currentQuestionIndex.value]['incorrectMessage'] ?? "Better luck next time!";
 
@@ -70,7 +70,7 @@ class QuestionFeedbackDialog extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // Close the dialog and reset the selection if the answer is incorrect
+                
                 Navigator.of(context).pop();
                 if (!isCorrect) {
                   progressController.resetSelection();
