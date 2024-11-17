@@ -20,7 +20,7 @@ class MainPage extends StatelessWidget {
             if (userId.isEmpty) {
               return GettingStartedHome();
             } else {
-              return HomeScreen();
+              return HomePage();
             }
           } else {
             return GettingStartedHome();

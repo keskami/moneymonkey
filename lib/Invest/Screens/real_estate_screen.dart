@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Invest/Pages/discover_page.dart';
 
-import '../../Widgets/real_estate_item.dart';
+import '../Widgets/real_estate_item.dart';
 
-class RealEstateHome extends StatefulWidget {
-  const RealEstateHome({super.key});
+class RealEstateScreen extends StatefulWidget {
+  const RealEstateScreen({super.key});
 
   @override
-  State<RealEstateHome> createState() => _RealEstateHomeState();
+  State<RealEstateScreen> createState() => _RealEstateScreenState();
 }
 
-class _RealEstateHomeState extends State<RealEstateHome> {
+class _RealEstateScreenState extends State<RealEstateScreen> {
   final Map<String, List<String>> items = {
     "assets/real_estate/center1.png": [
       "assets/real_estate/house.png",
@@ -44,7 +42,6 @@ class _RealEstateHomeState extends State<RealEstateHome> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 137, 220, 142),
         body: _buildGridScreenshot(context),
-        bottomNavigationBar: _buildBottomNavigationBar(),
       ),
     );
   }
@@ -102,63 +99,6 @@ class _RealEstateHomeState extends State<RealEstateHome> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DiscoverPage(),
-                  ));
-            },
-            child: Text(
-              "Discover",
-              style: GoogleFonts.baloo2(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => MarketScreen(),
-              //     ));
-            },
-            child: Text(
-              "Markets",
-              style: GoogleFonts.baloo2(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "Real Estate",
-              style: GoogleFonts.baloo2(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

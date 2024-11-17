@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
-import 'package:money_monkey/friendsPages/friendsProfile.dart';
+import 'package:money_monkey/Friends/friendsProfile.dart';
 
 class FriendsFromSearch extends StatefulWidget {
   const FriendsFromSearch({super.key});

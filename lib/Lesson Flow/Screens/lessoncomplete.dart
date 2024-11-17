@@ -128,7 +128,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder: (context) => HomeScreen(),
                                 ),
                               );
                             },

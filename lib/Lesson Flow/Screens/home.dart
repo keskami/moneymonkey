@@ -8,14 +8,14 @@ import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
 import 'package:money_monkey/controller/controller.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   String? userID;
   late ProgressController progressController;
   @override
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        bottomNavigationBar: _buildBottomBar(context),
+        // bottomNavigationBar: _buildBottomBar(context),
       ),
     );
   }
@@ -271,7 +271,7 @@ class _HomePageState extends State<HomePage> {
         }
         if (_currentIndex == 3) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProfilePage(),
+            builder: (context) => ProfileScreen(),
           ));
         }
       },

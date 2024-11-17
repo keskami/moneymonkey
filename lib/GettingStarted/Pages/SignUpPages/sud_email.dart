@@ -82,7 +82,7 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
                   toNextPage: () async {
                     await authService.googleAuth(context);
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => HomeScreen(),
                     ));
                   },
                   child: Row(

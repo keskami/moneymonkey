@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Backend/Services/alpha_vantage_services.dart';
-import 'package:money_monkey/Invest/Pages/news_web_view.dart';
+import 'package:money_monkey/Invest/Accessory%20Pages/news_web_view.dart';
 
 class MarketScreen extends StatefulWidget {
   const MarketScreen({Key? key}) : super(key: key);

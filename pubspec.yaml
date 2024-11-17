@@ -122,6 +122,7 @@ flutter:
     - assets/real_estate/path2.png
     - assets/real_estate/path3.png
     - assets/real_estate/center_complete.png
+    - assets/real_estate/real_estate_income.png
 
   fonts:
     - family: Baloo 2

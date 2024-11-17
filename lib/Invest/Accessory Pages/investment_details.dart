@@ -3,20 +3,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Invest/Widgets/investment_options_list.dart';
 import 'package:money_monkey/Invest/Widgets/line_chart_widget.dart';
 import 'package:money_monkey/Invest/Widgets/title_row.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../../Backend/Models/stock_data.dart';
-import '../Widgets/investment_options_list.dart';
+import '../../../Backend/Models/stock_data.dart';
 
-class InvestmentPage extends StatefulWidget {
+class InvestmentDetailsScreen extends StatefulWidget {
   final String investmentType;
   final dynamic investmentService;
   final String defaultSymbol;
 
-  const InvestmentPage({
+  const InvestmentDetailsScreen({
     Key? key,
     required this.investmentType,
     required this.investmentService,
@@ -24,10 +24,11 @@ class InvestmentPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<InvestmentPage> createState() => _InvestmentPageState();
+  State<InvestmentDetailsScreen> createState() =>
+      _InvestmentDetailsScreenState();
 }
 
-class _InvestmentPageState extends State<InvestmentPage> {
+class _InvestmentDetailsScreenState extends State<InvestmentDetailsScreen> {
   Map<String, List<StockData>> _investmentDataMap = {};
   String _selectedSymbol = "";
   bool _isLoading = true;
@@ -121,7 +122,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
             const SizedBox(height: 10),
             SizedBox(
               width: screenWidth,
-              height: screenHeight * 0.30,
+              height: screenHeight * 0.29,
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : _selectedSymbol == ''
@@ -192,7 +193,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
   Widget _buildDurationButton(String label) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.15,
-      height: MediaQuery.of(context).size.height * 0.04,
+      height: MediaQuery.of(context).size.height * 0.05,
       decoration: label == _duration
           ? BoxDecoration(
               color: Colors.white,

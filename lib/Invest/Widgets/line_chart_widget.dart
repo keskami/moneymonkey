@@ -83,7 +83,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 30,
+              reservedSize: 35,
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toStringAsFixed(0),
@@ -92,7 +92,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
-                  textAlign: TextAlign.start,
+                  textAlign: TextAlign.center,
                 );
               },
             ),
@@ -133,17 +133,18 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                   ),
                   children: [
                     TextSpan(
-                      text: 'Price: ${dataPoint.close.toStringAsFixed(2)}\n',
+                      text: '🍌${dataPoint.close.toStringAsFixed(2)}  ',
                       style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),
                     TextSpan(
-                      text: 'Change: $arrow ${change.toStringAsFixed(2)}%',
+                      text: '$arrow ${change.toStringAsFixed(2)}%',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                         color: Colors.black,
+                        backgroundColor: Colors.white,
                       ),
                     ),
                   ],

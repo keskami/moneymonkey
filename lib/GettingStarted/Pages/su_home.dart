@@ -112,7 +112,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           MaterialPageRoute(
             builder: (c) => PopScope(
               canPop: false,
-              child: HomePage(),
+              child: HomeScreen(),
             ),
           ),
         );
