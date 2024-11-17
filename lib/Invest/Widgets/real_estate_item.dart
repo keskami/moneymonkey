@@ -71,31 +71,23 @@ class _RealEstateItemState extends State<RealEstateItem> {
               for (int i = 0; i < widget.neighbours.length; i++)
                 Stack(
                   children: [
-                    // Main neighbor avatar
                     Transform.translate(
                       offset: _calculateCircularOffset(i),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showPopUpList[i] = false;
-                          });
-                        },
-                        child: CircleAvatar(
-                          radius: 45,
-                          backgroundImage: AssetImage(widget.neighbours[i]),
-                          backgroundColor: Colors.transparent,
-                        ),
+                      child: CircleAvatar(
+                        radius: 45,
+                        backgroundImage: AssetImage(widget.neighbours[i]),
+                        backgroundColor: Colors.transparent,
                       ),
                     ),
                     if (showPopUpList[i] && i % 2 == 0)
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showPopUpList[i] = false;
-                          });
-                        },
-                        child: Transform.translate(
-                          offset: _calculateCircularOffset(i) + Offset(20, -30),
+                      Transform.translate(
+                        offset: _calculateCircularOffset(i) + Offset(20, -30),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showPopUpList[i] = false;
+                            });
+                          },
                           child: Image.asset(
                             "assets/real_estate/real_estate_income.png",
                           ),
