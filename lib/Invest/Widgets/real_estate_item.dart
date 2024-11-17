@@ -63,7 +63,6 @@ class _RealEstateItemState extends State<RealEstateItem> {
             backgroundColor: Colors.transparent,
           ),
         ),
-        // Cluster of neighbors
         Transform.translate(
           offset: getClusterOffset(),
           child: Stack(
@@ -98,7 +97,6 @@ class _RealEstateItemState extends State<RealEstateItem> {
             ],
           ),
         ),
-        // Path image
         if (!widget.isFin)
           Transform.translate(
             offset: widget.start ? Offset(45, 80) : Offset(-35, 85),
