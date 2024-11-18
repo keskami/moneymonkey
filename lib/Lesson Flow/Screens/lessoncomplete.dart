@@ -2,8 +2,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
-import 'package:money_monkey/controller/controller.dart';
+import 'package:moneymonkey/controller/controller.dart';
 
 class LessonCompleteScreen extends StatefulWidget {
   @override
@@ -59,9 +58,12 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
   @override
   Widget build(BuildContext context) {
     // Access the progress controller to get the number of attempts
-    final ProgressController progressController =
-        Get.find<ProgressController>();
+    final ProgressController progressController = Get.find<ProgressController>();
+    
+    final screenSize = MediaQuery.of(context).size;
 
+    final double screenHeight= screenSize.height;
+    final double screenWidth = screenSize.width;
     // Determine how many stars based on the number of attempts
     int stars = progressController.attempts.value == 1 ? 3 : 2;
 
@@ -76,7 +78,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
+                    height: screenHeight * 0.6,
                     child: Stack(
                       alignment: Alignment.center,
                       clipBehavior: Clip.none,
@@ -85,6 +87,8 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                           top: 0,
                           child: Image.asset(
                             'assets/images/hang.png',
+                            // height: screenHeight*1,
+                            // width: screenWidth*1,
                             height: 598,
                             width: 598,
                             fit: BoxFit.contain,
@@ -92,50 +96,43 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                         ),
                         // Display stars based on attempts
                         Positioned(
-                          top: 300,
+                            top: screenHeight * 0.32,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(stars, (index) {
                               return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
+                                padding:  EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  height: 60,
+                                  height:screenHeight * 0.06,
                                 ),
                               );
                             }),
                           ),
                         ),
                         Positioned(
-                          top: 60,
+                          top: screenHeight*0.1,
                           child: Text(
                             "Lesson\n Complete!",
                             style: TextStyle(
                               fontFamily: "Baloo 2",
-                              fontSize: 40,
+                              fontSize: screenHeight*0.04,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Positioned(
-                          bottom: 100,
+                        Positioned(     
+                          bottom: screenHeight*0.14,
                           child: ElevatedButton(
                             onPressed: () {
-                              // Add your continue button logic
-
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                              );
+                              Get.toNamed("/HomePage");
                             },
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 40,
-                                vertical: 12,
+                                horizontal: screenWidth*0.08,
+                                vertical: screenHeight*0.010,
                               ),
                               backgroundColor: Color(0xFF87CEEB),
                               shape: RoundedRectangleBorder(
@@ -146,7 +143,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                               'CONTINUE',
                               style: TextStyle(
                                 fontFamily: "Baloo 2",
-                                fontSize: 20,
+                                fontSize:  screenHeight * 0.020,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -156,9 +153,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 80,
-                  ),
+                  SizedBox(height: 80),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,8 +165,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.green, width: 2),
+                                border: Border.all(color: Colors.green, width: 2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.all(8),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/question_feedback_dialog.dart';
-import 'package:money_monkey/controller/controller.dart';
+import 'package:moneymonkey/controller/controller.dart';
 
 class ImageGrid extends StatelessWidget {
   final List<String> imagePaths = [
@@ -15,7 +14,8 @@ class ImageGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProgressController progressController = Get.find<ProgressController>();
+    final ProgressController progressController = Get.find<ProgressController>();
+
     return Expanded(
       child: GridView.builder(
         padding: const EdgeInsets.all(16),
@@ -29,22 +29,22 @@ class ImageGrid extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              // Handle selection logic
-              if (titles[index] == 'Coins') {
-                progressController.setCorrectSelection(true);
-                _showCorrectDialog(context);
-              } else {
-                progressController.setCorrectSelection(false);
-                _showIncorrectDialog(context);
-              }
+              // Set selected option and determine if it’s correct
+              progressController.setSelectedOptionIndex(index);  // Update selected option index
+              bool isCorrect = titles[index] == 'Coins'; // Replace with correct answer logic
+              progressController.setCorrectSelection(isCorrect);
             },
-            child: Container(
+            child: Obx(() => Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: progressController.selectedOptionIndex.value == index
+                    ? Colors.blue[100] // Highlight if selected
+                    : Colors.grey[200], // Default color if not selected
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.transparent,
+                  color: progressController.selectedOptionIndex.value == index
+                      ? Colors.blue // Border color if selected
+                      : Colors.transparent,
                   width: 2,
                 ),
               ),
@@ -54,45 +54,14 @@ class ImageGrid extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     titles[index],
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-            ),
+            )),
           );
         },
       ),
     );
-  }
-
-  void _showCorrectDialog(BuildContext context) {
-    ProgressController progressController = Get.find<ProgressController>();
-    progressController.setQuizCompleted();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const QuestionFeedbackDialog(isCorrect: true);
-      },
-    );
-  }
-
-  void _showIncorrectDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const QuestionFeedbackDialog(isCorrect: false);
-      },
-    ).then((_) {
-      // Once the dialog is dismissed, mark the quiz as completed
-      ProgressController progressController = Get.find<ProgressController>();
-      progressController
-          .setQuizCompleted(); // Inform controller that the quiz is done
-    });
-    ;
-  }
-
-  void onCorrectAnswer() {
-    _showCorrectDialog(Get.context!);
   }
 }

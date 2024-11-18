@@ -1,15 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore imports
-import 'package:firebase_auth/firebase_auth.dart'; // Firebase auth imports
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../controller/controller.dart'; // Import the controller
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore imports
+import 'package:firebase_auth/firebase_auth.dart';   // Firebase auth imports
+import 'package:moneymonkey/widgets/monkeyanimation.dart';
+import '../controller/controller.dart'; // Import the controller
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final ProgressController progressController;
 
-  const CustomAppBar({Key? key, required this.progressController})
-      : super(key: key);
+  const CustomAppBar({Key? key, required this.progressController}) : super(key: key);
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -25,7 +24,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   void initState() {
     super.initState();
     fetchBananas();
-
+    
     // Listen for progress completion and refresh bananas
     widget.progressController.progress.listen((progress) {
       if (progress == 1.0) {
@@ -33,6 +32,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
       }
     });
   }
+  @override
+void dispose() {
+  // Cancel any listeners or subscriptions here if needed
+  super.dispose();
+}
 
   Future<void> fetchBananas() async {
     try {
@@ -68,9 +72,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.close, color: Colors.black),
+        icon: const Icon(Icons.arrow_back_sharp, color: Colors.black),
         onPressed: () {
-          Get.back(); // Close the screen
+       
+          final ProgressController progressController = Get.find<ProgressController>();
+          progressController.decrementProgress();
+              Navigator.pop(context);
         },
       ),
       titleSpacing: 0,
@@ -79,18 +86,28 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(right: 12.0),
-              child: Obx(() => ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: LinearProgressIndicator(
-                      value: widget.progressController.progress
-                          .value, // Use progress value
-                      backgroundColor:
-                          const Color(0xFFF0F0F0), // Light gray background
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(Colors.lightBlue),
-                      minHeight: 20,
-                    ),
-                  )),
+              child: Obx((){
+                   return TweenAnimationBuilder<double>(
+                  tween: Tween<double>(
+                      begin: 0, end: widget.progressController.progress.value),
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  builder: (context, value, child) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: LinearProgressIndicator(
+                        value: value, // Animated progress value
+                        backgroundColor: const Color(0xFFF0F0F0),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Colors.lightBlue),
+                        minHeight: 20,
+                  
+             ),
+                    );
+                  },
+                );
+              }),
+            //child: MonkeyProgressWidget(progressController:widget.progressController),
             ),
           ),
           Row(
@@ -102,10 +119,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               const SizedBox(width: 6),
               Text(
                 '$bananas', // Display the updated bananas count
-                style: const TextStyle(
-                    fontSize: 25,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ],
           ),

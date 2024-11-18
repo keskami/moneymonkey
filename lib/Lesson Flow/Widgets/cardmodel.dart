@@ -1,7 +1,8 @@
 // CardModel class
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/questionpage.dart';
+import 'package:get/get.dart';
+
 
 class CardModel {
   final Color color;
@@ -10,12 +11,12 @@ class CardModel {
   bool isFlipped;
   GlobalKey<FlipCardState> cardKey;
 
-  CardModel(
-      {required this.color,
-      required this.frontText,
-      required this.backWidget,
-      this.isFlipped = false})
-      : cardKey = GlobalKey<FlipCardState>();
+  CardModel({
+    required this.color,
+    required this.frontText,
+    required this.backWidget,
+   this.isFlipped= false
+  }) : cardKey = GlobalKey<FlipCardState>();
 }
 
 class _DetailNote extends StatelessWidget {
@@ -60,6 +61,7 @@ class _DetailNote extends StatelessWidget {
                 color: Color(0xFF000000),
                 fontSize: 35,
                 fontFamily: 'Baloo 2',
+                decoration: TextDecoration.none,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -72,6 +74,7 @@ class _DetailNote extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
+                  decoration: TextDecoration.none,
                   color: Color(0xFF000000),
                   fontSize: 20,
                   fontFamily: 'Baloo 2',
@@ -86,22 +89,18 @@ class _DetailNote extends StatelessWidget {
                 height: 200,
               ),
             const SizedBox(height: 20),
-            // Add button image for navigation
-            GestureDetector(
-              onTap: () {
-                // Get.toNamed("/questionPageRoute");
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => QuestionPage(),
-                  ),
-                );
-              },
-              child: Image.asset(
-                'assets/images/button.png', // Your provided button image path
-                height: 60,
-                width: 200,
-              ),
-            ),
+            
+
+            // GestureDetector(
+            //   onTap: () {
+            //     Get.toNamed("/questionPageRoute");
+            //   },
+            //   child: Image.asset(
+            //     'assets/images/button.png', 
+            //     height: 60,
+            //     width: 200,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -109,40 +108,37 @@ class _DetailNote extends StatelessWidget {
   }
 }
 
-List<CardModel> getCards() {
+List <CardModel> getCards(){
   return [
-    CardModel(
-      color: const Color(0xFF89DC8E), // Green card
-      frontText: "Banknote",
-      backWidget: _DetailNote(
-        color: const Color(0xFF89DC8E), // Green background
-        title: "Banknote",
-        details:
-            "Introduced in 7th century\nChina, banknotes today\nfacilitate everyday purchases.",
-        imagePath: "assets/images/monkeywithnote.png",
+     CardModel(
+        color: const Color(0xFF89DC8E), // Green card
+        frontText: "Banknote",
+        backWidget: _DetailNote(
+          color: const Color(0xFF89DC8E), // Green background
+          title: "Banknote",
+          details: "Introduced in 7th century\nChina, banknotes today\nfacilitate everyday purchases.",
+          imagePath: "assets/images/monkeywithnote.png",
+        ),
       ),
-    ),
-    CardModel(
-      color: const Color(0xFF87CEEB), // Blue card
-      frontText: "Coin",
-      backWidget: _DetailNote(
-        color: const Color(0xFF87CEEB), // Blue background
-        title: "Coin",
-        details:
-            "First used in ancient Lydia,\ncoins have been a staple of currency systems.",
-        imagePath: "assets/images/monkeywithnote.png",
+      CardModel(
+        color: const Color(0xFF87CEEB), // Blue card
+        frontText: "Coin",
+        backWidget: _DetailNote(
+          color: const Color(0xFF87CEEB), // Blue background
+          title: "Coin",
+          details: "First used in ancient Lydia,\ncoins have been a staple of currency systems.",
+          imagePath: "assets/images/monkeywithnote.png",
+        ),
       ),
-    ),
-    CardModel(
-      color: const Color(0xFFFFE792), // Yellow card
-      frontText: "Credit Card",
-      backWidget: _DetailNote(
-        color: const Color(0xFFFFE792), // Yellow background
-        title: "Credit Card",
-        details:
-            "First issued in 1950, credit cards revolutionized the way we handle money.",
-        imagePath: "assets/images/monkeywithnote.png",
+      CardModel(
+        color: const Color(0xFFFFE792), // Yellow card
+        frontText: "Credit Card",
+        backWidget: _DetailNote(
+          color: const Color(0xFFFFE792), // Yellow background
+          title: "Credit Card",
+          details: "First issued in 1950, credit cards revolutionized the way we handle money.",
+          imagePath: "assets/images/monkeywithnote.png",
+        ),
       ),
-    ),
   ];
 }

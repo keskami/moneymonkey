@@ -1,9 +1,9 @@
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/cardmodel.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/custom_app_bar.dart';
-import 'package:money_monkey/controller/controller.dart';
+import 'package:moneymonkey/controller/controller.dart';
+import 'package:moneymonkey/models/cardmodel.dart';
+import 'package:moneymonkey/widgets/custom_app_bar.dart';
 
 class BankNotePage extends StatefulWidget {
   @override
@@ -11,11 +11,12 @@ class BankNotePage extends StatefulWidget {
 }
 
 class _BankNotePageState extends State<BankNotePage> {
-  final ProgressController progressController = Get.put(ProgressController());
+    final ProgressController progressController = Get.put(ProgressController());
   late List<CardModel> _cards;
   Offset _cardOffset = Offset.zero;
   double _cardRotation = 0.0;
   bool _isDragging = false;
+  bool _showButton= false;  
 
   @override
   void initState() {
@@ -25,12 +26,11 @@ class _BankNotePageState extends State<BankNotePage> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      appBar: CustomAppBar(
-        progressController: progressController,
-      ),
+      appBar:CustomAppBar(progressController: progressController),
       body: Center(
         child: Stack(
           alignment: Alignment.center,
@@ -109,28 +109,51 @@ class _BankNotePageState extends State<BankNotePage> {
       _isDragging = false;
       _cards.insert(0, swipedCard);
 
+
       print("carddds");
-      // Check if all cards have been flipped and swiped
-      if (_cards.every((card) => card.isFlipped)) {
-        progressController
-            .setCardsCompleted(); // Inform controller that cards are flipped and swiped
-      }
+        // Check if all cards have been flipped and swiped
+    if (_cards.every((card) => card.isFlipped)) {
+      progressController.setCardsCompleted();  // Inform controller that cards are flipped and swiped
+      _showButton=true;
+    }
     });
   }
 
   Widget _buildFlipCard(CardModel cardModel) {
+    bool isTopCard = cardModel == _cards.last;
     return FlipCard(
       key: cardModel.cardKey,
       flipOnTouch: true,
-      front: _buildCardContent(cardModel),
+      front: Stack(
+        children: [
+          _buildCardContent(cardModel,),
+          if(_showButton && isTopCard)
+          Positioned(
+            bottom: 60,
+            left: 50,
+            right: 50,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed("/questionPageRoute");
+              },
+              child: Image.asset(
+                'assets/images/button.png',
+                height: 60,
+                width: 200,
+              ),
+            ),
+          ),
+        ],
+      ),
       back: cardModel.backWidget,
-      onFlipDone: (bool flipped) {
-        if (flipped && !cardModel.isFlipped) {
-          //ensure that isFlipped is only marked true if the card is flipped for the first time.
-          cardModel.isFlipped = true;
+       onFlipDone: (bool flipped) {
+        if(flipped && !cardModel.isFlipped){   //ensure that isFlipped is only marked true if the card is flipped for the first time.
+           cardModel.isFlipped = true; 
+
+         
         }
-        // Track card flipping
-      },
+      // Track card flipping
+    },
     );
   }
 
@@ -155,9 +178,11 @@ class _BankNotePageState extends State<BankNotePage> {
           child: Text(
             cardModel.frontText,
             textAlign: TextAlign.center,
+            
             style: const TextStyle(
               color: Color(0xFF000000),
               fontSize: 45,
+              decoration: TextDecoration.none,
               fontFamily: 'Baloo 2',
               fontWeight: FontWeight.bold,
             ),
@@ -166,4 +191,9 @@ class _BankNotePageState extends State<BankNotePage> {
       ),
     );
   }
+
+
+
+
+
 }
