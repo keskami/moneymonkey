@@ -174,7 +174,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 59, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 30, 0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

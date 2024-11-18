@@ -28,7 +28,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   Widget build(BuildContext context) {
     final Map<String, int> days = {
       "24H": 40,
-      "7D": 45,
+      "7D": 48,
       "1M": 90,
       "3M": 150,
       "1Y": 365,

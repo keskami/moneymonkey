@@ -35,11 +35,26 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+          toolbarHeight: screenHeight * 0.05,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.black.withOpacity(0.8),
+              size: 30,
+            ),
+          )),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.05,
-          vertical: screenHeight * 0.02,
+        padding: EdgeInsets.fromLTRB(
+          screenWidth * 0.05,
+          0,
+          screenWidth * 0.05,
+          0,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

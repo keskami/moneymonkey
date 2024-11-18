@@ -39,6 +39,7 @@ dependencies:
   aligned_dialog: ^0.0.7
   shimmer: ^3.0.0
   syncfusion_flutter_gauges: ^27.1.58
+  align_positioned: ^5.0.1
 
 dev_dependencies:
   flutter_test:

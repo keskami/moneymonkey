@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Invest/Widgets/chat_dialog.dart';
-import 'package:money_monkey/Invest/Widgets/continue_btn.dart';
 
 import '../Accessory Pages/property_details.dart';
+import 'chat_dialog.dart';
+import 'continue_btn.dart';
 
 class RealEstateItem extends StatefulWidget {
   const RealEstateItem({
@@ -26,12 +26,17 @@ class RealEstateItem extends StatefulWidget {
 }
 
 class _RealEstateItemState extends State<RealEstateItem> {
-  late List<bool> showPopUpList;
+  bool show = true;
+  List<bool> showPopUpList = [
+    true,
+    true,
+    true,
+    true,
+  ];
 
   @override
   void initState() {
     super.initState();
-    showPopUpList = List.generate(widget.neighbours.length, (index) => true);
   }
 
   Offset getClusterOffset() {
@@ -44,75 +49,72 @@ class _RealEstateItemState extends State<RealEstateItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            showAlignedDialog(
-              context: context,
-              builder: _localDialogBuilder,
-              followerAnchor: Alignment.topCenter,
-              targetAnchor: Alignment.bottomCenter,
-              barrierColor: Colors.grey.withOpacity(0.5),
-            );
-          },
-          child: CircleAvatar(
-            radius: 45,
-            backgroundImage: AssetImage(widget.center),
-            backgroundColor: Colors.transparent,
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      child: Stack(
+        alignment: Alignment.center,
+        fit: StackFit.loose,
+        children: [
+          //Center Milestone
+          SizedBox(
+            child: GestureDetector(
+              onTap: () {
+                showAlignedDialog(
+                  context: context,
+                  builder: _localDialogBuilder,
+                  followerAnchor: Alignment.topCenter,
+                  targetAnchor: Alignment.bottomCenter,
+                  barrierColor: Colors.grey.withOpacity(0.5),
+                );
+              },
+              child: CircleAvatar(
+                radius: 45,
+                backgroundImage: AssetImage(widget.center),
+                backgroundColor: Colors.transparent,
+              ),
+            ),
           ),
-        ),
-        Transform.translate(
-          offset: getClusterOffset(),
-          child: Stack(
-            children: [
-              for (int i = 0; i < widget.neighbours.length; i++)
-                Stack(
-                  children: [
-                    Transform.translate(
-                      offset: _calculateCircularOffset(i),
-                      child: CircleAvatar(
-                        radius: 45,
-                        backgroundImage: AssetImage(widget.neighbours[i]),
-                        backgroundColor: Colors.transparent,
-                      ),
-                    ),
-                    if (showPopUpList[i] && i % 2 == 0)
+
+          Transform.translate(
+            offset: getClusterOffset(),
+            child: Stack(
+              fit: StackFit.loose,
+              children: [
+                for (int i = 0; i < widget.neighbours.length; i++)
+                  Stack(
+                    children: [
                       Transform.translate(
-                        offset: _calculateCircularOffset(i) + Offset(20, -30),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              showPopUpList[i] = false;
-                            });
-                          },
-                          child: Image.asset(
-                            "assets/real_estate/real_estate_income.png",
-                          ),
+                        offset: _calculateCircularOffset(i),
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundImage: AssetImage(widget.neighbours[i]),
+                          backgroundColor: Colors.transparent,
                         ),
                       ),
-                  ],
-                ),
-            ],
-          ),
-        ),
-        if (!widget.isFin)
-          Transform.translate(
-            offset: widget.start ? Offset(45, 80) : Offset(-35, 85),
-            child: !widget.start
-                ? Image.asset(
-                    "assets/real_estate/path3.png",
-                  )
-                : Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(pi),
-                    child: Image.asset(
-                      "assets/real_estate/path3.png",
-                    ),
+                    ],
                   ),
+              ],
+            ),
           ),
-      ],
+          //Path between Milestones
+          if (!widget.isFin)
+            Transform.translate(
+              offset: widget.start ? Offset(45, 80) : Offset(-35, 85),
+              child: !widget.start
+                  ? Image.asset(
+                      "assets/real_estate/path3.png",
+                    )
+                  : Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi),
+                      child: Image.asset(
+                        "assets/real_estate/path3.png",
+                      ),
+                    ),
+            ),
+        ],
+      ),
     );
   }
 
