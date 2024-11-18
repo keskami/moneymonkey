@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import 'GettingStarted/Pages/gs_home.dart';
 import 'firebase_options.dart';
-import 'home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +44,13 @@ class MyApp extends StatelessWidget {
                   return GettingStartedHome();
                 } else {
                   return HomePage();
+                  // return PropertyCluster(
+                  //   neighbors: [
+                  //     "assets/real_estate/bakery.png",
+                  //     "assets/real_estate/restaurant.png",
+                  //     "assets/real_estate/donut_bakery.png",
+                  //   ],
+                  // );
                 }
               } else {
                 return GettingStartedHome();

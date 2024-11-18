@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/Invest/Widgets/property_cluster.dart';
 
 import '../Widgets/real_estate_item.dart';
 
@@ -54,7 +55,7 @@ class _RealEstateScreenState extends State<RealEstateScreen> {
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(
         0,
-        screenHeight * 0.12,
+        screenHeight * 0.05,
         0,
         screenHeight * 0.2,
       ),
@@ -63,38 +64,43 @@ class _RealEstateScreenState extends State<RealEstateScreen> {
         bool isEven = index % 2 == 0;
         final item = itemEntries[index];
 
-        return Padding(
-          padding: EdgeInsets.only(
-            top: screenHeight * 0.02,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        return SizedBox(
+          height: screenHeight * 0.15,
+          child: Stack(
+            clipBehavior: Clip.none,
             children: [
-              Row(
-                mainAxisAlignment:
-                    isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    width: screenWidth * 0.25,
+              if (index != itemEntries.length - 1)
+                Positioned(
+                  top: screenHeight * 0.02,
+                  left: isEven ? screenWidth * 0.01 : null,
+                  right: isEven ? null : screenWidth * 0.05,
+                  child: PropertyCluster(
+                    neighbors: item.value,
+                    isLeft: isEven,
                   ),
-                  RealEstateItem(
-                    center: item.key,
-                    neighbours: item.value,
-                    start: !isEven,
-                    isFin: index > item.value.length,
-                  ),
-                  SizedBox(
-                    width: screenWidth * 0.26,
-                  ),
-                ],
-              ),
-              index != item.value.length
-                  ? SizedBox(
-                      height: item.value.length.toDouble() * 12,
-                    )
-                  : SizedBox(
-                      height: item.value.length.toDouble() * 6,
+                ),
+              Positioned(
+                top: screenHeight * 0.1, // Adjust for better alignment
+                left: isEven ? screenWidth * 0.2 : null,
+                right: isEven ? null : screenWidth * 0.25,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (index == itemEntries.length - 1)
+                      SizedBox(
+                        width: screenWidth * 0.08,
+                      ),
+                    Container(
+                      child: RealEstateItem(
+                        center: item.key,
+                        neighbours: item.value,
+                        start: !isEven,
+                        isFin: index > item.value.length,
+                      ),
                     ),
+                  ],
+                ),
+              ),
             ],
           ),
         );

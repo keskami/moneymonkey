@@ -27,12 +27,7 @@ class RealEstateItem extends StatefulWidget {
 
 class _RealEstateItemState extends State<RealEstateItem> {
   bool show = true;
-  List<bool> showPopUpList = [
-    true,
-    true,
-    true,
-    true,
-  ];
+  List<bool> showPopUpList = [true, true, true, true];
 
   @override
   void initState() {
@@ -41,93 +36,52 @@ class _RealEstateItemState extends State<RealEstateItem> {
 
   Offset getClusterOffset() {
     if (!widget.start) {
-      return Offset(-80, -80);
+      return Offset(-50, -70);
     } else {
-      return widget.neighbours.length >= 3 ? Offset(90, -60) : Offset(70, -70);
+      return widget.neighbours.length >= 3 ? Offset(50, -60) : Offset(20, -60);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        alignment: Alignment.center,
-        fit: StackFit.loose,
-        children: [
-          //Center Milestone
-          SizedBox(
-            child: GestureDetector(
-              onTap: () {
-                showAlignedDialog(
-                  context: context,
-                  builder: _localDialogBuilder,
-                  followerAnchor: Alignment.topCenter,
-                  targetAnchor: Alignment.bottomCenter,
-                  barrierColor: Colors.grey.withOpacity(0.5),
-                );
-              },
-              child: CircleAvatar(
-                radius: 45,
-                backgroundImage: AssetImage(widget.center),
-                backgroundColor: Colors.transparent,
-              ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Center Milestone
+        GestureDetector(
+          onTap: () {
+            showAlignedDialog(
+              context: context,
+              builder: _localDialogBuilder,
+              followerAnchor: Alignment.topCenter,
+              targetAnchor: Alignment.bottomCenter,
+              barrierColor: Colors.grey.withOpacity(0.5),
+            );
+          },
+          child: Container(
+            height: 100,
+            width: 100,
+            child: CircleAvatar(
+              radius: 45,
+              backgroundImage: AssetImage(widget.center),
+              backgroundColor: Colors.transparent,
             ),
           ),
-
+        ),
+        // Path between Milestones
+        if (!widget.isFin)
           Transform.translate(
-            offset: getClusterOffset(),
-            child: Stack(
-              fit: StackFit.loose,
-              children: [
-                for (int i = 0; i < widget.neighbours.length; i++)
-                  Stack(
-                    children: [
-                      Transform.translate(
-                        offset: _calculateCircularOffset(i),
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundImage: AssetImage(widget.neighbours[i]),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                    ],
+            offset: widget.start ? Offset(30, 80) : Offset(-20, 80),
+            child: !widget.start
+                ? Image.asset("assets/real_estate/path3.png")
+                : Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(pi),
+                    child: Image.asset("assets/real_estate/path3.png"),
                   ),
-              ],
-            ),
           ),
-          //Path between Milestones
-          if (!widget.isFin)
-            Transform.translate(
-              offset: widget.start ? Offset(45, 80) : Offset(-35, 85),
-              child: !widget.start
-                  ? Image.asset(
-                      "assets/real_estate/path3.png",
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationY(pi),
-                      child: Image.asset(
-                        "assets/real_estate/path3.png",
-                      ),
-                    ),
-            ),
-        ],
-      ),
+      ],
     );
-  }
-
-  Offset _calculateCircularOffset(int index) {
-    double radius = 55;
-    double angleStep = (2 * pi) / widget.neighbours.length;
-    double angleOffset = (widget.start && widget.neighbours.length >= 3)
-        ? -pi / 4
-        : (widget.start && widget.neighbours.length >= 2)
-            ? pi / 6
-            : (!widget.start && widget.neighbours.length >= 2)
-                ? -pi / 7
-                : 0;
-    double angle = angleStep * index + angleOffset;
-    return Offset(radius * cos(angle), radius * sin(angle));
   }
 }
 
@@ -149,15 +103,11 @@ WidgetBuilder get _localDialogBuilder {
             children: [
               Text(
                 "House",
-                style: TextStyle(
-                  fontSize: 15,
-                ),
+                style: TextStyle(fontSize: 15),
               ),
               Text(
                 "Real Estate 1/4",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Align(
                 alignment: Alignment.center,
