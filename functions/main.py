@@ -420,29 +420,35 @@ ecoVineBonusLeft = 0
 ecoVineBeginingVal = 0
 ecoVineBonusType = ''
 
-def getBonus(current, left,  typeInc, beginVal):
+def getMeanRevBonus(current, left,   beginVal):
     global ecoVineBonusStart
-    print(typeInc)
     if left > 0:
-        if typeInc == "MeanRev":
-            timeUnit = ecoVineBonusStart / 120
-            left -= 1
-            dec = (beginVal/(30*timeUnit))
-            if left > 113 * timeUnit:
-                ret =  current + dec
-            elif left > 59 * timeUnit:
-                ret =  current - dec
-            else: 
-                ret = current + (dec/(4 * timeUnit))
+        timeUnit = ecoVineBonusStart / 120
+        left -= 1
+        dec = (beginVal/(30*timeUnit))
+        if left > 113 * timeUnit:
+            ret =  current + dec
+        elif left > 59 * timeUnit:
+            ret =  current - dec
+        else: 
+            ret = current + (dec/(4 * timeUnit))
+        return ret , left
+    return 0, left 
 
-            return ret , left , typeInc
+def getSteadyBonus():
+    global  ecoVineBonusLeft, ecoVineBonusStart, ecoSteady, ecoSteadyInc, EcoVineVals
+    if ecoVineBonusLeft > ecoVineBonusStart / 2:
+        ecoVineBonusLeft -= 1
+        return EcoVineVals[-1] * ecoSteadyInc
+    else:
+        ecoVineBonusLeft -= 1
+        return EcoVineVals[-1] * random.uniform(0.9990, 1.00111)
+        
 
-    return 0, left , typeInc
 
-
-
+ecoSteady = False
 def pickValue(values, stock):
-    global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal
+    global ecoVineBonus, ecoVineBonusLeft,  ecoVineBeginingVal, ecoSteady
 
     if stock == 'BananaTech':
         return random.uniform(0.975, 1.03) * mean(values)
@@ -451,8 +457,13 @@ def pickValue(values, stock):
     elif stock == 'EcoVine':
         print("ECO Bonuss")
         print(ecoVineBonus)
-        ret = (random.uniform(0.990, 1.0111) + ecoVineBonus) * mean(values)
-        ecoVineBonus, ecoVineBonusLeft, typeInc  = getBonus(ecoVineBonus, ecoVineBonusLeft,ecoVineBonusType, ecoVineBeginingVal)
+        ret = 0
+        if ecoSteady and ecoVineBonusLeft > 0:
+            ret = getSteadyBonus()
+            print("ECOSTEADY")
+        else:
+            ret = (random.uniform(0.990, 1.0111) + ecoVineBonus) * mean(values)
+            ecoVineBonus, ecoVineBonusLeft  = getMeanRevBonus(ecoVineBonus, ecoVineBonusLeft, ecoVineBeginingVal)
         return ret
     elif stock == 'JungleGoods':
         return random.uniform(0.997, 1.0131) * mean(values)
@@ -796,7 +807,7 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         
 
     elif req.method == 'POST':
-        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal, ecoVineBonusStart
+        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal, ecoVineBonusStart,ecoSteady, ecoSteadyInc
         print("POST request received")
         if path == "/api/change/Time":
             data = req.get_json()
@@ -814,16 +825,23 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         elif path == "/api/change/Value":
             data = req.get_json()
             if data:
-                value = data["Value"]
-                startingVal = data["Start"]
                 typeInc = data["Type"]
                 minutes = data["Min"]
+                value = data["Value"]
                 if value == "EcoVine":
-                    ecoVineBonus = startingVal / 100
-                    ecoVineBonusType = typeInc
-                    ecoVineBonusLeft = minutes
-                    ecoVineBonusStart = minutes
-                    ecoVineBeginingVal = startingVal / 100
+                    if typeInc == "MeanRev":
+                        startingVal = data["Start"]
+                        ecoVineBonus = startingVal / 100
+                        ecoSteady = False
+                        ecoVineBonusLeft = minutes
+                        ecoVineBonusStart = minutes
+                        ecoVineBeginingVal = startingVal / 100
+                    elif typeInc == "steadyInc":
+                        ecoSteady = True
+                        target =  1 + (data["Inc"]/ 100)
+                        ecoSteadyInc = (target ** (1/minutes)) 
+                        ecoVineBonusLeft = minutes * 2
+                        ecoVineBonusStart = minutes * 2
                     print(typeInc)
                 return jsonify({"status": "success", "message": "Data received", "data": data}), 200
             else:
