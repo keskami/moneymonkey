@@ -1,3 +1,4 @@
+// widgets/card_title.dart
 import 'package:flutter/material.dart';
 
 class CardTitle extends StatelessWidget {
@@ -5,12 +6,11 @@ class CardTitle extends StatelessWidget {
   final String titleText;
   final Color color;
 
-  const CardTitle({
-    super.key,
-    required this.unitNumber,
-    required this.titleText,
-    required this.color,
-  });
+  const CardTitle(
+      {super.key,
+      required this.unitNumber,
+      required this.titleText,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {

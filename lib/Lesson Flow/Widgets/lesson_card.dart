@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/monkey_with_button.dart';
+import 'package:money_monkey/Lesson Flow/widgets/monkey_with_button.dart';
 // Import your widget
 
 class LessonCard extends StatelessWidget {

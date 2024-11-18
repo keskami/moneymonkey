@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Lesson Flow/Widgets//arrowclipper.dart';
-import 'package:money_monkey/Lesson Flow/Widgets/card_title.dart';
-import 'package:money_monkey/Lesson Flow/Widgets/top_bar.dart';
+import 'package:money_monkey/Lesson Flow/Models/arrowclipper.dart';
 import 'package:money_monkey/Lesson Flow/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/widgets/card_title.dart';
+//import 'package:moneymonkey/widgets/grid_screenshot.dart';
+import 'package:money_monkey/Lesson Flow/widgets/top_bar.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/lessonpage.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage>
+class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   String? userID;
   late AnimationController _chestAnimationController;
@@ -101,6 +102,7 @@ class _HomePageState extends State<HomePage>
     if (_isAnimationControllerInitialized) {
       _chestAnimationController.dispose(); // Dispose only if initialized
     }
+    progressController.dispose();
     super.dispose();
   }
 
@@ -131,7 +133,6 @@ class _HomePageState extends State<HomePage>
             ],
           ),
         ),
-        bottomNavigationBar: _buildBottomBar(context),
       ),
     );
   }
@@ -330,6 +331,7 @@ class _HomePageState extends State<HomePage>
     double rewardFontSize = screenWidth * 0.038;
     bool isScrolling = true;
 
+    //final ScrollController scrollController = Scrollable.of(context)?.widget.controller ?? ScrollController();
     final double bottomPadding = screenHeight *
         0.4; // Adjust this based on the height of the bottom navigation bar and dialog
 
@@ -423,10 +425,11 @@ class _HomePageState extends State<HomePage>
                                 await Future.delayed(
                                     const Duration(milliseconds: 50));
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LessonPage(),
-                                    ));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LessonPage(),
+                                  ),
+                                );
                                 // Get.toNamed(AppRoutes.lessonScreen);
                               },
                               style: ElevatedButton.styleFrom(
@@ -549,55 +552,6 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomBar(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
-      },
-      backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed, // Fixed items
-      selectedItemColor: Colors.blue, // Color for the selected item
-      unselectedItemColor: Colors.grey, // Color for unselected items
-      showSelectedLabels: false, // Hide the labels
-      showUnselectedLabels: false,
-      items: [
-        _buildNavItem('assets/images/globemonkey.png', 0),
-        _buildNavItem('assets/images/treasure.png', 1),
-        _buildNavItem('assets/images/bottommonkey.png', 2),
-        _buildNavItem('assets/images/bluemonkey.png', 3),
-      ],
-    );
-  }
-
-  // Build each navigation item with custom behavior for selected state
-  BottomNavigationBarItem _buildNavItem(String iconPath, int index) {
-    final screenSize = MediaQuery.of(context).size;
-    double iconSize = screenSize.width * 0.13; // Make icons 10% of screen width
-
-    return BottomNavigationBarItem(
-      icon: Container(
-        width: iconSize,
-        height: iconSize,
-        decoration: BoxDecoration(
-          border: _currentIndex == index
-              ? Border.all(
-                  color: Colors.blue, width: 3) // Border for the selected item
-              : null,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.all(8),
-        child: Image.asset(
-          iconPath,
-          fit: BoxFit.contain,
-        ),
-      ),
-      label: '', // No label
     );
   }
 }

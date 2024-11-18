@@ -46,6 +46,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  uses-material-design: true
   assets:
     - assets/
     - assets/sample_stock_data.json
@@ -128,6 +129,21 @@ flutter:
     - assets/real_estate/path3.png
     - assets/real_estate/center_complete.png
     - assets/real_estate/real_estate_income.png
+    - assets/real_estate/rural_house.png
+    - assets/images/shopping-cart.svg
+    - assets/images/movie-ticket.svg
+    - assets/images/money-jar.svg
+    - assets/images/donation-box.svg
+    - assets/images/credit-card.svg
+    - assets/images/coins.svg
+    - assets/images/piggy-bank.svg
+    - assets/images/dollar-cash.svg
+    - assets/images/trade.svg
+    - assets/images/wallet.svg
+    - assets/images/money-trade.svg
+    - assets/images/money-manager.svg
+    - assets/images/savings-jar.svg
+    - assets/images/price-tags.svg
 
   fonts:
     - family: Baloo 2

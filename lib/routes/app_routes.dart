@@ -42,7 +42,6 @@ class AppRoutes {
       name: MarketScreenRoute,
       page: () => MarketScreen(),
     ),
-    GetPage(name: HomePageRoute, page: ()=>  HomePage()),
-    
+    // GetPage(name: HomePageRoute, page: () => HomeScreen()),
   ];
 }

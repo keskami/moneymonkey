@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Lesson Flow/Widgets/question_feedback_dialog.dart';
 import 'package:money_monkey/Lesson Flow/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/widgets/question_feedback_dialog.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/lessoncomplete.dart';
 
 class ContinueButtonSection extends StatelessWidget {
@@ -43,7 +43,6 @@ class ContinueButtonSection extends StatelessWidget {
                 onPressed: isOptionSelected
                     ? () {
                         if (isCorrectSelected && !isDialogShown) {
-                          // Show correct answer dialog
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -51,20 +50,31 @@ class ContinueButtonSection extends StatelessWidget {
                                   isCorrect: true);
                             },
                           ).then((_) {
-                            // After showing the dialog, update dialog shown state
+                            // Update dialog shown state
                             progressController.setDialogShown(true);
-                            // Mark quiz as completed
-                            progressController.setQuizCompleted();
                           });
                         } else if (isCorrectSelected && isDialogShown) {
-                          // Navigate to the next page if "Continue" is clicked
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LessonCompleteScreen(),
-                            ),
-                          );
-                          // Get.toNamed("/lessonCompletePageRoute");
+                          // Move to the next question if "Continue" is clicked
+                          if (progressController.currentQuestionIndex.value <
+                              progressController.quizQuestions.length - 1) {
+                            // Load the next question and reset state
+                            progressController.nextQuestion();
+                            progressController.incrementProgress();
+                          } else {
+                            // Mark quiz as completed
+                            progressController.setQuizCompleted();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LessonCompleteScreen(),
+                              ),
+                            );
+                            // Get.toNamed("/lessonCompletePageRoute");
+                            // Award bananas and move to the next lesson
+                            // progressController.awardBananas().then((_) {
+                            //   progressController.moveToNextLesson();
+                            // });
+                          }
                         } else {
                           // Show incorrect answer dialog
                           showDialog(
@@ -75,7 +85,7 @@ class ContinueButtonSection extends StatelessWidget {
                             },
                           ).then((_) {
                             // Reset option selection for retry
-                            progressController.setOptionSelected(false);
+                            progressController.resetSelection();
                           });
                         }
                       }
@@ -90,7 +100,7 @@ class ContinueButtonSection extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );

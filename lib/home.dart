@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> {
         });
       },
       backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed, // Fixed items
-      selectedItemColor: Colors.blue, // Color for the selected item
-      unselectedItemColor: Colors.grey, // Color for unselected items
-      showSelectedLabels: false, // Hide the labels
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+      showSelectedLabels: false,
       showUnselectedLabels: false,
       items: [
         _buildNavItem('assets/images/globemonkey.png', 0),

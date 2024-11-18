@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/Invest/investment_home.dart';
+import 'package:money_monkey/PortfolioPages/transfers_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
 
 import '../Lesson Flow/Screens/home.dart';
@@ -514,13 +515,25 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: screenHeightUnit * 4,
+                                      height: screenHeightUnit * 3.5,
                                     ),
                                     Align(
                                       alignment: Alignment.bottomRight,
-                                      child: Text(
-                                        "View All >",
-                                        style: GoogleFonts.baloo2(fontSize: 18),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TransfersScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          "View All >",
+                                          style:
+                                              GoogleFonts.baloo2(fontSize: 18),
+                                        ),
                                       ),
                                     ),
                                   ] else ...[

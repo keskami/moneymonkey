@@ -25,9 +25,6 @@ class _TopBarState extends State<TopBar> {
   void initState() {
     super.initState();
     fetchEarnings();
-
-    // Observe changes in the controller
-    //ProgressController progressController = Get.find<ProgressController>();
     widget.progressController.progress.listen((progress) {
       if (progress == 1.0) {
         fetchEarnings(); // Fetch bananas once progress is complete
@@ -46,9 +43,9 @@ class _TopBarState extends State<TopBar> {
             .collection('Users')
             .doc(userId) // Use the real userId here
             .collection('Progression')
-            .doc('progression1'); // Assuming you're using 'progression1'
+            .doc('Progression');
 
-        print("Fetching earnings for user: $userId");
+        // print("Fetching earnings for user: $userId");
         final docSnapshot = await progressionRef.get();
 
         if (docSnapshot.exists) {

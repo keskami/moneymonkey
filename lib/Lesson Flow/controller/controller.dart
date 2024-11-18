@@ -13,6 +13,7 @@ class ProgressController extends GetxController {
   var currentLessonIndex = 0.obs;
   var isDialogShown = false.obs;
   var isChestUnlocked = false.obs;
+
   // var selectedOptionIndex = (-1).obs;
 
   var flashcards = <Map<String, dynamic>>[].obs;
@@ -73,14 +74,14 @@ class ProgressController extends GetxController {
     checkCompletion();
   }
 
-  void checkCompletion() {
+  void checkCompletion() async {
     print("Checking completion...");
     print("cardsCompleted: ${cardsCompleted.value}");
     print("quizCompleted: ${quizCompleted.value}");
 
     if (cardsCompleted.isTrue && quizCompleted.isTrue) {
       print("Conditions met, awarding bananas...");
-      awardBananas();
+      await awardBananas();
       moveToNextLesson();
       print("Lesson Completed");
     }
@@ -227,6 +228,7 @@ class ProgressController extends GetxController {
   }
 
   var selectedOptionIndex = ValueNotifier<int>(-1);
+
   // Set the selected option index
   void setSelectedOptionIndex(int index) {
     selectedOptionIndex.value = index;
@@ -306,6 +308,7 @@ class ProgressController extends GetxController {
   Future<void> awardBananas() async {
     var currentUser = FirebaseAuth.instance.currentUser;
     String? userId = currentUser?.uid;
+    print("User ID: $userId");
 
     if (userId != null) {
       try {
@@ -313,35 +316,60 @@ class ProgressController extends GetxController {
         final userDocRef =
             FirebaseFirestore.instance.collection('Users').doc(userId);
         final progressionRef =
-            userDocRef.collection('Progression').doc('progression1');
+            userDocRef.collection('Progression').doc('Progression');
 
         // Fetch current values
         final docSnapshot = await progressionRef.get();
         final userSnapshot = await userDocRef.get();
 
-        if (docSnapshot.exists && userSnapshot.exists) {
-          // Update 'Earnings from Lesson.Bananas'
-          final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
-          final currentLessonBananas = earnings['Bananas'] ?? 0;
-          await progressionRef.update({
-            'Earnings from Lesson.Bananas': currentLessonBananas + 10,
+        if (!userSnapshot.exists) {
+          // Create the User document with default Portfolio data
+          await userDocRef.set({
+            'Portfolio': {
+              'Total Bananas': 0,
+            },
           });
-
-          // Update 'Portfolio.Total Bananas'
-          final portfolio = userSnapshot.data()?['Portfolio'] ?? {};
-          final currentTotalBananas = portfolio['Total Bananas'] ?? 0;
-          await userDocRef.update({
-            'Portfolio.Total Bananas': currentTotalBananas + 10,
-          });
-
-          // Update progress bar or notify UI
-          progress.value = 1.0;
-        } else {
-          print('Document or User data does not exist');
+          print("User document created with initial Portfolio.");
         }
+
+        if (!docSnapshot.exists) {
+          // Create the Progression document with initial Earnings data
+          await progressionRef.set({
+            'Earnings from Lesson': {
+              'Bananas': 0,
+            },
+          });
+          print("Progression document created with initial Earnings.");
+        }
+
+        // Retrieve the updated values after creation
+        final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
+        final portfolio = userSnapshot.data()?['Portfolio'] ?? {};
+
+        final currentLessonBananas = earnings['Bananas'] ?? 0;
+        final currentTotalBananas = portfolio['Total Bananas'] ?? 0;
+
+        print("Current Lesson Bananas: $currentLessonBananas");
+        print("Current Total Bananas: $currentTotalBananas");
+
+        // Update 'Earnings from Lesson.Bananas'
+        await progressionRef.update({
+          'Earnings from Lesson.Bananas': currentLessonBananas + 10,
+        });
+
+        // Update 'Portfolio.Total Bananas'
+        await userDocRef.update({
+          'Portfolio.Total Bananas': currentTotalBananas + 10,
+        });
+
+        // Update progress bar or notify UI
+        progress.value = 1.0;
+        print("Bananas awarded successfully!");
       } catch (e) {
         print('Error awarding bananas: $e');
       }
+    } else {
+      print("User is not signed in.");
     }
   }
 }

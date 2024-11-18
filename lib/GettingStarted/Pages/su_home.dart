@@ -8,7 +8,7 @@ import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class SignUpDetailsHome extends StatefulWidget {
@@ -112,7 +112,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           MaterialPageRoute(
             builder: (c) => PopScope(
               canPop: false,
-              child: HomeScreen(),
+              child: HomePage(),
             ),
           ),
         );

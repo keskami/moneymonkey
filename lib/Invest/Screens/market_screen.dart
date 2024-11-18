@@ -32,8 +32,7 @@ class _MarketScreenState extends State<MarketScreen> {
       final appleData = await _stockService.fetchStockData('AAPL');
       final googleData = await _stockService.fetchStockData("GOOGL");
       final nasdaqData = await _stockService.fetchGlobalQuoteData('MSFT');
-      final dowData =
-          await _stockService.fetchStockData('DJI');
+      final dowData = await _stockService.fetchStockData('DJI');
       final nyseData = await _stockService.fetchStockData('AACG');
 
       print(nasdaqData);
@@ -217,36 +216,6 @@ class _MarketScreenState extends State<MarketScreen> {
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // Set the active tab
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        backgroundColor: Colors.white,
-        selectedLabelStyle: TextStyle(
-          fontSize: screenWidth * 0.05,
-          fontFamily: "Baloo 2",
-          fontWeight: FontWeight.bold,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontFamily: "Baloo 2",
-          fontSize: screenWidth * 0.05,
-        ),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore, color: Colors.transparent),
-            label: 'Discover',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart, color: Colors.transparent),
-            label: 'Markets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.house, color: Colors.transparent),
-            label: 'Real Estate',
           ),
         ],
       ),
@@ -596,20 +565,6 @@ class CurvedHeader extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Positioned(
-            top: 40,
-            left: 16,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-                size: 28,
-              ),
-            ),
-          ),
           Center(
             child: Padding(
               padding: const EdgeInsets.only(top: 60.0),

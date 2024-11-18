@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/banknote.dart';
+
+import '../controller/controller.dart'; // Controller for progress
 
 class MonkeyImageWithButton extends StatelessWidget {
   const MonkeyImageWithButton({Key? key}) : super(key: key);
@@ -45,12 +46,13 @@ class MonkeyImageWithButton extends StatelessWidget {
                 onPressed: () {
                   progressController
                       .incrementProgress(); // Increment the progress
-                  // Get.toNamed('/bankPageRoute'); // Navigate to the next page
-                  Navigator.of(context).push(
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(
                       builder: (context) => BankNotePage(),
                     ),
                   );
+                  // Get.toNamed('/bankPageRoute'); // Navigate to the next page
                 },
                 child: const Text(
                   "Done",

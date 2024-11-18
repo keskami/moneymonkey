@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:money_monkey/Lesson Flow/controller/controller.dart';
+
+import '../controller/controller.dart';
 
 class MonkeyProgressWidget extends StatelessWidget {
   final ProgressController progressController;

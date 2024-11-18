@@ -11,7 +11,6 @@ class LessonPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen size for dynamic scaling
     final screenSize = MediaQuery.of(context).size;
     double verticalPadding =
         screenSize.height * 0.05; // 5% of screen height as padding

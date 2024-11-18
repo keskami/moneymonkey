@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_monkey/Lesson Flow/controller/controller.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/home.dart';
 
 class LessonCompleteScreen extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
   late Animation<double> _scaleAnimation;
   late ConfettiController _confettiController;
   bool _bananaClicked = false;
-
+  final ProgressController progressController = Get.find<ProgressController>();
   @override
   void initState() {
     super.initState();
@@ -38,10 +38,11 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
     super.dispose();
   }
 
-  void _onBananaTap() {
+  void _onBananaTap() async {
     setState(() {
       _bananaClicked = true;
     });
+    await progressController.awardBananas();
     _controller.forward();
     _confettiController.play();
   }
@@ -58,10 +59,6 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Access the progress controller to get the number of attempts
-    final ProgressController progressController =
-        Get.find<ProgressController>();
-
     final screenSize = MediaQuery.of(context).size;
 
     final double screenHeight = screenSize.height;
@@ -133,7 +130,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
+                                  builder: (context) => HomePage(),
                                 ),
                                 (route) => false,
                               );

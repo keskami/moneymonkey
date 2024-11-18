@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Friends/comingSoonPage.dart';
+import 'package:money_monkey/Global%20Controllers/home_controller.dart';
+import 'package:money_monkey/Lesson%20Flow/controller/controller.dart';
 import 'package:money_monkey/Settings/Pages/Account Pages/privacy_settings.dart';
-import 'package:money_monkey/Settings/Pages/Account Pages/subscription.dart';
 import 'package:money_monkey/Settings/Pages/Account%20Pages/preferences.dart';
 import 'package:money_monkey/Settings/Pages/Account%20Pages/profile.dart';
-import 'package:money_monkey/Settings/Pages/Account%20Pages/social_accounts.dart';
 import 'package:money_monkey/Settings/Pages/Notification%20Pages/notification.dart';
-import 'package:money_monkey/Settings/Pages/Support%20Pages/help_center.dart';
 import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -156,8 +157,7 @@ class SettingsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    SubscriptionSettingsPage(),
+                                builder: (context) => ComingSoonPage(),
                               ),
                             );
                           },
@@ -169,8 +169,7 @@ class SettingsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    SocialAccountsSettingsPage(),
+                                builder: (context) => ComingSoonPage(),
                               ),
                             );
                           },
@@ -206,7 +205,7 @@ class SettingsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HelpCenter(),
+                                builder: (context) => ComingSoonPage(),
                               ),
                             );
                           },
@@ -241,6 +240,11 @@ class SettingsPage extends StatelessWidget {
                       child: TextButton(
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
+                          ProgressController pC =
+                              Get.find<ProgressController>();
+                          HomeController hC = Get.find<HomeController>();
+                          pC.dispose();
+                          hC.dispose();
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => GettingStartedHome(),

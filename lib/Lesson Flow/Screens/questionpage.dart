@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Lesson Flow/Widgets/image_grid.dart';
+import 'package:money_monkey/Lesson Flow/Widgets/continue_button.dart';
 import 'package:money_monkey/Lesson Flow/Widgets/optionList.dart';
 import 'package:money_monkey/Lesson Flow/controller/controller.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/continue_button.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/custom_app_bar.dart';
+import 'package:money_monkey/Lesson Flow/widgets/custom_app_bar.dart';
+
+import '../widgets/image_grid.dart'; // Import the ImageGrid widget
 
 class QuestionPage extends StatelessWidget {
   final ProgressController progressController = Get.put(ProgressController());
@@ -26,7 +27,9 @@ class QuestionPage extends StatelessWidget {
         appBar: CustomAppBar(progressController: progressController),
         body: Obx(() {
           if (progressController.quizOptions.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           // Conditionally render the quiz question UI based on the question index

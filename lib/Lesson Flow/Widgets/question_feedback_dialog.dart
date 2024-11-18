@@ -13,6 +13,15 @@ class QuestionFeedbackDialog extends StatelessWidget {
     final ProgressController progressController =
         Get.find<ProgressController>();
 
+    final String correctMessage = progressController
+                .quizQuestions[progressController.currentQuestionIndex.value]
+            ['correctMessage'] ??
+        "Well done!";
+    final String incorrectMessage = progressController
+                .quizQuestions[progressController.currentQuestionIndex.value]
+            ['incorrectMessage'] ??
+        "Better luck next time!";
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -58,10 +67,9 @@ class QuestionFeedbackDialog extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              isCorrect
-                  ? "You're right! Coins have been used since around 600 B.C., making them the oldest form of money still in use."
-                  : "Correct Answer: Coins have been used since around 600 B.C., making them the oldest form of money still in use.",
+              isCorrect ? correctMessage : incorrectMessage,
               style: const TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -76,11 +84,8 @@ class QuestionFeedbackDialog extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                if (isCorrect) {
-                  // Get.toNamed("/lessonCompletePageRoute");
-                  Navigator.of(context).pop(); // Close the dialog
-                } else {
-                  Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
+                if (!isCorrect) {
                   progressController.resetSelection();
                 }
               },
