@@ -52,8 +52,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getUserInfo();
   }
 
-  int _currentIndex = 3;
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
