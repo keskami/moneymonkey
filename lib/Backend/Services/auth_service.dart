@@ -5,14 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_monkey/GettingStarted/Frontend/controller/sign_up_controller.dart';
-import 'package:money_monkey/GettingStarted/Frontend/controller/start_fresh_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SignUpController signUpController = Get.find();
   final StartFreshController startFreshController = Get.find();
+  final GettingStartedController gettingStartedController = Get.find();
   String user = "";
   //Google Sign In
   Future<void> googleAuth(BuildContext context) async {
@@ -45,7 +47,36 @@ class AuthService {
     }
   }
 
-  // Function to create a new user
+  Future<bool> checkEmailUsed(String email, BuildContext context) async {
+    // Validate email format
+    if (!email.isEmail) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Enter a valid email.")));
+      return false;
+    }
+
+    try {
+      final emailSnapshot = await _firestore
+          .collection('Users')
+          .where('Email', isEqualTo: email)
+          .get();
+
+      if (emailSnapshot.docs.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Email already associated with a user.")));
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error checking email: $e"),
+        backgroundColor: Colors.red[100],
+      ));
+      return false;
+    }
+  }
+
   Future<void> signUpUser(BuildContext context) async {
     try {
       // Get the user input from the controller
@@ -63,17 +94,6 @@ class AuthService {
       addUserDetails(userId, signUpController.email.value.trim());
       // Get the current user
       User? user = userCredential.user;
-
-      if (user != null) {
-        // Save additional user details (like name) in Firestore
-        await _firestore.collection('users').doc(user.uid).set({
-          'userId': user.uid,
-          'name': name,
-          'email': email,
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-        // You can set other fields, like 'age', 'knowledgeLevel', etc. if needed.
-      }
     } catch (e) {
       // Handle errors such as invalid email, weak password, etc.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -105,8 +125,7 @@ class AuthService {
     }
   }
 
-  //Add User Details
-   Future<void> addUserDetails(String userId, String email) async {
+  Future<void> addUserDetails(String userId, String email) async {
     final userDocRef =
         FirebaseFirestore.instance.collection('Users').doc(userId);
     final userSnapshot = await userDocRef.get();
@@ -114,30 +133,27 @@ class AuthService {
     if (userSnapshot.exists) {
       return;
     }
-  List<String> following = [
-    "QofNULUkjTRKL0cQccTNrwuri5I3",
-    'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
-  ];
+    List<String> following = [
+      "QofNULUkjTRKL0cQccTNrwuri5I3",
+      'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
+    ];
 
-  List<String> followers = [
-    "QofNULUkjTRKL0cQccTNrwuri5I3",
-    'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
-    '6mMH88Ebp4aiYWIT3jGfBDyxxRB2'
-
-
- 
-  ];
-
+    List<String> followers = [
+      "QofNULUkjTRKL0cQccTNrwuri5I3",
+      'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
+      '6mMH88Ebp4aiYWIT3jGfBDyxxRB2'
+    ];
 
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
-      'Age': 0,
-      'Knowledge Level': 0,
-      'Learning Goal Per Day': 0,
+      'Phone Number': signUpController.phoneNumber.value,
+      'Age': gettingStartedController.age.value,
+      'Knowledge Level': gettingStartedController.knowledgeLevel.value,
+      'Learning Goal Per Day': startFreshController.learningGoal.value,
       'Profile': {
-        'Full Name': 'Your Name Here',
-        'Username': 'Your Name Here',
+        'Full Name': signUpController.name.value,
+        'Username': signUpController.username.value,
         'Number of Followers': 3,
         'Following': 2,
         'Top Achievements': 0,
@@ -163,9 +179,38 @@ class AuthService {
         'Profit from Invested Bananas (Current Month)': 890,
         'Username': "Josh5"
       },
-
-    'following': following, 
-    'followers': followers,  
+      'following': following,
+      'followers': followers,
+      'Settings': {
+        'Preferences': {
+          'Sound Effects': true,
+          'Audio': false,
+          'Dark Mode': false,
+        },
+        'Notifications': {
+          'Reminders': {
+            'Reminder Time': "08:00 AM",
+            'Practice Email': true,
+            'Practice Phone': false,
+            'Weekly Progress': false,
+          },
+          'Friends': {
+            'New Follower Email': true,
+            'New Follower Phone': false,
+            'Friend Activity Email': true,
+            'Friend Activity Phone': false,
+          },
+          'Announcements': {
+            'Marketing Notifications Email': true,
+            'Marketing Notifications Phone': false,
+            'Educational Tips Email': true,
+            'Educational Tips Phone': false,
+          },
+        },
+        'Privacy Settings': {
+          'Public Profile': true,
+        },
+      }
     });
 
     final transactionsRef = userDocRef.collection('Transactions');

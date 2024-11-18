@@ -4,11 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
 import 'package:money_monkey/friendsPages/comingSoonPage.dart';
-import 'package:money_monkey/friendsPages/friendsFromContacts.dart';
 import 'package:money_monkey/friendsPages/friendsProfile.dart';
 import 'package:money_monkey/friendsPages/friendsSearch.dart';
 import 'package:money_monkey/friendsPages/friendsSuggestion.dart';
-import 'package:money_monkey/LoginPages/login.dart';
 
 class FriendsHome extends StatefulWidget {
   const FriendsHome({super.key});
@@ -34,7 +32,6 @@ class _FriendsHomeState extends State<FriendsHome> {
     );
 
     loadFriendSuggestions(3, '');
-  
 
     super.initState();
   }
@@ -43,8 +40,6 @@ class _FriendsHomeState extends State<FriendsHome> {
     if (userID != null) {
       List<Map<String, String>> fetchedFriends =
           await crud.findFriends(userID!, amount);
-
-          
 
       fetchedFriends.removeWhere((friend) => friend["otherID"] == remove);
 
@@ -198,94 +193,91 @@ class _FriendsHomeState extends State<FriendsHome> {
     ];
 
     return Scaffold(
-        body: Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: screenHeightUnit * 57),
-          Padding(
-              padding: EdgeInsets.fromLTRB(screenWidthUnit * 6, 0, 0, 0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()));
-                },
-                child: Icon(
-                  Icons.arrow_back,
-                  size: screenHeightUnit * 37,
-                ),
-              )),
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                screenHeightUnit * 14, screenHeightUnit * 27, 0, 0),
-            child: Text(
-              "Find your friends",
-              style: GoogleFonts.inter(
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: screenHeightUnit * 37,
             ),
           ),
-          Column(
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (friendsColumnWidgets.isNotEmpty) ...friendsColumnWidgets
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(screenWidthUnit * 14,
-                screenHeightUnit * 40, screenWidthUnit * 19, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Friends suggestions",
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    screenHeightUnit * 14, screenHeightUnit * 27, 0, 0),
+                child: Text(
+                  "Find your friends",
                   style: GoogleFonts.inter(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FriendsSuggestions(),
-                        ));
-                  },
-                  child: Text(
-                    "view all",
-                    style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: const Color.fromRGBO(135, 206, 235, 1)),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-              ],
-            ),
+              ),
+              Column(
+                children: [
+                  if (friendsColumnWidgets.isNotEmpty) ...friendsColumnWidgets
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(screenWidthUnit * 14,
+                    screenHeightUnit * 40, screenWidthUnit * 19, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Friends suggestions",
+                      style: GoogleFonts.inter(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FriendsSuggestions(),
+                            ));
+                      },
+                      child: Text(
+                        "view all",
+                        style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: const Color.fromRGBO(135, 206, 235, 1)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: friends.isEmpty
+                    ? [Center(child: CircularProgressIndicator())]
+                    : friends
+                        .map((friend) => friendsRowWidget(
+                              name: friend["name"]!,
+                              screenHeightUnit: screenHeightUnit,
+                              screenWidthUnit: screenWidthUnit,
+                              otherID: friend["otherID"]!,
+                              onRemove: () => removeFriend(friend["otherID"]!),
+                            ))
+                        .toList(),
+              ),
+              SizedBox(
+                height: screenHeightUnit * 40,
+              )
+            ],
           ),
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: friends.isEmpty
-                ? [Center(child: CircularProgressIndicator())]
-                : friends
-                    .map((friend) => friendsRowWidget(
-                          name: friend["name"]!,
-                          screenHeightUnit: screenHeightUnit,
-                          screenWidthUnit: screenWidthUnit,
-                          otherID: friend["otherID"]!,
-                          onRemove: () => removeFriend(friend["otherID"]!),
-                        ))
-                    .toList(),
-          ),
-          SizedBox(
-            height: screenHeightUnit * 40,
-          )
-        ],
-      ),
-    ));
+        ));
   }
 
   void removeFriend(String otherID) {

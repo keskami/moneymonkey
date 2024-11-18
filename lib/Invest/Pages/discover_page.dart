@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/stock_service.dart';
+import 'package:money_monkey/Invest/Pages/Real%20Estate%20Pages/real_estate_home.dart';
 import 'package:money_monkey/Invest/Pages/investment_page.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -110,6 +110,18 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(137, 220, 142, 1),
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(137, 220, 142, 1),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: screenHeightUnit * 37,
+          ),
+        ),
+      ),
       body: loading
           ? Container(
               color: const Color.fromRGBO(137, 220, 142, 1),
@@ -120,7 +132,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: screenHeightUnit * 47),
+                    SizedBox(height: screenHeightUnit * 25),
                     Padding(
                       padding:
                           EdgeInsets.fromLTRB(screenWidthUnit * 10, 0, 0, 0),
@@ -129,21 +141,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const PortfolioScreen(),
-                                ),
-                              );
-                            },
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
-                              size: screenHeightUnit * 20,
-                            ),
-                          ),
                           Row(
                             children: [
                               SizedBox(width: screenWidthUnit * 20),
@@ -369,7 +366,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RealEstateHome(),
+                        ));
+                  },
                   child: Text(
                     "Real Estate",
                     style: GoogleFonts.baloo2(

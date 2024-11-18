@@ -8,22 +8,8 @@ class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // 1. User Management and Authentication
-
-  Future<void> createUser(String userId, Map<String, dynamic> userData) async {
-    await _firestore.collection('Users').doc(userId).set(userData);
-  }
-
-  Future<DocumentSnapshot> getUser(String userId) async {
-    return await _firestore.collection('Users').doc(userId).get();
-  }
-
   Future<void> updateUser(String userId, Map<String, dynamic> userData) async {
     await _firestore.collection('Users').doc(userId).update(userData);
-  }
-
-  Future<void> deleteUser(String userId) async {
-    await _firestore.collection('Users').doc(userId).delete();
   }
 
   // 2. Financial Education and Progression

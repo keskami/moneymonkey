@@ -416,16 +416,35 @@ def add5min():
 
    
 ecoVineBonus = 0
+ecoVineBonusLeft = 0
+ecoVineBonusType = ''
+
+def getBonus(current, left,  typeInc):
+    print(typeInc)
+    if typeInc == "Test":
+        print("here")
+        left -= 1
+        return (current - .005), left , typeInc
+    else: 
+        return current, left , typeInc
+
+
+
 def pickValue(values, stock):
-    global ecoVineBonus
+    global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType
+
     if stock == 'BananaTech':
         return random.uniform(0.975, 1.03) * mean(values)
     elif stock == 'HealthyChimp':
-        return random.uniform(0.9965, 1.0036) * mean(values) 
+        return random.uniform(0.9965, 1.0136) * mean(values) 
     elif stock == 'EcoVine':
-        return (random.uniform(0.990, 1.0011) * mean(values)) 
+        print("ECO Bonuss")
+        print(ecoVineBonus)
+        ret = (random.uniform(0.990, 1.0111) + ecoVineBonus) * mean(values)
+        ecoVineBonus, ecoVineBonusLeft, typeInc  = getBonus(ecoVineBonus, ecoVineBonusLeft,ecoVineBonusType)
+        return ret
     elif stock == 'JungleGoods':
-        return random.uniform(0.997, 1.0031) * mean(values)
+        return random.uniform(0.997, 1.0131) * mean(values)
     elif stock == "TreeTech":
          return random.uniform(0.99, 1.011) * mean(values)
     elif stock == "MonkeyMed":
@@ -766,7 +785,7 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         
 
     elif req.method == 'POST':
-        global ecoVineBonus
+        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType
         print("POST request received")
         if path == "/api/change/Time":
             data = req.get_json()
@@ -785,10 +804,13 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
             data = req.get_json()
             if data:
                 value = data["Value"]
-                amount = data["Amount"]
+                startingVal = data["Start"]
+                typeInc = data["Type"]
                 if value == "EcoVine":
-                    ecoVineBonus = amount
-                    print(ecoVineBonus)
+                    ecoVineBonus = startingVal / 100
+                    ecoVineBonusType = typeInc
+                    ecoVineBonusLeft = 60
+                    print(typeInc)
                 return jsonify({"status": "success", "message": "Data received", "data": data}), 200
             else:
              return make_response("Invalid data", 400)

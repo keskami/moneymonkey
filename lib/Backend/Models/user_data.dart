@@ -1,62 +1,56 @@
+import 'package:money_monkey/Backend/Models/settings.dart';
+
 class UserData {
   String userId;
   String email;
+  String phoneNumber;
   int age;
-  int knowledgeLevel; // Change to int
+  int knowledgeLevel;
   int learningGoalPerDay;
   int startingLevel;
   ProfileData profile;
+  SettingsData settings;
 
   UserData({
     required this.userId,
     required this.email,
+    required this.phoneNumber,
     required this.age,
     required this.knowledgeLevel,
     required this.learningGoalPerDay,
     required this.startingLevel,
     required this.profile,
+    required this.settings,
   });
 
-  // Convert Firestore document to UserData object
   factory UserData.fromFirestore(Map<String, dynamic> data, String id) {
     return UserData(
       userId: id,
       email: data['Email'] ?? '',
+      phoneNumber: data['Phone Number'] ?? '', // Retrieve phone number
       age: data['Age'] is int ? data['Age'] : 0,
-      knowledgeLevel: data['Knowledge Level'] is int
-          ? data['Knowledge Level']
-          : 0, // Adjusted to int
+      knowledgeLevel:
+          data['Knowledge Level'] is int ? data['Knowledge Level'] : 0,
       learningGoalPerDay: data['Learning Goal Per Day'] is int
           ? data['Learning Goal Per Day']
           : 0,
-      startingLevel: data['Starting Level'] is int
-          ? data['Starting Level']
-          : 0, // Consistent key usage
-      profile: data['Profile'] != null
-          ? ProfileData.fromFirestore(data['Profile'])
-          : ProfileData(
-              // Handle null profile case
-              fullName: '',
-              username: 'Your Name Here',
-              numberOfFollowers: 0,
-              following: 0,
-              topAchievements: 0,
-              streak: 0,
-              totalProfit: 0.0,
-              portfolioScore: 0.0,
-              averageMonthlyGrowth: 0.0),
+      startingLevel: data['Starting Level'] is int ? data['Starting Level'] : 0,
+      profile: ProfileData.fromFirestore(data['Profile'] ?? {}),
+      settings: SettingsData.fromFirestore(
+          data['Settings'] ?? {}), // Retrieve settings
     );
   }
 
-  // Convert UserData object to Firestore document
   Map<String, dynamic> toFirestore() {
     return {
       'Email': email,
+      'Phone Number': phoneNumber, // Save phone number
       'Age': age,
       'Knowledge Level': knowledgeLevel,
       'Learning Goal Per Day': learningGoalPerDay,
-      'Starting Level': startingLevel, // Consistent key usage
-      'Profile': profile.toFirestore(), // Profile conversion
+      'Starting Level': startingLevel,
+      'Profile': profile.toFirestore(),
+      'Settings': settings.toFirestore(), // Save settings
     };
   }
 }
@@ -66,7 +60,7 @@ class ProfileData {
   String username;
   int numberOfFollowers;
   int following;
-  int topAchievements; // Change to int since it's stored as a number
+  int topAchievements; // Adjusted to int since it's stored as a number
   int streak;
   double totalProfit;
   double portfolioScore;
