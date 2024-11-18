@@ -449,6 +449,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: screenHeightUnit * 49,
                                       child: TextField(
                                         controller: _loginPasswordController,
+                                        obscureText: true,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                             borderRadius:

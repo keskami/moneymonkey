@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Friends/comingSoonPage.dart';
-import 'package:money_monkey/Global%20Controllers/home_controller.dart';
 import 'package:money_monkey/Lesson%20Flow/controller/controller.dart';
 import 'package:money_monkey/Settings/Pages/Account Pages/privacy_settings.dart';
 import 'package:money_monkey/Settings/Pages/Account%20Pages/preferences.dart';
@@ -240,11 +238,7 @@ class SettingsPage extends StatelessWidget {
                       child: TextButton(
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
-                          ProgressController pC =
-                              Get.find<ProgressController>();
-                          HomeController hC = Get.find<HomeController>();
-                          pC.dispose();
-                          hC.dispose();
+                          ProgressController().progress.value = 0.0;
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => GettingStartedHome(),

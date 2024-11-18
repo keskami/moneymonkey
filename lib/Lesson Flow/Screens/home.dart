@@ -101,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen>
     if (_isAnimationControllerInitialized) {
       _chestAnimationController.dispose(); // Dispose only if initialized
     }
-    progressController.dispose();
     super.dispose();
   }
 
