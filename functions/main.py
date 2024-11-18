@@ -417,21 +417,31 @@ def add5min():
    
 ecoVineBonus = 0
 ecoVineBonusLeft = 0
+ecoVineBeginingVal = 0
 ecoVineBonusType = ''
 
-def getBonus(current, left,  typeInc):
+def getBonus(current, left,  typeInc, beginVal):
     print(typeInc)
-    if typeInc == "Test":
-        print("here")
-        left -= 1
-        return (current - .005), left , typeInc
-    else: 
-        return current, left , typeInc
+    if left > 0:
+        if typeInc == "Test":
+            print("here")
+            left -= 1
+            dec = (beginVal/30)
+            if left > 113:
+                ret =  current + dec
+            elif left > 59:
+                ret =  current - dec
+            else: 
+                ret = current + (dec/4)
+
+            return ret , left , typeInc
+
+    return 0, left , typeInc
 
 
 
 def pickValue(values, stock):
-    global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType
+    global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal
 
     if stock == 'BananaTech':
         return random.uniform(0.975, 1.03) * mean(values)
@@ -441,7 +451,7 @@ def pickValue(values, stock):
         print("ECO Bonuss")
         print(ecoVineBonus)
         ret = (random.uniform(0.990, 1.0111) + ecoVineBonus) * mean(values)
-        ecoVineBonus, ecoVineBonusLeft, typeInc  = getBonus(ecoVineBonus, ecoVineBonusLeft,ecoVineBonusType)
+        ecoVineBonus, ecoVineBonusLeft, typeInc  = getBonus(ecoVineBonus, ecoVineBonusLeft,ecoVineBonusType, ecoVineBeginingVal)
         return ret
     elif stock == 'JungleGoods':
         return random.uniform(0.997, 1.0131) * mean(values)
@@ -480,7 +490,7 @@ def updateStocks():
     global ecoVineBonus
 
     while True:
-        time.sleep(5.9)
+        time.sleep(.9)
 
         BananaTechValue = 124
         HealthyChimpValue = 64
@@ -785,7 +795,7 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         
 
     elif req.method == 'POST':
-        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType
+        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal
         print("POST request received")
         if path == "/api/change/Time":
             data = req.get_json()
@@ -809,7 +819,8 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
                 if value == "EcoVine":
                     ecoVineBonus = startingVal / 100
                     ecoVineBonusType = typeInc
-                    ecoVineBonusLeft = 60
+                    ecoVineBonusLeft = 120
+                    ecoVineBeginingVal = startingVal / 100
                     print(typeInc)
                 return jsonify({"status": "success", "message": "Data received", "data": data}), 200
             else:
