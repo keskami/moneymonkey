@@ -439,7 +439,7 @@ def getSteadyBonus():
     global  ecoVineBonusLeft, ecoVineBonusStart, ecoSteady, ecoSteadyInc, EcoVineVals
     if ecoVineBonusLeft > ecoVineBonusStart / 2:
         ecoVineBonusLeft -= 1
-        return EcoVineVals[-1] * ecoSteadyInc
+        return EcoVineVals[-1] * ecoSteadyInc * random.uniform(0.9990, 1.00111)
     else:
         ecoVineBonusLeft -= 1
         return EcoVineVals[-1] * random.uniform(0.9990, 1.00111)
