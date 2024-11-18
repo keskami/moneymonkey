@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import '../controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 
 class MonkeyProgressWidget extends StatelessWidget {
   final ProgressController progressController;
 
-  const MonkeyProgressWidget({Key? key, required this.progressController}) : super(key: key);
+  const MonkeyProgressWidget({Key? key, required this.progressController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,8 @@ class MonkeyProgressWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: (screenWidth - 60) * progress, // Make the monkey move according to progress
+            left: (screenWidth - 60) *
+                progress, // Make the monkey move according to progress
             child: Lottie.asset(
               'assets/images/swinging_monkey.json', // Replace with your animation path
               width: 60,

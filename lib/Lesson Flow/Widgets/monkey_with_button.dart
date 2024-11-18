@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/banknote.dart';
-
-import '../../controller/controller.dart'; // Controller for progress
 
 class MonkeyImageWithButton extends StatelessWidget {
   const MonkeyImageWithButton({Key? key}) : super(key: key);

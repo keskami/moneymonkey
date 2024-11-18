@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moneymonkey/controller/controller.dart';
-import 'package:moneymonkey/widgets/question_feedback_dialog.dart';
+import 'package:money_monkey/Lesson Flow/Widgets/question_feedback_dialog.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/lessoncomplete.dart';
 
 class ContinueButtonSection extends StatelessWidget {
   const ContinueButtonSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ProgressController progressController = Get.find<ProgressController>();
+    final ProgressController progressController =
+        Get.find<ProgressController>();
 
     return Obx(() {
       bool isOptionSelected = progressController.isOptionSelected.value;
@@ -16,7 +18,8 @@ class ContinueButtonSection extends StatelessWidget {
       bool isDialogShown = progressController.isDialogShown.value;
 
       // Update button text based on current state
-      String buttonText = isCorrectSelected && isDialogShown ? "Continue" : "Check";
+      String buttonText =
+          isCorrectSelected && isDialogShown ? "Continue" : "Check";
 
       return Container(
         height: 50,
@@ -31,9 +34,8 @@ class ContinueButtonSection extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 12),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isOptionSelected
-                      ? const Color(0XFF87CEEB)
-                      : Colors.grey,
+                  backgroundColor:
+                      isOptionSelected ? const Color(0XFF87CEEB) : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -45,7 +47,8 @@ class ContinueButtonSection extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return const QuestionFeedbackDialog(isCorrect: true);
+                              return const QuestionFeedbackDialog(
+                                  isCorrect: true);
                             },
                           ).then((_) {
                             // After showing the dialog, update dialog shown state
@@ -55,13 +58,20 @@ class ContinueButtonSection extends StatelessWidget {
                           });
                         } else if (isCorrectSelected && isDialogShown) {
                           // Navigate to the next page if "Continue" is clicked
-                          Get.toNamed("/lessonCompletePageRoute");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LessonCompleteScreen(),
+                            ),
+                          );
+                          // Get.toNamed("/lessonCompletePageRoute");
                         } else {
                           // Show incorrect answer dialog
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return const QuestionFeedbackDialog(isCorrect: false);
+                              return const QuestionFeedbackDialog(
+                                  isCorrect: false);
                             },
                           ).then((_) {
                             // Reset option selection for retry

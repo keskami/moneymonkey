@@ -32,12 +32,10 @@ dependencies:
   fl_chart: ^0.69.0
   confetti: ^0.8.0
   lottie: ^3.1.2
-  url_launcher: ^6.3.1
   webview_flutter: ^4.10.0
   flutter_keyboard_visibility: ^6.0.0
   toggle_switch: ^2.3.0
   url_launcher: ^6.3.1
-  aligned_dialog: ^0.0.7
   shimmer: ^3.0.0
   aligned_dialog: ^0.0.7
 
@@ -104,6 +102,8 @@ flutter:
     - assets/sample_stock_data.json
     - assets/images/banana_reward.json
     - assets/images/specsbanana.json
+    - assets/images/speech_bubble.png
+    - assets/images/quizMonkey.png
     - assets/images/swinging_monkey.json
     - assets/images/Treasure_chest.gif
     - assets/real_estate/airport.png

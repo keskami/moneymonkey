@@ -1,14 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore imports
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase auth imports
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore imports
-import 'package:firebase_auth/firebase_auth.dart';   // Firebase auth imports
-import 'package:moneymonkey/widgets/monkeyanimation.dart';
-import '../controller/controller.dart'; // Import the controller
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final ProgressController progressController;
 
-  const CustomAppBar({Key? key, required this.progressController}) : super(key: key);
+  const CustomAppBar({Key? key, required this.progressController})
+      : super(key: key);
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -24,7 +24,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   void initState() {
     super.initState();
     fetchBananas();
-    
+
     // Listen for progress completion and refresh bananas
     widget.progressController.progress.listen((progress) {
       if (progress == 1.0) {
@@ -32,11 +32,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
       }
     });
   }
+
   @override
-void dispose() {
-  // Cancel any listeners or subscriptions here if needed
-  super.dispose();
-}
+  void dispose() {
+    // Cancel any listeners or subscriptions here if needed
+    super.dispose();
+  }
 
   Future<void> fetchBananas() async {
     try {
@@ -74,10 +75,10 @@ void dispose() {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_sharp, color: Colors.black),
         onPressed: () {
-       
-          final ProgressController progressController = Get.find<ProgressController>();
+          final ProgressController progressController =
+              Get.find<ProgressController>();
           progressController.decrementProgress();
-              Navigator.pop(context);
+          Navigator.pop(context);
         },
       ),
       titleSpacing: 0,
@@ -86,8 +87,8 @@ void dispose() {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(right: 12.0),
-              child: Obx((){
-                   return TweenAnimationBuilder<double>(
+              child: Obx(() {
+                return TweenAnimationBuilder<double>(
                   tween: Tween<double>(
                       begin: 0, end: widget.progressController.progress.value),
                   duration: const Duration(milliseconds: 500),
@@ -101,13 +102,12 @@ void dispose() {
                         valueColor: const AlwaysStoppedAnimation<Color>(
                             Colors.lightBlue),
                         minHeight: 20,
-                  
-             ),
+                      ),
                     );
                   },
                 );
               }),
-            //child: MonkeyProgressWidget(progressController:widget.progressController),
+              //child: MonkeyProgressWidget(progressController:widget.progressController),
             ),
           ),
           Row(
@@ -119,7 +119,10 @@ void dispose() {
               const SizedBox(width: 6),
               Text(
                 '$bananas', // Display the updated bananas count
-                style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: 25,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),

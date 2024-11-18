@@ -2,7 +2,8 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:moneymonkey/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 
 class LessonCompleteScreen extends StatefulWidget {
   @override
@@ -58,11 +59,12 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
   @override
   Widget build(BuildContext context) {
     // Access the progress controller to get the number of attempts
-    final ProgressController progressController = Get.find<ProgressController>();
-    
+    final ProgressController progressController =
+        Get.find<ProgressController>();
+
     final screenSize = MediaQuery.of(context).size;
 
-    final double screenHeight= screenSize.height;
+    final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
     // Determine how many stars based on the number of attempts
     int stars = progressController.attempts.value == 1 ? 3 : 2;
@@ -96,43 +98,51 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                         ),
                         // Display stars based on attempts
                         Positioned(
-                            top: screenHeight * 0.32,
+                          top: screenHeight * 0.32,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(stars, (index) {
                               return Padding(
-                                padding:  EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.01),
                                 child: Image.asset(
                                   'assets/images/star.png',
-                                  height:screenHeight * 0.06,
+                                  height: screenHeight * 0.06,
                                 ),
                               );
                             }),
                           ),
                         ),
                         Positioned(
-                          top: screenHeight*0.1,
+                          top: screenHeight * 0.1,
                           child: Text(
                             "Lesson\n Complete!",
                             style: TextStyle(
                               fontFamily: "Baloo 2",
-                              fontSize: screenHeight*0.04,
+                              fontSize: screenHeight * 0.04,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Positioned(     
-                          bottom: screenHeight*0.14,
+                        Positioned(
+                          bottom: screenHeight * 0.14,
                           child: ElevatedButton(
                             onPressed: () {
-                              Get.toNamed("/HomePage");
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ),
+                                (route) => false,
+                              );
+                              // Get.toNamed("/HomePage");
                             },
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth*0.08,
-                                vertical: screenHeight*0.010,
+                                horizontal: screenWidth * 0.08,
+                                vertical: screenHeight * 0.010,
                               ),
                               backgroundColor: Color(0xFF87CEEB),
                               shape: RoundedRectangleBorder(
@@ -143,7 +153,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                               'CONTINUE',
                               style: TextStyle(
                                 fontFamily: "Baloo 2",
-                                fontSize:  screenHeight * 0.020,
+                                fontSize: screenHeight * 0.020,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -165,7 +175,8 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.green, width: 2),
+                                border:
+                                    Border.all(color: Colors.green, width: 2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.all(8),

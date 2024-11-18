@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 
 class TopBar extends StatefulWidget {
   final String userId; // Pass the userId from the parent

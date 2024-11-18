@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:moneymonkey/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 
 class QuestionFeedbackDialog extends StatelessWidget {
   final bool isCorrect;
 
-  const QuestionFeedbackDialog({required this.isCorrect, Key? key}) : super(key: key);
+  const QuestionFeedbackDialog({required this.isCorrect, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-     final ProgressController progressController = Get.find<ProgressController>();
-
+    final ProgressController progressController =
+        Get.find<ProgressController>();
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -37,8 +37,10 @@ class QuestionFeedbackDialog extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  isCorrect ? Icons.check_circle : Icons.cancel, 
-                  color: isCorrect ? const Color(0xFF85DC40) : const Color(0xFFFF0000), 
+                  isCorrect ? Icons.check_circle : Icons.cancel,
+                  color: isCorrect
+                      ? const Color(0xFF85DC40)
+                      : const Color(0xFFFF0000),
                   size: 32,
                 ),
                 const SizedBox(width: 10),
@@ -47,7 +49,9 @@ class QuestionFeedbackDialog extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: isCorrect ? const Color(0xFF85DC40) : const Color(0xFFFF0000),
+                    color: isCorrect
+                        ? const Color(0xFF85DC40)
+                        : const Color(0xFFFF0000),
                   ),
                 ),
               ],
@@ -62,25 +66,24 @@ class QuestionFeedbackDialog extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15), 
-                backgroundColor: isCorrect ? const Color(0xFF85DC40) : const Color(0xFFFF0000), 
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                backgroundColor: isCorrect
+                    ? const Color(0xFF85DC40)
+                    : const Color(0xFFFF0000),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               onPressed: () {
-
-                if(isCorrect){
-                 // Get.toNamed("/lessonCompletePageRoute");
+                if (isCorrect) {
+                  // Get.toNamed("/lessonCompletePageRoute");
                   Navigator.of(context).pop(); // Close the dialog
-                }
-                else{
+                } else {
                   Navigator.of(context).pop(); // Close the dialog
-                   progressController.resetSelection();
+                  progressController.resetSelection();
                 }
-              
               },
-              
               child: const Text(
                 'Got it',
                 style: TextStyle(fontSize: 18, color: Colors.white),
