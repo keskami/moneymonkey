@@ -146,10 +146,10 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             const SizedBox(height: 20),
 
             Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(15),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -168,7 +168,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
 
             Expanded(
               child: GridView(
@@ -227,6 +227,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
 
   Widget _buildBottomBar(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.08,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
