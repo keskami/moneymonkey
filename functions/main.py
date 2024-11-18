@@ -421,18 +421,19 @@ ecoVineBeginingVal = 0
 ecoVineBonusType = ''
 
 def getBonus(current, left,  typeInc, beginVal):
+    global ecoVineBonusStart
     print(typeInc)
     if left > 0:
-        if typeInc == "Test":
-            print("here")
+        if typeInc == "MeanRev":
+            timeUnit = ecoVineBonusStart / 120
             left -= 1
-            dec = (beginVal/30)
-            if left > 113:
+            dec = (beginVal/(30*timeUnit))
+            if left > 113 * timeUnit:
                 ret =  current + dec
-            elif left > 59:
+            elif left > 59 * timeUnit:
                 ret =  current - dec
             else: 
-                ret = current + (dec/4)
+                ret = current + (dec/(4 * timeUnit))
 
             return ret , left , typeInc
 
@@ -795,7 +796,7 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         
 
     elif req.method == 'POST':
-        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal
+        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal, ecoVineBonusStart
         print("POST request received")
         if path == "/api/change/Time":
             data = req.get_json()
@@ -816,10 +817,12 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
                 value = data["Value"]
                 startingVal = data["Start"]
                 typeInc = data["Type"]
+                minutes = data["Min"]
                 if value == "EcoVine":
                     ecoVineBonus = startingVal / 100
                     ecoVineBonusType = typeInc
-                    ecoVineBonusLeft = 120
+                    ecoVineBonusLeft = minutes
+                    ecoVineBonusStart = minutes
                     ecoVineBeginingVal = startingVal / 100
                     print(typeInc)
                 return jsonify({"status": "success", "message": "Data received", "data": data}), 200
