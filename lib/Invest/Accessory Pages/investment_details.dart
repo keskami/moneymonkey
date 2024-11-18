@@ -1,52 +1,88 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Invest/Widgets/investment_options_list.dart';
 import 'package:money_monkey/Invest/Widgets/line_chart_widget.dart';
 import 'package:money_monkey/Invest/Widgets/title_row.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../../Backend/Models/stock_data.dart';
-import '../Widgets/investment_options_list.dart';
+import '../../../Backend/Models/stock_data.dart';
 
-class InvestmentPage extends StatefulWidget {
-  final String investmentType; // e.g., "Stocks", "ETFs", "Bonds"
-  final dynamic investmentService; // Could be StockService, BondService, etc.
+class InvestmentDetailsScreen extends StatefulWidget {
+  final String investmentType;
+  final dynamic investmentService;
   final String defaultSymbol;
-  const InvestmentPage({
-    super.key,
+
+  const InvestmentDetailsScreen({
+    Key? key,
     required this.investmentType,
     required this.investmentService,
     required this.defaultSymbol,
-  });
+  }) : super(key: key);
 
   @override
-  State<InvestmentPage> createState() => _InvestmentPageState();
+  State<InvestmentDetailsScreen> createState() =>
+      _InvestmentDetailsScreenState();
 }
 
-class _InvestmentPageState extends State<InvestmentPage> {
+class _InvestmentDetailsScreenState extends State<InvestmentDetailsScreen> {
   Map<String, List<StockData>> _investmentDataMap = {};
-  String _selectedSymbol = ""; // Start with no selected stock
+  String _selectedSymbol = "";
   bool _isLoading = true;
-  String _duration = "24H";
+  String _duration = "3M";
+  List<StockData> _stockData = [];
 
   @override
   void initState() {
     super.initState();
-    // Initially no stock is selected
     _selectedSymbol = "";
-    // You can load data similarly for any investment type
-    // _loadInvestmentDataForAllSymbols();
+    _loadStockData();
   }
 
-  // Function to update the selected symbol and reload the graph
+  Future<void> _loadStockData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final List<StockData> loadedStockData = await loadStockData();
+    setState(() {
+      _stockData = loadedStockData;
+      _isLoading = false;
+    });
+  }
+
+  // Function to load data from a local JSON file
+  Future<List<StockData>> loadStockData() async {
+    try {
+      final String response =
+          await rootBundle.loadString('assets/sample_stock_data.json');
+      final Map<String, dynamic> jsonMap = json.decode(response);
+      final timeSeries = jsonMap["Time Series (Daily)"] as Map<String, dynamic>;
+
+      List<StockData> loadedStockData = timeSeries.entries.map((entry) {
+        final date = entry.key;
+        final data = entry.value as Map<String, dynamic>;
+        return StockData.fromJson(data, date);
+      }).toList();
+
+      // Sort the stock data in ascending order (oldest on the left)
+      loadedStockData.sort(
+          (a, b) => a.date.compareTo(b.date)); // Change sorting to ascending
+
+      return loadedStockData;
+    } catch (e) {
+      print("Error loading data from JSON file: $e");
+      return [];
+    }
+  }
+
   void _updateSelectedSymbol(String symbol) {
     setState(() {
-      if (symbol == _selectedSymbol) {
-        _selectedSymbol = ""; // Deselect if tapped again
-      } else {
-        _selectedSymbol = symbol;
-      }
-      _duration = "24H";
+      _selectedSymbol = (symbol == _selectedSymbol) ? "" : symbol;
+      _duration = "3M";
     });
   }
 
@@ -71,54 +107,39 @@ class _InvestmentPageState extends State<InvestmentPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_selectedSymbol == '')
-              const Text(
-                "Show default Portfolio Scores and\n Investments", // Display when no stock is selected
-                style: TextStyle(fontSize: 24, color: Colors.grey),
-              )
-            else
-              TitleRow(
-                page: widget.investmentType, // Dynamic investment type
-                selectedSymbol: _selectedSymbol,
-                investmentValue:
-                    _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
-                        ? _investmentDataMap[_selectedSymbol]![0].open
-                        : 0.0, // Default value if data is unavailable
-                changePercentage:
-                    _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
-                        ? _investmentDataMap[_selectedSymbol]![0].close
-                        : 0.0, // Default value if data is unavailable
-              ),
+            TitleRow(
+              page: widget.investmentType,
+              selectedSymbol: _selectedSymbol,
+              investmentValue:
+                  _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
+                      ? _investmentDataMap[_selectedSymbol]![0].open
+                      : 0.0,
+              changePercentage:
+                  _investmentDataMap[_selectedSymbol]?.isNotEmpty == true
+                      ? _investmentDataMap[_selectedSymbol]![0].close
+                      : 0.0,
+            ),
             const SizedBox(height: 10),
             SizedBox(
               width: screenWidth,
-              height: screenHeight * 0.35,
+              height: screenHeight * 0.29,
               child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : _selectedSymbol != '' &&
-                          _investmentDataMap[_selectedSymbol]?.isNotEmpty ==
-                              true
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 30.0),
+                  ? const Center(child: CircularProgressIndicator())
+                  : _selectedSymbol == ''
+                      ? SizedBox(
+                          width: screenWidth,
+                          height: screenHeight * 0.30,
+                        )
+                      : Container(
                           child: LineChartWidget(
                             duration: _duration,
-                            stockData: _investmentDataMap[_selectedSymbol]!,
-                          ),
-                        )
-                      : const Center(
-                          child: Text(
-                            "No data available",
-                            style: TextStyle(color: Colors.grey),
+                            stockData: _stockData,
                           ),
                         ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
-                _buildDurationButton("24H"),
                 const Spacer(),
                 _buildDurationButton("7D"),
                 const Spacer(),
@@ -135,7 +156,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
             InvestmentOptionsList(
               dataMap: _investmentDataMap,
               onInvestmentSelected: _updateSelectedSymbol,
-              defaultSelectedSymbol: widget.defaultSymbol,
+              page: widget.investmentType,
             ),
             const Spacer(),
             Align(
@@ -147,9 +168,8 @@ class _InvestmentPageState extends State<InvestmentPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("${widget.investmentType} Power >"), // Dynamic label
+                    Text("${widget.investmentType} Power >"),
                     Text(
                       "🍌7,630",
                       style: GoogleFonts.baloo2(
@@ -173,7 +193,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
   Widget _buildDurationButton(String label) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.15,
-      height: MediaQuery.of(context).size.height * 0.06,
+      height: MediaQuery.of(context).size.height * 0.05,
       decoration: label == _duration
           ? BoxDecoration(
               color: Colors.white,

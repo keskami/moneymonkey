@@ -18,7 +18,6 @@ class _ComingSoonPageState extends State<ComingSoonPage> {
       backgroundColor: Colors.white, // Set a background color
       body: Center(
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Image.asset(
@@ -50,18 +49,6 @@ class _ComingSoonPageState extends State<ComingSoonPage> {
           ],
         ),
       ),
-      floatingActionButton: IconButton(
-        padding: EdgeInsets.only(top: 20),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        icon: const Icon(
-          Icons.arrow_back,
-          size: 40,
-          color: Colors.black,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
     );
   }
 }

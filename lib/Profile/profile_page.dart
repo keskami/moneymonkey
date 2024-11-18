@@ -12,19 +12,19 @@ import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Settings/Pages/settings.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../friendsPages/friendsHome.dart';
+import '../Friends/friendsHome.dart';
 import 'Widgets/custom_stat.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({
     super.key,
   });
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final int pageIndex = 0;
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
@@ -381,7 +381,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       //Temporary Bottom Navigation Bar
-      bottomNavigationBar: _buildBottomBar(context),
+      // bottomNavigationBar: _buildBottomBar(context),
       floatingActionButton: IconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -406,7 +406,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
         if (_currentIndex == 0) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => HomeScreen(),
           ));
         } else if (_currentIndex == 1) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -415,7 +415,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         if (_currentIndex == 3) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProfilePage(),
+            builder: (context) => ProfileScreen(),
           ));
         }
       },

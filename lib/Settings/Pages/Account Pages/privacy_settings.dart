@@ -80,6 +80,7 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
                         trailing: Switch(
                           value: isPublic,
                           activeColor: Colors.grey,
+                          thumbColor: WidgetStatePropertyAll(Colors.white),
                           onChanged: (value) async {
                             await settingsService.updatePrivacySettings(
                                 userId: userId!, public: !isPublic);

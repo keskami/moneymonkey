@@ -11,6 +11,7 @@ class AppThemes {
           ),
     ),
     scaffoldBackgroundColor: const Color.fromARGB(255, 244, 247, 249),
+    switchTheme: SwitchThemeData(),
     appBarTheme: AppBarTheme(
       backgroundColor: const Color.fromARGB(255, 244, 247, 249),
       titleTextStyle: TextStyle(

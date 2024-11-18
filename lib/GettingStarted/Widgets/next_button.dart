@@ -4,11 +4,11 @@ import 'package:money_monkey/themes/color_themes.dart';
 class NextButton extends StatelessWidget {
   NextButton({
     super.key,
-    required this.pages,
     required this.nextPage,
     required this.isEnabled,
+    this.text = "CONTINUE",
   });
-  final int pages;
+  final String text;
   final Function() nextPage;
   final bool isEnabled;
 
@@ -33,7 +33,7 @@ class NextButton extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.065,
           child: Center(
             child: Text(
-              "CONTINUE",
+              text,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 25,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/LoginPages/login.dart';
-import 'package:money_monkey/friendsPages/friendsHome.dart';
-import 'package:money_monkey/friendsPages/friendsProfile.dart';
+import 'package:money_monkey/Friends/friendsHome.dart';
+import 'package:money_monkey/Friends/friendsProfile.dart';
 
 class FriendsFromContacts extends StatefulWidget {
   const FriendsFromContacts({super.key});
@@ -13,7 +11,7 @@ class FriendsFromContacts extends StatefulWidget {
 }
 
 class _FriendsFromContactsState extends State<FriendsFromContacts> {
-   List<Map<String, String>> friends = [
+  List<Map<String, String>> friends = [
     {
       "name": "Josh Feenberg",
       "image": "assets/images/magGlass.png",
@@ -68,15 +66,12 @@ class _FriendsFromContactsState extends State<FriendsFromContacts> {
       "whySuggested": "Followed by Jacob Lee",
       "otherID": "yUx6lW8G1xW6BoxiMQWwGKMdi93"
     },
-    
-   
   ];
 
   @override
   Widget build(BuildContext context) {
     double screenWidthUnit = MediaQuery.of(context).size.width / 390;
     double screenHeightUnit = MediaQuery.of(context).size.height / 844;
-    
 
     return Scaffold(
       body: Column(
@@ -143,26 +138,26 @@ class _FriendsFromContactsState extends State<FriendsFromContacts> {
               ],
             ),
             child: Column(
-                children: [
-                  for (var friend in friends)
-                    friendSuggestion(
-                      name: friend["name"]!,
-                      image: friend["image"]!,
-                      whySuggested: friend["whySuggested"]!,
-                      screenHeightUnit: screenHeightUnit,
-                      screenWidthUnit: screenWidthUnit,
-                      otherID: friend["otherID"]!,
-                      onRemove: () => removeFriend(friend["otherID"]!),
-                    ),
-                ],
-              ),
+              children: [
+                for (var friend in friends)
+                  friendSuggestion(
+                    name: friend["name"]!,
+                    image: friend["image"]!,
+                    whySuggested: friend["whySuggested"]!,
+                    screenHeightUnit: screenHeightUnit,
+                    screenWidthUnit: screenWidthUnit,
+                    otherID: friend["otherID"]!,
+                    onRemove: () => removeFriend(friend["otherID"]!),
+                  ),
+              ],
+            ),
           ))
         ],
       ),
     );
   }
 
-   void removeFriend(String otherID) {
+  void removeFriend(String otherID) {
     setState(() {
       friends.removeWhere((friend) => friend["otherID"] == otherID);
     });
@@ -236,7 +231,7 @@ class _FriendsFromContactsState extends State<FriendsFromContacts> {
                   height: 23 * screenHeightUnit,
                   width: 95 * screenWidthUnit,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(135, 206, 235, 1), 
+                    color: Color.fromRGBO(135, 206, 235, 1),
                     borderRadius: BorderRadius.circular(screenHeightUnit * 8),
                     border: Border.all(
                         color: Colors.black, width: screenWidthUnit * 1),
@@ -254,7 +249,7 @@ class _FriendsFromContactsState extends State<FriendsFromContacts> {
                     style: GoogleFonts.fredoka(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black, 
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),

@@ -112,7 +112,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           MaterialPageRoute(
             builder: (c) => PopScope(
               canPop: false,
-              child: HomePage(),
+              child: HomeScreen(),
             ),
           ),
         );
@@ -183,7 +183,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -196,7 +195,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -211,7 +209,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -226,7 +223,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -235,7 +231,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: true,
               nextPage: toNextPage,
             ),

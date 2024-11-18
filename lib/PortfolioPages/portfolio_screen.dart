@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:money_monkey/Invest/Pages/discover_page.dart';
+import 'package:money_monkey/Invest/investment_home.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
 
 import '../Lesson Flow/Screens/home.dart';
@@ -168,14 +168,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           setState(() {
             isExpanded = false;
           });
-          
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 59, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 30, 0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -589,7 +588,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomBar(context),
+      // bottomNavigationBar: _buildBottomBar(context),
       floatingActionButton: GestureDetector(
         onTap: () {
           setState(() {
@@ -610,10 +609,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   children: [
                     GestureDetector(
                         onTap: () {
+                          setState(() {
+                            isExpanded = false;
+                          });
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DiscoverPage(),
+                              builder: (context) => InvestmentHomePage(),
                             ),
                           );
                         },
@@ -727,7 +729,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         });
         if (_currentIndex == 0) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => HomeScreen(),
           ));
         } else if (_currentIndex == 1) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -736,7 +738,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         }
         if (_currentIndex == 3) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProfilePage(),
+            builder: (context) => ProfileScreen(),
           ));
         }
       },

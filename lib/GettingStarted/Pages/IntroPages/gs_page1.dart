@@ -130,7 +130,9 @@ class GettingStartedPage1State extends State<GettingStartedPage1> {
             isBordered: true,
             toNextPage: toLoginPage,
           ),
-          const Spacer(),
+          const SizedBox(
+            height: 30,
+          ),
         ],
       ),
     );

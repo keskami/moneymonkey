@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Profile/profile_page.dart';
 import 'package:money_monkey/Settings/Pages/Account Pages/privacy_settings.dart';
 import 'package:money_monkey/Settings/Pages/Account Pages/subscription.dart';
 import 'package:money_monkey/Settings/Pages/Account%20Pages/preferences.dart';
@@ -10,9 +9,11 @@ import 'package:money_monkey/Settings/Pages/Account%20Pages/social_accounts.dart
 import 'package:money_monkey/Settings/Pages/Notification%20Pages/notification.dart';
 import 'package:money_monkey/Settings/Pages/Support%20Pages/help_center.dart';
 import 'package:money_monkey/Settings/Widgets/custom_list_button_tile.dart';
-import 'package:money_monkey/routing_page.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../GettingStarted/Pages/gs_home.dart';
+import '../../Profile/profile_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -50,7 +51,7 @@ class SettingsPage extends StatelessWidget {
               Navigator.pop(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
+                    builder: (context) => ProfileScreen(),
                   ));
             },
             icon: Icon(
@@ -241,7 +242,9 @@ class SettingsPage extends StatelessWidget {
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
                           Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => MainPage()),
+                            MaterialPageRoute(
+                              builder: (context) => GettingStartedHome(),
+                            ),
                             (Route<dynamic> route) => false,
                           );
                         },

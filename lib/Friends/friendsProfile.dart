@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
+import 'package:money_monkey/Friends/Widgets/add_friends_button_friends.dart';
+import 'package:money_monkey/Friends/Widgets/custom_stat_friends.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
-import 'package:money_monkey/Profile/profile_page.dart';
-import 'package:money_monkey/friendsPages/Widgets/add_friends_button_friends.dart';
-import 'package:money_monkey/friendsPages/Widgets/custom_stat_friends.dart';
 import 'package:money_monkey/themes/color_themes.dart';
+
+import '../Profile/profile_page.dart';
 
 class friendProfile extends StatefulWidget {
   final String otherID;
@@ -330,7 +331,7 @@ class _friendProfileState extends State<friendProfile> {
         });
         if (_currentIndex == 0) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => HomeScreen(),
           ));
         } else if (_currentIndex == 1) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -339,7 +340,7 @@ class _friendProfileState extends State<friendProfile> {
         }
         if (_currentIndex == 3) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProfilePage(),
+            builder: (context) => ProfileScreen(),
           ));
         }
       },

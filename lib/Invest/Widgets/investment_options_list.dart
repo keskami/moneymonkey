@@ -6,15 +6,14 @@ import '../../themes/color_themes.dart';
 
 class InvestmentOptionsList extends StatefulWidget {
   final Map<String, List<StockData>> dataMap;
-  final void Function(String)
-      onInvestmentSelected; // Callback for stock selection
-  final defaultSelectedSymbol;
+  final void Function(String) onInvestmentSelected;
+  final page;
 
   const InvestmentOptionsList({
     super.key,
     required this.dataMap,
     required this.onInvestmentSelected,
-    required this.defaultSelectedSymbol,
+    required this.page,
   });
 
   @override
@@ -26,7 +25,6 @@ class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
   @override
   void initState() {
     super.initState();
-    _selectedInvestmentSymbol = widget.defaultSelectedSymbol;
   }
 
   // Define a temporary list to display if dataMap is empty
@@ -112,18 +110,12 @@ class _InvestmentOptionsListState extends State<InvestmentOptionsList> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     // Use tempDataMap if widget.dataMap is empty
-    final dataMap = widget.dataMap.isEmpty
-        ? (_selectedInvestmentSymbol == 'AAPL' ||
-                _selectedInvestmentSymbol == 'PG' ||
-                _selectedInvestmentSymbol == 'JNJ' ||
-                _selectedInvestmentSymbol == 'JPM'
-            ? _tempStockDataMap
-            : _tempETFDataMap)
-        : widget.dataMap;
+    final dataMap =
+        widget.page == "Stocks" ? _tempStockDataMap : _tempETFDataMap;
     final List<String> investmentSymbols = dataMap.keys.toList();
 
     return Container(
-      height: screenHeight * 0.28,
+      height: screenHeight * 0.30,
       padding: EdgeInsets.symmetric(
         vertical: screenHeight * 0.005,
       ),

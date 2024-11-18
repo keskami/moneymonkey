@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 
 class BuyPopUp extends StatelessWidget {
   const BuyPopUp({
@@ -16,6 +17,14 @@ class BuyPopUp extends StatelessWidget {
     "JNJ":
         "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2Favocado.png?alt=media&token=f24f255d-963b-4410-be52-e8c7389fbc7c",
     "JPM":
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2Fapricot.png?alt=media&token=4e321c69-8e3d-404f-900f-f23bd8115966",
+    "SPY":
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2Fapple.png?alt=media&token=ad6a644b-60a7-48ef-adc9-e4e865589d50",
+    "QQQ":
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2Fgrapes.png?alt=media&token=49c7e8d0-7c38-4323-b87c-ddd53aa4954c",
+    "VUG":
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2Favocado.png?alt=media&token=f24f255d-963b-4410-be52-e8c7389fbc7c",
+    "QUAL":
         "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FInvest%20Section%2Fapricot.png?alt=media&token=4e321c69-8e3d-404f-900f-f23bd8115966",
   };
 
@@ -57,21 +66,16 @@ class BuyPopUp extends StatelessWidget {
                           if (loadingProgress == null) {
                             return child;
                           }
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
+                          return ShimmerContainer(
+                              height: MediaQuery.of(context).size.width * 0.5,
+                              width: MediaQuery.of(context).size.width * 0.5);
                         },
                       )
                     : const Icon(
                         Icons.error_outline,
                         color: Colors.red,
                         size: 50,
-                      ), // Show an error icon or placeholder
+                      ),
                 IconButton(
                   onPressed: () {},
                   icon: Icon(

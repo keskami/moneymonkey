@@ -31,7 +31,7 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
 
   void toNextPage() {
     int currentIndex = gettingStartedController.pageIndex.value;
-    if (currentIndex + 1 == 6) {
+    if (currentIndex + 1 == 5) {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -69,26 +69,12 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
             child: NextButton(
               nextPage: toNextPage,
               isEnabled: false,
-              pages: 0,
-            ),
-          );
-        } else if (!_isKeyboardVisible &&
-            gettingStartedController.pageIndex.value == 5 &&
-            gettingStartedController.knowledgeLevel.value > 4) {
-          return Container(
-            margin: const EdgeInsets.only(
-              bottom: 50,
-            ),
-            child: NextButton(
-              nextPage: toNextPage,
-              isEnabled: false,
-              pages: 0,
             ),
           );
         } else if (!_isKeyboardVisible &&
             gettingStartedController.pageIndex.value >= 1 &&
-            gettingStartedController.pageIndex.value <= 5 &&
-            (gettingStartedController.pageIndex.value != 5 ||
+            gettingStartedController.pageIndex.value <= 4 &&
+            (gettingStartedController.pageIndex.value != 4 ||
                 gettingStartedController.age.value != 0)) {
           return Container(
             margin: const EdgeInsets.only(
@@ -97,7 +83,6 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
             child: NextButton(
               nextPage: toNextPage,
               isEnabled: true,
-              pages: 0,
             ),
           );
         } else {

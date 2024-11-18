@@ -3,17 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/stock_service.dart';
-import 'package:money_monkey/Invest/Pages/Real%20Estate%20Pages/real_estate_home.dart';
-import 'package:money_monkey/Invest/Pages/investment_page.dart';
+import 'package:money_monkey/Invest/Accessory%20Pages/investment_details.dart';
 
-class DiscoverPage extends StatefulWidget {
-  const DiscoverPage({super.key});
+class DiscoverScreen extends StatefulWidget {
+  const DiscoverScreen({super.key});
 
   @override
-  State<DiscoverPage> createState() => _DiscoverPageState();
+  State<DiscoverScreen> createState() => _DiscoverScreenState();
 }
 
-class _DiscoverPageState extends State<DiscoverPage> {
+class _DiscoverScreenState extends State<DiscoverScreen> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   String? name = '';
@@ -110,18 +109,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(137, 220, 142, 1),
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(137, 220, 142, 1),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            size: screenHeightUnit * 37,
-          ),
-        ),
-      ),
       body: loading
           ? Container(
               color: const Color.fromRGBO(137, 220, 142, 1),
@@ -132,7 +119,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: screenHeightUnit * 25),
+                    SizedBox(height: screenHeightUnit * 40),
                     Padding(
                       padding:
                           EdgeInsets.fromLTRB(screenWidthUnit * 10, 0, 0, 0),
@@ -220,14 +207,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             _buildInvestmentCard(
                               investmentData[0],
                               screenWidthUnit,
-                              screenHeightUnit,
+                              screenHeightUnit * 1.1,
                               20,
                               context,
                             ),
                             _buildInvestmentCard(
                               investmentData[1],
                               screenWidthUnit,
-                              screenHeightUnit,
+                              screenHeightUnit * 1.1,
                               20,
                               context,
                             ),
@@ -242,14 +229,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             _buildInvestmentCard(
                               investmentData[2],
                               screenWidthUnit,
-                              screenHeightUnit,
+                              screenHeightUnit * 1.1,
                               18,
                               context,
                             ),
                             _buildInvestmentCard(
                               investmentData[3],
                               screenWidthUnit,
-                              screenHeightUnit,
+                              screenHeightUnit * 1.1,
                               20,
                               context,
                             ),
@@ -334,54 +321,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ),
               ],
             ),
-      bottomNavigationBar: Container(
-          color: Colors.white,
-          child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Discover",
-                    style: GoogleFonts.baloo2(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to Market Screen
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //   builder: (context) => MarketScreen(),
-                    // ));
-                  },
-                  child: Text(
-                    "Markets",
-                    style: GoogleFonts.baloo2(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: const Color.fromRGBO(87, 99, 101, 1)),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RealEstateHome(),
-                        ));
-                  },
-                  child: Text(
-                    "Real Estate",
-                    style: GoogleFonts.baloo2(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: const Color.fromRGBO(87, 99, 101, 1)),
-                  ),
-                )
-              ])),
     );
   }
 }
@@ -392,7 +331,7 @@ Widget _buildInvestmentCard(Map<String, dynamic> data, double screenWidthUnit,
     onTap: () {
       if (data['title'] == 'Stocks') {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => InvestmentPage(
+          builder: (context) => InvestmentDetailsScreen(
               investmentType: 'Stocks',
               investmentService: StockService(),
               defaultSymbol: 'AAPL'),
@@ -400,7 +339,7 @@ Widget _buildInvestmentCard(Map<String, dynamic> data, double screenWidthUnit,
       }
       if (data['title'] == 'ETFs') {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => InvestmentPage(
+          builder: (context) => InvestmentDetailsScreen(
               investmentType: 'ETFs',
               investmentService: StockService(),
               defaultSymbol: 'SPY'),

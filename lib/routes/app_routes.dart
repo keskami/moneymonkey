@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Invest/Pages/market_screen.dart';
+import 'package:money_monkey/Invest/Screens/market_screen.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/banknote.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/lessoncomplete.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/lessonpage.dart';

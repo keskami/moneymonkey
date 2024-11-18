@@ -133,7 +133,7 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder: (context) => HomeScreen(),
                                 ),
                                 (route) => false,
                               );
