@@ -11,7 +11,6 @@ class CustomListButtonTile extends StatelessWidget {
   final void Function() onTap;
   @override
   Widget build(BuildContext context) {
-    bool val = true;
     return ListTile(
       leading: Text(
         title,
@@ -29,6 +28,5 @@ class CustomListButtonTile extends StatelessWidget {
             size: 30,
           )),
     );
-    ;
   }
 }

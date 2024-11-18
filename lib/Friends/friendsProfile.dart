@@ -32,11 +32,11 @@ class _friendProfileState extends State<friendProfile> {
 
   void getUserInfo() async {
     try {
-      userData = await firestoreService.getUserData(widget.otherID!);
+      userData = await firestoreService.getUserData(widget.otherID);
       isFollowing = await firestoreService.isFollowing(userID!, widget.otherID);
 
       if (userData == null) {
-        print("User data is null for userID: ${widget.otherID!!}");
+        print("User data is null for userID: ${widget.otherID}");
       }
     } catch (e) {
       print("Error fetching user data: $e");

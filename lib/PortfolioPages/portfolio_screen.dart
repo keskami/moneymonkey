@@ -8,9 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/Invest/investment_home.dart';
 import 'package:money_monkey/PortfolioPages/transfers_screen.dart';
-import 'package:money_monkey/Profile/profile_page.dart';
-
-import '../Lesson Flow/Screens/home.dart';
 
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({super.key});
@@ -156,13 +153,11 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     }
   }
 
-  int _currentIndex = 1;
   @override
   Widget build(BuildContext context) {
     double screenWidthUnit = MediaQuery.of(context).size.width / 390;
     double screenHeightUnit = MediaQuery.of(context).size.height / 880;
 
-    final double screenW = MediaQuery.of(context).size.width;
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -730,69 +725,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           Image.asset(imageUrl, height: screenHeight * .0367),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomBar(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
-        if (_currentIndex == 0) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomeScreen(),
-          ));
-        } else if (_currentIndex == 1) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => PortfolioScreen(),
-          ));
-        }
-        if (_currentIndex == 3) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProfileScreen(),
-          ));
-        }
-      },
-      backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed, // Fixed items
-      selectedItemColor: Colors.blue, // Color for the selected item
-      unselectedItemColor: Colors.grey, // Color for unselected items
-      showSelectedLabels: false, // Hide the labels
-      showUnselectedLabels: false,
-      items: [
-        _buildNavItem('assets/images/globemonkey.png', 0),
-        _buildNavItem('assets/images/treasure.png', 1),
-        _buildNavItem('assets/images/bottommonkey.png', 2),
-        _buildNavItem('assets/images/bluemonkey.png', 3),
-      ],
-    );
-  }
-
-  // Build each navigation item with custom behavior for selected state
-  BottomNavigationBarItem _buildNavItem(String iconPath, int index) {
-    final screenSize = MediaQuery.of(context).size;
-    double iconSize = screenSize.width * 0.13; // Make icons 10% of screen width
-
-    return BottomNavigationBarItem(
-      icon: Container(
-        width: iconSize,
-        height: iconSize,
-        decoration: BoxDecoration(
-          border: _currentIndex == index
-              ? Border.all(
-                  color: Colors.blue, width: 3) // Border for the selected item
-              : null,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.all(8),
-        child: Image.asset(
-          iconPath,
-          fit: BoxFit.contain,
-        ),
-      ),
-      label: '', // No label
     );
   }
 }

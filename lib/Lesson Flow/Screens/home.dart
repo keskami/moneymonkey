@@ -21,7 +21,6 @@ class _HomeScreenState extends State<HomeScreen>
   late ProgressController progressController;
   late ScrollController _scrollController;
   Color _titleColor = const Color(0xFFC8A2C8);
-  String? _titleText;
   int _currentSection = 1;
   bool _isAnimationControllerInitialized = false;
   // List of GlobalKeys for each section
@@ -106,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -207,8 +205,6 @@ class _HomeScreenState extends State<HomeScreen>
 
     // Calculate the start and end indices for the current section
     int startLessonIndexForSection = sectionIndex * itemsPerSection;
-    int endLessonIndexForSection =
-        startLessonIndexForSection + itemsPerSection - 1;
 
     // For the first section (Section 1)
     if (sectionIndex == 0) {
@@ -299,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
 
-    overlayState?.insert(overlayEntry);
+    overlayState.insert(overlayEntry);
 
     // Optionally remove the overlay after a duration
     Future.delayed(const Duration(seconds: 3), () {
@@ -329,7 +325,6 @@ class _HomeScreenState extends State<HomeScreen>
     double arrowHeight = screenHeight * 0.015;
     double textFontSize = screenWidth * 0.04;
     double rewardFontSize = screenWidth * 0.038;
-    bool isScrolling = true;
 
     //final ScrollController scrollController = Scrollable.of(context)?.widget.controller ?? ScrollController();
     final double bottomPadding = screenHeight *
