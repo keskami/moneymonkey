@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 
 class TopBar extends StatefulWidget {
   final String userId; // Pass the userId from the parent
@@ -25,9 +25,6 @@ class _TopBarState extends State<TopBar> {
   void initState() {
     super.initState();
     fetchEarnings();
-
-    // Observe changes in the controller
-    //ProgressController progressController = Get.find<ProgressController>();
     widget.progressController.progress.listen((progress) {
       if (progress == 1.0) {
         fetchEarnings(); // Fetch bananas once progress is complete
@@ -46,9 +43,9 @@ class _TopBarState extends State<TopBar> {
             .collection('Users')
             .doc(userId) // Use the real userId here
             .collection('Progression')
-            .doc('progression1'); // Assuming you're using 'progression1'
+            .doc('Progression');
 
-        print("Fetching earnings for user: $userId");
+        // print("Fetching earnings for user: $userId");
         final docSnapshot = await progressionRef.get();
 
         if (docSnapshot.exists) {

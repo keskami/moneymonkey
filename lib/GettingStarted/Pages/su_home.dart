@@ -8,7 +8,7 @@ import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class SignUpDetailsHome extends StatefulWidget {
@@ -183,7 +183,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -196,7 +195,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -211,7 +209,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -226,7 +223,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: false,
               nextPage: toNextPage,
             ),
@@ -235,7 +231,6 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
           return Container(
             margin: const EdgeInsets.only(bottom: 50),
             child: NextButton(
-              pages: 2,
               isEnabled: true,
               nextPage: toNextPage,
             ),

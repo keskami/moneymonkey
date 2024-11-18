@@ -1,98 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/question_feedback_dialog.dart';
-import 'package:money_monkey/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 
 class ImageGrid extends StatelessWidget {
-  final List<String> imagePaths = [
-    'assets/images/banknote.png',
-    'assets/images/coin.png',
-    'assets/images/creditcard.png',
-    'assets/images/mobile.png',
-  ];
-
-  final List<String> titles = ['Banknotes', 'Coins', 'Debit Cards', 'Mobile'];
-
   @override
   Widget build(BuildContext context) {
-    ProgressController progressController = Get.find<ProgressController>();
-    return Expanded(
-      child: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 0.75,
-        ),
-        itemCount: imagePaths.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              // Handle selection logic
-              if (titles[index] == 'Coins') {
-                progressController.setCorrectSelection(true);
-                _showCorrectDialog(context);
-              } else {
-                progressController.setCorrectSelection(false);
-                _showIncorrectDialog(context);
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.transparent,
-                  width: 2,
-                ),
+    final ProgressController progressController =
+        Get.find<ProgressController>();
+
+    return ValueListenableBuilder<int>(
+      valueListenable: progressController.selectedOptionIndex,
+      builder: (context, selectedIndex, child) {
+        if (progressController.quizOptions.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: GridView.builder(
+              padding: const EdgeInsets.only(top: 20),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.85,
               ),
-              child: Column(
-                children: [
-                  Image.asset(imagePaths[index], height: 120, width: 120),
-                  const SizedBox(height: 10),
-                  Text(
-                    titles[index],
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+              itemCount: progressController.quizOptions.length,
+              itemBuilder: (context, index) {
+                final bool isSelected = selectedIndex == index;
+                final String imagePath =
+                    'assets/images/${progressController.quizOptions[index]}';
+                final String title =
+                    _formatTitle(progressController.quizOptions[index]);
+
+                return GestureDetector(
+                  onTap: () {
+                    progressController.setSelectedOptionIndex(index);
+                    bool isCorrect = progressController.quizOptions[index] ==
+                        progressController.correctAnswer.value;
+                    progressController.setCorrectSelection(isCorrect);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.blue[50] : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isSelected ? Colors.blue : Colors.black12,
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: SvgPicture.asset(
+                            imagePath,
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  void _showCorrectDialog(BuildContext context) {
-    ProgressController progressController = Get.find<ProgressController>();
-    progressController.setQuizCompleted();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const QuestionFeedbackDialog(isCorrect: true);
+          ),
+        );
       },
     );
   }
 
-  void _showIncorrectDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const QuestionFeedbackDialog(isCorrect: false);
-      },
-    ).then((_) {
-      // Once the dialog is dismissed, mark the quiz as completed
-      ProgressController progressController = Get.find<ProgressController>();
-      progressController
-          .setQuizCompleted(); // Inform controller that the quiz is done
-    });
-    ;
+  // Helper method to format the title from the image filename
+  String _formatTitle(String filename) {
+    // Remove the file extension (.svg)
+    String nameWithoutExtension = filename.replaceAll('.svg', '');
+    // Replace hyphens with spaces and capitalize each word
+    List<String> words = nameWithoutExtension
+        .split('-')
+        .map((word) => _capitalize(word))
+        .toList();
+    // Join the words with a space
+    return words.join(' ');
   }
 
-  void onCorrectAnswer() {
-    _showCorrectDialog(Get.context!);
+  // Helper method to capitalize the first letter of each word
+  String _capitalize(String word) {
+    if (word.isEmpty) return word;
+    return word[0].toUpperCase() + word.substring(1);
   }
 }

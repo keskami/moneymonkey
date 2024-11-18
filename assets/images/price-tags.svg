@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="price-tags">
+  <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="17 8.23 20.13 7.01 23.02 16.21 16 31 4.47 26.04 11.37 10.41 13 9.78"></polyline>
+  <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="21 9.67 23.82 7.77 28.54 16.17 25.64 30.33 21 29.48"></polyline>
+  <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m26,11.47c1.23-1.1,2-2.7,2-4.47,0-3.31-2.69-6-6-6s-6,2.69-6,6c0,1.78.77,3.37,2,4.47"></path>
+  <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="2" d="m18.06,16.88l-2.46-1.14c-.88-.41-1.93-.02-2.34.86l-.02.04c-.41.88-.03,1.93.85,2.34l.97.45c.88.41,1.26,1.45.86,2.33h0c-.41.89-1.46,1.28-2.35.87l-2.51-1.17"></path>
+  <line x1="16.92" x2="16.37" y1="14.29" y2="15.45" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="2"></line>
+  <line x1="12.88" x2="12.29" y1="22.98" y2="24.29" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"></line>
+</svg>

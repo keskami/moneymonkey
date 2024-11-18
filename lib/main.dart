@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monkey/routing_page.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
+import 'GettingStarted/Pages/gs_home.dart';
 import 'firebase_options.dart';
+import 'home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +33,24 @@ class MyApp extends StatelessWidget {
         darkTheme: AppThemes.darkTheme,
         theme: AppThemes.lightTheme,
         themeMode: ThemeMode.light,
-        home: const MainPage(),
+        home: Scaffold(
+          body: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                User? user = FirebaseAuth.instance.currentUser;
+                String userId = user?.uid ?? '';
+                if (userId.isEmpty) {
+                  return GettingStartedHome();
+                } else {
+                  return HomePage();
+                }
+              } else {
+                return GettingStartedHome();
+              }
+            },
+          ),
+        ),
       ),
     );
   }

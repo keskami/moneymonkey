@@ -1,21 +1,105 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
-import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
+import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
+import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 
-class StartFreshPage1 extends StatelessWidget {
+class StartFreshPage1 extends StatefulWidget {
   const StartFreshPage1({super.key});
 
   @override
+  State<StartFreshPage1> createState() => _StartFreshPage1State();
+}
+
+class _StartFreshPage1State extends State<StartFreshPage1> {
+  int selectedIndex = 5;
+  @override
   Widget build(BuildContext context) {
-    GettingStartedController gettingStartedController = Get.find();
+    StartFreshController startFreshController = Get.find();
+    void onTapGoal(int val) {
+      print('Value: ${val * 5}');
+      startFreshController.learningGoal.value = val * 5;
+    }
+
+    final List<Widget> learningGoals = [
+      const Row(
+        children: [
+          Text(
+            "5 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Casual",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+      const Row(
+        children: [
+          Text(
+            "10 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Regular",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+      const Row(
+        children: [
+          Text(
+            "15 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Serious",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+      const Row(
+        children: [
+          Text(
+            "20 min / day",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          Spacer(),
+          Text(
+            "Intense",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+    ];
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(
-            height: 17,
-          ),
+          const SizedBox(height: 17),
           Row(
             children: [
               Image.network(
@@ -44,30 +128,47 @@ class StartFreshPage1 extends StatelessWidget {
                   ),
                 ),
               ),
-              ChatBubbleContainer(
+              const ChatBubbleContainer(
                 trianglePosition: TrianglePosition.left,
                 borderRadius: 12,
                 borderWidth: 1,
-                childWidget: gettingStartedController.knowledgeLevel.value == 0
-                    ? Text(
-                        "Okay, we'll start fresh!",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      )
-                    : Text(
-                        "Okay, We'll build on\nwhat you know!",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
+                childWidget: Text(
+                  "What's your daily\nlearning goal?",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
               ),
             ],
           ),
-          const SizedBox(
-            height: 20,
+          const SizedBox(height: 20),
+          // Wrapping the ListView.builder in Flexible to make it scrollable
+          Flexible(
+            child: ListView.builder(
+              itemCount: learningGoals.length,
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  onTapGoal(index + 1);
+                  print(index);
+                  print(startFreshController.learningGoal.value);
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+                child: CustomOptionTile(
+                  isSelected: selectedIndex == index ||
+                      (startFreshController.learningGoal.value / 5) - 1 ==
+                          index,
+                  childWidget: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 5,
+                      ),
+                      child: learningGoals[index]),
+                ),
+              ),
+            ),
           ),
         ],
       ),

@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
+import 'package:money_monkey/Lesson Flow/widgets/question_feedback_dialog.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/lessoncomplete.dart';
-import 'package:money_monkey/controller/controller.dart';
 
 class ContinueButtonSection extends StatelessWidget {
   const ContinueButtonSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Fetch the ProgressController
     final ProgressController progressController =
         Get.find<ProgressController>();
 
     return Obx(() {
+      bool isOptionSelected = progressController.isOptionSelected.value;
+      bool isCorrectSelected = progressController.isCorrectSelected.value;
+      bool isDialogShown = progressController.isDialogShown.value;
+
+      // Update button text based on current state
+      String buttonText =
+          isCorrectSelected && isDialogShown ? "Continue" : "Check";
+
       return Container(
         height: 50,
         width: double.maxFinite,
@@ -26,31 +34,65 @@ class ContinueButtonSection extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 12),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: progressController.isCorrectSelected.value
-                      ? const Color(0XFF87CEEB) // Light blue when enabled
-                      : Colors.grey, // Grey when disabled
+                  backgroundColor:
+                      isOptionSelected ? const Color(0XFF87CEEB) : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  visualDensity:
-                      const VisualDensity(vertical: -4, horizontal: -4),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 2),
                 ),
-                // Only allow the button to be pressed if the correct answer is selected
-                onPressed: progressController.isCorrectSelected.value
+                onPressed: isOptionSelected
                     ? () {
-                        // Get.toNamed(AppRoutes.lessonCompletePageRoute)
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => LessonCompleteScreen(),
-                          ),
-                        );
+                        if (isCorrectSelected && !isDialogShown) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const QuestionFeedbackDialog(
+                                  isCorrect: true);
+                            },
+                          ).then((_) {
+                            // Update dialog shown state
+                            progressController.setDialogShown(true);
+                          });
+                        } else if (isCorrectSelected && isDialogShown) {
+                          // Move to the next question if "Continue" is clicked
+                          if (progressController.currentQuestionIndex.value <
+                              progressController.quizQuestions.length - 1) {
+                            // Load the next question and reset state
+                            progressController.nextQuestion();
+                            progressController.incrementProgress();
+                          } else {
+                            // Mark quiz as completed
+                            progressController.setQuizCompleted();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LessonCompleteScreen(),
+                              ),
+                            );
+                            // Get.toNamed("/lessonCompletePageRoute");
+                            // Award bananas and move to the next lesson
+                            // progressController.awardBananas().then((_) {
+                            //   progressController.moveToNextLesson();
+                            // });
+                          }
+                        } else {
+                          // Show incorrect answer dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const QuestionFeedbackDialog(
+                                  isCorrect: false);
+                            },
+                          ).then((_) {
+                            // Reset option selection for retry
+                            progressController.resetSelection();
+                          });
+                        }
                       }
-                    : null, // Disable the button if the correct answer is not selected
-                child: const Text(
-                  "Continue",
-                  style: TextStyle(
+                    : null,
+                child: Text(
+                  buttonText,
+                  style: const TextStyle(
                     color: Color(0XFFFFFFFF),
                     fontSize: 20,
                     fontFamily: 'Baloo 2',
@@ -58,7 +100,7 @@ class ContinueButtonSection extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );

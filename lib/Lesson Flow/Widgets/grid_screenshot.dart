@@ -1,8 +1,7 @@
 // widgets/grid_screenshot.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/arrowclipper.dart';
-import 'package:money_monkey/routes/app_routes.dart';
+import 'package:money_monkey/Lesson%20Flow/Models/arrowclipper.dart';
+import 'package:money_monkey/home.dart';
 
 class GridScreenshot extends StatelessWidget {
   const GridScreenshot({super.key});
@@ -119,7 +118,13 @@ class GridScreenshot extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Get.toNamed(AppRoutes.lessonScreen);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                          );
+                          // Get.toNamed(AppRoutes.lessonScreen);
                           // Navigator.of(context).pop(); // Close the dialog
                         },
                         style: ElevatedButton.styleFrom(

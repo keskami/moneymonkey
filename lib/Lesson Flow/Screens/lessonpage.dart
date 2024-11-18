@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Lesson Flow/Widgets/lesson_card.dart';
+import 'package:money_monkey/Lesson Flow/controller/controller.dart';
 import 'package:money_monkey/Lesson%20Flow/Widgets/custom_app_bar.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/lesson_card.dart';
-import 'package:money_monkey/controller/controller.dart';
 
 class LessonPage extends StatelessWidget {
   final ProgressController progressController = Get.put(ProgressController());
@@ -11,7 +11,6 @@ class LessonPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen size for dynamic scaling
     final screenSize = MediaQuery.of(context).size;
     double verticalPadding =
         screenSize.height * 0.05; // 5% of screen height as padding

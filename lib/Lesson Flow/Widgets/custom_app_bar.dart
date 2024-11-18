@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart'; // Firebase auth imports
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controller/controller.dart'; // Import the controller
+import '../controller/controller.dart'; // Import the controller
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final ProgressController progressController;
@@ -32,6 +32,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
         fetchBananas();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    // Cancel any listeners or subscriptions here if needed
+    super.dispose();
   }
 
   Future<void> fetchBananas() async {
@@ -68,9 +74,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.close, color: Colors.black),
+        icon: const Icon(Icons.arrow_back_sharp, color: Colors.black),
         onPressed: () {
-          Get.back(); // Close the screen
+          final ProgressController progressController =
+              Get.find<ProgressController>();
+          progressController.decrementProgress();
+          Navigator.pop(context);
         },
       ),
       titleSpacing: 0,
@@ -79,18 +88,26 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(right: 12.0),
-              child: Obx(() => ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: LinearProgressIndicator(
-                      value: widget.progressController.progress
-                          .value, // Use progress value
-                      backgroundColor:
-                          const Color(0xFFF0F0F0), // Light gray background
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(Colors.lightBlue),
-                      minHeight: 20,
-                    ),
-                  )),
+              child: Obx(() {
+                print(
+                    "Building progress bar with value: ${widget.progressController.progress.value}");
+
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: LinearProgressIndicator(
+                    key: ValueKey(widget
+                        .progressController.progress.value), // Force rebuild
+                    value: widget.progressController.progress
+                        .value, // Animated progress value
+
+                    backgroundColor: const Color(0xFFF0F0F0),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.lightBlue),
+                    minHeight: 20,
+                  ),
+                );
+              }),
+              //child: MonkeyProgressWidget(progressController:widget.progressController),
             ),
           ),
           Row(

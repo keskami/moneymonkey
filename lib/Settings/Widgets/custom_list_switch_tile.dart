@@ -25,6 +25,10 @@ class CustomListSwitchTile extends StatelessWidget {
       trailing: Switch(
         value: val,
         activeColor: Colors.grey,
+        trackOutlineColor: val ? null : WidgetStatePropertyAll(Colors.black),
+        thumbColor: val
+            ? WidgetStatePropertyAll(Colors.white)
+            : WidgetStatePropertyAll(Colors.grey),
         onChanged: (value) {
           onTap();
         },

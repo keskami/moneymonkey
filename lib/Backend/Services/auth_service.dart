@@ -80,7 +80,6 @@ class AuthService {
   Future<void> signUpUser(BuildContext context) async {
     try {
       // Get the user input from the controller
-      String name = signUpController.name.value;
       String email = signUpController.email.value;
       String password = signUpController.password.value;
 
@@ -93,7 +92,6 @@ class AuthService {
       String userId = userCredential.user!.uid;
       addUserDetails(userId, signUpController.email.value.trim());
       // Get the current user
-      User? user = userCredential.user;
     } catch (e) {
       // Handle errors such as invalid email, weak password, etc.
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import '../../../Backend/Models/settings.dart';
@@ -19,6 +20,7 @@ class RemindersSettingsPage extends StatefulWidget {
 class _RemindersSettingsPageState extends State<RemindersSettingsPage> {
   final SettingsService settingsService = SettingsService();
   String? userId;
+  bool isLoading = true;
 
   TimeOfDay? practiceTime;
   bool isPracticePhoneEnabled = false;
@@ -49,6 +51,7 @@ class _RemindersSettingsPageState extends State<RemindersSettingsPage> {
       print("Is Practice Phone Enabled: $isPracticePhoneEnabled");
       print("Is Practice Email Enabled: $isPracticeEmailEnabled");
       print("Is Weekly Progress Enabled: $isWeeklyProgressEnabled");
+      isLoading = false;
     }
   }
 
@@ -125,137 +128,142 @@ class _RemindersSettingsPageState extends State<RemindersSettingsPage> {
           ),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-              horizontal: 15.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: const Color.fromARGB(255, 250, 250, 250),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 5,
-                          spreadRadius: BorderSide.strokeAlignOutside,
-                          offset: Offset(2, 2),
-                          color: Colors.grey,
-                        )
-                      ]),
+      body: isLoading
+          ? ShimmerContainer(
+              height: screenHeight,
+              width: screenHeight,
+            )
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 15.0,
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomRowTileButton(
-                        title: "Reminder Time",
-                        rowChildren: [
-                          TextButton(
-                            onPressed: _selectPracticeTime,
-                            child: Text(
-                              practiceTime!.format(context),
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                        onTap: () {},
+                      const SizedBox(
+                        height: 40,
                       ),
-                      Divider(),
-                      CustomRowTileButton(
-                        title: "Practice Message",
-                        rowChildren: [
-                          IconButton(
-                            onPressed: () async {
-                              setState(() => isPracticePhoneEnabled =
-                                  !isPracticePhoneEnabled);
-                              await updateReminderSettings();
-                            },
-                            icon: Icon(
-                              Platform.isAndroid
-                                  ? Icons.phone_android
-                                  : Icons.phone_iphone,
-                              color: isPracticePhoneEnabled
-                                  ? Colors.black
-                                  : Colors.grey,
-                              size: screenHeight * 0.05,
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: const Color.fromARGB(255, 250, 250, 250),
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 5,
+                                spreadRadius: BorderSide.strokeAlignOutside,
+                                offset: Offset(2, 2),
+                                color: Colors.grey,
+                              )
+                            ]),
+                        child: Column(
+                          children: [
+                            CustomRowTileButton(
+                              title: "Reminder Time",
+                              rowChildren: [
+                                TextButton(
+                                  onPressed: _selectPracticeTime,
+                                  child: Text(
+                                    practiceTime!.format(context),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              onTap: () {},
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              setState(() => isPracticeEmailEnabled =
-                                  !isPracticeEmailEnabled);
-                              await updateReminderSettings();
-                            },
-                            icon: Icon(
-                              Icons.mail_outlined,
-                              color: isPracticeEmailEnabled
-                                  ? Colors.black
-                                  : Colors.grey,
-                              size: screenHeight * 0.05,
+                            Divider(),
+                            CustomRowTileButton(
+                              title: "Practice Message",
+                              rowChildren: [
+                                IconButton(
+                                  onPressed: () async {
+                                    setState(() => isPracticePhoneEnabled =
+                                        !isPracticePhoneEnabled);
+                                    await updateReminderSettings();
+                                  },
+                                  icon: Icon(
+                                    Platform.isAndroid
+                                        ? Icons.phone_android
+                                        : Icons.phone_iphone,
+                                    color: isPracticePhoneEnabled
+                                        ? Colors.black
+                                        : Colors.grey,
+                                    size: screenHeight * 0.05,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    setState(() => isPracticeEmailEnabled =
+                                        !isPracticeEmailEnabled);
+                                    await updateReminderSettings();
+                                  },
+                                  icon: Icon(
+                                    Icons.mail_outlined,
+                                    color: isPracticeEmailEnabled
+                                        ? Colors.black
+                                        : Colors.grey,
+                                    size: screenHeight * 0.05,
+                                  ),
+                                ),
+                              ],
+                              onTap: () {},
                             ),
-                          ),
-                        ],
-                        onTap: () {},
+                            Divider(),
+                            CustomRowTileButton(
+                              title: "Weekly progress",
+                              rowChildren: [
+                                IconButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isWeeklyProgressEnabled =
+                                          !isWeeklyProgressEnabled;
+                                    });
+                                    await updateReminderSettings();
+                                  },
+                                  icon: Icon(
+                                    Icons.mail_outlined,
+                                    color: isWeeklyProgressEnabled
+                                        ? Colors.black
+                                        : Colors.grey,
+                                    size: screenHeight * 0.05,
+                                  ),
+                                ),
+                              ],
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
                       ),
-                      Divider(),
-                      CustomRowTileButton(
-                        title: "Weekly progress",
-                        rowChildren: [
-                          IconButton(
-                            onPressed: () async {
-                              setState(() {
-                                isWeeklyProgressEnabled =
-                                    !isWeeklyProgressEnabled;
-                              });
-                              await updateReminderSettings();
-                            },
-                            icon: Icon(
-                              Icons.mail_outlined,
-                              color: isWeeklyProgressEnabled
-                                  ? Colors.black
-                                  : Colors.grey,
-                              size: screenHeight * 0.05,
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            // Implement restore default functionality
+                          },
+                          child: Text(
+                            "Restore Default",
+                            style: GoogleFonts.baloo2(
+                              color: LightTheme().primaryBlue,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ],
-                        onTap: () {},
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      // Implement restore default functionality
-                    },
-                    child: Text(
-                      "Restore Default",
-                      style: GoogleFonts.baloo2(
-                        color: LightTheme().primaryBlue,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

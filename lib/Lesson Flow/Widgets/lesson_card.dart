@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/monkey_with_button.dart';
+import 'package:money_monkey/Lesson Flow/widgets/monkey_with_button.dart';
 // Import your widget
 
 class LessonCard extends StatelessWidget {
@@ -7,13 +7,6 @@ class LessonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    double cardWidth = screenSize.width * 0.9; // 90% of the screen width
-    double cardPaddingHorizontal = screenSize.width * 0.05; // 5% padding
-    double cardPaddingVertical =
-        screenSize.height * 0.02; // 2% vertical padding
-    double textFontSize =
-        screenSize.width * 0.045; // Adjust text size based on screen width
     return Container(
       width: double.maxFinite,
       margin: const EdgeInsets.symmetric(horizontal: 8),

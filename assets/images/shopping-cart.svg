@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" id="shopping-cart" x="0" y="0" version="1.1" viewBox="0 0 48 48">
+  <g id="XMLID_4079_">
+    <g id="XMLID_4278_">
+      <path id="XMLID_4283_" fill="#3AB7FC" d="M26.3 4.1c-.3-.3-.7-.4-1.1-.2l-11.8 6c-.4.2-.6.6-.4 1.1l6.2 19.6c.2.6.8.8 1.3.6l17.9-9.3c.5-.3.7-.9.3-1.4L26.3 4.1z" style="fill:#3ab7fc"></path>
+      <circle id="XMLID_4282_" cx="24.2" cy="7.5" r="1.1" style="fill:#666" transform="rotate(-27.311 24.182 7.462)"></circle>
+      <circle id="XMLID_4281_" cx="17.1" cy="11.1" r="1.1" style="fill:#666" transform="rotate(-27.311 17.073 11.133)"></circle>
+      <g id="XMLID_4279_">
+        <path id="XMLID_4280_" d="M16.9 2c2.3-1 5.1 0 6.3 2.3l1.3 2.4c.1.3 0 .5-.2.7s-.6 0-.7-.3l-1.3-2.4c-1-1.7-3.2-2.6-5-1.7-1.8.8-2.5 2.9-1.5 4.8l1.4 2.8c.1.3 0 .5-.2.7-.2.1-.6 0-.7-.3l-1.4-2.8c-1.2-2.4-.3-5.1 2-6.2z" style="fill:#fc6"></path>
+      </g>
+    </g>
+    <g id="XMLID_4272_">
+      <path id="XMLID_4277_" d="M41.4 9c-.1-.4-.5-.7-.9-.7H27.3c-.4 0-.8.3-.9.7l-3.5 20.2c-.1.6.3 1.1.9 1.1H44c.6 0 1-.5.9-1.1L41.4 9z" style="fill:#fc6"></path>
+      <circle id="XMLID_4276_" cx="38" cy="11" r="1.1" style="fill:#666"></circle>
+      <circle id="XMLID_4275_" cx="30" cy="11" r="1.1" style="fill:#666"></circle>
+      <g id="XMLID_4273_">
+        <path id="XMLID_4274_" fill="#88C057" d="M33.9 2.9c2.5.1 4.5 2.3 4.5 4.9v2.7c0 .3-.2.5-.5.5s-.5-.3-.5-.5V7.8c0-2-1.6-3.8-3.5-3.9-1.9-.1-3.5 1.5-3.5 3.5v3.1c0 .3-.2.5-.5.5s-.5-.3-.5-.5V7.4c0-2.6 2.1-4.6 4.5-4.5z" style="fill:#88c057"></path>
+      </g>
+    </g>
+    <g id="XMLID_4136_">
+      <g id="XMLID_4255_">
+        <g id="XMLID_4267_">
+          <circle id="XMLID_4271_" cx="38.6" cy="42.6" r="3.8" style="fill:#5d5d5d"></circle>
+          <circle id="XMLID_4268_" cx="38.6" cy="42.6" r="1.7" style="fill:#fff"></circle>
+        </g>
+        <g id="XMLID_4256_">
+          <circle id="XMLID_4263_" cx="21.1" cy="42.6" r="3.8" style="fill:#5d5d5d"></circle>
+          <circle id="XMLID_4257_" cx="21.1" cy="42.6" r="1.7" style="fill:#fff"></circle>
+        </g>
+      </g>
+      <path id="XMLID_5881_" fill="#ED7161" d="m44.9 31 3-16.7c.1-.3 0-.7-.3-1-.2-.3-.5-.4-.9-.4H10.2L8.8 8c-.1-.5-.6-.9-1.1-.9H1.2C.5 7.1 0 7.6 0 8.3c0 .6.5 1.2 1.2 1.2h5.7L14.6 38c.1.5.6.9 1.1.9h28.4c.6 0 1.2-.5 1.2-1.2 0-.6-.5-1.2-1.2-1.2H16.6l-1.3-4.6h28.4c.7 0 1.1-.4 1.2-.9zm-4.3-15.7h4.8l-.5 2.9h-4.7l.4-2.9zm-.7 5.2h4.7l-.6 2.8h-4.5l.4-2.8zm-29.1-5.2h7.4l.4 2.9h-7l-.8-2.9zm1.4 5.2h6.7l.4 2.9H13l-.8-2.9zm2.5 9.1-1.1-4h6l.6 4h-5.5zm6.4-14.3H28l.1 2.9h-6.6l-.4-2.9zm.5 5.2H28l.1 2.9H22l-.4-2.9zm1 9.1-.4-4h5.9l.1 4h-5.6zm13.6 0h-5.6l.1-4h5.9l-.4 4zm.6-6.3h-6.1l.1-2.9h6.4l-.4 2.9zm.6-5.2h-6.6l.1-2.9h6.9l-.4 2.9zm5.4 11.5h-4.3l.6-4h4.4l-.7 4z" style="fill:#ed7161"></path>
+    </g>
+  </g>
+</svg>

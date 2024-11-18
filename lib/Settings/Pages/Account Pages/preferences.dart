@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Friends/comingSoonPage.dart';
 
 import '../../../Backend/Services/settings_service.dart';
 import '../../Widgets/custom_list_button_tile.dart';
@@ -96,7 +97,14 @@ class _PreferencesSettingsPageState extends State<PreferencesSettingsPage> {
                     children: [
                       CustomListButtonTile(
                         title: "Difficulty Level",
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ComingSoonPage(),
+                            ),
+                          );
+                        },
                       ),
                       Divider(),
                       CustomListSwitchTile(

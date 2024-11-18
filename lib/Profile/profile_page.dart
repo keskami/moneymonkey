@@ -5,26 +5,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Settings/Pages/settings.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../friendsPages/friendsHome.dart';
+import '../Friends/friendsHome.dart';
 import 'Widgets/custom_stat.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({
     super.key,
   });
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final int pageIndex = 0;
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
@@ -54,7 +52,6 @@ class _ProfilePageState extends State<ProfilePage> {
     getUserInfo();
   }
 
-  int _currentIndex = 3;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -76,8 +73,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: isLoading
                 ? Center(
                     child: ShimmerContainer(
-                      height: screenHeight / 4.5,
-                      width: screenHeight / 4.5,
+                      height: screenHeight * 0.9,
+                      width: screenHeight * 0.7,
                     ),
                   ) // Loading indicator
                 : userData == null
@@ -381,7 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       //Temporary Bottom Navigation Bar
-      bottomNavigationBar: _buildBottomBar(context),
+      // bottomNavigationBar: _buildBottomBar(context),
       floatingActionButton: IconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -394,68 +391,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-    );
-  }
-
-  Widget _buildBottomBar(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
-        if (_currentIndex == 0) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ));
-        } else if (_currentIndex == 1) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => PortfolioScreen(),
-          ));
-        }
-        if (_currentIndex == 3) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProfilePage(),
-          ));
-        }
-      },
-      backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed, // Fixed items
-      selectedItemColor: Colors.blue, // Color for the selected item
-      unselectedItemColor: Colors.grey, // Color for unselected items
-      showSelectedLabels: false, // Hide the labels
-      showUnselectedLabels: false,
-      items: [
-        _buildNavItem('assets/images/globemonkey.png', 0),
-        _buildNavItem('assets/images/treasure.png', 1),
-        _buildNavItem('assets/images/bottommonkey.png', 2),
-        _buildNavItem('assets/images/bluemonkey.png', 3),
-      ],
-    );
-  }
-
-  BottomNavigationBarItem _buildNavItem(String iconPath, int index) {
-    final screenSize = MediaQuery.of(context).size;
-    double iconSize = screenSize.width * 0.13; // Make icons 10% of screen width
-
-    return BottomNavigationBarItem(
-      icon: Container(
-        width: iconSize,
-        height: iconSize,
-        decoration: BoxDecoration(
-          border: _currentIndex == index
-              ? Border.all(
-                  color: Colors.blue, width: 3) // Border for the selected item
-              : null,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.all(8),
-        child: Image.asset(
-          iconPath,
-          fit: BoxFit.contain,
-        ),
-      ),
-      label: '', // No label
     );
   }
 }
