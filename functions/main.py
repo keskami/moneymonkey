@@ -419,6 +419,7 @@ ecoVineBonus = 0
 ecoVineBonusLeft = 0
 ecoVineBeginingVal = 0
 ecoVineBonusType = ''
+marketBoost = 1
 
 def getMeanRevBonus(current, left,   beginVal):
     global ecoVineBonusStart
@@ -439,16 +440,16 @@ def getSteadyBonus():
     global  ecoVineBonusLeft, ecoVineBonusStart, ecoSteady, ecoSteadyInc, EcoVineVals
     if ecoVineBonusLeft > ecoVineBonusStart / 2:
         ecoVineBonusLeft -= 1
-        return EcoVineVals[-1] * ecoSteadyInc * random.uniform(0.9990, 1.00111)
+        return EcoVineVals[-1] * ecoSteadyInc * (random.uniform(0.9990, 1.00111) ) * marketBoost
     else:
         ecoVineBonusLeft -= 1
-        return EcoVineVals[-1] * random.uniform(0.9990, 1.00111)
+        return EcoVineVals[-1] * (random.uniform(0.9990, 1.00111)) * marketBoost
         
 
 
 ecoSteady = False
 def pickValue(values, stock):
-    global ecoVineBonus, ecoVineBonusLeft,  ecoVineBeginingVal, ecoSteady
+    global ecoVineBonus, ecoVineBonusLeft,  ecoVineBeginingVal, ecoSteady, marketBoost
 
     if stock == 'BananaTech':
         return random.uniform(0.975, 1.03) * mean(values)
@@ -462,7 +463,7 @@ def pickValue(values, stock):
             ret = getSteadyBonus()
             print("ECOSTEADY")
         else:
-            ret = (random.uniform(0.990, 1.0111) + ecoVineBonus) * mean(values)
+            ret = (random.uniform(0.990, 1.0111)) * mean(values) * marketBoost
             ecoVineBonus, ecoVineBonusLeft  = getMeanRevBonus(ecoVineBonus, ecoVineBonusLeft, ecoVineBeginingVal)
         return ret
     elif stock == 'JungleGoods':
@@ -805,9 +806,9 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
         else:
             return make_response("Not Found", 404)
         
-
     elif req.method == 'POST':
         global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal, ecoVineBonusStart,ecoSteady, ecoSteadyInc
+        global marketBoost
         print("POST request received")
         if path == "/api/change/Time":
             data = req.get_json()
@@ -846,6 +847,21 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
                 return jsonify({"status": "success", "message": "Data received", "data": data}), 200
             else:
              return make_response("Invalid data", 400)
+        elif path == "/api/change/marketValue":
+            data = req.get_json()
+            if data:
+                if data["Value"] > 0:
+                    marketBoost = (1 + (data["Value"]/100)) ** (1/64)
+                elif data["Value"] < 0:
+                     marketBoost =  1 - abs(1 - (1 + (data["Value"]/100)) ** (1/64))
+                else:
+                    marketBoost = 1
+
+
+                return jsonify({"status": "success", "message": "Data received", "data": data}), 200
+            else:
+             return make_response("Invalid data", 400)
+
         
         return make_response("Not Found", 404)
 
