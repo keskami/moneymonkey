@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moneymonkey/screens/banknote.dart';
 import '../controller/controller.dart'; // Controller for progress
 
 class MonkeyImageWithButton extends StatelessWidget {
@@ -41,7 +42,13 @@ class MonkeyImageWithButton extends StatelessWidget {
                 ),
                 onPressed: () {
                   progressController.incrementProgress(); // Increment the progress
-                  Get.toNamed('/bankPageRoute'); // Navigate to the next page
+                 // Get.toNamed('/bankPageRoute'); // Navigate to the next page
+                  Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BankNotePage(),
+          ),
+        );
                 },
                 child: const Text(
                   "Done",

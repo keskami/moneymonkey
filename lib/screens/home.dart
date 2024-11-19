@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:moneymonkey/controller/controller.dart';
 import 'package:moneymonkey/models/arrowclipper.dart';
 import 'package:moneymonkey/routes/app_routes.dart';
+import 'package:moneymonkey/screens/lessonpage.dart';
 import 'package:moneymonkey/widgets/card_title.dart';
 //import 'package:moneymonkey/widgets/grid_screenshot.dart';
 import 'package:moneymonkey/widgets/top_bar.dart';
@@ -427,7 +428,13 @@ bool _isLessonEnabled(int itemIndex, int sectionIndex) {
                                 await Future.delayed(
                                     const Duration(milliseconds: 50));
 
-                                Get.toNamed(AppRoutes.lessonScreen);
+                                //Get.toNamed(AppRoutes.lessonScreen);
+                                 Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LessonPage(),
+          ),
+        );
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(

@@ -3,6 +3,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:get/get.dart';
 import 'package:moneymonkey/controller/controller.dart';
 import 'package:moneymonkey/models/cardmodel.dart';
+import 'package:moneymonkey/screens/questionpage.dart';
 import 'package:moneymonkey/widgets/custom_app_bar.dart';
 
 class BankNotePage extends StatefulWidget {
@@ -173,7 +174,13 @@ class _BankNotePageState extends State<BankNotePage> {
               child: GestureDetector(
                 onTap: () {
                    progressController.incrementProgress();
-                  Get.toNamed("/questionPageRoute");
+                  // Get.toNamed("/questionPageRoute");
+                  Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QuestionPage(),
+          ),
+        );
                 },
                 child: Image.asset(
                   'assets/images/button.png',

@@ -198,6 +198,7 @@ void loadQuestion() {
     print("Options: ${quizOptions}");
   } else {
     Get.toNamed("/lessonCompletePageRoute");
+    
   }
 }
 

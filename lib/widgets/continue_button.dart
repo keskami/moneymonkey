@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moneymonkey/controller/controller.dart';
+import 'package:moneymonkey/screens/lessoncomplete.dart';
 import 'package:moneymonkey/widgets/question_feedback_dialog.dart';
 
 class ContinueButtonSection extends StatelessWidget {
@@ -60,11 +61,17 @@ class ContinueButtonSection extends StatelessWidget {
                           } else {
                             // Mark quiz as completed
                             progressController.setQuizCompleted();
-                            Get.toNamed("/lessonCompletePageRoute");
+                           // Get.toNamed("/lessonCompletePageRoute");
                             // Award bananas and move to the next lesson
                             // progressController.awardBananas().then((_) {
                             //   progressController.moveToNextLesson();
                             // });
+                             Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LessonCompleteScreen(),
+          ),
+        );
                           }
                         } else {
                           // Show incorrect answer dialog

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:moneymonkey/controller/controller.dart';
+import 'package:moneymonkey/screens/home.dart';
 
 class LessonCompleteScreen extends StatefulWidget {
   @override
@@ -127,7 +128,13 @@ class _LessonCompleteScreenState extends State<LessonCompleteScreen>
                           bottom: screenHeight*0.14,
                           child: ElevatedButton(
                             onPressed: () {
-                              Get.toNamed("/HomePage");
+                             // Get.toNamed("/HomePage");
+                              Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
                             },
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(
