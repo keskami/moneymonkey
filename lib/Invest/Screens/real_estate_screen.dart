@@ -71,7 +71,7 @@ class _RealEstateScreenState extends State<RealEstateScreen> {
             children: [
               if (index != itemEntries.length - 1)
                 Positioned(
-                  top: screenHeight * 0.02,
+                  top: screenHeight * 0.001,
                   left: isEven ? screenWidth * 0.01 : null,
                   right: isEven ? null : screenWidth * 0.05,
                   child: PropertyCluster(
@@ -80,7 +80,7 @@ class _RealEstateScreenState extends State<RealEstateScreen> {
                   ),
                 ),
               Positioned(
-                top: screenHeight * 0.1, // Adjust for better alignment
+                top: screenHeight * 0.1,
                 left: isEven ? screenWidth * 0.2 : null,
                 right: isEven ? null : screenWidth * 0.25,
                 child: Row(
