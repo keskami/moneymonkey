@@ -483,14 +483,15 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         child: Column(
                           children: [
                             Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 29, 0, 0),
-                                child: Container(
-                                  height: screenHeightUnit * 1,
-                                  width: screenWidthUnit * 332,
-                                  decoration: const BoxDecoration(
-                                    color: Color.fromRGBO(0, 0, 0, .3),
-                                  ),
-                                )),
+                              padding: const EdgeInsets.fromLTRB(0, 29, 0, 0),
+                              child: Container(
+                                height: screenHeightUnit * 1,
+                                width: screenWidthUnit * 332,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromRGBO(0, 0, 0, .3),
+                                ),
+                              ),
+                            ),
                             SizedBox(
                               width: screenWidthUnit * 332,
                               height: screenHeightUnit * 175,

@@ -28,6 +28,7 @@ class _RealEstateScreenState extends State<RealEstateScreen> {
       "assets/real_estate/stadium.png",
       "assets/real_estate/shopping_mall.png",
       "assets/real_estate/airport.png",
+      "assets/real_estate/airport.png",
     ],
     "assets/real_estate/center_complete.png": [],
   };

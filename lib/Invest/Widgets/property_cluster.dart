@@ -50,7 +50,7 @@ class _PropertyClusterState extends State<PropertyCluster> {
           if (showBananaPopup)
             Positioned(
               right: 0,
-              top: -10,
+              top: 0,
               child: BananaPopUp(),
             ),
         ],
