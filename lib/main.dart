@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Money Monkey',
       theme: ThemeData(
-        fontFamily: "Baloo2"
+        fontFamily: "Baloo 2"
       ),
       debugShowCheckedModeBanner: false,
       
