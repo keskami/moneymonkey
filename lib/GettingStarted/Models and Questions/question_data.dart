@@ -30,7 +30,7 @@ const questions = [
     ], // Correct answer
   ),
   QuizQuestion(
-    '(Select all that apply) Which of these scenarios best illustrate “earned income”?',
+    'Which of these scenarios best illustrate “earned income”?\n(Select all that apply) ',
     [
       'Receiving a gift from a friend',
       'Interest gained from a savings account',
@@ -70,7 +70,7 @@ const questions = [
     ], // Correct answer
   ),
   QuizQuestion(
-    '(Select all that apply)How can having a low credit score impact your financial options?',
+    'How can having a low credit score impact your financial options?\n(Select all that apply)',
     [
       'You may face higher interest rates on loans and credit cards',
       'It can make it harder to secure loans or rent an apartment',
