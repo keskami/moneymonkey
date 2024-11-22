@@ -21,7 +21,6 @@ class _PropertyClusterState extends State<PropertyCluster> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     double width = widget.neighbors.length == 1
         ? screenWidth * 0.3
         : widget.neighbors.length == 2
