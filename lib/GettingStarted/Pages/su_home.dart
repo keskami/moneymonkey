@@ -7,9 +7,12 @@ import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
+import 'package:get/get.dart';
 
 class SignUpDetailsHome extends StatefulWidget {
   const SignUpDetailsHome({super.key});
@@ -47,15 +50,11 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     });
   }
 
+  StartFreshController startFreshController = Get.put(StartFreshController());
+  GettingStartedController gettingStartedController =
+      Get.put(GettingStartedController());
   @override
   Widget build(BuildContext context) {
-    // Set system UI overlay style
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: LightTheme().primaryGreen,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
     fetchUserData();
     void toNextPage() async {
       int currentIndex = signUpController.pageIndex.value;
@@ -129,7 +128,10 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     //   }
     // }
 
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       // appBar: AppBar(
       //   actions: [
       //     IconButton(
@@ -144,7 +146,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            SizedBox(height: screenHeight * 0.05),
             const Row(
               mainAxisAlignment:
                   MainAxisAlignment.start, // Distribute space between widgets

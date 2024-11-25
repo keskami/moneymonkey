@@ -16,7 +16,7 @@ class SignUpController extends GetxController {
     SUDetailsEmailPage(),
     SUDetailsPasswordPage(),
   ];
-
+  RxBool isLoading = false.obs;
   RxString name = "".obs;
   RxString email = "".obs;
   RxString password = "".obs;

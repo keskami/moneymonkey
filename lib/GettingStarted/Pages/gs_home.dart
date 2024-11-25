@@ -44,6 +44,8 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: LightTheme().primaryBackgroundColor,
@@ -89,7 +91,9 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
           return const SizedBox.shrink();
         }
       }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: screenWidth > screenHeight
+          ? FloatingActionButtonLocation.endFloat
+          : FloatingActionButtonLocation.centerDocked,
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:money_monkey/GettingStarted/Pages/IntroPages/gs_page2.dart';
 import 'package:money_monkey/GettingStarted/Pages/IntroPages/gs_page3.dart';
 import 'package:money_monkey/GettingStarted/Pages/IntroPages/gs_page4.dart';
 import 'package:money_monkey/GettingStarted/Pages/IntroPages/gs_page5.dart';
-import 'package:money_monkey/GettingStarted/Pages/IntroPages/gs_page6.dart';
 
 class GettingStartedController extends GetxController {
   RxInt pageIndex = 0.obs;
@@ -14,7 +13,6 @@ class GettingStartedController extends GetxController {
     const GettingStartedPage3(),
     const GettingStartedPage4(),
     const GettingStartedPage5(),
-    const GettingStartedPage6(),
   ];
   RxInt age = 0.obs;
   RxInt knowledgeLevel = 6.obs;

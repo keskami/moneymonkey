@@ -16,7 +16,7 @@ class CustomProgressBar extends StatelessWidget {
     if (page == 0) {
       final StartFreshController startFreshController =
           Get.find<StartFreshController>();
-      progress = startFreshController.pageIndex.value / 4;
+      progress = startFreshController.pageIndex.value / 5;
     } else if (page == 1) {
       final SignUpController signUpController = Get.find<SignUpController>();
       progress = signUpController.pageIndex.value / 5;

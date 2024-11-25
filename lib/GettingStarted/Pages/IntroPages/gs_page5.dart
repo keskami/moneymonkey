@@ -13,6 +13,20 @@ class GettingStartedPage5 extends StatelessWidget {
       gettingStartedController.age.value = val;
     }
 
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(screenWidth * 0.05),
+        child: screenWidth > screenHeight
+            ? webDisplay(submitAge, screenWidth)
+            : mobileDisplay(submitAge),
+      ),
+    );
+  }
+
+  Widget mobileDisplay(Future<void> submitAge(int val)) {
     return Container(
       color: Colors.white,
       child: Center(
@@ -97,6 +111,96 @@ class GettingStartedPage5 extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget webDisplay(Future<void> submitAge(int val), double screenWidth) {
+    return Center(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 17,
+          ),
+          Container(
+            width: screenWidth * 0.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const ChatBubbleContainer(
+                  trianglePosition: TrianglePosition.bottom,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  childWidget: Text(
+                    "How old are you?",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Image.network(
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+                  height: 145,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      // If loadingProgress is null, the image has fully loaded
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) => const SizedBox(
+                    height: 145,
+                    width: 137,
+                    child: Center(
+                      child: Text('Unable to fetch Image.'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: screenWidth * 0.4,
+            child: Obx(
+              () {
+                return CustomOptionTile(
+                  isSelected: gettingStartedController.age.value != 0,
+                  childWidget: TextField(
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: gettingStartedController.age.value == 0
+                          ? "Age"
+                          : gettingStartedController.age.value.toString(),
+                      hintStyle: const TextStyle(
+                        fontSize: 23,
+                      ),
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(),
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 178, 182, 182),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onSubmitted: (value) {
+                      submitAge(int.parse(value));
+                    },
+                  ),
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
   }
