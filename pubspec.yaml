@@ -40,6 +40,7 @@ dependencies:
   shimmer: ^3.0.0
   syncfusion_flutter_gauges: ^27.1.58
   align_positioned: ^5.0.1
+  mockito: ^5.4.4
 
 dev_dependencies:
   flutter_test:

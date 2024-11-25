@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'Global Controllers/home_controller.dart';
+import 'package:money_monkey/Friends/comingSoonPage.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -13,13 +14,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final HomeController homeController = Get.put(HomeController());
-
+  PageController _pageController = PageController();
+  int currentPage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(
-        () => homeController.pages[homeController.pageIndex.value],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (value) {
+          setState(() {
+            currentPage = value;
+          });
+        },
+        children: [
+          HomeScreen(),
+          PortfolioScreen(),
+          ComingSoonPage(),
+          ProfileScreen(),
+        ],
       ),
       bottomNavigationBar: _buildBottomBar(context),
     );
@@ -27,11 +39,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildBottomBar(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: homeController.pageIndex.value,
+      currentIndex: currentPage,
       onTap: (index) {
-        setState(() {
-          homeController.pageIndex.value = index;
-        });
+        _pageController.animateToPage(
+          index,
+          duration: Duration(milliseconds: 100),
+          curve: Curves.linear,
+        );
       },
       backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
@@ -57,9 +71,8 @@ class _HomePageState extends State<HomePage> {
         width: iconSize,
         height: iconSize,
         decoration: BoxDecoration(
-          border: homeController.pageIndex.value == index
-              ? Border.all(
-                  color: Colors.blue, width: 3) // Border for the selected item
+          border: currentPage == index
+              ? Border.all(color: Colors.blue, width: 3)
               : null,
           borderRadius: BorderRadius.circular(12),
         ),

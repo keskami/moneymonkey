@@ -217,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (!mounted) {
           return;
         }
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(),
@@ -285,7 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
           await addUserDetails(userId, email);
         } else {}
 
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(),
