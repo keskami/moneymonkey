@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
 
 class StartFreshPage4 extends StatelessWidget {
