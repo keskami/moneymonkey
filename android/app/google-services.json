@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "851718603804-u95mr4l9inbq8bbt1vdpp4hqlsjk8sca.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.moneyMonkey",
-            "certificate_hash": "59724654a80e124f7e99fe3656db3e0058332cea"
-          }
-        },
-        {
           "client_id": "851718603804-vf78kbnmgjeblnaiqi86hsfj9kdnl06e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
