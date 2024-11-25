@@ -545,7 +545,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             ),
                           ],
                         ),
-                      )
+                      ),
+                      Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0,
+                                screenWidthUnit * 25, screenHeightUnit * 7),
+                            child: Text(
+                              "View All >",
+                              style: GoogleFonts.baloo2(fontSize: 18),
+                            ),
+                          ))
                     ],
                   ),
                 ),

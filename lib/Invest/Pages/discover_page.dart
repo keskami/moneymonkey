@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Services/stock_service.dart';
 import 'package:money_monkey/Invest/Accessory%20Pages/investment_details.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 
-class DiscoverScreen extends StatefulWidget {
-  const DiscoverScreen({super.key});
+class DiscoverPage extends StatefulWidget {
+  const DiscoverPage({super.key});
 
   @override
-  State<DiscoverScreen> createState() => _DiscoverScreenState();
+  State<DiscoverPage> createState() => _DiscoverPageState();
 }
 
-class _DiscoverScreenState extends State<DiscoverScreen> {
+class _DiscoverPageState extends State<DiscoverPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   String? name = '';
@@ -119,7 +120,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: screenHeightUnit * 40),
+                    SizedBox(height: screenHeightUnit * 47),
                     Padding(
                       padding:
                           EdgeInsets.fromLTRB(screenWidthUnit * 10, 0, 0, 0),
@@ -128,6 +129,21 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PortfolioScreen(),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                              size: screenHeightUnit * 20,
+                            ),
+                          ),
                           Row(
                             children: [
                               SizedBox(width: screenWidthUnit * 20),
@@ -207,14 +223,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             _buildInvestmentCard(
                               investmentData[0],
                               screenWidthUnit,
-                              screenHeightUnit * 1.1,
+                              screenHeightUnit,
                               20,
                               context,
                             ),
                             _buildInvestmentCard(
                               investmentData[1],
                               screenWidthUnit,
-                              screenHeightUnit * 1.1,
+                              screenHeightUnit,
                               20,
                               context,
                             ),
@@ -229,14 +245,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             _buildInvestmentCard(
                               investmentData[2],
                               screenWidthUnit,
-                              screenHeightUnit * 1.1,
+                              screenHeightUnit,
                               18,
                               context,
                             ),
                             _buildInvestmentCard(
                               investmentData[3],
                               screenWidthUnit,
-                              screenHeightUnit * 1.1,
+                              screenHeightUnit,
                               20,
                               context,
                             ),
@@ -321,6 +337,48 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 ),
               ],
             ),
+      bottomNavigationBar: Container(
+          color: Colors.white,
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Discover",
+                    style: GoogleFonts.baloo2(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to Market Screen
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //   builder: (context) => MarketScreen(),
+                    // ));
+                  },
+                  child: Text(
+                    "Markets",
+                    style: GoogleFonts.baloo2(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromRGBO(87, 99, 101, 1)),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Real Estate",
+                    style: GoogleFonts.baloo2(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromRGBO(87, 99, 101, 1)),
+                  ),
+                )
+              ])),
     );
   }
 }
