@@ -74,5 +74,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'money-monkey-f4d73.appspot.com',
     iosBundleId: 'com.example.moneyMonkey',
   );
-
 }
