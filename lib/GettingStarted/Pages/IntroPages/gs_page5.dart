@@ -192,6 +192,9 @@ class GettingStartedPage5 extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                    onChanged: (value) {
+                      submitAge(int.parse(value));
+                    },
                     onSubmitted: (value) {
                       submitAge(int.parse(value));
                     },

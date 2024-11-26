@@ -23,7 +23,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final int pageIndex = 0;
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
@@ -357,7 +356,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         iconURL:
                                             "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FProfile%20Page%2FProfitStat.png?alt=media&token=fdca0cec-3182-49ed-a802-012f41184b7c",
                                         number:
-                                            "+${userData!.profile.totalProfit.toString().substring(0, userData!.profile.totalProfit.toString().lastIndexOf('.'))}",
+                                            "+${userData!.profile.totalProfit.toString().contains('.') ? userData!.profile.totalProfit.toString().substring(0, userData!.profile.totalProfit.toString().lastIndexOf('.')) : userData!.profile.totalProfit.toString()}",
                                       ),
                                     ],
                                   ),
@@ -372,7 +371,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         iconURL:
                                             "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FProfile%20Page%2FPortfolioStat.png?alt=media&token=52557059-bbd7-4cc8-b510-ccc1e95508a0",
                                         number:
-                                            "${userData!.profile.portfolioScore.toString().substring(0, userData!.profile.portfolioScore.toString().lastIndexOf('.'))}/100",
+                                            "${userData!.profile.portfolioScore.toString().contains('.') ? userData!.profile.portfolioScore.toString().substring(0, userData!.profile.portfolioScore.toString().lastIndexOf('.')) : userData!.profile.portfolioScore.toString()}/100",
                                       ),
                                       const Spacer(),
                                       CustomStat(

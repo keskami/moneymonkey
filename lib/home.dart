@@ -41,11 +41,13 @@ class _HomePageState extends State<HomePage> {
     return BottomNavigationBar(
       currentIndex: currentPage,
       onTap: (index) {
+        print(index);
         _pageController.animateToPage(
           index,
           duration: Duration(milliseconds: 100),
           curve: Curves.linear,
         );
+        currentPage = index;
       },
       backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
