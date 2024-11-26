@@ -7,7 +7,8 @@ from statistics import mean
 import random
 from datetime import datetime, timedelta, timezone
 from collections import deque
-est = timezone(timedelta(hours=-5)) #change to 9 to test at 12:30
+chnageFromUTC = -6
+TIMEDIFF = timezone(timedelta(hours=-chnageFromUTC)) #change to 9 to test at 12:30
 
 initialize_app()  
 db = firestore.client()
@@ -123,13 +124,13 @@ mf5dayapi = deque(maxlen = 240)
 
 
 
-currenthour = datetime.now(est).hour
-currentminute = datetime.now(est).minute
+currenthour = datetime.now(TIMEDIFF).hour
+currentminute = datetime.now(TIMEDIFF).minute
 nextincof5 = ((currentminute // 5) * 5) + 5
 nextincof30 = ((currentminute // 30) * 30) + 30
-currentDate = datetime.now(est).date()    #timedelta(hours=-33) intsead of est to test at 12:30
+currentDate = (datetime.now(TIMEDIFF)).date()    #timedelta(hours=-33) intsead of est to test at 12:30
 
-print(datetime.now(est))
+
 stocksNowData = {}
 etfsNowData = {}
 mfNowData = []
@@ -153,9 +154,44 @@ def newDay():
     global BananaIncomeVals, BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay
     global JungleSectorVals, JungleSector31days, JungleSector365days, JungleSector5MinsforDay
     global allMutualFundsVals, allMutualFunds31days, allMutualFunds365days, allMutualFunds5MinsforDay
-    global stockdailyapi
-
+    global stockdailyapi, etfdailyapi, mfdailyapi
     print("New Day")
+
+
+    stockdailydata =  {"createdAt" : firestore.SERVER_TIMESTAMP ,
+    'BananaTechValue': round(mean(list(BananaIncome5MinsforDay)), 2),
+            'HealthyChimpValue': round(mean(list(HealthyChimp5MinsforDay)), 2),
+            'EcoVineValue': round(mean(list(EcoVine5MinsforDay)), 2),
+            'JungleGoodsValue': round(mean(list(JungleGoods5MinsforDay)), 2),
+            'Stocks': round(mean(list(allStock5MinsforDay)), 2)
+            }
+
+    etfdailydata = {
+         "createdAt" : firestore.SERVER_TIMESTAMP,
+         'TechTreeValue': round(mean(list(TechTree5MinsforDay)), 2),
+            'MonkeyMedValue': round(mean(list(MonkeyMed5MinsforDay)), 2),
+            'GreenLeafPowerValue': round(mean(list(GreenLeaf5MinsforDay)), 2),
+            'GorillaGoodsValue': round(mean(list(GorillaGoods5MinsforDay)), 2),
+            'ETFs': round(mean(list(allETFS5MinsforDay)), 2)
+            }
+
+    mfdailydata = {
+        "createdAt" : firestore.SERVER_TIMESTAMP,
+            'APEGrowthValue': round(mean(list(APEGrowth5MinsforDay)), 2),
+            'BalancedBananaValue': round(mean(list(BalancedBanana5MinsforDay)), 2),
+            'BananaIncomeValue': round(mean(list(BananaIncome5MinsforDay)), 2),
+            'JungleSectorValue': round(mean(list(JungleSector5MinsforDay)), 2),
+            'MutualFunds': round(mean(list(allMutualFunds5MinsforDay)), 2)
+    }
+
+    try:
+        db.collection('StocksDaily').add(stockdailydata)
+        db.collection('ETFsDaily').add(etfdailydata)
+        db.collection('MutualFundsDaily').add(mfdailydata)
+        
+    except Exception as e:
+        print(f"Error adding document: {e}") 
+        
 
     def updateForDay(stockVals, stock31, stock365, stock5forday):
         if stockVals:
@@ -184,7 +220,14 @@ def newDay():
     BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay = updateForDay(BananaIncomeVals, BananaIncome31days, BananaIncome365days, BananaIncome5MinsforDay)
     JungleSector31days, JungleSector365days, JungleSector5MinsforDay = updateForDay(JungleSectorVals, JungleSector31days, JungleSector365days, JungleSector5MinsforDay)
 
+  
+    
+    
+
     stockdailyapi = deque(list(stockdailyapi)[-1:], maxlen=stockdailyapi.maxlen)
+    etfdailyapi = deque(list(etfdailyapi)[-1:], maxlen=etfdailyapi.maxlen)
+    mfdailyapi = deque(list(mfdailyapi)[-1:], maxlen=mfdailyapi.maxlen)
+
 
 
 
@@ -244,7 +287,7 @@ def add30mins():
     if allMutualFundsVals:
         allMutualFunds30for5.append(round(mean(list(allMutualFundsVals)[-30:]), 2))
    
-    now = datetime.now(est)
+    now = datetime.now(TIMEDIFF)
     rounded_time = now - timedelta(minutes=now.minute % 30, seconds=now.second, microseconds=now.microsecond)
 
     stockdailydata = {
@@ -339,13 +382,13 @@ def add5min():
         allMutualFunds5MinsforDay.append(round(mean(list(allMutualFundsVals)[-5:]), 2))
     
 
-    now = datetime.now(est)
+    now = datetime.now(TIMEDIFF)
     rounded_time = now - timedelta(minutes=now.minute % 5, seconds=now.second, microseconds=now.microsecond)
     stockdailydata = {
          str(rounded_time) : {'BananaTechValue': round(mean(list(BananaTechVals)[-5:]), 2),
             'HealthyChimpValue': round(mean(list(HealthyChimpVals)[-5:]), 2),
             'EcoVineValue': round(mean(list(EcoVineVals)[-5:]), 2),
-            'JungleGoodsValue': round(mean(list(BananaTechVals)[-5:]), 2),
+            'JungleGoodsValue': round(mean(list(JungleGoodsVals)[-5:]), 2),
             'Stocks': round(mean(list(allStockVals)[-5:]), 2)}
             }
     stockdailyapi.append(stockdailydata)
@@ -372,16 +415,59 @@ def add5min():
 
 
    
+ecoVineBonus = 0
+ecoVineBonusLeft = 0
+ecoVineBeginingVal = 0
+ecoVineBonusType = ''
+marketBoost = 1
 
+def getMeanRevBonus(current, left,   beginVal):
+    global ecoVineBonusStart
+    if left > 0:
+        timeUnit = ecoVineBonusStart / 120
+        left -= 1
+        dec = (beginVal/(30*timeUnit))
+        if left > 113 * timeUnit:
+            ret =  current + dec
+        elif left > 59 * timeUnit:
+            ret =  current - dec
+        else: 
+            ret = current + (dec/(4 * timeUnit))
+        return ret , left
+    return 0, left 
+
+def getSteadyBonus():
+    global  ecoVineBonusLeft, ecoVineBonusStart, ecoSteady, ecoSteadyInc, EcoVineVals
+    if ecoVineBonusLeft > ecoVineBonusStart / 2:
+        ecoVineBonusLeft -= 1
+        return EcoVineVals[-1] * ecoSteadyInc * (random.uniform(0.9990, 1.00111) ) * marketBoost
+    else:
+        ecoVineBonusLeft -= 1
+        return EcoVineVals[-1] * (random.uniform(0.9990, 1.00111)) * marketBoost
+        
+
+
+ecoSteady = False
 def pickValue(values, stock):
+    global ecoVineBonus, ecoVineBonusLeft,  ecoVineBeginingVal, ecoSteady, marketBoost
+
     if stock == 'BananaTech':
-        return random.uniform(0.9975, 1.003) * mean(values)
+        return random.uniform(0.975, 1.03) * mean(values)
     elif stock == 'HealthyChimp':
-        return random.uniform(0.9985, 1.0016) * mean(values) 
+        return random.uniform(0.9965, 1.0136) * mean(values) 
     elif stock == 'EcoVine':
-        return random.uniform(0.997, 1.0035) * mean(values) 
+        print("ECO Bonuss")
+        print(ecoVineBonus)
+        ret = 0
+        if ecoSteady and ecoVineBonusLeft > 0:
+            ret = getSteadyBonus()
+            print("ECOSTEADY")
+        else:
+            ret = (random.uniform(0.990, 1.0111)) * mean(values) * marketBoost
+            ecoVineBonus, ecoVineBonusLeft  = getMeanRevBonus(ecoVineBonus, ecoVineBonusLeft, ecoVineBeginingVal)
+        return ret
     elif stock == 'JungleGoods':
-        return random.uniform(0.998, 1.002) * mean(values)
+        return random.uniform(0.997, 1.0131) * mean(values)
     elif stock == "TreeTech":
          return random.uniform(0.99, 1.011) * mean(values)
     elif stock == "MonkeyMed":
@@ -413,10 +499,11 @@ def updateStocks():
     global TechTreeVals, MonkeyMedVals, GreenLeafVals, GorillaGoodsVals, allETFVals
     global APEGrowthVals, BalancedBananaVals, BananaIncomeVals, JungleSectorVals, allMutualFundsVals
     global currenthour, currentminute, nextincof5, nextincof30, currentDate
-    global EcoVine5MinsforDay, EcoVine30for5, EcoVine31days
+    global EcoVine5MinsforDay, EcoVine30for5, EcoVine31days,  TIMEDIFF, chnageFromUTC
+    global ecoVineBonus
 
     while True:
-        time.sleep(59.9)
+        time.sleep(.9)
 
         BananaTechValue = 124
         HealthyChimpValue = 64
@@ -443,6 +530,9 @@ def updateStocks():
                 BananaTechVals.append(lastBanana)
                 HealthyChimpVals.append(lastChimp)
                 EcoVineVals.append(LastEconVine)
+                
+
+
                 JungleGoodsVals.append(LastJungle)
 
                 TechTreeVals.append(LastJungle)
@@ -544,10 +634,6 @@ def updateStocks():
                 JungleSectorVals.append(lastJungleSector)
                 JungleSectorValue = lastJungleSector
 
-                
-
-
-
         except Exception as e:
             BananaTechValue = 124
             BananaTechVals.append(BananaTechValue)
@@ -594,7 +680,11 @@ def updateStocks():
             JungleSectorValue = lastJungleSector
             print(e)
 
+
+
+
         
+
         lastBanana = BananaTechValue
         lastChimp = HealthyChimpValue
         LastEconVine = EcoVineValue
@@ -605,8 +695,9 @@ def updateStocks():
             'EcoVineValue': EcoVineValue,
             'JungleGoodsValue': JungleGoodsValue,
             'Stocks': (BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue),
-            'timestamp': datetime.now(est)
+            'timestamp': datetime.now(TIMEDIFF)
         }
+        
         allStockVals.append(BananaTechValue + HealthyChimpValue + EcoVineValue +JungleGoodsValue)
 
         lastTreeTech = TreeTechValue
@@ -622,7 +713,7 @@ def updateStocks():
             "GreenLeafValue": GreenLeafValue,
             "GorillaGoodsValue": GorillaGoodsValue,
             "ETFS" : etfVal,
-            "timestamp": datetime.now(est)
+            "timestamp": datetime.now(TIMEDIFF)
         }
 
 
@@ -639,33 +730,32 @@ def updateStocks():
         "BananaIncomeValue": BananaIncomeValue,
         "JungleSectorValue": JungleSectorValue,
         "MuturalFuds" : mutualFundsVal,
-        "timestamp": datetime.now(est)
+        "timestamp": datetime.now(TIMEDIFF)
         }
 
 
 
         
-        if datetime.now(est).hour != currenthour:
-            print("NEW HOUR")
+        if datetime.now(TIMEDIFF).hour != currenthour:
             add5min()
             add30mins()
-            currenthour = datetime.now(est).hour
+            currenthour = datetime.now(TIMEDIFF).hour
             nextincof5 = 5
             nextincof30 = 30
         else:
-            if int(datetime.now(est).minute) > nextincof5: 
+            if int(datetime.now(TIMEDIFF).minute) >= nextincof5: 
                 print("NEW 5") 
                 nextincof5 += 5
                 add5min() 
 
-            if int(datetime.now(est).minute)  > nextincof30:
+            if int(datetime.now(TIMEDIFF).minute)  >= nextincof30:
                 print("NEW 30")
                 nextincof30 += 30
                 add30mins() 
 
-        if currentDate < datetime.now(est).date() and datetime.now(est).hour >= 9 and datetime.now(est).minute >= 30:
+        if currentDate < datetime.now(TIMEDIFF).date() and datetime.now(TIMEDIFF).hour >= 9 and datetime.now(TIMEDIFF).minute >= 30:
             print("ADDING DAY")
-            currentDate = datetime.now(est).date()
+            currentDate = datetime.now(TIMEDIFF).date()
             newDay()
 
       
@@ -677,6 +767,7 @@ def updateStocks():
         print(EcoVine5MinsforDay)
         print(EcoVine30for5)
         print(EcoVine31days)
+        print(TIMEDIFF)
 
 
 
@@ -690,7 +781,9 @@ def start_background_tasks():
 
 @https_fn.on_request()
 def on_request_example(req: https_fn.Request) -> https_fn.Response:
-    path = req.path  
+    path = req.path
+    global TIMEDIFF, chnageFromUTC
+
     if req.method == 'GET':
         if path == '/api/stocks':
             return jsonify(stocksNowData)
@@ -712,7 +805,69 @@ def on_request_example(req: https_fn.Request) -> https_fn.Response:
             return jsonify(list(mf5dayapi))
         else:
             return make_response("Not Found", 404)
-    return make_response("OK", 200)
+        
+    elif req.method == 'POST':
+        global ecoVineBonus, ecoVineBonusLeft, ecoVineBonusType, ecoVineBeginingVal, ecoVineBonusStart,ecoSteady, ecoSteadyInc
+        global marketBoost
+        print("POST request received")
+        if path == "/api/change/Time":
+            data = req.get_json()
+            if data:
+                isSavings = data["EST"]
+                if isSavings == "True":
+                    chnageFromUTC = -6
+                else:
+                    chnageFromUTC = -7
+                TIMEDIFF = timezone(timedelta(hours=-chnageFromUTC))
+            
+                return jsonify({"status": "success", "message": "Data received", "data": data}), 200
+            else:
+                return make_response("Invalid data", 400)
+        elif path == "/api/change/Value":
+            data = req.get_json()
+            if data:
+                typeInc = data["Type"]
+                minutes = data["Min"]
+                value = data["Value"]
+                if value == "EcoVine":
+                    if typeInc == "MeanRev":
+                        startingVal = data["Start"]
+                        ecoVineBonus = startingVal / 100
+                        ecoSteady = False
+                        ecoVineBonusLeft = minutes
+                        ecoVineBonusStart = minutes
+                        ecoVineBeginingVal = startingVal / 100
+                    elif typeInc == "steadyInc":
+                        ecoSteady = True
+                        target =  1 + (data["Inc"]/ 100)
+                        ecoSteadyInc = (target ** (1/minutes)) 
+                        ecoVineBonusLeft = minutes * 2
+                        ecoVineBonusStart = minutes * 2
+                    print(typeInc)
+                return jsonify({"status": "success", "message": "Data received", "data": data}), 200
+            else:
+             return make_response("Invalid data", 400)
+        elif path == "/api/change/marketValue":
+            data = req.get_json()
+            if data:
+                if data["Value"] > 0:
+                    marketBoost = (1 + (data["Value"]/100)) ** (1/64)
+                elif data["Value"] < 0:
+                     marketBoost =  1 - abs(1 - (1 + (data["Value"]/100)) ** (1/64))
+                else:
+                    marketBoost = 1
+
+
+                return jsonify({"status": "success", "message": "Data received", "data": data}), 200
+            else:
+             return make_response("Invalid data", 400)
+
+        
+        return make_response("Not Found", 404)
+
+    return make_response("Method Not Allowed", 405)
+        
+    
 
 start_background_tasks()
 
@@ -723,27 +878,3 @@ if __name__ == '__main__':
 
     
 
-'''
-    try:
-        db.collection('BananaTech').add(bananaData)
-        db.collection('HealthyChimp').add(chimpData)
-        db.collection('EcoVine').add(ecoData)
-        db.collection('JungleGoods').add(jungleData)
-        db.collection('Stocks').add(stocksData)
-        response = make_response("Document added to Firestore!", 200)
-        return response
-    except Exception as e:
-        print(f"Error adding document: {e}") 
-        response = make_response(f"Error adding document: {e}", 500)
-        return response
-        
-        
-        def start():
-    while True:
-        with app.app_context():  
-            on_request_example(None)  
-        time.sleep(20) 
-
-        
-        
-        '''
