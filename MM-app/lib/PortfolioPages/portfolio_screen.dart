@@ -163,11 +163,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     return screenWidth > screenHeight
         ? Scaffold(
-            body: GestureDetector(
-              onTap: () {
+            body: MouseRegion(
+              onEnter: (PointerEvent event) {
                 setState(() {
                   isExpanded = false;
-                });
+                }
+                );
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,8 +317,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   SizedBox(height: screenHeightUnit * 33),
                   Center(
                     child: SizedBox(
-                      width: screenWidthUnit * 286,
-                      height: screenHeightUnit * 340,
+                      width: screenWidthUnit * 276,
+                      height: screenHeightUnit * 360,
                       child: Container(
                         decoration: BoxDecoration(
                           color: const Color.fromRGBO(255, 255, 255, 1),
@@ -566,7 +567,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   ),
                   const Spacer(),
                   Container(
-                      height: screenHeightUnit * 80,
+                      height: screenHeightUnit * 100,
                       width: screenWidthUnit * 500,
                       color: Colors.white,
                       child: Row(
@@ -609,8 +610,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 ],
               ),
             ),
-            floatingActionButton: GestureDetector(
-              onTap: () {
+            floatingActionButton: MouseRegion(
+              onEnter: (PointerEvent event) {
                 setState(() {
                   isExpanded = !isExpanded;
                 });
