@@ -155,10 +155,539 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidthUnit = MediaQuery.of(context).size.width / 390;
-    double screenHeightUnit = MediaQuery.of(context).size.height / 880;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    double screenWidthUnit = screenWidth / 390;
+    double screenHeightUnit = screenHeight / 880;
+
+    return screenWidth > screenHeight ? Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          setState(() {
+            isExpanded = false;
+          });
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  
+                    Text(
+                      "Total asset value",
+                      style:
+                          GoogleFonts.baloo2(fontSize: screenHeightUnit * 15, color: Colors.black),
+                    
+                  ),
+                 Text(
+                      '$totalBananstring🍌',
+                      style:  TextStyle(
+                        fontSize: 40 * screenHeightUnit,
+                        fontFamily: "FredokaOne",
+                      ),
+                    ),
+                  
+                  SizedBox(
+                    height: screenHeightUnit * 18,
+                    child: Row(
+                      children: [
+                        Icon(
+                          _changePercentage > 0
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward,
+                          color:
+                              _changePercentage > 0 ? Colors.blue : Colors.red,
+                        ),
+                        Text(
+                          '$_changePercentage% ',
+                          style: GoogleFonts.baloo2(
+                            fontSize: 13,
+                            color: _changePercentage > 0
+                                ? Colors.blue
+                                : Colors.red,
+                          ),
+                        ),
+                        const Text(
+                          'from this week',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: screenHeightUnit * 15,
+            ),
+            Center(
+              child: SizedBox(
+                width: screenWidthUnit * 250,
+                height: screenHeightUnit * 250,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(135, 206, 235, 1),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding:  EdgeInsets.all(screenHeightUnit * 15 ),
+                          child: Text(
+                            "Balance",
+                            style: GoogleFonts.baloo2(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          padding:  EdgeInsets.only(top: screenHeightUnit * 20),
+                          child: SizedBox(
+                            height: screenHeightUnit * 39,
+                            width: screenWidthUnit * 41,
+                            child: Image.asset('assets/images/bank.png'),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding:  EdgeInsets.all(screenHeightUnit * 20),
+                          child: Text(
+                            "**** 0149",
+                            style: GoogleFonts.baloo2(
+                              color: Colors.white,
+                              fontSize: screenHeightUnit * 21,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding:  EdgeInsets.all(screenHeightUnit * 20),
+                          child: Text(
+                            "05/25",
+                            style: GoogleFonts.baloo2(
+                                fontSize: screenHeightUnit * 24, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "$balanceString🍌",
+                                  style: GoogleFonts.baloo2(
+                                      fontSize: screenHeightUnit * 56, color: Colors.white),
+                                ),
+                              ],
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeightUnit * 33),
+            Center(
+              child: SizedBox(
+                width: screenWidthUnit * 306,
+                height: screenHeightUnit * 360,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(255, 255, 255, 1),
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      const Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(15, 17, 0, 0),
+                          child: Text(
+                            "Transactional History",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontFamily: "FredokaOne",
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 45, 0, 0),
+                          child: Text(
+                            "A list of historical transactions",
+                            style: GoogleFonts.baloo2(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(13, 77, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: screenHeightUnit * 29,
+                                width: screenWidthUnit * 69,
+                                padding: const EdgeInsets.all(0),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: _currButton == "All"
+                                      ? const Color.fromRGBO(255, 224, 130, 1)
+                                      : const Color.fromRGBO(
+                                          217, 217, 217, 100),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: _currButton == "All"
+                                        ? screenWidthUnit * .5
+                                        : screenWidthUnit * 0,
+                                  ),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    _updateButton("All");
+                                    _setTransaction("ALL");
+                                  },
+                                  child: Text(
+                                    "All",
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: _currButton == "All"
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      height: screenHeightUnit * -.01,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: screenWidthUnit * 10),
+                              Container(
+                                height: screenHeightUnit * 29,
+                                width: screenWidthUnit * 89,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: _currButton == "Income"
+                                      ? const Color.fromRGBO(255, 224, 130, 1)
+                                      : const Color.fromRGBO(
+                                          217, 217, 217, 100),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: _currButton == "Income"
+                                        ? screenWidthUnit * .5
+                                        : screenWidthUnit * 0,
+                                  ),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    _updateButton("Income");
+                                    _setTransaction("Income");
+                                  },
+                                  child: Text(
+                                    "Income",
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: _currButton == "Income"
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      height: screenHeightUnit * -.01,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: screenWidthUnit * 10),
+                              Container(
+                                height: screenHeightUnit * 29,
+                                width: screenWidthUnit * 89,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: _currButton == "Expenses"
+                                      ? const Color.fromRGBO(255, 224, 130, 1)
+                                      : const Color.fromRGBO(
+                                          217, 217, 217, 100),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: _currButton == "Expenses"
+                                        ? screenWidthUnit * .5
+                                        : screenWidthUnit * 0,
+                                  ),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    _updateButton("Expenses");
+                                    _setTransaction("Expenses");
+                                  },
+                                  child: Text(
+                                    "Expenses",
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: _currButton == "Expenses"
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      height: screenHeightUnit * -.01,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 90, 0, 0),
+                        child: Column(
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 29, 0, 0),
+                                child: Container(
+                                  height: screenHeightUnit * 1,
+                                  width: screenWidthUnit * 332,
+                                  decoration: const BoxDecoration(
+                                    color: Color.fromRGBO(0, 0, 0, .3),
+                                  ),
+                                )),
+                            SizedBox(
+                              width: screenWidthUnit * 332,
+                              height: screenHeightUnit * 175,
+                              child: Column(
+                                children: [
+                                  if (transactionWidgets.isNotEmpty) ...[
+                                    ...transactionWidgets,
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 1, 0, 0),
+                                      child: Container(
+                                        height: screenHeightUnit * 1,
+                                        width: screenWidthUnit * 332,
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromRGBO(0, 0, 0, .3),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: screenHeightUnit * 3.5,
+                                    ),
+                                  
+                                  ] else ...[
+                                    const Center(
+                                      child: Text(
+                                        'No Transactions',
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                     Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TransfersScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          "View All >",
+                                          style:
+                                              GoogleFonts.baloo2(fontSize: 18),
+                                        ),
+                                      ),
+                                    ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const Spacer(),
+            Container(
+                height: screenHeightUnit * 80,
+                width: screenWidthUnit * 500,
+                color: Colors.white,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      width: screenWidthUnit * 15,
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(height: screenHeightUnit * 20),
+                        Text(
+                          "Buying Power  >",
+                          style: GoogleFonts.baloo2(
+                            fontSize: 17,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: screenWidthUnit * 20,
+                            ),
+                            Text(
+                              "$balanceString🍌",
+                              style: GoogleFonts.baloo2(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      width: screenWidthUnit * 30,
+                    ),
+                  ],
+                )),
+          ],
+        ),
+      ),
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          setState(() {
+            isExpanded = !isExpanded;
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 0),
+          width: 191 * screenWidthUnit,
+          height: isExpanded ? screenHeightUnit * 105 : screenHeightUnit * 52,
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(135, 206, 235, 1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: isExpanded
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded = false;
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InvestmentHomePage(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(135, 206, 235, 1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          width: 191 * screenWidthUnit,
+                          height: screenHeightUnit * 40,
+                          child: Text(
+                            'Invest',
+                            style: GoogleFonts.fredoka(
+                              color: Colors.white,
+                              fontSize: 19,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )),
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 1,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        color: const Color.fromRGBO(135, 206, 235, 1),
+                        width: 191 * screenWidthUnit,
+                        height: screenHeightUnit * 40,
+                        child: Text(
+                          'Save',
+                          style: GoogleFonts.fredoka(
+                            color: Colors.white,
+                            fontSize: 19,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              : Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Grow  ^',
+                    style: GoogleFonts.fredoka(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+        ),
+      ),
+    ) : 
+
+
+
+
+
+
+
+
+
+    Scaffold(
       body: GestureDetector(
         onTap: () {
           setState(() {
@@ -606,7 +1135,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           ],
         ),
       ),
-      // bottomNavigationBar: _buildBottomBar(context),
       floatingActionButton: GestureDetector(
         onTap: () {
           setState(() {

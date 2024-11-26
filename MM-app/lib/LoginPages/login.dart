@@ -346,6 +346,7 @@ class _LoginScreenState extends State<LoginScreen> {
     double screenHeightUnit = screenHeight / 880;
 
     return screenWidth > screenHeight
+    
         ? Container(
             color: Colors.white,
             child: SafeArea(
@@ -373,7 +374,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 alignment: Alignment.topCenter,
                               ),
                               Positioned(
-                                top: 185,
+                                top: 185 * screenHeightUnit,
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
@@ -405,12 +406,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                26, 16, 0, 0),
+                                            padding:  EdgeInsets.fromLTRB(
+                                                26, 16 * screenHeightUnit, 0, 0),
                                             child: Text(
                                               'Welcome Back',
                                               style: GoogleFonts.baloo2(
-                                                fontSize: 26,
+                                                fontSize: 30 * screenHeightUnit,
                                                 color: const Color.fromRGBO(
                                                     0, 0, 0, 1),
                                               ),
@@ -423,7 +424,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             child: Text(
                                               'Fill out the information below in order',
                                               style: GoogleFonts.baloo2(
-                                                fontSize: 14,
+                                                fontSize: 16 * screenHeightUnit,
                                                 color: const Color.fromRGBO(
                                                     0, 0, 0, 1),
                                               ),
@@ -431,12 +432,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                26, 2, 0, 0),
+                                            padding:  EdgeInsets.fromLTRB(
+                                                26, 2 * screenHeightUnit, 0, 0),
                                             child: Text(
                                               'to access your account.',
                                               style: GoogleFonts.baloo2(
-                                                fontSize: 14,
+                                                fontSize: 16 * screenHeightUnit,
                                                 color: const Color.fromRGBO(
                                                     0, 0, 0, 1),
                                               ),
@@ -444,8 +445,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                28, 29, 0, 0),
+                                            padding:  EdgeInsets.fromLTRB(
+                                                28, 20 * screenHeightUnit, 0, 0),
                                             child: SizedBox(
                                               width: screenWidthUnit * 150,
                                               height: screenHeightUnit * 49,
@@ -464,8 +465,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                29, 9, 0, 0),
+                                            padding:  EdgeInsets.fromLTRB(
+                                                29, 7 * screenHeightUnit, 0, 0),
                                             child: SizedBox(
                                               width: screenWidthUnit * 150,
                                               height: screenHeightUnit * 49,
@@ -505,24 +506,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           BorderRadius.circular(
                                                               30),
                                                     ),
-                                                    padding: const EdgeInsets
+                                                    padding:  EdgeInsets
                                                         .symmetric(
-                                                        horizontal: 10,
+                                                        horizontal: 10 * screenHeightUnit,
                                                         vertical: 5),
                                                     elevation: 8,
                                                   ),
-                                                  child: const Text(
+                                                  child:  Text(
                                                     'Log in',
                                                     style: TextStyle(
                                                       color: Color.fromARGB(
                                                           252, 252, 252, 252),
-                                                      fontSize: 16,
+                                                      fontSize: 18 * screenHeightUnit,
                                                     ),
                                                   ),
                                                 )),
                                           ),
                                           SizedBox(
-                                              height: screenHeightUnit * 30),
+                                              height: screenHeightUnit * 20),
                                           Center(
                                               child: Text(
                                             "Or sign in with",
@@ -569,8 +570,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 19, 0, 0),
+                                                       EdgeInsets.fromLTRB(
+                                                          0, 10 * screenHeightUnit, 0, 0),
                                                   child: Center(
                                                     child: TextButton(
                                                         onPressed: () {
@@ -589,7 +590,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           "If you are new, create a new account here",
                                                           style: GoogleFonts
                                                               .baloo2(
-                                                            fontSize: 14,
+                                                            fontSize: 16 * screenHeightUnit,
                                                             color: const Color
                                                                 .fromRGBO(
                                                                 0, 0, 0, 1),
