@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id" content="851718603804-p4fk4verfma8p0cm4b64fd4k1er9gk7p.apps.googleusercontent.com">
+  <title>money_monkey</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDTDnHK7Nm7jAAukT8RaEv8tc_EhJyxCgE",
+      authDomain: "money-monkey-f4d73.firebaseapp.com",
+      databaseURL: "https://money-monkey-f4d73-default-rtdb.firebaseio.com",
+      projectId: "money-monkey-f4d73",
+      storageBucket: "money-monkey-f4d73.appspot.com",
+      messagingSenderId: "851718603804",
+      appId: "1:851718603804:web:f7afdb4064129d3b458bd9",
+      measurementId: "G-2L45V4QX6T"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    console.log("Firebase initialized:", app);
+  </script>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
