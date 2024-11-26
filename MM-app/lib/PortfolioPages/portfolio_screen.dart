@@ -1056,7 +1056,24 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                           SizedBox(
                                             height: screenHeightUnit * 3.5,
                                           ),
-                                          Align(
+                                          
+                                        ] else ...[
+                                          const Center(
+                                            child: Text(
+                                              'No Transactions',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Align(
                                             alignment: Alignment.bottomRight,
                                             child: TextButton(
                                               onPressed: () {
@@ -1075,35 +1092,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                               ),
                                             ),
                                           ),
-                                        ] else ...[
-                                          const Center(
-                                            child: Text(
-                                              'No Transactions',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(
-                                      0,
-                                      0,
-                                      screenWidthUnit * 25,
-                                      screenHeightUnit * 7),
-                                  child: Text(
-                                    "View All >",
-                                    style: GoogleFonts.baloo2(fontSize: 18),
-                                  ),
-                                ))
                           ],
                         ),
                       ),
