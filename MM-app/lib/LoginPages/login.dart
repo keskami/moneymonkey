@@ -282,12 +282,13 @@ class _LoginScreenState extends State<LoginScreen> {
         final userSnapshot = await userDocRef.get();
 
         if (!userSnapshot.exists) {
-         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("No account linked to Google Account. Please Sign Up."),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,
-        ));
-        } 
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text("No account linked to Google Account. Please Sign Up."),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        }
 
         Navigator.push(
           context,
@@ -338,250 +339,542 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidthUnit = MediaQuery.of(context).size.width / 400;
-    double screenHeightUnit = MediaQuery.of(context).size.height / 880;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
-    return SafeArea(
-      child: Scaffold(
-        body: SizedBox(
-          width: screenWidthUnit * double.infinity,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: screenHeightUnit * 19),
-                SizedBox(
-                  height: screenHeightUnit * 1144,
-                  width: screenWidthUnit * 390,
-                  child: Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      SizedBox(height: screenHeightUnit * 19),
-                      Image.asset(
-                        'assets/images/monkey.png',
-                        height: screenHeightUnit * 390,
-                        width: screenWidthUnit * 390,
-                        alignment: Alignment.topCenter,
-                      ),
-                      Positioned(
-                        top: 210,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(13, 16, 0, 0),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey.withOpacity(.5),
-                              width: screenWidthUnit * 3,
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 10.0,
-                                spreadRadius: 3.0,
-                                offset: const Offset(0, 4),
+    double screenWidthUnit = screenWidth / 400;
+    double screenHeightUnit = screenHeight / 880;
+
+    return screenWidth > screenHeight
+        ? Container(
+            color: Colors.white,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                body: SizedBox(
+                  width: screenWidthUnit * double.infinity,
+                  child: SingleChildScrollView(
+
+                    child: Column(
+                      
+                      children: [
+                        SizedBox(height: screenHeightUnit * 19),
+                        SizedBox(
+                          height: screenHeightUnit * 844,
+                          width: screenWidthUnit * 200,
+                          child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: [
+                              SizedBox(height: screenHeightUnit * 19),
+                              Image.asset(
+                                'assets/images/monkey.png',
+                                height: screenHeightUnit * 390,
+                                width: screenWidthUnit * 390,
+                                alignment: Alignment.topCenter,
+                              ),
+                              Positioned(
+                                top: 185,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(13, 16, 0, 0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.grey.withOpacity(.5),
+                                      width: 0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 10.0,
+                                        spreadRadius: 3.0,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                26, 16, 0, 0),
+                                            child: Text(
+                                              'Welcome Back',
+                                              style: GoogleFonts.baloo2(
+                                                fontSize: 26,
+                                                color: const Color.fromRGBO(
+                                                    0, 0, 0, 1),
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                26, 9, 0, 0),
+                                            child: Text(
+                                              'Fill out the information below in order',
+                                              style: GoogleFonts.baloo2(
+                                                fontSize: 14,
+                                                color: const Color.fromRGBO(
+                                                    0, 0, 0, 1),
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                26, 2, 0, 0),
+                                            child: Text(
+                                              'to access your account.',
+                                              style: GoogleFonts.baloo2(
+                                                fontSize: 14,
+                                                color: const Color.fromRGBO(
+                                                    0, 0, 0, 1),
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                28, 29, 0, 0),
+                                            child: SizedBox(
+                                              width: screenWidthUnit * 150,
+                                              height: screenHeightUnit * 49,
+                                              child: TextField(
+                                                controller:
+                                                    _loginEmailController,
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  labelText: 'Email',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                29, 9, 0, 0),
+                                            child: SizedBox(
+                                              width: screenWidthUnit * 150,
+                                              height: screenHeightUnit * 49,
+                                              child: TextField(
+                                                controller:
+                                                    _loginPasswordController,
+                                                obscureText: true,
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  labelText: 'Password',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                              height: screenHeightUnit * 13),
+                                          Center(
+                                            child: SizedBox(
+                                                width: screenWidthUnit * 75,
+                                                height: screenHeightUnit * 49,
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    logIn();
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        const Color.fromRGBO(
+                                                            135, 206, 235, 1),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30),
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 5),
+                                                    elevation: 8,
+                                                  ),
+                                                  child: const Text(
+                                                    'Log in',
+                                                    style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                          252, 252, 252, 252),
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                )),
+                                          ),
+                                          SizedBox(
+                                              height: screenHeightUnit * 30),
+                                          Center(
+                                              child: Text(
+                                            "Or sign in with",
+                                            style: GoogleFonts.baloo2(
+                                                fontSize: 14,
+                                                color: const Color.fromRGBO(
+                                                    0, 0, 0, 1)),
+                                          )),
+                                          SizedBox(
+                                              height: screenHeightUnit * 19),
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Center(
+                                                  child: IconButton(
+                                                    icon: Image.asset(
+                                                      "assets/images/apple.png",
+                                                      height:
+                                                          screenHeightUnit * 34,
+                                                      width:
+                                                          screenWidthUnit * 75,
+                                                    ),
+                                                    onPressed: () {
+                                                      appleAuth();
+                                                    },
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: IconButton(
+                                                    icon: Image.asset(
+                                                      "assets/images/google.png",
+                                                      height:
+                                                          screenHeightUnit * 34,
+                                                      width:
+                                                          screenWidthUnit * 75,
+                                                    ),
+                                                    onPressed: () {
+                                                      googleAuth(context);
+                                                    },
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 19, 0, 0),
+                                                  child: Center(
+                                                    child: TextButton(
+                                                        onPressed: () {
+                                                          if (!mounted) {
+                                                            return;
+                                                          }
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  GettingStartedHome(),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Text(
+                                                          "If you are new, create a new account here",
+                                                          style: GoogleFonts
+                                                              .baloo2(
+                                                            fontSize: 14,
+                                                            color: const Color
+                                                                .fromRGBO(
+                                                                0, 0, 0, 1),
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                          ),
+                                                        )),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(26, 16, 0, 0),
-                                    child: Text(
-                                      'Welcome Back',
-                                      style: GoogleFonts.baloo2(
-                                        fontSize: 26,
-                                        color: const Color.fromRGBO(0, 0, 0, 1),
-                                      ),
-                                      textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ))
+        : SafeArea(
+            child: Scaffold(
+              body: SizedBox(
+                width: screenWidthUnit * double.infinity,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: screenHeightUnit * 19),
+                      SizedBox(
+                        height: screenHeightUnit * 1144,
+                        width: screenWidthUnit * 390,
+                        child: Stack(
+                          alignment: Alignment.topCenter,
+                          children: [
+                            SizedBox(height: screenHeightUnit * 19),
+                            Image.asset(
+                              'assets/images/monkey.png',
+                              height: screenHeightUnit * 390,
+                              width: screenWidthUnit * 390,
+                              alignment: Alignment.topCenter,
+                            ),
+                            Positioned(
+                              top: 210,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(13, 16, 0, 0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.grey.withOpacity(.5),
+                                    width: screenWidthUnit * 3,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 10.0,
+                                      spreadRadius: 3.0,
+                                      offset: const Offset(0, 4),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(26, 9, 0, 0),
-                                    child: Text(
-                                      'Fill out the information below in order',
-                                      style: GoogleFonts.baloo2(
-                                        fontSize: 14,
-                                        color: const Color.fromRGBO(0, 0, 0, 1),
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(26, 2, 0, 0),
-                                    child: Text(
-                                      'to access your account.',
-                                      style: GoogleFonts.baloo2(
-                                        fontSize: 14,
-                                        color: const Color.fromRGBO(0, 0, 0, 1),
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(28, 29, 0, 0),
-                                    child: SizedBox(
-                                      width: screenWidthUnit * 314,
-                                      height: screenHeightUnit * 49,
-                                      child: TextField(
-                                        controller: _loginEmailController,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          labelText: 'Email',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(29, 9, 0, 0),
-                                    child: SizedBox(
-                                      width: screenWidthUnit * 314,
-                                      height: screenHeightUnit * 49,
-                                      child: TextField(
-
-                                        controller: _loginPasswordController,
-                                        obscureText: true,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          labelText: 'Password',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: screenHeightUnit * 13),
-                                  Center(
-                                    child: SizedBox(
-                                        width: screenWidthUnit * 220,
-                                        height: screenHeightUnit * 49,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            logIn();
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                const Color.fromRGBO(
-                                                    135, 206, 235, 1),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 5),
-                                            elevation: 8,
-                                          ),
-                                          child: const Text(
-                                            'Log in',
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  252, 252, 252, 252),
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        )),
-                                  ),
-                                  SizedBox(height: screenHeightUnit * 30),
-                                  Center(
-                                      child: Text(
-                                    "Or sign in with",
-                                    style: GoogleFonts.baloo2(
-                                        fontSize: 14,
-                                        color:
-                                            const Color.fromRGBO(0, 0, 0, 1)),
-                                  )),
-                                  SizedBox(height: screenHeightUnit * 19),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Column(
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Center(
-                                          child: IconButton(
-                                            icon: Image.asset(
-                                              "assets/images/apple.png",
-                                              height: screenHeightUnit * 34,
-                                              width: screenWidthUnit * 220,
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              26, 16, 0, 0),
+                                          child: Text(
+                                            'Welcome Back',
+                                            style: GoogleFonts.baloo2(
+                                              fontSize: 26,
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1),
                                             ),
-                                            onPressed: () {
-                                              appleAuth();
-                                            },
-                                          ),
-                                        ),
-                                        Center(
-                                          child: IconButton(
-                                            icon: Image.asset(
-                                              "assets/images/google.png",
-                                              height: screenHeightUnit * 34,
-                                              width: screenWidthUnit * 220,
-                                            ),
-                                            onPressed: () {
-                                              googleAuth(context);
-                                            },
+                                            textAlign: TextAlign.left,
                                           ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
-                                              0, 19, 0, 0),
-                                          child: Center(
-                                            child: TextButton(
-                                                onPressed: () {
-                                                  if (!mounted) {
-                                                    return;
-                                                  }
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          GettingStartedHome(),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Text(
-                                                  "If you are new, create a new account here",
-                                                  style: GoogleFonts.baloo2(
-                                                    fontSize: 14,
-                                                    color: const Color.fromRGBO(
-                                                        0, 0, 0, 1),
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                  ),
-                                                )),
+                                              26, 9, 0, 0),
+                                          child: Text(
+                                            'Fill out the information below in order',
+                                            style: GoogleFonts.baloo2(
+                                              fontSize: 14,
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1),
+                                            ),
+                                            textAlign: TextAlign.left,
                                           ),
                                         ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              26, 2, 0, 0),
+                                          child: Text(
+                                            'to access your account.',
+                                            style: GoogleFonts.baloo2(
+                                              fontSize: 14,
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              28, 29, 0, 0),
+                                          child: SizedBox(
+                                            width: screenWidthUnit * 314,
+                                            height: screenHeightUnit * 49,
+                                            child: TextField(
+                                              controller: _loginEmailController,
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                ),
+                                                labelText: 'Email',
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              29, 9, 0, 0),
+                                          child: SizedBox(
+                                            width: screenWidthUnit * 314,
+                                            height: screenHeightUnit * 49,
+                                            child: TextField(
+                                              controller:
+                                                  _loginPasswordController,
+                                              obscureText: true,
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                ),
+                                                labelText: 'Password',
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: screenHeightUnit * 13),
+                                        Center(
+                                          child: SizedBox(
+                                              width: screenWidthUnit * 220,
+                                              height: screenHeightUnit * 49,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  logIn();
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          135, 206, 235, 1),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                                  elevation: 8,
+                                                ),
+                                                child: const Text(
+                                                  'Log in',
+                                                  style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        252, 252, 252, 252),
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                        SizedBox(height: screenHeightUnit * 30),
+                                        Center(
+                                            child: Text(
+                                          "Or sign in with",
+                                          style: GoogleFonts.baloo2(
+                                              fontSize: 14,
+                                              color: const Color.fromRGBO(
+                                                  0, 0, 0, 1)),
+                                        )),
+                                        SizedBox(height: screenHeightUnit * 19),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Center(
+                                                child: IconButton(
+                                                  icon: Image.asset(
+                                                    "assets/images/apple.png",
+                                                    height:
+                                                        screenHeightUnit * 34,
+                                                    width:
+                                                        screenWidthUnit * 220,
+                                                  ),
+                                                  onPressed: () {
+                                                    appleAuth();
+                                                  },
+                                                ),
+                                              ),
+                                              Center(
+                                                child: IconButton(
+                                                  icon: Image.asset(
+                                                    "assets/images/google.png",
+                                                    height:
+                                                        screenHeightUnit * 34,
+                                                    width:
+                                                        screenWidthUnit * 220,
+                                                  ),
+                                                  onPressed: () {
+                                                    googleAuth(context);
+                                                  },
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 19, 0, 0),
+                                                child: Center(
+                                                  child: TextButton(
+                                                      onPressed: () {
+                                                        if (!mounted) {
+                                                          return;
+                                                        }
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                GettingStartedHome(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        "If you are new, create a new account here",
+                                                        style:
+                                                            GoogleFonts.baloo2(
+                                                          fontSize: 14,
+                                                          color: const Color
+                                                              .fromRGBO(
+                                                              0, 0, 0, 1),
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                        ),
+                                                      )),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
