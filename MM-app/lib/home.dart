@@ -1,95 +1,196 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'Global Controllers/home_controller.dart';
+import 'package:money_monkey/Friends/comingSoonPage.dart';
+import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({
+    super.key,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final HomeController homeController = Get.put(HomeController());
+  PageController _pageController = PageController();
+  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
-    final bool isWideScreen = MediaQuery.of(context).size.width > 600;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
 
+    return screenWidth > screenHeight
+        ? webDisplay(context, screenWidth)
+        : mobileDisplay(context);
+  }
+
+  Scaffold webDisplay(BuildContext context, double screenWidth) {
     return Scaffold(
-      body: isWideScreen
-          ? Row(
+      body: Row(
+        children: [
+          Container(
+            width: screenWidth * 0.15,
+            child: Column(
               children: [
-                _buildPersistentDrawer(), 
-                Expanded(
-                  child: Obx(
-                    () => homeController.pages[homeController.pageIndex.value],
+                ListTile(
+                  onTap: () {
+                    setState(() {
+                      currentPage = 0;
+                    });
+                    _pageController.animateToPage(
+                      currentPage,
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.linear,
+                    );
+                  },
+                  selected: currentPage == 0,
+                  leading: Image.asset('assets/images/globemonkey.png'),
+                  trailing: Text(
+                    "Home",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 20,
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    setState(() {
+                      currentPage = 1;
+                    });
+                    _pageController.animateToPage(
+                      currentPage,
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.linear,
+                    );
+                  },
+                  selected: currentPage == 1,
+                  leading: Image.asset('assets/images/treasure.png'),
+                  trailing: Text(
+                    "Portfolio",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 20,
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    setState(() {
+                      currentPage = 2;
+                    });
+                    _pageController.animateToPage(
+                      currentPage,
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.linear,
+                    );
+                  },
+                  selected: currentPage == 2,
+                  leading: Image.asset('assets/images/bottommonkey.png'),
+                  trailing: Text(
+                    "Market",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 20,
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    setState(() {
+                      currentPage = 3;
+                    });
+                    _pageController.animateToPage(
+                      currentPage,
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.linear,
+                    );
+                  },
+                  selected: currentPage == 3,
+                  leading: Image.asset('assets/images/bluemonkey.png'),
+                  trailing: Text(
+                    "Profile",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 20,
                   ),
                 ),
               ],
-            )
-          : Obx(
-              () => homeController.pages[homeController.pageIndex.value],
             ),
-      drawer: isWideScreen ? null : _buildDrawer(), 
-      bottomNavigationBar: !isWideScreen ? _buildBottomBar(context) : null,
+          ),
+          Container(
+            width: screenWidth * 0.85,
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (value) {
+                setState(() {
+                  currentPage = value;
+                });
+              },
+              children: [
+                HomeScreen(),
+                PortfolioScreen(),
+                ComingSoonPage(),
+                ProfileScreen(),
+              ],
+            ),
+          ),
+        ],
+      ),
+      // bottomNavigationBar: _buildMobileBottomBar(context),
     );
   }
 
-  Widget _buildPersistentDrawer() {
-    return Container(
-      width: 250, 
-      color: Colors.blue.shade50,
-      child: _buildDrawerContent(),
+  Scaffold mobileDisplay(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (value) {
+          setState(() {
+            currentPage = value;
+          });
+        },
+        children: [
+          HomeScreen(),
+          PortfolioScreen(),
+          ComingSoonPage(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: _buildMobileBottomBar(context),
     );
   }
 
-  Widget _buildDrawer() {
-    return Drawer(
-      child: _buildDrawerContent(),
-    );
-  }
-
-  Widget _buildDrawerContent() {
-    final screenHeight = MediaQuery.of(context).size.height;
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: 
-      <Widget>[
-        SizedBox(height: screenHeight * .1,),
-        _buildDrawerItem('assets/images/globemonkey.png', 0,screenHeight, "Home"),
-        SizedBox(height: screenHeight * .05,),
-        _buildDrawerItem('assets/images/treasure.png', 1,screenHeight, "Porfolio"),
-        SizedBox(height: screenHeight * .05,),
-        _buildDrawerItem('assets/images/bottommonkey.png', 2, screenHeight, "IDK"),
-        SizedBox(height: screenHeight * .05,),
-        _buildDrawerItem('assets/images/bluemonkey.png', 3, screenHeight, "IDK"),
-      ],
-    );
-  }
-
-  Widget _buildDrawerItem(String iconPath, int index, double screenHeight, String page) {
-    
-    return ListTile(
-      leading: Image.asset(iconPath, height: screenHeight * .15),
-      title: Text('$page'),
-      selected: homeController.pageIndex.value == index,
-      onTap: () {
-        setState(() {
-          homeController.pageIndex.value = index;
-        });
-      },
-    );
-  }
-
-  Widget _buildBottomBar(BuildContext context) {
+  Widget _buildMobileBottomBar(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: homeController.pageIndex.value,
+      currentIndex: currentPage,
       onTap: (index) {
-        setState(() {
-          homeController.pageIndex.value = index;
-        });
+        print(index);
+        _pageController.animateToPage(
+          index,
+          duration: Duration(milliseconds: 100),
+          curve: Curves.linear,
+        );
       },
       backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
@@ -98,15 +199,15 @@ class _HomePageState extends State<HomePage> {
       showSelectedLabels: false,
       showUnselectedLabels: false,
       items: [
-        _buildNavItem('assets/images/globemonkey.png', 0),
-        _buildNavItem('assets/images/treasure.png', 1),
-        _buildNavItem('assets/images/bottommonkey.png', 2),
-        _buildNavItem('assets/images/bluemonkey.png', 3),
+        _buildMobileNavItem('assets/images/globemonkey.png', 0),
+        _buildMobileNavItem('assets/images/treasure.png', 1),
+        _buildMobileNavItem('assets/images/bottommonkey.png', 2),
+        _buildMobileNavItem('assets/images/bluemonkey.png', 3),
       ],
     );
   }
 
-  BottomNavigationBarItem _buildNavItem(String iconPath, int index) {
+  BottomNavigationBarItem _buildMobileNavItem(String iconPath, int index) {
     final screenSize = MediaQuery.of(context).size;
     double iconSize = screenSize.width * 0.13;
 
@@ -115,9 +216,8 @@ class _HomePageState extends State<HomePage> {
         width: iconSize,
         height: iconSize,
         decoration: BoxDecoration(
-          border: homeController.pageIndex.value == index
-              ? Border.all(
-                  color: Colors.blue, width: 3) // Border for the selected item
+          border: currentPage == index
+              ? Border.all(color: Colors.blue, width: 3)
               : null,
           borderRadius: BorderRadius.circular(12),
         ),
@@ -130,4 +230,4 @@ class _HomePageState extends State<HomePage> {
       label: '', // No label
     );
   }
-  }
+}
