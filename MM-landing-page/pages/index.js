@@ -16,7 +16,6 @@ export default function Home() {
       <Feature2 />
       <Feature3 />
       <Feature4 />
-      <CallToAction />
     </>
   );
 }
