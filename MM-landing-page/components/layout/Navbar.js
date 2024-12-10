@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './Navbar.module.css';
 import EcosystemDropdown from './Navbar/EcosystemDropdown';
+import Link from 'next/link';
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -13,16 +14,17 @@ export default function Navbar() {
     const closeMenu = () => {
         setMenuOpen(false);
     };
-    
+
 
     return (
         <nav className={styles.navbar}>
-            <div className={styles.logo}>
-                <img src="/logo.png" alt="Money Monkey Logo" />
-            </div>
-
+            <Link href="/">
+                <div className={styles.logo}>
+                    <img src="/logo.png" alt="Money Monkey Logo" />
+                </div>
+            </Link>
             <ul className={styles.desktopNav}>
-                <li 
+                <li
                     onMouseEnter={() => setEcosystemOpen(true)}
                     onMouseLeave={() => setEcosystemOpen(false)}
                 >
@@ -36,8 +38,11 @@ export default function Navbar() {
 
             {/* Right-Aligned Register and Login Links */}
             <div className={styles.desktopNavRegister}>
-                <a href="/register">Register</a>
-                <a href="/login" className={styles.loginButton}>Login</a>
+                {/* Right-Aligned Register and Login Links */}
+                <div className={styles.desktopNavRegister}>
+                    <a href="/register" className={styles.signInLink}>Register</a>
+                    <a href="/login" className={styles.registerButton}>Login</a>
+                </div>
             </div>
 
             {/* Mobile Hamburger */}

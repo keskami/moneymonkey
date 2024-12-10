@@ -56,22 +56,6 @@ const CallToAction = () => {
     }
   };
 
-  const curveVariants = {
-    hidden: { 
-      opacity: 0,
-      scaleY: 0
-    },
-    visible: {
-      opacity: 1,
-      scaleY: 1,
-      transition: {
-        duration: 1,
-        ease: "easeOut",
-        delay: 0.2
-      }
-    }
-  };
-
   return (
     <section className={styles.container} ref={ref}>
       <motion.div 
@@ -96,11 +80,8 @@ const CallToAction = () => {
       </motion.div>
       
       {/* Animated decorative curve */}
-      <motion.div 
+      <div 
         className={styles.bottomCurve}
-        variants={curveVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
       />
     </section>
   );

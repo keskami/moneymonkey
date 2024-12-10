@@ -89,10 +89,10 @@ const Feature1 = () => {
             className={styles.description}
             variants={fadeUpVariants}
           >
-            Duolingo for Schools applies both ACTFL and CEFR 
-            learning standards to Duolingo's extensive 
-            curriculum, allowing you to find content that meets 
-            your teaching needs.
+            Money Monkey aligns with financial literacy
+            standards set by the Jump$tart Coalition and
+            NFEC, ensuring up-to-date, standards-based
+            learning for students.        
           </motion.p>
           <motion.div 
             className={styles.buttonContainer}

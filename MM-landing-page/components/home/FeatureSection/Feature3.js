@@ -68,7 +68,7 @@ const Feature1 = () => {
           variants={slideVariants}
         >
           <Image
-            src="/feature1.png"
+            src="/feature3.png"
             alt="Standards-aligned curriculum interface"
             width={800}
             height={500}
@@ -83,23 +83,24 @@ const Feature1 = () => {
             className={styles.title}
             variants={fadeUpVariants}
           >
-            standards-aligned curriculum
+            engaging, hands-on simulations
           </motion.h2>
           <motion.p 
             className={styles.description}
             variants={fadeUpVariants}
           >
-            Duolingo for Schools applies both ACTFL and CEFR 
-            learning standards to Duolingo's extensive 
-            curriculum, allowing you to find content that meets 
-            your teaching needs.
+            Money Monkey's core motto is "learning by doing".
+            We want users to practice the skills they've
+            learned in our real life investment, budgeting,
+            and small business simulations as well as interactive
+            scenarios for any situation.
           </motion.p>
           <motion.div 
             className={styles.buttonContainer}
             variants={fadeUpVariants}
           >
-            <Link href="/courses" className={styles.button}>
-              Courses
+            <Link href="/simulators" className={styles.button}>
+              Simulators
             </Link>
             <Link href="/pricing" className={`${styles.button} ${styles.buttonSecondary}`}>
               Pricing {'>'}

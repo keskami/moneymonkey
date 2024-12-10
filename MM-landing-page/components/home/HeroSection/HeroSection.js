@@ -39,14 +39,13 @@ export default function HeroSection() {
           className={styles.title}
           variants={itemVariants}
         >
-          Gamifying CTE & Financial Literacy for the Future
+          Transforming Financial Literacy with Engaging, Hands-On Learning
         </motion.h1>
         <motion.p 
           className={styles.subtitle}
           variants={itemVariants}
         >
-          AI-powered financial education curriculum and solutions for K-12 
-          schools, colleges & universities, and banks.
+          AI-powered financial education through application-based learning and gamification for K-12 schools, colleges, and banks.
         </motion.p>
         <motion.a 
           href="#" 

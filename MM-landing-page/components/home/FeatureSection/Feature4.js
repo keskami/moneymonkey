@@ -5,7 +5,7 @@ import styles from './Feature.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Feature2 = () => {
+const Feature4 = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once: true,
@@ -71,23 +71,20 @@ const Feature2 = () => {
             className={styles.title}
             variants={fadeUpVariants}
           >
-            fun, gamified assignments
+            student/children progress insights
           </motion.h2>
           <motion.p 
             className={styles.description}
             variants={fadeUpVariants}
-          >
-            Assignments combine AI and financial literacy
-            principles to tailor the level and pace to each student’s
-            needs. We tie in application-based learning with theory
-            to make financial literacy fun and engaging!
+          > 
+            Coming soon - Empowering educators and parents with real-time insights into student progress, including accuracy and time spent learning, through flexible, tailored curricula for grades 6-12 and beyond. 
           </motion.p>
           <motion.div 
             className={styles.buttonContainer}
             variants={fadeUpVariants}
           >
-            <Link href="/courses" className={styles.button}>
-              Courses
+            <Link href="/dashboards" className={styles.button}>
+              Dashboard
             </Link>
             <Link href="/pricing" className={`${styles.button} ${styles.buttonSecondary}`}>
               Pricing {'>'}
@@ -99,7 +96,7 @@ const Feature2 = () => {
           variants={slideVariants}
         >
           <Image
-            src="/feature2.png"
+            src="/comingsoon.png"
             alt="Personalized assignments interface"
             width={800}
             height={500}
@@ -111,4 +108,4 @@ const Feature2 = () => {
   );
 };
 
-export default Feature2;
+export default Feature4;

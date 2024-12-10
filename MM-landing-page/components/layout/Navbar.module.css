@@ -1,127 +1,145 @@
 .navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #ffffff;
-    display: flex;
-    align-items: center;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    padding: 5px 0;
-  }
-  
-  /* Logo Section */
-  .logo {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-  }
-  
-  .logo img {
-    max-height: 40px;
-  }
-  
-  /* Centered Navigation Links */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 15px 0;
+}
+
+/* Logo Section */
+.logo {
+  margin-left: 20px;
+  width: 200px; /* Fixed width for logo section */
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo img {
+  max-height: 40px;
+  z-index: 1000;
+}
+
+/* Centered Navigation Links */
+.desktopNav {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  list-style: none;
+  margin: 0 auto; /* This helps center the nav */
+}
+
+.desktopNav li a {
+  font-family: "Baloo 2", sans-serif;
+  text-decoration: none;
+  color: #333;
+  font-size: large;
+}
+
+/* Right-Aligned Register and Login Links */
+/* Update these styles in your Navbar.module.css */
+.desktopNavRegister {
+  width: 200px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  margin-right: 20px;
+}
+
+.signInLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #333;
+  font-family: "Baloo 2", sans-serif;
+  z-index: 1000;
+}
+
+.signInLink::after {
+  content: "→";
+  font-size: 20px;
+}
+
+.registerButton {
+  background-color: #38a4d8;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: "Baloo 2", sans-serif;
+  transition: background-color 0.2s ease;
+  z-index: 1000;
+}
+
+.registerButton:hover {
+  background-color: #3367d6;
+}
+
+/* Rest of your CSS remains the same */
+
+/* Mobile Hamburger Menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding-right: 20px;
+}
+
+.hamburger .line {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+/* Mobile Overlay Menu */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobileNav {
+  list-style: none;
+  text-align: center;
+}
+
+.mobileNav li {
+  margin: 20px 0;
+}
+
+.mobileNav li a {
+  font-family: "Baloo 2", sans-serif;
+  text-decoration: none;
+  color: #fff;
+  font-size: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 1068px) {
   .desktopNav {
-    flex: 2;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    list-style: none;
-  }
-  
-  .desktopNav li a {
-    font-family: 'Baloo 2', sans-serif;
-    text-decoration: none;
-    color: #333;
-    font-size: large;
-  }
-  
-  /* Right-Aligned Register and Login Links */
-  .desktopNavRegister {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 20px;
-    padding-right: 20px;
-  }
-  
-  .loginButton {
-    border: 2px solid #38A4D8;
-    padding: 5px 15px;
-    border-radius: 5px;
-    font-family: 'Baloo 2', sans-serif;
-    font-weight: bold;
-    color: #38A4D8;
-  }
-  
-  /* Mobile Hamburger Menu */
-  .hamburger {
     display: none;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-    padding-right: 20px;
   }
-  
-  .hamburger .line {
-    width: 25px;
-    height: 3px;
-    background-color: #333;
-    border-radius: 2px;
+
+  .desktopNavRegister {
+    display: none;
   }
-  
-  /* Mobile Overlay Menu */
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+
+  .hamburger {
     display: flex;
-    justify-content: center;
-    align-items: center;
   }
-  
-  .mobileNav {
-    list-style: none;
-    text-align: center;
-  }
-  
-  .mobileNav li {
-    margin: 20px 0;
-  }
-  
-  .mobileNav li a {
-    font-family: 'Baloo 2', sans-serif;
-    text-decoration: none;
-    color: #fff;
-    font-size: 20px;
-  }
-
-  .desktopNav li {
-    position: relative;
-  }
-  
-  .desktopNav li:hover > a {
-    color: #38A4D8;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .desktopNav {
-      display: none;
-    }
-
-    .desktopNavRegister {
-      display: none;
-    }
-  
-    .hamburger {
-      display: flex;
-    }
-  }
-  
+}

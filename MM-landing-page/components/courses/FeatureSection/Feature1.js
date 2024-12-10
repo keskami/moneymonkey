@@ -5,7 +5,7 @@ import styles from './Feature.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Feature2 = () => {
+const CourseFeature1 = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once: true,
@@ -28,7 +28,7 @@ const Feature2 = () => {
   const slideVariants = {
     hidden: { 
       opacity: 0,
-      x: 30 // Sliding from right instead of left
+      x: -30
     },
     visible: {
       opacity: 1,
@@ -64,6 +64,18 @@ const Feature2 = () => {
         variants={containerVariants}
       >
         <motion.div 
+          className={styles.imageContainer}
+          variants={slideVariants}
+        >
+          <Image
+            src="/course-images/course-features/coursefeature1.png"
+            alt="Standards-aligned curriculum interface"
+            width={800}
+            height={500}
+            className={styles.image}
+          />
+        </motion.div>
+        <motion.div 
           className={styles.textContent}
           variants={containerVariants}
         >
@@ -71,44 +83,18 @@ const Feature2 = () => {
             className={styles.title}
             variants={fadeUpVariants}
           >
-            fun, gamified assignments
+            Gamified Units
           </motion.h2>
           <motion.p 
             className={styles.description}
             variants={fadeUpVariants}
           >
-            Assignments combine AI and financial literacy
-            principles to tailor the level and pace to each student’s
-            needs. We tie in application-based learning with theory
-            to make financial literacy fun and engaging!
+            Money Monkey uses research backed educational-science to engage and retain learners of all levels
           </motion.p>
-          <motion.div 
-            className={styles.buttonContainer}
-            variants={fadeUpVariants}
-          >
-            <Link href="/courses" className={styles.button}>
-              Courses
-            </Link>
-            <Link href="/pricing" className={`${styles.button} ${styles.buttonSecondary}`}>
-              Pricing {'>'}
-            </Link>
-          </motion.div>
-        </motion.div>
-        <motion.div 
-          className={styles.imageContainer}
-          variants={slideVariants}
-        >
-          <Image
-            src="/feature2.png"
-            alt="Personalized assignments interface"
-            width={800}
-            height={500}
-            className={styles.image}
-          />
         </motion.div>
       </motion.div>
     </section>
   );
 };
 
-export default Feature2;
+export default CourseFeature1;
