@@ -1,0 +1,124 @@
+
+.featureContainer {
+    padding: 4rem 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  
+  .contentWrapper {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+  }
+  
+  .imageContainer {
+    flex: 1.5;
+  }
+  
+  .image {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .textContent {
+    flex: 1;
+    padding-right: 2rem;
+    font-family: 'Baloo 2', sans-serif;
+  }
+  
+  .title {
+    font-size: 3rem;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    color: #333;
+  }
+  
+  .description {
+    font-size: 1.25rem;
+    font-family: 'Baloo 2', sans-serif;
+    line-height: 1.6;
+    color: #666;
+  }
+
+  .buttonContainer {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .button {
+    padding: 0.7rem 2rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .button {
+    background-color: #3d8ae0; /* Dark purple color */
+    color: white;
+  }
+  
+  .buttonSecondary {
+    background-color: transparent;
+    color: #3d8ae0;
+    border: 2px solid #3d8ae0;
+  }
+  
+  .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .buttonSecondary:hover {
+    background-color: rgba(72, 61, 139, 0.1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .contentWrapper {
+      flex-direction: column;
+      gap: 2rem;
+      text-align: center;
+    }
+  
+    .textContent {
+      padding-right: 0;
+    }
+  
+    .title {
+      font-size: 2.5rem;
+      font-family: 'Baloo 2', sans-serif;
+    }
+  
+    .description {
+      font-size: 1.125rem;
+      font-family: 'Baloo 2', sans-serif;
+    }
+
+    .buttonContainer {
+        justify-content: center;
+      }
+  }
+  
+  @media (max-width: 768px) {
+    .featureContainer {
+      padding: 2rem 1rem;
+    }
+  
+    .title {
+      font-size: 2rem;
+      font-family: 'Baloo 2', sans-serif;
+    }
+
+    .button {
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+      }
+  }

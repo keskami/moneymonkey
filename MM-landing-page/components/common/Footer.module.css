@@ -1,0 +1,82 @@
+.footer {
+    padding: 2rem 1.5rem;
+    background-color: white;
+  }
+  
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .grid {
+      grid-template-columns: 300px 1fr;
+    }
+  
+    .navigationGrid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin: 0 0 0 auto;
+    }
+  }
+  
+  .logo {
+    margin-bottom: 1rem;
+  }
+  
+  .addressSection {
+    font-size: 0.875rem;
+  }
+  
+  .label {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+  
+  .contactInfo {
+    margin-top: 1rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .linkList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  .copyright {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e5e5;
+    font-size: 0.875rem;
+    color: #666;
+  }
+  
+  .linksSection {
+    display: flex;
+    flex-direction: column;
+  }

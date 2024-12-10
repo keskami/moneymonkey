@@ -1,0 +1,154 @@
+name: money_monkey
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^3.5.0
+  cloud_firestore: ^5.4.2  # Downgrade to this version
+
+  firebase_auth: ^5.3.0
+  google_sign_in: ^6.1.5
+  firebase_storage: ^12.3.2
+  cupertino_icons: ^1.0.8
+  #firebase
+  flutter_localizations:
+    sdk: flutter
+  cached_network_image: ^3.3.0
+  flutter_svg: ^2.0.9
+  get: ^4.6.6
+  swipable_stack: ^0.2.1
+  flip_card: ^0.7.0
+  swipeable_card_stack: ^0.0.5
+  google_fonts: ^6.2.1
+  fl_chart: ^0.69.0
+  confetti: ^0.8.0
+  lottie: ^3.1.2
+  webview_flutter: ^4.10.0
+  flutter_keyboard_visibility: ^6.0.0
+  toggle_switch: ^2.3.0
+  url_launcher: ^6.3.1
+  aligned_dialog: ^0.0.7
+  shimmer: ^3.0.0
+  syncfusion_flutter_gauges: ^27.1.58
+  align_positioned: ^5.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/sample_stock_data.json
+    - assets/images/banknote.png
+    - assets/images/bigbanana.png
+    - assets/images/bigtreasure.png
+    - assets/images/bluemonkey.png
+    - assets/images/bottommonkey.png
+    - assets/images/coin.png
+    - assets/images/creditcard.png
+    - assets/images/globemonkey.png
+    - assets/images/hang.png
+    - assets/images/image1.png
+    - assets/images/img_group_4.svg
+    - assets/images/img_group_5.svg
+    - assets/images/img_group.svg
+    - assets/images/img_monkeymoney_50.png
+    - assets/images/img_monkeymoney_51.png
+    - assets/images/img_monkeymoney_52.png
+    - assets/images/img_screenshot_2024_08_26.png
+    - assets/images/img_screenshot_2024_08_26_94x110.png
+    - assets/images/img_screenshot_2024_08_26_1.png
+    - assets/images/img_svgjsg1008.svg
+    - assets/images/img_solar_book_bold.svg
+    - assets/images/img_transparent_logo.png
+    - assets/images/img_treasure_chest.png
+    - assets/images/mobile.png
+    - assets/images/monkeywithcap.png
+    - assets/images/monkeywithnote.png
+    - assets/images/rewardbanana.png
+    - assets/images/rewardmonkey.png
+    - assets/images/star.png
+    - assets/images/treasure.png
+    - assets/images/button.png
+    - assets/images/monkey.png
+    - assets/images/apple.png
+    - assets/images/google.png
+    - assets/images/banana.png
+    - assets/images/bank.png
+    - assets/images/navbar1.png
+    - assets/images/navbar2.png
+    - assets/images/navbar3.png
+    - assets/images/navbar4.png
+    - assets/images/monkey.png
+    - assets/images/google.png
+    - assets/images/apple.png
+    - assets/images/monkeyNoText.png
+    - assets/images/magGlass.png
+    - assets/images/contacts.png
+    - assets/images/shareProfile.png
+    - assets/images/textMessage.png
+    - assets/images/whatsApp.png
+    - assets/images/snapchat.png
+    - assets/images/copyProfile.png
+    - assets/sample_stock_data.json
+    - assets/images/banana_reward.json
+    - assets/images/specsbanana.json
+    - assets/images/speech_bubble.png
+    - assets/images/quizMonkey.png
+    - assets/images/swinging_monkey.json
+    - assets/images/Treasure_chest.gif
+    - assets/real_estate/airport.png
+    - assets/real_estate/bakery.png
+    - assets/real_estate/center1.png
+    - assets/real_estate/center2.png
+    - assets/real_estate/center3.png
+    - assets/real_estate/center3_copy.png
+    - assets/real_estate/center4.png
+    - assets/real_estate/center4_copy.png
+    - assets/real_estate/donut_bakery.png
+    - assets/real_estate/hotel.png
+    - assets/real_estate/hotel_2.png
+    - assets/real_estate/restaurant.png
+    - assets/real_estate/house.png
+    - assets/real_estate/office.png
+    - assets/real_estate/shopping_mall.png
+    - assets/real_estate/stadium.png
+    - assets/real_estate/path1.png
+    - assets/real_estate/path2.png
+    - assets/real_estate/path3.png
+    - assets/real_estate/center_complete.png
+    - assets/real_estate/real_estate_income.png
+    - assets/real_estate/rural_house.png
+    - assets/images/shopping-cart.svg
+    - assets/images/movie-ticket.svg
+    - assets/images/money-jar.svg
+    - assets/images/donation-box.svg
+    - assets/images/credit-card.svg
+    - assets/images/coins.svg
+    - assets/images/piggy-bank.svg
+    - assets/images/dollar-cash.svg
+    - assets/images/trade.svg
+    - assets/images/wallet.svg
+    - assets/images/money-trade.svg
+    - assets/images/money-manager.svg
+    - assets/images/savings-jar.svg
+    - assets/images/price-tags.svg
+
+  fonts:
+    - family: Baloo 2
+      fonts:
+        - asset: assets/fonts/Baloo2Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Baloo2Medium.ttf
+          weight: 500
