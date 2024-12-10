@@ -18,12 +18,11 @@ const Footer = () => {
             />
             <div className={styles.addressSection}>
               <p className={styles.label}>Address:</p>
-              <p>8437 Bell Oaks Dr</p>
-              <p>Suite 910</p>
-              <p>Newburgh, IN 47630</p>
+              <p>4096 Brown Farm Dr</p>
+              <p>Carmel, IN 46074</p>
               <div className={styles.contactInfo}>
                 <p className={styles.label}>Contact:</p>
-                <p>info@intertwinedfinance.com</p>
+                <p>moneymonkeyinqueries@gmail.com</p>
               </div>
             </div>
           </div>
@@ -38,7 +37,7 @@ const Footer = () => {
                 <Link href="#" className={styles.link}>Assessment Tools</Link>
                 <Link href="#" className={styles.link}>Stock Simulator</Link>
                 <Link href="#" className={styles.link}>Budget Simulator</Link>
-                <Link href="#" className={styles.link}>Startup Simulator</Link>
+                <Link href="#" className={styles.link}>Credit Simulator</Link>
               </div>
             </div>
 
@@ -79,7 +78,7 @@ const Footer = () => {
 
         {/* Copyright Section */}
         <div className={styles.copyright}>
-          <p>© 2024 Intertwined Solutions, Inc. All Rights Reserved.</p>
+          <p>© 2024 Money Monkey, LLC. All Rights Reserved.</p>
         </div>
       </div>
     </footer>
