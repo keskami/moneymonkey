@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7cf04a4-d2d6-4b3d-ba65-dba3dff5b3df" name="Changes" comment="Committing Dev" />
+    <list default="true" id="f7cf04a4-d2d6-4b3d-ba65-dba3dff5b3df" name="Changes" comment="Committing Dev">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MM-app/lib/Profile/Widgets/add_friends_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/MM-app/lib/Profile/Widgets/add_friends_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MM-app/lib/Profile/Widgets/custom_stat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/MM-app/lib/Profile/Widgets/custom_stat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MM-app/lib/Profile/profile_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/MM-app/lib/Profile/profile_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MM-app/lib/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/MM-app/lib/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MM-app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/MM-app/pubspec.lock" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,21 +28,21 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "bhavyabedi"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;bhavyabedi&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/keskami/moneymonkey.git",
-    "accountId": "47e09b08-5cc5-4679-a89e-0285ff1775b5"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/keskami/moneymonkey.git&quot;,
+    &quot;accountId&quot;: &quot;47e09b08-5cc5-4679-a89e-0285ff1775b5&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2pOUeFODq0CB5h7YvjvMrabMX39" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -54,9 +61,13 @@
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "bhavya__dev",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/MA",
-    "settings.editor.selected.configurable": "MTFeaturesSettingsConfigurable",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>

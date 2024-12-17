@@ -141,6 +141,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             width: screenWidth * 0.85,
             child: PageView(
+              scrollDirection: Axis.vertical,
               controller: _pageController,
               onPageChanged: (value) {
                 setState(() {
@@ -157,7 +158,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      // bottomNavigationBar: _buildMobileBottomBar(context),
     );
   }
 

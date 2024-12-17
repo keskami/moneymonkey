@@ -233,7 +233,7 @@ class _StartFreshPage3State extends State<StartFreshPage3> {
               ),
               Image.network(
                 "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
-                height: 145,
+                height: screenWidth * 0.2,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) {
