@@ -346,7 +346,6 @@ class _LoginScreenState extends State<LoginScreen> {
     double screenHeightUnit = screenHeight / 880;
 
     return screenWidth > screenHeight
-    
         ? Container(
             color: Colors.white,
             child: SafeArea(
@@ -355,18 +354,62 @@ class _LoginScreenState extends State<LoginScreen> {
                 body: SizedBox(
                   width: screenWidthUnit * double.infinity,
                   child: SingleChildScrollView(
-
                     child: Column(
-                      
                       children: [
-                        SizedBox(height: screenHeightUnit * 19),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    0,
+                                    screenHeightUnit * 25,
+                                    screenWidthUnit * 30,
+                                    0),
+                                child: TextButton(
+                                  onPressed: () {
+                                    if (!mounted) {
+                                      return;
+                                    }
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            GettingStartedHome(),
+                                      ),
+                                    );
+                                  },
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Color.fromRGBO(
+                                                            135, 206, 235, 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    shadowColor: Colors.grey.withOpacity(0.3),
+                                    elevation: 3,
+                                  ),
+                                  child: Container(
+                                    width: screenWidthUnit * 40,
+                                    height: screenHeightUnit * 50,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Sign Up",
+                                      style: GoogleFonts.baloo2(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                          ],
+                        ),
                         SizedBox(
-                          height: screenHeightUnit * 844,
-                          width: screenWidthUnit * 200,
+                          height: screenHeightUnit * 794,
+                          width: screenWidthUnit * 100,
                           child: Stack(
                             alignment: Alignment.topCenter,
                             children: [
-                              SizedBox(height: screenHeightUnit * 19),
+                              SizedBox(height: screenHeightUnit * 3),
                               Image.asset(
                                 'assets/images/monkey.png',
                                 height: screenHeightUnit * 390,
@@ -374,20 +417,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                 alignment: Alignment.topCenter,
                               ),
                               Positioned(
-                                top: 185 * screenHeightUnit,
+                                top: 205 * screenHeightUnit,
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(13, 16, 0, 0),
+                                      const EdgeInsets.fromLTRB(13, 6, 0, 0),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(
                                       color: Colors.grey.withOpacity(.5),
                                       width: 0,
                                     ),
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(10),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.1),
@@ -397,17 +440,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ],
                                   ),
+
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      SizedBox(height: screenHeightUnit * 25,),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding:  EdgeInsets.fromLTRB(
-                                                26, 16 * screenHeightUnit, 0, 0),
+                                            padding: EdgeInsets.fromLTRB(
+                                                26, 1 * screenHeightUnit, 0, 0),
                                             child: Text(
                                               'Welcome Back',
                                               style: GoogleFonts.baloo2(
@@ -432,7 +478,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding:  EdgeInsets.fromLTRB(
+                                            padding: EdgeInsets.fromLTRB(
                                                 26, 2 * screenHeightUnit, 0, 0),
                                             child: Text(
                                               'to access your account.',
@@ -445,8 +491,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding:  EdgeInsets.fromLTRB(
-                                                28, 20 * screenHeightUnit, 0, 0),
+                                            padding: EdgeInsets.fromLTRB(
+                                                15 * screenHeightUnit,
+                                                10 * screenHeightUnit,
+                                                15 * screenHeightUnit,
+                                                0),
                                             child: SizedBox(
                                               width: screenWidthUnit * 150,
                                               height: screenHeightUnit * 49,
@@ -465,8 +514,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding:  EdgeInsets.fromLTRB(
-                                                29, 7 * screenHeightUnit, 0, 0),
+                                            padding: EdgeInsets.fromLTRB(
+                                                15 * screenHeightUnit,
+                                                12 * screenHeightUnit,
+                                                15 * screenHeightUnit,
+                                                0),
                                             child: SizedBox(
                                               width: screenWidthUnit * 150,
                                               height: screenHeightUnit * 49,
@@ -506,18 +558,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           BorderRadius.circular(
                                                               30),
                                                     ),
-                                                    padding:  EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 10 * screenHeightUnit,
-                                                        vertical: 5),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10 *
+                                                                screenHeightUnit,
+                                                            vertical: 5),
                                                     elevation: 8,
                                                   ),
-                                                  child:  Text(
+                                                  child: Text(
                                                     'Log in',
                                                     style: TextStyle(
                                                       color: Color.fromARGB(
                                                           252, 252, 252, 252),
-                                                      fontSize: 18 * screenHeightUnit,
+                                                      fontSize:
+                                                          18 * screenHeightUnit,
                                                     ),
                                                   ),
                                                 )),
@@ -568,39 +622,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     },
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                       EdgeInsets.fromLTRB(
-                                                          0, 10 * screenHeightUnit, 0, 0),
-                                                  child: Center(
-                                                    child: TextButton(
-                                                        onPressed: () {
-                                                          if (!mounted) {
-                                                            return;
-                                                          }
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  GettingStartedHome(),
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Text(
-                                                          "If you are new, create a new account here",
-                                                          style: GoogleFonts
-                                                              .baloo2(
-                                                            fontSize: 16 * screenHeightUnit,
-                                                            color: const Color
-                                                                .fromRGBO(
-                                                                0, 0, 0, 1),
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                        )),
-                                                  ),
-                                                ),
+                                                
                                               ],
                                             ),
                                           )
