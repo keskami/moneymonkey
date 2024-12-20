@@ -1,5 +1,5 @@
 // ignore_for_file: file_names
-
+import 'package:flutter/foundation.dart'; // For kIsWeb
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,9 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
       _currButton = buttonText;
     });
   }
+
+  
+
 
   Future<List<DocumentSnapshot>> _getTransactions(String type) async {
     CollectionReference transactionsRef = FirebaseFirestore.instance
@@ -77,16 +80,31 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         String subtitle = "Paid From $sourceOrDestination";
         String imageUrl = 'assets/images/banana.png';
         String type = data['Type'];
-        transactionWidgets.add(
-          transactionItem(
-            icon:
-                type == "Savings" ? Icons.savings_outlined : Icons.trending_up,
-            title: type,
-            subtitle: subtitle,
-            amount: amount,
-            imageUrl: imageUrl,
-          ),
-        );
+        if (kIsWeb) {
+          transactionWidgets.add(
+            webTransactionItem(
+              icon: type == "Savings"
+                  ? Icons.savings_outlined
+                  : Icons.trending_up,
+              title: type,
+              subtitle: subtitle,
+              amount: amount,
+              imageUrl: imageUrl,
+            ),
+          );
+        } else {
+          transactionWidgets.add(
+            transactionItem(
+              icon: type == "Savings"
+                  ? Icons.savings_outlined
+                  : Icons.trending_up,
+              title: type,
+              subtitle: subtitle,
+              amount: amount,
+              imageUrl: imageUrl,
+            ),
+          );
+        }
       }
     }
     setState(() {});
@@ -167,311 +185,317 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               onEnter: (PointerEvent event) {
                 setState(() {
                   isExpanded = false;
-                }
-                );
+                });
               },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Total asset value",
-                          style: GoogleFonts.baloo2(
-                              fontSize: screenHeightUnit * 15,
-                              color: Colors.black),
-                        ),
-                        Text(
-                          '$totalBananstring🍌',
-                          style: TextStyle(
-                            fontSize: 40 * screenHeightUnit,
-                            fontFamily: "FredokaOne",
+              child: Row(children: [
+                SizedBox(width: screenWidthUnit * 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Total asset value",
+                            style: GoogleFonts.baloo2(
+                                fontSize: screenHeightUnit * 15,
+                                color: Colors.black),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              _changePercentage > 0
-                                  ? Icons.arrow_upward
-                                  : Icons.arrow_downward,
-                              color: _changePercentage > 0
-                                  ? Colors.blue
-                                  : Colors.red,
+                          Text(
+                            '$totalBananstring🍌',
+                            style: TextStyle(
+                              fontSize: 40 * screenHeightUnit,
+                              fontFamily: "FredokaOne",
                             ),
-                            Text(
-                              '$_changePercentage% ',
-                              style: GoogleFonts.baloo2(
-                                fontSize: 15 * screenHeightUnit,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                _changePercentage > 0
+                                    ? Icons.arrow_upward
+                                    : Icons.arrow_downward,
                                 color: _changePercentage > 0
                                     ? Colors.blue
                                     : Colors.red,
                               ),
-                            ),
-                            const Text(
-                              'from this week',
-                              style: TextStyle(
-                                color: Colors.black,
+                              Text(
+                                '$_changePercentage% ',
+                                style: GoogleFonts.baloo2(
+                                  fontSize: 15 * screenHeightUnit,
+                                  color: _changePercentage > 0
+                                      ? Colors.blue
+                                      : Colors.red,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              const Text(
+                                'from this week',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: screenHeightUnit * 15,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: screenWidthUnit * 200,
-                      height: screenHeightUnit * 225,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(135, 206, 235, 1),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: EdgeInsets.all(screenHeightUnit * 15),
-                                child: Text(
-                                  "Balance",
-                                  style: GoogleFonts.baloo2(
-                                    color: Colors.white,
-                                    fontSize: 16,
+                    SizedBox(
+                      height: screenHeightUnit * 22,
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.only(
+                          start: screenWidthUnit * 15,
+                          end: screenWidthUnit * 15),
+                      child: SizedBox(
+                        width: screenWidthUnit * 90,
+                        height: screenHeightUnit * 200,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(135, 206, 235, 1),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.all(screenHeightUnit * 20),
+                                  child: Text(
+                                    "Balance",
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Container(
-                                padding:
-                                    EdgeInsets.only(top: screenHeightUnit * 20),
-                                child: SizedBox(
-                                  height: screenHeightUnit * 39,
-                                  width: screenWidthUnit * 41,
-                                  child: Image.asset('assets/images/bank.png'),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                padding: EdgeInsets.all(screenHeightUnit * 20),
-                                child: Text(
-                                  "**** 0149",
-                                  style: GoogleFonts.baloo2(
-                                    color: Colors.white,
-                                    fontSize: screenHeightUnit * 21,
+                              //Align(
+                              //alignment: Alignment.topRight,
+                              //child: Container(
+                              //padding:
+                              //  EdgeInsets.only(top: screenHeightUnit * 10),
+                              //child: SizedBox(
+                              //height: screenHeightUnit * 30,
+                              //width: screenWidthUnit * 31,
+                              //child: Image.asset('assets/images/bank.png'),
+                              //),
+                              // ),
+                              //),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.all(screenHeightUnit * 20),
+                                  child: Text(
+                                    "**** 0149",
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.white,
+                                      fontSize: screenHeightUnit * 11,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Padding(
-                                padding: EdgeInsets.all(screenHeightUnit * 20),
-                                child: Text(
-                                  "05/25",
-                                  style: GoogleFonts.baloo2(
-                                      fontSize: screenHeightUnit * 24,
-                                      color: Colors.white),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.all(screenHeightUnit * 20),
+                                  child: Text(
+                                    "05/25",
+                                    style: GoogleFonts.baloo2(
+                                        fontSize: screenHeightUnit * 20,
+                                        color: Colors.white),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                  padding: const EdgeInsets.only(left: 25),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "$balanceString🍌",
-                                        style: GoogleFonts.baloo2(
-                                            fontSize: screenHeightUnit * 56,
-                                            color: Colors.white),
-                                      ),
-                                    ],
-                                  )),
-                            )
-                          ],
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                    padding: const EdgeInsets.only(left: 25),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "$balanceString🍌",
+                                          style: GoogleFonts.baloo2(
+                                              fontSize: screenHeightUnit * 46,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: screenHeightUnit * 33),
-                  Center(
-                    child: SizedBox(
-                      width: screenWidthUnit * 276,
-                      height: screenHeightUnit * 360,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(255, 255, 255, 1),
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          children: [
-                            const Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(15, 17, 0, 0),
-                                child: Text(
-                                  "Transactional History",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontFamily: "FredokaOne",
+                    SizedBox(height: screenHeightUnit * 47),
+                    Center(
+                      child: SizedBox(
+                        width: screenWidthUnit * 126,
+                        height: screenHeightUnit * 300,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(255, 255, 255, 1),
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Stack(
+                            children: [
+                              const Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(15, 17, 0, 0),
+                                  child: Text(
+                                    "Transactional History",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontFamily: "FredokaOne",
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 45, 0, 0),
-                                child: Text(
-                                  "A list of historical transactions",
-                                  style: GoogleFonts.baloo2(
-                                    color: Colors.black,
-                                    fontSize: 14,
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 45, 0, 0),
+                                  child: Text(
+                                    "A list of historical transactions",
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(13, 77, 0, 0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        _updateButton("All");
-                                        _setTransaction("ALL");
-                                      },
-                                      child: Container(
-                                        height: screenHeightUnit * 29,
-                                        width: screenWidthUnit * 69,
-                                        padding: const EdgeInsets.all(0),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: _currButton == "All"
-                                              ? const Color.fromRGBO(
-                                                  255, 224, 130, 1)
-                                              : const Color.fromRGBO(
-                                                  217, 217, 217, 100),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: Colors.lightBlue,
-                                            width: _currButton == "All"
-                                                ? screenWidthUnit * .5
-                                                : screenWidthUnit * 0,
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(13, 77, 0, 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          _updateButton("All");
+                                          _setTransaction("ALL");
+                                        },
+                                        child: Container(
+                                          height: screenHeightUnit * 29,
+                                          width: screenWidthUnit * 29,
+                                          padding: const EdgeInsets.all(0),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: _currButton == "All"
+                                                ? const Color.fromRGBO(
+                                                    255, 224, 130, 1)
+                                                : const Color.fromRGBO(
+                                                    217, 217, 217, 100),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: Colors.lightBlue,
+                                              width: _currButton == "All"
+                                                  ? screenWidthUnit * .5
+                                                  : screenWidthUnit * 0,
+                                            ),
                                           ),
-                                        ),
-                                        child: Text(
-                                          "All",
-                                          style: GoogleFonts.baloo2(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: _currButton == "All"
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                            height: screenHeightUnit * -.01,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: screenWidthUnit * 10),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _updateButton("Income");
-                                        _setTransaction("Income");
-                                      },
-                                      child: Container(
-                                        height: screenHeightUnit * 29,
-                                        width: screenWidthUnit * 89,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: _currButton == "Income"
-                                              ? const Color.fromRGBO(
-                                                  255, 224, 130, 1)
-                                              : const Color.fromRGBO(
-                                                  217, 217, 217, 100),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: Colors.lightBlue,
-                                            width: _currButton == "Income"
-                                                ? screenWidthUnit * .5
-                                                : screenWidthUnit * 0,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          "Income",
-                                          style: GoogleFonts.baloo2(
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                            fontWeight: _currButton == "Income"
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                            height: screenHeightUnit * -.01,
+                                          child: Text(
+                                            "All",
+                                            style: GoogleFonts.baloo2(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: _currButton == "All"
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                              height: screenHeightUnit * -.01,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: screenWidthUnit * 10),
-                                    GestureDetector(
-                                      onTap: (){
-                                        _updateButton("Expenses");
-                                        _setTransaction("Expenses");
-
-                                      },
-                                      child: Container(
-                                        height: screenHeightUnit * 29,
-                                        width: screenWidthUnit * 89,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: _currButton == "Expenses"
-                                              ? const Color.fromRGBO(
-                                                  255, 224, 130, 1)
-                                              : const Color.fromRGBO(
-                                                  217, 217, 217, 100),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: Colors.lightBlue,
-                                            width: _currButton == "Expenses"
-                                                ? screenWidthUnit * .5
-                                                : screenWidthUnit * 0,
+                                      SizedBox(width: screenWidthUnit * 5),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _updateButton("Income");
+                                          _setTransaction("Income");
+                                        },
+                                        child: Container(
+                                          height: screenHeightUnit * 29,
+                                          width: screenWidthUnit * 29,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: _currButton == "Income"
+                                                ? const Color.fromRGBO(
+                                                    255, 224, 130, 1)
+                                                : const Color.fromRGBO(
+                                                    217, 217, 217, 100),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: Colors.lightBlue,
+                                              width: _currButton == "Income"
+                                                  ? screenWidthUnit * .5
+                                                  : screenWidthUnit * 0,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Income",
+                                            style: GoogleFonts.baloo2(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight:
+                                                  _currButton == "Income"
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal,
+                                              height: screenHeightUnit * -.01,
+                                            ),
                                           ),
                                         ),
-                                       
+                                      ),
+                                      SizedBox(width: screenWidthUnit * 5),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _updateButton("Expenses");
+                                          _setTransaction("Expenses");
+                                        },
+                                        child: Container(
+                                          height: screenHeightUnit * 29,
+                                          width: screenWidthUnit * 29,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: _currButton == "Expenses"
+                                                ? const Color.fromRGBO(
+                                                    255, 224, 130, 1)
+                                                : const Color.fromRGBO(
+                                                    217, 217, 217, 100),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: Colors.lightBlue,
+                                              width: _currButton == "Expenses"
+                                                  ? screenWidthUnit * .5
+                                                  : screenWidthUnit * 0,
+                                            ),
+                                          ),
                                           child: Text(
                                             "Expenses",
                                             style: GoogleFonts.baloo2(
@@ -486,130 +510,134 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                           ),
                                         ),
                                       ),
-                                    
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 90, 0, 0),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 29, 0, 0),
+                                        child: Container(
+                                          height: screenHeightUnit * 1,
+                                          width: screenWidthUnit * 332,
+                                          decoration: const BoxDecoration(
+                                            color: Color.fromRGBO(0, 0, 0, .3),
+                                          ),
+                                        )),
+                                    SizedBox(
+                                      width: screenWidthUnit * 332,
+                                      height: screenHeightUnit * 175,
+                                      child: Column(
+                                        children: [
+                                          if (transactionWidgets
+                                              .isNotEmpty) ...[
+                                            ...transactionWidgets,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 1, 0, 0),
+                                              child: Container(
+                                                height: screenHeightUnit * 1,
+                                                width: screenWidthUnit * 332,
+                                                decoration: const BoxDecoration(
+                                                  color: Color.fromRGBO(
+                                                      0, 0, 0, .3),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: screenHeightUnit * 3.5,
+                                            ),
+                                          ] else ...[
+                                            const Center(
+                                              child: Text(
+                                                'No Transactions',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 90, 0, 0),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 29, 0, 0),
-                                      child: Container(
-                                        height: screenHeightUnit * 1,
-                                        width: screenWidthUnit * 332,
-                                        decoration: const BoxDecoration(
-                                          color: Color.fromRGBO(0, 0, 0, .3),
-                                        ),
-                                      )),
-                                  SizedBox(
-                                    width: screenWidthUnit * 332,
-                                    height: screenHeightUnit * 175,
-                                    child: Column(
-                                      children: [
-                                        if (transactionWidgets.isNotEmpty) ...[
-                                          ...transactionWidgets,
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 1, 0, 0),
-                                            child: Container(
-                                              height: screenHeightUnit * 1,
-                                              width: screenWidthUnit * 332,
-                                              decoration: const BoxDecoration(
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, .3),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: screenHeightUnit * 3.5,
-                                          ),
-                                        ] else ...[
-                                          const Center(
-                                            child: Text(
-                                              'No Transactions',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TransfersScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "View All >",
+                                    style: GoogleFonts.baloo2(fontSize: 18),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => TransfersScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "View All >",
-                                  style: GoogleFonts.baloo2(fontSize: 18),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  Container(
-                      height: screenHeightUnit * 100,
-                      width: screenWidthUnit * 500,
-                      color: Colors.white,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            width: screenWidthUnit * 15,
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(height: screenHeightUnit * 20),
-                              Text(
-                                "Buying Power  >",
-                                style: GoogleFonts.baloo2(
-                                  fontSize: 17,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: screenWidthUnit * 20,
+                    const Spacer(),
+                    Container(
+                        height: screenHeightUnit * 100,
+                        width: screenWidthUnit * 200,
+                        color: Colors.white,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              width: screenWidthUnit * 15,
+                            ),
+                            Column(
+                              children: [
+                                SizedBox(height: screenHeightUnit * 20),
+                                Text(
+                                  "Buying Power  >",
+                                  style: GoogleFonts.baloo2(
+                                    fontSize: 17,
+                                    color: Colors.black,
                                   ),
-                                  Text(
-                                    "$balanceString🍌",
-                                    style: GoogleFonts.baloo2(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: screenWidthUnit * 20,
                                     ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            width: screenWidthUnit * 30,
-                          ),
-                        ],
-                      )),
-                ],
-              ),
+                                    Text(
+                                      "$balanceString🍌",
+                                      style: GoogleFonts.baloo2(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              width: screenWidthUnit * 30,
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ]),
             ),
+            
             floatingActionButton: MouseRegion(
               onEnter: (PointerEvent event) {
                 setState(() {
@@ -618,16 +646,16 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 0),
-                width: 191 * screenWidthUnit,
+                width: 50 * screenWidthUnit,
                 height:
-                    isExpanded ? screenHeightUnit * 105 : screenHeightUnit * 52,
+                    isExpanded ? screenHeightUnit * 55 : screenHeightUnit * 32,
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(135, 206, 235, 1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: isExpanded
                     ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           GestureDetector(
                               onTap: () {
@@ -646,13 +674,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                   color: const Color.fromRGBO(135, 206, 235, 1),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                width: 191 * screenWidthUnit,
-                                height: screenHeightUnit * 40,
+                                width: 51 * screenWidthUnit,
+                                height: screenHeightUnit * 19,
                                 child: Text(
                                   'Invest',
                                   style: GoogleFonts.fredoka(
                                     color: Colors.white,
-                                    fontSize: 19,
+                                    fontSize: 16,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -665,13 +693,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             onTap: () {},
                             child: Container(
                               color: const Color.fromRGBO(135, 206, 235, 1),
-                              width: 191 * screenWidthUnit,
-                              height: screenHeightUnit * 40,
+                              width: 51 * screenWidthUnit,
+                              height: screenHeightUnit * 19,
                               child: Text(
                                 'Save',
                                 style: GoogleFonts.fredoka(
                                   color: Colors.white,
-                                  fontSize: 19,
+                                  fontSize: 16,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -682,10 +710,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     : Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Grow  ^',
+                          'Invest',
                           style: GoogleFonts.fredoka(
                             color: Colors.white,
-                            fontSize: 24,
+                            fontSize: 18,
                           ),
                         ),
                       ),
@@ -1056,7 +1084,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                           SizedBox(
                                             height: screenHeightUnit * 3.5,
                                           ),
-                                          
                                         ] else ...[
                                           const Center(
                                             child: Text(
@@ -1074,24 +1101,22 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                               ),
                             ),
                             Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: TextButton(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        TransfersScreen(),
-                                                  ),
-                                                );
-                                              },
-                                              child: Text(
-                                                "View All >",
-                                                style: GoogleFonts.baloo2(
-                                                    fontSize: 18),
-                                              ),
-                                            ),
-                                          ),
+                              alignment: Alignment.bottomRight,
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TransfersScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "View All >",
+                                  style: GoogleFonts.baloo2(fontSize: 18),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -1142,12 +1167,14 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 ],
               ),
             ),
+            
             floatingActionButton: GestureDetector(
               onTap: () {
                 setState(() {
                   isExpanded = !isExpanded;
                 });
               },
+              
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 0),
                 width: 191 * screenWidthUnit,
@@ -1273,4 +1300,66 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
       ),
     );
   }
+
+  Widget webTransactionItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String amount,
+    required String imageUrl,
+  }) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 3, 5, 3),
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: Icon(icon, size: 15),
+          ),
+          SizedBox(width: screenWidth * 0.01),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.baloo2(fontSize: 13, color: Colors.black),
+                ),
+                Text(subtitle,
+                    style: GoogleFonts.baloo2(
+                      color: Colors.black,
+                      fontSize: 10,
+                    )),
+              ],
+            ),
+          ),
+          Text(amount,
+              style: GoogleFonts.baloo2(
+                  fontSize: screenHeight * .0275, fontWeight: FontWeight.w500)),
+          SizedBox(width: screenWidth * .01),
+          Image.asset(imageUrl, height: screenHeight * .0367),
+        ],
+      ),
+    );
+  }
 }
+
+
+class CustomFABLocation extends FloatingActionButtonLocation {
+  final double x;
+  final double y;
+
+  CustomFABLocation(this.x, this.y);
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    return Offset(x, y);
+  }
+}
+
