@@ -531,8 +531,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                 child: Column(
                                   children: [
                                     Padding(
-                                        padding:  EdgeInsets.fromLTRB(
-                                           0, screenHeightUnit*.017,0,0),
+                                        padding: EdgeInsets.fromLTRB(
+                                           0, 28,0,0),
                                         child: Container(
                                           height: screenHeightUnit * 1,
                                           width: screenWidthUnit * 332,
