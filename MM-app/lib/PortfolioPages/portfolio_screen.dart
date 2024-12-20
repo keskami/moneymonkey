@@ -172,6 +172,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   }
 
   @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    final double offset = scaffoldGeometry.minInsets.bottom;
+    final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height;
+    return Offset(
+      scaffoldGeometry.scaffoldSize.width / 2 - scaffoldGeometry.floatingActionButtonSize.width / 2,
+      scaffoldGeometry.scaffoldSize.height - fabHeight - offset - 50 // 20 pixels up
+    );
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -301,7 +312,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                     "**** 0149",
                                     style: GoogleFonts.baloo2(
                                       color: Colors.white,
-                                      fontSize: screenHeightUnit * 11,
+                                      fontSize: screenHeightUnit * 16,
                                     ),
                                   ),
                                 ),
@@ -343,7 +354,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     Center(
                       child: SizedBox(
                         width: screenWidthUnit * 126,
-                        height: screenHeightUnit * 300,
+                        height: screenHeightUnit * 340,
                         child: Container(
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(255, 255, 255, 1),
@@ -520,8 +531,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                 child: Column(
                                   children: [
                                     Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 29, 0, 0),
+                                        padding:  EdgeInsets.fromLTRB(
+                                           0, screenHeightUnit*.017,0,0),
                                         child: Container(
                                           height: screenHeightUnit * 1,
                                           width: screenWidthUnit * 332,
@@ -594,13 +605,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     const Spacer(),
                     Container(
                         height: screenHeightUnit * 100,
-                        width: screenWidthUnit * 200,
-                        color: Colors.white,
+                        width: screenWidthUnit * 150,
+                        //color: Colors.white,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             SizedBox(
-                              width: screenWidthUnit * 15,
+                              width: screenWidthUnit * 6,
                             ),
                             Column(
                               children: [
@@ -615,7 +626,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width: screenWidthUnit * 20,
+                                      width: screenWidthUnit * 0,
                                     ),
                                     Text(
                                       "$balanceString🍌",
@@ -637,7 +648,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 ),
               ]),
             ),
-            
+            floatingActionButtonLocation: CustomFabLocation(),
+            floatingActionButtonAnimator: NoScalingAnimation(),
             floatingActionButton: MouseRegion(
               onEnter: (PointerEvent event) {
                 setState(() {
@@ -648,7 +660,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 duration: const Duration(milliseconds: 0),
                 width: 50 * screenWidthUnit,
                 height:
-                    isExpanded ? screenHeightUnit * 55 : screenHeightUnit * 32,
+                    isExpanded ? screenHeightUnit * 70 : screenHeightUnit * 42,
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(135, 206, 235, 1),
                   borderRadius: BorderRadius.circular(10),
@@ -675,7 +687,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 width: 51 * screenWidthUnit,
-                                height: screenHeightUnit * 19,
+                                height: screenHeightUnit * 24,
                                 child: Text(
                                   'Invest',
                                   style: GoogleFonts.fredoka(
@@ -694,7 +706,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             child: Container(
                               color: const Color.fromRGBO(135, 206, 235, 1),
                               width: 51 * screenWidthUnit,
-                              height: screenHeightUnit * 19,
+                              height: screenHeightUnit * 24,
                               child: Text(
                                 'Save',
                                 style: GoogleFonts.fredoka(
@@ -1311,7 +1323,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 3, 5, 3),
+      padding:  EdgeInsets.fromLTRB(0, 3, 5, screenHeight * .008),
       child: Row(
         children: [
           Container(
@@ -1320,7 +1332,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.all(8),
-            child: Icon(icon, size: 15),
+            child: Icon(icon, size: screenWidth * .01),
           ),
           SizedBox(width: screenWidth * 0.01),
           Expanded(
@@ -1351,15 +1363,32 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 }
 
 
-class CustomFABLocation extends FloatingActionButtonLocation {
-  final double x;
-  final double y;
-
-  CustomFABLocation(this.x, this.y);
-
+class CustomFabLocation extends FloatingActionButtonLocation {
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
-    return Offset(x, y);
+    final Offset offset = FloatingActionButtonLocation.centerDocked.getOffset(scaffoldGeometry);
+    return Offset(offset.dx -60, offset.dy - 20);
   }
 }
+
+class NoScalingAnimation extends FloatingActionButtonAnimator {
+  const NoScalingAnimation();
+
+  @override
+  Offset getOffset({required Offset begin, required Offset end, required double progress}) {
+    return end;
+  }
+
+  @override
+  Animation<double> getScaleAnimation({required Animation<double> parent}) {
+    return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
+  }
+
+  @override
+  Animation<double> getRotationAnimation({required Animation<double> parent}) {
+    return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
+  }
+}
+
+
 
