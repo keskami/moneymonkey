@@ -37,9 +37,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     });
   }
 
-  
-
-
   Future<List<DocumentSnapshot>> _getTransactions(String type) async {
     CollectionReference transactionsRef = FirebaseFirestore.instance
         .collection('Users')
@@ -176,11 +173,14 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     final double offset = scaffoldGeometry.minInsets.bottom;
     final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height;
     return Offset(
-      scaffoldGeometry.scaffoldSize.width / 2 - scaffoldGeometry.floatingActionButtonSize.width / 2,
-      scaffoldGeometry.scaffoldSize.height - fabHeight - offset - 50 // 20 pixels up
-    );
+        scaffoldGeometry.scaffoldSize.width / 2 -
+            scaffoldGeometry.floatingActionButtonSize.width / 2,
+        scaffoldGeometry.scaffoldSize.height -
+            fabHeight -
+            offset -
+            50 // 20 pixels up
+        );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +199,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 });
               },
               child: Row(children: [
-                SizedBox(width: screenWidthUnit * 40),
+                SizedBox(width: screenWidthUnit * 60),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -531,8 +531,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                 child: Column(
                                   children: [
                                     Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                           0, 28,0,0),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 28, 0, 0),
                                         child: Container(
                                           height: screenHeightUnit * 1,
                                           width: screenWidthUnit * 332,
@@ -646,6 +646,33 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         )),
                   ],
                 ),
+                SizedBox(
+                  width: screenWidthUnit * 30,
+                ),
+                Column(
+                  
+                  children: [
+                     SizedBox(
+                  height: screenHeightUnit * 10,
+                ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                         Image.asset(
+                                'assets/images/monkeyNoText.png',
+                                height: screenHeightUnit * 49,
+                              ),
+                        
+                        SizedBox(width: screenWidthUnit * 10,),
+                        Text("here"),
+                        SizedBox(width: screenWidthUnit * 10,),
+                        Text("here"),
+                        SizedBox(width: screenWidthUnit * 10,),
+                        Text("here")
+                      ],
+                    )
+                  ],
+                )
               ]),
             ),
             floatingActionButtonLocation: CustomFabLocation(),
@@ -1179,14 +1206,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 ],
               ),
             ),
-            
             floatingActionButton: GestureDetector(
               onTap: () {
                 setState(() {
                   isExpanded = !isExpanded;
                 });
               },
-              
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 0),
                 width: 191 * screenWidthUnit,
@@ -1323,7 +1348,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding:  EdgeInsets.fromLTRB(0, 3, 5, screenHeight * .008),
+      padding: EdgeInsets.fromLTRB(0, 3, 5, screenHeight * .008),
       child: Row(
         children: [
           Container(
@@ -1362,12 +1387,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   }
 }
 
-
 class CustomFabLocation extends FloatingActionButtonLocation {
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
-    final Offset offset = FloatingActionButtonLocation.centerDocked.getOffset(scaffoldGeometry);
-    return Offset(offset.dx -60, offset.dy - 20);
+    final Offset offset =
+        FloatingActionButtonLocation.centerDocked.getOffset(scaffoldGeometry);
+    return Offset(offset.dx - 60, offset.dy - 20);
   }
 }
 
@@ -1375,7 +1400,8 @@ class NoScalingAnimation extends FloatingActionButtonAnimator {
   const NoScalingAnimation();
 
   @override
-  Offset getOffset({required Offset begin, required Offset end, required double progress}) {
+  Offset getOffset(
+      {required Offset begin, required Offset end, required double progress}) {
     return end;
   }
 
@@ -1389,6 +1415,3 @@ class NoScalingAnimation extends FloatingActionButtonAnimator {
     return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
   }
 }
-
-
-
