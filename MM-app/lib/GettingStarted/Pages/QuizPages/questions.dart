@@ -37,7 +37,8 @@ class _QuizHomeState extends State<QuizHome> {
   @override
   Widget build(context) {
     QuizController quizController = Get.put(QuizController());
-    GettingStartedController gettingStartedController = Get.find();
+    GettingStartedController gettingStartedController =
+        Get.put(GettingStartedController());
     void showResultPage() {
       int score = quizController.calculateScore();
       if (score <= 3) {
@@ -99,54 +100,56 @@ class _QuizHomeState extends State<QuizHome> {
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: screenWidth * 0.01, vertical: screenWidth * 0.05),
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: screenWidth * 0.4,
-              child: Column(
-                children: [
-                  ChatBubbleContainer(
-                    trianglePosition: TrianglePosition.bottom,
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    childWidget: SingleChildScrollView(
-                      child: Text(
-                        currentQuizData.text,
-                        softWrap: true,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+                  height: screenWidth * 0.1,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return ShimmerContainer(
+                      height: 145,
+                      width: 137,
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
+                      ShimmerContainer(
+                    height: 145,
+                    width: 137,
+                  ),
+                ),
+                ChatBubbleContainer(
+                  trianglePosition: TrianglePosition.left,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  childWidget: Container(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width *
+                            0.7), // Set max width
+                    child: Text(
+                      currentQuizData.text,
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                     ),
                   ),
-                  Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
-                    height: screenWidth * 0.2,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return ShimmerContainer(
-                        height: 145,
-                        width: 137,
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) =>
-                        ShimmerContainer(
-                      height: 145,
-                      width: 137,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Container(
-              width: screenWidth * 0.5,
-              child: Expanded(
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.2),
                 child: SingleChildScrollView(
                   child: Column(children: [
                     ...options.map((answer) {

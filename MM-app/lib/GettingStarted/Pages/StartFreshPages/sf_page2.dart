@@ -229,7 +229,7 @@ class StartFreshPage2 extends StatelessWidget {
         Container(
           width: screenWidth * 0.5,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -276,7 +276,7 @@ class StartFreshPage2 extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: screenWidth * 0.05,
+                height: screenWidth * 0.01,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -323,7 +323,7 @@ class StartFreshPage2 extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: screenWidth * 0.05,
+                height: screenWidth * 0.01,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -369,7 +369,7 @@ class StartFreshPage2 extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: screenWidth * 0.05,
+                height: screenWidth * 0.01,
               ),
             ],
           ),
