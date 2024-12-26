@@ -144,6 +144,9 @@ flutter:
     - assets/images/money-manager.svg
     - assets/images/savings-jar.svg
     - assets/images/price-tags.svg
+    - assets/images/newMonkeys/Maria.png
+    - assets/images/newMonkeys/Ava.png
+    - assets/images/newMonkeys/Jason.png
 
   fonts:
     - family: Baloo 2
