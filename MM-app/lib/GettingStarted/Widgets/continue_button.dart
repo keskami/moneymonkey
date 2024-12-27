@@ -59,7 +59,7 @@ class NextButton extends StatelessWidget {
         onTap: isEnabled ? nextPage : null,
         child: Container(
           decoration: BoxDecoration(
-            color: isEnabled ? LightTheme().primaryBlue : Colors.grey,
+            color: isEnabled ? LightTheme().primaryBlue : Colors.grey[300],
             borderRadius: BorderRadius.circular(15),
           ),
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
@@ -67,14 +67,14 @@ class NextButton extends StatelessWidget {
             horizontal: 10,
             vertical: 12,
           ),
-          width: screenWidth * 2 / 5,
-          height: screenHeight * 0.1,
+          width: screenWidth * 0.1,
+          height: screenHeight * 0.07,
           child: Center(
             child: Text(
               text,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),

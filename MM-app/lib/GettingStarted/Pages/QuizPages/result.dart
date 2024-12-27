@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../Models and Questions/question_data.dart';

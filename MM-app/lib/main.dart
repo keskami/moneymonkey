@@ -2,12 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monkey/GettingStarted/Pages/QuizPages/questions.dart';
 import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
-import 'package:money_monkey/home.dart';
+import 'package:money_monkey/LessonPages/LessonOnePages/Page1.dart';
+import 'package:money_monkey/LessonPages/Pages/LessonOne.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import 'GettingStarted/Pages/gs_home.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -45,10 +44,10 @@ class MyApp extends StatelessWidget {
                 if (userId.isEmpty) {
                   return StartFreshHome();
                 } else {
-                  return HomePage();
+                  return L1Page1();
                 }
               } else {
-                return GettingStartedHome();
+                return LessonOne();
               }
             },
           ),

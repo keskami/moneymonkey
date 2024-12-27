@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
@@ -144,7 +144,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
         child: Column(
           children: [
             SizedBox(height: screenHeight * 0.05),
-            const Row(
+            Row(
               mainAxisAlignment:
                   MainAxisAlignment.start, // Distribute space between widgets
               children: [

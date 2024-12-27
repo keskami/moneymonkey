@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 

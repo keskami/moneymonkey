@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Pages/QuizPages/questions.dart';
 import 'package:money_monkey/GettingStarted/Pages/su_home.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
