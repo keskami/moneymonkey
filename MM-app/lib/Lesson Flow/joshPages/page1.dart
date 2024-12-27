@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Lesson%20Flow/joshPages/page2.dart';
+
 import 'package:money_monkey/home.dart';
 
 class Page1 extends StatefulWidget {
@@ -44,10 +46,8 @@ class _Page1State extends State<Page1> {
             var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
 
             if (portfolioData != null) {
-              balance = portfolioData?['Balance'] ?? 0;
-              totalBanans = portfolioData?['Total Bananas'] ?? 0;
-              int netGain = portfolioData?['Weekly net gain'] ?? 0;
-              int lastWeek = balance! - netGain;
+              balance = portfolioData['Balance'] ?? 0;
+              totalBanans = portfolioData['Total Bananas'] ?? 0;
             }
 
             isLoading = false;
@@ -86,8 +86,8 @@ class _Page1State extends State<Page1> {
               pageNumber: 5,
               totalPages: 10,
               context: context,
-              bananas: totalBanans!),
-          SizedBox(height: screenHeightUnit * 82),
+              bananas: totalBanans),
+          SizedBox(height: screenHeightUnit * 92),
           Text(
             "Taking Responsibility for Personal Financial Decisions",
             style: GoogleFonts.baloo2(
@@ -115,12 +115,18 @@ class _Page1State extends State<Page1> {
                   monkeyImage: 'assets/images/newMonkeys/Maria.png',
                   name: "Maria",
                   description: "The Planner"),
+              SizedBox(
+                width: screenWidthUnit * 10,
+              ),
               newMonkey(
                   screenWidthUnit: screenWidthUnit,
                   screenHeightUnit: screenHeightUnit,
                   monkeyImage: 'assets/images/newMonkeys/Jason.png',
                   name: "Jason",
                   description: "Family Provider"),
+              SizedBox(
+                width: screenWidthUnit * 10,
+              ),
               newMonkey(
                   screenWidthUnit: screenWidthUnit,
                   screenHeightUnit: screenHeightUnit,
@@ -129,7 +135,38 @@ class _Page1State extends State<Page1> {
                   description: "The Single Saver"),
             ],
           ),
-          Text("here"),
+          SizedBox(height: screenHeightUnit * 82),
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Page2()),
+                );
+              },
+              child: Container(
+                height: screenHeightUnit * 58,
+                width: screenWidthUnit * 61,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(137, 220, 142, 1),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 5,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    "Continue to Peer Stories",
+                    style: GoogleFonts.baloo2(
+                        fontSize: screenWidthUnit * 4.2,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ))
         ]),
       ),
     );
@@ -143,13 +180,23 @@ Widget newMonkey({
   required String name,
   required String description,
 }) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.white,
+  return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+    Image.asset(
+      monkeyImage,
+      height: screenHeightUnit * 135,
     ),
-    child: Image.asset(monkeyImage),
-  );
-  
+    Text("$name",
+        style: GoogleFonts.baloo2(
+            fontSize: screenWidthUnit * 4.5,
+            color: Colors.black,
+            fontWeight: FontWeight.w700)),
+    SizedBox(height: screenHeightUnit * 5),
+    Text("$description",
+        style: GoogleFonts.baloo2(
+            fontSize: screenWidthUnit * 4.5,
+            color: Colors.black,
+            fontWeight: FontWeight.w700)),
+  ]);
 }
 
 Widget topOfLesson({

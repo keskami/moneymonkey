@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monkey/Lesson%20Flow/joshPages/page1.dart';
+import 'package:money_monkey/Lesson Flow/joshPages/page1.dart';
 import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
