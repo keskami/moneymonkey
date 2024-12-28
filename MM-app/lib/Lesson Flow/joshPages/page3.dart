@@ -17,7 +17,16 @@ class _Page3State extends State<Page3> {
   int? balance;
   int totalBanans = 0;
 
-  List<String> availableItems = ['Item A', 'Item B', 'Item C'];
+  List<String> availableItems = [
+    'Planning for grad school',
+    'Starting retirement fund',
+    'Budgeting for family needs',
+    'Emergency fund',
+    'Kids’ education savings',
+    'Travel savings',
+    'Personal investments',
+    'Flexible budgeting'
+  ];
   List<String> droppedItems1 = [];
   List<String> droppedItems2 = [];
   List<String> droppedItems3 = [];
@@ -74,6 +83,8 @@ class _Page3State extends State<Page3> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidthUnit = screenWidth / 390;
     double screenHeightUnit = screenHeight / 880;
+    double WebscreenWidthUnit = screenWidth / 1920;
+    double WebscreenHeightUnit = screenHeight / 1080;
 
     return Scaffold(
       body: Column(
@@ -87,39 +98,91 @@ class _Page3State extends State<Page3> {
             context: context,
             bananas: totalBanans,
           ),
-          SizedBox(height: 20),
-          // Droppable Section
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildDropZone(droppedItems1, 'Drop Zone 1'),
-                _buildDropZone(droppedItems2, 'Drop Zone 2'),
-                _buildDropZone(droppedItems3, 'Drop Zone 3'),
-              ],
+          SizedBox(height: WebscreenHeightUnit * 95),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+                padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
+                child: Text(
+                  'Match Actions to Categories',
+                  style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 6.5,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                )),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Expanded(
+              flex: 3,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                    WebscreenWidthUnit * 475, WebscreenHeightUnit * 31, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildDropZone(
+                        droppedItems1,
+                        'Lifelong Financial\nWell-Being',
+                        WebscreenWidthUnit,
+                        WebscreenHeightUnit),
+                    SizedBox(width: WebscreenWidthUnit * 16),
+                    _buildDropZone(
+                        droppedItems2,
+                        'Responsibility with\nDependents',
+                        WebscreenWidthUnit,
+                        WebscreenHeightUnit),
+                    SizedBox(width: WebscreenWidthUnit * 16),
+                    _buildDropZone(
+                        droppedItems3,
+                        'Responsibility\nwithout Dependents',
+                        WebscreenWidthUnit,
+                        WebscreenHeightUnit),
+                  ],
+                ),
+              ),
             ),
           ),
           SizedBox(height: 20),
-          // Draggable Items Row
-
-          Expanded(
-            child: Row(
+          Align(
+              child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              WebscreenWidthUnit * 475,
+              0,
+              0,
+              0,),
+              child: Expanded(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: availableItems.map((item) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: _buildDraggableItem(item),
+              children:
+                  List.generate((availableItems.length / 4).ceil(), (index) {
+                int start = index * 4;
+                int end = (index * 4 + 4) > availableItems.length
+                    ? availableItems.length
+                    : (index * 4 + 4);
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: availableItems.sublist(start, end).map((item) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: _buildDraggableItem(item),
+                    );
+                  }).toList(),
                 );
-              }).toList(),
+              }),
             ),
           ),
+            ),
+          ),
+          
         ],
       ),
     );
   }
 
-  Widget _buildDropZone(List<String> droppedItems, String label) {
+  Widget _buildDropZone(List<String> droppedItems, String label,
+      double WebscreenWidthUnit, double WebscreenHeightUnit) {
     return DragTarget<String>(
       onAccept: (data) {
         setState(() {
@@ -129,19 +192,25 @@ class _Page3State extends State<Page3> {
       },
       builder: (context, candidateData, rejectedData) {
         return Container(
-          width: 100,
-          height: 200,
+          width: WebscreenWidthUnit * 315,
+          height: WebscreenHeightUnit * 428,
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.grey[200],
-            border: Border.all(color: Colors.blueAccent),
+            border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: GoogleFonts.baloo2(
+                  fontSize: WebscreenWidthUnit * 25.5,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.start,
               ),
               SizedBox(height: 10),
               ...droppedItems.map((item) => _buildDroppedItem(item)),
