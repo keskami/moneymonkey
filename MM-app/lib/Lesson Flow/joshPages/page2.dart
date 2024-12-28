@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Lesson%20Flow/joshPages/page3.dart';
 import 'package:money_monkey/home.dart';
 
 class Page2 extends StatefulWidget {
@@ -160,7 +161,7 @@ class _Page2State extends State<Page2> {
               if(avaClicked && jasonClicked && mariaClicked){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => Page3()),
                 );
               }
               else{
