@@ -98,7 +98,7 @@ class _Page3State extends State<Page3> {
             context: context,
             bananas: totalBanans,
           ),
-          SizedBox(height: WebscreenHeightUnit * 75),
+          SizedBox(height: WebscreenHeightUnit * 65),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -118,7 +118,7 @@ class _Page3State extends State<Page3> {
               flex: 3,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    WebscreenWidthUnit * 475, WebscreenHeightUnit * 31, 0, 0),
+                    WebscreenWidthUnit * 475, WebscreenHeightUnit * 26, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -126,19 +126,25 @@ class _Page3State extends State<Page3> {
                         droppedItems1,
                         'Lifelong Financial\nWell-Being',
                         WebscreenWidthUnit,
-                        WebscreenHeightUnit),
+                        WebscreenHeightUnit,
+                        (item) => droppedItems2.remove(item),
+                        (item) => droppedItems3.remove(item)),
                     SizedBox(width: WebscreenWidthUnit * 16),
                     _buildDropZone(
                         droppedItems2,
                         'Responsibility with\nDependents',
                         WebscreenWidthUnit,
-                        WebscreenHeightUnit),
+                        WebscreenHeightUnit,
+                        (item) => droppedItems1.remove(item),
+                        (item) => droppedItems3.remove(item)),
                     SizedBox(width: WebscreenWidthUnit * 16),
                     _buildDropZone(
                         droppedItems3,
                         'Responsibility\nwithout Dependents',
                         WebscreenWidthUnit,
-                        WebscreenHeightUnit),
+                        WebscreenHeightUnit,
+                        (item) => droppedItems1.remove(item),
+                        (item) => droppedItems2.remove(item)),
                   ],
                 ),
               ),
@@ -148,7 +154,7 @@ class _Page3State extends State<Page3> {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: EdgeInsets.fromLTRB(
-                  WebscreenWidthUnit * 475, WebscreenHeightUnit * 31, 0, 0),
+                  WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
               child: Text(
                 'Actions to Categorize:',
                 style: GoogleFonts.baloo2(
@@ -190,17 +196,83 @@ class _Page3State extends State<Page3> {
               ),
             ),
           ),
+          Spacer(),
+          Padding(
+            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 83),
+            child: GestureDetector(
+                onTap: () {
+                  if (droppedItems1.contains("Flexible budgeting") &&
+                      droppedItems1.contains("Travel savings") &&
+                      droppedItems1.contains("Emergency fund") &&
+                      droppedItems1.contains("Starting retirement fund") &&
+                      droppedItems2.contains("Budgeting for family needs") &&
+                      droppedItems2.contains("Kids’ education savings") &&
+                      droppedItems3.contains("Personal investments") &&
+                      droppedItems3.contains("Planning for grad school")) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Page3()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          'Please categorize all the items correctly to continue'),
+                      duration: Duration(seconds: 2),
+                    ));
+                  }
+                },
+                child: Container(
+                  height: screenHeightUnit * 58,
+                  width: screenWidthUnit * 61,
+                  decoration: BoxDecoration(
+                    color: (droppedItems1.contains("Flexible budgeting") &&
+                      droppedItems1.contains("Travel savings") &&
+                      droppedItems1.contains("Emergency fund") &&
+                      droppedItems1.contains("Starting retirement fund") &&
+                      droppedItems2.contains("Budgeting for family needs") &&
+                      droppedItems2.contains("Kids’ education savings") &&
+                      droppedItems3.contains("Personal investments") &&
+                      droppedItems3.contains("Planning for grad school"))
+                        ? Color.fromRGBO(137, 220, 142, 1)
+                        : Color.fromRGBO(224, 227, 231, 1),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 5,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Continue to Activity",
+                      style: GoogleFonts.baloo2(
+                          fontSize: screenWidthUnit * 4.2,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                )),
+          )
         ],
       ),
     );
   }
 
-  Widget _buildDropZone(List<String> droppedItems, String label,
-      double WebscreenWidthUnit, double WebscreenHeightUnit) {
+  Widget _buildDropZone(
+      List<String> droppedItems,
+      String label,
+      double WebscreenWidthUnit,
+      double WebscreenHeightUnit,
+      Function(String) onItemDropped,
+      Function(String) onItemDropped2) {
     return DragTarget<String>(
       onAccept: (data) {
         setState(() {
           droppedItems.add(data);
+          onItemDropped(data);
+          onItemDropped2(data);
           availableItems.remove(data);
         });
       },
@@ -227,11 +299,36 @@ class _Page3State extends State<Page3> {
                 textAlign: TextAlign.start,
               ),
               SizedBox(height: 10),
-              ...droppedItems.map((item) => _buildDroppedItem(item)),
+              ...droppedItems.map(
+                (item) => _buildDraggableDroppedItem(
+                  item,
+                  droppedItems,
+                ),
+              )
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildDraggableDroppedItem(String label, List<String> sourceList) {
+    return Draggable<String>(
+      data: label,
+      feedback: Material(
+        color: Colors.transparent,
+        child: _buildDroppedItem(label),
+      ),
+      childWhenDragging: Opacity(
+        opacity: 0.5,
+        child: _buildDroppedItem(label),
+      ),
+      onDragCompleted: () {
+        setState(() {
+          sourceList.remove(label);
+        });
+      },
+      child: _buildDroppedItem(label),
     );
   }
 
@@ -252,9 +349,9 @@ class _Page3State extends State<Page3> {
 
   Widget _buildDroppedItem(String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
-        padding: EdgeInsets.all(7),
+        padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: Colors.white,
@@ -263,7 +360,8 @@ class _Page3State extends State<Page3> {
               color: Colors.black.withOpacity(0.1),
               blurRadius: 5,
               offset: const Offset(0, 4),
-            ),],
+            ),
+          ],
         ),
         child: Text(label, style: TextStyle(fontSize: 14)),
       ),
