@@ -98,7 +98,7 @@ class _Page3State extends State<Page3> {
             context: context,
             bananas: totalBanans,
           ),
-          SizedBox(height: WebscreenHeightUnit * 95),
+          SizedBox(height: WebscreenHeightUnit * 75),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -144,38 +144,52 @@ class _Page3State extends State<Page3> {
               ),
             ),
           ),
-          SizedBox(height: 20),
           Align(
-              child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              WebscreenWidthUnit * 475,
-              0,
-              0,
-              0,),
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                  WebscreenWidthUnit * 475, WebscreenHeightUnit * 31, 0, 0),
+              child: Text(
+                'Actions to Categorize:',
+                style: GoogleFonts.baloo2(
+                  fontSize: screenWidthUnit * 5,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          Align(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                WebscreenWidthUnit * 475,
+                0,
+                0,
+                0,
+              ),
               child: Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:
-                  List.generate((availableItems.length / 4).ceil(), (index) {
-                int start = index * 4;
-                int end = (index * 4 + 4) > availableItems.length
-                    ? availableItems.length
-                    : (index * 4 + 4);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: availableItems.sublist(start, end).map((item) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: _buildDraggableItem(item),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate((availableItems.length / 4).ceil(),
+                      (index) {
+                    int start = index * 4;
+                    int end = (index * 4 + 4) > availableItems.length
+                        ? availableItems.length
+                        : (index * 4 + 4);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: availableItems.sublist(start, end).map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: _buildDraggableItem(item),
+                        );
+                      }).toList(),
                     );
-                  }).toList(),
-                );
-              }),
+                  }),
+                ),
+              ),
             ),
           ),
-            ),
-          ),
-          
         ],
       ),
     );
@@ -238,13 +252,18 @@ class _Page3State extends State<Page3> {
 
   Widget _buildDroppedItem(String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(7),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(8),
           color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 5,
+              offset: const Offset(0, 4),
+            ),],
         ),
         child: Text(label, style: TextStyle(fontSize: 14)),
       ),
