@@ -56,7 +56,7 @@ class _OptionsTileState extends State<OptionsTile> {
           vertical: 10,
         ),
         padding: const EdgeInsets.symmetric(
-          horizontal: 15,
+          horizontal: 10,
           vertical: 5,
         ),
         child: widget.childWidget,

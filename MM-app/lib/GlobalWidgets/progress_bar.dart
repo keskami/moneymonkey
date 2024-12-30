@@ -16,7 +16,7 @@ class CustomProgressBar extends StatelessWidget {
     switch (pageName) {
       case 'EducationPage':
         final LessonOneController educationPagesController = Get.find();
-        progress = educationPagesController.pageIndex / 6;
+        progress = educationPagesController.pageIndex / 8;
         break;
     }
     return progress;

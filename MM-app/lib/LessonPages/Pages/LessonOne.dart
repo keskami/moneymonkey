@@ -12,8 +12,20 @@ class LessonOne extends StatefulWidget {
 
 class _LessonOneState extends State<LessonOne> {
   LessonOneController lessonOneController = Get.put(LessonOneController());
+  Future<void> _preLoadImages() async {
+    await precacheImage(
+        NetworkImage(
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af"),
+        context);
+    await precacheImage(
+        NetworkImage(
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c"),
+        context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _preLoadImages();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(

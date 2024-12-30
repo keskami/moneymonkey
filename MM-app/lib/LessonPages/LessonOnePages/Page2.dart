@@ -25,6 +25,9 @@ class _L1Page2State extends State<L1Page2> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+    });
   }
 
   @override

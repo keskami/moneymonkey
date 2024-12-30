@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
+import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
-import 'package:money_monkey/themes/color_themes.dart';
 
 class L1Page1 extends StatefulWidget {
   const L1Page1({
@@ -30,74 +30,23 @@ class _L1Page1State extends State<L1Page1> {
     "Only when I’m ready to plan for retirement.",
   ];
   LessonOneController lessonOneController = Get.find();
-  Future<void> _preLoadImages() async {
-    await precacheImage(
-        NetworkImage(
-            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af"),
-        context);
-    await precacheImage(
-        NetworkImage(
-            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c"),
-        context);
-  }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+    });
   }
 
-  SnackBar correctAnswer = SnackBar(
-    backgroundColor: LightTheme().pastelGreen,
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 25,
-          backgroundColor: Colors.white,
-          child: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af"),
-        ),
-        const SizedBox(
-          width: 20,
-        ),
-        Text(
-          "That's right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let's explore why.",
-          overflow: TextOverflow.visible,
-          softWrap: true,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
-        ),
-      ],
-    ),
+  SnackBar correctAnswer = CorrectAnswerSnackBar(
+    message:
+        "That's right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let's explore why.",
   );
-  SnackBar wrongAnswer = SnackBar(
-    backgroundColor: LightTheme().pastelRed,
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 25,
-          backgroundColor: Colors.white,
-          child: Image.network(
-            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c",
-          ),
-        ),
-        const SizedBox(
-          width: 20,
-        ),
-        Text(
-          "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
-          overflow: TextOverflow.visible,
-          softWrap: true,
-          style: TextStyle(
-            fontSize: 16,
-          ),
-        ),
-      ],
-    ),
+
+  SnackBar wrongAnswer = WrongAnswerSnackBar(
+    message:
+        "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
   );
   void answerQuestion(String ans) {
     currentAnswers.clear();
@@ -124,7 +73,6 @@ class _L1Page1State extends State<L1Page1> {
 
   @override
   Widget build(context) {
-    _preLoadImages();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return screenWidth > screenHeight
