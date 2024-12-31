@@ -88,6 +88,7 @@ class _Page3State extends State<Page3> {
     double WebscreenHeightUnit = screenHeight / 1080;
 
     return Scaffold(
+       backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(height: screenHeight * .05),

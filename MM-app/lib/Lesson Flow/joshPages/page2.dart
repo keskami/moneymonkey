@@ -79,6 +79,7 @@ class _Page2State extends State<Page2> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Column(children: [
       SizedBox(
         height: screenHeight * .05,
@@ -158,13 +159,12 @@ class _Page2State extends State<Page2> {
         padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
         child: GestureDetector(
             onTap: () {
-              if(avaClicked && jasonClicked && mariaClicked){
+              if (avaClicked && jasonClicked && mariaClicked) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Page3()),
                 );
-              }
-              else{
+              } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Please read all the stories to continue'),
                   duration: Duration(seconds: 2),
@@ -175,7 +175,9 @@ class _Page2State extends State<Page2> {
               height: screenHeightUnit * 58,
               width: screenWidthUnit * 61,
               decoration: BoxDecoration(
-                color: (avaClicked && jasonClicked && mariaClicked)? Color.fromRGBO(137, 220, 142, 1) : Color.fromRGBO(224, 227, 231, 1),
+                color: (avaClicked && jasonClicked && mariaClicked)
+                    ? Color.fromRGBO(137, 220, 142, 1)
+                    : Color.fromRGBO(224, 227, 231, 1),
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(

@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:money_monkey/Lesson Flow/joshPages/page1.dart';
 import 'package:money_monkey/Lesson%20Flow/joshPages/page3.dart';
 import 'package:money_monkey/Lesson%20Flow/joshPages/page4.dart';
+import 'package:money_monkey/Lesson%20Flow/joshPages/page5.dart';
+import 'package:money_monkey/Lesson%20Flow/joshPages/page6.dart';
+import 'package:money_monkey/Lesson%20Flow/joshPages/page8.dart';
 import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -43,9 +46,10 @@ class MyApp extends StatelessWidget {
                 User? user = FirebaseAuth.instance.currentUser;
                 String userId = user?.uid ?? '';
                 if (userId.isEmpty) {
+                  
                   return GettingStartedHome();
                 } else {
-                  return Page4();
+                  return Page8();
                   // return PropertyCluster(
                   //   neighbors: [
                   //     "assets/real_estate/bakery.png",
@@ -55,6 +59,7 @@ class MyApp extends StatelessWidget {
                   // );
                 }
               } else {
+                
                 return GettingStartedHome();
               }
             },

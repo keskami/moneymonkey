@@ -77,6 +77,7 @@ class _Page4State extends State<Page4> {
     double WebscreenHeightUnit = screenHeight / 1080;
 
     return Scaffold(
+       backgroundColor: Colors.white,
         body: Column(
       children: [
         SizedBox(height: screenHeight * .05),
@@ -274,7 +275,7 @@ class _Page4State extends State<Page4> {
               },
               child: Container(
                 height: screenHeightUnit * 58,
-                width: screenWidthUnit * 61,
+                width: screenWidthUnit * 81,
                 decoration: BoxDecoration(
                   color: (avaClicked || jasonClicked || mariaClicked)
                       ? Color.fromRGBO(137, 220, 142, 1)
@@ -290,7 +291,7 @@ class _Page4State extends State<Page4> {
                 ),
                 child: Center(
                   child: Text(
-                    "Continue to Activity",
+                    "Finish Peer Reflection",
                     style: GoogleFonts.baloo2(
                         fontSize: screenWidthUnit * 4.2,
                         color: Colors.white,
