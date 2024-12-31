@@ -147,6 +147,7 @@ flutter:
     - assets/images/newMonkeys/Maria.png
     - assets/images/newMonkeys/Ava.png
     - assets/images/newMonkeys/Jason.png
+    - assets/images/newMonkeys/check.png
 
   fonts:
     - family: Baloo 2

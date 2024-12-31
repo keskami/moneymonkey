@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/Lesson Flow/joshPages/page1.dart';
+import 'package:money_monkey/Lesson%20Flow/joshPages/page3.dart';
 import 'package:money_monkey/Lesson%20Flow/joshPages/page4.dart';
 import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
                 if (userId.isEmpty) {
                   return GettingStartedHome();
                 } else {
-                  return Page1();
+                  return Page4();
                   // return PropertyCluster(
                   //   neighbors: [
                   //     "assets/real_estate/bakery.png",

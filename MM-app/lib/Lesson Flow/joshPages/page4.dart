@@ -76,7 +76,8 @@ class _Page4State extends State<Page4> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
 
-    return Column(
+    return Scaffold(
+        body: Column(
       children: [
         SizedBox(height: screenHeight * .05),
         topOfLesson(
@@ -128,16 +129,26 @@ class _Page4State extends State<Page4> {
                             content: Container(
                               height: WebscreenHeightUnit * 103,
                               child: Center(
-                                child: Text(
-                                  'Please select a peer to continue',
-                                  style: GoogleFonts.baloo2(
-                                      fontSize: WebscreenWidthUnit * 25,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    size: WebscreenHeightUnit * 80,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: WebscreenWidthUnit * 10),
+                                  Text(
+                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
+                                    style: GoogleFonts.baloo2(
+                                        fontSize: WebscreenWidthUnit * 25,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              )),
                             ),
-                            duration: Duration(seconds: 5),
+                            duration: Duration(seconds: 3),
                             backgroundColor: Color.fromRGBO(137, 220, 142, 1),
                           ));
                         }
@@ -165,16 +176,26 @@ class _Page4State extends State<Page4> {
                             content: Container(
                               height: WebscreenHeightUnit * 103,
                               child: Center(
-                                child: Text(
-                                  'Please select a peer to continue',
-                                  style: GoogleFonts.baloo2(
-                                      fontSize: WebscreenWidthUnit * 25,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    size: WebscreenHeightUnit * 80,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: WebscreenWidthUnit * 10),
+                                  Text(
+                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
+                                    style: GoogleFonts.baloo2(
+                                        fontSize: WebscreenWidthUnit * 25,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              )),
                             ),
-                            duration: Duration(seconds: 5),
+                            duration: Duration(seconds: 3),
                             backgroundColor: Color.fromRGBO(137, 220, 142, 1),
                           ));
                         }
@@ -202,16 +223,26 @@ class _Page4State extends State<Page4> {
                             content: Container(
                               height: WebscreenHeightUnit * 103,
                               child: Center(
-                                child: Text(
-                                  'Please select a peer to continue',
-                                  style: GoogleFonts.baloo2(
-                                      fontSize: WebscreenWidthUnit * 25,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    size: WebscreenHeightUnit * 80,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: WebscreenWidthUnit * 10),
+                                  Text(
+                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
+                                    style: GoogleFonts.baloo2(
+                                        fontSize: WebscreenWidthUnit * 25,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              )),
                             ),
-                            duration: Duration(seconds: 5),
+                            duration: Duration(seconds: 3),
                             backgroundColor: Color.fromRGBO(137, 220, 142, 1),
                           ));
                         }
@@ -269,7 +300,7 @@ class _Page4State extends State<Page4> {
               )),
         )
       ],
-    );
+    ));
   }
 }
 
