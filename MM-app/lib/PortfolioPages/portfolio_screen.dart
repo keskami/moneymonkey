@@ -205,7 +205,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      padding:
+                          EdgeInsets.fromLTRB(screenWidthUnit * 1.75, 10, 0, 0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,13 +217,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                 fontSize: screenHeightUnit * 15,
                                 color: Colors.black),
                           ),
-                          Text(
-                            '$totalBananstring🍌',
-                            style: TextStyle(
-                              fontSize: 40 * screenHeightUnit,
-                              fontFamily: "FredokaOne",
+                          Row(children: [
+                            Text(
+                              '$totalBananstring',
+                              style: TextStyle(
+                                fontSize: 40 * screenHeightUnit,
+                                fontFamily: "FredokaOne",
+                              ),
                             ),
-                          ),
+                            Image.asset('assets/images/banana.png',
+                                height: screenHeightUnit * 40),
+                          ]),
                           Row(
                             children: [
                               Icon(
@@ -337,11 +342,16 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          "$balanceString🍌",
+                                          "$balanceString",
                                           style: GoogleFonts.baloo2(
                                               fontSize: screenHeightUnit * 46,
                                               color: Colors.white),
                                         ),
+                                        SizedBox(
+                                          width: screenWidthUnit * 2,
+                                        ),
+                                        Image.asset('assets/images/banana.png',
+                                            height: screenHeightUnit * 42),
                                       ],
                                     )),
                               )
@@ -351,10 +361,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       ),
                     ),
                     SizedBox(height: screenHeightUnit * 47),
-                    Center(
+                    Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(screenWidthUnit * 4.5, 0, 0, 0),
                       child: SizedBox(
-                        width: screenWidthUnit * 126,
-                        height: screenHeightUnit * 340,
+                        width: screenWidthUnit * 112,
+                        height: screenHeightUnit * 347,
                         child: Container(
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(255, 255, 255, 1),
@@ -608,12 +620,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         width: screenWidthUnit * 150,
                         //color: Colors.white,
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          
                           children: [
                             SizedBox(
                               width: screenWidthUnit * 6,
                             ),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: screenHeightUnit * 20),
                                 Text(
@@ -624,16 +637,21 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                   ),
                                 ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: screenWidthUnit * 0,
-                                    ),
-                                    Text(
-                                      "$balanceString🍌",
-                                      style: GoogleFonts.baloo2(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "$balanceString",
+                                          style: GoogleFonts.baloo2(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox( width: screenWidthUnit * 1),
+                                        Image.asset('assets/images/banana.png',
+                                            height: screenHeightUnit * 20),
+                                      ],
                                     )
                                   ],
                                 )
@@ -722,19 +740,23 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     ),
                     SizedBox(
                         width: screenWidthUnit * 100,
-                        height: screenHeightUnit * 310,
+                        height: screenHeightUnit * 340,
                         child: Container(
-                          decoration: BoxDecoration(
+                            decoration: BoxDecoration(
                             color: const Color.fromRGBO(255, 255, 255, 1),
                             borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: .5,
+                            ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                               ),
                             ],
-                          ),
+                            ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -1476,9 +1498,9 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.all(8),
-            child: Icon(icon, size: screenWidth * .01),
+            child: Icon(icon, size: screenWidth * .009),
           ),
-          SizedBox(width: screenWidth * 0.01),
+          SizedBox(width: screenWidth * 0.008),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1497,7 +1519,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           ),
           Text(amount,
               style: GoogleFonts.baloo2(
-                  fontSize: screenHeight * .0275, fontWeight: FontWeight.w500)),
+                  fontSize: screenHeight * .0272, fontWeight: FontWeight.w500)),
           SizedBox(width: screenWidth * .01),
           Image.asset(imageUrl, height: screenHeight * .0367),
         ],
@@ -1546,12 +1568,11 @@ Widget dailyQuest({
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color.fromRGBO(135,206,235,1), 
-                      Color.fromRGBO(213,213,213,1), 
-                      
+                      Color.fromRGBO(135, 206, 235, 1),
+                      Color.fromRGBO(213, 213, 213, 1),
                     ],
                     stops: [
-                      completed / outOf, 
+                      completed / outOf,
                       completed / outOf,
                     ],
                     begin: Alignment.centerLeft,
@@ -1590,7 +1611,7 @@ class CustomFabLocation extends FloatingActionButtonLocation {
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
     final Offset offset =
         FloatingActionButtonLocation.centerDocked.getOffset(scaffoldGeometry);
-    return Offset(offset.dx - 60, offset.dy - 20);
+    return Offset(offset.dx - 50, offset.dy - 20);
   }
 }
 

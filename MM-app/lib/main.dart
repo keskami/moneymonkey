@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
                 if (userId.isEmpty) {
                   return GettingStartedHome();
                 } else {
-                  return Page4();
+                  return Page1();
                   // return PropertyCluster(
                   //   neighbors: [
                   //     "assets/real_estate/bakery.png",
