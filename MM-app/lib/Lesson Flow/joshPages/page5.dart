@@ -83,7 +83,7 @@ class _Page5State extends State<Page5> {
             screenWidthUnit: screenWidthUnit,
             screenHeightUnit: screenHeightUnit,
             pageNumber: 5,
-            totalPages: 10,
+            totalPages: 8,
             context: context,
             bananas: totalBanans,
           ),
@@ -186,48 +186,53 @@ Widget topOfLesson({
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       IconButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+          icon: Icon(Icons.close, color: Colors.black)),
+      TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
+        duration: Duration(seconds: 2),
+        builder: (context, value, child) {
+          return Container(
+            height: screenHeightUnit * 25,
+            width: screenWidthUnit * 202,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(135, 206, 235, 1),
+                  Color.fromRGBO(213, 213, 213, 1),
+                ],
+                stops: [value, value],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 5,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
           );
         },
-        icon: Icon(Icons.close, color: Colors.black),
       ),
-      Container(
-        height: screenHeightUnit * 25,
-        width: screenWidthUnit * 202,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromRGBO(135, 206, 235, 1),
-              Color.fromRGBO(213, 213, 213, 1),
-            ],
-            stops: [pageNumber / totalPages, pageNumber / totalPages],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 5,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+      SizedBox(
+        width: screenWidthUnit * 4,
       ),
-      SizedBox(width: screenWidthUnit * 4),
       Image.asset("assets/images/img_monkeymoney_52.png",
           height: screenHeightUnit * 36),
-      SizedBox(width: screenWidthUnit * 1),
-      Text(
-        "$bananas",
-        style: GoogleFonts.roboto(
-          fontSize: screenWidthUnit * 5.5,
-          color: Colors.black,
-        ),
+      SizedBox(
+        width: screenWidthUnit * 1,
       ),
+      Text("$bananas",
+          style: GoogleFonts.roboto(
+              fontSize: screenWidthUnit * 5.5, color: Colors.black)),
     ],
   );
 }

@@ -87,8 +87,8 @@ class _Page2State extends State<Page2> {
       topOfLesson(
           screenWidthUnit: screenWidthUnit,
           screenHeightUnit: screenHeightUnit,
-          pageNumber: 5,
-          totalPages: 10,
+          pageNumber: 2,
+          totalPages: 8,
           context: context,
           bananas: totalBanans),
       SizedBox(height: WebscreenHeightUnit * 95),
@@ -329,28 +329,34 @@ Widget topOfLesson({
             );
           },
           icon: Icon(Icons.close, color: Colors.black)),
-      Container(
-        height: screenHeightUnit * 25,
-        width: screenWidthUnit * 202,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromRGBO(135, 206, 235, 1),
-              Color.fromRGBO(213, 213, 213, 1),
-            ],
-            stops: [pageNumber / totalPages, pageNumber / totalPages],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 5,
-              offset: const Offset(0, 4),
+      TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
+        duration: Duration(seconds: 2),
+        builder: (context, value, child) {
+          return Container(
+            height: screenHeightUnit * 25,
+            width: screenWidthUnit * 202,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(135, 206, 235, 1),
+                  Color.fromRGBO(213, 213, 213, 1),
+                ],
+                stops: [value, value],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 5,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
       SizedBox(
         width: screenWidthUnit * 4,

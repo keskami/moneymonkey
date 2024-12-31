@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                   
                   return GettingStartedHome();
                 } else {
-                  return Page8();
+                  return Page1();
                   // return PropertyCluster(
                   //   neighbors: [
                   //     "assets/real_estate/bakery.png",
