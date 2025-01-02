@@ -263,10 +263,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.only(
-                          start: screenWidthUnit * 15,
-                          end: screenWidthUnit * 15),
+                          start: screenWidthUnit * 10,
+                          end: screenWidthUnit * 10),
                       child: SizedBox(
-                        width: screenWidthUnit * 90,
+                        width: screenWidthUnit * 100,
                         height: screenHeightUnit * 200,
                         child: Container(
                           decoration: BoxDecoration(
@@ -1514,14 +1514,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       color: Colors.black,
                       fontSize: 10,
                     )),
+                   
               ],
             ),
+            
           ),
           Text(amount,
               style: GoogleFonts.baloo2(
                   fontSize: screenHeight * .0272, fontWeight: FontWeight.w500)),
           SizedBox(width: screenWidth * .01),
           Image.asset(imageUrl, height: screenHeight * .0367),
+           SizedBox(width: screenWidth * 0.006),
         ],
       ),
     );
