@@ -275,6 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       String userId = userCredential.user?.uid ?? '';
+      // ignore: unused_local_variable
       String email = userCredential.user?.email ?? '';
       if (userId.isNotEmpty) {
         final userDocRef =
@@ -282,12 +283,13 @@ class _LoginScreenState extends State<LoginScreen> {
         final userSnapshot = await userDocRef.get();
 
         if (!userSnapshot.exists) {
-         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("No account linked to Google Account. Please Sign Up."),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,
-        ));
-        } 
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text("No account linked to Google Account. Please Sign Up."),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ));
+        }
 
         Navigator.pushReplacement(
           context,
@@ -452,7 +454,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       width: screenWidthUnit * 314,
                                       height: screenHeightUnit * 49,
                                       child: TextField(
-
                                         controller: _loginPasswordController,
                                         obscureText: true,
                                         decoration: InputDecoration(

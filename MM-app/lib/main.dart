@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page1.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonOne.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import 'firebase_options.dart';
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
                 if (userId.isEmpty) {
                   return StartFreshHome();
                 } else {
-                  return L1Page1();
+                  return HomePage();
                 }
               } else {
                 return LessonOne();
