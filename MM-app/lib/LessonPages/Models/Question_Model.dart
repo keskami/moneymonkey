@@ -2,7 +2,8 @@ enum QuestionType {
   multipleChoice,
   revealCard,
   iconReveal,
-  knowledgeCheck,
+  lerningCheck,
+  scenario,
   keyTakeaways,
 }
 
@@ -42,17 +43,22 @@ class Prompt {
 
 class MultipleChoice {
   const MultipleChoice({
+    required this.question,
+    required this.questionExplanation,
     required this.options,
     required this.correctAnswers,
     required this.prompts,
   });
-
+  final String question;
+  final String questionExplanation;
   final List<String> correctAnswers;
   final List<String> options;
   final Prompt prompts;
 
   factory MultipleChoice.fromMap(Map<String, dynamic> map) {
     return MultipleChoice(
+      question: map['question'],
+      questionExplanation: map['questionExplanation'],
       options: List<String>.from(map['options']),
       correctAnswers: List<String>.from(map['correctAnswers']),
       prompts: Prompt.fromMap(map['prompts']),
@@ -61,6 +67,8 @@ class MultipleChoice {
 
   Map<String, dynamic> toMap() {
     return {
+      'question': question,
+      'questionExplanation': questionExplanation,
       'options': options,
       'correctAnswers': correctAnswers,
       'prompts': prompts.toMap(),
@@ -70,22 +78,25 @@ class MultipleChoice {
 
 class RevealCard {
   const RevealCard({
+    required this.definition,
     required this.tapInstruction,
     required this.revealInformation,
   });
-
+  final String definition;
   final String tapInstruction;
-  final String revealInformation;
+  final List<String> revealInformation;
 
   factory RevealCard.fromMap(Map<String, dynamic> map) {
     return RevealCard(
+      definition: map['definition'],
       tapInstruction: map['tapInstruction'] as String,
-      revealInformation: map['revealInformation'] as String,
+      revealInformation: List<String>.from(map['revealInformation']),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'definition': definition,
       'tapInstruction': tapInstruction,
       'revealInformation': revealInformation,
     };
@@ -116,26 +127,119 @@ class IconReveal {
   }
 }
 
-class KeyTakeaways {
-  const KeyTakeaways({
+class Scenario {
+  const Scenario({
     required this.title,
-    required this.content,
+    required this.scenarioExplanation,
+    required this.questions,
   });
-
   final String title;
-  final String content;
+  final List<MultipleChoice> questions;
+  final String scenarioExplanation;
 
-  factory KeyTakeaways.fromMap(Map<String, dynamic> map) {
-    return KeyTakeaways(
-      title: map['title'] as String,
-      content: map['content'] as String,
+  factory Scenario.fromMap(Map<String, dynamic> map) {
+    print("Parsing Scenario with data: $map");
+
+    List<MultipleChoice> parsedQuestions = [];
+    if (map['questions'] != null) {
+      final questionsList = map['questions'] as List<dynamic>;
+      print("Processing ${questionsList.length} scenario questions");
+
+      parsedQuestions = questionsList.map((questionData) {
+        print("Processing scenario question data: $questionData");
+        if (questionData is Map<String, dynamic>) {
+          try {
+            return MultipleChoice.fromMap(questionData);
+          } catch (e) {
+            print("Error parsing scenario question: $e");
+            throw e;
+          }
+        } else {
+          throw Exception(
+              "Invalid question data format in scenario: $questionData");
+        }
+      }).toList();
+    }
+
+    return Scenario(
+      title: map['title'] as String? ?? "Missing title",
+      scenarioExplanation:
+          map['scenarioExplanation'] as String? ?? "Missing explanation",
+      questions: parsedQuestions,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'title': title,
-      'content': content,
+      'scenarioExplanation': scenarioExplanation,
+      'questions': questions.map((q) => q.toMap()).toList(),
+    };
+  }
+}
+
+class LearningCheck {
+  const LearningCheck({
+    required this.question1,
+    required this.question2,
+    required this.options1,
+    required this.options2,
+    required this.correctAns1,
+    required this.correctAns2,
+  });
+
+  final String question1;
+  final String question2;
+  final String correctAns1;
+  final String correctAns2;
+  final List<String> options1;
+  final List<String> options2;
+
+  factory LearningCheck.fromMap(Map<String, dynamic> map) {
+    print("Parsing LearningCheck with data: $map"); // Debug log
+
+    return LearningCheck(
+      question1: map["question1"] ?? "Missing question",
+      question2: map["question2"] ?? "Missing question",
+      options1: List<String>.from(map["options1"] ?? []),
+      options2: List<String>.from(map["options2"] ?? []),
+      correctAns1:
+          map["correctAns1"] ?? "", // Note: Fixed typo from "corectAns1"
+      correctAns2:
+          map["correctAns2"] ?? "", // Note: Fixed typo from "corectAns2"
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'question1': question1,
+      'question2': question2,
+      'options1': options1,
+      'options2': options2,
+      'correctAns1': correctAns1, // Fixed typo
+      'correctAns2': correctAns2, // Fixed typo
+    };
+  }
+}
+
+class KeyTakeaways {
+  const KeyTakeaways({
+    required this.takeaway,
+  });
+
+  final Map<String, String> takeaway;
+
+  factory KeyTakeaways.fromMap(Map<String, dynamic> map) {
+    final takeawayMap = Map<String, String>.from(map['takeaway'] as Map);
+
+    return KeyTakeaways(
+      takeaway: takeawayMap,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'takeaway': takeaway,
     };
   }
 }
@@ -150,32 +254,71 @@ class Question {
   final dynamic data;
 
   factory Question.fromMap(Map<String, dynamic> map) {
-    final type = QuestionTypeExtension.fromString(map['type'] as String);
-    final data = map['data'] as Map<String, dynamic>;
+    print("Parsing Question with data: $map"); // Debug log
 
-    switch (type) {
-      case QuestionType.multipleChoice:
-        return Question(
-          type: type,
-          data: MultipleChoice.fromMap(data),
-        );
-      case QuestionType.revealCard:
-        return Question(
-          type: type,
-          data: RevealCard.fromMap(data),
-        );
-      case QuestionType.iconReveal:
-        return Question(
-          type: type,
-          data: IconReveal.fromMap(data),
-        );
-      case QuestionType.keyTakeaways:
-        return Question(
-          type: type,
-          data: KeyTakeaways.fromMap(data),
-        );
-      default:
-        throw Exception("Unsupported question type: ${type.name}");
+    final typeStr = map['type'] as String?;
+    if (typeStr == null) {
+      throw Exception("Question type is missing");
+    }
+
+    final type = QuestionTypeExtension.fromString(typeStr);
+    final data = map['data'] as Map<String, dynamic>?;
+
+    if (data == null) {
+      throw Exception("Question data is missing");
+    }
+
+    try {
+      switch (type) {
+        case QuestionType.multipleChoice:
+          print("Parsing MultipleChoice question");
+          return Question(
+            type: type,
+            data: MultipleChoice.fromMap(data),
+          );
+
+        case QuestionType.revealCard:
+          print("Parsing RevealCard question");
+          return Question(
+            type: type,
+            data: RevealCard.fromMap(data),
+          );
+
+        case QuestionType.iconReveal:
+          print("Parsing IconReveal question");
+          return Question(
+            type: type,
+            data: IconReveal.fromMap(data),
+          );
+
+        case QuestionType.lerningCheck:
+          print("Parsing LearningCheck question");
+          return Question(
+            type: type,
+            data: LearningCheck.fromMap(data),
+          );
+
+        case QuestionType.scenario:
+          print("Parsing Scenario question");
+          return Question(
+            type: type,
+            data: Scenario.fromMap(data),
+          );
+
+        case QuestionType.keyTakeaways:
+          print("Parsing KeyTakeaways question");
+          return Question(
+            type: type,
+            data: KeyTakeaways.fromMap(data),
+          );
+
+        default:
+          throw Exception("Unsupported question type: ${type.name}");
+      }
+    } catch (e, stackTrace) {
+      print("Error parsing ${type.name} question: $e");
+      print("Stack trace: $stackTrace");
+      rethrow;
     }
   }
 
