@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7cf04a4-d2d6-4b3d-ba65-dba3dff5b3df" name="Changes" comment="Merged Lesson Page">
-      <change beforePath="$PROJECT_DIR$/MM-app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/MM-app/lib/main.dart" afterDir="false" />
-    </list>
+    <list default="true" id="f7cf04a4-d2d6-4b3d-ba65-dba3dff5b3df" name="Changes" comment="Merged Lesson Pages" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,7 +119,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735922455830</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Merged Lesson Pages">
+      <option name="closed" value="true" />
+      <created>1735922584562</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1735922584562</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -140,6 +146,7 @@
     <MESSAGE value="Committing Dev" />
     <MESSAGE value="Josh Merge" />
     <MESSAGE value="Merged Lesson Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merged Lesson Page" />
+    <MESSAGE value="Merged Lesson Pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merged Lesson Pages" />
   </component>
 </project>
