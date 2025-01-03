@@ -14,6 +14,15 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return screenWidth > screenHeight
+        ? webDisplay(context, screenHeight, screenWidth)
+        : mobileDisplay(context);
+  }
+
+  GestureDetector mobileDisplay(BuildContext context) {
     return GestureDetector(
         onTap: isEnabled ? nextPage : null,
         child: Container(
@@ -37,6 +46,35 @@ class NextButton extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ));
+  }
+
+  GestureDetector webDisplay(
+      BuildContext context, double screenHeight, double screenWidth) {
+    return GestureDetector(
+        onTap: isEnabled ? nextPage : null,
+        child: Container(
+          decoration: BoxDecoration(
+            color: isEnabled ? LightTheme().primaryBlue : Colors.grey[300],
+            borderRadius: BorderRadius.circular(15),
+          ),
+          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 12,
+          ),
+          width: screenWidth * 0.1,
+          height: screenHeight * 0.07,
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),

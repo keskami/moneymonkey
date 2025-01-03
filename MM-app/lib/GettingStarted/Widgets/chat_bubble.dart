@@ -16,28 +16,46 @@ class ChatBubbleContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return CustomPaint(
       painter: ChatBubblePainter(
         trianglePosition: trianglePosition,
         borderWidth: borderWidth,
         borderRadius: borderRadius,
       ),
-      child: Container(
-        padding: trianglePosition == TrianglePosition.bottom
-            ? const EdgeInsets.fromLTRB(
-                10,
-                10,
-                10,
-                20,
-              )
-            : const EdgeInsets.fromLTRB(
-                33,
-                10,
-                15,
-                10,
-              ),
-        child: childWidget,
-      ),
+      child: screenHeight < screenWidth
+          ? Container(
+              //For Web Desktop View
+              padding: trianglePosition == TrianglePosition.bottom
+                  ? EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.1,
+                      vertical: screenHeight * 0.05,
+                    )
+                  : const EdgeInsets.fromLTRB(
+                      33,
+                      10,
+                      15,
+                      10,
+                    ),
+              child: childWidget,
+            )
+          : Container(
+              padding: trianglePosition == TrianglePosition.bottom
+                  ? const EdgeInsets.fromLTRB(
+                      10,
+                      10,
+                      10,
+                      20,
+                    )
+                  : const EdgeInsets.fromLTRB(
+                      33,
+                      10,
+                      15,
+                      10,
+                    ),
+              child: childWidget,
+            ),
     );
   }
 }

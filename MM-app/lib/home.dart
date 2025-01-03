@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/Friends/comingSoonPage.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/GlobalWidgets/SideBar.dart';
+import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
+import 'package:money_monkey/LessonPages/Pages/Home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
 
@@ -15,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController _pageController = PageController();
+  HomePagesController homePagesController = Get.put(HomePagesController());
   int currentPage = 0;
 
   @override
@@ -29,135 +33,21 @@ class _HomePageState extends State<HomePage> {
 
   Scaffold webDisplay(BuildContext context, double screenWidth) {
     return Scaffold(
-      body: Row(
-        children: [
-          Container(
-            width: screenWidth * 0.15,
-            child: Column(
-              children: [
-                ListTile(
-                  onTap: () {
-                    setState(() {
-                      currentPage = 0;
-                    });
-                    _pageController.animateToPage(
-                      currentPage,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear,
-                    );
-                  },
-                  selected: currentPage == 0,
-                  leading: Image.asset('assets/images/globemonkey.png'),
-                  trailing: Text(
-                    "Home",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 20,
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    setState(() {
-                      currentPage = 1;
-                    });
-                    _pageController.animateToPage(
-                      currentPage,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear,
-                    );
-                  },
-                  selected: currentPage == 1,
-                  leading: Image.asset('assets/images/treasure.png'),
-                  trailing: Text(
-                    "Portfolio",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 20,
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    setState(() {
-                      currentPage = 2;
-                    });
-                    _pageController.animateToPage(
-                      currentPage,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear,
-                    );
-                  },
-                  selected: currentPage == 2,
-                  leading: Image.asset('assets/images/bottommonkey.png'),
-                  trailing: Text(
-                    "Market",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 20,
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    setState(() {
-                      currentPage = 3;
-                    });
-                    _pageController.animateToPage(
-                      currentPage,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.linear,
-                    );
-                  },
-                  selected: currentPage == 3,
-                  leading: Image.asset('assets/images/bluemonkey.png'),
-                  trailing: Text(
-                    "Profile",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 20,
-                  ),
-                ),
-              ],
+      body: Obx(
+        () => Row(
+          children: [
+            Container(
+              width: screenWidth * 0.2,
+              child: SideBar(),
             ),
-          ),
-          Container(
-            width: screenWidth * 0.85,
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (value) {
-                setState(() {
-                  currentPage = value;
-                });
-              },
-              children: [
-                HomeScreen(),
-                PortfolioScreen(),
-                ComingSoonPage(),
-                ProfileScreen(),
-              ],
-            ),
-          ),
-        ],
+            Container(
+              width: screenWidth * 0.8,
+              child: homePagesController
+                  .pages[homePagesController.pageIndex.value],
+            )
+          ],
+        ),
       ),
-      // bottomNavigationBar: _buildMobileBottomBar(context),
     );
   }
 
