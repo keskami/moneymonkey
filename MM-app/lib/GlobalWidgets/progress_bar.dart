@@ -8,9 +8,11 @@ class CustomProgressBar extends StatelessWidget {
     super.key,
     required this.pageName,
     this.width,
+    this.pageNum = 0,
   });
   final String pageName;
   final double? width;
+  double pageNum;
   double getProgress() {
     double progress = 0;
     switch (pageName) {
@@ -18,6 +20,8 @@ class CustomProgressBar extends StatelessWidget {
         final LessonOneController educationPagesController = Get.find();
         progress = educationPagesController.pageIndex / 8;
         break;
+      default:
+        progress = pageNum / 8;
     }
     return progress;
   }

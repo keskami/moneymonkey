@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:money_monkey/Lesson%20Flow/joshPages/page5.dart';
-import 'package:money_monkey/home.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/home.dart';
 
 class Page8 extends StatefulWidget {
   @override
@@ -161,7 +159,8 @@ class _Page8State extends State<Page8> {
             ),
             Spacer(),
             Padding(
-              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 200, 0, 0, WebscreenHeightUnit * 100),
+              padding: EdgeInsets.fromLTRB(
+                  WebscreenWidthUnit * 200, 0, 0, WebscreenHeightUnit * 100),
               child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -243,7 +242,8 @@ Widget topOfLesson({
           },
           icon: Icon(Icons.close, color: Colors.black)),
       TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
+        tween: Tween<double>(
+            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
         duration: Duration(seconds: 2),
         builder: (context, value, child) {
           return Container(

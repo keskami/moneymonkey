@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monkey/Lesson%20Flow/joshPages/page4.dart';
-import 'package:money_monkey/home.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
+import 'package:money_monkey/home.dart';
 
 class Page3 extends StatefulWidget {
   @override
@@ -88,7 +88,7 @@ class _Page3State extends State<Page3> {
     double WebscreenHeightUnit = screenHeight / 1080;
 
     return Scaffold(
-       backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(height: screenHeight * .05),
@@ -228,13 +228,15 @@ class _Page3State extends State<Page3> {
                   width: screenWidthUnit * 61,
                   decoration: BoxDecoration(
                     color: (droppedItems1.contains("Flexible budgeting") &&
-                      droppedItems1.contains("Travel savings") &&
-                      droppedItems1.contains("Emergency fund") &&
-                      droppedItems1.contains("Starting retirement fund") &&
-                      droppedItems2.contains("Budgeting for family needs") &&
-                      droppedItems2.contains("Kids’ education savings") &&
-                      droppedItems3.contains("Personal investments") &&
-                      droppedItems3.contains("Planning for grad school"))
+                            droppedItems1.contains("Travel savings") &&
+                            droppedItems1.contains("Emergency fund") &&
+                            droppedItems1
+                                .contains("Starting retirement fund") &&
+                            droppedItems2
+                                .contains("Budgeting for family needs") &&
+                            droppedItems2.contains("Kids’ education savings") &&
+                            droppedItems3.contains("Personal investments") &&
+                            droppedItems3.contains("Planning for grad school"))
                         ? Color.fromRGBO(137, 220, 142, 1)
                         : Color.fromRGBO(224, 227, 231, 1),
                     borderRadius: BorderRadius.circular(10),
@@ -391,7 +393,8 @@ Widget topOfLesson({
           },
           icon: Icon(Icons.close, color: Colors.black)),
       TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
+        tween: Tween<double>(
+            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
         duration: Duration(seconds: 2),
         builder: (context, value, child) {
           return Container(

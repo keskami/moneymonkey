@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
-import 'package:flutter/foundation.dart'; // For kIsWeb
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart'; // For kIsWeb
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -199,7 +199,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 });
               },
               child: Row(children: [
-                SizedBox(width: screenWidthUnit * 60),
+                SizedBox(width: screenWidthUnit * 40),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -620,7 +620,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         width: screenWidthUnit * 150,
                         //color: Colors.white,
                         child: Row(
-                          
                           children: [
                             SizedBox(
                               width: screenWidthUnit * 6,
@@ -648,7 +647,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        SizedBox( width: screenWidthUnit * 1),
+                                        SizedBox(width: screenWidthUnit * 1),
                                         Image.asset('assets/images/banana.png',
                                             height: screenHeightUnit * 20),
                                       ],
@@ -742,7 +741,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         width: screenWidthUnit * 100,
                         height: screenHeightUnit * 340,
                         child: Container(
-                            decoration: BoxDecoration(
+                          decoration: BoxDecoration(
                             color: const Color.fromRGBO(255, 255, 255, 1),
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
@@ -751,12 +750,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
+                                color: Colors.grey.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
                               ),
                             ],
-                            ),
+                          ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -1514,17 +1513,15 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       color: Colors.black,
                       fontSize: 10,
                     )),
-                   
               ],
             ),
-            
           ),
           Text(amount,
               style: GoogleFonts.baloo2(
                   fontSize: screenHeight * .0272, fontWeight: FontWeight.w500)),
           SizedBox(width: screenWidth * .01),
           Image.asset(imageUrl, height: screenHeight * .0367),
-           SizedBox(width: screenWidth * 0.006),
+          SizedBox(width: screenWidth * 0.006),
         ],
       ),
     );

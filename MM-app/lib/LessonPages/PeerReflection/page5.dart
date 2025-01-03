@@ -3,15 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Lesson%20Flow/joshPages/page7.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/page6.dart';
 import 'package:money_monkey/home.dart';
 
-class Page6 extends StatefulWidget {
+class Page5 extends StatefulWidget {
   @override
-  _Page6State createState() => _Page6State();
+  _Page5State createState() => _Page5State();
 }
 
-class _Page6State extends State<Page6> {
+class _Page5State extends State<Page5> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;
@@ -75,25 +75,25 @@ class _Page6State extends State<Page6> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
     return Scaffold(
-       backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(height: screenHeight * .05),
           topOfLesson(
             screenWidthUnit: screenWidthUnit,
             screenHeightUnit: screenHeightUnit,
-            pageNumber: 6,
+            pageNumber: 5,
             totalPages: 8,
             context: context,
             bananas: totalBanans,
           ),
           SizedBox(height: WebscreenHeightUnit * 95),
           Align(
-            alignment: Alignment.center,
+            alignment: Alignment.topLeft,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
               child: Text(
-                "Lifelong Financial Well-Being",
+                "Welcome to your Toolkit for Lifelong\nFinancial Wellbeing!",
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 7,
                   color: Colors.black,
@@ -103,15 +103,36 @@ class _Page6State extends State<Page6> {
               ),
             ),
           ),
+          SizedBox(height: WebscreenHeightUnit * 20),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
+              child: Text(
+                "Get ready to plan ahead, save smart, and take responsibility for your finances.",
+                style: GoogleFonts.baloo2(
+                  fontSize: screenWidthUnit * 4.75,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ),
           SizedBox(height: WebscreenHeightUnit * 65),
-          Image.asset("assets/images/lfwLessonPage5/bubble.png", width: WebscreenWidthUnit * 700,),
-          
-          SizedBox(height: WebscreenHeightUnit * 12),
-          
-              Image.asset("assets/images/monkeyNoText.png",
-                  height: WebscreenHeightUnit * 250),
-             
-          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("assets/images/lfwLessonPage5/piggy.png",
+                  height: WebscreenHeightUnit * 181),
+              SizedBox(width: WebscreenWidthUnit * 104),
+              Image.asset("assets/images/lfwLessonPage5/house.png",
+                  height: WebscreenHeightUnit * 181),
+              SizedBox(width: WebscreenWidthUnit * 104),
+              Image.asset("assets/images/lfwLessonPage5/grad.png",
+                  height: WebscreenHeightUnit * 181),
+            ],
+          ),
           Spacer(),
           Padding(
             padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
@@ -119,12 +140,12 @@ class _Page6State extends State<Page6> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Page7()),
+                    MaterialPageRoute(builder: (context) => Page6()),
                   );
                 },
                 child: Container(
                   height: screenHeightUnit * 58,
-                  width: WebscreenWidthUnit * 291,
+                  width: screenWidthUnit * 71,
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(137, 220, 142, 1),
                     borderRadius: BorderRadius.circular(10),
@@ -138,7 +159,7 @@ class _Page6State extends State<Page6> {
                   ),
                   child: Center(
                     child: Text(
-                      "Continue",
+                      "Start Learning ->",
                       style: GoogleFonts.baloo2(
                           fontSize: screenWidthUnit * 4.2,
                           color: Colors.white,
@@ -173,7 +194,8 @@ Widget topOfLesson({
           },
           icon: Icon(Icons.close, color: Colors.black)),
       TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
+        tween: Tween<double>(
+            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
         duration: Duration(seconds: 2),
         builder: (context, value, child) {
           return Container(

@@ -1,20 +1,13 @@
-import 'dart:io';
+import 'dart:html' as html;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Lesson%20Flow/joshPages/page6.dart';
-import 'package:money_monkey/Lesson%20Flow/joshPages/page8.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/page8.dart';
 import 'package:money_monkey/home.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart'; // For file storage paths
-import 'package:http/http.dart' as http; // For file download
-import 'dart:html' as html;
-import 'package:dio/dio.dart';
-import 'package:open_filex/open_filex.dart';
 
 class Page7 extends StatefulWidget {
   @override
@@ -241,9 +234,10 @@ class _Page7State extends State<Page7> {
                             context,
                             MaterialPageRoute(builder: (context) => Page8()),
                           );
-                        }else{
-                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Download the file before continuing'),
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('Download the file before continuing'),
                             duration: Duration(seconds: 2),
                             backgroundColor: Colors.red,
                           ));
@@ -253,7 +247,9 @@ class _Page7State extends State<Page7> {
                         height: screenHeightUnit * 58,
                         width: WebscreenWidthUnit * 221,
                         decoration: BoxDecoration(
-                          color: downloaded ? Color.fromRGBO(137, 220, 142, 1) : Color.fromRGBO(224, 227, 231, 1),
+                          color: downloaded
+                              ? Color.fromRGBO(137, 220, 142, 1)
+                              : Color.fromRGBO(224, 227, 231, 1),
                           borderRadius: BorderRadius.circular(5),
                           boxShadow: [
                             BoxShadow(
@@ -301,7 +297,8 @@ Widget topOfLesson({
           },
           icon: Icon(Icons.close, color: Colors.black)),
       TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
+        tween: Tween<double>(
+            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
         duration: Duration(seconds: 2),
         builder: (context, value, child) {
           return Container(

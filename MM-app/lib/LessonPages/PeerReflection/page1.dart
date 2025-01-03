@@ -3,14 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Lesson%20Flow/joshPages/page2.dart';
-
+import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
 import 'package:money_monkey/home.dart';
 
 class Page1 extends StatefulWidget {
   @override
   _Page1State createState() => _Page1State();
-
 }
 
 class _Page1State extends State<Page1> {
@@ -220,7 +218,8 @@ Widget topOfLesson({
           },
           icon: Icon(Icons.close, color: Colors.black)),
       TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
+        tween: Tween<double>(
+            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
         duration: Duration(seconds: 2),
         builder: (context, value, child) {
           return Container(
