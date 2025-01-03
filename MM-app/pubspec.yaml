@@ -161,6 +161,7 @@ flutter:
     - assets/images/lfwLessonPage5/grad.png
     - assets/images/lfwLessonPage5/bubble.png
     - assets/images/lfwLessonPage5/check.png
+    - assets/images/budgetSim/blueSquare.png
 
   fonts:
     - family: Baloo 2

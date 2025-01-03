@@ -74,7 +74,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
     'Freelance & Irregular Income 🔒',
   ];
 
-  String? selectedScenario;
+  String? selectedScenario = '';
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +125,9 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: webScreenWidthUnit * 121,
+                              width: selectedScenario != ''
+                                  ? webScreenWidthUnit * 151
+                                  : webScreenWidthUnit * 121,
                             ),
                             Text(
                               'Scenario',
@@ -172,10 +174,10 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                           ? Align(
                               alignment: Alignment.centerLeft,
                               child: Container(
-                                height: webScreenHeightUnit * 1895,
+                                height: webScreenHeightUnit * 2010,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(
-                                      webScreenWidthUnit * 121, 0, 0, 0),
+                                      webScreenWidthUnit * 151, 0, 0, 0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -466,13 +468,21 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                           SizedBox(
                                             width: webScreenWidthUnit * 56.5,
                                           ),
-                                          Column(
+                                          Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment.center,
                                             children: [
-                                              Text("Rent",
+                                              Image.asset(
+                                                'assets/images/budgetSim/blueSquare.png',
+                                                height:
+                                                    webScreenHeightUnit * 80,
+                                              ),
+                                              SizedBox(
+                                                width: webScreenWidthUnit * 10,
+                                              ),
+                                              Text("Debt Avalanche Start",
                                                   style: GoogleFonts.baloo2(
                                                     fontSize:
                                                         webScreenWidthUnit * 33,
@@ -482,15 +492,23 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                             ],
                                           ),
                                           SizedBox(
-                                            width: webScreenWidthUnit * 92,
+                                            width: webScreenWidthUnit * 49,
                                           ),
-                                          Column(
+                                          Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment.center,
                                             children: [
-                                              Text("Utilities",
+                                              Image.asset(
+                                                'assets/images/budgetSim/blueSquare.png',
+                                                height:
+                                                    webScreenHeightUnit * 80,
+                                              ),
+                                              SizedBox(
+                                                width: webScreenWidthUnit * 10,
+                                              ),
+                                              Text("Two Weeks Under Budget",
                                                   style: GoogleFonts.baloo2(
                                                     fontSize:
                                                         webScreenWidthUnit * 33,
@@ -516,12 +534,20 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                           SizedBox(
                                             width: webScreenWidthUnit * 219,
                                           ),
-                                          Column(
+                                          Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment.center,
                                             children: [
+                                              Image.asset(
+                                                'assets/images/budgetSim/blueSquare.png',
+                                                height:
+                                                    webScreenHeightUnit * 80,
+                                              ),
+                                              SizedBox(
+                                                width: webScreenWidthUnit * 10,
+                                              ),
                                               Text(
                                                   "Credit Card Minimum Payment",
                                                   style: GoogleFonts.baloo2(
@@ -536,7 +562,57 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                             width: webScreenWidthUnit * 67,
                                           ),
                                         ],
-                                      )
+                                      ),
+                                      SizedBox(
+                                        height: webScreenHeightUnit * 100,
+                                      ),
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text("Goal",
+                                                        style:
+                                                            GoogleFonts.baloo2(
+                                                          fontSize:
+                                                              webScreenWidthUnit *
+                                                                  33,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.black,
+                                                        )),
+                                                    SizedBox(
+                                                      height:
+                                                          webScreenHeightUnit *
+                                                              126,
+                                                    )
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width:
+                                                      webScreenWidthUnit * 150,
+                                                ),
+                                                Text(
+                                                    "50% (or more) of the original credit card balance paid off by\nthe end of Month 3",
+                                                    style: GoogleFonts.baloo2(
+                                                      fontSize:
+                                                          webScreenWidthUnit *
+                                                              33,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.black,
+                                                    )),
+                                              ],
+                                            ),
+                                          ]),
+                                          SizedBox(height: webScreenHeightUnit * 120,)
                                     ],
                                   ),
                                 ),
@@ -550,7 +626,9 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: webScreenWidthUnit * 121,
+                              width: selectedScenario == ""
+                                  ? webScreenWidthUnit * 121
+                                  : webScreenWidthUnit * 151,
                             ),
                             Text(
                               'Level',
@@ -630,7 +708,9 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                   ? webScreenHeightUnit * 88
                                   : 290,
                               0,
-                              0),
+                              selectedScenario == ""
+                                  ? 0
+                                  : webScreenHeightUnit * 60),
                           child: GestureDetector(
                             onTap: () {},
                             child: Container(
