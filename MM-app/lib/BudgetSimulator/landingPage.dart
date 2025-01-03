@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 
+
 class BudgetSimulatorLanding extends StatefulWidget {
   @override
   _BudgetSimulatorLandingState createState() => _BudgetSimulatorLandingState();
@@ -15,7 +16,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
   bool isLoading = true;
   int? balance;
   int totalBanans = 0;
-  bool firstTime = false;
+  bool firstTime = true;
   bool beginner = false;
   bool intermediate = false;
   bool advanced = false;
@@ -88,12 +89,250 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
           )
         : firstTime
             ? Scaffold(
-                backgroundColor: Colors.white,
-                body: Column(
+                body: Stack(
                   children: [
-                    Text('Welcome to the Budget Simulator!'),
-                    Text('You have $balance in your account'),
-                    Text('You have $totalBanans Bananas'),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: webScreenHeightUnit * 50,
+                        ),
+                        Center(
+                          child: Text(
+                            'Setup',
+                            style: GoogleFonts.baloo2(
+                              fontSize: webScreenWidthUnit * 35,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: webScreenHeightUnit * 92,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: selectedScenario != ''
+                                    ? webScreenWidthUnit * 151
+                                    : webScreenWidthUnit * 121,
+                              ),
+                              Text(
+                                'Scenario',
+                                style: GoogleFonts.baloo2(
+                                  fontSize: webScreenWidthUnit * 35,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(
+                                width: webScreenWidthUnit * 55,
+                              ),
+                              DropdownMenu(
+                                width: webScreenWidthUnit * 543,
+                                dropdownMenuEntries: [
+                                  for (String scenario in scenarios)
+                                    DropdownMenuEntry(
+                                      value: scenario,
+                                      label: scenario,
+                                    )
+                                ],
+                                textStyle: GoogleFonts.baloo2(
+                                    fontSize: webScreenWidthUnit * 22,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: webScreenHeightUnit * 127,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: selectedScenario == ""
+                                    ? webScreenWidthUnit * 121
+                                    : webScreenWidthUnit * 151,
+                              ),
+                              Text(
+                                'Level',
+                                style: GoogleFonts.baloo2(
+                                  fontSize: webScreenWidthUnit * 35,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(
+                                width: webScreenWidthUnit * 106,
+                              ),
+                              LevelOptions(
+                                screenWidthUnit: webScreenWidthUnit,
+                                screenHeightUnit: webScreenHeightUnit,
+                                level: "Beginner",
+                                isSelected: beginner,
+                                onTap: () {
+                                  setState(() {
+                                    if (beginner == false) {
+                                      beginner = true;
+                                      intermediate = false;
+                                      advanced = false;
+                                    } else {
+                                      beginner = false;
+                                    }
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: webScreenWidthUnit * 81,
+                              ),
+                              LevelOptions(
+                                screenWidthUnit: webScreenWidthUnit,
+                                screenHeightUnit: webScreenHeightUnit,
+                                level: "Intermediate",
+                                isSelected: intermediate,
+                                onTap: () {
+                                  setState(() {
+                                    if (intermediate == false) {
+                                      beginner = false;
+                                      intermediate = true;
+                                      advanced = false;
+                                    } else {
+                                      intermediate = false;
+                                    }
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: webScreenWidthUnit * 81,
+                              ),
+                              LevelOptions(
+                                screenWidthUnit: webScreenWidthUnit,
+                                screenHeightUnit: webScreenHeightUnit,
+                                level: "Advanced",
+                                isSelected: advanced,
+                                onTap: () {
+                                  setState(() {
+                                    if (advanced == false) {
+                                      advanced = true;
+                                      intermediate = false;
+                                      beginner = false;
+                                    } else {
+                                      advanced = false;
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(
+                                webScreenWidthUnit * 1200,
+                                selectedScenario == "Crush the Credit Card Debt"
+                                    ? webScreenHeightUnit * 88
+                                    : 290,
+                                0,
+                                selectedScenario == ""
+                                    ? 0
+                                    : webScreenHeightUnit * 60),
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                width: webScreenWidthUnit * 207,
+                                height: webScreenHeightUnit * 120,
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(79, 195, 247, 1),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text("Confirm",
+                                      style: GoogleFonts.baloo2(
+                                        fontSize: webScreenWidthUnit * 22,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      )),
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                    Container(
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Image.asset(
+                            'assets/images/newMonkeys/Minty.png',
+                            height: webScreenWidthUnit * 450,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  width: webScreenWidthUnit * 160,
+                                  height: webScreenHeightUnit * 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    color: Color.fromRGBO(79, 195, 247, 1),
+                                  ),
+                                  child: Center(
+                                    child: Text("Minty",
+                                        style: GoogleFonts.baloo2(
+                                          fontSize: webScreenWidthUnit * 22,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        )),
+                                  )),
+                                  SizedBox(height: webScreenHeightUnit * 20,),
+                              Container(
+                                width: webScreenWidthUnit * 600,
+                                padding:
+                                    EdgeInsets.fromLTRB(webScreenWidthUnit * 8,webScreenHeightUnit * 50,0,0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: 
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                  "This is a text box that expands\nwhen there is more text.\n" *
+                                    2,
+                                  style: GoogleFonts.baloo2(
+                                    fontSize: webScreenWidthUnit * 29,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded,)
+                                  ],
+
+                                )
+                                
+                                
+                              ),
+                              SizedBox(height: webScreenHeightUnit * 20,),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               )
@@ -612,7 +851,9 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                               ],
                                             ),
                                           ]),
-                                          SizedBox(height: webScreenHeightUnit * 120,)
+                                      SizedBox(
+                                        height: webScreenHeightUnit * 120,
+                                      )
                                     ],
                                   ),
                                 ),

@@ -48,6 +48,7 @@ dependencies:
   dio: ^5.7.0
   open_filex: ^4.6.0
   path_provider: ^2.1.5
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -156,6 +157,7 @@ flutter:
     - assets/images/newMonkeys/Ava.png
     - assets/images/newMonkeys/Jason.png
     - assets/images/newMonkeys/check.png
+    - assets/images/newMonkeys/Minty.png
     - assets/images/lfwLessonPage5/piggy.png
     - assets/images/lfwLessonPage5/house.png
     - assets/images/lfwLessonPage5/grad.png
