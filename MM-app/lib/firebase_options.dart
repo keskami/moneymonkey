@@ -47,15 +47,14 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDTDnHK7Nm7jAAukT8RaEv8tc_EhJyxCgE',
-    appId: '1:851718603804:web:f7afdb4064129d3b458bd9',
-    messagingSenderId: '851718603804',
-    projectId: 'money-monkey-f4d73',
-    authDomain: 'money-monkey-f4d73.firebaseapp.com',
-    databaseURL: 'https://money-monkey-f4d73-default-rtdb.firebaseio.com',
-    storageBucket: 'money-monkey-f4d73.appspot.com',
-    measurementId: 'G-2L45V4QX6T',
-  );
+      apiKey: "AIzaSyDTDnHK7Nm7jAAukT8RaEv8tc_EhJyxCgE",
+      authDomain: "money-monkey-f4d73.firebaseapp.com",
+      databaseURL: "https://money-monkey-f4d73-default-rtdb.firebaseio.com",
+      projectId: "money-monkey-f4d73",
+      storageBucket: "money-monkey-f4d73.appspot.com",
+      messagingSenderId: "851718603804",
+      appId: "1:851718603804:web:f7afdb4064129d3b458bd9",
+      measurementId: "G-2L45V4QX6T");
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCyFYwBCkYWF4fDMheevh66mJeO89sCeQQ',
@@ -73,9 +72,6 @@ class DefaultFirebaseOptions {
     projectId: 'money-monkey-f4d73',
     databaseURL: 'https://money-monkey-f4d73-default-rtdb.firebaseio.com',
     storageBucket: 'money-monkey-f4d73.appspot.com',
-    androidClientId: '851718603804-lagpm85nipdt45hnruocknpu6q14vhmb.apps.googleusercontent.com',
-    iosClientId: '851718603804-2frotpk9bnjt4ntrk9f4lu70rtsq5hss.apps.googleusercontent.com',
     iosBundleId: 'com.example.moneyMonkey',
   );
-
 }

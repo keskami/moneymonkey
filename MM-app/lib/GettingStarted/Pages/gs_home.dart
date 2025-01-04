@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -44,6 +44,8 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: LightTheme().primaryBackgroundColor,
@@ -89,7 +91,9 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
           return const SizedBox.shrink();
         }
       }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: screenWidth > screenHeight
+          ? FloatingActionButtonLocation.endFloat
+          : FloatingActionButtonLocation.centerDocked,
     );
   }
 }

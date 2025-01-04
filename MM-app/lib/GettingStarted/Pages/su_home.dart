@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import this for SystemChrome
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/user_data.dart';
 import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
+import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
+import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -47,15 +48,11 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     });
   }
 
+  StartFreshController startFreshController = Get.put(StartFreshController());
+  GettingStartedController gettingStartedController =
+      Get.put(GettingStartedController());
   @override
   Widget build(BuildContext context) {
-    // Set system UI overlay style
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: LightTheme().primaryGreen,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
     fetchUserData();
     void toNextPage() async {
       int currentIndex = signUpController.pageIndex.value;
@@ -129,7 +126,9 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     //   }
     // }
 
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       // appBar: AppBar(
       //   actions: [
       //     IconButton(
@@ -144,8 +143,8 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 10),
-            const Row(
+            SizedBox(height: screenHeight * 0.05),
+            Row(
               mainAxisAlignment:
                   MainAxisAlignment.start, // Distribute space between widgets
               children: [

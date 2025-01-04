@@ -95,16 +95,124 @@ class _StartFreshPage1State extends State<StartFreshPage1> {
         ],
       ),
     ];
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 17),
-          Row(
-            children: [
-              Image.network(
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+      child: screenWidth > screenHeight
+          ? webDisplay(
+              learningGoals, onTapGoal, startFreshController, screenWidth)
+          : mobileDisplay(
+              learningGoals,
+              onTapGoal,
+              startFreshController,
+            ),
+    );
+  }
+
+  Widget mobileDisplay(List<Widget> learningGoals, void onTapGoal(int val),
+      StartFreshController startFreshController) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 17),
+        Row(
+          children: [
+            Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+              height: 145,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  // If loadingProgress is null, the image has fully loaded
+                  return child;
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) => const SizedBox(
                 height: 145,
+                width: 137,
+                child: Center(
+                  child: Text('Unable to fetch Image.'),
+                ),
+              ),
+            ),
+            const ChatBubbleContainer(
+              trianglePosition: TrianglePosition.left,
+              borderRadius: 12,
+              borderWidth: 1,
+              childWidget: Text(
+                "What's your daily\nlearning goal?",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        // Wrapping the ListView.builder in Flexible to make it scrollable
+        Flexible(
+          child: ListView.builder(
+            itemCount: learningGoals.length,
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () {
+                onTapGoal(index + 1);
+                print(index);
+                print(startFreshController.learningGoal.value);
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              child: CustomOptionTile(
+                isSelected: selectedIndex == index ||
+                    (startFreshController.learningGoal.value / 5) - 1 == index,
+                childWidget: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: learningGoals[index]),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget webDisplay(List<Widget> learningGoals, void onTapGoal(int val),
+      StartFreshController startFreshController, double screenWidth) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const ChatBubbleContainer(
+              trianglePosition: TrianglePosition.bottom,
+              borderRadius: 12,
+              borderWidth: 1,
+              childWidget: Text(
+                "What's your daily\nlearning goal?",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            Container(
+              width: screenWidth * 0.4,
+              child: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+                height: screenWidth * 0.2,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) {
@@ -128,50 +236,37 @@ class _StartFreshPage1State extends State<StartFreshPage1> {
                   ),
                 ),
               ),
-              const ChatBubbleContainer(
-                trianglePosition: TrianglePosition.left,
-                borderRadius: 12,
-                borderWidth: 1,
-                childWidget: Text(
-                  "What's your daily\nlearning goal?",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          // Wrapping the ListView.builder in Flexible to make it scrollable
-          Flexible(
-            child: ListView.builder(
-              itemCount: learningGoals.length,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  onTapGoal(index + 1);
-                  print(index);
-                  print(startFreshController.learningGoal.value);
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                },
-                child: CustomOptionTile(
-                  isSelected: selectedIndex == index ||
-                      (startFreshController.learningGoal.value / 5) - 1 ==
-                          index,
-                  childWidget: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 5,
-                      ),
-                      child: learningGoals[index]),
-                ),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Container(
+          width: screenWidth * 0.5,
+          child: ListView.builder(
+            itemCount: learningGoals.length,
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () {
+                onTapGoal(index + 1);
+                print(index);
+                print(startFreshController.learningGoal.value);
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              child: CustomOptionTile(
+                isSelected: selectedIndex == index ||
+                    (startFreshController.learningGoal.value / 5) - 1 == index,
+                childWidget: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: learningGoals[index]),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -44,21 +44,34 @@ class _RealEstateItemState extends State<RealEstateItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Center Milestone
-        GestureDetector(
-          onTap: () {
-            showAlignedDialog(
-              context: context,
-              builder: _localDialogBuilder,
-              followerAnchor: Alignment.topCenter,
-              targetAnchor: Alignment.bottomCenter,
-              barrierColor: Colors.grey.withOpacity(0.5),
-            );
-          },
-          child: Container(
+    return GestureDetector(
+      onTap: () {
+        showAlignedDialog(
+          context: context,
+          builder: _localDialogBuilder,
+          followerAnchor: Alignment.topCenter,
+          targetAnchor: Alignment.bottomCenter,
+          barrierColor: Colors.grey.withOpacity(0.5),
+        );
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          // Path between Milestones
+          if (!widget.isFin)
+            Transform.translate(
+              offset: widget.start ? Offset(30, 80) : Offset(-20, 80),
+              child: !widget.start
+                  ? Image.asset("assets/real_estate/path3.png")
+                  : Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi),
+                      child: Image.asset("assets/real_estate/path3.png"),
+                    ),
+            ),
+          // Center Milestone
+          Container(
             height: 100,
             width: 100,
             child: CircleAvatar(
@@ -67,20 +80,8 @@ class _RealEstateItemState extends State<RealEstateItem> {
               backgroundColor: Colors.transparent,
             ),
           ),
-        ),
-        // Path between Milestones
-        if (!widget.isFin)
-          Transform.translate(
-            offset: widget.start ? Offset(30, 80) : Offset(-20, 80),
-            child: !widget.start
-                ? Image.asset("assets/real_estate/path3.png")
-                : Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(pi),
-                    child: Image.asset("assets/real_estate/path3.png"),
-                  ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

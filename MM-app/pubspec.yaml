@@ -13,7 +13,11 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^3.5.0
-  cloud_firestore: ^5.4.2  # Downgrade to this version
+  cloud_firestore: ^5.4.2 
+
+  
+  
+   # Downgrade to this version
 
   firebase_auth: ^5.3.0
   google_sign_in: ^6.1.5
@@ -40,6 +44,10 @@ dependencies:
   shimmer: ^3.0.0
   syncfusion_flutter_gauges: ^27.1.58
   align_positioned: ^5.0.1
+  permission_handler: ^11.3.1
+  dio: ^5.7.0
+  open_filex: ^4.6.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -144,6 +152,15 @@ flutter:
     - assets/images/money-manager.svg
     - assets/images/savings-jar.svg
     - assets/images/price-tags.svg
+    - assets/images/newMonkeys/Maria.png
+    - assets/images/newMonkeys/Ava.png
+    - assets/images/newMonkeys/Jason.png
+    - assets/images/newMonkeys/check.png
+    - assets/images/lfwLessonPage5/piggy.png
+    - assets/images/lfwLessonPage5/house.png
+    - assets/images/lfwLessonPage5/grad.png
+    - assets/images/lfwLessonPage5/bubble.png
+    - assets/images/lfwLessonPage5/check.png
 
   fonts:
     - family: Baloo 2
