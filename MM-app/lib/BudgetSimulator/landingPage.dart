@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class BudgetSimulatorLanding extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
   int totalBanans = 0;
   bool firstTime = true;
   bool beginner = false;
-  bool intermediate = false;
+  bool intermediate = true;
   bool advanced = false;
 
   @override
@@ -74,6 +74,31 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
     'First Apartment: Living on Your Own 🔒',
     'Freelance & Irregular Income 🔒',
   ];
+
+  final List<TyperAnimatedText> animatedTexts = [
+    TyperAnimatedText(
+      'Here, we’ll walk through real-life\nbudgeting scenarios, tackle unexpected\nevents, and learn how to manage money\nlike a pro.',
+      speed: Duration(
+          milliseconds: 5000 ~/
+              'Here, we’ll walk through real-life\nbudgeting scenarios, tackle unexpected\nevents, and learn how to manage money\nlike a pro.'
+                  .length),
+    ),
+    TyperAnimatedText(
+      'Design first, then code',
+      speed: Duration(milliseconds: 5000 ~/ 'Design first, then code'.length),
+    ),
+    TyperAnimatedText(
+      'Do not patch bugs out, rewrite them',
+      speed: Duration(
+          milliseconds: 5000 ~/ 'Do not patch bugs out, rewrite them'.length),
+    ),
+    TyperAnimatedText(
+      'Do not test bugs out, design them out',
+      speed: Duration(
+          milliseconds: 5000 ~/ 'Do not test bugs out, design them out'.length),
+    ),
+  ];
+  int animatedTextIndex = 0;
 
   String? selectedScenario = '';
 
@@ -296,38 +321,69 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                           color: Colors.white,
                                         )),
                                   )),
-                                  SizedBox(height: webScreenHeightUnit * 20,),
-                              Container(
-                                width: webScreenWidthUnit * 600,
-                                padding:
-                                    EdgeInsets.fromLTRB(webScreenWidthUnit * 8,webScreenHeightUnit * 50,0,0),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: 
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                  "This is a text box that expands\nwhen there is more text.\n" *
-                                    2,
-                                  style: GoogleFonts.baloo2(
-                                    fontSize: webScreenWidthUnit * 29,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                Icon(Icons.arrow_forward_ios_rounded,)
-                                  ],
-
-                                )
-                                
-                                
+                              SizedBox(
+                                height: webScreenHeightUnit * 20,
                               ),
-                              SizedBox(height: webScreenHeightUnit * 20,),
+                              Container(
+                                  width: webScreenWidthUnit * 956,
+                                  padding: EdgeInsets.fromLTRB(
+                                      webScreenWidthUnit * 8,
+                                      webScreenHeightUnit * 50,
+                                      0,
+                                      0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      DefaultTextStyle(
+                                        style: const TextStyle(
+                                          fontSize: 30.0,
+                                          fontFamily: 'Agne',
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            AnimatedTextKit(
+                                              key: ValueKey<int>(
+                                                  animatedTextIndex), // Ensures the widget rebuilds
+                                              animatedTexts: [
+                                                animatedTexts[animatedTextIndex]
+                                              ],
+                                              isRepeatingAnimation: false,
+                                              onFinished: () {
+                                                print("Animation Finished");
+                                              },
+                                            ),
+                                            
+                                          ],
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              animatedTextIndex++;
+                                              if (animatedTextIndex >=
+                                                  animatedTexts.length) {
+                                                animatedTextIndex =
+                                                    0; // Reset to the first text
+                                              }
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                          ))
+                                    ],
+                                  )),
+                              SizedBox(
+                                height: webScreenHeightUnit * 30,
+                              ),
                             ],
                           )
                         ],
