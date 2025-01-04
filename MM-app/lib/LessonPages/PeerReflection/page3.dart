@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
 import 'package:money_monkey/home.dart';
 
@@ -17,6 +20,8 @@ class _Page3State extends State<Page3> {
   bool isLoading = true;
   int? balance;
   int totalBanans = 0;
+    PeerReflectioncontroller peerReflectionController = Get.find();
+
 
   List<String> availableItems = [
     'Planning for grad school',
@@ -87,180 +92,165 @@ class _Page3State extends State<Page3> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(height: screenHeight * .05),
-          topOfLesson(
-            screenWidthUnit: screenWidthUnit,
-            screenHeightUnit: screenHeightUnit,
-            pageNumber: 3,
-            totalPages: 8,
-            context: context,
-            bananas: totalBanans,
-          ),
-          SizedBox(height: WebscreenHeightUnit * 65),
-          Align(
-            alignment: Alignment.topLeft,
+    return Column(
+      children: [
+        SizedBox(height: screenHeight * .05),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
+              child: Text(
+                'Match Actions to Categories',
+                style: GoogleFonts.baloo2(
+                  fontSize: screenWidthUnit * 6.5,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                ),
+              )),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Expanded(
+            flex: 3,
             child: Padding(
-                padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
-                child: Text(
-                  'Match Actions to Categories',
-                  style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 6.5,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                )),
+              padding: EdgeInsets.fromLTRB(
+                  WebscreenWidthUnit * 475, WebscreenHeightUnit * 26, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _buildDropZone(
+                      droppedItems1,
+                      'Lifelong Financial\nWell-Being',
+                      WebscreenWidthUnit,
+                      WebscreenHeightUnit,
+                      (item) => droppedItems2.remove(item),
+                      (item) => droppedItems3.remove(item)),
+                  SizedBox(width: WebscreenWidthUnit * 16),
+                  _buildDropZone(
+                      droppedItems2,
+                      'Responsibility with\nDependents',
+                      WebscreenWidthUnit,
+                      WebscreenHeightUnit,
+                      (item) => droppedItems1.remove(item),
+                      (item) => droppedItems3.remove(item)),
+                  SizedBox(width: WebscreenWidthUnit * 16),
+                  _buildDropZone(
+                      droppedItems3,
+                      'Responsibility\nwithout Dependents',
+                      WebscreenWidthUnit,
+                      WebscreenHeightUnit,
+                      (item) => droppedItems1.remove(item),
+                      (item) => droppedItems2.remove(item)),
+                ],
+              ),
+            ),
           ),
-          Align(
-            alignment: Alignment.topLeft,
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+                WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
+            child: Text(
+              'Actions to Categorize:',
+              style: GoogleFonts.baloo2(
+                fontSize: screenWidthUnit * 5,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              WebscreenWidthUnit * 475,
+              0,
+              0,
+              0,
+            ),
             child: Expanded(
-              flex: 3,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                    WebscreenWidthUnit * 475, WebscreenHeightUnit * 26, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _buildDropZone(
-                        droppedItems1,
-                        'Lifelong Financial\nWell-Being',
-                        WebscreenWidthUnit,
-                        WebscreenHeightUnit,
-                        (item) => droppedItems2.remove(item),
-                        (item) => droppedItems3.remove(item)),
-                    SizedBox(width: WebscreenWidthUnit * 16),
-                    _buildDropZone(
-                        droppedItems2,
-                        'Responsibility with\nDependents',
-                        WebscreenWidthUnit,
-                        WebscreenHeightUnit,
-                        (item) => droppedItems1.remove(item),
-                        (item) => droppedItems3.remove(item)),
-                    SizedBox(width: WebscreenWidthUnit * 16),
-                    _buildDropZone(
-                        droppedItems3,
-                        'Responsibility\nwithout Dependents',
-                        WebscreenWidthUnit,
-                        WebscreenHeightUnit,
-                        (item) => droppedItems1.remove(item),
-                        (item) => droppedItems2.remove(item)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:
+                    List.generate((availableItems.length / 4).ceil(), (index) {
+                  int start = index * 4;
+                  int end = (index * 4 + 4) > availableItems.length
+                      ? availableItems.length
+                      : (index * 4 + 4);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: availableItems.sublist(start, end).map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: _buildDraggableItem(item),
+                      );
+                    }).toList(),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: WebscreenHeightUnit * 83),
+          child: GestureDetector(
+              onTap: () {
+                if (droppedItems1.contains("Flexible budgeting") &&
+                    droppedItems1.contains("Travel savings") &&
+                    droppedItems1.contains("Emergency fund") &&
+                    droppedItems1.contains("Starting retirement fund") &&
+                    droppedItems2.contains("Budgeting for family needs") &&
+                    droppedItems2.contains("Kids’ education savings") &&
+                    droppedItems3.contains("Personal investments") &&
+                    droppedItems3.contains("Planning for grad school")) {
+                      print(peerReflectionController.pageIndex.value);
+                peerReflectionController.pageIndex.value += 1;
+
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        'Please categorize all the items correctly to continue'),
+                    duration: Duration(seconds: 2),
+                  ));
+                }
+              },
+              child: Container(
+                height: screenHeightUnit * 58,
+                width: screenWidthUnit * 61,
+                decoration: BoxDecoration(
+                  color: (droppedItems1.contains("Flexible budgeting") &&
+                          droppedItems1.contains("Travel savings") &&
+                          droppedItems1.contains("Emergency fund") &&
+                          droppedItems1.contains("Starting retirement fund") &&
+                          droppedItems2
+                              .contains("Budgeting for family needs") &&
+                          droppedItems2.contains("Kids’ education savings") &&
+                          droppedItems3.contains("Personal investments") &&
+                          droppedItems3.contains("Planning for grad school"))
+                      ? Color.fromRGBO(137, 220, 142, 1)
+                      : Color.fromRGBO(224, 227, 231, 1),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 5,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
                 ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
-              child: Text(
-                'Actions to Categorize:',
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 5,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          Align(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                WebscreenWidthUnit * 475,
-                0,
-                0,
-                0,
-              ),
-              child: Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate((availableItems.length / 4).ceil(),
-                      (index) {
-                    int start = index * 4;
-                    int end = (index * 4 + 4) > availableItems.length
-                        ? availableItems.length
-                        : (index * 4 + 4);
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: availableItems.sublist(start, end).map((item) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: _buildDraggableItem(item),
-                        );
-                      }).toList(),
-                    );
-                  }),
-                ),
-              ),
-            ),
-          ),
-          Spacer(),
-          Padding(
-            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 83),
-            child: GestureDetector(
-                onTap: () {
-                  if (droppedItems1.contains("Flexible budgeting") &&
-                      droppedItems1.contains("Travel savings") &&
-                      droppedItems1.contains("Emergency fund") &&
-                      droppedItems1.contains("Starting retirement fund") &&
-                      droppedItems2.contains("Budgeting for family needs") &&
-                      droppedItems2.contains("Kids’ education savings") &&
-                      droppedItems3.contains("Personal investments") &&
-                      droppedItems3.contains("Planning for grad school")) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Page4()),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          'Please categorize all the items correctly to continue'),
-                      duration: Duration(seconds: 2),
-                    ));
-                  }
-                },
-                child: Container(
-                  height: screenHeightUnit * 58,
-                  width: screenWidthUnit * 61,
-                  decoration: BoxDecoration(
-                    color: (droppedItems1.contains("Flexible budgeting") &&
-                            droppedItems1.contains("Travel savings") &&
-                            droppedItems1.contains("Emergency fund") &&
-                            droppedItems1
-                                .contains("Starting retirement fund") &&
-                            droppedItems2
-                                .contains("Budgeting for family needs") &&
-                            droppedItems2.contains("Kids’ education savings") &&
-                            droppedItems3.contains("Personal investments") &&
-                            droppedItems3.contains("Planning for grad school"))
-                        ? Color.fromRGBO(137, 220, 142, 1)
-                        : Color.fromRGBO(224, 227, 231, 1),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 5,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                child: Center(
+                  child: Text(
+                    "Continue to Activity",
+                    style: GoogleFonts.baloo2(
+                        fontSize: screenWidthUnit * 4.2,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700),
                   ),
-                  child: Center(
-                    child: Text(
-                      "Continue to Activity",
-                      style: GoogleFonts.baloo2(
-                          fontSize: screenWidthUnit * 4.2,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                )),
-          )
-        ],
-      ),
+                ),
+              )),
+        )
+      ],
     );
   }
 

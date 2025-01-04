@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
 
 class PeerReflection extends StatefulWidget {
   const PeerReflection({super.key});
@@ -46,7 +49,7 @@ class _PeerReflectionState extends State<PeerReflection> {
               Container(
                 width: screenWidth * 0.44,
                 child: CustomProgressBar(
-                  pageName: 'EducationPage',
+                  pageName: 'PeerReflection',
                   width: screenWidth * 0.44,
                   key: ValueKey(peerReflectioncontroller
                       .pageIndex.value), // Add key to force rebuild

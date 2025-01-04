@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:money_monkey/BudgetSimulator/landingPage.dart';
 import 'package:money_monkey/LessonPages/LessonOnePages/Page1.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonOne.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
                 if (userId.isEmpty) {
                   return LoginScreen();
                 } else {
-                  return PortfolioScreen();
+                  return PeerReflection();
                 }
               } else {
                 return LoginScreen();

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflection';
 import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
 import 'package:money_monkey/home.dart';
 
@@ -77,100 +76,86 @@ class _Page1State extends State<Page1> {
     double screenWidthUnit = screenWidth / 390;
     double screenHeightUnit = screenHeight / 880;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0XFFFFFFFF),
-        body: Column(children: [
-          SizedBox(
-            height: screenHeight * .05,
-          ),
-          topOfLesson(
+    return Column(children: [
+      SizedBox(height: screenHeightUnit * 92),
+      Text(
+        "Taking Responsibility for Personal Financial Decisions",
+        style: GoogleFonts.baloo2(
+            fontSize: screenWidthUnit * 7,
+            color: Colors.black,
+            fontWeight: FontWeight.w700),
+      ),
+      SizedBox(height: screenHeightUnit * 42),
+      Text(
+        "Taking responsibility for your finances helps you plan for\nevery stage of life, whether you're managing just for\n yourself or for others who depend on you.",
+        style: GoogleFonts.baloo2(
+            fontSize: screenWidthUnit * 4.5,
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            height: ((5 / 3) * screenWidthUnit) / 3.5),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: screenHeightUnit * 42),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          newMonkey(
               screenWidthUnit: screenWidthUnit,
               screenHeightUnit: screenHeightUnit,
-              pageNumber: 1,
-              totalPages: 8,
-              context: context,
-              bananas: totalBanans),
-          SizedBox(height: screenHeightUnit * 92),
-          Text(
-            "Taking Responsibility for Personal Financial Decisions",
-            style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 7,
-                color: Colors.black,
-                fontWeight: FontWeight.w700),
+              monkeyImage: 'assets/images/newMonkeys/Maria.png',
+              name: "Maria",
+              description: "The Planner"),
+          SizedBox(
+            width: screenWidthUnit * 10,
           ),
-          SizedBox(height: screenHeightUnit * 42),
-          Text(
-            "Taking responsibility for your finances helps you plan for\nevery stage of life, whether you're managing just for\n yourself or for others who depend on you.",
-            style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 4.5,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                height: ((5 / 3) * screenWidthUnit) / 3.5),
-            textAlign: TextAlign.center,
+          newMonkey(
+              screenWidthUnit: screenWidthUnit,
+              screenHeightUnit: screenHeightUnit,
+              monkeyImage: 'assets/images/newMonkeys/Jason.png',
+              name: "Jason",
+              description: "Family Provider"),
+          SizedBox(
+            width: screenWidthUnit * 10,
           ),
-          SizedBox(height: screenHeightUnit * 42),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              newMonkey(
-                  screenWidthUnit: screenWidthUnit,
-                  screenHeightUnit: screenHeightUnit,
-                  monkeyImage: 'assets/images/newMonkeys/Maria.png',
-                  name: "Maria",
-                  description: "The Planner"),
-              SizedBox(
-                width: screenWidthUnit * 10,
-              ),
-              newMonkey(
-                  screenWidthUnit: screenWidthUnit,
-                  screenHeightUnit: screenHeightUnit,
-                  monkeyImage: 'assets/images/newMonkeys/Jason.png',
-                  name: "Jason",
-                  description: "Family Provider"),
-              SizedBox(
-                width: screenWidthUnit * 10,
-              ),
-              newMonkey(
-                  screenWidthUnit: screenWidthUnit,
-                  screenHeightUnit: screenHeightUnit,
-                  monkeyImage: 'assets/images/newMonkeys/Ava.png',
-                  name: "Ava",
-                  description: "The Single Saver"),
-            ],
-          ),
-          SizedBox(height: screenHeightUnit * 82),
-          GestureDetector(
-              onTap: () {
-                peerReflectionController.pageIndex.value += 1;
-              },
-              child: Container(
-                height: screenHeightUnit * 58,
-                width: screenWidthUnit * 61,
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(137, 220, 142, 1),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(
-                    "Continue to Peer Stories",
-                    style: GoogleFonts.baloo2(
-                        fontSize: screenWidthUnit * 4.2,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ))
-        ]),
+          newMonkey(
+              screenWidthUnit: screenWidthUnit,
+              screenHeightUnit: screenHeightUnit,
+              monkeyImage: 'assets/images/newMonkeys/Ava.png',
+              name: "Ava",
+              description: "The Single Saver"),
+        ],
       ),
-    );
+      SizedBox(height: screenHeightUnit * 82),
+      GestureDetector(
+          onTap: () {
+            print(peerReflectionController.pageIndex.value);
+            peerReflectionController.pageIndex.value += 1;
+          },
+          child: Container(
+            height: screenHeightUnit * 58,
+            width: screenWidthUnit * 61,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(137, 220, 142, 1),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 5,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                "Continue to Peer Stories",
+                style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 4.2,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ))
+    ]);
   }
 }
 
