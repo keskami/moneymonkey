@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflection';
 import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
 import 'package:money_monkey/home.dart';
 
@@ -17,6 +21,7 @@ class _Page1State extends State<Page1> {
   bool isLoading = true;
   int? balance;
   int totalBanans = 0;
+  PeerReflectioncontroller peerReflectionController = Get.find();
 
   @override
   void initState() {
@@ -137,10 +142,7 @@ class _Page1State extends State<Page1> {
           SizedBox(height: screenHeightUnit * 82),
           GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Page2()),
-                );
+                peerReflectionController.pageIndex.value += 1;
               },
               child: Container(
                 height: screenHeightUnit * 58,
