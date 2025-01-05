@@ -74,20 +74,10 @@ class _Page8State extends State<Page8> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
+    return Column(
           children: [
             SizedBox(height: screenHeight * .05),
-            topOfLesson(
-              screenWidthUnit: screenWidthUnit,
-              screenHeightUnit: screenHeightUnit,
-              pageNumber: 8,
-              totalPages: 8,
-              context: context,
-              bananas: totalBanans,
-            ),
-            SizedBox(height: WebscreenHeightUnit * 115),
+            
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -157,7 +147,6 @@ class _Page8State extends State<Page8> {
                     ],
                   )),
             ),
-            Spacer(),
             Padding(
               padding: EdgeInsets.fromLTRB(
                   WebscreenWidthUnit * 200, 0, 0, WebscreenHeightUnit * 100),
@@ -194,7 +183,7 @@ class _Page8State extends State<Page8> {
                   )),
             )
           ],
-        ));
+        );
   }
 }
 

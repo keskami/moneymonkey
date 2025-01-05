@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page7.dart';
 import 'package:money_monkey/home.dart';
 
@@ -20,6 +22,7 @@ class _Page6State extends State<Page6> {
   bool mariaClicked = false;
   bool jasonClicked = false;
   bool avaClicked = false;
+  PeerReflectioncontroller peerReflectionController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -74,80 +77,65 @@ class _Page6State extends State<Page6> {
     double screenHeightUnit = screenHeight / 880;
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(height: screenHeight * .05),
-          topOfLesson(
-            screenWidthUnit: screenWidthUnit,
-            screenHeightUnit: screenHeightUnit,
-            pageNumber: 6,
-            totalPages: 8,
-            context: context,
-            bananas: totalBanans,
-          ),
-          SizedBox(height: WebscreenHeightUnit * 95),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: Text(
-                "Lifelong Financial Well-Being",
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 7,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
-                textAlign: TextAlign.start,
+    return Column(
+      children: [
+        SizedBox(height: screenHeight * .05),
+        Align(
+          alignment: Alignment.center,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Text(
+              "Lifelong Financial Well-Being",
+              style: GoogleFonts.baloo2(
+                fontSize: screenWidthUnit * 7,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
               ),
+              textAlign: TextAlign.start,
             ),
           ),
-          SizedBox(height: WebscreenHeightUnit * 65),
-          Image.asset(
-            "assets/images/lfwLessonPage5/bubble.png",
-            width: WebscreenWidthUnit * 700,
-          ),
-          SizedBox(height: WebscreenHeightUnit * 12),
-          Image.asset("assets/images/monkeyNoText.png",
-              height: WebscreenHeightUnit * 250),
-          Spacer(),
-          Padding(
-            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Page7()),
-                  );
-                },
-                child: Container(
-                  height: screenHeightUnit * 58,
-                  width: WebscreenWidthUnit * 291,
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(137, 220, 142, 1),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 5,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Continue",
-                      style: GoogleFonts.baloo2(
-                          fontSize: screenWidthUnit * 4.2,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700),
+        ),
+        SizedBox(height: WebscreenHeightUnit * 65),
+        Image.asset(
+          "assets/images/lfwLessonPage5/bubble.png",
+          width: WebscreenWidthUnit * 700,
+        ),
+        SizedBox(height: WebscreenHeightUnit * 12),
+        Image.asset("assets/images/monkeyNoText.png",
+            height: WebscreenHeightUnit * 250),
+        Padding(
+          padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
+          child: GestureDetector(
+              onTap: () {
+                print(peerReflectionController.pageIndex.value);
+                peerReflectionController.pageIndex.value += 1;
+              },
+              child: Container(
+                height: screenHeightUnit * 58,
+                width: WebscreenWidthUnit * 291,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(137, 220, 142, 1),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 5,
+                      offset: const Offset(0, 4),
                     ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    "Continue",
+                    style: GoogleFonts.baloo2(
+                        fontSize: screenWidthUnit * 4.2,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700),
                   ),
-                )),
-          )
-        ],
-      ),
+                ),
+              )),
+        )
+      ],
     );
   }
 }

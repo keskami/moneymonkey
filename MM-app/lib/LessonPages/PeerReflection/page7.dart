@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page8.dart';
 import 'package:money_monkey/home.dart';
 
@@ -69,6 +71,8 @@ class _Page7State extends State<Page7> {
     }
   }
 
+  PeerReflectioncontroller peerReflectionController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -77,202 +81,186 @@ class _Page7State extends State<Page7> {
     double screenHeightUnit = screenHeight / 880;
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(height: screenHeight * .05),
-          topOfLesson(
-            screenWidthUnit: screenWidthUnit,
-            screenHeightUnit: screenHeightUnit,
-            pageNumber: 7,
-            totalPages: 8,
-            context: context,
-            bananas: totalBanans,
+    return Column(
+      children: [
+        SizedBox(height: screenHeight * .05),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
+            child: Text(
+              "Plan Your Financial Future!",
+              style: GoogleFonts.baloo2(
+                fontSize: screenWidthUnit * 7,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.start,
+            ),
           ),
-          SizedBox(height: WebscreenHeightUnit * 95),
-          Align(
-            alignment: Alignment.topLeft,
+        ),
+        SizedBox(height: WebscreenHeightUnit * 20),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
+            child: Text(
+              "This planner helps you set short- and long-term financial goals. Download it\nand fill it out to start your journey toward financial success.",
+              style: GoogleFonts.baloo2(
+                fontSize: screenWidthUnit * 4.75,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+        ),
+        SizedBox(height: WebscreenHeightUnit * 45),
+        GestureDetector(
+          onTap: () {
+            try {
+              if (futureFiles != null) {
+                futureFiles.then((value) {
+                  value.items.forEach((element) {
+                    if (element.name == "dummy.pdf") {
+                      element.getDownloadURL().then((value) {
+                        html.window.open(value, "dummy.pdf");
+                      });
+                    }
+                  });
+                });
+                setState(() {
+                  downloaded = true;
+                });
+              }
+            } catch (e) {
+              print(e);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Error Downloading File'),
+                duration: Duration(seconds: 2),
+                backgroundColor: Colors.red,
+              ));
+            }
+          },
+          child: Container(
+            height: WebscreenHeightUnit * 203,
+            width: WebscreenWidthUnit * 972,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(249, 250, 251, 1),
+              borderRadius: BorderRadius.circular(5),
+            ),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(
+                  WebscreenWidthUnit * 40, WebscreenHeightUnit * 20, 0, 0),
               child: Text(
-                "Plan Your Financial Future!",
+                "Financial Goal Planner",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 7,
+                  fontSize: screenWidthUnit * 5,
                   color: Colors.black,
                   fontWeight: FontWeight.w700,
                 ),
-                textAlign: TextAlign.start,
               ),
             ),
           ),
-          SizedBox(height: WebscreenHeightUnit * 20),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
-              child: Text(
-                "This planner helps you set short- and long-term financial goals. Download it\nand fill it out to start your journey toward financial success.",
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 4.75,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-          ),
-          SizedBox(height: WebscreenHeightUnit * 45),
-          GestureDetector(
-            onTap: () {
-              try {
-                if (futureFiles != null) {
-                  futureFiles.then((value) {
-                    value.items.forEach((element) {
-                      if (element.name == "dummy.pdf") {
-                        element.getDownloadURL().then((value) {
-                          html.window.open(value, "dummy.pdf");
-                        });
+        ),
+        Padding(
+            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      try {
+                        if (futureFiles != null) {
+                          futureFiles.then((value) {
+                            value.items.forEach((element) {
+                              if (element.name == "dummy.pdf") {
+                                element.getDownloadURL().then((value) {
+                                  html.window.open(value, "dummy.pdf");
+                                });
+                              }
+                            });
+                          });
+                          setState(() {
+                            downloaded = true;
+                          });
+                        }
+                      } catch (e) {
+                        print(e);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Error Downloading File'),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ));
                       }
-                    });
-                  });
-                  setState(() {
-                    downloaded = true;
-                  });
-                }
-              } catch (e) {
-                print(e);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Error Downloading File'),
-                  duration: Duration(seconds: 2),
-                  backgroundColor: Colors.red,
-                ));
-              }
-            },
-            child: Container(
-              height: WebscreenHeightUnit * 203,
-              width: WebscreenWidthUnit * 972,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(249, 250, 251, 1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                    WebscreenWidthUnit * 40, WebscreenHeightUnit * 20, 0, 0),
-                child: Text(
-                  "Financial Goal Planner",
-                  style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 5,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Spacer(),
-          Padding(
-              padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        try {
-                          if (futureFiles != null) {
-                            futureFiles.then((value) {
-                              value.items.forEach((element) {
-                                if (element.name == "dummy.pdf") {
-                                  element.getDownloadURL().then((value) {
-                                    html.window.open(value, "dummy.pdf");
-                                  });
-                                }
-                              });
-                            });
-                            setState(() {
-                              downloaded = true;
-                            });
-                          }
-                        } catch (e) {
-                          print(e);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Error Downloading File'),
-                            duration: Duration(seconds: 2),
-                            backgroundColor: Colors.red,
-                          ));
-                        }
-                      },
-                      child: Container(
-                        height: screenHeightUnit * 58,
-                        width: WebscreenWidthUnit * 221,
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(137, 220, 142, 1),
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 5,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Download",
-                            style: GoogleFonts.baloo2(
-                                fontSize: screenWidthUnit * 4.2,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 58,
+                      width: WebscreenWidthUnit * 221,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(137, 220, 142, 1),
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 5,
+                            offset: const Offset(0, 4),
                           ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Download",
+                          style: GoogleFonts.baloo2(
+                              fontSize: screenWidthUnit * 4.2,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700),
                         ),
-                      )),
-                  SizedBox(width: WebscreenWidthUnit * 170),
-                  GestureDetector(
-                      onTap: () {
-                        if (downloaded) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Page8()),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text('Download the file before continuing'),
-                            duration: Duration(seconds: 2),
-                            backgroundColor: Colors.red,
-                          ));
-                        }
-                      },
-                      child: Container(
-                        height: screenHeightUnit * 58,
-                        width: WebscreenWidthUnit * 221,
-                        decoration: BoxDecoration(
-                          color: downloaded
-                              ? Color.fromRGBO(137, 220, 142, 1)
-                              : Color.fromRGBO(224, 227, 231, 1),
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 5,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Continue",
-                            style: GoogleFonts.baloo2(
-                                fontSize: screenWidthUnit * 4.2,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
+                      ),
+                    )),
+                SizedBox(width: WebscreenWidthUnit * 170),
+                GestureDetector(
+                    onTap: () {
+                      if (downloaded) {
+                        print(peerReflectionController.pageIndex.value);
+                        peerReflectionController.pageIndex.value += 1;
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Download the file before continuing'),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 58,
+                      width: WebscreenWidthUnit * 221,
+                      decoration: BoxDecoration(
+                        color: downloaded
+                            ? Color.fromRGBO(137, 220, 142, 1)
+                            : Color.fromRGBO(224, 227, 231, 1),
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 5,
+                            offset: const Offset(0, 4),
                           ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Continue",
+                          style: GoogleFonts.baloo2(
+                              fontSize: screenWidthUnit * 4.2,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700),
                         ),
-                      )),
-                ],
-              ))
-        ],
-      ),
+                      ),
+                    )),
+              ],
+            ))
+      ],
     );
   }
 }
