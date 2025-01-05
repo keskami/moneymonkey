@@ -126,6 +126,7 @@ class _Page7State extends State<Page7> {
           GestureDetector(
             onTap: () {
               try {
+                // ignore: unnecessary_null_comparison
                 if (futureFiles != null) {
                   futureFiles.then((value) {
                     value.items.forEach((element) {
@@ -179,6 +180,7 @@ class _Page7State extends State<Page7> {
                   GestureDetector(
                       onTap: () {
                         try {
+                          // ignore: unnecessary_null_comparison
                           if (futureFiles != null) {
                             futureFiles.then((value) {
                               value.items.forEach((element) {

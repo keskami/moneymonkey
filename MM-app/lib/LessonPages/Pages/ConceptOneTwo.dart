@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 
 class LessonOne extends StatefulWidget {
   const LessonOne({super.key});
@@ -11,7 +11,8 @@ class LessonOne extends StatefulWidget {
 }
 
 class _LessonOneState extends State<LessonOne> {
-  LessonOneController lessonOneController = Get.put(LessonOneController());
+  ComponentOneTwoController componentOneTwoController =
+      Get.put(ComponentOneTwoController());
   final String lessonId = "Lesson1";
   Future<void> _preLoadImages() async {
     await precacheImage(
@@ -25,7 +26,7 @@ class _LessonOneState extends State<LessonOne> {
   }
 
   Future<void> fetchQuestions() async {
-    await lessonOneController.fetchQuestions(lessonId);
+    await componentOneTwoController.fetchQuestions(lessonId);
     print("fetched");
   }
 
@@ -54,17 +55,16 @@ class _LessonOneState extends State<LessonOne> {
             children: [
               IconButton(
                 onPressed: () {
-                  lessonOneController.pageIndex.value = 0;
+                  componentOneTwoController.pageIndex.value = 0;
                 },
                 icon: Icon(Icons.close),
               ),
               Container(
                 width: screenWidth * 0.44,
                 child: CustomProgressBar(
-                  pageName: 'EducationPage',
+                  pageName: 'ConceptOne',
                   width: screenWidth * 0.44,
-                  key: ValueKey(lessonOneController
-                      .pageIndex.value), // Add key to force rebuild
+                  key: ValueKey(componentOneTwoController.pageIndex.value),
                 ),
               ),
               const SizedBox(
@@ -83,8 +83,8 @@ class _LessonOneState extends State<LessonOne> {
             ],
           ),
           Obx(
-            () =>
-                lessonOneController.pages[lessonOneController.pageIndex.value],
+            () => componentOneTwoController
+                .pages[componentOneTwoController.pageIndex.value],
           ),
         ],
       ),

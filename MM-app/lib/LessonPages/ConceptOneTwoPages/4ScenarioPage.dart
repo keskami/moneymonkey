@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
-class L1Page6 extends StatefulWidget {
-  const L1Page6({super.key});
+class ScenarioPage extends StatefulWidget {
+  const ScenarioPage({super.key});
 
   @override
-  State<L1Page6> createState() => _L1Page6State();
+  State<ScenarioPage> createState() => _ScenarioPageState();
 }
 
-class _L1Page6State extends State<L1Page6> {
+class _ScenarioPageState extends State<ScenarioPage> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  List<String> correctAnswers = ["High priority"];
+  List<String> correctAnswers = ["Save 10%"];
   List<String> options = [
-    "High priority",
-    "Not that important",
+    "Save 10%",
+    "Spend all of it",
   ];
-  String _containerHeading = "Family Planning";
+  String _containerHeading = "High School";
   String _containerSubHeading =
-      "Jordan is thinking about starting a family soon. How important is it to have an emergency fund?";
-  LessonOneController lessonOneController = Get.find();
+      "Jordan just started a full-time job. Should he create a monthly budget first or just wing it?";
+
+  ComponentOneTwoController componentOneTwoController = Get.find();
   SnackBar correctAnswer = CorrectAnswerSnackBar(
-    message:
-        "Yes! Unexpected costs like medical\nbills or childcare can pop up. Having a\ncushion is crucial.",
+    message: "Great habit! Even \$5 a week adds up over time.",
   );
 
   SnackBar wrongAnswer = WrongAnswerSnackBar(
@@ -44,7 +44,7 @@ class _L1Page6State extends State<L1Page6> {
       Future.delayed(
         Duration(seconds: 2),
         () {
-          lessonOneController.pageIndex.value += 1;
+          componentOneTwoController.pageIndex.value += 1;
         },
       );
     } else {

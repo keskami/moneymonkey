@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 import 'package:money_monkey/LessonPages/Widgets/ShadowedBoxContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class L1Page8 extends StatefulWidget {
-  const L1Page8({super.key});
+class QuickCheckPage extends StatefulWidget {
+  const QuickCheckPage({super.key});
 
   @override
-  State<L1Page8> createState() => _L1Page8State();
+  State<QuickCheckPage> createState() => _QuickCheckPageState();
 }
 
-class _L1Page8State extends State<L1Page8> {
+class _QuickCheckPageState extends State<QuickCheckPage> {
   String title = "Lifelong Financial Responsibility";
   String question1 =
       "Which of the following best describes a strong financial habit at any age?";
@@ -34,7 +34,7 @@ class _L1Page8State extends State<L1Page8> {
     "It means you can freely spend on luxury items without a budget",
   ];
   bool isNextEnabled = false;
-  LessonOneController lessonOneController = Get.find();
+  ComponentOneTwoController componentOneTwoController = Get.find();
   void showMessage() {
     ScaffoldMessenger.of(context).clearSnackBars();
     if (answer1 == correctAns1 && answer2 == correctAns2) {
@@ -46,7 +46,7 @@ class _L1Page8State extends State<L1Page8> {
       Future.delayed(
         Duration(seconds: 2),
         () {
-          lessonOneController.pageIndex.value += 1;
+          componentOneTwoController.pageIndex.value += 1;
         },
       );
     } else if (answer1 == correctAns1 || answer2 == correctAns2) {

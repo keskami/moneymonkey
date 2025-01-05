@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import 'GettingStarted/Pages/sf_home.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
                   return HomePage();
                 }
               } else {
-                return HomePage();
+                return LessonOne();
               }
             },
           ),
