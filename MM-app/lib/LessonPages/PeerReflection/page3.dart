@@ -20,8 +20,7 @@ class _Page3State extends State<Page3> {
   bool isLoading = true;
   int? balance;
   int totalBanans = 0;
-    PeerReflectioncontroller peerReflectionController = Get.find();
-
+  PeerReflectioncontroller peerReflectionController = Get.find();
 
   List<String> availableItems = [
     'Planning for grad school',
@@ -161,39 +160,43 @@ class _Page3State extends State<Page3> {
             ),
           ),
         ),
-        Align(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              WebscreenWidthUnit * 475,
-              0,
-              0,
-              0,
-            ),
-            child: Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:
-                    List.generate((availableItems.length / 4).ceil(), (index) {
-                  int start = index * 4;
-                  int end = (index * 4 + 4) > availableItems.length
-                      ? availableItems.length
-                      : (index * 4 + 4);
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: availableItems.sublist(start, end).map((item) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: _buildDraggableItem(item),
-                      );
-                    }).toList(),
-                  );
-                }),
+        Container(
+          height: screenHeightUnit * 152,
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                WebscreenWidthUnit * 475,
+                0,
+                0,
+                0,
+              ),
+              child: Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: List.generate((availableItems.length / 4).ceil(),
+                      (index) {
+                    int start = index * 4;
+                    int end = (index * 4 + 4) > availableItems.length
+                        ? availableItems.length
+                        : (index * 4 + 4);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: availableItems.sublist(start, end).map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: _buildDraggableItem(item),
+                        );
+                      }).toList(),
+                    );
+                  }),
+                ),
               ),
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: WebscreenHeightUnit * 83),
+          padding: EdgeInsets.only(top: WebscreenHeightUnit * 0),
           child: GestureDetector(
               onTap: () {
                 if (droppedItems1.contains("Flexible budgeting") &&
@@ -204,9 +207,8 @@ class _Page3State extends State<Page3> {
                     droppedItems2.contains("Kids’ education savings") &&
                     droppedItems3.contains("Personal investments") &&
                     droppedItems3.contains("Planning for grad school")) {
-                      print(peerReflectionController.pageIndex.value);
-                peerReflectionController.pageIndex.value += 1;
-
+                  print(peerReflectionController.pageIndex.value);
+                  peerReflectionController.pageIndex.value += 1;
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(

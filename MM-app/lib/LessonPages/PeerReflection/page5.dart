@@ -80,7 +80,7 @@ class _Page5State extends State<Page5> {
     double WebscreenHeightUnit = screenHeight / 1080;
     return  Column(
         children: [
-          SizedBox(height: screenHeight * .05),
+          SizedBox(height: screenHeight * .07),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -127,7 +127,7 @@ class _Page5State extends State<Page5> {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
+            padding: EdgeInsets.only(top: WebscreenHeightUnit * 293),
             child: GestureDetector(
                 onTap: () {
                   print(peerReflectionController.pageIndex.value);

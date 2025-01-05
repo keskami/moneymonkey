@@ -250,7 +250,7 @@ class _Page4State extends State<Page4> {
               )),
         ),
         Padding(
-          padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 169),
+          padding: EdgeInsets.only(top: WebscreenHeightUnit * 120),
           child: GestureDetector(
               onTap: () {
                 if (avaClicked || jasonClicked || mariaClicked) {

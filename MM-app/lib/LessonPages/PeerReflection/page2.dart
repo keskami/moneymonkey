@@ -103,57 +103,60 @@ class _Page2State extends State<Page2> {
         ),
       ),
       Padding(
-          padding: EdgeInsets.only(
-              left: WebscreenWidthUnit * 17.5, top: WebscreenHeightUnit * 31),
-          child: Column(children: [
-            lessonTab(
-              image: "assets/images/newMonkeys/Maria.png",
-              name: "Maria: The Planner",
-              discription:
-                  "Maria started saving as a teen to buy her first car. Now in her 20s,\nshe's saving for grad school while setting aside money for retirement.",
-              isClicked: mariaClicked,
-              onClick: () {
-                setState(() {
-                  mariaClicked = true;
-                });
-              },
-              context: context,
-              WebscreenHeightUnit: WebscreenHeightUnit,
-              WebscreenWidthUnit: WebscreenWidthUnit,
-            ),
-            SizedBox(height: WebscreenHeightUnit * 29),
-            lessonTab(
-              image: "assets/images/newMonkeys/Jason.png",
-              name: "Jason: The Family Provider",
-              discription:
-                  "Jason is a dad with two kids. He prioritizes housing, groceries, and school expenses\nbut still sets aside money for emergencies and his kids' future education.",
-              isClicked: jasonClicked,
-              onClick: () {
-                setState(() {
-                  jasonClicked = true;
-                });
-              },
-              context: context,
-              WebscreenHeightUnit: WebscreenHeightUnit,
-              WebscreenWidthUnit: WebscreenWidthUnit,
-            ),
-            SizedBox(height: WebscreenHeightUnit * 29),
-            lessonTab(
-              image: "assets/images/newMonkeys/Ava.png",
-              name: "Ava: The Single Saver",
-              discription:
-                  "Ava, in her early 30s, focuses on saving for travel and investing in her future.\nWithout dependents, she can prioritize her personal goals.",
-              isClicked: avaClicked,
-              onClick: () {
-                setState(() {
-                  avaClicked = true;
-                });
-              },
-              context: context,
-              WebscreenHeightUnit: WebscreenHeightUnit,
-              WebscreenWidthUnit: WebscreenWidthUnit,
-            ),
-          ])),
+        padding: EdgeInsets.only(
+            left: WebscreenWidthUnit * 17.5, top: WebscreenHeightUnit * 31),
+        child: Container(
+            height: WebscreenHeightUnit * 550,
+            child: Column(children: [
+              lessonTab(
+                image: "assets/images/newMonkeys/Maria.png",
+                name: "Maria: The Planner",
+                discription:
+                    "Maria started saving as a teen to buy her first car. Now in her 20s,\nshe's saving for grad school while setting aside money for retirement.",
+                isClicked: mariaClicked,
+                onClick: () {
+                  setState(() {
+                    mariaClicked = true;
+                  });
+                },
+                context: context,
+                WebscreenHeightUnit: WebscreenHeightUnit,
+                WebscreenWidthUnit: WebscreenWidthUnit,
+              ),
+              SizedBox(height: WebscreenHeightUnit * 29),
+              lessonTab(
+                image: "assets/images/newMonkeys/Jason.png",
+                name: "Jason: The Family Provider",
+                discription:
+                    "Jason is a dad with two kids. He prioritizes housing, groceries, and school expenses\nbut still sets aside money for emergencies and his kids' future education.",
+                isClicked: jasonClicked,
+                onClick: () {
+                  setState(() {
+                    jasonClicked = true;
+                  });
+                },
+                context: context,
+                WebscreenHeightUnit: WebscreenHeightUnit,
+                WebscreenWidthUnit: WebscreenWidthUnit,
+              ),
+              SizedBox(height: WebscreenHeightUnit * 29),
+              lessonTab(
+                image: "assets/images/newMonkeys/Ava.png",
+                name: "Ava: The Single Saver",
+                discription:
+                    "Ava, in her early 30s, focuses on saving for travel and investing in her future.\nWithout dependents, she can prioritize her personal goals.",
+                isClicked: avaClicked,
+                onClick: () {
+                  setState(() {
+                    avaClicked = true;
+                  });
+                },
+                context: context,
+                WebscreenHeightUnit: WebscreenHeightUnit,
+                WebscreenWidthUnit: WebscreenWidthUnit,
+              ),
+            ])),
+      ),
       SizedBox(height: WebscreenHeightUnit * 82),
       Positioned(
         bottom: WebscreenHeightUnit * 0,

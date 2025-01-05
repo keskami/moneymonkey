@@ -79,7 +79,7 @@ class _Page6State extends State<Page6> {
     double WebscreenHeightUnit = screenHeight / 1080;
     return Column(
       children: [
-        SizedBox(height: screenHeight * .05),
+        SizedBox(height: screenHeight * .08),
         Align(
           alignment: Alignment.center,
           child: Padding(
@@ -104,7 +104,7 @@ class _Page6State extends State<Page6> {
         Image.asset("assets/images/monkeyNoText.png",
             height: WebscreenHeightUnit * 250),
         Padding(
-          padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
+          padding: EdgeInsets.only(top: WebscreenHeightUnit * 153),
           child: GestureDetector(
               onTap: () {
                 print(peerReflectionController.pageIndex.value);

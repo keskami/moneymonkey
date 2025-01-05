@@ -149,7 +149,7 @@ class _Page8State extends State<Page8> {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(
-                  WebscreenWidthUnit * 200, 0, 0, WebscreenHeightUnit * 100),
+                  WebscreenWidthUnit * 200, WebscreenHeightUnit * 150, 0, WebscreenHeightUnit * 0),
               child: GestureDetector(
                   onTap: () {
                     Navigator.push(

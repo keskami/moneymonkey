@@ -164,7 +164,7 @@ class _Page7State extends State<Page7> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
+            padding: EdgeInsets.only(top: WebscreenHeightUnit * 335),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
