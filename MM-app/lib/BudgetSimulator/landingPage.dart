@@ -20,6 +20,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
   bool beginner = false;
   bool intermediate = true;
   bool advanced = false;
+  bool eventFinished = false;
 
   @override
   void initState() {
@@ -77,26 +78,36 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
 
   final List<TyperAnimatedText> animatedTexts = [
     TyperAnimatedText(
-      'Here, we’ll walk through real-life\nbudgeting scenarios, tackle unexpected\nevents, and learn how to manage money\nlike a pro.',
+      'Hi! Welcome to the Budget Simulator.',
+      textStyle: TextStyle(),
       speed: Duration(
-          milliseconds: 5000 ~/
-              'Here, we’ll walk through real-life\nbudgeting scenarios, tackle unexpected\nevents, and learn how to manage money\nlike a pro.'
+          milliseconds: 1000 ~/
+              'Hi! Welcome to the Budget Simulator.'
                   .length),
     ),
+
+
     TyperAnimatedText(
-      'Design first, then code',
-      speed: Duration(milliseconds: 5000 ~/ 'Design first, then code'.length),
+      'I\’m Minty, your personal guide on this\nadventure.',
+      speed: Duration(milliseconds: 2000 ~/ 'I\’m Minty, your personal guide on this adventure'.length),
     ),
+
+
+
     TyperAnimatedText(
-      'Do not patch bugs out, rewrite them',
+      'Here, we\’ll walk through real-life\nbudgeting scenarios, tackle unexpected\nevents, and learn how to manage money\nlike a pro.',
       speed: Duration(
-          milliseconds: 5000 ~/ 'Do not patch bugs out, rewrite them'.length),
+          milliseconds: 5000 ~/ 'Here, we’ll walk through real-life budgeting scenarios, tackle unexpected events, and learn how to manage money like a pro.'.length),
     ),
+
+
     TyperAnimatedText(
       'Do not test bugs out, design them out',
       speed: Duration(
-          milliseconds: 5000 ~/ 'Do not test bugs out, design them out'.length),
+          milliseconds: 2000 ~/ 'Do not test bugs out, design them out'.length),
     ),
+    
+    
   ];
   int animatedTextIndex = 0;
 
@@ -325,12 +336,12 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                 height: webScreenHeightUnit * 20,
                               ),
                               Container(
-                                  width: webScreenWidthUnit * 956,
+                                  width: webScreenWidthUnit * 856,
                                   padding: EdgeInsets.fromLTRB(
-                                      webScreenWidthUnit * 8,
+                                      webScreenWidthUnit * 67,
                                       webScreenHeightUnit * 50,
                                       0,
-                                      0),
+                                      webScreenWidthUnit * 0),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),
@@ -338,51 +349,69 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      DefaultTextStyle(
-                                        style: const TextStyle(
-                                          fontSize: 30.0,
-                                          fontFamily: 'Agne',
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            AnimatedTextKit(
-                                              key: ValueKey<int>(
-                                                  animatedTextIndex), // Ensures the widget rebuilds
-                                              animatedTexts: [
-                                                animatedTexts[animatedTextIndex]
-                                              ],
-                                              isRepeatingAnimation: false,
-                                              onFinished: () {
-                                                print("Animation Finished");
-                                              },
-                                            ),
-                                            
-                                          ],
+                                      Expanded(
+                                        child: DefaultTextStyle(
+                                          style:  GoogleFonts.baloo2(
+                                            fontSize: webScreenWidthUnit * 36,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                           
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              AnimatedTextKit(
+                                                key: ValueKey<int>(
+                                                    animatedTextIndex), // Ensures the widget rebuilds
+                                                animatedTexts: [
+                                                  animatedTexts[
+                                                      animatedTextIndex]
+                                                ],
+                                                isRepeatingAnimation: false,
+                                                onFinished: () {
+                                                  setState(() {
+                                                    eventFinished = true;
+                                                  });
+                                                  print("Animation Finished");
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       GestureDetector(
-                                          onTap: () {
-                                            setState(() {
+                                        onTap: () {
+                                          setState(() {
+                                            if (eventFinished) {
                                               animatedTextIndex++;
+                                              eventFinished = false;
                                               if (animatedTextIndex >=
                                                   animatedTexts.length) {
                                                 animatedTextIndex =
                                                     0; // Reset to the first text
                                               }
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                          ))
+                                            }
+                                          });
+                                        },
+                                        child: Padding(
+                                            padding: EdgeInsets.fromLTRB(0, 0,
+                                                webScreenWidthUnit * 38, 0),
+                                            child: Icon(
+                                              Icons.arrow_drop_down,
+                                              size: webScreenWidthUnit * 37,
+                                              color: Color.fromRGBO(
+                                                  79, 197, 247, 1),
+                                            )),
+                                      )
                                     ],
                                   )),
                               SizedBox(
-                                height: webScreenHeightUnit * 30,
+                                height: webScreenHeightUnit * 77,
                               ),
                             ],
                           )
