@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 class BudgetSimulatorLanding extends StatefulWidget {
   @override
@@ -18,9 +20,10 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
   int totalBanans = 0;
   bool firstTime = true;
   bool beginner = false;
-  bool intermediate = true;
+  bool intermediate = false;
   bool advanced = false;
   bool eventFinished = false;
+  bool showSecondText = false;
 
   @override
   void initState() {
@@ -68,6 +71,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
     }
   }
 
+
   final List<String> scenarios = [
     'Vacation on a Budget 🔒',
     'Crush the Credit Card Debt',
@@ -78,40 +82,55 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
 
   final List<TyperAnimatedText> animatedTexts = [
     TyperAnimatedText(
-      'Hi! Welcome to the Budget Simulator.',
-      textStyle: TextStyle(),
-      speed: Duration(
-          milliseconds: 1000 ~/
-              'Hi! Welcome to the Budget Simulator.'
-                  .length),
+      'Hi! Welcome to the ',
+      speed: Duration(milliseconds: 600 ~/ 'Hi! Welcome to the'.length),
     ),
-
-
     TyperAnimatedText(
       'I\’m Minty, your personal guide on this\nadventure.',
-      speed: Duration(milliseconds: 2000 ~/ 'I\’m Minty, your personal guide on this adventure'.length),
+      speed: Duration(
+          milliseconds: 2000 ~/
+              'I\’m Minty, your personal guide on this adventure'.length),
     ),
-
-
-
     TyperAnimatedText(
       'Here, we\’ll walk through real-life\nbudgeting scenarios, tackle unexpected\nevents, and learn how to manage money\nlike a pro.',
       speed: Duration(
-          milliseconds: 5000 ~/ 'Here, we’ll walk through real-life budgeting scenarios, tackle unexpected events, and learn how to manage money like a pro.'.length),
+          milliseconds: 5000 ~/
+              'Here, we’ll walk through real-life budgeting scenarios, tackle unexpected events, and learn how to manage money like a pro.'
+                  .length),
     ),
-
-
     TyperAnimatedText(
-      'Do not test bugs out, design them out',
+      'Think of me as your friendly companion\n—ready to cheer you on at every step!',
       speed: Duration(
-          milliseconds: 2000 ~/ 'Do not test bugs out, design them out'.length),
+          milliseconds: 2500 ~/
+              'Think of me as your friendly companion\n—ready to cheer you on at every step!'
+                  .length),
     ),
-    
-    
+    TyperAnimatedText(
+      'This simulator will challenge you to\nbalance your everyday expenses with\nlarger financial goals.',
+      speed: Duration(
+          milliseconds: 3300 ~/
+              'This simulator will challenge you to\nbalance your everyday expenses with\nlarger financial goals.'
+                  .length),
+    ),
+    TyperAnimatedText(
+      'Don\’t worry—I\’ll provide hints along the\nway. By the end, you\’ll see how small\nchanges can make a big difference in\nyour finances!',
+      speed: Duration(
+          milliseconds: 5000 ~/
+              'Don\’t worry—I\’ll provide hints along the\nway. By the end, you\’ll see how small\nchanges can make a big difference in\nyour finances!'
+                  .length),
+    ),
+    TyperAnimatedText(
+      'Ok, let’s get set up!',
+      speed: Duration(milliseconds: 1500 ~/ 'Ok, let’s get set up!'.length),
+    ),
   ];
   int animatedTextIndex = 0;
 
   String? selectedScenario = '';
+
+
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +143,8 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
             child: CircularProgressIndicator(),
           )
         : firstTime
-            ? Scaffold(
+            ? 
+            Scaffold(
                 body: Stack(
                   children: [
                     Column(
@@ -152,7 +172,9 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: selectedScenario != ''
+                                width: selectedScenario !=
+                                            "Crush the Credit Card Debt" &&
+                                        intermediate
                                     ? webScreenWidthUnit * 151
                                     : webScreenWidthUnit * 121,
                               ),
@@ -193,7 +215,9 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: selectedScenario == ""
+                                width: selectedScenario ==
+                                            "Crush the Credit Card Debt" &&
+                                        intermediate
                                     ? webScreenWidthUnit * 121
                                     : webScreenWidthUnit * 151,
                               ),
@@ -271,11 +295,15 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                         Padding(
                             padding: EdgeInsets.fromLTRB(
                                 webScreenWidthUnit * 1200,
-                                selectedScenario == "Crush the Credit Card Debt"
+                                selectedScenario ==
+                                            "Crush the Credit Card Debt" &&
+                                        intermediate
                                     ? webScreenHeightUnit * 88
                                     : 290,
                                 0,
-                                selectedScenario == ""
+                                selectedScenario ==
+                                            "Crush the Credit Card Debt" &&
+                                        intermediate
                                     ? 0
                                     : webScreenHeightUnit * 60),
                             child: GestureDetector(
@@ -308,6 +336,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+
                           Image.asset(
                             'assets/images/newMonkeys/Minty.png',
                             height: webScreenWidthUnit * 450,
@@ -353,33 +382,88 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                     children: [
                                       Expanded(
                                         child: DefaultTextStyle(
-                                          style:  GoogleFonts.baloo2(
+                                          style: GoogleFonts.baloo2(
                                             fontSize: webScreenWidthUnit * 36,
                                             color: Colors.black,
                                             fontWeight: FontWeight.w600,
-                                           
                                           ),
-                                          child: Column(
+                                          child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              AnimatedTextKit(
-                                                key: ValueKey<int>(
-                                                    animatedTextIndex), // Ensures the widget rebuilds
-                                                animatedTexts: [
-                                                  animatedTexts[
-                                                      animatedTextIndex]
-                                                ],
-                                                isRepeatingAnimation: false,
-                                                onFinished: () {
-                                                  setState(() {
-                                                    eventFinished = true;
-                                                  });
-                                                  print("Animation Finished");
-                                                },
-                                              ),
+                                              animatedTextIndex < 1
+                                                  ? Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        AnimatedTextKit(
+                                                          key: ValueKey<int>(0),
+                                                          animatedTexts: [
+                                                            animatedTexts[0]
+                                                          ],
+                                                          isRepeatingAnimation:
+                                                              false,
+                                                          onFinished: () {
+                                                            setState(() {
+                                                              showSecondText =
+                                                                  true;
+                                                            });
+                                                          },
+                                                        ),
+                                                        animatedTextIndex ==
+                                                                    0 &&
+                                                                showSecondText
+                                                            ? AnimatedTextKit(
+                                                                animatedTexts: [
+                                                                  TyperAnimatedText(
+                                                                    'Budget Simluator!',
+                                                                    textStyle:
+                                                                        GoogleFonts
+                                                                            .baloo2(
+                                                                      fontSize:
+                                                                          webScreenWidthUnit *
+                                                                              36,
+                                                                      color: Color.fromRGBO(
+                                                                          79,
+                                                                          195,
+                                                                          247,
+                                                                          1),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                    ),
+                                                                    speed: Duration(
+                                                                        milliseconds:
+                                                                            400 ~/
+                                                                                'Budget Simluator!'.length),
+                                                                  ),
+                                                                ],
+                                                                isRepeatingAnimation:
+                                                                    false,
+                                                              )
+                                                            : Text("")
+                                                      ],
+                                                    )
+                                                  : AnimatedTextKit(
+                                                      key: ValueKey<int>(
+                                                          animatedTextIndex), // Ensures the widget rebuilds
+                                                      animatedTexts: [
+                                                        animatedTexts[
+                                                            animatedTextIndex]
+                                                      ],
+                                                      isRepeatingAnimation:
+                                                          false,
+                                                      onFinished: () {
+                                                        setState(() {
+                                                          eventFinished = true;
+                                                        });
+                                                        print(
+                                                            "Animation Finished");
+                                                      },
+                                                    ),
                                             ],
                                           ),
                                         ),
@@ -387,13 +471,15 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
+                                            if (animatedTextIndex < 1) {
+                                              animatedTextIndex = 1;
+                                            }
                                             if (eventFinished) {
                                               animatedTextIndex++;
                                               eventFinished = false;
                                               if (animatedTextIndex >=
                                                   animatedTexts.length) {
-                                                animatedTextIndex =
-                                                    0; // Reset to the first text
+                                                firstTime = false;
                                               }
                                             }
                                           });
@@ -403,7 +489,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                                 webScreenWidthUnit * 38, 0),
                                             child: Icon(
                                               Icons.arrow_drop_down,
-                                              size: webScreenWidthUnit * 37,
+                                              size: webScreenWidthUnit * 57,
                                               color: Color.fromRGBO(
                                                   79, 197, 247, 1),
                                             )),
@@ -449,9 +535,11 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: selectedScenario != ''
-                                  ? webScreenWidthUnit * 151
-                                  : webScreenWidthUnit * 121,
+                              width: selectedScenario ==
+                                          "Crush the Credit Card Debt" &&
+                                      intermediate
+                                  ? webScreenWidthUnit * 121
+                                  : webScreenWidthUnit * 151,
                             ),
                             Text(
                               'Scenario',
@@ -494,7 +582,8 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                           ],
                         ),
                       ),
-                      selectedScenario == 'Crush the Credit Card Debt'
+                      selectedScenario == 'Crush the Credit Card Debt' &&
+                              intermediate
                           ? Align(
                               alignment: Alignment.centerLeft,
                               child: Container(
@@ -952,7 +1041,9 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: selectedScenario == ""
+                              width: selectedScenario ==
+                                          "Crush the Credit Card Debt" &&
+                                      intermediate
                                   ? webScreenWidthUnit * 121
                                   : webScreenWidthUnit * 151,
                             ),
@@ -968,22 +1059,16 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                               width: webScreenWidthUnit * 106,
                             ),
                             LevelOptions(
-                              screenWidthUnit: webScreenWidthUnit,
-                              screenHeightUnit: webScreenHeightUnit,
-                              level: "Beginner",
-                              isSelected: beginner,
-                              onTap: () {
-                                setState(() {
-                                  if (beginner == false) {
-                                    beginner = true;
-                                    intermediate = false;
-                                    advanced = false;
-                                  } else {
-                                    beginner = false;
-                                  }
-                                });
-                              },
-                            ),
+                                screenWidthUnit: webScreenWidthUnit,
+                                screenHeightUnit: webScreenHeightUnit,
+                                level: "Beginner",
+                                isSelected: beginner,
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      WrongAnswerSnackBar(
+                                          message:
+                                              "Please select Intermediate"));
+                                }),
                             SizedBox(
                               width: webScreenWidthUnit * 81,
                             ),
@@ -1013,15 +1098,10 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                               level: "Advanced",
                               isSelected: advanced,
                               onTap: () {
-                                setState(() {
-                                  if (advanced == false) {
-                                    advanced = true;
-                                    intermediate = false;
-                                    beginner = false;
-                                  } else {
-                                    advanced = false;
-                                  }
-                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    WrongAnswerSnackBar(
+                                        message:
+                                            "Please select Intermediate"));
                               },
                             ),
                           ],
@@ -1030,11 +1110,15 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                       Padding(
                           padding: EdgeInsets.fromLTRB(
                               webScreenWidthUnit * 1200,
-                              selectedScenario == "Crush the Credit Card Debt"
+                              selectedScenario ==
+                                          "Crush the Credit Card Debt" &&
+                                      intermediate
                                   ? webScreenHeightUnit * 88
                                   : 290,
                               0,
-                              selectedScenario == ""
+                              selectedScenario ==
+                                          "Crush the Credit Card Debt" &&
+                                      intermediate
                                   ? 0
                                   : webScreenHeightUnit * 60),
                           child: GestureDetector(
