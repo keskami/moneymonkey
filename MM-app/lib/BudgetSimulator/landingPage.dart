@@ -7,7 +7,6 @@ import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-
 class BudgetSimulatorLanding extends StatefulWidget {
   @override
   _BudgetSimulatorLandingState createState() => _BudgetSimulatorLandingState();
@@ -18,7 +17,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
   bool isLoading = true;
   int? balance;
   int totalBanans = 0;
-  bool firstTime = true;
+  bool firstTime = false;
   bool beginner = false;
   bool intermediate = false;
   bool advanced = false;
@@ -71,7 +70,6 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
     }
   }
 
-
   final List<String> scenarios = [
     'Vacation on a Budget 🔒',
     'Crush the Credit Card Debt',
@@ -83,7 +81,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
   final List<TyperAnimatedText> animatedTexts = [
     TyperAnimatedText(
       'Hi! Welcome to the ',
-      speed: Duration(milliseconds: 600 ~/ 'Hi! Welcome to the'.length),
+      speed: Duration(milliseconds: 1000 ~/ 'Hi! Welcome to the'.length),
     ),
     TyperAnimatedText(
       'I\’m Minty, your personal guide on this\nadventure.',
@@ -128,10 +126,6 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
 
   String? selectedScenario = '';
 
-
-  
-
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -143,8 +137,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
             child: CircularProgressIndicator(),
           )
         : firstTime
-            ? 
-            Scaffold(
+            ? Scaffold(
                 body: Stack(
                   children: [
                     Column(
@@ -336,10 +329,33 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-
-                          Image.asset(
-                            'assets/images/newMonkeys/Minty.png',
+                          SizedBox(
                             height: webScreenWidthUnit * 450,
+                            width: webScreenWidthUnit * 550,
+                            child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  (loadingProgress
+                                                          .expectedTotalBytes ??
+                                                      1)
+                                              : null,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -1100,8 +1116,7 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                               onTap: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     WrongAnswerSnackBar(
-                                        message:
-                                            "Please select Intermediate"));
+                                        message: "Please select Intermediate"));
                               },
                             ),
                           ],
@@ -1153,43 +1168,57 @@ Widget LevelOptions({
   required bool isSelected,
   required Function() onTap,
 }) {
-  return GestureDetector(
-      onTap: onTap,
-      child: isSelected
-          ? Container(
-              width: screenWidthUnit * 359,
-              height: screenHeightUnit * 185,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(79, 195, 247, 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  level,
-                  style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 35,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+  return level != "Intermediate"
+      ? Container(
+          width: screenWidthUnit * 359,
+          height: screenHeightUnit * 185,
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(197, 197, 197, 1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+              width: screenWidthUnit * 59,
+              height: screenHeightUnit * 25,
+              child: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLock.png?alt=media&token=2b93bce0-075b-4f9c-a6ef-fae04dd0e6b0",
+              )))
+      : GestureDetector(
+          onTap: onTap,
+          child: isSelected
+              ? Container(
+                  width: screenWidthUnit * 359,
+                  height: screenHeightUnit * 185,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(79, 195, 247, 1),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-              ),
-            )
-          : Container(
-              width: screenWidthUnit * 359,
-              height: screenHeightUnit * 185,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(197, 197, 197, 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  level,
-                  style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 35,
-                    fontWeight: FontWeight.w700,
-                    color: Color.fromRGBO(127, 127, 127, 1),
+                  child: Center(
+                    child: Text(
+                      level,
+                      style: GoogleFonts.baloo2(
+                        fontSize: screenWidthUnit * 35,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ));
+                )
+              : Container(
+                  width: screenWidthUnit * 359,
+                  height: screenHeightUnit * 185,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(197, 197, 197, 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      level,
+                      style: GoogleFonts.baloo2(
+                        fontSize: screenWidthUnit * 35,
+                        fontWeight: FontWeight.w700,
+                        color: Color.fromRGBO(127, 127, 127, 1),
+                      ),
+                    ),
+                  ),
+                ));
 }
