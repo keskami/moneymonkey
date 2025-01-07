@@ -1,95 +1,46 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
+import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
+import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/home.dart';
 
-class Page3 extends StatefulWidget {
+class PeerReflectionQuizPage5 extends StatefulWidget {
   @override
-  _Page3State createState() => _Page3State();
+  _PeerReflectionQuizPage5State createState() =>
+      _PeerReflectionQuizPage5State();
 }
 
-class _Page3State extends State<Page3> {
-  final User? user = FirebaseAuth.instance.currentUser;
-  final String? userID = FirebaseAuth.instance.currentUser?.uid;
-  bool isLoading = true;
-  int? balance;
-  int totalBanans = 0;
-  PeerReflectioncontroller peerReflectionController = Get.find();
+class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
 
+  PeerReflectionQuizcontroller peerReflectionQuizcontroller = Get.find();
+  bool option1 = false;
+  bool option2 = false;
+  bool option3 = false;
+  bool option4 = false;
+  bool firstTime = true;
+  bool correct = false;
   List<String> availableItems = [
-    'Planning for grad school',
-    'Starting retirement fund',
-    'Budgeting for family needs',
-    'Emergency fund',
-    'Kids’ education savings',
-    'Travel savings',
-    'Personal investments',
-    'Flexible budgeting'
+    'Saving for retirement',
+    'Planning for college tuition',
+    'Saving for a concert ticket'
   ];
   List<String> droppedItems1 = [];
   List<String> droppedItems2 = [];
   List<String> droppedItems3 = [];
 
   @override
-  void initState() {
-    super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
-  }
-
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    double WebscreenWidthUnit = screenWidth / 1920;
+    double WebscreenHeightUnit = screenHeight / 980;
+
     double screenWidthUnit = screenWidth / 390;
     double screenHeightUnit = screenHeight / 880;
-    double WebscreenWidthUnit = screenWidth / 1920;
-    double WebscreenHeightUnit = screenHeight / 1080;
+
 
     return Column(
       children: [
@@ -119,7 +70,7 @@ class _Page3State extends State<Page3> {
                 children: [
                   _buildDropZone(
                       droppedItems1,
-                      'Lifelong Financial\nWell-Being',
+                      'Short-Term Goal:',
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems2.remove(item),
@@ -127,7 +78,7 @@ class _Page3State extends State<Page3> {
                   SizedBox(width: WebscreenWidthUnit * 16),
                   _buildDropZone(
                       droppedItems2,
-                      'Responsibility with\nDependents',
+                      'Medium-Term Goal:',
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems1.remove(item),
@@ -135,7 +86,7 @@ class _Page3State extends State<Page3> {
                   SizedBox(width: WebscreenWidthUnit * 16),
                   _buildDropZone(
                       droppedItems3,
-                      'Responsibility\nwithout Dependents',
+                      'Long-Term Goal:',
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems1.remove(item),
@@ -161,7 +112,7 @@ class _Page3State extends State<Page3> {
           ),
         ),
         Container(
-          height: screenHeightUnit * 152,
+          height: screenHeightUnit * 112,
           child: Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -199,16 +150,13 @@ class _Page3State extends State<Page3> {
           padding: EdgeInsets.only(top: WebscreenHeightUnit * 0),
           child: GestureDetector(
               onTap: () {
-                if (droppedItems1.contains("Flexible budgeting") &&
-                    droppedItems1.contains("Travel savings") &&
-                    droppedItems1.contains("Emergency fund") &&
-                    droppedItems1.contains("Starting retirement fund") &&
-                    droppedItems2.contains("Budgeting for family needs") &&
-                    droppedItems2.contains("Kids’ education savings") &&
-                    droppedItems3.contains("Personal investments") &&
-                    droppedItems3.contains("Planning for grad school")) {
-                  print(peerReflectionController.pageIndex.value);
-                  peerReflectionController.pageIndex.value += 1;
+                if (droppedItems1.contains("Saving for a concert ticket") &&
+                    
+                    droppedItems2.contains("Planning for college tuition") &&
+                   
+                    droppedItems3.contains("Saving for retirement")) {
+               
+                    peerReflectionQuizcontroller.pageIndex += 1;
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
@@ -221,15 +169,11 @@ class _Page3State extends State<Page3> {
                 height: screenHeightUnit * 58,
                 width: screenWidthUnit * 61,
                 decoration: BoxDecoration(
-                  color: (droppedItems1.contains("Flexible budgeting") &&
-                          droppedItems1.contains("Travel savings") &&
-                          droppedItems1.contains("Emergency fund") &&
-                          droppedItems1.contains("Starting retirement fund") &&
-                          droppedItems2
-                              .contains("Budgeting for family needs") &&
-                          droppedItems2.contains("Kids’ education savings") &&
-                          droppedItems3.contains("Personal investments") &&
-                          droppedItems3.contains("Planning for grad school"))
+                  color:  (droppedItems1.contains("Saving for a concert ticket") &&
+                    
+                    droppedItems2.contains("Planning for college tuition") &&
+                   
+                    droppedItems3.contains("Saving for retirement"))
                       ? Color.fromRGBO(137, 220, 142, 1)
                       : Color.fromRGBO(224, 227, 231, 1),
                   borderRadius: BorderRadius.circular(10),
@@ -243,7 +187,7 @@ class _Page3State extends State<Page3> {
                 ),
                 child: Center(
                   child: Text(
-                    "Continue to Activity",
+                    "Continue",
                     style: GoogleFonts.baloo2(
                         fontSize: screenWidthUnit * 4.2,
                         color: Colors.white,

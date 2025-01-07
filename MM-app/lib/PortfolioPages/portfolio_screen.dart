@@ -192,6 +192,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     return screenWidth > screenHeight
         ? Scaffold(
+          backgroundColor: Colors.white,
             body: MouseRegion(
               onEnter: (PointerEvent event) {
                 setState(() {

@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
 import 'package:money_monkey/home.dart';
 
@@ -22,6 +26,7 @@ class _Page2State extends State<Page2> {
   bool mariaClicked = false;
   bool jasonClicked = false;
   bool avaClicked = false;
+  PeerReflectioncontroller peerReflectionController = Get.find();
 
   @override
   void initState() {
@@ -78,128 +83,123 @@ class _Page2State extends State<Page2> {
     double screenHeightUnit = screenHeight / 880;
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(children: [
-          SizedBox(
-            height: screenHeight * .05,
-          ),
-          topOfLesson(
-              screenWidthUnit: screenWidthUnit,
-              screenHeightUnit: screenHeightUnit,
-              pageNumber: 2,
-              totalPages: 8,
-              context: context,
-              bananas: totalBanans),
-          SizedBox(height: WebscreenHeightUnit * 95),
-          Padding(
-            padding: EdgeInsets.only(right: WebscreenWidthUnit * 758),
-            child: Text(
-              "Peer Stories",
-              style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 5,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(
-                  left: WebscreenWidthUnit * 17.5,
-                  top: WebscreenHeightUnit * 31),
-              child: Column(children: [
-                lessonTab(
-                  image: "assets/images/newMonkeys/Maria.png",
-                  name: "Maria: The Planner",
-                  discription:
-                      "Maria started saving as a teen to buy her first car. Now in her 20s,\nshe's saving for grad school while setting aside money for retirement.",
-                  isClicked: mariaClicked,
-                  onClick: () {
-                    setState(() {
-                      mariaClicked = true;
-                    });
-                  },
-                  context: context,
-                  WebscreenHeightUnit: WebscreenHeightUnit,
-                  WebscreenWidthUnit: WebscreenWidthUnit,
-                ),
-                SizedBox(height: WebscreenHeightUnit * 29),
-                lessonTab(
-                  image: "assets/images/newMonkeys/Jason.png",
-                  name: "Jason: The Family Provider",
-                  discription:
-                      "Jason is a dad with two kids. He prioritizes housing, groceries, and school expenses\nbut still sets aside money for emergencies and his kids' future education.",
-                  isClicked: jasonClicked,
-                  onClick: () {
-                    setState(() {
-                      jasonClicked = true;
-                    });
-                  },
-                  context: context,
-                  WebscreenHeightUnit: WebscreenHeightUnit,
-                  WebscreenWidthUnit: WebscreenWidthUnit,
-                ),
-                SizedBox(height: WebscreenHeightUnit * 29),
-                lessonTab(
-                  image: "assets/images/newMonkeys/Ava.png",
-                  name: "Ava: The Single Saver",
-                  discription:
-                      "Ava, in her early 30s, focuses on saving for travel and investing in her future.\nWithout dependents, she can prioritize her personal goals.",
-                  isClicked: avaClicked,
-                  onClick: () {
-                    setState(() {
-                      avaClicked = true;
-                    });
-                  },
-                  context: context,
-                  WebscreenHeightUnit: WebscreenHeightUnit,
-                  WebscreenWidthUnit: WebscreenWidthUnit,
-                ),
-              ])),
-          Spacer(),
-          Padding(
-            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
-            child: GestureDetector(
-                onTap: () {
-                  if (avaClicked && jasonClicked && mariaClicked) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Page3()),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Please read all the stories to continue'),
-                      duration: Duration(seconds: 2),
-                    ));
-                  }
+    return Column(children: [
+      topOfLesson(
+          screenWidthUnit: screenWidthUnit,
+          screenHeightUnit: screenHeightUnit,
+          pageNumber: 2,
+          totalPages: 8,
+          context: context,
+          bananas: totalBanans),
+      SizedBox(height: WebscreenHeightUnit * 95),
+      Padding(
+        padding: EdgeInsets.only(right: WebscreenWidthUnit * 758),
+        child: Text(
+          "Peer Stories",
+          style: GoogleFonts.baloo2(
+              fontSize: screenWidthUnit * 5,
+              color: Colors.black,
+              fontWeight: FontWeight.w700),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: WebscreenWidthUnit * 17.5, top: WebscreenHeightUnit * 31),
+        child: Container(
+            height: WebscreenHeightUnit * 550,
+            child: Column(children: [
+              lessonTab(
+                image: "assets/images/newMonkeys/Maria.png",
+                name: "Maria: The Planner",
+                discription:
+                    "Maria started saving as a teen to buy her first car. Now in her 20s,\nshe's saving for grad school while setting aside money for retirement.",
+                isClicked: mariaClicked,
+                onClick: () {
+                  setState(() {
+                    mariaClicked = true;
+                  });
                 },
-                child: Container(
-                  height: screenHeightUnit * 58,
-                  width: screenWidthUnit * 61,
-                  decoration: BoxDecoration(
-                    color: (avaClicked && jasonClicked && mariaClicked)
-                        ? Color.fromRGBO(137, 220, 142, 1)
-                        : Color.fromRGBO(224, 227, 231, 1),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 5,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                context: context,
+                WebscreenHeightUnit: WebscreenHeightUnit,
+                WebscreenWidthUnit: WebscreenWidthUnit,
+              ),
+              SizedBox(height: WebscreenHeightUnit * 29),
+              lessonTab(
+                image: "assets/images/newMonkeys/Jason.png",
+                name: "Jason: The Family Provider",
+                discription:
+                    "Jason is a dad with two kids. He prioritizes housing, groceries, and school expenses\nbut still sets aside money for emergencies and his kids' future education.",
+                isClicked: jasonClicked,
+                onClick: () {
+                  setState(() {
+                    jasonClicked = true;
+                  });
+                },
+                context: context,
+                WebscreenHeightUnit: WebscreenHeightUnit,
+                WebscreenWidthUnit: WebscreenWidthUnit,
+              ),
+              SizedBox(height: WebscreenHeightUnit * 29),
+              lessonTab(
+                image: "assets/images/newMonkeys/Ava.png",
+                name: "Ava: The Single Saver",
+                discription:
+                    "Ava, in her early 30s, focuses on saving for travel and investing in her future.\nWithout dependents, she can prioritize her personal goals.",
+                isClicked: avaClicked,
+                onClick: () {
+                  setState(() {
+                    avaClicked = true;
+                  });
+                },
+                context: context,
+                WebscreenHeightUnit: WebscreenHeightUnit,
+                WebscreenWidthUnit: WebscreenWidthUnit,
+              ),
+            ])),
+      ),
+      SizedBox(height: WebscreenHeightUnit * 82),
+      Positioned(
+        bottom: WebscreenHeightUnit * 0,
+        child: GestureDetector(
+            onTap: () {
+              if (avaClicked && jasonClicked && mariaClicked) {
+                print(peerReflectionController.pageIndex.value);
+                peerReflectionController.pageIndex.value += 1;
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Please read all the stories to continue'),
+                  duration: Duration(seconds: 2),
+                ));
+              }
+            },
+            child: Container(
+              height: screenHeightUnit * 58,
+              width: screenWidthUnit * 61,
+              decoration: BoxDecoration(
+                color: (avaClicked && jasonClicked && mariaClicked)
+                    ? Color.fromRGBO(137, 220, 142, 1)
+                    : Color.fromRGBO(224, 227, 231, 1),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 5,
+                    offset: const Offset(0, 4),
                   ),
-                  child: Center(
-                    child: Text(
-                      "Continue to Activity",
-                      style: GoogleFonts.baloo2(
-                          fontSize: screenWidthUnit * 4.2,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                )),
-          )
-        ]));
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  "Continue to Activity",
+                  style: GoogleFonts.baloo2(
+                      fontSize: screenWidthUnit * 4.2,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+            )),
+      ),
+    ]);
   }
 }
 
@@ -319,58 +319,5 @@ Widget topOfLesson({
   required BuildContext context,
   required int bananas,
 }) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-          icon: Icon(Icons.close, color: Colors.black)),
-      TweenAnimationBuilder<double>(
-        tween: Tween<double>(
-            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
-        duration: Duration(seconds: 2),
-        builder: (context, value, child) {
-          return Container(
-            height: screenHeightUnit * 25,
-            width: screenWidthUnit * 202,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(135, 206, 235, 1),
-                  Color.fromRGBO(213, 213, 213, 1),
-                ],
-                stops: [value, value],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 5,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-      SizedBox(
-        width: screenWidthUnit * 4,
-      ),
-      Image.asset("assets/images/img_monkeymoney_52.png",
-          height: screenHeightUnit * 36),
-      SizedBox(
-        width: screenWidthUnit * 1,
-      ),
-      Text("$bananas",
-          style: GoogleFonts.roboto(
-              fontSize: screenWidthUnit * 5.5, color: Colors.black)),
-    ],
-  );
+  return Container();
 }

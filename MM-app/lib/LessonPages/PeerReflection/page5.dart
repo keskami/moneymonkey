@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page6.dart';
 import 'package:money_monkey/home.dart';
 
@@ -20,6 +23,7 @@ class _Page5State extends State<Page5> {
   bool mariaClicked = false;
   bool jasonClicked = false;
   bool avaClicked = false;
+  PeerReflectioncontroller peerReflectionController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -74,20 +78,9 @@ class _Page5State extends State<Page5> {
     double screenHeightUnit = screenHeight / 880;
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
+    return  Column(
         children: [
-          SizedBox(height: screenHeight * .05),
-          topOfLesson(
-            screenWidthUnit: screenWidthUnit,
-            screenHeightUnit: screenHeightUnit,
-            pageNumber: 5,
-            totalPages: 8,
-            context: context,
-            bananas: totalBanans,
-          ),
-          SizedBox(height: WebscreenHeightUnit * 95),
+          SizedBox(height: screenHeight * .07),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -133,15 +126,12 @@ class _Page5State extends State<Page5> {
                   height: WebscreenHeightUnit * 181),
             ],
           ),
-          Spacer(),
           Padding(
-            padding: EdgeInsets.only(bottom: WebscreenHeightUnit * 103),
+            padding: EdgeInsets.only(top: WebscreenHeightUnit * 293),
             child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Page6()),
-                  );
+                  print(peerReflectionController.pageIndex.value);
+                  peerReflectionController.pageIndex.value += 1;
                 },
                 child: Container(
                   height: screenHeightUnit * 58,
@@ -169,7 +159,7 @@ class _Page5State extends State<Page5> {
                 )),
           )
         ],
-      ),
+      
     );
   }
 }
