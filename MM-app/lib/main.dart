@@ -7,6 +7,7 @@ import 'package:money_monkey/LessonPages/LessonOnePages/Page1.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonOne.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
+import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
                 if (userId.isEmpty) {
                   return LoginScreen();
                 } else {
-                  return PeerReflectionQuiz();
+                  return Toolkit();
                 }
               } else {
                 return LoginScreen();

@@ -254,8 +254,11 @@ class _Page4State extends State<Page4> {
           child: GestureDetector(
               onTap: () {
                 if (avaClicked || jasonClicked || mariaClicked) {
-                  print(peerReflectionController.pageIndex.value);
-                  peerReflectionController.pageIndex.value += 1;
+                    
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Please select a peer to continue'),

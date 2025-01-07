@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page8.dart';
 import 'package:money_monkey/home.dart';
 
@@ -71,7 +72,7 @@ class _Page7State extends State<Page7> {
     }
   }
 
-  PeerReflectioncontroller peerReflectionController = Get.find();
+  Toolkitcontroller peerReflectionController = Get.find();
 
   @override
   Widget build(BuildContext context) {

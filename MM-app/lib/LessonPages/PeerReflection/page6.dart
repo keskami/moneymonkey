@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page7.dart';
 import 'package:money_monkey/home.dart';
 
@@ -22,7 +23,7 @@ class _Page6State extends State<Page6> {
   bool mariaClicked = false;
   bool jasonClicked = false;
   bool avaClicked = false;
-  PeerReflectioncontroller peerReflectionController = Get.find();
+  Toolkitcontroller peerReflectionController = Get.find();
   @override
   void initState() {
     super.initState();
