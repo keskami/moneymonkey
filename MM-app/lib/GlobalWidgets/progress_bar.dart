@@ -29,7 +29,7 @@ class CustomProgressBar extends StatelessWidget {
         break;
       case 'PeerReflectionQuiz':
         final PeerReflectionQuizcontroller peerReflectionQuizcontroller = Get.find();
-        progress = peerReflectionQuizcontroller.pageIndex/2;
+        progress = peerReflectionQuizcontroller.pageIndex/5;
         break;
       default:
         progress = pageNum / 8;

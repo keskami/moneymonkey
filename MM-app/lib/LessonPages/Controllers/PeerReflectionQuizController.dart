@@ -3,6 +3,9 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page1.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page2.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page3.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page4.dart';
+import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page5.dart';
 
 
 class PeerReflectionQuizcontroller  extends GetxController{
@@ -11,7 +14,11 @@ class PeerReflectionQuizcontroller  extends GetxController{
 
    var pages = [
     PeerReflectionQuizPage1(),
-    PeerReflectionQuizPage2()
+    PeerReflectionQuizPage5(),
+    PeerReflectionQuizPage3(),
+    PeerReflectionQuizPage2(),
+    PeerReflectionQuizPage4()
+
    ];
 
 

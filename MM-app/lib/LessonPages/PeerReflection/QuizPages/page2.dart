@@ -31,13 +31,13 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
     return Center(
         child: Padding(
       padding: EdgeInsets.fromLTRB(
-          screenWidthUnit * 572, screenHeightUnit * 177, 0, 0),
+          screenWidthUnit * 572, screenHeightUnit * 122, 0, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "What is the main purpose of money?",
+            "Why is it important to have an emergency fund?",
             style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 27,
                 fontWeight: FontWeight.w700,
@@ -48,7 +48,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
           ),
           Row(children: [
             quizOptionWithoutImage(
-                text: 'To use it as a distraction',
+                text: 'To cover unexpected expenses',
                 screenHeightUnit: screenHeightUnit,
                 option: option1,
                 screenWidthUnit: screenWidthUnit,
@@ -65,7 +65,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
               width: screenWidthUnit * 20,
             ),
             quizOptionWithoutImage(
-                text: 'To exchange it for things\n we want or need',
+                text: 'To buy luxury items',
                 screenHeightUnit: screenHeightUnit,
                 option: option2,
                 screenWidthUnit: screenWidthUnit,
@@ -84,7 +84,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
           ),
           Row(children: [
             quizOptionWithoutImage(
-                text: 'To hide it away from others',
+                text: 'To invest in risky stocks',
                 option: option3,
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
@@ -102,7 +102,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
               width: screenWidthUnit * 20,
             ),
             quizOptionWithoutImage(
-                text: 'To keep it only in banks',
+                text: 'To aviod working a job',
                 option: option4,
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
@@ -129,14 +129,24 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
             option4: option4,
             correct: correct,
             onTap: () {
+
+              if((!firstTime && !correct)){
+                setState(() {
+                  firstTime = true;
+                  option1 = false;
+                  option2 = false;
+                  option3 = false;
+                  option4 = false;
+                  correct = false;
+                  
+                });
+                
+              }
               if (correct) {
-               Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+               peerReflectionQuizcontroller.pageIndex.value += 1;
               }
               else if (option1 || option2 || option3 || option4) {
-                if (option2) {
+                if (option1) {
                   ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(
                       message:
                           "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));

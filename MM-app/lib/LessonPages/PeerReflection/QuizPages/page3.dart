@@ -4,14 +4,15 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
+import 'package:money_monkey/home.dart';
 
-class PeerReflectionQuizPage1 extends StatefulWidget {
+class PeerReflectionQuizPage3 extends StatefulWidget {
   @override
-  _PeerReflectionQuizPage1State createState() =>
-      _PeerReflectionQuizPage1State();
+  _PeerReflectionQuizPage3State createState() =>
+      _PeerReflectionQuizPage3State();
 }
 
-class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
+class _PeerReflectionQuizPage3State extends State<PeerReflectionQuizPage3> {
   PeerReflectionQuizcontroller peerReflectionQuizcontroller = Get.find();
   bool option1 = false;
   bool option2 = false;
@@ -36,28 +37,24 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "What is a key reason to start saving early in life?",
+            "Which of the following are good startegies for finacial\nresponsibility?(Select all that appy)",
             style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 27,
                 fontWeight: FontWeight.w700,
                 color: Colors.black),
           ),
           SizedBox(
-            height: screenHeightUnit * 51,
+            height: screenHeightUnit * 61,
           ),
           Row(children: [
             quizOptionWithoutImage(
-                text: 'To buy expensive luxury\nitems immediately',
+                text: 'Set aside money for emergencies',
                 screenHeightUnit: screenHeightUnit,
                 option: option1,
                 screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/banknote.png',
                 onClick: () {
                   setState(() {
                     option1 = !option1;
-                    option2 = false;
-                    option3 = false;
-                    option4 = false;
                   });
                 },
                 context: context),
@@ -65,17 +62,13 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
               width: screenWidthUnit * 20,
             ),
             quizOptionWithoutImage(
-                text: 'To build good finacial habits\nover time',
+                text: 'Spend all your income on entertainment',
                 screenHeightUnit: screenHeightUnit,
                 option: option2,
                 screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/coin.png',
                 onClick: () {
                   setState(() {
                     option2 = !option2;
-                    option1 = false;
-                    option3 = false;
-                    option4 = false;
                   });
                 },
                 context: context),
@@ -85,17 +78,13 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
           ),
           Row(children: [
             quizOptionWithoutImage(
-                text: 'To aviod making a budget',
+                text: 'Create a budget and stick to it',
                 option: option3,
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/creditcard.png',
                 onClick: () {
                   setState(() {
                     option3 = !option3;
-                    option2 = false;
-                    option1 = false;
-                    option4 = false;
                   });
                 },
                 context: context),
@@ -103,23 +92,19 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
               width: screenWidthUnit * 20,
             ),
             quizOptionWithoutImage(
-                text: 'To spend without worrying about\nthe future',
+                text: 'Ignore long-term finacial goals',
                 option: option4,
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/mobile.png',
                 onClick: () {
                   setState(() {
                     option4 = !option4;
-                    option1 = false;
-                    option3 = false;
-                    option2 = false;
                   });
                 },
                 context: context),
           ]),
           SizedBox(
-            height: screenHeightUnit * 44,
+            height: screenHeightUnit * 64,
           ),
           bottomBar(
             screenHeightUnit: screenHeightUnit,
@@ -131,7 +116,7 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
             option4: option4,
             correct: correct,
             onTap: () {
-              if((!firstTime && !correct)){
+              if ((!firstTime && !correct)) {
                 setState(() {
                   firstTime = true;
                   option1 = false;
@@ -139,16 +124,12 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
                   option3 = false;
                   option4 = false;
                   correct = false;
-                  
                 });
-                
               }
-
               if (correct) {
-               peerReflectionQuizcontroller.pageIndex.value += 1;
-              }
-              else if (option1 || option2 || option3 || option4) {
-                if (option2) {
+                peerReflectionQuizcontroller.pageIndex.value += 1;
+              } else if (option1 || option2 || option3 || option4) {
+                if (option1 && option3 && !option2 && !option4) {
                   ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(
                       message:
                           "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
@@ -171,6 +152,7 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
     ));
   }
 }
+
 Widget quizOptionWithoutImage(
     {required String text,
     required double screenHeightUnit,
@@ -201,50 +183,6 @@ Widget quizOptionWithoutImage(
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ));
-}
-
-
-Widget quizOptionWithImage(
-    {required String text,
-    required double screenHeightUnit,
-    required double screenWidthUnit,
-    required String image,
-    required Function onClick,
-    required BuildContext context,
-    required bool option}) {
-  return GestureDetector(
-      onTap: () {
-        onClick();
-      },
-      child: Container(
-        height: screenHeightUnit * 153,
-        width: screenWidthUnit * 377,
-        decoration: BoxDecoration(
-          color: option ? Color.fromRGBO(137, 220, 142, 1) : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.network(
-              image,
-              height: screenHeightUnit * 120,
-              width: screenWidthUnit * 120,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(width: screenWidthUnit * 10),
-            Text(
-              text,
-              style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 20,
-                fontWeight: FontWeight.w600,
-              ),
             ),
           ],
         ),
