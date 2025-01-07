@@ -39,6 +39,7 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
               IconButton(
                 onPressed: () {
                   peerReflectionQuizcontroller.pageIndex.value = 0;
+                  Navigator.pop(context);
                 },
                 icon: Icon(Icons.close),
               ),

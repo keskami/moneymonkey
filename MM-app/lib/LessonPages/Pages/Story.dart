@@ -39,6 +39,7 @@ class _StoryPageState extends State<StoryPage> {
               IconButton(
                 onPressed: () {
                   storyController.pageIndex.value = 0;
+                  Navigator.pop(context);
                 },
                 icon: Icon(Icons.close),
               ),
