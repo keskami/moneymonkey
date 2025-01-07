@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
+import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomProgressBar extends StatelessWidget {
@@ -19,6 +21,14 @@ class CustomProgressBar extends StatelessWidget {
       case 'ConceptOne':
         final ComponentOneTwoController educationPagesController = Get.find();
         progress = educationPagesController.pageIndex / 8;
+        break;
+      case 'StoryPage':
+        final StoryController storyController = Get.find();
+        progress = storyController.pageIndex / 4;
+        break;
+      case 'ScenarioPage':
+        final ScenarioController scenarioController = Get.find();
+        progress = scenarioController.pageIndex / 4;
         break;
       default:
         progress = pageNum / 8;

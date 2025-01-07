@@ -6,7 +6,7 @@ import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.da
 import 'package:money_monkey/GettingStarted/controller/quiz_controller.dart';
 import '../../../Backend/Loading Widgets/shimmer_loading_container.dart';
 import '../../Models and Questions/question_data.dart';
-import '../../Widgets/chat_bubble.dart';
+import '../../../GlobalWidgets/chat_bubble.dart';
 import '../../Widgets/continue_button.dart';
 import '../../Widgets/option_tile.dart';
 

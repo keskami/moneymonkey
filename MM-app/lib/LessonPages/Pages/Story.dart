@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
+import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
 class StoryPage extends StatefulWidget {
   const StoryPage({super.key});
@@ -9,6 +12,14 @@ class StoryPage extends StatefulWidget {
 }
 
 class _StoryPageState extends State<StoryPage> {
+  StoryController storyController = Get.put(StoryController());
+  final String lessonId = "Lesson1";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -16,6 +27,7 @@ class _StoryPageState extends State<StoryPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
@@ -26,15 +38,16 @@ class _StoryPageState extends State<StoryPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  storyController.pageIndex.value = 0;
+                },
                 icon: Icon(Icons.close),
               ),
               Container(
                 width: screenWidth * 0.44,
                 child: CustomProgressBar(
                   pageName: 'StoryPage',
-                  width: screenWidth * 0.44,
-                  key: ValueKey(0),
+                  key: ValueKey(storyController.pageIndex.value),
                 ),
               ),
               const SizedBox(
@@ -52,12 +65,42 @@ class _StoryPageState extends State<StoryPage> {
               ),
             ],
           ),
-          // Obx(
-          //   () =>
-          //       lessonOneController.pages[lessonOneController.pageIndex.value],
-          // ),
+          SizedBox(
+            height: screenHeight * 0.05,
+          ),
+          Text(
+            "Financial Responsibility Story",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          SizedBox(
+            height: screenHeight * 0.02,
+          ),
+          Text(
+            "Taking control of your money to build a secure future",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Obx(
+            () => storyController.pages[storyController.pageIndex.value],
+          ),
+          Row(
+            children: [
+              Spacer(),
+              CustomNextButton(
+                nextPage: () {
+                  storyController.pageIndex.value += 1;
+                },
+                isEnabled: true,
+              ),
+            ],
+          ),
         ],
-      ),
+      ).paddingSymmetric(horizontal: screenWidth * 0.25),
     );
   }
 }

@@ -188,7 +188,11 @@ class _TakeawayPageState extends State<TakeawayPage> {
               children: [
                 const Spacer(),
                 CustomNextButton(
-                  nextPage: () {},
+                  nextPage: () {
+                    // componentOneTwoController.pageIndex.value = 0;
+                    componentOneTwoController.dispose();
+                    Navigator.pop(context);
+                  },
                   isEnabled: personalReflectionController.text.isNotEmpty,
                 ),
               ],

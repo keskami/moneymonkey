@@ -49,13 +49,14 @@ class _LessonOneState extends State<LessonOne> {
           SizedBox(
             height: screenHeight * 0.05,
           ),
+          //Progress Bar Row
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: () {
-                  componentOneTwoController.pageIndex.value = 0;
+                  Navigator.pop(context);
                 },
                 icon: Icon(Icons.close),
               ),

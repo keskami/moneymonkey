@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/1MCQPage.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/2RevealPage.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/3IconRevealPage.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/4ScenarioPage.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/Page5.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/Page6.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/5QuizkCheckPage.dart';
-import 'package:money_monkey/LessonPages/ConceptOneTwoPages/6TakeawayPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/1MCQPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/2RevealPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/3IconRevealPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/4ScenarioPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page5.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page6.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/5QuizkCheckPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/6TakeawayPage.dart';
 import 'package:money_monkey/LessonPages/Models/Question_Model.dart';
 
-import '../ConceptOneTwoPages/Page7.dart';
+import '../Pages_ConceptOneTwo/Page7.dart';
 
 class ComponentOneTwoController extends GetxController {
   RxInt pageIndex = 0.obs;
