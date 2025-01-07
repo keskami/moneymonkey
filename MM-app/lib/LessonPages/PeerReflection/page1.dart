@@ -6,12 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
 import 'package:money_monkey/home.dart';
 
-class Page1 extends StatefulWidget {
+class PeerReflection extends StatefulWidget {
   @override
-  _Page1State createState() => _Page1State();
+  _PeerReflectionState createState() => _PeerReflectionState();
 }
 
-class _Page1State extends State<Page1> {
+class _PeerReflectionState extends State<PeerReflection> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;
