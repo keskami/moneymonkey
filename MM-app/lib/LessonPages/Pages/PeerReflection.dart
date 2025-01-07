@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
 
 class PeerReflection extends StatefulWidget {
   const PeerReflection({super.key});
@@ -14,18 +11,17 @@ class PeerReflection extends StatefulWidget {
 }
 
 class _PeerReflectionState extends State<PeerReflection> {
-  PeerReflectioncontroller peerReflectioncontroller = Get.put(PeerReflectioncontroller());
+  PeerReflectioncontroller peerReflectioncontroller =
+      Get.put(PeerReflectioncontroller());
   final String lessonId = "PeerReflection";
-  
 
   @override
   void initState() {
     super.initState();
-   
   }
+
   @override
   Widget build(BuildContext context) {
-
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -43,6 +39,7 @@ class _PeerReflectionState extends State<PeerReflection> {
               IconButton(
                 onPressed: () {
                   peerReflectioncontroller.pageIndex.value = 0;
+                  Navigator.pop(context);
                 },
                 icon: Icon(Icons.close),
               ),
@@ -71,8 +68,8 @@ class _PeerReflectionState extends State<PeerReflection> {
             ],
           ),
           Obx(
-            () =>
-                peerReflectioncontroller.pages[peerReflectioncontroller.pageIndex.value],
+            () => peerReflectioncontroller
+                .pages[peerReflectioncontroller.pageIndex.value],
           ),
         ],
       ),

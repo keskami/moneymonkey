@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
 import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
 import 'package:money_monkey/LessonPages/Pages/Story.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -34,6 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
     StoryPage(),
     Scenario(),
     PeerReflection(),
+    Scenario(),
+    PeerReflectionQuiz(),
   ];
   List<String> imageLinks = [
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbulb.png?alt=media&token=f5d89615-3c3a-48fe-9b30-2aa31a1bf293",

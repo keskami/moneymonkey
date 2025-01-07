@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
 class IntroPage extends StatefulWidget {
   IntroPage({super.key});
@@ -11,7 +13,7 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-
+  final StoryController storyController = Get.find();
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -43,11 +45,21 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                   ),
                   Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty_Monkey.png?alt=media&token=03208304-90b4-4326-a9ca-f66abbd75e70",
-                  ),
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793"),
                 ],
               ).marginSymmetric(vertical: screenHeight * 0.05),
-            )
+            ),
+            Row(
+              children: [
+                Spacer(),
+                CustomNextButton(
+                  nextPage: () {
+                    storyController.pageIndex.value += 1;
+                  },
+                  isEnabled: true,
+                ),
+              ],
+            ),
           ],
         ),
       ),

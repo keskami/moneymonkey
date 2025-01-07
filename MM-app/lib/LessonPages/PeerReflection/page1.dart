@@ -3,18 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
 import 'package:money_monkey/home.dart';
 
-class PeerReflection extends StatefulWidget {
+class Page1 extends StatefulWidget {
   @override
-  _PeerReflectionState createState() => _PeerReflectionState();
+  _Page1State createState() => _Page1State();
 }
 
-class _PeerReflectionState extends State<PeerReflection> {
+class _Page1State extends State<Page1> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;

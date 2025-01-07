@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
@@ -10,11 +9,10 @@ import 'package:money_monkey/LessonPages/PeerReflection/page6.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page7.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page8.dart';
 
-class PeerReflectioncontroller  extends GetxController{
+class PeerReflectioncontroller extends GetxController {
+  RxInt pageIndex = 0.obs;
 
-   RxInt pageIndex = 0.obs;
-
-   var pages = [
+  var pages = [
     Page1(),
     Page2(),
     Page3(),
@@ -23,8 +21,5 @@ class PeerReflectioncontroller  extends GetxController{
     Page6(),
     Page7(),
     Page8(),
-   ];
-
-
-
+  ];
 }

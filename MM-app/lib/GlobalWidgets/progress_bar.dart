@@ -5,7 +5,6 @@ import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomProgressBar extends StatelessWidget {
@@ -23,24 +22,24 @@ class CustomProgressBar extends StatelessWidget {
     switch (pageName) {
       case 'ConceptOne':
         final ComponentOneTwoController educationPagesController = Get.find();
-        progress = educationPagesController.pageIndex / 8;
+        progress = educationPagesController.pageIndex.value / 8;
         break;
       case 'PeerReflection':
         final PeerReflectioncontroller peerReflectionController = Get.find();
-        progress = peerReflectionController.pageIndex / 8;
+        progress = peerReflectionController.pageIndex.value / 8;
         break;
       case 'PeerReflectionQuiz':
         final PeerReflectionQuizcontroller peerReflectionQuizcontroller =
             Get.find();
-        progress = peerReflectionQuizcontroller.pageIndex / 5;
+        progress = peerReflectionQuizcontroller.pageIndex.value / 5;
         break;
       case 'StoryPage':
         final StoryController storyController = Get.find();
-        progress = storyController.pageIndex / 4;
+        progress = storyController.pageIndex.value / 5;
         break;
       case 'ScenarioPage':
         final ScenarioController scenarioController = Get.find();
-        progress = scenarioController.pageIndex / 4;
+        progress = scenarioController.pageIndex.value / 4;
         break;
       default:
         progress = pageNum / 8;

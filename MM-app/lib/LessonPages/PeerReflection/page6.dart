@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page7.dart';
 import 'package:money_monkey/home.dart';
 
 class Page6 extends StatefulWidget {

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
+import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class ProblemPage extends StatefulWidget {
   ProblemPage({super.key});
@@ -11,6 +15,8 @@ class ProblemPage extends StatefulWidget {
 class _ProblemPageState extends State<ProblemPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
+  final StoryController storyController = Get.find();
+  bool isEnabled = false; // Tracks whether the NextButton should be enabled.
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +64,74 @@ class _ProblemPageState extends State<ProblemPage> {
                             fontSize: 20,
                           ),
                         ),
+                        const Spacer(),
+                        Container(
+                          height: screenHeight * 0.2,
+                          child: TapToRevealContainer(
+                            onTap: () {
+                              setState(() {
+                                isEnabled = true;
+                              });
+                            },
+                            contents: Container(
+                              width: screenWidth * 0.3,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: LightTheme()
+                                    .pastelRed
+                                    .withValues(alpha: 0.2),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Problem: No control over spending",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.red,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            instructions: Container(
+                              width: screenWidth * 0.3,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: LightTheme()
+                                    .pastelRed
+                                    .withValues(alpha: 0.2),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Click to reveal the problem...",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
                       ],
                     ),
                   ),
                 ],
               ).marginSymmetric(vertical: screenHeight * 0.05),
-            )
+            ),
+            Row(
+              children: [
+                Spacer(),
+                CustomNextButton(
+                  nextPage: () {
+                    storyController.pageIndex.value += 1;
+                  },
+                  isEnabled: isEnabled,
+                ),
+              ],
+            ),
           ],
         ),
       ),

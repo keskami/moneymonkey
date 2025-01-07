@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
 
 class PeerReflectionQuiz extends StatefulWidget {
   const PeerReflectionQuiz({super.key});
@@ -14,18 +11,17 @@ class PeerReflectionQuiz extends StatefulWidget {
 }
 
 class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
-  PeerReflectionQuizcontroller peerReflectionQuizcontroller = Get.put(PeerReflectionQuizcontroller());
+  PeerReflectionQuizcontroller peerReflectionQuizcontroller =
+      Get.put(PeerReflectionQuizcontroller());
   final String lessonId = "PeerReflectionQuiz";
-  
 
   @override
   void initState() {
     super.initState();
-   
   }
+
   @override
   Widget build(BuildContext context) {
-
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -51,8 +47,7 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
                 child: CustomProgressBar(
                   pageName: 'PeerReflectionQuiz',
                   width: screenWidth * 0.44,
-                  key: ValueKey(peerReflectionQuizcontroller
-                      .pageIndex.value), // Add key to force rebuild
+                  key: ValueKey(peerReflectionQuizcontroller.pageIndex.value),
                 ),
               ),
               const SizedBox(
@@ -71,8 +66,8 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
             ],
           ),
           Obx(
-            () =>
-                peerReflectionQuizcontroller.pages[peerReflectionQuizcontroller.pageIndex.value],
+            () => peerReflectionQuizcontroller
+                .pages[peerReflectionQuizcontroller.pageIndex.value],
           ),
         ],
       ),

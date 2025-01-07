@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/home.dart';
 
@@ -13,7 +12,6 @@ class PeerReflectionQuizPage5 extends StatefulWidget {
 }
 
 class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
-
   PeerReflectionQuizcontroller peerReflectionQuizcontroller = Get.find();
   bool option1 = false;
   bool option2 = false;
@@ -40,7 +38,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
 
     double screenWidthUnit = screenWidth / 390;
     double screenHeightUnit = screenHeight / 880;
-
 
     return Column(
       children: [
@@ -151,12 +148,9 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
           child: GestureDetector(
               onTap: () {
                 if (droppedItems1.contains("Saving for a concert ticket") &&
-                    
                     droppedItems2.contains("Planning for college tuition") &&
-                   
                     droppedItems3.contains("Saving for retirement")) {
-               
-                    peerReflectionQuizcontroller.pageIndex += 1;
+                  peerReflectionQuizcontroller.pageIndex += 1;
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
@@ -169,13 +163,13 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
                 height: screenHeightUnit * 58,
                 width: screenWidthUnit * 61,
                 decoration: BoxDecoration(
-                  color:  (droppedItems1.contains("Saving for a concert ticket") &&
-                    
-                    droppedItems2.contains("Planning for college tuition") &&
-                   
-                    droppedItems3.contains("Saving for retirement"))
-                      ? Color.fromRGBO(137, 220, 142, 1)
-                      : Color.fromRGBO(224, 227, 231, 1),
+                  color:
+                      (droppedItems1.contains("Saving for a concert ticket") &&
+                              droppedItems2
+                                  .contains("Planning for college tuition") &&
+                              droppedItems3.contains("Saving for retirement"))
+                          ? Color.fromRGBO(137, 220, 142, 1)
+                          : Color.fromRGBO(224, 227, 231, 1),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(

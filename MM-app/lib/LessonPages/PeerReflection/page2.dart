@@ -6,9 +6,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
-import 'package:money_monkey/home.dart';
 
 class Page2 extends StatefulWidget {
   const Page2({super.key});

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
-import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
 class StoryPage extends StatefulWidget {
   const StoryPage({super.key});
@@ -87,17 +86,6 @@ class _StoryPageState extends State<StoryPage> {
           ),
           Obx(
             () => storyController.pages[storyController.pageIndex.value],
-          ),
-          Row(
-            children: [
-              Spacer(),
-              CustomNextButton(
-                nextPage: () {
-                  storyController.pageIndex.value += 1;
-                },
-                isEnabled: true,
-              ),
-            ],
           ),
         ],
       ).paddingSymmetric(horizontal: screenWidth * 0.25),
