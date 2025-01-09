@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/ShadowedBoxContainer.dart';
 
-class L1Reflection extends StatefulWidget {
-  const L1Reflection({super.key});
+class TakeawayPage extends StatefulWidget {
+  const TakeawayPage({super.key});
 
   @override
-  State<L1Reflection> createState() => _L1ReflectionState();
+  State<TakeawayPage> createState() => _TakeawayPageState();
 }
 
-class _L1ReflectionState extends State<L1Reflection> {
+class _TakeawayPageState extends State<TakeawayPage> {
   List<List<String>> takeAways = [
     [
       "Early habits matter",
@@ -32,7 +32,7 @@ class _L1ReflectionState extends State<L1Reflection> {
     ],
   ];
   String pageHeading = "Lifelong Financial Responsibility";
-  LessonOneController lessonOneController = Get.find();
+  ComponentOneTwoController componentOneTwoController = Get.find();
   double screenHeight = 0.0;
   double screenWidth = 0.0;
   TextEditingController personalReflectionController =
@@ -188,7 +188,11 @@ class _L1ReflectionState extends State<L1Reflection> {
               children: [
                 const Spacer(),
                 CustomNextButton(
-                  nextPage: () {},
+                  nextPage: () {
+                    // componentOneTwoController.pageIndex.value = 0;
+                    componentOneTwoController.dispose();
+                    Navigator.pop(context);
+                  },
                   isEnabled: personalReflectionController.text.isNotEmpty,
                 ),
               ],

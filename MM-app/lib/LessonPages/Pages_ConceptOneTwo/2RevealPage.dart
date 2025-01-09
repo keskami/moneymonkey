@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
-class L1Page2 extends StatefulWidget {
-  const L1Page2({
+class RevealPage extends StatefulWidget {
+  const RevealPage({
     super.key,
   });
 
   @override
-  State<L1Page2> createState() {
-    return _L1Page2State();
+  State<RevealPage> createState() {
+    return _RevealPageState();
   }
 }
 
-class _L1Page2State extends State<L1Page2> {
-  LessonOneController lessonOneController = Get.find();
+class _RevealPageState extends State<RevealPage> {
+  ComponentOneTwoController componentOneTwoController = Get.find();
   String text =
       "Click for what it really means to be financially\nresponsible over a lifetime...";
   bool showContent = false;
@@ -93,7 +93,7 @@ class _L1Page2State extends State<L1Page2> {
             const Spacer(),
             CustomNextButton(
               nextPage: () {
-                lessonOneController.pageIndex.value += 1;
+                componentOneTwoController.pageIndex.value += 1;
               },
               isEnabled: enableNext,
             ),

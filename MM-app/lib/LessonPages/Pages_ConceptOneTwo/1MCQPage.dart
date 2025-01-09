@@ -3,21 +3,21 @@ import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
-class L1Page1 extends StatefulWidget {
-  const L1Page1({
+class MCQPage extends StatefulWidget {
+  const MCQPage({
     super.key,
   });
 
   @override
-  State<L1Page1> createState() {
-    return _L1Page1State();
+  State<MCQPage> createState() {
+    return _MCQPageState();
   }
 }
 
-class _L1Page1State extends State<L1Page1> {
+class _MCQPageState extends State<MCQPage> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
   List<String> correctAnswers = [
@@ -29,7 +29,7 @@ class _L1Page1State extends State<L1Page1> {
     "After I graduate from college.",
     "Only when I’m ready to plan for retirement.",
   ];
-  LessonOneController lessonOneController = Get.find();
+  ComponentOneTwoController componentOneTwoController = Get.find();
 
   @override
   void initState() {
@@ -59,7 +59,7 @@ class _L1Page1State extends State<L1Page1> {
       Future.delayed(
         Duration(seconds: 2),
         () {
-          lessonOneController.pageIndex.value += 1;
+          componentOneTwoController.pageIndex.value += 1;
         },
       );
     } else {

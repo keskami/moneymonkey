@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class L1Page3 extends StatefulWidget {
-  const L1Page3({super.key});
+class IconRevealPage extends StatefulWidget {
+  const IconRevealPage({super.key});
 
   @override
-  State<L1Page3> createState() => _L1Page3State();
+  State<IconRevealPage> createState() => _IconRevealPageState();
 }
 
-class _L1Page3State extends State<L1Page3> {
+class _IconRevealPageState extends State<IconRevealPage> {
   List<bool> showIcon = [
     false,
     false,
@@ -32,7 +32,7 @@ class _L1Page3State extends State<L1Page3> {
     "You live off savings, pensions, or investments made earlier. Continued budgeting helps ensure your money lasts and you maintain your desired lifestyle.",
   ];
   bool isNextEnabled = false;
-  LessonOneController lessonOneController = Get.find();
+  ComponentOneTwoController componentOneTwoController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -153,7 +153,7 @@ class _L1Page3State extends State<L1Page3> {
             const Spacer(),
             CustomNextButton(
               nextPage: () {
-                lessonOneController.pageIndex.value += 1;
+                componentOneTwoController.pageIndex.value += 1;
               },
               isEnabled: isNextEnabled,
             ),

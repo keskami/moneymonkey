@@ -3,22 +3,21 @@ import 'package:get/get.dart';
 import 'package:money_monkey/Friends/comingSoonPage.dart';
 import 'package:money_monkey/GlobalWidgets/SideBar.dart';
 import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
-import 'package:money_monkey/LessonPages/Pages/Home.dart';
+import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  PageController _pageController = PageController();
-  HomePagesController homePagesController = Get.put(HomePagesController());
+  final PageController _pageController = PageController();
+  final HomePagesController homePagesController = Get.put(HomePagesController());
+
   int currentPage = 0;
 
   @override
@@ -26,24 +25,28 @@ class _HomePageState extends State<HomePage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
+    // Decide whether to show web or mobile layout
     return screenWidth > screenHeight
         ? webDisplay(context, screenWidth)
         : mobileDisplay(context);
   }
 
+  /// WEB DISPLAY
   Scaffold webDisplay(BuildContext context, double screenWidth) {
     return Scaffold(
       body: Obx(
         () => Row(
           children: [
-            Container(
+            // Sidebar (20% width)
+            SizedBox(
               width: screenWidth * 0.2,
               child: SideBar(),
             ),
-            Container(
+
+            // Main content (80% width)
+            SizedBox(
               width: screenWidth * 0.8,
-              child: homePagesController
-                  .pages[homePagesController.pageIndex.value],
+              child: homePagesController.pages[homePagesController.pageIndex.value],
             )
           ],
         ),
@@ -51,6 +54,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// MOBILE DISPLAY
   Scaffold mobileDisplay(BuildContext context) {
     return Scaffold(
       body: PageView(
@@ -60,8 +64,8 @@ class _HomePageState extends State<HomePage> {
             currentPage = value;
           });
         },
-        children: [
-          HomeScreen(),
+        children: const [
+          LessonsHome(),
           PortfolioScreen(),
           ComingSoonPage(),
           ProfileScreen(),
@@ -71,14 +75,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// BUILD MOBILE NAVIGATION BAR
   Widget _buildMobileBottomBar(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentPage,
       onTap: (index) {
-        print(index);
         _pageController.animateToPage(
           index,
-          duration: Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 100),
           curve: Curves.linear,
         );
       },
@@ -97,6 +101,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// HELPER TO BUILD BOTTOM NAVIGATION BUTTON
   BottomNavigationBarItem _buildMobileNavItem(String iconPath, int index) {
     final screenSize = MediaQuery.of(context).size;
     double iconSize = screenSize.width * 0.13;

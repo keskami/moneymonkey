@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
-class L1Page5 extends StatefulWidget {
-  const L1Page5({super.key});
+class L1Page7 extends StatefulWidget {
+  const L1Page7({super.key});
 
   @override
-  State<L1Page5> createState() => _L1Page5State();
+  State<L1Page7> createState() => _L1Page7State();
 }
 
-class _L1Page5State extends State<L1Page5> {
+class _L1Page7State extends State<L1Page7> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  List<String> correctAnswers = ["Create a monthly budget"];
+  List<String> correctAnswers = ["Yes"];
   List<String> options = [
-    "Create a monthly budget",
-    "Wing it",
+    "Yes",
+    "No",
   ];
-  LessonOneController lessonOneController = Get.find();
-  String _containerHeading = "High School";
+  String _containerHeading = "Retirement";
   String _containerSubHeading =
-      "Jordan just started a full-time job. Should he create a monthly budget first or just wing it?";
-
+      "Jordan is now approaching retirement. Should they continue some form of budgeting?";
+  ComponentOneTwoController componentOneTwoController = Get.find();
   SnackBar correctAnswer = CorrectAnswerSnackBar(
     message:
-        "Smart move! This helps Jordan track\nspending and allocate money for bills,\nsavings, and fun.",
+        "Yes! Consistent budgeting helps\nensure savings last throughout\nretirement.",
   );
 
   SnackBar wrongAnswer = WrongAnswerSnackBar(
@@ -45,7 +44,7 @@ class _L1Page5State extends State<L1Page5> {
       Future.delayed(
         Duration(seconds: 2),
         () {
-          lessonOneController.pageIndex.value += 1;
+          componentOneTwoController.pageIndex.value += 1;
         },
       );
     } else {
