@@ -1,0 +1,100 @@
+.section {
+  margin: 4rem 0 0 0;
+  padding: 4rem 1.5rem;
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-family: "Baloo 2", sans-serif;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.toggleButton {
+  width: 48px;
+  height: 24px;
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.toggleButton.active {
+  background-color: #4285F4;
+}
+
+.toggleCircle {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+.toggleButton.active .toggleCircle {
+  transform: translateX(24px);
+}
+
+.active {
+  color: #333;
+  font-weight: 500;
+  font-family: "Baloo 2", sans-serif;
+}
+
+.inactive {
+  color: #666;
+}
+
+.discount {
+  background-color: #4285F4;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  font-family: "Baloo 2", sans-serif;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

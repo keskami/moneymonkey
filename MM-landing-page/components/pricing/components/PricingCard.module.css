@@ -1,0 +1,137 @@
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.3s;
+  }
+  
+  .card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .popularBadge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #4285F4;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-family: "Baloo 2", sans-serif;
+  }
+  
+  .header {
+    text-align: center;
+  }
+  
+  .planName {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1rem;
+    font-family: "Baloo 2", sans-serif;
+  }
+  
+  .priceContainer {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+  
+  .currency {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: "Baloo 2", sans-serif;
+  }
+  
+  .price {
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: "Baloo 2", sans-serif;
+  }
+  
+  .period {
+    color: #666;
+  }
+  
+  .description {
+    color: #666;
+  }
+  
+  .button {
+    background-color: #4285F4;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    font-family: "Baloo 2", sans-serif;
+  }
+  
+  .button:hover {
+    background-color: #3367D6;
+  }
+  
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-family: "Baloo 2", sans-serif;
+  }
+  
+  .included {
+    background-color: #E8F5E9;
+    color: #4CAF50;
+  }
+  
+  .excluded {
+    background-color: #FFEBEE;
+    color: #F44336;
+  }
+  
+  .excludedText {
+    color: #999;
+  }
+  
+  /* Theme variations */
+  .basic {
+    border: 1px solid #e0e0e0;
+  }
+  
+  .standard {
+    border: 1px solid #81C784;
+  }
+  
+  .pro {
+    border: 2px solid #4285F4;
+  }
+  
+  .infinite {
+    border: 2px solid #673AB7;
+  }
