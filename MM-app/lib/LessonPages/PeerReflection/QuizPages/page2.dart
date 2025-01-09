@@ -4,7 +4,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
-import 'package:money_monkey/home.dart';
 
 class PeerReflectionQuizPage2 extends StatefulWidget {
   @override
@@ -88,7 +87,6 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 option: option3,
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
-                
                 onClick: () {
                   setState(() {
                     option3 = !option3;
@@ -129,8 +127,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
             option4: option4,
             correct: correct,
             onTap: () {
-
-              if((!firstTime && !correct)){
+              if ((!firstTime && !correct)) {
                 setState(() {
                   firstTime = true;
                   option1 = false;
@@ -138,14 +135,11 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                   option3 = false;
                   option4 = false;
                   correct = false;
-                  
                 });
-                
               }
               if (correct) {
-               peerReflectionQuizcontroller.pageIndex.value += 1;
-              }
-              else if (option1 || option2 || option3 || option4) {
+                peerReflectionQuizcontroller.pageIndex.value += 1;
+              } else if (option1 || option2 || option3 || option4) {
                 if (option1) {
                   ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(
                       message:

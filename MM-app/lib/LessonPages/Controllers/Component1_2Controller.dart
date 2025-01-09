@@ -1,33 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page1.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page2.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page3.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page4.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page5.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page6.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Page8.dart';
-import 'package:money_monkey/LessonPages/LessonOnePages/Reflection.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/1MCQPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/2RevealPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/3IconRevealPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/4ScenarioPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page5.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page6.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/5QuizkCheckPage.dart';
+import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/6TakeawayPage.dart';
 import 'package:money_monkey/LessonPages/Models/Question_Model.dart';
 
-import '../LessonOnePages/Page7.dart';
+import '../Pages_ConceptOneTwo/Page7.dart';
 
-class LessonOneController extends GetxController {
+class ComponentOneTwoController extends GetxController {
   RxInt pageIndex = 0.obs;
 
   // To store fetched questions
   RxList<Question> questions = <Question>[].obs;
 
   var pages = [
-    L1Page1(),
-    L1Page2(),
-    L1Page3(),
-    L1Page4(),
+    MCQPage(),
+    RevealPage(),
+    IconRevealPage(),
+    ScenarioPage(),
     L1Page5(),
     L1Page6(),
     L1Page7(),
-    L1Page8(),
-    L1Reflection(),
+    QuickCheckPage(),
+    TakeawayPage(),
   ];
 
   DocumentReference<Map<String, dynamic>> getLessonDocRef(String lessonId) {

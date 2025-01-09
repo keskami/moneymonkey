@@ -1,48 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 
-class LessonOne extends StatefulWidget {
-  const LessonOne({super.key});
+class StoryPage extends StatefulWidget {
+  const StoryPage({super.key});
 
   @override
-  State<LessonOne> createState() => _LessonOneState();
+  State<StoryPage> createState() => _StoryPageState();
 }
 
-class _LessonOneState extends State<LessonOne> {
-  LessonOneController lessonOneController = Get.put(LessonOneController());
+class _StoryPageState extends State<StoryPage> {
+  StoryController storyController = Get.put(StoryController());
   final String lessonId = "Lesson1";
-  Future<void> _preLoadImages() async {
-    await precacheImage(
-        NetworkImage(
-            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af"),
-        context);
-    await precacheImage(
-        NetworkImage(
-            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c"),
-        context);
-  }
-
-  Future<void> fetchQuestions() async {
-    await lessonOneController.fetchQuestions(lessonId);
-    print("fetched");
-  }
 
   @override
   void initState() {
     super.initState();
-    fetchQuestions();
   }
 
   @override
   Widget build(BuildContext context) {
-    _preLoadImages();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
@@ -54,17 +38,16 @@ class _LessonOneState extends State<LessonOne> {
             children: [
               IconButton(
                 onPressed: () {
-                  lessonOneController.pageIndex.value = 0;
+                  storyController.pageIndex.value = 0;
+                  Navigator.pop(context);
                 },
                 icon: Icon(Icons.close),
               ),
               Container(
                 width: screenWidth * 0.44,
                 child: CustomProgressBar(
-                  pageName: 'EducationPage',
-                  width: screenWidth * 0.44,
-                  key: ValueKey(lessonOneController
-                      .pageIndex.value), // Add key to force rebuild
+                  pageName: 'StoryPage',
+                  key: ValueKey(storyController.pageIndex.value),
                 ),
               ),
               const SizedBox(
@@ -82,12 +65,31 @@ class _LessonOneState extends State<LessonOne> {
               ),
             ],
           ),
+          SizedBox(
+            height: screenHeight * 0.05,
+          ),
+          Text(
+            "Financial Responsibility Story",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          SizedBox(
+            height: screenHeight * 0.02,
+          ),
+          Text(
+            "Taking control of your money to build a secure future",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           Obx(
-            () =>
-                lessonOneController.pages[lessonOneController.pageIndex.value],
+            () => storyController.pages[storyController.pageIndex.value],
           ),
         ],
-      ),
+      ).paddingSymmetric(horizontal: screenWidth * 0.25),
     );
   }
 }

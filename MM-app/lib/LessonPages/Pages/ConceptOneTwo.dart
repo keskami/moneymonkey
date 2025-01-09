@@ -1,27 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 
-class PeerReflection extends StatefulWidget {
-  const PeerReflection({super.key});
+class LessonOne extends StatefulWidget {
+  const LessonOne({super.key});
 
   @override
-  State<PeerReflection> createState() => _PeerReflectionState();
+  State<LessonOne> createState() => _LessonOneState();
 }
 
-class _PeerReflectionState extends State<PeerReflection> {
-  PeerReflectioncontroller peerReflectioncontroller =
-      Get.put(PeerReflectioncontroller());
-  final String lessonId = "PeerReflection";
+class _LessonOneState extends State<LessonOne> {
+  ComponentOneTwoController componentOneTwoController =
+      Get.put(ComponentOneTwoController());
+  final String lessonId = "Lesson1";
+  Future<void> _preLoadImages() async {
+    await precacheImage(
+        NetworkImage(
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af"),
+        context);
+    await precacheImage(
+        NetworkImage(
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c"),
+        context);
+  }
+
+  Future<void> fetchQuestions() async {
+    await componentOneTwoController.fetchQuestions(lessonId);
+    print("fetched");
+  }
 
   @override
   void initState() {
     super.initState();
+    fetchQuestions();
   }
 
   @override
   Widget build(BuildContext context) {
+    _preLoadImages();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -32,13 +49,13 @@ class _PeerReflectionState extends State<PeerReflection> {
           SizedBox(
             height: screenHeight * 0.05,
           ),
+          //Progress Bar Row
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: () {
-                  peerReflectioncontroller.pageIndex.value = 0;
                   Navigator.pop(context);
                 },
                 icon: Icon(Icons.close),
@@ -46,10 +63,9 @@ class _PeerReflectionState extends State<PeerReflection> {
               Container(
                 width: screenWidth * 0.44,
                 child: CustomProgressBar(
-                  pageName: 'PeerReflection',
+                  pageName: 'ConceptOne',
                   width: screenWidth * 0.44,
-                  key: ValueKey(peerReflectioncontroller
-                      .pageIndex.value), // Add key to force rebuild
+                  key: ValueKey(componentOneTwoController.pageIndex.value),
                 ),
               ),
               const SizedBox(
@@ -68,8 +84,8 @@ class _PeerReflectionState extends State<PeerReflection> {
             ],
           ),
           Obx(
-            () => peerReflectioncontroller
-                .pages[peerReflectioncontroller.pageIndex.value],
+            () => componentOneTwoController
+                .pages[componentOneTwoController.pageIndex.value],
           ),
         ],
       ),

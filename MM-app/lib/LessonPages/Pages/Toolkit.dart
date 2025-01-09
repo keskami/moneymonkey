@@ -79,4 +79,8 @@ class _ToolkitState extends State<Toolkit> {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> development

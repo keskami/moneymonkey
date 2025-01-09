@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
+import 'package:money_monkey/GlobalWidgets/chat_bubble.dart';
 
 class GettingStartedPage4 extends StatelessWidget {
   const GettingStartedPage4({super.key});

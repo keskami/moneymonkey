@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/LessonOneController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
-class L1Page4 extends StatefulWidget {
-  const L1Page4({super.key});
+class L1Page5 extends StatefulWidget {
+  const L1Page5({super.key});
 
   @override
-  State<L1Page4> createState() => _L1Page4State();
+  State<L1Page5> createState() => _L1Page5State();
 }
 
-class _L1Page4State extends State<L1Page4> {
+class _L1Page5State extends State<L1Page5> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  List<String> correctAnswers = ["Save 10%"];
+  List<String> correctAnswers = ["Create a monthly budget"];
   List<String> options = [
-    "Save 10%",
-    "Spend all of it",
+    "Create a monthly budget",
+    "Wing it",
   ];
+  ComponentOneTwoController componentOneTwoController = Get.find();
   String _containerHeading = "High School";
   String _containerSubHeading =
       "Jordan just started a full-time job. Should he create a monthly budget first or just wing it?";
 
-  LessonOneController lessonOneController = Get.find();
   SnackBar correctAnswer = CorrectAnswerSnackBar(
-    message: "Great habit! Even \$5 a week adds up over time.",
+    message:
+        "Smart move! This helps Jordan track\nspending and allocate money for bills,\nsavings, and fun.",
   );
 
   SnackBar wrongAnswer = WrongAnswerSnackBar(
@@ -44,7 +45,7 @@ class _L1Page4State extends State<L1Page4> {
       Future.delayed(
         Duration(seconds: 2),
         () {
-          lessonOneController.pageIndex.value += 1;
+          componentOneTwoController.pageIndex.value += 1;
         },
       );
     } else {

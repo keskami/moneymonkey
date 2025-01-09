@@ -1,44 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 
-class PeerReflection extends StatefulWidget {
-  const PeerReflection({super.key});
+class Scenario extends StatefulWidget {
+  const Scenario({super.key});
 
   @override
-  State<PeerReflection> createState() => _PeerReflectionState();
+  State<Scenario> createState() => _ScenarioState();
 }
 
-class _PeerReflectionState extends State<PeerReflection> {
-  PeerReflectioncontroller peerReflectioncontroller =
-      Get.put(PeerReflectioncontroller());
-  final String lessonId = "PeerReflection";
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _ScenarioState extends State<Scenario> {
+  double screenHeight = 0.0;
+  double screenWidth = 0.0;
+  final ScenarioController scenarioController = Get.put(ScenarioController());
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    return screenWidth > screenHeight ? webDisplay() : mobileDisplay();
+  }
+
+  Widget webDisplay() {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            height: screenHeight * 0.05,
-          ),
+          //Progress Bar Row
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: () {
-                  peerReflectioncontroller.pageIndex.value = 0;
                   Navigator.pop(context);
                 },
                 icon: Icon(Icons.close),
@@ -46,10 +41,9 @@ class _PeerReflectionState extends State<PeerReflection> {
               Container(
                 width: screenWidth * 0.44,
                 child: CustomProgressBar(
-                  pageName: 'PeerReflection',
+                  pageName: 'ScenarioPage',
                   width: screenWidth * 0.44,
-                  key: ValueKey(peerReflectioncontroller
-                      .pageIndex.value), // Add key to force rebuild
+                  key: ValueKey(scenarioController.pageIndex.value),
                 ),
               ),
               const SizedBox(
@@ -66,13 +60,16 @@ class _PeerReflectionState extends State<PeerReflection> {
                 ),
               ),
             ],
-          ),
+          ).marginSymmetric(vertical: screenHeight * 0.05),
           Obx(
-            () => peerReflectioncontroller
-                .pages[peerReflectioncontroller.pageIndex.value],
+            () => scenarioController.pages[scenarioController.pageIndex.value],
           ),
         ],
+      ).paddingSymmetric(
+        horizontal: screenWidth * 0.25,
       ),
     );
   }
+
+  mobileDisplay() {}
 }
