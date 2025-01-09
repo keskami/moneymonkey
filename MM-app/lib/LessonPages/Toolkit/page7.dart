@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
+import 'package:money_monkey/LessonPages/Toolkit/page8.dart';
 import 'package:money_monkey/home.dart';
 
 class Page7 extends StatefulWidget {
@@ -70,7 +72,7 @@ class _Page7State extends State<Page7> {
     }
   }
 
-  PeerReflectioncontroller peerReflectionController = Get.find();
+  Toolkitcontroller peerReflectionController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -118,18 +120,20 @@ class _Page7State extends State<Page7> {
         GestureDetector(
           onTap: () {
             try {
-              futureFiles.then((value) {
-                value.items.forEach((element) {
-                  if (element.name == "dummy.pdf") {
-                    element.getDownloadURL().then((value) {
-                      html.window.open(value, "dummy.pdf");
-                    });
-                  }
+              if (futureFiles != null) {
+                futureFiles.then((value) {
+                  value.items.forEach((element) {
+                    if (element.name == "dummy.pdf") {
+                      element.getDownloadURL().then((value) {
+                        html.window.open(value, "dummy.pdf");
+                      });
+                    }
+                  });
                 });
-              });
-              setState(() {
-                downloaded = true;
-              });
+                setState(() {
+                  downloaded = true;
+                });
+              }
             } catch (e) {
               print(e);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -168,18 +172,20 @@ class _Page7State extends State<Page7> {
                 GestureDetector(
                     onTap: () {
                       try {
-                        futureFiles.then((value) {
-                          value.items.forEach((element) {
-                            if (element.name == "dummy.pdf") {
-                              element.getDownloadURL().then((value) {
-                                html.window.open(value, "dummy.pdf");
-                              });
-                            }
+                        if (futureFiles != null) {
+                          futureFiles.then((value) {
+                            value.items.forEach((element) {
+                              if (element.name == "dummy.pdf") {
+                                element.getDownloadURL().then((value) {
+                                  html.window.open(value, "dummy.pdf");
+                                });
+                              }
+                            });
                           });
-                        });
-                        setState(() {
-                          downloaded = true;
-                        });
+                          setState(() {
+                            downloaded = true;
+                          });
+                        }
                       } catch (e) {
                         print(e);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

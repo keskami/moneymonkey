@@ -5,6 +5,7 @@ import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
+import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomProgressBar extends StatelessWidget {
@@ -26,7 +27,7 @@ class CustomProgressBar extends StatelessWidget {
         break;
       case 'PeerReflection':
         final PeerReflectioncontroller peerReflectionController = Get.find();
-        progress = peerReflectionController.pageIndex.value / 8;
+        progress = peerReflectionController.pageIndex.value / 4;
         break;
       case 'PeerReflectionQuiz':
         final PeerReflectionQuizcontroller peerReflectionQuizcontroller =
@@ -40,6 +41,10 @@ class CustomProgressBar extends StatelessWidget {
       case 'ScenarioPage':
         final ScenarioController scenarioController = Get.find();
         progress = scenarioController.pageIndex.value / 4;
+        break;
+      case 'Toolkit':
+        final Toolkitcontroller toolkitcontroller = Get.find();
+        progress = toolkitcontroller.pageIndex / 4;
         break;
       default:
         progress = pageNum / 8;
