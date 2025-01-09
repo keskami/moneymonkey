@@ -7,7 +7,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
+<<<<<<< HEAD:MM-app/lib/LessonPages/PeerReflection/page5.dart
+import 'package:money_monkey/LessonPages/PeerReflection/page6.dart';
+=======
 import 'package:money_monkey/LessonPages/Toolkit/page6.dart';
+>>>>>>> development:MM-app/lib/LessonPages/Toolkit/page5.dart
 import 'package:money_monkey/home.dart';
 
 class Page5 extends StatefulWidget {

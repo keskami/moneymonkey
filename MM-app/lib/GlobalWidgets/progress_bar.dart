@@ -46,6 +46,10 @@ class CustomProgressBar extends StatelessWidget {
         final Toolkitcontroller toolkitcontroller = Get.find();
         progress = toolkitcontroller.pageIndex / 4;
         break;
+      case 'Toolkit':
+        final Toolkitcontroller toolkitcontroller = Get.find();
+        progress = toolkitcontroller.pageIndex/4;
+        break;
       default:
         progress = pageNum / 8;
     }
