@@ -35,7 +35,7 @@ class _ProblemPageState extends State<ProblemPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: screenHeight * 0.56,
+              height: screenHeight * 0.4,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +114,6 @@ class _ProblemPageState extends State<ProblemPage> {
                             ),
                           ),
                         ),
-                        const Spacer(),
                       ],
                     ),
                   ),

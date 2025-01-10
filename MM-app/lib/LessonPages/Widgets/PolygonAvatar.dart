@@ -1,19 +1,21 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class PolygonAvatar extends StatelessWidget {
   final double size;
   final Color backgroundColor;
   final Widget icon;
-  final int sides; // Number of sides for the polygon
+  final int sides;
+  final bool isActivated;
 
   const PolygonAvatar({
     super.key,
     this.size = 50,
     required this.backgroundColor,
     required this.icon,
-    this.sides = 6, // Default hexagon
+    this.sides = 6,
+    required this.isActivated,
   });
 
   @override
@@ -23,7 +25,18 @@ class PolygonAvatar extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        color: backgroundColor,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              !isActivated
+                  ? LightTheme().primaryBlue
+                  : backgroundColor, // Creates a lighter shade
+              backgroundColor,
+            ],
+          ),
+        ),
         child: Center(
           child: icon,
         ),

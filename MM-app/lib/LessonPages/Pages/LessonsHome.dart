@@ -213,11 +213,13 @@ class CustomPolygon extends StatelessWidget {
           },
           child: PolygonAvatar(
             size: width,
+            isActivated: isActivated,
             backgroundColor: Colors.grey.shade400,
             icon: isActivated
                 ? PolygonAvatar(
                     size: width * 0.9,
-                    backgroundColor: Colors.blue.shade300,
+                    isActivated: !isActivated,
+                    backgroundColor: Colors.blue.shade600,
                     icon: CircleAvatar(
                       radius: 25,
                       backgroundColor: Colors.transparent,

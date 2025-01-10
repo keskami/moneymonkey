@@ -31,13 +31,13 @@ class _IntroPageState extends State<IntroPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: screenHeight * 0.56,
+              height: screenHeight * 0.4,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: screenHeight * 0.6,
+                    height: screenHeight * 0.4,
                     width: screenWidth * 0.004,
                     decoration: BoxDecoration(
                       color: Colors.blue,
@@ -45,7 +45,8 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                   ),
                   Image.network(
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793"),
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+                  ),
                 ],
               ).marginSymmetric(vertical: screenHeight * 0.05),
             ),
