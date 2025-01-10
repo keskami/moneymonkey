@@ -62,7 +62,7 @@ class ResultPage extends StatelessWidget {
             vertical: screenHeight * 0.02,
           ),
           decoration: BoxDecoration(
-            color: LightTheme().primaryBlue,
+            color: LightTheme().primaryBlue.withAlpha(70),
             borderRadius: BorderRadius.circular(
               10,
             ),
@@ -71,7 +71,7 @@ class ResultPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Financial Responsibility Score: ${scenarioController.responsibilityScore.value}%",
+                "Financial Responsibility Score: ${scenarioController.responsibilityScore.value.toStringAsFixed(2)}%",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 18,

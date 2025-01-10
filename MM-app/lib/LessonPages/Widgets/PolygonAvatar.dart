@@ -78,3 +78,45 @@ class PolygonClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
+
+class Polygon {
+  final Offset center;
+  final int index;
+  final bool isActivated;
+
+  Polygon(this.center, this.index, this.isActivated);
+}
+
+class PolygonConnectorPainter extends CustomPainter {
+  final List<Polygon> polygons;
+  final double scrollOffset;
+
+  PolygonConnectorPainter({required this.polygons, required this.scrollOffset});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.grey // Color of the lines
+      ..strokeWidth = 2.0;
+
+    // Adjust polygon centers based on scroll offset
+    List<Offset> adjustedCenters = polygons.map((polygon) {
+      return Offset(polygon.center.dx, polygon.center.dy - scrollOffset);
+    }).toList();
+
+    // Draw connecting lines between adjacent polygons
+    for (int i = 0; i < adjustedCenters.length - 1; i++) {
+      Offset center1 = adjustedCenters[i];
+      Offset center2 = adjustedCenters[i + 1];
+      Path path = Path();
+      path.moveTo(center1.dx, center1.dy);
+      path.lineTo(center2.dx, center2.dy);
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true; // Repaint whenever scroll offset changes
+  }
+}

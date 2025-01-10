@@ -20,20 +20,15 @@ class LessonsHome extends StatefulWidget {
 }
 
 class _LessonsHomeState extends State<LessonsHome> {
-  // 8 total -> match pagesLink & imageLinks
-  final List<int> lessonTypes = [0, 1, 2, 3, 4, 5, 6, 7];
+  final List<int> lessonTypes = [0, 1, 2, 3, 4, 5, 6];
   late List<GlobalKey> polygonKeys;
 
-  // Key for the half-width container
   final GlobalKey _containerKey = GlobalKey();
 
   double polygonWidth = 0.0;
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-
   int unitNum = 1;
-
-  // 8 pages
   final List<Widget> pagesLink = [
     LessonOne(),
     LessonOne(),
@@ -42,10 +37,7 @@ class _LessonsHomeState extends State<LessonsHome> {
     PeerReflection(),
     Toolkit(),
     PeerReflectionQuiz(),
-    PeerReflectionQuiz(),
   ];
-
-  // 8 images
   List<String> imageLinks = [
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbulb.png?alt=media&token=f5d89615-3c3a-48fe-9b30-2aa31a1bf293",
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbrain.png?alt=media&token=69ff0773-b9d8-49e3-97a0-4cb5dd7fc54a",
@@ -54,17 +46,22 @@ class _LessonsHomeState extends State<LessonsHome> {
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fpeer-to-peer.png?alt=media&token=1a8e499b-0e9c-4f30-89d5-8b73969b77da",
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbriefcase.png?alt=media&token=7d494c7c-0536-461c-aec9-b5dfb24547d3",
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fcircle_question.png?alt=media&token=b89a30a9-cc6a-4710-aea6-105ece4ee36c",
-    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonFlowImages%2FgoldTreasure.png?alt=media&token=2299e888-e835-414e-ac4a-0e260fa44e2a"
   ];
 
   final List<String> unitTitles = [
     "Costs and Benefits of Financial Responsibility",
   ];
+  List<Polygon> polygons = [];
 
   @override
   void initState() {
     super.initState();
     polygonKeys = List.generate(lessonTypes.length, (index) => GlobalKey());
+    for (int i = 0; i < lessonTypes.length; i++) {
+      double centerX = screenWidth * (0.15 + (i * 0.2));
+      double centerY = screenHeight * 0.4;
+      polygons.add(Polygon(Offset(centerX, centerY), i, true));
+    }
   }
 
   @override
@@ -80,21 +77,10 @@ class _LessonsHomeState extends State<LessonsHome> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SizedBox(
-        key: _containerKey, // The half-width container
+        key: _containerKey,
         width: screenWidth * 0.5,
         child: Stack(
           children: [
-            // Painted lines behind
-            Positioned.fill(
-              child: CustomPaint(
-                painter: _LinePainter(
-                  polygonKeys: polygonKeys,
-                  containerKey: _containerKey,
-                ),
-              ),
-            ),
-
-            // Scrollable polygons
             SingleChildScrollView(
               padding: EdgeInsets.only(top: screenHeight * 0.25).add(
                 EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
@@ -102,6 +88,15 @@ class _LessonsHomeState extends State<LessonsHome> {
               child: Column(
                 children: [
                   SizedBox(height: screenHeight * 0.1),
+                  for (int i = 0; i < lessonTypes.length; i++)
+                    CustomPolygon(
+                      key: polygonKeys[i],
+                      index: lessonTypes[i],
+                      isActivated: true,
+                      width: polygonWidth,
+                      imageLinks: imageLinks,
+                      pagesLink: pagesLink,
+                    ),
                   for (int i = 0; i < lessonTypes.length; i++)
                     Container(
                       width: double.infinity,
@@ -117,8 +112,7 @@ class _LessonsHomeState extends State<LessonsHome> {
                 ],
               ),
             ),
-
-            // Your unit title
+            //Unit Name
             Positioned(
               top: screenHeight * 0.05,
               left: screenWidth * 0.05,
@@ -196,14 +190,6 @@ class _LessonsHomeState extends State<LessonsHome> {
         width: screenWidth * 0.5,
         child: Stack(
           children: [
-            Positioned.fill(
-              child: CustomPaint(
-                painter: _LinePainter(
-                  polygonKeys: polygonKeys,
-                  containerKey: _containerKey,
-                ),
-              ),
-            ),
             SingleChildScrollView(
               padding: EdgeInsets.only(top: 50).add(
                 EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
@@ -230,63 +216,6 @@ class _LessonsHomeState extends State<LessonsHome> {
       ),
     );
   }
-}
-
-/// Painter that subtracts the container’s global offset from the polygon's global offset
-class _LinePainter extends CustomPainter {
-  final List<GlobalKey> polygonKeys;
-  final GlobalKey containerKey;
-
-  _LinePainter({
-    required this.polygonKeys,
-    required this.containerKey,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-
-    // The half-width container's RenderBox
-    final containerBox =
-        containerKey.currentContext?.findRenderObject() as RenderBox?;
-    if (containerBox == null) return;
-
-    // 1) Get container's top-left in global coords
-    final containerGlobalPos = containerBox.localToGlobal(Offset.zero);
-
-    // 2) For each pair of polygons, compute local offset manually
-    for (int i = 0; i < polygonKeys.length - 1; i++) {
-      final box1 =
-          polygonKeys[i].currentContext?.findRenderObject() as RenderBox?;
-      final box2 =
-          polygonKeys[i + 1].currentContext?.findRenderObject() as RenderBox?;
-      if (box1 == null || box2 == null) continue;
-
-      // Polygon i center in global
-      final center1Global = box1.localToGlobal(
-        Offset(box1.size.width / 2, box1.size.height / 2),
-      );
-      // Subtract container top-left => local
-      final center1Local = center1Global - containerGlobalPos;
-
-      // Polygon i+1 center
-      final center2Global = box2.localToGlobal(
-        Offset(box2.size.width / 2, box2.size.height / 2),
-      );
-      final center2Local = center2Global - containerGlobalPos;
-
-      // Optional debug
-      // print('Index $i => global: $center1Global | local: $center1Local');
-
-      canvas.drawLine(center1Local, center2Local, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_LinePainter oldDelegate) => true;
 }
 
 class CustomPolygon extends StatelessWidget {
@@ -318,6 +247,8 @@ class CustomPolygon extends StatelessWidget {
         mainAxisAlignment = MainAxisAlignment.center;
         break;
       case 6:
+        mainAxisAlignment = MainAxisAlignment.center;
+        break;
       case 3:
       case 7:
         mainAxisAlignment = MainAxisAlignment.end;
@@ -360,13 +291,24 @@ class CustomPolygon extends StatelessWidget {
           ),
         ),
         if (index == 6)
-          CircleAvatar(
-            radius: 45,
-            backgroundColor: Colors.transparent,
-            child: Image.network(
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2FTreasure%20Chest.png?alt=media&token=e2acbcb2-17d4-4b1a-89df-6d6296467c03"),
-          ).marginOnly(left: 45),
+          PolygonAvatar(
+            size: width,
+            isActivated: true,
+            backgroundColor: Colors.grey.shade400,
+            icon: PolygonAvatar(
+              size: width * 0.9,
+              isActivated: !isActivated,
+              backgroundColor: Colors.yellow,
+              icon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.transparent,
+                child: Image.network(
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonFlowImages%2FgoldTreasure.png?alt=media&token=2299e888-e835-414e-ac4a-0e260fa44e2a",
+                ),
+              ),
+            ),
+          )
       ],
-    );
+    ).marginOnly(left: index == 6 ? 45 : 0);
   }
 }
