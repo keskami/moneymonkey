@@ -275,6 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       String userId = userCredential.user?.uid ?? '';
+      // ignore: unused_local_variable
       String email = userCredential.user?.email ?? '';
       if (userId.isNotEmpty) {
         final userDocRef =
@@ -379,8 +380,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     );
                                   },
                                   style: TextButton.styleFrom(
-                                    backgroundColor: Color.fromRGBO(
-                                                            135, 206, 235, 1),
+                                    backgroundColor:
+                                        Color.fromRGBO(135, 206, 235, 1),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -440,13 +441,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ],
                                   ),
-
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(height: screenHeightUnit * 25,),
+                                      SizedBox(
+                                        height: screenHeightUnit * 25,
+                                      ),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -622,7 +624,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     },
                                                   ),
                                                 ),
-                                                
                                               ],
                                             ),
                                           )

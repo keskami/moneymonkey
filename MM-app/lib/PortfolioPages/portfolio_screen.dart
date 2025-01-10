@@ -168,7 +168,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     }
   }
 
-  @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
     final double offset = scaffoldGeometry.minInsets.bottom;
     final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height;
@@ -192,7 +191,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     return screenWidth > screenHeight
         ? Scaffold(
-          backgroundColor: Colors.white,
+            backgroundColor: Colors.white,
             body: MouseRegion(
               onEnter: (PointerEvent event) {
                 setState(() {
