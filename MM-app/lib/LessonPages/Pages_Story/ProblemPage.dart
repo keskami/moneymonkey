@@ -79,7 +79,6 @@ class _ProblemPageState extends State<ProblemPage> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: LightTheme()
                                     .pastelRed
-                                    .withValues(alpha: 0.2),
                               ),
                               child: Center(
                                 child: Text(
@@ -99,7 +98,6 @@ class _ProblemPageState extends State<ProblemPage> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: LightTheme()
                                     .pastelRed
-                                    .withValues(alpha: 0.2),
                               ),
                               child: Center(
                                 child: Text(

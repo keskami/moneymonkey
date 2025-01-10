@@ -1,43 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
 import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
 import 'package:money_monkey/LessonPages/Pages/Story.dart';
+import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
+
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class LessonsHome extends StatefulWidget {
+  const LessonsHome({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<LessonsHome> createState() => _LessonsHomeState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  List<int> lessonTypes = [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-  ];
+class _LessonsHomeState extends State<LessonsHome> {
+  // 8 total -> match pagesLink & imageLinks
+  final List<int> lessonTypes = [0, 1, 2, 3, 4, 5, 6, 7];
+  late List<GlobalKey> polygonKeys;
+
+  // Key for the half-width container
+  final GlobalKey _containerKey = GlobalKey();
+
   double polygonWidth = 0.0;
   double screenHeight = 0.0;
   double screenWidth = 0.0;
+
   int unitNum = 1;
-  List<Widget> pagesLink = [
+
+  // 8 pages
+  final List<Widget> pagesLink = [
     LessonOne(),
     LessonOne(),
     StoryPage(),
     Scenario(),
     PeerReflection(),
-    Scenario(),
+    Toolkit(),
+    PeerReflectionQuiz(),
     PeerReflectionQuiz(),
   ];
+
+  // 8 images
   List<String> imageLinks = [
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbulb.png?alt=media&token=f5d89615-3c3a-48fe-9b30-2aa31a1bf293",
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbrain.png?alt=media&token=69ff0773-b9d8-49e3-97a0-4cb5dd7fc54a",
@@ -46,46 +54,71 @@ class _HomeScreenState extends State<HomeScreen> {
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fpeer-to-peer.png?alt=media&token=1a8e499b-0e9c-4f30-89d5-8b73969b77da",
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbriefcase.png?alt=media&token=7d494c7c-0536-461c-aec9-b5dfb24547d3",
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fcircle_question.png?alt=media&token=b89a30a9-cc6a-4710-aea6-105ece4ee36c",
+    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonFlowImages%2FgoldTreasure.png?alt=media&token=2299e888-e835-414e-ac4a-0e260fa44e2a"
   ];
-  List<String> unitTitles = [
+
+  final List<String> unitTitles = [
     "Costs and Benefits of Financial Responsibility",
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    polygonKeys = List.generate(lessonTypes.length, (index) => GlobalKey());
+  }
+
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     polygonWidth = screenWidth * 0.07;
+
     return screenWidth > screenHeight ? webDisplay() : mobileDisplay();
   }
 
   Scaffold webDisplay() {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: SizedBox(
+        key: _containerKey, // The half-width container
         width: screenWidth * 0.5,
         child: Stack(
           children: [
+            // Painted lines behind
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _LinePainter(
+                  polygonKeys: polygonKeys,
+                  containerKey: _containerKey,
+                ),
+              ),
+            ),
+
+            // Scrollable polygons
             SingleChildScrollView(
-              padding: EdgeInsets.only(
-                  top: screenHeight *
-                      0.25), // Add padding to avoid overlap with the floating container
+              padding: EdgeInsets.only(top: screenHeight * 0.25).add(
+                EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
+              ),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: screenHeight * 0.1,
-                  ),
-                  ...lessonTypes.map(
-                    (type) => CustomPolygon(
-                      index: type,
-                      isActivated: true,
-                      width: polygonWidth,
-                      imageLinks: imageLinks,
-                      pagesLink: pagesLink,
+                  SizedBox(height: screenHeight * 0.1),
+                  for (int i = 0; i < lessonTypes.length; i++)
+                    Container(
+                      width: double.infinity,
+                      child: CustomPolygon(
+                        key: polygonKeys[i],
+                        index: lessonTypes[i],
+                        isActivated: true,
+                        width: polygonWidth,
+                        imageLinks: imageLinks,
+                        pagesLink: pagesLink,
+                      ),
                     ),
-                  ),
                 ],
-              ).paddingSymmetric(horizontal: screenWidth * 0.15),
+              ),
             ),
+
+            // Your unit title
             Positioned(
               top: screenHeight * 0.05,
               left: screenWidth * 0.05,
@@ -101,19 +134,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: LightTheme().primaryBlue,
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Expanded(
                       flex: 3,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Unit $unitNum".toUpperCase(),
-                            softWrap: true,
-                            style: TextStyle(
-                              fontSize: 22,
+                            style: const TextStyle(
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -121,12 +151,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           Expanded(
                             child: Text(
                               unitTitles[unitNum - 1],
-                              softWrap: true,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.w600,
+                              style: GoogleFonts.baloo2(
+                                fontSize: 35,
+                                fontWeight: FontWeight.w400,
                                 color: Colors.white,
+                                height: 1.2,
                               ),
                             ),
                           ),
@@ -140,10 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 75,
                           height: 75,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.blue,
-                              width: 2,
-                            ),
+                            border: Border.all(color: Colors.blue, width: 2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.network(
@@ -162,7 +188,105 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  mobileDisplay() {}
+  Scaffold mobileDisplay() {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Lessons')),
+      body: SizedBox(
+        key: _containerKey,
+        width: screenWidth * 0.5,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _LinePainter(
+                  polygonKeys: polygonKeys,
+                  containerKey: _containerKey,
+                ),
+              ),
+            ),
+            SingleChildScrollView(
+              padding: EdgeInsets.only(top: 50).add(
+                EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
+              ),
+              child: Column(
+                children: [
+                  for (int i = 0; i < lessonTypes.length; i++)
+                    Container(
+                      width: double.infinity,
+                      child: CustomPolygon(
+                        key: polygonKeys[i],
+                        index: lessonTypes[i],
+                        isActivated: true,
+                        width: polygonWidth,
+                        imageLinks: imageLinks,
+                        pagesLink: pagesLink,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Painter that subtracts the container’s global offset from the polygon's global offset
+class _LinePainter extends CustomPainter {
+  final List<GlobalKey> polygonKeys;
+  final GlobalKey containerKey;
+
+  _LinePainter({
+    required this.polygonKeys,
+    required this.containerKey,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+
+    // The half-width container's RenderBox
+    final containerBox =
+        containerKey.currentContext?.findRenderObject() as RenderBox?;
+    if (containerBox == null) return;
+
+    // 1) Get container's top-left in global coords
+    final containerGlobalPos = containerBox.localToGlobal(Offset.zero);
+
+    // 2) For each pair of polygons, compute local offset manually
+    for (int i = 0; i < polygonKeys.length - 1; i++) {
+      final box1 =
+          polygonKeys[i].currentContext?.findRenderObject() as RenderBox?;
+      final box2 =
+          polygonKeys[i + 1].currentContext?.findRenderObject() as RenderBox?;
+      if (box1 == null || box2 == null) continue;
+
+      // Polygon i center in global
+      final center1Global = box1.localToGlobal(
+        Offset(box1.size.width / 2, box1.size.height / 2),
+      );
+      // Subtract container top-left => local
+      final center1Local = center1Global - containerGlobalPos;
+
+      // Polygon i+1 center
+      final center2Global = box2.localToGlobal(
+        Offset(box2.size.width / 2, box2.size.height / 2),
+      );
+      final center2Local = center2Global - containerGlobalPos;
+
+      // Optional debug
+      // print('Index $i => global: $center1Global | local: $center1Local');
+
+      canvas.drawLine(center1Local, center2Local, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_LinePainter oldDelegate) => true;
 }
 
 class CustomPolygon extends StatelessWidget {
@@ -174,6 +298,7 @@ class CustomPolygon extends StatelessWidget {
     required this.imageLinks,
     required this.pagesLink,
   });
+
   final double width;
   final int index;
   final bool isActivated;

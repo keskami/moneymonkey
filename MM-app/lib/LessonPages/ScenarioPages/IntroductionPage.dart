@@ -18,7 +18,7 @@ class IntroductionPage extends StatelessWidget {
           width: screenWidth * 0.5,
           height: screenHeight * 0.3,
           decoration: BoxDecoration(
-            color: LightTheme().primaryBlue.withValues(alpha: 0.2),
+            color: LightTheme().primaryBlue,
             borderRadius: BorderRadius.circular(
               10,
             ),

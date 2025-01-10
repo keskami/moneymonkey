@@ -62,7 +62,7 @@ class ResultPage extends StatelessWidget {
             vertical: screenHeight * 0.02,
           ),
           decoration: BoxDecoration(
-            color: LightTheme().primaryBlue.withValues(alpha: 0.2),
+            color: LightTheme().primaryBlue,
             borderRadius: BorderRadius.circular(
               10,
             ),

@@ -178,9 +178,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   vertical: 5,
                 ),
                 decoration: BoxDecoration(
-                  color: LightTheme().primaryBlue.withValues(
-                        alpha: 0.2,
-                      ),
+                  color: LightTheme().primaryBlue,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
