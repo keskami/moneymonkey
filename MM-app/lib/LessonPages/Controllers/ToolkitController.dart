@@ -5,17 +5,10 @@ import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
-<<<<<<< HEAD
-import 'package:money_monkey/LessonPages/PeerReflection/page5.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page6.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page7.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page8.dart';
-=======
 import 'package:money_monkey/LessonPages/Toolkit/page5.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page6.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page7.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page8.dart';
->>>>>>> development
 
 class Toolkitcontroller  extends GetxController{
 
