@@ -1,4 +1,3 @@
-import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
@@ -99,87 +98,131 @@ class _LessonsHomeState extends State<LessonsHome> {
   Scaffold webDisplay() {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SizedBox(
-        width: screenWidth * 0.5,
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Stack(
-                children: [
-                  SlantLineColumn,
-                  PolygonLessonColumn,
-                ],
-              ).marginSymmetric(
-                vertical: screenHeight * 0.2,
-                horizontal: screenWidth * 0.08,
-              ),
-            ),
-            //Unit Name
-            Positioned(
-              top: screenHeight * 0.05,
-              left: screenWidth * 0.05,
-              right: screenWidth * 0.05,
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.03,
-                  vertical: screenHeight * 0.02,
+      body: Row(
+        children: [
+          //Lesson Content Scrollable
+          SizedBox(
+            width: screenWidth * 0.5,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      SlantLineColumn,
+                      PolygonLessonColumn,
+                    ],
+                  ).marginSymmetric(
+                    vertical: screenHeight * 0.2,
+                    horizontal: screenWidth * 0.08,
+                  ),
                 ),
-                height: screenHeight * 0.2,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: LightTheme().primaryBlue,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Unit $unitNum".toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                //Unit Name
+                Positioned(
+                  top: screenHeight * 0.05,
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.05,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.03,
+                      vertical: screenHeight * 0.02,
+                    ),
+                    height: screenHeight * 0.2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: LightTheme().primaryBlue,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Unit $unitNum".toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  unitTitles[unitNum - 1],
+                                  style: GoogleFonts.baloo2(
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                    height: 1.2,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: Text(
-                              unitTitles[unitNum - 1],
-                              style: GoogleFonts.baloo2(
-                                fontSize: 35,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white,
-                                height: 1.2,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Center(
+                            child: Container(
+                              width: 75,
+                              height: 75,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.blue, width: 2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Image.network(
+                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FUnit1%2FbookLogo.png?alt=media&token=5292ff86-afa7-49a3-bb62-a14f9c8b48f8",
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Container(
-                          width: 75,
-                          height: 75,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blue, width: 2),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Image.network(
-                            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FUnit1%2FbookLogo.png?alt=media&token=5292ff86-afa7-49a3-bb62-a14f9c8b48f8",
-                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            width: screenWidth * 0.3,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: screenHeight * 0.05,
+                ),
+                Row(
+                  children: [
+                    //Diamond
+                    Image.network(
+                      height: screenHeight * 0.1,
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMoneyMonkey.png?alt=media&token=8bc3b244-749e-49bf-a663-28664c2b4714",
+                    ),
+                    const Spacer(),
+                    Text("10"),
+                    Image.network(
+                      height: screenHeight * 0.1,
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMM_Silhouette.png?alt=media&token=3bf54556-da0d-446e-94c6-5a5ca59e9ce5",
+                    ),
+                    const Spacer(),
+                    Text("10"),
+                    Image.network(
+                      height: screenHeight * 0.1,
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FDiamond.png?alt=media&token=c71fbaad-8ae7-4790-9bdd-2a17a77b3837",
+                    ),
+                    const Spacer(),
+                    Text("10"),
+                    Image.network(
+                      height: screenHeight * 0.1,
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FBanana.png?alt=media&token=2b2a1a4a-9196-44e5-913c-23445802edb4",
+                    ),
+                    const Spacer(),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
