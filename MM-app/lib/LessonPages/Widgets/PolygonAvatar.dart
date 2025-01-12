@@ -2,6 +2,77 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
+class LessonPolygon extends PolygonAvatar {
+  LessonPolygon({
+    required super.backgroundColor,
+    required super.icon,
+    required super.isActivated,
+    required this.width,
+    required this.index,
+    required this.imageLinks,
+  });
+  final double width;
+  final List<String> imageLinks;
+  final int index;
+  @override
+  Widget build(BuildContext context) {
+    return BackgroundPolygon(
+      size: width,
+      isActivated: !isActivated,
+      icon: isActivated
+          ? PolygonAvatar(
+              size: width * 0.9,
+              isActivated: isActivated,
+              backgroundColor: Colors.blue.shade600,
+              icon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.transparent,
+                child: Image.network(
+                  imageLinks[index],
+                ),
+              ),
+            )
+          : Icon(
+              Icons.lock,
+              color: Colors.white,
+              size: width * 0.4,
+            ),
+    );
+  }
+}
+
+class BackgroundPolygon extends StatelessWidget {
+  final double size;
+  final Widget icon;
+  final int sides;
+  final bool isActivated;
+
+  const BackgroundPolygon({
+    super.key,
+    this.size = 50,
+    required this.icon,
+    this.sides = 6,
+    required this.isActivated,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      clipper: PolygonClipper(sides: sides),
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade400,
+        ),
+        child: Center(
+          child: icon,
+        ),
+      ),
+    );
+  }
+}
+
 class PolygonAvatar extends StatelessWidget {
   final double size;
   final Color backgroundColor;
@@ -26,16 +97,16 @@ class PolygonAvatar extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              !isActivated
-                  ? LightTheme().primaryBlue
-                  : backgroundColor, // Creates a lighter shade
-              backgroundColor,
-            ],
-          ),
+          gradient: isActivated
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    isActivated ? LightTheme().primaryBlue : backgroundColor,
+                    backgroundColor,
+                  ],
+                )
+              : LinearGradient(colors: [backgroundColor, backgroundColor]),
         ),
         child: Center(
           child: icon,
