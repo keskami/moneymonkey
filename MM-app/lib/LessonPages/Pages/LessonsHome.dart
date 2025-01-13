@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
@@ -80,8 +79,8 @@ class _LessonsHomeState extends State<LessonsHome> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SizedBox(
-        key: _containerKey,          // The half-width container
-        width: screenWidth * 0.5,    
+        key: _containerKey, // The half-width container
+        width: screenWidth * 0.5,
         child: Stack(
           children: [
             // Painted lines behind
@@ -250,7 +249,8 @@ class _LinePainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     // The half-width container's RenderBox
-    final containerBox = containerKey.currentContext?.findRenderObject() as RenderBox?;
+    final containerBox =
+        containerKey.currentContext?.findRenderObject() as RenderBox?;
     if (containerBox == null) return;
 
     // 1) Get container's top-left in global coords
@@ -258,8 +258,10 @@ class _LinePainter extends CustomPainter {
 
     // 2) For each pair of polygons, compute local offset manually
     for (int i = 0; i < polygonKeys.length - 1; i++) {
-      final box1 = polygonKeys[i].currentContext?.findRenderObject() as RenderBox?;
-      final box2 = polygonKeys[i + 1].currentContext?.findRenderObject() as RenderBox?;
+      final box1 =
+          polygonKeys[i].currentContext?.findRenderObject() as RenderBox?;
+      final box2 =
+          polygonKeys[i + 1].currentContext?.findRenderObject() as RenderBox?;
       if (box1 == null || box2 == null) continue;
 
       // Polygon i center in global

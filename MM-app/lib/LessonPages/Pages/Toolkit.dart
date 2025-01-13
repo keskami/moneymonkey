@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
-import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
 
 class Toolkit extends StatefulWidget {
   const Toolkit({super.key});
@@ -17,16 +13,14 @@ class Toolkit extends StatefulWidget {
 class _ToolkitState extends State<Toolkit> {
   Toolkitcontroller toolkitcontroller = Get.put(Toolkitcontroller());
   final String lessonId = "PeerReflectionQuiz";
-  
 
   @override
   void initState() {
     super.initState();
-   
   }
+
   @override
   Widget build(BuildContext context) {
-
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -72,15 +66,10 @@ class _ToolkitState extends State<Toolkit> {
             ],
           ),
           Obx(
-            () =>
-                toolkitcontroller.pages[toolkitcontroller.pageIndex.value],
+            () => toolkitcontroller.pages[toolkitcontroller.pageIndex.value],
           ),
         ],
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> development
