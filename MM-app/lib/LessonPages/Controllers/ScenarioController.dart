@@ -9,6 +9,7 @@ class ScenarioController extends GetxController {
     "What about those \$150 sneakers?": "Wait for Next Paycheck",
     "Planning for Emergencies": "Set aside \$150",
   };
+
   final List<List<List<String>>> options = [
     [
       ["Save \$250 (50%)", "Maximum savings for future goals"],
@@ -26,6 +27,7 @@ class ScenarioController extends GetxController {
       ["Keep Nothing for Emergencies", "Spend it all"],
     ],
   ];
+
   RxInt pageIndex = 0.obs;
   RxDouble responsibilityScore = 0.0.obs;
 

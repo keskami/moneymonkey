@@ -14,9 +14,23 @@ class _StoryPageState extends State<StoryPage> {
   StoryController storyController = Get.put(StoryController());
   final String lessonId = "Lesson1";
 
+  Future<void> _preCacheImages() async {
+    await precacheImage(
+        NetworkImage(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+        ),
+        context);
+    await precacheImage(
+        NetworkImage(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FStoryPages%2FDIamond.png?alt=media&token=98ad4d6e-dbda-4112-9e0c-d0429eef9d37",
+        ),
+        context);
+  }
+
   @override
   void initState() {
     super.initState();
+    _preCacheImages();
   }
 
   @override
