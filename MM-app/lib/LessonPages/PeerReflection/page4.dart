@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/home.dart';
 
@@ -22,6 +23,7 @@ class _Page4State extends State<Page4> {
   bool jasonClicked = false;
   bool avaClicked = false;
   PeerReflectioncontroller peerReflectionController = Get.find();
+  bool delay = false;
 
   @override
   void initState() {
@@ -33,6 +35,14 @@ class _Page4State extends State<Page4> {
       ),
     );
     _fetchUserProfile();
+    _6secdelay();
+  }
+
+  Future<void> _6secdelay() async {
+    await Future.delayed(Duration(seconds: 6));
+    setState(() {
+      delay = true;
+    });
   }
 
   Future<void> _fetchUserProfile() async {
@@ -117,32 +127,12 @@ class _Page4State extends State<Page4> {
                           mariaClicked = true;
                           jasonClicked = false;
                           avaClicked = false;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Container(
-                              height: WebscreenHeightUnit * 103,
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.check_circle,
-                                    size: WebscreenHeightUnit * 80,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: WebscreenWidthUnit * 10),
-                                  Text(
-                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
-                                    style: GoogleFonts.baloo2(
-                                        fontSize: WebscreenWidthUnit * 25,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )),
-                            ),
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Color.fromRGBO(137, 220, 142, 1),
-                          ));
+
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          Future.delayed(Duration(seconds: 1), () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CorrectAnswerSnackBar(message: ""));
+                          });
                         }
                       });
                     },
@@ -164,32 +154,11 @@ class _Page4State extends State<Page4> {
                           jasonClicked = true;
                           avaClicked = false;
                           mariaClicked = false;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Container(
-                              height: WebscreenHeightUnit * 103,
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.check_circle,
-                                    size: WebscreenHeightUnit * 80,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: WebscreenWidthUnit * 10),
-                                  Text(
-                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
-                                    style: GoogleFonts.baloo2(
-                                        fontSize: WebscreenWidthUnit * 25,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )),
-                            ),
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Color.fromRGBO(137, 220, 142, 1),
-                          ));
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          Future.delayed(Duration(seconds: 1), () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CorrectAnswerSnackBar(message: ""));
+                          });
                         }
                       });
                     },
@@ -211,32 +180,11 @@ class _Page4State extends State<Page4> {
                           avaClicked = true;
                           jasonClicked = false;
                           mariaClicked = false;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Container(
-                              height: WebscreenHeightUnit * 103,
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.check_circle,
-                                    size: WebscreenHeightUnit * 80,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: WebscreenWidthUnit * 10),
-                                  Text(
-                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
-                                    style: GoogleFonts.baloo2(
-                                        fontSize: WebscreenWidthUnit * 25,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )),
-                            ),
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Color.fromRGBO(137, 220, 142, 1),
-                          ));
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          Future.delayed(Duration(seconds: 1), () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CorrectAnswerSnackBar(message: ""));
+                          });
                         }
                       });
                     },
@@ -251,13 +199,20 @@ class _Page4State extends State<Page4> {
           padding: EdgeInsets.only(top: WebscreenHeightUnit * 120),
           child: GestureDetector(
               onTap: () {
-                if (avaClicked || jasonClicked || mariaClicked) {
-                    
-                    Navigator.push(
+                
+
+                if ((avaClicked || jasonClicked || mariaClicked) && delay) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                } else {
+                  );
+                } else if(!delay){
+
+                }
+                
+                else {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Please select a peer to continue'),
                     duration: Duration(seconds: 2),
@@ -268,7 +223,7 @@ class _Page4State extends State<Page4> {
                 height: screenHeightUnit * 58,
                 width: screenWidthUnit * 81,
                 decoration: BoxDecoration(
-                  color: (avaClicked || jasonClicked || mariaClicked)
+                  color: ((avaClicked || jasonClicked || mariaClicked) && delay)
                       ? Color.fromRGBO(137, 220, 142, 1)
                       : Color.fromRGBO(224, 227, 231, 1),
                   borderRadius: BorderRadius.circular(10),

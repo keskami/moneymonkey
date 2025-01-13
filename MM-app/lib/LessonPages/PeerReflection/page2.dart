@@ -168,7 +168,7 @@ class _Page2State extends State<Page2> {
         child: GestureDetector(
             onTap: () {
               if (avaClicked && jasonClicked && mariaClicked && delay) {
-                print(peerReflectionController.pageIndex.value);
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 peerReflectionController.pageIndex.value += 1;
               } else if (!delay){
 

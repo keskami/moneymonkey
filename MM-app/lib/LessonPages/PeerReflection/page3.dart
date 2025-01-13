@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/home.dart';
 
@@ -31,6 +32,21 @@ class _Page3State extends State<Page3> {
     'Personal investments',
     'Flexible budgeting'
   ];
+  List<String> correct1 = [
+    'Flexible budgeting',
+    'Travel savings',
+    'Starting retirement fund',
+    'Emergency fund',
+  ];
+  List<String> correct2 = [
+    'Budgeting for family needs',
+    'Kids’ education savings',
+  ];
+  List<String> correct3 = [
+    'Planning for grad school',
+    'Personal investments',
+  ];
+
   List<String> droppedItems1 = [];
   List<String> droppedItems2 = [];
   List<String> droppedItems3 = [];
@@ -45,6 +61,23 @@ class _Page3State extends State<Page3> {
       ),
     );
     _fetchUserProfile();
+  }
+
+  Future<void> _checkCompletion() async {
+    if (droppedItems1.contains("Flexible budgeting") &&
+        droppedItems1.contains("Travel savings") &&
+        droppedItems1.contains("Emergency fund") &&
+        droppedItems1.contains("Starting retirement fund") &&
+        droppedItems2.contains("Budgeting for family needs") &&
+        droppedItems2.contains("Kids’ education savings") &&
+        droppedItems3.contains("Personal investments") &&
+        droppedItems3.contains("Planning for grad school")) {
+      await Future.delayed(Duration(seconds: 2));
+       ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+
+      peerReflectionController.pageIndex.value += 1;
+    }
   }
 
   Future<void> _fetchUserProfile() async {
@@ -122,7 +155,11 @@ class _Page3State extends State<Page3> {
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems2.remove(item),
-                      (item) => droppedItems3.remove(item)),
+                      (item) => droppedItems3.remove(item),
+                      droppedItems1,
+                      droppedItems2,
+                      droppedItems3,
+                      correct1),
                   SizedBox(width: WebscreenWidthUnit * 16),
                   _buildDropZone(
                       droppedItems2,
@@ -130,7 +167,11 @@ class _Page3State extends State<Page3> {
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems1.remove(item),
-                      (item) => droppedItems3.remove(item)),
+                      (item) => droppedItems3.remove(item),
+                      droppedItems1,
+                      droppedItems2,
+                      droppedItems3,
+                      correct2),
                   SizedBox(width: WebscreenWidthUnit * 16),
                   _buildDropZone(
                       droppedItems3,
@@ -138,7 +179,11 @@ class _Page3State extends State<Page3> {
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems1.remove(item),
-                      (item) => droppedItems2.remove(item)),
+                      (item) => droppedItems2.remove(item),
+                      droppedItems1,
+                      droppedItems2,
+                      droppedItems3,
+                      correct3),
                 ],
               ),
             ),
@@ -194,74 +239,81 @@ class _Page3State extends State<Page3> {
             ),
           ),
         ),
+        /*
         Padding(
           padding: EdgeInsets.only(top: WebscreenHeightUnit * 0),
           child: GestureDetector(
               onTap: () {
-                if (droppedItems1.contains("Flexible budgeting") &&
-                    droppedItems1.contains("Travel savings") &&
-                    droppedItems1.contains("Emergency fund") &&
-                    droppedItems1.contains("Starting retirement fund") &&
-                    droppedItems2.contains("Budgeting for family needs") &&
-                    droppedItems2.contains("Kids’ education savings") &&
-                    droppedItems3.contains("Personal investments") &&
-                    droppedItems3.contains("Planning for grad school")) {
-                  print(peerReflectionController.pageIndex.value);
-                  peerReflectionController.pageIndex.value += 1;
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        'Please categorize all the items correctly to continue'),
-                    duration: Duration(seconds: 2),
-                  ));
-                }
+          if (droppedItems1.contains("Flexible budgeting") &&
+              droppedItems1.contains("Travel savings") &&
+              droppedItems1.contains("Emergency fund") &&
+              droppedItems1.contains("Starting retirement fund") &&
+              droppedItems2.contains("Budgeting for family needs") &&
+              droppedItems2.contains("Kids’ education savings") &&
+              droppedItems3.contains("Personal investments") &&
+              droppedItems3.contains("Planning for grad school")) {
+            print(peerReflectionController.pageIndex.value);
+            peerReflectionController.pageIndex.value += 1;
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+            'Please categorize all the items correctly to continue'),
+              duration: Duration(seconds: 2),
+            ));
+          }
               },
               child: Container(
-                height: screenHeightUnit * 58,
-                width: screenWidthUnit * 61,
-                decoration: BoxDecoration(
-                  color: (droppedItems1.contains("Flexible budgeting") &&
-                          droppedItems1.contains("Travel savings") &&
-                          droppedItems1.contains("Emergency fund") &&
-                          droppedItems1.contains("Starting retirement fund") &&
-                          droppedItems2
-                              .contains("Budgeting for family needs") &&
-                          droppedItems2.contains("Kids’ education savings") &&
-                          droppedItems3.contains("Personal investments") &&
-                          droppedItems3.contains("Planning for grad school"))
-                      ? Color.fromRGBO(137, 220, 142, 1)
-                      : Color.fromRGBO(224, 227, 231, 1),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(
-                    "Continue to Activity",
-                    style: GoogleFonts.baloo2(
-                        fontSize: screenWidthUnit * 4.2,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
+          height: screenHeightUnit * 58,
+          width: screenWidthUnit * 61,
+          decoration: BoxDecoration(
+            color: (droppedItems1.contains("Flexible budgeting") &&
+              droppedItems1.contains("Travel savings") &&
+              droppedItems1.contains("Emergency fund") &&
+              droppedItems1.contains("Starting retirement fund") &&
+              droppedItems2
+                  .contains("Budgeting for family needs") &&
+              droppedItems2.contains("Kids’ education savings") &&
+              droppedItems3.contains("Personal investments") &&
+              droppedItems3.contains("Planning for grad school"))
+                ? Color.fromRGBO(137, 220, 142, 1)
+                : Color.fromRGBO(224, 227, 231, 1),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 5,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              "Continue to Activity",
+              style: GoogleFonts.baloo2(
+            fontSize: screenWidthUnit * 4.2,
+            color: Colors.white,
+            fontWeight: FontWeight.w700),
+            ),
+          ),
               )),
         )
+        */
       ],
     );
   }
 
   Widget _buildDropZone(
-      List<String> droppedItems,
-      String label,
-      double WebscreenWidthUnit,
-      double WebscreenHeightUnit,
-      Function(String) onItemDropped,
-      Function(String) onItemDropped2) {
+    List<String> droppedItems,
+    String label,
+    double WebscreenWidthUnit,
+    double WebscreenHeightUnit,
+    Function(String) onItemDropped,
+    Function(String) onItemDropped2,
+    List<String> droppedItems1,
+    List<String> droppedItems2,
+    List<String> droppedItems3,
+    List<String> correctItems,
+  ) {
     return DragTarget<String>(
       onAccept: (data) {
         setState(() {
@@ -269,6 +321,45 @@ class _Page3State extends State<Page3> {
           onItemDropped(data);
           onItemDropped2(data);
           availableItems.remove(data);
+        });
+
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        if (correctItems.contains(data)) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(CorrectAnswerSnackBar(message: ""));
+              _checkCompletion();
+         
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(WrongAnswerSnackBar(message: ''));
+        }
+       
+      },
+      onWillAccept: (data) => true,
+      onLeave: (data) {
+        setState(() {
+          if (data != null && droppedItems.contains(data)) {
+            droppedItems.remove(data);
+
+            // Add back to available items
+          }
+          if (droppedItems1.contains(data) ||
+              droppedItems2.contains(data) ||
+              droppedItems3.contains(data)) {
+            if (availableItems.contains(data)) {
+              setState(() {
+                availableItems.remove(data);
+              });
+            } else {
+              setState(() {});
+            }
+          } else {
+            setState(() {
+              if (!availableItems.contains(data)) {
+                availableItems.add(data!);
+              }
+            });
+          }
         });
       },
       builder: (context, candidateData, rejectedData) {
@@ -284,22 +375,34 @@ class _Page3State extends State<Page3> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                label,
-                style: GoogleFonts.baloo2(
-                  fontSize: WebscreenWidthUnit * 25.5,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
+              Padding(
+                padding: EdgeInsets.only(left: WebscreenWidthUnit * 10),
+                child: Text(
+                  label,
+                  style: GoogleFonts.baloo2(
+                    fontSize: WebscreenWidthUnit * 25.5,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.start,
                 ),
-                textAlign: TextAlign.start,
               ),
               SizedBox(height: 10),
-              ...droppedItems.map(
-                (item) => _buildDraggableDroppedItem(
-                  item,
-                  droppedItems,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: droppedItems
+                        .map(
+                          (item) => _buildDraggableDroppedItem(
+                            item,
+                            droppedItems,
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -322,6 +425,20 @@ class _Page3State extends State<Page3> {
         setState(() {
           sourceList.remove(label);
         });
+
+        if (droppedItems1.contains(label) ||
+            droppedItems2.contains(label) ||
+            droppedItems3.contains(label)) {
+          if (availableItems.contains(label)) {
+            setState(() {
+              availableItems.remove(label);
+            });
+          }
+        } else {
+          setState(() {
+            //availableItems.add(label);
+          });
+        }
       },
       child: _buildDroppedItem(label),
     );
