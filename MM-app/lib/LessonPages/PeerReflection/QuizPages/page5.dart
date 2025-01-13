@@ -323,10 +323,14 @@ Widget topOfLesson({
           },
           icon: Icon(Icons.close, color: Colors.black)),
       TweenAnimationBuilder<double>(
+
         tween: Tween<double>(
             begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
         duration: Duration(seconds: 2),
         builder: (context, value, child) {
+
+
+          
           return Container(
             height: screenHeightUnit * 25,
             width: screenWidthUnit * 202,
