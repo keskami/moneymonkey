@@ -52,6 +52,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 option: option1,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
+                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     option1 = !option1;
                     option2 = false;
@@ -69,6 +70,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 option: option2,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
+                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     option2 = !option2;
                     option1 = false;
@@ -88,6 +90,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
+                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     option3 = !option3;
                     option2 = false;
@@ -105,6 +108,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
+                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     option4 = !option4;
                     option1 = false;
@@ -173,6 +177,7 @@ Widget quizOptionWithoutImage(
     required bool option}) {
   return GestureDetector(
       onTap: () {
+         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         onClick();
       },
       child: Container(
@@ -190,8 +195,8 @@ Widget quizOptionWithoutImage(
             Text(
               text,
               style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 18,
-                fontWeight: FontWeight.w600,
+                fontSize: screenWidthUnit * 22,
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),

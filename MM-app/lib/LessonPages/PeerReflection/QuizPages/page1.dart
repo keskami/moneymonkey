@@ -197,8 +197,8 @@ Widget quizOptionWithoutImage(
             Text(
               text,
               style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 18,
-                fontWeight: FontWeight.w600,
+                 fontSize: screenWidthUnit * 22,
+                fontWeight: FontWeight.bold
               ),
               textAlign: TextAlign.center,
             ),
@@ -243,7 +243,7 @@ Widget quizOptionWithImage(
               text,
               style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 20,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],

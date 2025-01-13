@@ -60,7 +60,7 @@ class _PeerReflectionQuizPage3State extends State<PeerReflectionQuizPage3> {
               width: screenWidthUnit * 20,
             ),
             quizOptionWithoutImage(
-                text: 'Spend all your income on entertainment',
+                text: 'Spend all your income\non entertainment',
                 screenHeightUnit: screenHeightUnit,
                 option: option2,
                 screenWidthUnit: screenWidthUnit,
@@ -177,8 +177,8 @@ Widget quizOptionWithoutImage(
             Text(
               text,
               style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 18,
-                fontWeight: FontWeight.w600,
+                 fontSize: screenWidthUnit * 22,
+                fontWeight: FontWeight.bold
               ),
               textAlign: TextAlign.center,
             ),

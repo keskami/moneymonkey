@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
+import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import 'GettingStarted/Pages/sf_home.dart';
@@ -43,12 +45,12 @@ class MyApp extends StatelessWidget {
                   User? user = FirebaseAuth.instance.currentUser;
                   String userId = user?.uid ?? '';
                   if (userId.isEmpty) {
-                    return StartFreshHome();
+                    return PeerReflectionQuiz();
                   } else {
-                    return PeerReflection();
+                    return PeerReflectionQuiz();
                   }
                 } else {
-                  return PeerReflection();
+                  return PeerReflectionQuiz();
                 }
               },
             ),

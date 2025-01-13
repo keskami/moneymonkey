@@ -78,7 +78,7 @@ class _PeerReflectionQuizPage4State extends State<PeerReflectionQuizPage4> {
           ),
           Row(children: [
             quizOptionWithoutImage(
-                text: 'Spending without tracking expenses',
+                text: 'Spending without tracking\nexpenses',
                 option: option3,
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
@@ -127,10 +127,7 @@ class _PeerReflectionQuizPage4State extends State<PeerReflectionQuizPage4> {
                 });
               }
               if (correct) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
+               peerReflectionQuizcontroller.pageIndex.value += 1;
               } else if (option1 || option2 || option3 || option4) {
                 if (option1 && !option3 && option2 && option4) {
                   ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(
@@ -182,8 +179,8 @@ Widget quizOptionWithoutImage(
             Text(
               text,
               style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 18,
-                fontWeight: FontWeight.w600,
+               fontSize: screenWidthUnit * 22,
+                fontWeight: FontWeight.bold
               ),
               textAlign: TextAlign.center,
             ),

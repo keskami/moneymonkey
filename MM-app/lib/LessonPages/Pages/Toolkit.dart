@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
+import 'package:money_monkey/home.dart';
 
 class Toolkit extends StatefulWidget {
   const Toolkit({super.key});
@@ -24,12 +25,33 @@ class _ToolkitState extends State<Toolkit> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: screenHeight * .06,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            if (toolkitcontroller.pageIndex == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            } else {
+              toolkitcontroller.pageIndex -= 1;
+            }
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: screenHeight * .04,
+          ),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: screenHeight * 0.05,
+            height: screenHeight * 0.00,
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -38,6 +60,10 @@ class _ToolkitState extends State<Toolkit> {
               IconButton(
                 onPressed: () {
                   toolkitcontroller.pageIndex.value = 0;
+                  Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
                 },
                 icon: Icon(Icons.close),
               ),

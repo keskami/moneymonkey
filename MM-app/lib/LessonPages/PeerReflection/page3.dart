@@ -72,11 +72,16 @@ class _Page3State extends State<Page3> {
         droppedItems2.contains("Kids’ education savings") &&
         droppedItems3.contains("Personal investments") &&
         droppedItems3.contains("Planning for grad school")) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CorrectAnswerSnackBar(message: ""));
       await Future.delayed(Duration(seconds: 2));
-       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
-
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       peerReflectionController.pageIndex.value += 1;
+    } else {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(WrongAnswerSnackBar(message: ""));
     }
   }
 
@@ -324,16 +329,14 @@ class _Page3State extends State<Page3> {
         });
 
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        if (correctItems.contains(data)) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(CorrectAnswerSnackBar(message: ""));
-              _checkCompletion();
-         
+        if (availableItems.isEmpty) {
+          //ScaffoldMessenger.of(context)
+          //.showSnackBar(CorrectAnswerSnackBar(message: ""));
+          _checkCompletion();
         } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(WrongAnswerSnackBar(message: ''));
+          //ScaffoldMessenger.of(context)
+          //.showSnackBar(WrongAnswerSnackBar(message: ''));
         }
-       
       },
       onWillAccept: (data) => true,
       onLeave: (data) {

@@ -39,7 +39,7 @@ class _Page4State extends State<Page4> {
   }
 
   Future<void> _6secdelay() async {
-    await Future.delayed(Duration(seconds: 6));
+    await Future.delayed(Duration(seconds: 4));
     setState(() {
       delay = true;
     });

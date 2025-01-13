@@ -137,7 +137,7 @@ class _Page1State extends State<Page1> {
           onTap: !delay ? (){
 
           } : () {
-            print(peerReflectionController.pageIndex.value);
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             peerReflectionController.pageIndex.value += 1;
           },
           child: Container(
