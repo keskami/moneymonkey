@@ -18,6 +18,8 @@ class _Page1State extends State<Page1> {
   bool isLoading = true;
   int? balance;
   int totalBanans = 0;
+  bool delay = false;
+
   PeerReflectioncontroller peerReflectionController = Get.find();
 
   @override
@@ -30,6 +32,13 @@ class _Page1State extends State<Page1> {
       ),
     );
     _fetchUserProfile();
+    _6secdelay();
+  }
+  Future<void> _6secdelay() async {
+    await Future.delayed(Duration(seconds: 6));
+    setState(() {
+      delay = true;
+    });
   }
 
   Future<void> _fetchUserProfile() async {
@@ -125,7 +134,9 @@ class _Page1State extends State<Page1> {
       ),
       SizedBox(height: screenHeightUnit * 82),
       GestureDetector(
-          onTap: () {
+          onTap: !delay ? (){
+
+          } : () {
             print(peerReflectionController.pageIndex.value);
             peerReflectionController.pageIndex.value += 1;
           },
@@ -133,7 +144,7 @@ class _Page1State extends State<Page1> {
             height: screenHeightUnit * 58,
             width: screenWidthUnit * 61,
             decoration: BoxDecoration(
-              color: Color.fromRGBO(137, 220, 142, 1),
+              color: !delay? Color.fromRGBO(224, 227, 231, 1) :Color.fromRGBO(137, 220, 142, 1),
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
@@ -195,7 +206,7 @@ Widget topOfLesson({
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       IconButton(
-          onPressed: () {
+          onPressed:  () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HomePage()),

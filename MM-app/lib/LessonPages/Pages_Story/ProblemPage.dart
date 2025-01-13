@@ -77,8 +77,8 @@ class _ProblemPageState extends State<ProblemPage> {
                               width: screenWidth * 0.3,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: LightTheme().pastelRed.withValues(
-                                        alpha: 0.7,
+                                  color: LightTheme().pastelRed.withOpacity(
+                                         0.7,
                                       )),
                               child: Center(
                                 child: Text(
@@ -96,8 +96,8 @@ class _ProblemPageState extends State<ProblemPage> {
                               width: screenWidth * 0.3,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: LightTheme().pastelRed.withValues(
-                                      alpha: 0.7,
+                                color: LightTheme().pastelRed.withOpacity(
+                                       0.7,
                                     ),
                               ),
                               child: Center(

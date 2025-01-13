@@ -24,6 +24,7 @@ class _Page2State extends State<Page2> {
   bool jasonClicked = false;
   bool avaClicked = false;
   PeerReflectioncontroller peerReflectionController = Get.find();
+  bool delay = false;
 
   @override
   void initState() {
@@ -35,6 +36,13 @@ class _Page2State extends State<Page2> {
       ),
     );
     _fetchUserProfile();
+    _6secdelay();
+  }
+  Future<void> _6secdelay() async {
+    await Future.delayed(Duration(seconds: 6));
+    setState(() {
+      delay = true;
+    });
   }
 
   Future<void> _fetchUserProfile() async {
@@ -159,10 +167,13 @@ class _Page2State extends State<Page2> {
         bottom: WebscreenHeightUnit * 0,
         child: GestureDetector(
             onTap: () {
-              if (avaClicked && jasonClicked && mariaClicked) {
+              if (avaClicked && jasonClicked && mariaClicked && delay) {
                 print(peerReflectionController.pageIndex.value);
                 peerReflectionController.pageIndex.value += 1;
-              } else {
+              } else if (!delay){
+
+              }
+              else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Please read all the stories to continue'),
                   duration: Duration(seconds: 2),
@@ -173,7 +184,7 @@ class _Page2State extends State<Page2> {
               height: screenHeightUnit * 58,
               width: screenWidthUnit * 61,
               decoration: BoxDecoration(
-                color: (avaClicked && jasonClicked && mariaClicked)
+                color: (avaClicked && jasonClicked && mariaClicked && delay)
                     ? Color.fromRGBO(137, 220, 142, 1)
                     : Color.fromRGBO(224, 227, 231, 1),
                 borderRadius: BorderRadius.circular(10),

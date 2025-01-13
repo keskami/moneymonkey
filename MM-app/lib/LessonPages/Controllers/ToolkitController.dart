@@ -4,7 +4,6 @@ import 'package:money_monkey/LessonPages/Toolkit/page5.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page6.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page7.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page8.dart';
->>>>>>> development
 
 class Toolkitcontroller extends GetxController {
   RxInt pageIndex = 0.obs;
