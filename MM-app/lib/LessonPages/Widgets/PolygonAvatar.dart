@@ -1,19 +1,58 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
-class PolygonAvatar extends StatelessWidget {
+class LessonPolygon extends PolygonAvatar {
+  LessonPolygon({
+    required super.backgroundColor,
+    required super.icon,
+    required super.isActivated,
+    required this.width,
+    required this.index,
+    required this.imageLinks,
+  });
+  final double width;
+  final List<String> imageLinks;
+  final int index;
+  @override
+  Widget build(BuildContext context) {
+    return BackgroundPolygon(
+      size: width,
+      isActivated: !isActivated,
+      icon: isActivated
+          ? PolygonAvatar(
+              size: width * 0.9,
+              isActivated: isActivated,
+              backgroundColor: Colors.blue.shade600,
+              icon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.transparent,
+                child: Image.network(
+                  imageLinks[index],
+                ),
+              ),
+            )
+          : Icon(
+              Icons.lock,
+              color: Colors.white,
+              size: width * 0.4,
+            ),
+    );
+  }
+}
+
+class BackgroundPolygon extends StatelessWidget {
   final double size;
-  final Color backgroundColor;
   final Widget icon;
-  final int sides; // Number of sides for the polygon
+  final int sides;
+  final bool isActivated;
 
-  const PolygonAvatar({
+  const BackgroundPolygon({
     super.key,
     this.size = 50,
-    required this.backgroundColor,
     required this.icon,
-    this.sides = 6, // Default hexagon
+    this.sides = 6,
+    required this.isActivated,
   });
 
   @override
@@ -23,7 +62,52 @@ class PolygonAvatar extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        color: backgroundColor,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade400,
+        ),
+        child: Center(
+          child: icon,
+        ),
+      ),
+    );
+  }
+}
+
+class PolygonAvatar extends StatelessWidget {
+  final double size;
+  final Color backgroundColor;
+  final Widget icon;
+  final int sides;
+  final bool isActivated;
+
+  const PolygonAvatar({
+    super.key,
+    this.size = 50,
+    required this.backgroundColor,
+    required this.icon,
+    this.sides = 6,
+    required this.isActivated,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      clipper: PolygonClipper(sides: sides),
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          gradient: isActivated
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    isActivated ? LightTheme().primaryBlue : backgroundColor,
+                    backgroundColor,
+                  ],
+                )
+              : LinearGradient(colors: [backgroundColor, backgroundColor]),
+        ),
         child: Center(
           child: icon,
         ),
@@ -64,4 +148,46 @@ class PolygonClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class Polygon {
+  final Offset center;
+  final int index;
+  final bool isActivated;
+
+  Polygon(this.center, this.index, this.isActivated);
+}
+
+class PolygonConnectorPainter extends CustomPainter {
+  final List<Polygon> polygons;
+  final double scrollOffset;
+
+  PolygonConnectorPainter({required this.polygons, required this.scrollOffset});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.grey // Color of the lines
+      ..strokeWidth = 2.0;
+
+    // Adjust polygon centers based on scroll offset
+    List<Offset> adjustedCenters = polygons.map((polygon) {
+      return Offset(polygon.center.dx, polygon.center.dy - scrollOffset);
+    }).toList();
+
+    // Draw connecting lines between adjacent polygons
+    for (int i = 0; i < adjustedCenters.length - 1; i++) {
+      Offset center1 = adjustedCenters[i];
+      Offset center2 = adjustedCenters[i + 1];
+      Path path = Path();
+      path.moveTo(center1.dx, center1.dy);
+      path.lineTo(center2.dx, center2.dy);
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true; // Repaint whenever scroll offset changes
+  }
 }

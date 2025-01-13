@@ -35,7 +35,7 @@ class _ProblemPageState extends State<ProblemPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: screenHeight * 0.56,
+              height: screenHeight * 0.4,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,10 +76,10 @@ class _ProblemPageState extends State<ProblemPage> {
                             contents: Container(
                               width: screenWidth * 0.3,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: LightTheme()
-                                    .pastelRed
-                              ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: LightTheme().pastelRed.withValues(
+                                        alpha: 0.7,
+                                      )),
                               child: Center(
                                 child: Text(
                                   "Problem: No control over spending",
@@ -96,8 +96,9 @@ class _ProblemPageState extends State<ProblemPage> {
                               width: screenWidth * 0.3,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: LightTheme()
-                                    .pastelRed
+                                color: LightTheme().pastelRed.withValues(
+                                      alpha: 0.7,
+                                    ),
                               ),
                               child: Center(
                                 child: Text(
@@ -112,7 +113,6 @@ class _ProblemPageState extends State<ProblemPage> {
                             ),
                           ),
                         ),
-                        const Spacer(),
                       ],
                     ),
                   ),

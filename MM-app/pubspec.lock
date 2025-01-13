@@ -318,6 +318,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
+  flutter_chat_bubble:
+    dependency: "direct main"
+    description:
+      name: flutter_chat_bubble
+      sha256: ede33df7237fea3d89464c8493bfa0bee2f94f50fd097ebd30c517c3c0d4fcf9
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   flutter_keyboard_visibility:
     dependency: "direct main"
     description:
@@ -371,6 +379,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_popup:
+    dependency: "direct main"
+    description:
+      name: flutter_popup
+      sha256: "8d653ebb04f0e334797aeb5b49eaf7653c57012e1a7cdeac09297dacf79a6524"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.0"
   flutter_svg:
     dependency: "direct main"
     description:

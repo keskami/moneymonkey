@@ -14,7 +14,16 @@ class ImpactPage extends StatefulWidget {
 class _ImpactPageState extends State<ImpactPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-
+  List<String> beforeText = [
+    "No savings",
+    "Constant stress",
+    "Emergency = crisis",
+  ];
+  List<String> afterText = [
+    "800 saved month",
+    "Peace of mind",
+    "Ready for emergencies"
+  ];
   final StoryController storyController = Get.find();
   bool isEnabled = false;
 
@@ -35,16 +44,16 @@ class _ImpactPageState extends State<ImpactPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: screenHeight * 0.56,
+              height: screenHeight * 0.4,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: screenHeight * 0.6,
+                    height: screenHeight * 0.4,
                     width: screenWidth * 0.004,
                     decoration: BoxDecoration(
-                      color: Colors.lightGreenAccent,
+                      color: Colors.orange.shade300,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -73,10 +82,8 @@ class _ImpactPageState extends State<ImpactPage> {
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
                                 contents: ContentContainer(
-                                  texts: [
-                                    "Before",
-                                    "- No savings\n- Constant stress\n- Emergency = crisis"
-                                  ],
+                                  isBefore: true,
+                                  texts: beforeText,
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(
@@ -87,7 +94,7 @@ class _ImpactPageState extends State<ImpactPage> {
                             ),
                             Icon(
                               Icons.arrow_forward,
-                              size: screenHeight * 0.2,
+                              size: screenHeight * 0.15,
                             ),
                             Container(
                               width: screenWidth * 0.15,
@@ -99,10 +106,8 @@ class _ImpactPageState extends State<ImpactPage> {
                                   });
                                 },
                                 contents: ContentContainer(
-                                  texts: [
-                                    "After",
-                                    "- \$800 saved/month\n- Peace of mind\n- Ready for emergencies"
-                                  ],
+                                  isBefore: false,
+                                  texts: afterText,
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(
@@ -113,7 +118,6 @@ class _ImpactPageState extends State<ImpactPage> {
                             ),
                           ],
                         ),
-                        const Spacer(),
                       ],
                     ),
                   ),
@@ -151,9 +155,11 @@ class ContentContainer extends StatelessWidget {
     super.key,
     required this.texts,
     required this.screenWidth,
+    required this.isBefore,
   });
 
   final List<String> texts;
+  final bool isBefore;
   final double screenWidth;
 
   @override
@@ -171,26 +177,39 @@ class ContentContainer extends StatelessWidget {
           children: [
             const Spacer(),
             Text(
-              texts[0],
+              isBefore ? "Before" : "After",
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: texts[0] == 'Before' ? Colors.red : Colors.green,
+                color: isBefore ? Colors.red : Colors.green,
               ),
               textAlign: TextAlign.start,
             ),
-            const Spacer(),
-            Text(
-              texts[1],
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.start,
+            ...texts.map(
+              (text) {
+                return Row(
+                  children: [
+                    Image.network(
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FStoryPages%2FDIamond.png?alt=media&token=98ad4d6e-dbda-4112-9e0c-d0429eef9d37",
+                      height: 20,
+                    ),
+                    Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                    ),
+                  ],
+                );
+              },
             ),
             const Spacer(),
           ],
-        ),
+        ).marginSymmetric(horizontal: screenWidth * 0.012),
       ),
     );
   }
