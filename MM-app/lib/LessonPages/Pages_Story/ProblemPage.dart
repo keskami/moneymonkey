@@ -140,3 +140,7 @@ class _ProblemPageState extends State<ProblemPage> {
     return Column();
   }
 }
+
+extension on Color {
+  withValues({required double alpha}) {}
+}
