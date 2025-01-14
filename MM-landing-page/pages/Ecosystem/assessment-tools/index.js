@@ -1,4 +1,4 @@
-import ComingSoon from "../../components/common/CommingSoon";
+import ComingSoon from "../../../components/common/CommingSoon";
 
 export default function AssessmentPage() {
     return (
