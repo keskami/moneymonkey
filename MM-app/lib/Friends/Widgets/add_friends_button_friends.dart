@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'package:money_monkey/Backend/Services/crud.dart';
 
+// ignore: must_be_immutable
 class AddFriendsButtonFriends extends StatefulWidget {
-  bool follows;
-  String otherID;
+   bool follows;
+  final String otherID;
 
-  AddFriendsButtonFriends({
+   AddFriendsButtonFriends({
     Key? key,
     required this.follows,
     required this.otherID,

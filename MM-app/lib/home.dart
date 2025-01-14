@@ -1,37 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'Global Controllers/home_controller.dart';
+import 'package:money_monkey/Friends/comingSoonPage.dart';
+import 'package:money_monkey/GlobalWidgets/SideBar.dart';
+import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
+import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final HomeController homeController = Get.put(HomeController());
+  final PageController _pageController = PageController();
+  final HomePagesController homePagesController = Get.put(HomePagesController());
+
+  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Decide whether to show web or mobile layout
+    return screenWidth > screenHeight
+        ? webDisplay(context, screenWidth)
+        : mobileDisplay(context);
+  }
+
+  /// WEB DISPLAY
+  Scaffold webDisplay(BuildContext context, double screenWidth) {
     return Scaffold(
       body: Obx(
-        () => homeController.pages[homeController.pageIndex.value],
+        () => Row(
+          children: [
+            // Sidebar (20% width)
+            SizedBox(
+              width: screenWidth * 0.2,
+              child: SideBar(),
+            ),
+
+            // Main content (80% width)
+            SizedBox(
+              width: screenWidth * 0.8,
+              child: homePagesController.pages[homePagesController.pageIndex.value],
+            )
+          ],
+        ),
       ),
-      bottomNavigationBar: _buildBottomBar(context),
     );
   }
 
-  Widget _buildBottomBar(BuildContext context) {
+  /// MOBILE DISPLAY
+  Scaffold mobileDisplay(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (value) {
+          setState(() {
+            currentPage = value;
+          });
+        },
+        children: const [
+          LessonsHome(),
+          PortfolioScreen(),
+          ComingSoonPage(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: _buildMobileBottomBar(context),
+    );
+  }
+
+  /// BUILD MOBILE NAVIGATION BAR
+  Widget _buildMobileBottomBar(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: homeController.pageIndex.value,
+      currentIndex: currentPage,
       onTap: (index) {
-        setState(() {
-          homeController.pageIndex.value = index;
-        });
+        _pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.linear,
+        );
       },
       backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
@@ -40,15 +93,16 @@ class _HomePageState extends State<HomePage> {
       showSelectedLabels: false,
       showUnselectedLabels: false,
       items: [
-        _buildNavItem('assets/images/globemonkey.png', 0),
-        _buildNavItem('assets/images/treasure.png', 1),
-        _buildNavItem('assets/images/bottommonkey.png', 2),
-        _buildNavItem('assets/images/bluemonkey.png', 3),
+        _buildMobileNavItem('assets/images/globemonkey.png', 0),
+        _buildMobileNavItem('assets/images/treasure.png', 1),
+        _buildMobileNavItem('assets/images/bottommonkey.png', 2),
+        _buildMobileNavItem('assets/images/bluemonkey.png', 3),
       ],
     );
   }
 
-  BottomNavigationBarItem _buildNavItem(String iconPath, int index) {
+  /// HELPER TO BUILD BOTTOM NAVIGATION BUTTON
+  BottomNavigationBarItem _buildMobileNavItem(String iconPath, int index) {
     final screenSize = MediaQuery.of(context).size;
     double iconSize = screenSize.width * 0.13;
 
@@ -57,9 +111,8 @@ class _HomePageState extends State<HomePage> {
         width: iconSize,
         height: iconSize,
         decoration: BoxDecoration(
-          border: homeController.pageIndex.value == index
-              ? Border.all(
-                  color: Colors.blue, width: 3) // Border for the selected item
+          border: currentPage == index
+              ? Border.all(color: Colors.blue, width: 3)
               : null,
           borderRadius: BorderRadius.circular(12),
         ),

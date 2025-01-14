@@ -49,9 +49,12 @@ class AuthService {
 
   Future<bool> checkEmailUsed(String email, BuildContext context) async {
     // Validate email format
+    signUpController.isLoading.value = true;
     if (!email.isEmail) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Enter a valid email.")));
+
+      signUpController.isLoading.value = false;
       return false;
     }
 
@@ -64,15 +67,18 @@ class AuthService {
       if (emailSnapshot.docs.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Email already associated with a user.")));
+        signUpController.isLoading.value = false;
         return false;
       }
 
+      signUpController.isLoading.value = false;
       return true;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error checking email: $e"),
         backgroundColor: Colors.red[100],
       ));
+      signUpController.isLoading.value = false;
       return false;
     }
   }

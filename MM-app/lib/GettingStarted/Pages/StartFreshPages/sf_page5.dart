@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_monkey/GettingStarted/Widgets/chat_bubble.dart';
+import 'package:money_monkey/GlobalWidgets/chat_bubble.dart';
 
 class StartFreshPage5 extends StatelessWidget {
   const StartFreshPage5({super.key});
