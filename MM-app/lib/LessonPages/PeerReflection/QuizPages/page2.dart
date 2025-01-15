@@ -52,7 +52,6 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 option: option1,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
-                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     option1 = !option1;
                     option2 = false;
@@ -70,7 +69,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 option: option2,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
-                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                   
                   setState(() {
                     option2 = !option2;
                     option1 = false;
@@ -90,7 +89,6 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
-                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     option3 = !option3;
                     option2 = false;
@@ -108,7 +106,6 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 screenHeightUnit: screenHeightUnit,
                 screenWidthUnit: screenWidthUnit,
                 onClick: () {
-                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     option4 = !option4;
                     option1 = false;
@@ -132,6 +129,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
             correct: correct,
             onTap: () {
               if ((!firstTime && !correct)) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 setState(() {
                   firstTime = true;
                   option1 = false;
@@ -142,6 +140,7 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
                 });
               }
               if (correct) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 peerReflectionQuizcontroller.pageIndex.value += 1;
               } else if (option1 || option2 || option3 || option4) {
                 if (option1) {
@@ -177,7 +176,6 @@ Widget quizOptionWithoutImage(
     required bool option}) {
   return GestureDetector(
       onTap: () {
-         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         onClick();
       },
       child: Container(

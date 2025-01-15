@@ -115,6 +115,7 @@ class _PeerReflectionQuizPage3State extends State<PeerReflectionQuizPage3> {
             correct: correct,
             onTap: () {
               if ((!firstTime && !correct)) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 setState(() {
                   firstTime = true;
                   option1 = false;
@@ -125,6 +126,7 @@ class _PeerReflectionQuizPage3State extends State<PeerReflectionQuizPage3> {
                 });
               }
               if (correct) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 peerReflectionQuizcontroller.pageIndex.value += 1;
               } else if (option1 || option2 || option3 || option4) {
                 if (option1 && option3 && !option2 && !option4) {
@@ -160,6 +162,7 @@ Widget quizOptionWithoutImage(
     required bool option}) {
   return GestureDetector(
       onTap: () {
+
         onClick();
       },
       child: Container(

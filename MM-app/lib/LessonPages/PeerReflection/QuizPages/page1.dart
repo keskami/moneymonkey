@@ -132,6 +132,7 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
             correct: correct,
             onTap: () {
               if((!firstTime && !correct)){
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 setState(() {
                   firstTime = true;
                   option1 = false;
@@ -145,6 +146,7 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
               }
 
               if (correct) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                peerReflectionQuizcontroller.pageIndex.value += 1;
               }
               else if (option1 || option2 || option3 || option4) {
