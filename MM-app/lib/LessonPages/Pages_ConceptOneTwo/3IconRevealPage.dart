@@ -68,7 +68,7 @@ class _IconRevealPageState extends State<IconRevealPage> {
     //For enabling the Next Button
     if (showIcon[3]) {
       Future.delayed(
-        Duration(seconds: 2),
+        Duration(seconds: 8),
         () {
           setState(() {
             isNextEnabled = true;
@@ -204,7 +204,7 @@ class _IconRevealPageState extends State<IconRevealPage> {
       ),
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.01,
-        vertical: screenHeight * 0.05,
+        vertical: screenHeight * 0.04,
       ),
       child: isVisible
           ? Text(
@@ -213,8 +213,9 @@ class _IconRevealPageState extends State<IconRevealPage> {
               overflow: TextOverflow.visible,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 15,
+                fontSize: 16.5,
               ),
+              textAlign: TextAlign.center,
             )
           : null,
     );

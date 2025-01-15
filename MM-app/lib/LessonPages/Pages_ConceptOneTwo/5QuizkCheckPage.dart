@@ -146,7 +146,7 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
         ],
       ).paddingSymmetric(
         horizontal: screenWidth * 0.25,
-        vertical: screenHeight * 0.02,
+        vertical: screenHeight * 0.018,
       ),
     );
   }
@@ -158,13 +158,14 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
       child: ShadowedBoxContainer(
         child: Column(
           children: [
+            Padding(padding: EdgeInsets.only(left: screenWidth * .014), child:
             Text(
               question,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 17,
               ),
-            ),
+            ),),
             ...options.map(
               (option) {
                 return GestureDetector(
@@ -178,12 +179,12 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
                       height: screenHeight * 0.1,
                       padding: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.01,
-                        vertical: screenHeight * 0.015,
+                        vertical: screenHeight * 0.01,
                       ),
                       child: Text(
                         option,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

@@ -42,7 +42,7 @@ class _L1Page7State extends State<L1Page7> {
         currentAnswers.add(ans);
       });
       Future.delayed(
-        Duration(seconds: 2),
+        Duration(seconds: 4),
         () {
           componentOneTwoController.pageIndex.value += 1;
         },

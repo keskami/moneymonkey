@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/home.dart';
 
 class LessonOne extends StatefulWidget {
   const LessonOne({super.key});
@@ -42,12 +43,33 @@ class _LessonOneState extends State<LessonOne> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: screenHeight * .06,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            if (componentOneTwoController.pageIndex == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            } else {
+              componentOneTwoController.pageIndex -= 1;
+            }
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: screenHeight * .0375,
+          ),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: screenHeight * 0.05,
+            height: screenHeight * 0.0,
           ),
           //Progress Bar Row
           Row(

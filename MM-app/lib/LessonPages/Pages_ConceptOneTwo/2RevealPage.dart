@@ -37,7 +37,7 @@ class _RevealPageState extends State<RevealPage> {
     initializeContents(screenWidth, screenHeight);
     if (showContent) {
       Future.delayed(
-        Duration(seconds: 2),
+        Duration(seconds: 12),
         () {
           setState(() {
             enableNext = true;

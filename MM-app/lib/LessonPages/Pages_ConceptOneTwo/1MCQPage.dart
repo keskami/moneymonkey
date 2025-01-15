@@ -30,6 +30,7 @@ class _MCQPageState extends State<MCQPage> {
     "Only when I’m ready to plan for retirement.",
   ];
   ComponentOneTwoController componentOneTwoController = Get.find();
+  
 
   @override
   void initState() {
