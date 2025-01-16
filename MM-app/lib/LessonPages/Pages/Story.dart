@@ -41,7 +41,7 @@ class _StoryPageState extends State<StoryPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: screenHeight * .06,
+        toolbarHeight: screenHeight * .01,
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
@@ -57,7 +57,7 @@ class _StoryPageState extends State<StoryPage> {
           },
           icon: Icon(
             Icons.arrow_back,
-            size: screenHeight * .04,
+            size: screenHeight * .01,
           ),
         ),
       ),

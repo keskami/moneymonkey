@@ -25,27 +25,7 @@ class _ScenarioState extends State<Scenario> {
 
   Widget webDisplay() {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: screenHeight * .06,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            if (scenarioController.pageIndex == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-            } else {
-              scenarioController.pageIndex -= 1;
-            }
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            size: screenHeight * .04,
-          ),
-        ),
-      ),
+      
       backgroundColor: Colors.white,
       body: Column(
         mainAxisSize: MainAxisSize.min,
