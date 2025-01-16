@@ -89,7 +89,9 @@ class _IconRevealPageState extends State<IconRevealPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: screenWidth * 0.02),
-        Text(
+        Padding(
+            padding: EdgeInsets.only(left: screenWidth * 0.043),
+          child: Text(
           "Definition: Financial Responsibility Over a Lifetime",
           softWrap: true,
           style: TextStyle(
@@ -100,6 +102,9 @@ class _IconRevealPageState extends State<IconRevealPage> {
           vertical: screenHeight * 0.025,
           horizontal: screenWidth * 0.015,
         ),
+
+        ),
+        
         //Icon Row
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
