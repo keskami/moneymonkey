@@ -559,7 +559,7 @@ const HeroSection = () => {
       <div className={`hero ${isVisible ? 'animated' : ''}`}>
         <div className="content">
           <h1 className="title">
-            <div className="title-line">The best place to</div>
+            <div className="title-line">The best way to</div>
             <div className="title-line">
               <span className="highlight">
                 <span style={{ color: primaryBlue }}>learn</span>
