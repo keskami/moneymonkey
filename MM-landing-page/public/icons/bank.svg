@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" id="bank">
+  <defs>
+    <linearGradient id="a" x1="19.29" x2="44.71" y1="34.71" y2="9.29" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#54a5ff"></stop>
+      <stop offset="1" stop-color="#8ad3fe"></stop>
+    </linearGradient>
+    <linearGradient xlink:href="#a" id="b" x1="32" x2="32" y1="30" y2="21"></linearGradient>
+    <linearGradient xlink:href="#a" id="c" x1="32" x2="32" y1="61" y2="51"></linearGradient>
+  </defs>
+  <path fill="#d7e9f7" d="M20 31V29a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2a3 3 0 0 0 2 2.82V47.18A3 3 0 0 0 8 50v2a1 1 0 0 0 1 1H19a1 1 0 0 0 1-1V50a3 3 0 0 0-2-2.82V33.82A3 3 0 0 0 20 31zM38 31V29a1 1 0 0 0-1-1H27a1 1 0 0 0-1 1v2a3 3 0 0 0 2 2.82V47.18A3 3 0 0 0 26 50v2a1 1 0 0 0 1 1H37a1 1 0 0 0 1-1V50a3 3 0 0 0-2-2.82V33.82A3 3 0 0 0 38 31zM56 31V29a1 1 0 0 0-1-1H45a1 1 0 0 0-1 1v2a3 3 0 0 0 2 2.82V47.18A3 3 0 0 0 44 50v2a1 1 0 0 0 1 1H55a1 1 0 0 0 1-1V50a3 3 0 0 0-2-2.82V33.82A3 3 0 0 0 56 31z"></path>
+  <path fill="url(#a)" d="M56.63,21.23,36.18,4.49a6.61,6.61,0,0,0-8.36,0L7.37,21.23a1,1,0,0,0-.31,1.11A1,1,0,0,0,8,23H56a1,1,0,0,0,.94-.66A1,1,0,0,0,56.63,21.23Z"></path>
+  <rect width="56" height="9" x="4" y="21" fill="url(#b)" rx="3" ry="3"></rect>
+  <path fill="#f0f7fc" d="M32.38,12h-1a.5.5,0,1,1,0-1H34a1,1,0,0,0,0-2H33V8a1,1,0,0,0-2,0V9a2.49,2.49,0,0,0,.38,5h1a.5.5,0,0,1,0,1H30a1,1,0,0,0,0,2h1v1a1,1,0,0,0,2,0V16.91A2.49,2.49,0,0,0,32.38,12Z"></path>
+  <path fill="url(#c)" d="M56,51H8a5,5,0,0,0-5,5v4a1,1,0,0,0,1,1H60a1,1,0,0,0,1-1V56A5,5,0,0,0,56,51Z"></path>
+</svg>
