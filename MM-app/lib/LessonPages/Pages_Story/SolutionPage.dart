@@ -34,13 +34,13 @@ class _SolutionPageState extends State<SolutionPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: screenHeight * 0.56,
+              height: screenHeight * 0.4,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: screenHeight * 0.6,
+                    height: screenHeight * 0.4,
                     width: screenWidth * 0.004,
                     decoration: BoxDecoration(
                       color: Colors.lightGreenAccent,
@@ -122,7 +122,6 @@ class _SolutionPageState extends State<SolutionPage> {
                             ),
                           ],
                         ),
-                        const Spacer(),
                       ],
                     ),
                   ),

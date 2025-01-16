@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monkey/LessonPages/Pages/Story.dart';
-import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import 'GettingStarted/Pages/sf_home.dart';
@@ -46,10 +44,10 @@ class MyApp extends StatelessWidget {
                   if (userId.isEmpty) {
                     return StartFreshHome();
                   } else {
-                    return LoginScreen();
+                    return HomePage();
                   }
                 } else {
-                  return LoginScreen();
+                  return HomePage();
                 }
               },
             ),
