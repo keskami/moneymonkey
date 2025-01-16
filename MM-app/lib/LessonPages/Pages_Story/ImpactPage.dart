@@ -100,7 +100,8 @@ class _ImpactPageState extends State<ImpactPage> {
                               width: screenWidth * 0.15,
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
-                                onTap: () {
+                                onTap: () async{
+                                  await Future.delayed(Duration(seconds: 6));
                                   setState(() {
                                     isEnabled = true;
                                   });

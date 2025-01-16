@@ -68,7 +68,8 @@ class _ProblemPageState extends State<ProblemPage> {
                         Container(
                           height: screenHeight * 0.2,
                           child: TapToRevealContainer(
-                            onTap: () {
+                            onTap: () async {
+                              await Future.delayed(Duration(seconds: 6));
                               setState(() {
                                 isEnabled = true;
                               });

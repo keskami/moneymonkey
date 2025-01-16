@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
+import 'package:money_monkey/home.dart';
 
 class Scenario extends StatefulWidget {
   const Scenario({super.key});
+
 
   @override
   State<Scenario> createState() => _ScenarioState();
@@ -23,6 +25,27 @@ class _ScenarioState extends State<Scenario> {
 
   Widget webDisplay() {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: screenHeight * .06,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            if (scenarioController.pageIndex == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            } else {
+              scenarioController.pageIndex -= 1;
+            }
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: screenHeight * .04,
+          ),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         mainAxisSize: MainAxisSize.min,
