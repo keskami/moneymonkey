@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/GlobalWidgets/chat_bubble.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
@@ -19,6 +19,7 @@ class QuestionPage extends StatefulWidget {
   final String correctAns;
   final List<List<String>> options;
   final String correctMessage;
+
   @override
   State<QuestionPage> createState() => _QuestionPageState();
 }
@@ -27,39 +28,35 @@ class _QuestionPageState extends State<QuestionPage> {
   final ScenarioController scenarioController = Get.find();
   String selectedAns = "";
   bool showMessage = false;
-  bool shouldIncrease = true;
+  bool hasAnsweredCorrectly = false;
+  double score = 0.0;
+  double questionValue = 0.0;
+
   @override
   void initState() {
     super.initState();
+    score = scenarioController.responsibilityScore.value;
+    questionValue = (1 / scenarioController.questions.length) * 100;
   }
 
   void answerQuestion(String ans) {
-    if (ans == widget.correctAns && shouldIncrease) {
-      showMessage = true;
-      checkAns();
-    } else {
-      showMessage = false;
-    }
-
     setState(() {
+      if (ans == widget.correctAns) {
+        showMessage = true;
+        score = scenarioController.responsibilityScore.value + questionValue;
+      } else {
+        showMessage = false;
+        score = scenarioController.responsibilityScore.value;
+      }
       selectedAns = ans;
     });
-  }
-
-  void checkAns() {
-    if (shouldIncrease) {
-      scenarioController.responsibilityScore.value += 33.33;
-      if (scenarioController.responsibilityScore.value == 99.99) {
-        scenarioController.responsibilityScore.value = 100;
-      }
-      shouldIncrease = false; // Prevent multiple increments
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -76,8 +73,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 ),
                 children: [
                   TextSpan(
-                    text:
-                        scenarioController.responsibilityScore.value.toString(),
+                    text: "${score.toStringAsFixed(2)}",
                     style: GoogleFonts.baloo2().copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -101,25 +97,31 @@ class _QuestionPageState extends State<QuestionPage> {
               height: screenHeight * 0.2,
               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
             ),
-            ChatBubbleContainer(
-              trianglePosition: TrianglePosition.left,
-              childWidget: Text(
-                widget.question,
-                style: TextStyle(
-                  fontSize: 17,
+            ChatBubble(
+              clipper: ChatBubbleClipper1(type: BubbleType.receiverBubble),
+              backGroundColor: Colors.grey.shade200,
+              margin: EdgeInsets.only(top: 20),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.7,
                 ),
-              ).marginSymmetric(
-                horizontal: screenWidth * 0.01,
-                vertical: screenHeight * 0.02,
+                child: Text(
+                  widget.question,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 17,
+                  ),
+                ).marginSymmetric(
+                  horizontal: screenWidth * 0.01,
+                  vertical: screenHeight * 0.01,
+                ),
               ),
             ),
           ],
         ),
         ...widget.options.map(
           (option) => GestureDetector(
-            onTap: () {
-              answerQuestion(option[0]);
-            },
+            onTap: () => answerQuestion(option[0]),
             child: OptionsTile(
               isSelected: selectedAns == option[0],
               childWidget: Container(
@@ -150,15 +152,18 @@ class _QuestionPageState extends State<QuestionPage> {
             ),
           ),
         ),
-        //NExt Button
         Row(
           children: [
             Spacer(),
             CustomNextButton(
               nextPage: () {
-                selectedAns = "";
-                showMessage = false;
-                shouldIncrease = true;
+                // Update the controller's score before moving to next question
+                scenarioController.responsibilityScore.value = score;
+                setState(() {
+                  selectedAns = "";
+                  showMessage = false;
+                  hasAnsweredCorrectly = false;
+                });
                 scenarioController.pageIndex.value += 1;
               },
               isEnabled: selectedAns.isNotEmpty,
@@ -178,7 +183,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   vertical: 5,
                 ),
                 decoration: BoxDecoration(
-                  color: LightTheme().primaryBlue,
+                  color: LightTheme().primaryBlue.withAlpha(70),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
