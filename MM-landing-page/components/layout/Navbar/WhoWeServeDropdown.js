@@ -3,44 +3,26 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './EcosystemDropdown.module.css';
 
-const EcosystemDropdown = ({ isOpen }) => {
+const WhoWeServeDropdown = ({ isOpen }) => {
   const menuItems = [
     {
-      icon: '/icons/book.svg',
-      title: 'Courses',
-      description: 'Standards-aligned curriculum and learning content. Application-based learning.',
-      link: '/Ecosystem/courses'
+      icon: '/icons/high-school.svg',
+      title: 'K-12 Schools',
+      description: 'Interactive financial literacy tools aligned with K-12 education.',
+      link: '/WhoWeServe/k-12-schools'
     },
     {
-      icon: '/icons/teacher.svg',
-      title: 'Teacher/Parent Tools',
-      description: 'Leverage AI and dashboards to personalize the assessment process and develop curriculum.',
-      link: '/Ecosystem/assessment-tools'
+      icon: '/icons/college.svg',
+      title: 'Colleges and Universities',
+      description: 'Personalized platforms to build real-world financial skills on campus.',
+      link: '/WhoWeServe/college'
     },
     {
-      icon: '/icons/parent.svg',
-      title: 'Teaching Supplements',
-      description: 'Enhance your course with lesson plans, presentations, certificates, and other resources.',
-      link: '/Ecosystem/teaching-supplements'
+      icon: '/icons/bank.svg',
+      title: 'Banks',
+      description: 'Helping financial institutions enhance community outreach and engagement.',
+      link: '/WhoWeServe/bank'
     },
-    {
-      icon: '/icons/stocks.svg',
-      title: 'Stock Market Simulator',
-      description: 'Make fake trades on 500+ global exchanges. Teaching core principles for long term wealth.',
-      link: '/Ecosystem/stock-simulator'
-    },
-    {
-      icon: '/icons/budget.svg',
-      title: 'Personal Budget Simulator',
-      description: 'Create budgets, make informed financial choices, and build essential consumer skills.',
-      link: '/Ecosystem/budget-simulator'
-    },
-    {
-      icon: '/icons/savings.svg',
-      title: 'Credit/Debt Simulator',
-      description: 'Build credit, manage loans, and explore the impact of interest rates in a risk-free environment.',
-      link: '/Ecosystem/credit-simulator'
-    }
   ];
 
   return (
@@ -82,4 +64,4 @@ const EcosystemDropdown = ({ isOpen }) => {
   );
 };
 
-export default EcosystemDropdown;
+export default WhoWeServeDropdown;

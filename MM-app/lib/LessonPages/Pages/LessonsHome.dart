@@ -66,7 +66,7 @@ class _LessonsHomeState extends State<LessonsHome> {
         for (int i = 0; i < lessonTypes.length; i++)
           CustomPolygonRow(
             index: lessonTypes[i],
-            isActivated: false,
+            isActivated: true,
             width: polygonWidth,
             imageLinks: imageLinks,
             pagesLink: pagesLink,
@@ -354,7 +354,14 @@ class CustomPolygonRow extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => pagesLink[index],
+                        ),
+                      );
+                    },
                     child: Text(
                       "Start",
                       style: TextStyle(
@@ -489,7 +496,14 @@ class CustomPolygonRow extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => pagesLink[index],
+                        ),
+                      );
+                    },
                     child: Text(
                       "Start",
                       style: TextStyle(
@@ -602,7 +616,14 @@ class CustomPolygonRow extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => pagesLink[index],
+                        ),
+                      );
+                    },
                     child: Text(
                       "Start",
                       style: TextStyle(
