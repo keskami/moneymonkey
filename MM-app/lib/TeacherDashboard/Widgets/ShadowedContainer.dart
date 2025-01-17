@@ -6,12 +6,18 @@ class ShadowedContainer extends Container {
     super.child,
     super.width,
     super.height,
+    super.decoration,
+    super.margin,
+    super.padding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: padding,
+      margin: margin,
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
         color: Colors.white,
         boxShadow: [
           BoxShadow(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/SubPageSelectorRow.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -24,6 +25,13 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   ];
   final TeacherDashboardController teacherDashboardController =
       Get.put(TeacherDashboardController());
+
+  void onClassPicked(String? className) {
+    if (className != null)
+      setState(() {
+        selectedClass = className;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,50 +62,14 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 fontWeight: FontWeight.bold,
               ),
             ).marginOnly(
-              left: screenWidth * 0.02,
+              left: screenWidth * 0.01,
             ),
             const Spacer(),
-            DropdownMenu(
+            CustomDropDownContainer(
               width: screenWidth * 0.4,
-              inputDecorationTheme: InputDecorationTheme(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors
-                        .grey.shade500, // Set your desired border color here
-                    width: 2.0, // Set border width here
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors
-                        .grey.shade500, // Set your desired border color here
-                    width: 2.0,
-                  ),
-                ),
-              ),
-              menuStyle: MenuStyle(
-                padding: WidgetStatePropertyAll(
-                  EdgeInsets.symmetric(
-                    vertical: 2,
-                  ),
-                ),
-                visualDensity:
-                    VisualDensity.compact, // Reduce space between items
-              ),
+              items: classes,
+              onChanged: onClassPicked,
               initialSelection: selectedClass,
-              onSelected: (value) {
-                setState(() {
-                  selectedClass = value.toString();
-                });
-              },
-              dropdownMenuEntries: [
-                ...classes.map(
-                  (className) => DropdownMenuEntry(
-                    value: className,
-                    label: className,
-                  ),
-                ),
-              ],
             ),
           ],
         ).marginSymmetric(
@@ -108,7 +80,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           horizontal: screenWidth * 0.05,
         ),
         Container(
-          height: screenHeight * 0.7,
+          height: screenHeight * 0.65,
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.05,

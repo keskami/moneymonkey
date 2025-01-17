@@ -19,7 +19,6 @@ class DashboardSubPageSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
 
     return Obx(
       () => Container(
@@ -30,31 +29,47 @@ class DashboardSubPageSelector extends StatelessWidget {
               .map(
                 (subPage) => Expanded(
                   child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       _teacherDashboardController.pageIndex.value =
                           subPages.indexOf(subPage);
                     },
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: _teacherDashboardController.pageIndex.value ==
-                              subPages.indexOf(subPage)
-                          ? BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: LightTheme().primaryBlue,
-                            )
-                          : null,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8,
-                      ),
-                      child: Text(
-                        subPage,
-                        style: TextStyle(
-                          color: _teacherDashboardController.pageIndex.value ==
-                                  subPages.indexOf(subPage)
-                              ? Colors.white
-                              : Colors.grey.shade500,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      child: Container(
+                        key: ValueKey<int>(
+                            _teacherDashboardController.pageIndex.value ==
+                                    subPages.indexOf(subPage)
+                                ? 1
+                                : 0),
+                        alignment: Alignment.center,
+                        decoration:
+                            _teacherDashboardController.pageIndex.value ==
+                                    subPages.indexOf(subPage)
+                                ? BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: LightTheme().primaryBlue,
+                                  )
+                                : null,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          subPage,
+                          style: TextStyle(
+                            color:
+                                _teacherDashboardController.pageIndex.value ==
+                                        subPages.indexOf(subPage)
+                                    ? Colors.white
+                                    : Colors.grey.shade500,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
                         ),
                       ),
                     ),
