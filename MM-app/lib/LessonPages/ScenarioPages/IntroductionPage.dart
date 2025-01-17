@@ -11,8 +11,6 @@ class IntroductionPage extends StatefulWidget {
 
   @override
   _IntroductionPageState createState() => _IntroductionPageState();
-  
-  
 }
 
 class _IntroductionPageState extends State<IntroductionPage> {
@@ -34,6 +32,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       wait6 = true;
     });
   }
+
   Future<void> makeTrue(String name) async {
     print(name);
     if (name == "College") {
@@ -50,8 +49,6 @@ class _IntroductionPageState extends State<IntroductionPage> {
       });
     }
   }
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,31 +97,47 @@ class _IntroductionPageState extends State<IntroductionPage> {
             SizedBox(
               width: screenWidth * .025,
             ),
-            Container(
-              width: screenWidth * 0.13,
-              height: screenHeight * 0.17,
-              child: TapToRevealContainer(
-                contents: NewContentContainer(
-                  image: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fsneakers%201.png?alt=media&token=625bdbab-4e8d-42cd-82b4-8f79a1bedf3f",
-                  texts: ['Sneakers'],
-                  screenWidth: screenWidth,
-                  onFlip: () => makeTrue("Sneakers"),
-                ),
-                instructions: InstructionContainer(
-                  text: "Click for choice 1...",
-                  screenWidth: screenWidth,
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  s = true;
+                });
+              },
+              child: Container(
+                width: screenWidth * 0.13,
+                height: screenHeight * 0.17,
+                child: TapToRevealContainer(
+                  contents: NewContentContainer(
+                    image:
+                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fsneakers%201.png?alt=media&token=625bdbab-4e8d-42cd-82b4-8f79a1bedf3f",
+                    texts: ['Sneakers'],
+                    screenWidth: screenWidth,
+                    onFlip: () => makeTrue("Sneakers"),
+                  ),
+                  instructions: InstructionContainer(
+                    text: "Click for choice 1...",
+                    screenWidth: screenWidth,
+                  ),
                 ),
               ),
             ),
             SizedBox(
               width: screenWidth * .025,
             ),
+             GestureDetector(
+              onTap: () {
+                setState(() {
+                  c = true;
+                });
+              },
+              child:
             Container(
               width: screenWidth * 0.13,
               height: screenHeight * 0.17,
               child: TapToRevealContainer(
                 contents: NewContentContainer(
-                  image: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fcollege%201.png?alt=media&token=cd5510da-9563-41a8-a2eb-bd13594312a3",
+                  image:
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fcollege%201.png?alt=media&token=cd5510da-9563-41a8-a2eb-bd13594312a3",
                   texts: ['College'],
                   screenWidth: screenWidth,
                   onFlip: () => makeTrue("College"),
@@ -134,16 +147,25 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   screenWidth: screenWidth,
                 ),
               ),
-            ),
+            ),),
             SizedBox(
               width: screenWidth * .025,
             ),
+            GestureDetector(
+              onTap: () {
+                print("CLikced");
+                setState(() {
+                  a = true;
+                });
+              },
+            child:
             Container(
               width: screenWidth * 0.13,
               height: screenHeight * 0.17,
               child: TapToRevealContainer(
                 contents: NewContentContainer(
-                  image: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
+                  image:
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
                   texts: ['Activities'],
                   screenWidth: screenWidth,
                   onFlip: () => makeTrue("Activities"),
@@ -153,14 +175,14 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   screenWidth: screenWidth,
                 ),
               ),
-            ),
+            ),),
           ]),
         ),
         SizedBox(
           height: screenHeight * 0.1,
         ),
         GestureDetector(
-            onTap: (wait6)
+            onTap: (wait6 )
                 ? () {
                     scenarioController.pageIndex.value += 1;
                   }
@@ -191,21 +213,18 @@ class _IntroductionPageState extends State<IntroductionPage> {
 }
 
 class NewContentContainer extends StatelessWidget {
-   NewContentContainer({
-    super.key,
-    required this.texts,
-    required this.screenWidth,
-    required this.image,
-    required this.onFlip
-  });
+  NewContentContainer(
+      {super.key,
+      required this.texts,
+      required this.screenWidth,
+      required this.image,
+      required this.onFlip});
 
   final List<String> texts;
   final String image;
   final double screenWidth;
   final Function onFlip;
 
-
-  
   @override
   Widget build(BuildContext context) {
     onFlip;
@@ -230,22 +249,22 @@ class NewContentContainer extends StatelessWidget {
             ),
             Image.network(
               '$image',
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                    height: screenWidth * 0.05,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
                   ),
+                );
+              },
+              height: screenWidth * 0.05,
+            ),
           ],
         ).marginSymmetric(horizontal: screenWidth * 0.012),
       ),
