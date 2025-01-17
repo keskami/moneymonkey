@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
-import 'package:money_monkey/home.dart';
 
 class Scenario extends StatefulWidget {
   const Scenario({super.key});
@@ -41,6 +40,7 @@ class _ScenarioState extends State<Scenario> {
     super.initState();
     _preCacheImages();
   }
+  
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
