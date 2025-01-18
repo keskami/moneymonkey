@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
 import 'package:money_monkey/LessonPages/Pages/addLesson.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -42,12 +43,12 @@ class MyApp extends StatelessWidget {
                   User? user = FirebaseAuth.instance.currentUser;
                   String userId = user?.uid ?? '';
                   if (userId.isEmpty) {
-                    return AddLessonTest();
+                    return PeerReflectionQuiz();
                   } else {
-                    return AddLessonTest();
+                    return PeerReflectionQuiz();
                   }
                 } else {
-                  return AddLessonTest();
+                  return PeerReflectionQuiz();
                 }
               },
             ),

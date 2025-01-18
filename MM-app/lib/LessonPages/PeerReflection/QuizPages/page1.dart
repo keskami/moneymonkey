@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
+import 'package:money_monkey/LessonPages/Pages/addLesson.dart';
 
 class PeerReflectionQuizPage1 extends StatefulWidget {
   @override
@@ -19,6 +21,18 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
   bool option4 = false;
   bool firstTime = true;
   bool correct = false;
+  
+
+  
+      
+
+
+  @override
+  void initState() {
+    super.initState();
+       
+    
+  }
 
   @override
   Widget build(BuildContext context) {

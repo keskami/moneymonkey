@@ -16,6 +16,82 @@ class AuthService {
   final StartFreshController startFreshController = Get.find();
   final GettingStartedController gettingStartedController = Get.find();
   String user = "";
+   Map<String, dynamic> pageData = {};
+
+  //Added her for now
+
+  Future<Map<String, dynamic>> getPageInfoFromFirestore(
+      {required String levelName,
+      required int UnitNumber,
+      required int LessonNumber,
+      required String TypeOfLesson,
+      required int PageNumber}) async {
+    try {
+     
+      final firestore = FirebaseFirestore.instance;
+      DocumentReference levelDoc =
+          firestore.collection('Levels').doc(levelName);
+
+      CollectionReference unitDataCollection =
+          levelDoc.collection('Unit_$UnitNumber');
+
+      QuerySnapshot unitQuerySnapshot = await unitDataCollection.get();
+
+      if (unitQuerySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot unitDoc = unitQuerySnapshot.docs.first;
+
+        CollectionReference lessonDataCollection =
+            unitDoc.reference.collection('Lesson_$LessonNumber');
+
+        QuerySnapshot lessonQuerySnapshot = await lessonDataCollection.get();
+
+        if (lessonQuerySnapshot.docs.isNotEmpty) {
+          DocumentSnapshot lessonDoc = lessonQuerySnapshot.docs.first;
+
+          CollectionReference lessonTypeDataCollection =
+              lessonDoc.reference.collection(TypeOfLesson);
+
+          QuerySnapshot lessonTypeQuerySnapshot =
+              await lessonTypeDataCollection.get();
+
+          if (lessonTypeQuerySnapshot.docs.isNotEmpty) {
+            DocumentSnapshot lessonTypeDoc = lessonTypeQuerySnapshot.docs.first;
+
+            if (lessonTypeDoc.exists) {
+              Map<String, dynamic> lessonTypeData =
+                  lessonTypeDoc.data() as Map<String, dynamic>;
+              if (lessonTypeData.containsKey("Page$PageNumber")) {
+                pageData =
+                    lessonTypeData["Page$PageNumber"] as Map<String, dynamic>;
+                return pageData;
+
+                print(pageData);
+              } else {
+                print('No page found.');
+                 return pageData;
+              }
+            } else {
+              print('No lesson type document found.');
+               return pageData;
+            }
+          } else {
+            print('No lesson type found.');
+             return pageData;
+          }
+        } else {
+          print('No page found.');
+          return pageData;
+        }
+      } else {
+        print('No lesson found.');
+        return pageData;
+      }
+    } catch (e) {
+      print('Failed to get page info: $e');
+      return pageData;
+    }
+  }
+
   //Google Sign In
   Future<void> googleAuth(BuildContext context) async {
     try {
