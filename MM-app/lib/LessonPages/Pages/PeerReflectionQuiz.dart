@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/home.dart';
@@ -16,7 +15,6 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
   PeerReflectionQuizcontroller peerReflectionQuizcontroller =
       Get.put(PeerReflectionQuizcontroller());
   final String lessonId = "PeerReflectionQuiz";
-  //final AuthService authService = AuthService();
 
   @override
   void initState() {

@@ -21,18 +21,28 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
   bool option4 = false;
   bool firstTime = true;
   bool correct = false;
-  
-
-  
-      
+  String test = '';
+  bool hasDataAdded = false;
 
 
   @override
   void initState() {
     super.initState();
-       
+
+    peerReflectionQuizcontroller.pageData.listen((data) {
+      if (data.isNotEmpty && !hasDataAdded && data.containsKey(1)) {
+        print(data[1]);
     
+        hasDataAdded = true;
+        setState(() {
+          test = data[1]["title"];
+        });
+
+      }
+    });
   }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +59,7 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(test,),
           Text(
             "What is a key reason to start saving early in life?",
             style: GoogleFonts.baloo2(
