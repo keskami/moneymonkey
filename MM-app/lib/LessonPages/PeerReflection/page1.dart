@@ -19,60 +19,57 @@ class _Page1State extends State<Page1> {
   int? balance;
   int totalBanans = 0;
   bool delay = false;
+  bool loading = true;
 
   PeerReflectioncontroller peerReflectionController = Get.find();
+
+  String title = '';
+  String subTitle = '';
+  String ava1 = '';
+  String ava2 = '';
+  String maria1 = '';
+  String maria2 = '';
+  String jason1 = '';
+  String jason2 = '';
+  String button = '';
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data['title'];
+      subTitle = data['subTitle'];
+      ava1 = data['ava'];
+      ava2 = data['ava2'];
+      maria1 = data['maria'];
+      maria2 = data['maria2'];
+      jason1 = data['jason'];
+      jason2 = data['jason2'];
+       button = data['button'];
+
+      loading = false;
+    });
+    _6secdelay();
+  }
 
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
-    _6secdelay();
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        if (peerReflectionController.pageData.isNotEmpty) {
+          setData(peerReflectionController.pageData[1]);
+        }
+      }
+    });
+    if (title == '') {
+      setData(peerReflectionController.pageData[1]);
+    }
   }
+
   Future<void> _6secdelay() async {
     await Future.delayed(Duration(seconds: 6));
     setState(() {
       delay = true;
     });
-  }
-
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
   }
 
   @override
@@ -83,88 +80,92 @@ class _Page1State extends State<Page1> {
     double screenWidthUnit = screenWidth / 390;
     double screenHeightUnit = screenHeight / 880;
 
-    return Column(children: [
-      SizedBox(height: screenHeightUnit * 92),
-      Text(
-        "Taking Responsibility for Personal Financial Decisions",
-        style: GoogleFonts.baloo2(
-            fontSize: screenWidthUnit * 7,
-            color: Colors.black,
-            fontWeight: FontWeight.w700),
-      ),
-      SizedBox(height: screenHeightUnit * 42),
-      Text(
-        "Taking responsibility for your finances helps you plan for\nevery stage of life, whether you're managing just for\n yourself or for others who depend on you.",
-        style: GoogleFonts.baloo2(
-            fontSize: screenWidthUnit * 4.5,
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-            height: ((5 / 3) * screenWidthUnit) / 3.5),
-        textAlign: TextAlign.center,
-      ),
-      SizedBox(height: screenHeightUnit * 42),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          newMonkey(
-              screenWidthUnit: screenWidthUnit,
-              screenHeightUnit: screenHeightUnit,
-              monkeyImage: 'assets/images/newMonkeys/Maria.png',
-              name: "Maria",
-              description: "The Planner"),
-          SizedBox(
-            width: screenWidthUnit * 10,
-          ),
-          newMonkey(
-              screenWidthUnit: screenWidthUnit,
-              screenHeightUnit: screenHeightUnit,
-              monkeyImage: 'assets/images/newMonkeys/Jason.png',
-              name: "Jason",
-              description: "Family Provider"),
-          SizedBox(
-            width: screenWidthUnit * 10,
-          ),
-          newMonkey(
-              screenWidthUnit: screenWidthUnit,
-              screenHeightUnit: screenHeightUnit,
-              monkeyImage: 'assets/images/newMonkeys/Ava.png',
-              name: "Ava",
-              description: "The Single Saver"),
-        ],
-      ),
-      SizedBox(height: screenHeightUnit * 82),
-      GestureDetector(
-          onTap: !delay ? (){
-
-          } : () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            peerReflectionController.pageIndex.value += 1;
-          },
-          child: Container(
-            height: screenHeightUnit * 58,
-            width: screenWidthUnit * 61,
-            decoration: BoxDecoration(
-              color: !delay? Color.fromRGBO(224, 227, 231, 1) :Color.fromRGBO(137, 220, 142, 1),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 5,
-                  offset: const Offset(0, 4),
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Column(children: [
+            SizedBox(height: screenHeightUnit * 92),
+            Text(
+              title,
+              style: GoogleFonts.baloo2(
+                  fontSize: screenWidthUnit * 7,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: screenHeightUnit * 42),
+            Text(
+              subTitle,
+              style: GoogleFonts.baloo2(
+                  fontSize: screenWidthUnit * 4.5,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  height: ((5 / 3) * screenWidthUnit) / 3.5),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: screenHeightUnit * 42),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                newMonkey(
+                    screenWidthUnit: screenWidthUnit,
+                    screenHeightUnit: screenHeightUnit,
+                    monkeyImage: 'assets/images/newMonkeys/Maria.png',
+                    name: maria1,
+                    description: maria2),
+                SizedBox(
+                  width: screenWidthUnit * 10,
                 ),
+                newMonkey(
+                    screenWidthUnit: screenWidthUnit,
+                    screenHeightUnit: screenHeightUnit,
+                    monkeyImage: 'assets/images/newMonkeys/Jason.png',
+                    name: jason1,
+                    description: jason2),
+                SizedBox(
+                  width: screenWidthUnit * 10,
+                ),
+                newMonkey(
+                    screenWidthUnit: screenWidthUnit,
+                    screenHeightUnit: screenHeightUnit,
+                    monkeyImage: 'assets/images/newMonkeys/Ava.png',
+                    name: ava1,
+                    description: ava2),
               ],
             ),
-            child: Center(
-              child: Text(
-                "Continue to Peer Stories",
-                style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 4.2,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-          ))
-    ]);
+            SizedBox(height: screenHeightUnit * 82),
+            GestureDetector(
+                onTap: !delay
+                    ? () {}
+                    : () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        peerReflectionController.pageIndex.value += 1;
+                      },
+                child: Container(
+                  height: screenHeightUnit * 58,
+                  width: screenWidthUnit * 61,
+                  decoration: BoxDecoration(
+                    color: !delay
+                        ? Color.fromRGBO(224, 227, 231, 1)
+                        : Color.fromRGBO(137, 220, 142, 1),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 5,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      button,
+                      style: GoogleFonts.baloo2(
+                          fontSize: screenWidthUnit * 4.2,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ))
+          ]);
   }
 }
 
@@ -194,66 +195,3 @@ Widget newMonkey({
   ]);
 }
 
-Widget topOfLesson({
-  required double screenWidthUnit,
-  required double screenHeightUnit,
-  required double pageNumber,
-  required double totalPages,
-  required BuildContext context,
-  required int bananas,
-}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      IconButton(
-          onPressed:  () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-          icon: Icon(Icons.close, color: Colors.black)),
-      TweenAnimationBuilder<double>(
-        tween: Tween<double>(
-            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
-        duration: Duration(seconds: 2),
-        builder: (context, value, child) {
-          return Container(
-            height: screenHeightUnit * 25,
-            width: screenWidthUnit * 202,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(135, 206, 235, 1),
-                  Color.fromRGBO(213, 213, 213, 1),
-                ],
-                stops: [value, value],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 5,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-      SizedBox(
-        width: screenWidthUnit * 4,
-      ),
-      Image.asset("assets/images/img_monkeymoney_52.png",
-          height: screenHeightUnit * 36),
-      SizedBox(
-        width: screenWidthUnit * 1,
-      ),
-      Text("$bananas",
-          style: GoogleFonts.roboto(
-              fontSize: screenWidthUnit * 5.5, color: Colors.black)),
-    ],
-  );
-}

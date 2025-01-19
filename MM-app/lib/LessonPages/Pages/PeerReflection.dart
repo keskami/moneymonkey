@@ -16,9 +16,17 @@ class _PeerReflectionState extends State<PeerReflection> {
       Get.put(PeerReflectioncontroller());
   final String lessonId = "PeerReflection";
 
+  Future<void> _preloadImages() async {
+  precacheImage(AssetImage('assets/images/newMonkeys/Maria.png'), context);
+  precacheImage(AssetImage('assets/images/newMonkeys/Jason.png'), context);
+  precacheImage(AssetImage('assets/images/newMonkeys/Ava.png'), context);
+  precacheImage(AssetImage('assets/images/img_monkeymoney_52.png'), context);
+}
+
   @override
   void initState() {
     super.initState();
+    _preloadImages();
   }
 
   @override
@@ -74,7 +82,7 @@ class _PeerReflectionState extends State<PeerReflection> {
                   pageName: 'PeerReflection',
                   width: screenWidth * 0.44,
                   key: ValueKey(peerReflectioncontroller
-                      .pageIndex.value), // Add key to force rebuild
+                      .pageIndex.value), 
                 ),
               ),
               const SizedBox(

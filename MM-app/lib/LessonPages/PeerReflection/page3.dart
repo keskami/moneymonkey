@@ -22,34 +22,40 @@ class _Page3State extends State<Page3> {
   int totalBanans = 0;
   PeerReflectioncontroller peerReflectionController = Get.find();
 
-  List<String> availableItems = [
-    'Planning for grad school',
-    'Starting retirement fund',
-    'Budgeting for family needs',
-    'Emergency fund',
-    'Kids’ education savings',
-    'Travel savings',
-    'Personal investments',
-    'Flexible budgeting'
-  ];
-  List<String> correct1 = [
-    'Flexible budgeting',
-    'Travel savings',
-    'Starting retirement fund',
-    'Emergency fund',
-  ];
-  List<String> correct2 = [
-    'Budgeting for family needs',
-    'Kids’ education savings',
-  ];
-  List<String> correct3 = [
-    'Planning for grad school',
-    'Personal investments',
-  ];
 
+  List<String> availableItems = [];
+
+  List<String> correct1 = [];
+  List<String> correct2 = [];
+  List<String> correct3 = [];
   List<String> droppedItems1 = [];
   List<String> droppedItems2 = [];
   List<String> droppedItems3 = [];
+  bool loading = false;
+  String question = '';
+  String box1 = '';
+  String box2 = '';
+  String box3 = '';
+  String subTitle = '';
+
+  Future<void> setData(data) async {
+    setState(() {
+      question = data["question"];
+      box1 = data["box1"];
+      box2 = data["box2"];
+      box3 = data["box3"];
+      availableItems =  List<String>.from(data["options"].map((item) => item.toString()));
+      correct1 =
+          List<String>.from(data["correct1"].map((item) => item.toString()));
+      correct2 =
+          List<String>.from(data["correct2"].map((item) => item.toString()));
+      correct3 =
+          List<String>.from(data["correct3"].map((item) => item.toString()));
+      subTitle = data["subTitle"];
+
+      loading = false;
+    });
+  }
 
   @override
   void initState() {
@@ -60,18 +66,16 @@ class _Page3State extends State<Page3> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    _fetchUserProfile();
+    setData(peerReflectionController.pageData[3]);
   }
 
   Future<void> _checkCompletion() async {
-    if (droppedItems1.contains("Flexible budgeting") &&
-        droppedItems1.contains("Travel savings") &&
-        droppedItems1.contains("Emergency fund") &&
-        droppedItems1.contains("Starting retirement fund") &&
-        droppedItems2.contains("Budgeting for family needs") &&
-        droppedItems2.contains("Kids’ education savings") &&
-        droppedItems3.contains("Personal investments") &&
-        droppedItems3.contains("Planning for grad school")) {
+    if (droppedItems1.length == correct1.length &&
+        droppedItems1.every((element) => correct1.contains(element)) &&
+        droppedItems2.length == correct2.length &&
+        droppedItems2.every((element) => correct2.contains(element)) &&
+        droppedItems3.length == correct3.length &&
+        droppedItems3.every((element) => correct3.contains(element))) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context)
           .showSnackBar(CorrectAnswerSnackBar(message: ""));
@@ -128,7 +132,9 @@ class _Page3State extends State<Page3> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
 
-    return Column(
+    return loading? Center(
+      child: CircularProgressIndicator()
+    ):Column(
       children: [
         SizedBox(height: screenHeight * .05),
         Align(
@@ -136,7 +142,7 @@ class _Page3State extends State<Page3> {
           child: Padding(
               padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
               child: Text(
-                'Match Actions to Categories',
+                question,
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 6.5,
                   color: Colors.black,
@@ -156,7 +162,7 @@ class _Page3State extends State<Page3> {
                 children: [
                   _buildDropZone(
                       droppedItems1,
-                      'Lifelong Financial\nWell-Being',
+                      box1,
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems2.remove(item),
@@ -168,7 +174,7 @@ class _Page3State extends State<Page3> {
                   SizedBox(width: WebscreenWidthUnit * 16),
                   _buildDropZone(
                       droppedItems2,
-                      'Responsibility with\nDependents',
+                      box2,
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems1.remove(item),
@@ -180,7 +186,7 @@ class _Page3State extends State<Page3> {
                   SizedBox(width: WebscreenWidthUnit * 16),
                   _buildDropZone(
                       droppedItems3,
-                      'Responsibility\nwithout Dependents',
+                      box3,
                       WebscreenWidthUnit,
                       WebscreenHeightUnit,
                       (item) => droppedItems1.remove(item),
@@ -200,7 +206,7 @@ class _Page3State extends State<Page3> {
             padding: EdgeInsets.fromLTRB(
                 WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
             child: Text(
-              'Actions to Categorize:',
+              subTitle,
               style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 5,
                 color: Colors.black,

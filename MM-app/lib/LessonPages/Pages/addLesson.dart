@@ -11,11 +11,7 @@ class _AddLessonTestState extends State<AddLessonTest> {
   Map<String, dynamic> lessonData = {};
   Map<String, dynamic> pageData = {};
 
-
-
-
-  
-///HERE TO ADD Lesson
+  ///HERE TO ADD Lesson
   Future<void> addLessonToFirestore(
       {required String levelName,
       required String UnitName,
@@ -29,7 +25,7 @@ class _AddLessonTestState extends State<AddLessonTest> {
       required Map<String, dynamic> Page2Data,
       required Map<String, dynamic> Page3Data,
       required Map<String, dynamic> Page4Data,
-       required Map<String, dynamic> Page5Data}) async {
+      required Map<String, dynamic> Page5Data}) async {
     try {
       // Reference to Firestore
       final firestore = FirebaseFirestore.instance;
@@ -93,10 +89,6 @@ class _AddLessonTestState extends State<AddLessonTest> {
       print('Failed to add lesson: $e');
     }
   }
-
-  
-
-
 
   Future<Map<String, dynamic>> getPageInfoFromFirestore(
       {required String levelName,
@@ -179,8 +171,6 @@ class _AddLessonTestState extends State<AddLessonTest> {
         Center(
           child: ElevatedButton(
             onPressed: () async {
-
-
               addLessonToFirestore(
                   levelName: "Advanced",
                   UnitName: "Budgeting Basics",
@@ -189,31 +179,98 @@ class _AddLessonTestState extends State<AddLessonTest> {
                       'Learn how to create a budget and manage expenses.',
                   LessonNumber: 1,
                   LessonName: "Understanding Income",
-                  TypeOfLesson: "Toolkit",
+                  TypeOfLesson: "PeerReflection",
                   Page1Data: {
                     "title":
-                        "Welcome to your Toolkit for Lifelong\nFinancial Wellbeing!",
+                        "Taking Responsibility for Personal Financial Decisions",
                     "subTitle":
-                        "Get ready to plan ahead, save smart, and take responsibility for your finances.",
+                        "Taking responsibility for your finances helps you plan for\nevery stage of life, whether you're managing just for\nyourself or for others who depend on you.",
+                    "maria": "Maria",
+                    "maria2": "The Planner",
+                    "ava": "Ava",
+                    "ava2": "The Single Saver",
+                    "jason": "Jason",
+                    'jason2': "Family Provider",
+                    'button': "Continue to Peer Stories",
                   },
                   Page2Data: {
-                    "title": "Lifelong Financial Well-Being!",
-                    //"subTitle":"Get ready to plan ahead, save smart, and take responsibility for your finances.",
+                    "title": "Peer Stories",
+                    "maria": "Maria: The Planner",
+                    "maria2":
+                        "Maria started saving as a teen to buy her first car. Now in her 20s,\nshe's saving for grad school while setting aside money for retirement.",
+                    "ava": "Ava: The Single Saver",
+                    "ava2":
+                        "Ava, in her early 30s, focuses on saving for travel and investing in her future.\nWithout dependents, she can prioritize her personal goals.",
+                    "jason": "Jason: The Family Provider",
+                    'jason2':
+                        "Jason is a dad with two kids. He prioritizes housing, groceries, and school expenses\nbut still sets aside money for emergencies and his kids' future education.",
+                    'button': "Continue to Activity",
                   },
                   Page3Data: {
-                    "title": "Plan Your Financial Future!",
-                    "subTitle":
-                        "This planner helps you set short- and long-term financial goals. Download it\nand fill it out to start your journey toward financial success.",
+                    "question": "Match Actions to Catagories",
+                    "subTitle": "Actions to Categorize:",
+                    "box1": "Lifelong Financial\nWell-Being",
+                    "box2": "Responsibility with\nDependents",
+                    "box3": "Responsibility\nwithout Dependents",
+                    "options": [
+                      'Planning for grad school',
+                      'Starting retirement fund',
+                      'Budgeting for family needs',
+                      'Emergency fund',
+                      'Kids’ education savings',
+                      'Personal investments',
+                      'Travel savings',
+                      'Flexible budgeting'
+                    ],
+                    "correct1": ['Flexible budgeting','Travel savings','Emergency fund','Starting retirement fund',],
+                    "correct2": [
+                     'Kids’ education savings','Budgeting for family needs',
+                    ],
+                    "correct3": ['Planning for grad school','Personal investments',],
                   },
                   Page4Data: {
                     "title": "Your Challenge: Plan and Save!",
                     "point1": "Step 1: Identify one short-term financial goal",
-                    "point2": "Step 2: Break it down into smaller steps using the planner",
+                    "point2":
+                        "Step 2: Break it down into smaller steps using the planner",
                     "point3": "Step 3: Get parent approval",
                     "point4": "Earn 50 coins and the 'Goal Setter' badge!"
                   },
                   Page5Data: {});
 
+              //HERE to add Toolkit
+              // addLessonToFirestore(
+              //     levelName: "Advanced",
+              //     UnitName: "Budgeting Basics",
+              //     UnitNumber: 1,
+              //     UnitDescription:
+              //         'Learn how to create a budget and manage expenses.',
+              //     LessonNumber: 1,
+              //     LessonName: "Understanding Income",
+              //     TypeOfLesson: "Toolkit",
+              //     Page1Data: {
+              //       "title":
+              //           "Welcome to your Toolkit for Lifelong\nFinancial Wellbeing!",
+              //       "subTitle":
+              //           "Get ready to plan ahead, save smart, and take responsibility for your finances.",
+              //     },
+              //     Page2Data: {
+              //       "title": "Lifelong Financial Well-Being!",
+              //       //"subTitle":"Get ready to plan ahead, save smart, and take responsibility for your finances.",
+              //     },
+              //     Page3Data: {
+              //       "title": "Plan Your Financial Future!",
+              //       "subTitle":
+              //           "This planner helps you set short- and long-term financial goals. Download it\nand fill it out to start your journey toward financial success.",
+              //     },
+              //     Page4Data: {
+              //       "title": "Your Challenge: Plan and Save!",
+              //       "point1": "Step 1: Identify one short-term financial goal",
+              //       "point2": "Step 2: Break it down into smaller steps using the planner",
+              //       "point3": "Step 3: Get parent approval",
+              //       "point4": "Earn 50 coins and the 'Goal Setter' badge!"
+              //     },
+              //     Page5Data: {});
 
               //HERE TO ADD QUIZ
               // await addLessonToFirestore(
@@ -276,11 +333,9 @@ class _AddLessonTestState extends State<AddLessonTest> {
               //       "correct2":  [ "Planning for college tutition",],
               //       "correct3":  ["Saving for Retierment"],
               //     }
-                  
-                  
+
               //     );
 
-                  
               //await getUnitInfoFromFirestore(levelName: 'Advanced', UnitNumber: 1);
               //await getLessonInfoFromFirestore(
               //levelName: "Advanced", UnitNumber: 1, LessonNumber: 2);
@@ -289,7 +344,7 @@ class _AddLessonTestState extends State<AddLessonTest> {
                   levelName: "Advanced",
                   UnitNumber: 1,
                   LessonNumber: 1,
-                  TypeOfLesson: "Quiz",
+                  TypeOfLesson: "PeerReflection",
                   PageNumber: 1);
             },
             child: Text("Add data"),

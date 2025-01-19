@@ -25,19 +25,50 @@ class _Page2State extends State<Page2> {
   bool avaClicked = false;
   PeerReflectioncontroller peerReflectionController = Get.find();
   bool delay = false;
+bool loading = true;
+  String title = '';
+  String subTitle = '';
+  String ava1 = '';
+  String ava2 = '';
+  String maria1 = '';
+  String maria2 = '';
+  String jason1 = '';
+  String jason2 = '';
+  String button = '';
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data['title'];
+      ava1 = data['ava'];
+      ava2 = data['ava2'];
+      maria1 = data['maria'];
+      maria2 = data['maria2'];
+      jason1 = data['jason'];
+      jason2 = data['jason2'];
+      button = data['button'];
+
+      loading = false;
+    });
+    _6secdelay();
+  }
 
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
-    _6secdelay();
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        if (peerReflectionController.pageData.isNotEmpty) {
+          setData(peerReflectionController.pageData[2]);
+        }
+      }
+    });
+    if (title == '') {
+      setData(peerReflectionController.pageData[2]);
+    }
   }
+
+
+
   Future<void> _6secdelay() async {
     await Future.delayed(Duration(seconds: 6));
     setState(() {
@@ -45,39 +76,7 @@ class _Page2State extends State<Page2> {
     });
   }
 
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +99,7 @@ class _Page2State extends State<Page2> {
       Padding(
         padding: EdgeInsets.only(right: WebscreenWidthUnit * 758),
         child: Text(
-          "Peer Stories",
+          title,
           style: GoogleFonts.baloo2(
               fontSize: screenWidthUnit * 5,
               color: Colors.black,
@@ -115,9 +114,9 @@ class _Page2State extends State<Page2> {
             child: Column(children: [
               lessonTab(
                 image: "assets/images/newMonkeys/Maria.png",
-                name: "Maria: The Planner",
+                name: maria1,
                 discription:
-                    "Maria started saving as a teen to buy her first car. Now in her 20s,\nshe's saving for grad school while setting aside money for retirement.",
+                    maria2,
                 isClicked: mariaClicked,
                 onClick: () {
                   setState(() {
@@ -131,9 +130,9 @@ class _Page2State extends State<Page2> {
               SizedBox(height: WebscreenHeightUnit * 29),
               lessonTab(
                 image: "assets/images/newMonkeys/Jason.png",
-                name: "Jason: The Family Provider",
+                name: jason1,
                 discription:
-                    "Jason is a dad with two kids. He prioritizes housing, groceries, and school expenses\nbut still sets aside money for emergencies and his kids' future education.",
+                     jason2,
                 isClicked: jasonClicked,
                 onClick: () {
                   setState(() {
@@ -147,9 +146,9 @@ class _Page2State extends State<Page2> {
               SizedBox(height: WebscreenHeightUnit * 29),
               lessonTab(
                 image: "assets/images/newMonkeys/Ava.png",
-                name: "Ava: The Single Saver",
+                name: ava1,
                 discription:
-                    "Ava, in her early 30s, focuses on saving for travel and investing in her future.\nWithout dependents, she can prioritize her personal goals.",
+                    ava2,
                 isClicked: avaClicked,
                 onClick: () {
                   setState(() {
@@ -198,7 +197,7 @@ class _Page2State extends State<Page2> {
               ),
               child: Center(
                 child: Text(
-                  "Continue to Activity",
+                  button,
                   style: GoogleFonts.baloo2(
                       fontSize: screenWidthUnit * 4.2,
                       color: Colors.white,
