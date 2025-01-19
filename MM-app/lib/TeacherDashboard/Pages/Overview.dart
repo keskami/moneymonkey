@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Resources/Resources.dart';
+import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -12,10 +15,6 @@ class DashboardOverview extends StatefulWidget {
 }
 
 class _DashboardOverviewState extends State<DashboardOverview> {
-  TextStyle containerTitleTextStyle = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.bold,
-  );
   final String teacherName = "Mrs. Anderson";
   final String progressStatus = "In-progress";
   final String message1 = "Financial Responsibility Over a Lifetime ";
@@ -65,17 +64,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
       "12",
     ],
   ];
-  String getProgress(String num) {
-    double percentage = double.parse(num);
-    if (percentage == 100) {
-      return "Completed";
-    } else if (percentage > 0 && percentage < 100) {
-      return "In Progress";
-    } else {
-      return "Pending";
-    }
-  }
-
+  final TeacherDashboardController teacherDashboardController = Get.find();
   final List<Color> randomColorList = [
     Color.fromARGB(255, 122, 180, 255),
     Color.fromARGB(255, 189, 122, 255),
@@ -146,7 +135,6 @@ class _DashboardOverviewState extends State<DashboardOverview> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-
     double screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
@@ -166,7 +154,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 children: [
                   Text(
                     "Current Lesson Progress",
-                    style: containerTitleTextStyle,
+                    style: TextStyles.containerTitle,
                   ),
                   const Spacer(),
                   TextButton(
@@ -193,19 +181,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 ],
               ),
               //Green Title for Overview
-              Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: screenHeight * 0.02,
-                ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.01,
-                  vertical: screenHeight * 0.02,
-                ),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: LightTheme().pastelGreen.withValues(alpha: 0.2),
-                ),
+              ColoredPaddedContainer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -237,23 +213,28 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     CircleAvatar(
                       radius: 12,
                       backgroundColor: Colors.transparent,
-                      child: getProgress(lesson[1]) == 'Completed'
-                          ? Image.network(
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
-                            )
-                          : Container(
-                              width: 20,
-                              height: 20,
-                              child: getProgress(lesson[1]) == 'In Progress'
-                                  ? CircularProgressIndicator(
-                                      value: double.parse(lesson[1]) / 100,
-                                      strokeWidth: 2,
-                                    )
-                                  : CircularProgressIndicator(
-                                      value: 1,
-                                      strokeWidth: 2,
-                                      color: Colors.grey,
-                                    )),
+                      child:
+                          teacherDashboardController.getProgress(lesson[1]) ==
+                                  'Completed'
+                              ? Image.network(
+                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+                                )
+                              : Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: teacherDashboardController
+                                              .getProgress(lesson[1]) ==
+                                          'In Progress'
+                                      ? CircularProgressIndicator(
+                                          value: double.parse(lesson[1]) / 100,
+                                          strokeWidth: 2,
+                                        )
+                                      : CircularProgressIndicator(
+                                          value: 1,
+                                          strokeWidth: 2,
+                                          color: Colors.grey,
+                                        ),
+                                ),
                     ),
                     Text(
                       lesson[0],
@@ -266,7 +247,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     ),
                     const Spacer(),
                     Text(
-                      getProgress(lesson[1]),
+                      teacherDashboardController.getProgress(lesson[1]),
                       style: TextStyle(
                         color: Colors.grey.shade500,
                         fontWeight: FontWeight.w600,
@@ -299,7 +280,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
             children: [
               Text(
                 "Quick Actions",
-                style: containerTitleTextStyle,
+                style: TextStyles.containerTitle,
               ),
               ...quickActionsSuggestions.map(
                 (suggestion) => Container(
@@ -345,7 +326,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
             children: [
               Text(
                 "Discussion Questions",
-                style: containerTitleTextStyle,
+                style: TextStyles.containerTitle,
               ),
               CustomDropDownContainer(
                 initialSelection: discussionComponent,
@@ -399,7 +380,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
             children: [
               Text(
                 "Performance Highlights",
-                style: containerTitleTextStyle,
+                style: TextStyles.containerTitle,
               ),
               const SizedBox(
                 height: 10,

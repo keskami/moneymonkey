@@ -17,7 +17,7 @@ class ShadowedContainer extends Container {
       padding: padding,
       margin: margin,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
