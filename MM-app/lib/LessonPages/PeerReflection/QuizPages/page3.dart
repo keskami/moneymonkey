@@ -66,7 +66,7 @@ class _PeerReflectionQuizPage3State extends State<PeerReflectionQuizPage3> {
         : Center(
             child: Padding(
             padding: EdgeInsets.fromLTRB(
-                screenWidthUnit * 572, screenHeightUnit * 122, 0, 0),
+                screenWidthUnit * 572, screenHeightUnit * 102, 0, 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +211,7 @@ class _PeerReflectionQuizPage3State extends State<PeerReflectionQuizPage3> {
                       }
                     } else {}
                   },
-                )
+                ),
               ],
             ),
           ));

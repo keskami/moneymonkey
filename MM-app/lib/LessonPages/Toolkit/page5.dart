@@ -21,52 +21,41 @@ class _Page5State extends State<Page5> {
   bool mariaClicked = false;
   bool jasonClicked = false;
   bool avaClicked = false;
+  bool loading = true;
   Toolkitcontroller peerReflectionController = Get.find();
+String title = '';
+String subTitle = '';
+
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data["title"];
+      subTitle = data["subTitle"];
+      loading = false;
+      
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
-  }
-
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        setData(peerReflectionController.pageData[1]);
+      }else{
+         setState(() {
+      isLoading = false;
+    });
       }
+    });
+
+    if (title == '') {
+      setData(peerReflectionController.pageData[1]); // Update UI with the new data
     }
+   
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +65,9 @@ class _Page5State extends State<Page5> {
     double screenHeightUnit = screenHeight / 880;
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
-    return Column(
+    return loading? Center(child: CircularProgressIndicator()) :
+    
+    Column(
       children: [
         SizedBox(height: screenHeight * .07),
         Align(
@@ -84,7 +75,7 @@ class _Page5State extends State<Page5> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
             child: Text(
-              "Welcome to your Toolkit for Lifelong\nFinancial Wellbeing!",
+              title,
               style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 7,
                 color: Colors.black,
@@ -100,7 +91,7 @@ class _Page5State extends State<Page5> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 455, 0, 0, 0),
             child: Text(
-              "Get ready to plan ahead, save smart, and take responsibility for your finances.",
+              subTitle,
               style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 4.75,
                 color: Colors.black,

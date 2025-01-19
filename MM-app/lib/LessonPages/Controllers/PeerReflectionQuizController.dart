@@ -21,6 +21,7 @@ class PeerReflectionQuizcontroller extends GetxController {
 
   var pageData = <int, dynamic>{}.obs;
   final LessonData lessonData = LessonData();
+  
 
   @override
   void onInit() {
@@ -45,7 +46,7 @@ class PeerReflectionQuizcontroller extends GetxController {
       print("Error fetching page data: $e");
     } finally {
       isLoading.value = false;
-      print(pageData[3]);// Set loading to false after data is fetched
+      
     }
   }
 }

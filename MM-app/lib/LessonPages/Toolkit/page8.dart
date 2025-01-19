@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
 import 'package:money_monkey/home.dart';
 
 class Page8 extends StatefulWidget {
@@ -19,52 +21,47 @@ class _Page8State extends State<Page8> {
   bool mariaClicked = false;
   bool jasonClicked = false;
   bool avaClicked = false;
+
+
+
+  String title = '';
+  String point1= '';
+  String point2= '';
+  String point3= '';
+  String point4= '';
+  bool loading = true;
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data["title"];
+      point1 = data["point1"];
+      point2 = data["point2"];
+      point3 = data["point3"];
+      point4 = data["point4"];
+      loading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
-  }
-
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        setData(peerReflectionController.pageData[4]);
+      } else {
         setState(() {
           isLoading = false;
         });
       }
+    });
+
+    if (title == '') {
+      setData(peerReflectionController.pageData[4]);
     }
   }
 
+  Toolkitcontroller peerReflectionController = Get.find();
+  
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -88,7 +85,7 @@ class _Page8State extends State<Page8> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Your Challenge: Plan and Save!",
+                        title,
                         style: GoogleFonts.baloo2(
                             fontSize: screenWidthUnit * 6,
                             color: Color.fromRGBO(0, 0, 0, 1),
@@ -98,20 +95,20 @@ class _Page8State extends State<Page8> {
                       Goal(
                           image: "assets/images/lfwLessonPage5/check.png",
                           text:
-                              "Step 1: Identify one short-term financial goal",
+                              point1,
                           WebscreenHeightUnit: WebscreenHeightUnit,
                           WebscreenWidthUnit: WebscreenWidthUnit),
                       SizedBox(height: WebscreenHeightUnit * 35),
                       Goal(
                           image: "assets/images/lfwLessonPage5/check.png",
                           text:
-                              "Step 2: Break it down into smaller steps using the planner",
+                              point2,
                           WebscreenHeightUnit: WebscreenHeightUnit,
                           WebscreenWidthUnit: WebscreenWidthUnit),
                       SizedBox(height: WebscreenHeightUnit * 35),
                       Goal(
                           image: "assets/images/lfwLessonPage5/check.png",
-                          text: "Step 3: Get parent approval",
+                          text: point3,
                           WebscreenHeightUnit: WebscreenHeightUnit,
                           WebscreenWidthUnit: WebscreenWidthUnit),
                       SizedBox(height: WebscreenHeightUnit * 35),
@@ -133,7 +130,7 @@ class _Page8State extends State<Page8> {
                                   height: WebscreenHeightUnit * 66),
                               SizedBox(width: WebscreenWidthUnit * 15),
                               Text(
-                                "Earn 50 coins and the 'Goal Setter' badge!",
+                                point4,
                                 style: GoogleFonts.baloo2(
                                   fontSize: WebscreenWidthUnit * 25,
                                   color: Color.fromRGBO(0, 0, 0, 1),

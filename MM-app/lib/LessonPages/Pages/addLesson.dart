@@ -11,6 +11,11 @@ class _AddLessonTestState extends State<AddLessonTest> {
   Map<String, dynamic> lessonData = {};
   Map<String, dynamic> pageData = {};
 
+
+
+
+  
+///HERE TO ADD Lesson
   Future<void> addLessonToFirestore(
       {required String levelName,
       required String UnitName,
@@ -89,75 +94,9 @@ class _AddLessonTestState extends State<AddLessonTest> {
     }
   }
 
-  Future<Map<String, dynamic>> getUnitInfoFromFirestore({
-    required String levelName,
-    required int UnitNumber,
-  }) async {
-    try {
-      final firestore = FirebaseFirestore.instance;
-      DocumentReference levelDoc =
-          firestore.collection('Levels').doc(levelName);
-      CollectionReference unitDataCollection =
-          levelDoc.collection('Unit_$UnitNumber');
-      QuerySnapshot querySnapshot = await unitDataCollection.get();
+  
 
-      if (querySnapshot.docs.isNotEmpty) {
-        DocumentSnapshot unitDoc = querySnapshot.docs.first;
-        setState(() {
-          unitData = unitDoc.data() as Map<String, dynamic>;
-        });
-        return unitData;
-      } else {
-        print('No unit found.');
-        return {};
-      }
-    } catch (e) {
-      print('Failed to get unit info: $e');
-      return {};
-    }
-  }
 
-  Future<Map<String, dynamic>> getLessonInfoFromFirestore(
-      {required String levelName,
-      required int UnitNumber,
-      required int LessonNumber}) async {
-    try {
-      final firestore = FirebaseFirestore.instance;
-      DocumentReference levelDoc =
-          firestore.collection('Levels').doc(levelName);
-
-      CollectionReference unitDataCollection =
-          levelDoc.collection('Unit_$UnitNumber');
-
-      QuerySnapshot unitQuerySnapshot = await unitDataCollection.get();
-
-      if (unitQuerySnapshot.docs.isNotEmpty) {
-        DocumentSnapshot unitDoc = unitQuerySnapshot.docs.first;
-
-        CollectionReference lessonDataCollection =
-            unitDoc.reference.collection('Lesson_$LessonNumber');
-
-        QuerySnapshot lessonQuerySnapshot = await lessonDataCollection.get();
-
-        if (lessonQuerySnapshot.docs.isNotEmpty) {
-          DocumentSnapshot lessonDoc = lessonQuerySnapshot.docs.first;
-          setState(() {
-            lessonData = lessonDoc.data() as Map<String, dynamic>;
-          });
-          return lessonData;
-        } else {
-          print('No lesson found.');
-          return {};
-        }
-      } else {
-        print('No unit found.');
-        return {};
-      }
-    } catch (e) {
-      print('Failed to get unit info: $e');
-      return {};
-    }
-  }
 
   Future<Map<String, dynamic>> getPageInfoFromFirestore(
       {required String levelName,
@@ -240,7 +179,9 @@ class _AddLessonTestState extends State<AddLessonTest> {
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              await addLessonToFirestore(
+
+
+              addLessonToFirestore(
                   levelName: "Advanced",
                   UnitName: "Budgeting Basics",
                   UnitNumber: 1,
@@ -248,61 +189,96 @@ class _AddLessonTestState extends State<AddLessonTest> {
                       'Learn how to create a budget and manage expenses.',
                   LessonNumber: 1,
                   LessonName: "Understanding Income",
-                  TypeOfLesson: "Quiz",
+                  TypeOfLesson: "Toolkit",
                   Page1Data: {
-                    "question":
-                        "What is a key reason to start saving early in life?",
-                    "answer1": "To buy expensive luxury\nitems immediately",
-                    "answer2": "To build good financial\nhabits over time",
-                    "answer3": "To avoid making a budget",
-                    "answer4": "To spend without worrying about\nthe future",
-                    "correct": '2',
+                    "title":
+                        "Welcome to your Toolkit for Lifelong\nFinancial Wellbeing!",
+                    "subTitle":
+                        "Get ready to plan ahead, save smart, and take responsibility for your finances.",
                   },
                   Page2Data: {
-                    "question":
-                        "Why is it important to have an emergency fund?",
-                    "answer1": "To cover unexpected expenses",
-                    "answer2": "To buy luxury items",
-                    "answer3": "To invest in risky stocks",
-                    "answer4": "To avoid working a job",
-                    "correct": '1'
+                    "title": "Lifelong Financial Well-Being!",
+                    //"subTitle":"Get ready to plan ahead, save smart, and take responsibility for your finances.",
                   },
                   Page3Data: {
-                    "question":
-                        "Which of the following are good financial\nstrategies? (select all that apply)",
-                    "answer1": "Set aside money for emergencies",
-                    "answer2": "Spend all your income\non entertainment",
-                    "answer3": "Create a budget and stick to it",
-                    "answer4": "Ignore long-term financial goals",
-                    "correct1": '1',
-                    "correct2": '3',
+                    "title": "Plan Your Financial Future!",
+                    "subTitle":
+                        "This planner helps you set short- and long-term financial goals. Download it\nand fill it out to start your journey toward financial success.",
                   },
                   Page4Data: {
-                    "question":
-                        "What actions demonstrate financial\nresponsibility? (select all that apply)",
-                    "answer1": "Planning for future expenses",
-                    "answer2": "Setting financial goals",
-                    "answer3": "Spending without tracking\nexpenses",
-                    "answer4": "Regularly contributing to savings",
-                    "correct1": '1',
-                    "correct2": '2',
-                    "correct3": '4',
+                    "title": "Your Challenge: Plan and Save!",
+                    "point1": "Step 1: Identify one short-term financial goal",
+                    "point2": "Step 2: Break it down into smaller steps using the planner",
+                    "point3": "Step 3: Get parent approval",
+                    "point4": "Earn 50 coins and the 'Goal Setter' badge!"
                   },
-                   Page5Data: {
-                    "question":
-                        "Match Actions to Catagories",
-                    "subTitle" : "Actions to Categorize:",
-                    "box1": "Short-Term Goals",
-                    "box2": "Medium-Term Goals",
-                    "box3": "Long-Term Goals",
-                    "options":["Saving for Retierment", "Planning for college tutition", "Saving for a concert ticket"],
-                    "correct1": ["Saving for a concert ticket"],
-                    "correct2":  [ "Planning for college tutition",],
-                    "correct3":  ["Saving for Retierment"],
-                  }
+                  Page5Data: {});
+
+
+              //HERE TO ADD QUIZ
+              // await addLessonToFirestore(
+              //     levelName: "Advanced",
+              //     UnitName: "Budgeting Basics",
+              //     UnitNumber: 1,
+              //     UnitDescription:
+              //         'Learn how to create a budget and manage expenses.',
+              //     LessonNumber: 1,
+              //     LessonName: "Understanding Income",
+              //     TypeOfLesson: "Quiz",
+              //     Page1Data: {
+              //       "question":
+              //           "What is a key reason to start saving early in life?",
+              //       "answer1": "To buy expensive luxury\nitems immediately",
+              //       "answer2": "To build good financial\nhabits over time",
+              //       "answer3": "To avoid making a budget",
+              //       "answer4": "To spend without worrying about\nthe future",
+              //       "correct": '2',
+              //     },
+              //     Page2Data: {
+              //       "question":
+              //           "Why is it important to have an emergency fund?",
+              //       "answer1": "To cover unexpected expenses",
+              //       "answer2": "To buy luxury items",
+              //       "answer3": "To invest in risky stocks",
+              //       "answer4": "To avoid working a job",
+              //       "correct": '1'
+              //     },
+              //     Page3Data: {
+              //       "question":
+              //           "Which of the following are good financial\nstrategies? (select all that apply)",
+              //       "answer1": "Set aside money for emergencies",
+              //       "answer2": "Spend all your income\non entertainment",
+              //       "answer3": "Create a budget and stick to it",
+              //       "answer4": "Ignore long-term financial goals",
+              //       "correct1": '1',
+              //       "correct2": '3',
+              //     },
+              //     Page4Data: {
+              //       "question":
+              //           "What actions demonstrate financial\nresponsibility? (select all that apply)",
+              //       "answer1": "Planning for future expenses",
+              //       "answer2": "Setting financial goals",
+              //       "answer3": "Spending without tracking\nexpenses",
+              //       "answer4": "Regularly contributing to savings",
+              //       "correct1": '1',
+              //       "correct2": '2',
+              //       "correct3": '4',
+              //     },
+              //      Page5Data: {
+              //       "question":
+              //           "Match Actions to Catagories",
+              //       "subTitle" : "Actions to Categorize:",
+              //       "box1": "Short-Term Goals",
+              //       "box2": "Medium-Term Goals",
+              //       "box3": "Long-Term Goals",
+              //       "options":["Saving for Retierment", "Planning for college tutition", "Saving for a concert ticket"],
+              //       "correct1": ["Saving for a concert ticket"],
+              //       "correct2":  [ "Planning for college tutition",],
+              //       "correct3":  ["Saving for Retierment"],
+              //     }
                   
                   
-                  );
+              //     );
 
                   
               //await getUnitInfoFromFirestore(levelName: 'Advanced', UnitNumber: 1);
@@ -326,3 +302,75 @@ class _AddLessonTestState extends State<AddLessonTest> {
     ));
   }
 }
+
+
+
+//Future<Map<String, dynamic>> getLessonInfoFromFirestore(
+  //     {required String levelName,
+  //     required int UnitNumber,
+  //     required int LessonNumber}) async {
+  //   try {
+  //     final firestore = FirebaseFirestore.instance;
+  //     DocumentReference levelDoc =
+  //         firestore.collection('Levels').doc(levelName);
+
+  //     CollectionReference unitDataCollection =
+  //         levelDoc.collection('Unit_$UnitNumber');
+
+  //     QuerySnapshot unitQuerySnapshot = await unitDataCollection.get();
+
+  //     if (unitQuerySnapshot.docs.isNotEmpty) {
+  //       DocumentSnapshot unitDoc = unitQuerySnapshot.docs.first;
+
+  //       CollectionReference lessonDataCollection =
+  //           unitDoc.reference.collection('Lesson_$LessonNumber');
+
+  //       QuerySnapshot lessonQuerySnapshot = await lessonDataCollection.get();
+
+  //       if (lessonQuerySnapshot.docs.isNotEmpty) {
+  //         DocumentSnapshot lessonDoc = lessonQuerySnapshot.docs.first;
+  //         setState(() {
+  //           lessonData = lessonDoc.data() as Map<String, dynamic>;
+  //         });
+  //         return lessonData;
+  //       } else {
+  //         print('No lesson found.');
+  //         return {};
+  //       }
+  //     } else {
+  //       print('No unit found.');
+  //       return {};
+  //     }
+  //   } catch (e) {
+  //     print('Failed to get unit info: $e');
+  //     return {};
+  //   }
+  // }
+
+//Future<Map<String, dynamic>> getUnitInfoFromFirestore({
+  //   required String levelName,
+  //   required int UnitNumber,
+  // }) async {
+  //   try {
+  //     final firestore = FirebaseFirestore.instance;
+  //     DocumentReference levelDoc =
+  //         firestore.collection('Levels').doc(levelName);
+  //     CollectionReference unitDataCollection =
+  //         levelDoc.collection('Unit_$UnitNumber');
+  //     QuerySnapshot querySnapshot = await unitDataCollection.get();
+
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       DocumentSnapshot unitDoc = querySnapshot.docs.first;
+  //       setState(() {
+  //         unitData = unitDoc.data() as Map<String, dynamic>;
+  //       });
+  //       return unitData;
+  //     } else {
+  //       print('No unit found.');
+  //       return {};
+  //     }
+  //   } catch (e) {
+  //     print('Failed to get unit info: $e');
+  //     return {};
+  //   }
+  // }

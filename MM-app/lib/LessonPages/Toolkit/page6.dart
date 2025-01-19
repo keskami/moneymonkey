@@ -22,16 +22,37 @@ class _Page6State extends State<Page6> {
   bool jasonClicked = false;
   bool avaClicked = false;
   Toolkitcontroller peerReflectionController = Get.find();
+  String title = '';
+//String subTitle = '';
+bool loading = true;
+
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data["title"];
+      //subTitle = data["subTitle"];
+      loading = false;
+      
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        setData(peerReflectionController.pageData[2]);
+      }else{
+         setState(() {
+      isLoading = false;
+    });
+      }
+    });
+
+    if (title  == '') {
+      setData(peerReflectionController.pageData[2]); 
+    }
+   
   }
 
   Future<void> _fetchUserProfile() async {
@@ -84,7 +105,7 @@ class _Page6State extends State<Page6> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Text(
-              "Lifelong Financial Well-Being",
+             title,
               style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 7,
                 color: Colors.black,

@@ -42,6 +42,7 @@ class _PeerReflectionQuizPage4State extends State<PeerReflectionQuizPage4> {
       correctAnswers.add(int.parse(data['correct1']));
       correctAnswers.add(int.parse(data['correct2']));
       correctAnswers.add(int.parse(data['correct3']));
+      
       loading = false;
     });
   }
