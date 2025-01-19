@@ -15,9 +15,32 @@ class _ToolkitState extends State<Toolkit> {
   Toolkitcontroller toolkitcontroller = Get.put(Toolkitcontroller());
   final String lessonId = "PeerReflectionQuiz";
 
+  Future<void> _preCacheImages() async {
+    await precacheImage(
+        NetworkImage(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fl1toolkit1%2Fpiggy.png?alt=media&token=67260651-2b47-40bf-8d11-9cdd6e5cf6e4",
+        ),
+        context);
+    await precacheImage(
+        NetworkImage(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fl1toolkit1%2Fhouse.png?alt=media&token=870308c5-a116-429f-a711-6bc7186fb15c",
+        ),
+        context);
+
+    await precacheImage(
+        NetworkImage(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fl1toolkit1%2Fgrad.png?alt=media&token=110526d2-737d-4e6e-9dcf-8d1fd205d36a",
+        ),
+        context);
+
+    
+  }
+
   @override
   void initState() {
+    _preCacheImages();
     super.initState();
+    
   }
 
   @override
@@ -61,9 +84,9 @@ class _ToolkitState extends State<Toolkit> {
                 onPressed: () {
                   toolkitcontroller.pageIndex.value = 0;
                   Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
                 },
                 icon: Icon(Icons.close),
               ),
