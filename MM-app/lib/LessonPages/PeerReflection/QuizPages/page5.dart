@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +9,11 @@ import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/home.dart';
 
-
 class PeerReflectionQuizPage5 extends StatefulWidget {
   @override
-  _PeerReflectionQuizPage5State createState() => _PeerReflectionQuizPage5State();
+  _PeerReflectionQuizPage5State createState() =>
+      _PeerReflectionQuizPage5State();
 }
-
 
 class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
   final User? user = FirebaseAuth.instance.currentUser;
@@ -25,28 +23,39 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
   int totalBanans = 0;
   PeerReflectionQuizcontroller peerReflectionController = Get.find();
 
+  List<String> availableItems = [];
 
- List<String> availableItems = [
-    'Saving for retirement',
-    'Planning for college tuition',
-    'Saving for a concert ticket'
-  ];
-
-  List<String> correct1 = [
-   'Saving for a concert ticket'
-  ];
-  List<String> correct2 = [
-     'Planning for college tuition',
-  ];
-  List<String> correct3 = [
-    'Saving for retirement',
-  ];
-
-
+  List<String> correct1 = [];
+  List<String> correct2 = [];
+  List<String> correct3 = [];
   List<String> droppedItems1 = [];
   List<String> droppedItems2 = [];
   List<String> droppedItems3 = [];
+  bool loading = false;
+  String question = '';
+  String box1 = '';
+  String box2 = '';
+  String box3 = '';
+  String subTitle = '';
 
+  Future<void> setData(data) async {
+    setState(() {
+      question = data["question"];
+      box1 = data["box1"];
+      box2 = data["box2"];
+      box3 = data["box3"];
+      availableItems =  List<String>.from(data["options"].map((item) => item.toString()));
+      correct1 =
+          List<String>.from(data["correct1"].map((item) => item.toString()));
+      correct2 =
+          List<String>.from(data["correct2"].map((item) => item.toString()));
+      correct3 =
+          List<String>.from(data["correct3"].map((item) => item.toString()));
+      subTitle = data["subTitle"];
+
+      loading = false;
+    });
+  }
 
   @override
   void initState() {
@@ -57,12 +66,16 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    _fetchUserProfile();
+    setData(peerReflectionController.pageData[5]);
   }
 
-
   Future<void> _checkCompletion() async {
-    if (droppedItems1.contains('Saving for a concert ticket') && droppedItems2.contains('Planning for college tuition') && droppedItems3.contains('Saving for retirement',)) {
+    if (droppedItems1.length == correct1.length &&
+        droppedItems1.every((element) => correct1.contains(element)) &&
+        droppedItems2.length == correct2.length &&
+        droppedItems2.every((element) => correct2.contains(element)) &&
+        droppedItems3.length == correct3.length &&
+        droppedItems3.every((element) => correct3.contains(element))) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context)
           .showSnackBar(CorrectAnswerSnackBar(message: ""));
@@ -79,46 +92,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
     }
   }
 
-
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -128,124 +101,128 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
 
-
-    return Column(
-      children: [
-        SizedBox(height: screenHeight * .05),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
-              child: Text(
-                'Match Actions to Categories',
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 6.5,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
-              )),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  WebscreenWidthUnit * 475, WebscreenHeightUnit * 26, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _buildDropZone(
-                      droppedItems1,
-                      'Short-Term Goals',
-                      WebscreenWidthUnit,
-                      WebscreenHeightUnit,
-                      (item) => droppedItems2.remove(item),
-                      (item) => droppedItems3.remove(item),
-                      droppedItems1,
-                      droppedItems2,
-                      droppedItems3,
-                      correct1),
-                  SizedBox(width: WebscreenWidthUnit * 16),
-                  _buildDropZone(
-                      droppedItems2,
-                       'Medium-Term Goals',
-                      WebscreenWidthUnit,
-                      WebscreenHeightUnit,
-                      (item) => droppedItems1.remove(item),
-                      (item) => droppedItems3.remove(item),
-                      droppedItems1,
-                      droppedItems2,
-                      droppedItems3,
-                      correct2),
-                  SizedBox(width: WebscreenWidthUnit * 16),
-                  _buildDropZone(
-                      droppedItems3,
-                      'Long-Term Goals',
-                      WebscreenWidthUnit,
-                      WebscreenHeightUnit,
-                      (item) => droppedItems1.remove(item),
-                      (item) => droppedItems2.remove(item),
-                      droppedItems1,
-                      droppedItems2,
-                      droppedItems3,
-                      correct3),
-                ],
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
+            children: [
+              SizedBox(height: screenHeight * .05),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                    padding:
+                        EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
+                    child: Text(
+                      question,
+                      style: GoogleFonts.baloo2(
+                        fontSize: screenWidthUnit * 6.5,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )),
               ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
-            child: Text(
-              'Actions to Categorize:',
-              style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 5,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          height: screenHeightUnit * 152,
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                WebscreenWidthUnit * 475,
-                0,
-                0,
-                0,
-              ),
-              child: Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: List.generate((availableItems.length / 4).ceil(),
-                      (index) {
-                    int start = index * 4;
-                    int end = (index * 4 + 4) > availableItems.length
-                        ? availableItems.length
-                        : (index * 4 + 4);
-                    return Row(
+              Align(
+                alignment: Alignment.topLeft,
+                child: Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475,
+                        WebscreenHeightUnit * 26, 0, 0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: availableItems.sublist(start, end).map((item) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: _buildDraggableItem(item),
-                        );
-                      }).toList(),
-                    );
-                  }),
+                      children: [
+                        _buildDropZone(
+                            droppedItems1,
+                            box1,
+                            WebscreenWidthUnit,
+                            WebscreenHeightUnit,
+                            (item) => droppedItems2.remove(item),
+                            (item) => droppedItems3.remove(item),
+                            droppedItems1,
+                            droppedItems2,
+                            droppedItems3,
+                            correct1),
+                        SizedBox(width: WebscreenWidthUnit * 16),
+                        _buildDropZone(
+                            droppedItems2,
+                            box2,
+                            WebscreenWidthUnit,
+                            WebscreenHeightUnit,
+                            (item) => droppedItems1.remove(item),
+                            (item) => droppedItems3.remove(item),
+                            droppedItems1,
+                            droppedItems2,
+                            droppedItems3,
+                            correct2),
+                        SizedBox(width: WebscreenWidthUnit * 16),
+                        _buildDropZone(
+                            droppedItems3,
+                            box3,
+                            WebscreenWidthUnit,
+                            WebscreenHeightUnit,
+                            (item) => droppedItems1.remove(item),
+                            (item) => droppedItems2.remove(item),
+                            droppedItems1,
+                            droppedItems2,
+                            droppedItems3,
+                            correct3),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-        /*
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
+                  child: Text(
+                    subTitle,
+                    style: GoogleFonts.baloo2(
+                      fontSize: screenWidthUnit * 5,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                height: screenHeightUnit * 152,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      WebscreenWidthUnit * 475,
+                      0,
+                      0,
+                      0,
+                    ),
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: List.generate(
+                            (availableItems.length / 4).ceil(), (index) {
+                          int start = index * 4;
+                          int end = (index * 4 + 4) > availableItems.length
+                              ? availableItems.length
+                              : (index * 4 + 4);
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children:
+                                availableItems.sublist(start, end).map((item) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: _buildDraggableItem(item),
+                              );
+                            }).toList(),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              /*
         Padding(
           padding: EdgeInsets.only(top: WebscreenHeightUnit * 0),
           child: GestureDetector(
@@ -304,10 +281,9 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
               )),
         )
         */
-      ],
-    );
+            ],
+          );
   }
-
 
   Widget _buildDropZone(
     List<String> droppedItems,
@@ -330,7 +306,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
           availableItems.remove(data);
         });
 
-
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         if (availableItems.isEmpty) {
           //ScaffoldMessenger.of(context)
@@ -346,7 +321,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
         setState(() {
           if (data != null && droppedItems.contains(data)) {
             droppedItems.remove(data);
-
 
             // Add back to available items
           }
@@ -417,7 +391,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
     );
   }
 
-
   Widget _buildDraggableDroppedItem(String label, List<String> sourceList) {
     return Draggable<String>(
       data: label,
@@ -433,7 +406,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
         setState(() {
           sourceList.remove(label);
         });
-
 
         if (droppedItems1.contains(label) ||
             droppedItems2.contains(label) ||
@@ -453,7 +425,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
     );
   }
 
-
   Widget _buildDraggableItem(String label) {
     return Draggable<String>(
       data: label,
@@ -468,7 +439,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
       child: _buildDroppedItem(label),
     );
   }
-
 
   Widget _buildDroppedItem(String label) {
     return Padding(
@@ -491,7 +461,6 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
     );
   }
 }
-
 
 Widget topOfLesson({
   required double screenWidthUnit,
@@ -556,6 +525,3 @@ Widget topOfLesson({
     ],
   );
 }
-
-
-
