@@ -43,7 +43,7 @@ class _Page1State extends State<Page1> {
       maria2 = data['maria2'];
       jason1 = data['jason'];
       jason2 = data['jason2'];
-       button = data['button'];
+      button = data['button'];
 
       loading = false;
     });
@@ -61,6 +61,9 @@ class _Page1State extends State<Page1> {
       }
     });
     if (title == '') {
+    setState(() {
+      isLoading = true;
+    });
       setData(peerReflectionController.pageData[1]);
     }
   }

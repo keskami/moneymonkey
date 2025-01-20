@@ -49,7 +49,6 @@ class PeerReflectioncontroller  extends GetxController{
       print("Error fetching page data: $e");
     } finally {
       isLoading.value = false;
-      print(pageData);
       
     }
   }

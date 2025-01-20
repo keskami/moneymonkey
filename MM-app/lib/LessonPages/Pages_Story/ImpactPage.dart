@@ -14,18 +14,53 @@ class ImpactPage extends StatefulWidget {
 class _ImpactPageState extends State<ImpactPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-  List<String> beforeText = [
-    "No savings",
-    "Constant stress",
-    "Emergency = crisis",
-  ];
-  List<String> afterText = [
-    "800 saved month",
-    "Peace of mind",
-    "Ready for emergencies"
-  ];
+  List<String> beforeText = [];
+  List<String> afterText = [];
+  List<String> ba = [];
   final StoryController storyController = Get.find();
   bool isEnabled = false;
+
+  bool isLoading = true;
+  String problem = '';
+  String title = '';
+  List<String> instructions = [];
+  String button = '';
+
+  Future<void> setData(Map<String, dynamic> data) async {
+    setState(() {
+      afterText =
+          List<String>.from(data['after'].map((item) => item.toString()));
+      beforeText =
+          List<String>.from(data['before'].map((item) => item.toString()));
+      title = data['title'];
+      instructions = List<String>.from(
+          data['instructions'].map((item) => item.toString()));
+      ba = List<String>.from(
+          data['before/after'].map((item) => item.toString()));
+      button = data['button'];
+
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    ever(storyController.isLoading, (_) {
+      if (!storyController.isLoading.value) {
+        setData(storyController.pageData[5]);
+      }
+    });
+
+    if (title == '') {
+      if (storyController.pageData[5] != null) {
+        setData(storyController.pageData[5]);
+      } else {
+        debugPrint("Page data for index 1 is null");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +100,7 @@ class _ImpactPageState extends State<ImpactPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "The Solution?",
+                          title,
                           softWrap: true,
                           overflow: TextOverflow.visible,
                           style: TextStyle(
@@ -85,9 +120,10 @@ class _ImpactPageState extends State<ImpactPage> {
                                   isBefore: true,
                                   texts: beforeText,
                                   screenWidth: screenWidth,
+                                  ba: ba,
                                 ),
                                 instructions: InstructionContainer(
-                                  text: "Click for the before...",
+                                  text: instructions[0],
                                   screenWidth: screenWidth,
                                 ),
                               ),
@@ -100,7 +136,7 @@ class _ImpactPageState extends State<ImpactPage> {
                               width: screenWidth * 0.15,
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
-                                onTap: () async{
+                                onTap: () async {
                                   await Future.delayed(Duration(seconds: 6));
                                   setState(() {
                                     isEnabled = true;
@@ -110,9 +146,10 @@ class _ImpactPageState extends State<ImpactPage> {
                                   isBefore: false,
                                   texts: afterText,
                                   screenWidth: screenWidth,
+                                  ba: ba,
                                 ),
                                 instructions: InstructionContainer(
-                                  text: "Click for the after...",
+                                  text: instructions[1],
                                   screenWidth: screenWidth,
                                 ),
                               ),
@@ -152,16 +189,17 @@ class _ImpactPageState extends State<ImpactPage> {
 }
 
 class ContentContainer extends StatelessWidget {
-  const ContentContainer({
-    super.key,
-    required this.texts,
-    required this.screenWidth,
-    required this.isBefore,
-  });
+  const ContentContainer(
+      {super.key,
+      required this.texts,
+      required this.screenWidth,
+      required this.isBefore,
+      required this.ba});
 
   final List<String> texts;
   final bool isBefore;
   final double screenWidth;
+  final List<String> ba;
 
   @override
   Widget build(BuildContext context) {

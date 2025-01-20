@@ -33,7 +33,6 @@ class _Page6State extends State<Page6> {
     Image.asset("assets/images/monkeyNoText.png"),
   ];
 
-  // Preload images
   Future<void> _preloadImages() async {
     try {
       final futures = images.map((image) {
@@ -55,7 +54,6 @@ class _Page6State extends State<Page6> {
     }
   }
 
-  // Set data based on the peerReflectionController
   Future<void> setData(Map<String, dynamic> data) async {
     setState(() {
       title = data["title"];
@@ -67,10 +65,8 @@ class _Page6State extends State<Page6> {
   void initState() {
     super.initState();
 
-    // Preload images
     _preloadImages();
 
-    // Watch for changes in the controller (using GetX)
     ever(peerReflectionController.isLoading, (_) {
       if (!peerReflectionController.isLoading.value) {
         setData(peerReflectionController.pageData[2]);
@@ -81,7 +77,6 @@ class _Page6State extends State<Page6> {
       }
     });
 
-    // Fallback to load data if title is not set
     if (title.isEmpty) {
       setData(peerReflectionController.pageData[2]);
     }
