@@ -222,19 +222,29 @@ class _AddLessonTestState extends State<AddLessonTest> {
                       'Travel savings',
                       'Flexible budgeting'
                     ],
-                    "correct1": ['Flexible budgeting','Travel savings','Emergency fund','Starting retirement fund',],
-                    "correct2": [
-                     'Kids’ education savings','Budgeting for family needs',
+                    "correct1": [
+                      'Flexible budgeting',
+                      'Travel savings',
+                      'Emergency fund',
+                      'Starting retirement fund',
                     ],
-                    "correct3": ['Planning for grad school','Personal investments',],
+                    "correct2": [
+                      'Kids’ education savings',
+                      'Budgeting for family needs',
+                    ],
+                    "correct3": [
+                      'Planning for grad school',
+                      'Personal investments',
+                    ],
                   },
                   Page4Data: {
-                    "title": "Your Challenge: Plan and Save!",
-                    "point1": "Step 1: Identify one short-term financial goal",
-                    "point2":
-                        "Step 2: Break it down into smaller steps using the planner",
-                    "point3": "Step 3: Get parent approval",
-                    "point4": "Earn 50 coins and the 'Goal Setter' badge!"
+                    "title": "Reflection",
+                    "subTitle":
+                        "Which peer\'s financial situation do you relate to most? Why?",
+                    "maria":"Maria, because I’m focused on planning future goals",
+                    "jason": "Jason, because I have to prioritize needs over wants",
+                    "ava": "Ava, because I’m working on personal savings and investments",
+                    'button': "Finish Peer Reflection",
                   },
                   Page5Data: {});
 
