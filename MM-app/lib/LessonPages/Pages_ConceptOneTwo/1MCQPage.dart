@@ -18,6 +18,9 @@ class MCQPage extends StatefulWidget {
 }
 
 class _MCQPageState extends State<MCQPage> {
+
+  ComponentOneTwoController componentOneTwoController = Get.find();
+
   String currentQuestion = "";
   List<String> currentAnswers = [];
   List<String> correctAnswers = [
@@ -29,31 +32,49 @@ class _MCQPageState extends State<MCQPage> {
     "After I graduate from college.",
     "Only when I’m ready to plan for retirement.",
   ];
-  ComponentOneTwoController componentOneTwoController = Get.find();
+  // String correctAnswer = '';
+
+  // List<String> options = [];
+  // ComponentOneTwoController componentOneTwoController = Get.find();
+  String wrong = '';
+  String correct = '';
+  // String title = '';
+  // String question = '';
+  // ComponentOneTwoController componentOneTwoController = Get.find();
+
   
+
+   Future<void> setData(data) async {
+    setState(() {
+      correct = data['correct'];
+      wrong = data['wrong'];
+      
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).clearSnackBars();
+    ever(componentOneTwoController.isLoading, (_) {
+      if (!componentOneTwoController.isLoading.value) {
+        if (componentOneTwoController.pageData.isNotEmpty) {
+          setData(componentOneTwoController.pageData[1]);
+        }
+      }
     });
+    if ( false) {
+    setState(() {
+    });
+      setData(componentOneTwoController.pageData[1]);
+    }
   }
 
-  SnackBar correctAnswer = CorrectAnswerSnackBar(
-    message:
-        "That's right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let's explore why.",
-  );
 
-  SnackBar wrongAnswer = WrongAnswerSnackBar(
-    message:
-        "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
-  );
   void answerQuestion(String ans) {
     currentAnswers.clear();
     if (correctAnswers.contains(ans)) {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(correctAnswer);
+      ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(message: correct));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -65,7 +86,7 @@ class _MCQPageState extends State<MCQPage> {
       );
     } else {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(wrongAnswer);
+      ScaffoldMessenger.of(context).showSnackBar(WrongAnswerSnackBar(message: wrong));
       setState(() {
         currentAnswers.add(ans);
       });

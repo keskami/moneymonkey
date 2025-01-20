@@ -26,15 +26,15 @@ class _LessonOneState extends State<LessonOne> {
         context);
   }
 
-  Future<void> fetchQuestions() async {
-    await componentOneTwoController.fetchQuestions(lessonId);
-    print("fetched");
-  }
+  // Future<void> fetchQuestions() async {
+  //   await componentOneTwoController.fetchQuestions(lessonId);
+  //   print("fetched");
+  // }
 
   @override
   void initState() {
     super.initState();
-    fetchQuestions();
+   // fetchQuestions();
   }
 
   @override

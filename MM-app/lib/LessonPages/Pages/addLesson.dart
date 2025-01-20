@@ -181,57 +181,23 @@ class _AddLessonTestState extends State<AddLessonTest> {
                     'Learn how to create a budget and manage expenses.',
                 LessonNumber: 1,
                 LessonName: "Understanding Income",
-                TypeOfLesson: "Scenario",
+                TypeOfLesson: "Concept",
                 controllerData: {
-                  "questions": [
-                    "How much will you save?",
-                    "What about those \$150 sneakers?",
-                    "Planning for Emergencies",
-                  ],
-                  'options2': [
-                    "Buy Now (\$150)",
-                    "Get them immediately",
-                    "Wait for Next Paycheck",
-                    "Practice patience",
-                    "Buy Cheaper Option (\$75)",
-                    "Find a balance",
-                  ],
-                  'options3': [
-                    "Set aside \$150",
-                    "Strong emergency fund",
-                    "Set aside \$50",
-                    "Small emergency fund",
-                    "Keep Nothing for Emergencies",
-                    "Spend it all",
-                  ],
-                  'options1': [
-                    "Save \$250 (50%)",
-                    "Maximum savings for future goals",
-                    "Save \$100 (20%)",
-                    "Moderate savings approach",
-                    "Save \$0 (0%)",
-                    "No savings",
-                  ],
-                  'correctAnswers': [
-                    "Save \$250 (50%)",
-                    "Wait for Next Paycheck",
-                    "Set aside \$150"
-                  ],
-                  "correctMessages": [
-                    "Great choice! Saving a significant portion ensures you're planning for the future.",
-                    "Great decision! Delaying gratification helps you stay within your budget.",
-                    "Excellent! Planning for emergencies helps you avoid debt in tough times.",
-                  ],
                 },
                 Page1Data: {
-                  'title':
-                      "Congratulations! You've just started your first part-time job and earned your first paycheck of \$500. You have several things you want to do with the money: buy new sneakers, save for college, and plan for weekend activities.",
-                  "items": ["Sneakers", "College", "Activities"],
-                  "instructions": [
-                    "Click for choice 1...",
-                    "Click for choice 2...",
-                    "Click for choice 3..."
-                  ]
+                  "correct":
+                      "That's right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let's explore why.",
+                  "wrong":
+                      "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
+                  "question": "When Should Financial Responsibility Begin?",
+                  "title": "Before we dive in, let’s see what you think!",
+                  "options": [
+                    "Once I have a full time job",
+                    "As soon as I start earning money (even if it’s part-time or allowance)",
+                    "After I graduate from college.",
+                    "Only when I’m ready to plan for retirement.",
+                  ],
+                  "correctAnswer":  "As soon as I start earning money (even if it’s part-time or allowance)",
                 },
                 Page2Data: {},
                 Page3Data: {
@@ -242,6 +208,79 @@ class _AddLessonTestState extends State<AddLessonTest> {
                 Page4Data: {},
                 Page5Data: {},
               );
+
+              //Here to add Scenario
+              // addLessonToFirestore(
+              //   levelName: "Advanced",
+              //   UnitName: "Budgeting Basics",
+              //   UnitNumber: 1,
+              //   UnitDescription:
+              //       'Learn how to create a budget and manage expenses.',
+              //   LessonNumber: 1,
+              //   LessonName: "Understanding Income",
+              //   TypeOfLesson: "Scenario",
+              //   controllerData: {
+              //     "questions": [
+              //       "How much will you save?",
+              //       "What about those \$150 sneakers?",
+              //       "Planning for Emergencies",
+              //     ],
+              //     'options2': [
+              //       "Buy Now (\$150)",
+              //       "Get them immediately",
+              //       "Wait for Next Paycheck",
+              //       "Practice patience",
+              //       "Buy Cheaper Option (\$75)",
+              //       "Find a balance",
+              //     ],
+              //     'options3': [
+              //       "Set aside \$150",
+              //       "Strong emergency fund",
+              //       "Set aside \$50",
+              //       "Small emergency fund",
+              //       "Keep Nothing for Emergencies",
+              //       "Spend it all",
+              //     ],
+              //     'options1': [
+              //       "Save \$250 (50%)",
+              //       "Maximum savings for future goals",
+              //       "Save \$100 (20%)",
+              //       "Moderate savings approach",
+              //       "Save \$0 (0%)",
+              //       "No savings",
+              //     ],
+              //     'correctAnswers': [
+              //       "Save \$250 (50%)",
+              //       "Wait for Next Paycheck",
+              //       "Set aside \$150"
+              //     ],
+              //     "correctMessages": [
+              //       "Great choice! Saving a significant portion ensures you're planning for the future.",
+              //       "Great decision! Delaying gratification helps you stay within your budget.",
+              //       "Excellent! Planning for emergencies helps you avoid debt in tough times.",
+              //     ],
+              //   },
+              //   Page1Data: {
+              //     'title':
+              //         "Congratulations! You've just started your first part-time job and earned your first paycheck of \$500. You have several things you want to do with the money: buy new sneakers, save for college, and plan for weekend activities.",
+              //     "items": ["Sneakers", "College", "Activities"],
+              //     "instructions": [
+              //       "Click for choice 1...",
+              //       "Click for choice 2...",
+              //       "Click for choice 3..."
+              //     ],
+              //     "button":"Start Managing Your Money",
+
+              //   },
+              //   Page2Data: {},
+              //   Page3Data: {
+              //     "title": "Your Financial Summary",
+              //     "button": "Finish",
+              //     "subTitle": "Financial Responsibility Score:",
+              //   },
+              //   Page4Data: {},
+              //   Page5Data: {},
+              // );
 
               //HERE to add Stroy
               // addLessonToFirestore(
