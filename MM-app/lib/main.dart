@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
+import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
 import 'package:money_monkey/LessonPages/Pages/Story.dart';
 import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
 import 'package:money_monkey/LessonPages/Pages/addLesson.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
                     return StoryPage();
                   }
                 } else {
-                  return StoryPage();
+                  return Scenario();
                 }
               },
             ),

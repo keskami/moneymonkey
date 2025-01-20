@@ -25,7 +25,8 @@ class _AddLessonTestState extends State<AddLessonTest> {
       required Map<String, dynamic> Page2Data,
       required Map<String, dynamic> Page3Data,
       required Map<String, dynamic> Page4Data,
-      required Map<String, dynamic> Page5Data}) async {
+      required Map<String, dynamic> Page5Data,
+      required Map<String, dynamic> controllerData}) async {
     try {
       // Reference to Firestore
       final firestore = FirebaseFirestore.instance;
@@ -81,6 +82,7 @@ class _AddLessonTestState extends State<AddLessonTest> {
           "Page3": Page3Data,
           "Page4": Page4Data,
           "Page5": Page5Data,
+          "Page0": controllerData,
         });
       }
 
@@ -179,47 +181,119 @@ class _AddLessonTestState extends State<AddLessonTest> {
                     'Learn how to create a budget and manage expenses.',
                 LessonNumber: 1,
                 LessonName: "Understanding Income",
-                TypeOfLesson: "Story",
-                Page1Data: {
-                  'button': "Continue to Peer Stories",
-                },
-                Page2Data: {'x': 'x'},
-                Page3Data: {
-                  "title":
-                      "Alex earns \$4,000 monthly but often runs out of money by month-end.",
-                  "problem": "Problem: No control over spending",
-                  "instructions": "Click to reveal the problem...",
-                },
-                Page4Data: {
-                  "title": "The Solution?",
-                  "instructions": [
-                    "Click to reveal solution 1",
-                    "Click to reveal solution 2",
-                    "Click to reveal solution 3",
+                TypeOfLesson: "Scenario",
+                controllerData: {
+                  "questions": [
+                    "How much will you save?",
+                    "What about those \$150 sneakers?",
+                    "Planning for Emergencies",
                   ],
-                  "bigTexts": ["Track Spending", "Plan Ahead", "Save First"],
-                  "smallTexts":["Record every expense","Set monthly budget", "20% of income to savings"],
-                },
-                Page5Data: {
-                  "title": "The Solution?",
-                  "before": [
+                  'options2': [
+                    "Buy Now (\$150)",
+                    "Get them immediately",
+                    "Wait for Next Paycheck",
+                    "Practice patience",
+                    "Buy Cheaper Option (\$75)",
+                    "Find a balance",
+                  ],
+                  'options3': [
+                    "Set aside \$150",
+                    "Strong emergency fund",
+                    "Set aside \$50",
+                    "Small emergency fund",
+                    "Keep Nothing for Emergencies",
+                    "Spend it all",
+                  ],
+                  'options1': [
+                    "Save \$250 (50%)",
+                    "Maximum savings for future goals",
+                    "Save \$100 (20%)",
+                    "Moderate savings approach",
+                    "Save \$0 (0%)",
                     "No savings",
-                    "Constant stress",
-                    "Emergency = crisis",
                   ],
-                  "after": [
-                    "800 saved month",
-                    "Peace of mind",
-                    "Ready for emergencies"
+                  'correctAnswers': [
+                    "Save \$250 (50%)",
+                    "Wait for Next Paycheck",
+                    "Set aside \$150"
                   ],
-                  "instructions": [
-                    "Click for the before...",
-                    "Click for the after..."
+                  "correctMessages": [
+                    "Great choice! Saving a significant portion ensures you're planning for the future.",
+                    "Great decision! Delaying gratification helps you stay within your budget.",
+                    "Excellent! Planning for emergencies helps you avoid debt in tough times.",
                   ],
-                  "before/after": ["before", "after"],
-                  'button': "Finish",
                 },
+                Page1Data: {
+                  'title':
+                      "Congratulations! You've just started your first part-time job and earned your first paycheck of \$500. You have several things you want to do with the money: buy new sneakers, save for college, and plan for weekend activities.",
+                  "items": ["Sneakers", "College", "Activities"],
+                  "instructions": [
+                    "Click for choice 1...",
+                    "Click for choice 2...",
+                    "Click for choice 3..."
+                  ]
+                },
+                Page2Data: {},
+                Page3Data: {
+                  "title": "Your Financial Summary",
+                  "button": "Finish",
+                  "subTitle": "Financial Responsibility Score:",
+                },
+                Page4Data: {},
+                Page5Data: {},
               );
+
+              //HERE to add Stroy
+              // addLessonToFirestore(
+              //   levelName: "Advanced",
+              //   UnitName: "Budgeting Basics",
+              //   UnitNumber: 1,
+              //   UnitDescription:
+              //       'Learn how to create a budget and manage expenses.',
+              //   LessonNumber: 1,
+              //   LessonName: "Understanding Income",
+              //   TypeOfLesson: "Story",
+              //   Page1Data: {
+              //     'button': "Continue to Peer Stories",
+              //   },
+              //   Page2Data: {'x': 'x'},
+              //   Page3Data: {
+              //     "title":
+              //         "Alex earns \$4,000 monthly but often runs out of money by month-end.",
+              //     "problem": "Problem: No control over spending",
+              //     "instructions": "Click to reveal the problem...",
+              //   },
+              //   Page4Data: {
+              //     "title": "The Solution?",
+              //     "instructions": [
+              //       "Click to reveal solution 1",
+              //       "Click to reveal solution 2",
+              //       "Click to reveal solution 3",
+              //     ],
+              //     "bigTexts": ["Track Spending", "Plan Ahead", "Save First"],
+              //     "smallTexts":["Record every expense","Set monthly budget", "20% of income to savings"],
+              //     'button': "Finish",
+              //   },
+              //   Page5Data: {
+              //     "title": "The Solution?",
+              //     "before": [
+              //       "No savings",
+              //       "Constant stress",
+              //       "Emergency = crisis",
+              //     ],
+              //     "after": [
+              //       "800 saved month",
+              //       "Peace of mind",
+              //       "Ready for emergencies"
+              //     ],
+              //     "instructions": [
+              //       "Click for the before...",
+              //       "Click for the after..."
+              //     ],
+              //     "before/after": ["before", "after"],
+              //     'button': "Finish",
+              //   },
+              // );
 
               //HERE to add Toolkit
               // addLessonToFirestore(
@@ -453,74 +527,72 @@ class _AddLessonTestState extends State<AddLessonTest> {
   }
 }
 
-
-
 //Future<Map<String, dynamic>> getLessonInfoFromFirestore(
-  //     {required String levelName,
-  //     required int UnitNumber,
-  //     required int LessonNumber}) async {
-  //   try {
-  //     final firestore = FirebaseFirestore.instance;
-  //     DocumentReference levelDoc =
-  //         firestore.collection('Levels').doc(levelName);
+//     {required String levelName,
+//     required int UnitNumber,
+//     required int LessonNumber}) async {
+//   try {
+//     final firestore = FirebaseFirestore.instance;
+//     DocumentReference levelDoc =
+//         firestore.collection('Levels').doc(levelName);
 
-  //     CollectionReference unitDataCollection =
-  //         levelDoc.collection('Unit_$UnitNumber');
+//     CollectionReference unitDataCollection =
+//         levelDoc.collection('Unit_$UnitNumber');
 
-  //     QuerySnapshot unitQuerySnapshot = await unitDataCollection.get();
+//     QuerySnapshot unitQuerySnapshot = await unitDataCollection.get();
 
-  //     if (unitQuerySnapshot.docs.isNotEmpty) {
-  //       DocumentSnapshot unitDoc = unitQuerySnapshot.docs.first;
+//     if (unitQuerySnapshot.docs.isNotEmpty) {
+//       DocumentSnapshot unitDoc = unitQuerySnapshot.docs.first;
 
-  //       CollectionReference lessonDataCollection =
-  //           unitDoc.reference.collection('Lesson_$LessonNumber');
+//       CollectionReference lessonDataCollection =
+//           unitDoc.reference.collection('Lesson_$LessonNumber');
 
-  //       QuerySnapshot lessonQuerySnapshot = await lessonDataCollection.get();
+//       QuerySnapshot lessonQuerySnapshot = await lessonDataCollection.get();
 
-  //       if (lessonQuerySnapshot.docs.isNotEmpty) {
-  //         DocumentSnapshot lessonDoc = lessonQuerySnapshot.docs.first;
-  //         setState(() {
-  //           lessonData = lessonDoc.data() as Map<String, dynamic>;
-  //         });
-  //         return lessonData;
-  //       } else {
-  //         print('No lesson found.');
-  //         return {};
-  //       }
-  //     } else {
-  //       print('No unit found.');
-  //       return {};
-  //     }
-  //   } catch (e) {
-  //     print('Failed to get unit info: $e');
-  //     return {};
-  //   }
-  // }
+//       if (lessonQuerySnapshot.docs.isNotEmpty) {
+//         DocumentSnapshot lessonDoc = lessonQuerySnapshot.docs.first;
+//         setState(() {
+//           lessonData = lessonDoc.data() as Map<String, dynamic>;
+//         });
+//         return lessonData;
+//       } else {
+//         print('No lesson found.');
+//         return {};
+//       }
+//     } else {
+//       print('No unit found.');
+//       return {};
+//     }
+//   } catch (e) {
+//     print('Failed to get unit info: $e');
+//     return {};
+//   }
+// }
 
 //Future<Map<String, dynamic>> getUnitInfoFromFirestore({
-  //   required String levelName,
-  //   required int UnitNumber,
-  // }) async {
-  //   try {
-  //     final firestore = FirebaseFirestore.instance;
-  //     DocumentReference levelDoc =
-  //         firestore.collection('Levels').doc(levelName);
-  //     CollectionReference unitDataCollection =
-  //         levelDoc.collection('Unit_$UnitNumber');
-  //     QuerySnapshot querySnapshot = await unitDataCollection.get();
+//   required String levelName,
+//   required int UnitNumber,
+// }) async {
+//   try {
+//     final firestore = FirebaseFirestore.instance;
+//     DocumentReference levelDoc =
+//         firestore.collection('Levels').doc(levelName);
+//     CollectionReference unitDataCollection =
+//         levelDoc.collection('Unit_$UnitNumber');
+//     QuerySnapshot querySnapshot = await unitDataCollection.get();
 
-  //     if (querySnapshot.docs.isNotEmpty) {
-  //       DocumentSnapshot unitDoc = querySnapshot.docs.first;
-  //       setState(() {
-  //         unitData = unitDoc.data() as Map<String, dynamic>;
-  //       });
-  //       return unitData;
-  //     } else {
-  //       print('No unit found.');
-  //       return {};
-  //     }
-  //   } catch (e) {
-  //     print('Failed to get unit info: $e');
-  //     return {};
-  //   }
-  // }
+//     if (querySnapshot.docs.isNotEmpty) {
+//       DocumentSnapshot unitDoc = querySnapshot.docs.first;
+//       setState(() {
+//         unitData = unitDoc.data() as Map<String, dynamic>;
+//       });
+//       return unitData;
+//     } else {
+//       print('No unit found.');
+//       return {};
+//     }
+//   } catch (e) {
+//     print('Failed to get unit info: $e');
+//     return {};
+//   }
+// }

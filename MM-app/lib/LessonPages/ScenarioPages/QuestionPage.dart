@@ -8,7 +8,7 @@ import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({
+   QuestionPage({
     super.key,
     required this.question,
     required this.correctAns,
