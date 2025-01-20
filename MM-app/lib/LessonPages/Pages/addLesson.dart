@@ -182,8 +182,7 @@ class _AddLessonTestState extends State<AddLessonTest> {
                 LessonNumber: 1,
                 LessonName: "Understanding Income",
                 TypeOfLesson: "Concept",
-                controllerData: {
-                },
+                controllerData: {},
                 Page1Data: {
                   "correct":
                       "That's right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let's explore why.",
@@ -197,15 +196,53 @@ class _AddLessonTestState extends State<AddLessonTest> {
                     "After I graduate from college.",
                     "Only when I’m ready to plan for retirement.",
                   ],
-                  "correctAnswer":  "As soon as I start earning money (even if it’s part-time or allowance)",
+                  "correctAnswer":
+                      "As soon as I start earning money (even if it’s part-time or allowance)",
                 },
-                Page2Data: {},
+                Page2Data: {
+                  "before":
+                      "Click for what it really means to be financially\nresponsible over a lifetime...",
+                  "bigTop": "Definition: ",
+                  "bigBottom":
+                      "\n\nFinancial responsibility over a lifetime means consistently making informed decisions about earning, saving, spending, and investing, starting from your earliest income and continuing through retirement.",
+                  'title':
+                      "Definition: Financial Responsibility Over a Lifetime",
+                  'little':
+                      "Why does it matter? Because small habits formed early—like setting aside a little money or comparing prices—can grow into long-term financial stability.",
+                },
                 Page3Data: {
-                  "title": "Your Financial Summary",
-                  "button": "Finish",
-                  "subTitle": "Financial Responsibility Score:",
+                  "iconLinks": [
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcard.png?alt=media&token=d9ad44a7-c607-4a88-9c8b-64d49e47a245",
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgraduation-cap.png?alt=media&token=53e1203d-816d-4512-b570-db886d53d904",
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fbriefcase-bag.png?alt=media&token=987a2538-9376-46ef-965e-502cf493d798",
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fsunset.png?alt=media&token=2ebd97df-6903-4254-bd15-3a59c404825b",
+                  ],
+                  'iconContents': [
+                    "Even small allowances or part-time earnings can be budgeted. Learning to save a portion of every dollar sets a foundation for bigger goals later.",
+                    "This might be your first real job or college experience. Start building credit responsibly and budget for regular bills—rent, utilities, groceries.",
+                    "You might buy a home or consider long-term investments. Having an emergency fund, managing debt wisely, and planning for retirement become crucial.",
+                    "You live off savings, pensions, or investments made earlier. Continued budgeting helps ensure your money lasts and you maintain your desired lifestyle.",
+                  ],
+                  "title":
+                      "Definition: Financial Responsibility Over a Lifetime",
+                  'wrong': "Kindly go in order from Left to Right.",
                 },
-                Page4Data: {},
+                Page4Data: {
+                  'title': 'Meet Jordan: A Life of Financial Decisions',
+                  'subTitle':
+                      'Jordan is on a journey from high school to retirement. Let\'s help them make smart financial choices!',
+                  'options': [
+                    "Save 10%",
+                    "Spend all of it",
+                  ],
+                  'correct': "Great habit! Even \$5 a week adds up over time.",
+                  'wrong':
+                      "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
+                  'containerHeading': "High School",
+                  'containerSubHeading':
+                      "Jordan just started a full-time job. Should he create a monthly budget first or just wing it?",
+                  'correctAnswer': "Save 10%",
+                },
                 Page5Data: {},
               );
 

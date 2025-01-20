@@ -17,17 +17,42 @@ class RevealPage extends StatefulWidget {
 
 class _RevealPageState extends State<RevealPage> {
   ComponentOneTwoController componentOneTwoController = Get.find();
-  String text =
-      "Click for what it really means to be financially\nresponsible over a lifetime...";
+  String before = '';
   bool showContent = false;
   bool enableNext = false;
+  bool loading = true;
+  String title = '';
+  String bigTop = '';
+  String bigBottom = '';
+  String little = '';
   late Column contents;
+  Future<void> setData(data) async {
+    setState(() {
+      before = data['before'] ?? '';
+      title = data['title'];
+      bigBottom = data['bigBottom'];
+      bigTop = data['bigTop'];
+      little = data['little'];
+      loading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
+    ever(componentOneTwoController.isLoading, (_) {
+      if (!componentOneTwoController.isLoading.value) {
+        if (componentOneTwoController.pageData.isNotEmpty) {
+          setData(componentOneTwoController.pageData[2]);
+        }
+      }
+    });
+    if (title == '') {
+      setData(componentOneTwoController.pageData[2]);
+    }
   }
 
   @override
@@ -51,59 +76,61 @@ class _RevealPageState extends State<RevealPage> {
   }
 
   Widget webDisplay(double screenWidth, double screenHeight) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: screenWidth * 0.02),
-        Text(
-          "Definition: Financial Responsibility Over a Lifetime",
-          softWrap: true,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 27,
-          ),
-        ).marginSymmetric(
-          vertical: screenHeight * 0.025,
-          horizontal: screenWidth * 0.015,
-        ),
-        AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-          child: Container(
-            key: ValueKey<bool>(
-                showContent), // Important for AnimatedSwitcher to detect changes
-            width: double.infinity,
-            height: screenHeight * 0.55,
-            child: showContent ? contents : TapToShowContainer(),
-          ),
-        ),
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenWidth * 0.02),
+              Text(
+                title,
+                softWrap: true,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 27,
+                ),
+              ).marginSymmetric(
+                vertical: screenHeight * 0.025,
+                horizontal: screenWidth * 0.015,
+              ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                child: Container(
+                  key: ValueKey<bool>(
+                      showContent), // Important for AnimatedSwitcher to detect changes
+                  width: double.infinity,
+                  height: screenHeight * 0.55,
+                  child: showContent ? contents : TapToShowContainer(),
+                ),
+              ),
 
-        SizedBox(
-          height: screenHeight * 0.05,
-        ),
-        //Next Button Row
-        Row(
-          children: [
-            const Spacer(),
-            CustomNextButton(
-              nextPage: () {
-                componentOneTwoController.pageIndex.value += 1;
-              },
-              isEnabled: enableNext,
-            ),
-            SizedBox(
-              width: screenWidth * 0.02,
-            ),
-          ],
-        )
-      ],
-    ).paddingSymmetric(horizontal: screenWidth * 0.25);
+              SizedBox(
+                height: screenHeight * 0.05,
+              ),
+              //Next Button Row
+              Row(
+                children: [
+                  const Spacer(),
+                  CustomNextButton(
+                    nextPage: () {
+                      componentOneTwoController.pageIndex.value += 1;
+                    },
+                    isEnabled: enableNext,
+                  ),
+                  SizedBox(
+                    width: screenWidth * 0.02,
+                  ),
+                ],
+              )
+            ],
+          ).paddingSymmetric(horizontal: screenWidth * 0.25);
   }
 
   Scaffold mobileDisplay() {
@@ -168,7 +195,7 @@ class _RevealPageState extends State<RevealPage> {
             child: Center(
               child: RichText(
                 text: TextSpan(
-                  text: "Definition: ",
+                  text: bigTop,
                   style: GoogleFonts.baloo2(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -176,7 +203,7 @@ class _RevealPageState extends State<RevealPage> {
                   children: [
                     TextSpan(
                       text:
-                          "\n\nFinancial responsibility over a lifetime means consistently making informed decisions about earning, saving, spending, and investing, starting from your earliest income and continuing through retirement.",
+                          bigBottom,
                       style: GoogleFonts.baloo2(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -201,7 +228,7 @@ class _RevealPageState extends State<RevealPage> {
               color: Colors.grey.shade200,
             ),
             child: Text(
-              "Why does it matter? Because small habits formed early—like setting aside a little money or comparing prices—can grow into long-term financial stability.",
+             little,
               style: GoogleFonts.baloo2(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -235,7 +262,7 @@ class _RevealPageState extends State<RevealPage> {
         ),
         child: Center(
           child: Text(
-            "Click for what it really means to be financially\nresponsible over a lifetime...",
+            before,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,

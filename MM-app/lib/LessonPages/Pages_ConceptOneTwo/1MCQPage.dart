@@ -18,37 +18,31 @@ class MCQPage extends StatefulWidget {
 }
 
 class _MCQPageState extends State<MCQPage> {
-
   ComponentOneTwoController componentOneTwoController = Get.find();
 
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  List<String> correctAnswers = [
-    "As soon as I start earning money (even if it’s part-time or allowance)"
-  ];
-  List<String> options = [
-    "Once I have a full time job",
-    "As soon as I start earning money (even if it’s part-time or allowance)",
-    "After I graduate from college.",
-    "Only when I’m ready to plan for retirement.",
-  ];
+  List<String> correctAnswers = [];
+  List<String> options = [];
   // String correctAnswer = '';
 
   // List<String> options = [];
-  // ComponentOneTwoController componentOneTwoController = Get.find();
   String wrong = '';
   String correct = '';
-  // String title = '';
-  // String question = '';
-  // ComponentOneTwoController componentOneTwoController = Get.find();
+  String title = '';
+  String question = '';
+  bool loading = true;
 
-  
-
-   Future<void> setData(data) async {
+  Future<void> setData(data) async {
     setState(() {
       correct = data['correct'];
       wrong = data['wrong'];
-      
+      title = data['title'];
+      question = data['question'];
+      options =
+          List<String>.from(data["options"].map((item) => item.toString()));
+      correctAnswers.add(data['correctAnswer']);
+      loading = false;
     });
   }
 
@@ -62,19 +56,18 @@ class _MCQPageState extends State<MCQPage> {
         }
       }
     });
-    if ( false) {
-    setState(() {
-    });
+    if (title == '') {
+     
       setData(componentOneTwoController.pageData[1]);
     }
   }
-
 
   void answerQuestion(String ans) {
     currentAnswers.clear();
     if (correctAnswers.contains(ans)) {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(message: correct));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CorrectAnswerSnackBar(message: correct));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -86,7 +79,8 @@ class _MCQPageState extends State<MCQPage> {
       );
     } else {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(WrongAnswerSnackBar(message: wrong));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(WrongAnswerSnackBar(message: wrong));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -103,74 +97,78 @@ class _MCQPageState extends State<MCQPage> {
   }
 
   Widget webDisplay(double screenWidth, double screenHeight) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: screenWidth * 0.02),
-        Text(
-          "When Should Financial Responsibility Begin?",
-          softWrap: true,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 27,
-          ),
-        ).marginSymmetric(
-          vertical: screenHeight * 0.025,
-          horizontal: screenWidth * 0.015,
-        ),
-        Text(
-          "Before we dive in, let’s see what you think!",
-          softWrap: true,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 19,
-          ),
-        ).marginSymmetric(
-          vertical: screenHeight * 0.01,
-          horizontal: screenWidth * 0.015,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Container(
-          height: screenHeight * 0.5,
-          child: Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: options.map((answer) {
-                  return GestureDetector(
-                    onTap: () {
-                      answerQuestion(answer);
-                    },
-                    child: OptionsTile(
-                      isSelected: currentAnswers.contains(answer),
-                      childWidget: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 15,
-                        ),
-                        child: Text(
-                          answer,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+    return loading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenWidth * 0.02),
+              Text(
+                question,
+                softWrap: true,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 27,
+                ),
+              ).marginSymmetric(
+                vertical: screenHeight * 0.025,
+                horizontal: screenWidth * 0.015,
               ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: screenHeight * 0.1,
-        ),
-      ],
-    ).paddingSymmetric(horizontal: screenWidth * 0.25);
+              Text(
+                title,
+                softWrap: true,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 19,
+                ),
+              ).marginSymmetric(
+                vertical: screenHeight * 0.01,
+                horizontal: screenWidth * 0.015,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                height: screenHeight * 0.5,
+                child: Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: options.map((answer) {
+                        return GestureDetector(
+                          onTap: () {
+                            answerQuestion(answer);
+                          },
+                          child: OptionsTile(
+                            isSelected: currentAnswers.contains(answer),
+                            childWidget: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 15,
+                              ),
+                              child: Text(
+                                answer,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.1,
+              ),
+            ],
+          ).paddingSymmetric(horizontal: screenWidth * 0.25);
   }
 
   Scaffold mobileDisplay() {
