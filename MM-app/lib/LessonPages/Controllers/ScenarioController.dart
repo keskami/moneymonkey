@@ -58,7 +58,7 @@ class ScenarioController extends GetxController {
           levelName: "Advanced",
           UnitNumber: 1,
           LessonNumber: 1,
-          TypeOfLesson: "PeerReflection",
+          TypeOfLesson: "Scenario",
           PageNumber: i,
         );
 

@@ -20,13 +20,42 @@ class _IntroductionPageState extends State<IntroductionPage> {
   bool s = false;
   bool a = false;
 
+  String title = '';
+  List<String> items = [];
+  List<String> instructions = [];
+  bool loading = false;
+  String button = '';
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data['title'];
+      button = data['button'];
+      items = List<String>.from(data["items"].map((item) => item.toString()));
+      instructions = List<String>.from(data["instructions"].map((item) => item.toString()));
+      wait6sec();
+      loading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    wait6sec();
+    ever(scenarioController.isLoading, (_) {
+      if (!scenarioController.isLoading.value) {
+        if (scenarioController.pageData.isNotEmpty && scenarioController.pageData[1] != null) {
+          setData(scenarioController.pageData[1]);
+        }
+      }
+    });
+    
+    // Initial data load attempt
+    if (!scenarioController.isLoading.value && 
+        scenarioController.pageData.isNotEmpty && 
+        scenarioController.pageData[1] != null) {
+      setData(scenarioController.pageData[1]);
+    }
   }
-
-  Future<void> wait6sec() async {
+  Future<void> wait6sec() async{
     await Future.delayed(Duration(seconds: 6));
     setState(() {
       wait6 = true;
@@ -55,160 +84,162 @@ class _IntroductionPageState extends State<IntroductionPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: screenWidth * 0.5,
-          height: screenHeight * 0.3,
-          decoration: BoxDecoration(
-            color: LightTheme().primaryBlue.withAlpha(70),
-            borderRadius: BorderRadius.circular(
-              10,
-            ),
-          ),
-          child: Row(
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.network(
-                height: screenHeight * 0.2,
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
-              ),
-              Expanded(
-                child: Text(
-                  "Congratulations! You've just started your first part-time job and earned your first paycheck of \$500. You have several things you want to do with the money: buy new sneakers, save for college, and plan for weekend activities.",
-                  overflow: TextOverflow.visible,
-                  softWrap: true,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+              Container(
+                width: screenWidth * 0.5,
+                height: screenHeight * 0.3,
+                decoration: BoxDecoration(
+                  color: LightTheme().primaryBlue.withAlpha(70),
+                  borderRadius: BorderRadius.circular(
+                    10,
                   ),
                 ),
-              )
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.network(
+                      height: screenHeight * 0.2,
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+                    ),
+                    Expanded(
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.visible,
+                        softWrap: true,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  ],
+                ).paddingSymmetric(
+                  horizontal: screenWidth * 0.02,
+                  vertical: screenHeight * 0.05,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, screenHeight * .04, 0, 0),
+                child: Row(children: [
+                  SizedBox(
+                    width: screenWidth * .025,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        s = true;
+                      });
+                    },
+                    child: Container(
+                      width: screenWidth * 0.13,
+                      height: screenHeight * 0.17,
+                      child: TapToRevealContainer(
+                        contents: NewContentContainer(
+                          image:
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fsneakers%201.png?alt=media&token=625bdbab-4e8d-42cd-82b4-8f79a1bedf3f",
+                          texts: [items[0]],
+                          screenWidth: screenWidth,
+                          onFlip: () => makeTrue(items[0]),
+                        ),
+                        instructions: InstructionContainer(
+                          text: instructions[0],
+                          screenWidth: screenWidth,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: screenWidth * .025,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        c = true;
+                      });
+                    },
+                    child: Container(
+                      width: screenWidth * 0.13,
+                      height: screenHeight * 0.17,
+                      child: TapToRevealContainer(
+                        contents: NewContentContainer(
+                          image:
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fcollege%201.png?alt=media&token=cd5510da-9563-41a8-a2eb-bd13594312a3",
+                          texts: [items[1]],
+                          screenWidth: screenWidth,
+                          onFlip: () => makeTrue(items[1]),
+                        ),
+                        instructions: InstructionContainer(
+                          text: instructions[1],
+                          screenWidth: screenWidth,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: screenWidth * .025,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print("CLikced");
+                      setState(() {
+                        a = true;
+                      });
+                    },
+                    child: Container(
+                      width: screenWidth * 0.13,
+                      height: screenHeight * 0.17,
+                      child: TapToRevealContainer(
+                        contents: NewContentContainer(
+                          image:
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
+                         texts: [items[2]],
+                          screenWidth: screenWidth,
+                          onFlip: () => makeTrue(items[2]),
+                        ),
+                        instructions: InstructionContainer(
+                          text: instructions[2],
+                          screenWidth: screenWidth,
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              SizedBox(
+                height: screenHeight * 0.1,
+              ),
+              GestureDetector(
+                  onTap: (wait6)
+                      ? () {
+                          scenarioController.pageIndex.value += 1;
+                        }
+                      : () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: (wait6)
+                          ? LightTheme().pastelGreen
+                          : Color.fromRGBO(227, 227, 227, 1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    width: screenWidth * 0.18,
+                    height: screenHeight * 0.08,
+                    child: Center(
+                      child: Text(
+                        button,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ))
             ],
-          ).paddingSymmetric(
-            horizontal: screenWidth * 0.02,
-            vertical: screenHeight * 0.05,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, screenHeight * .04, 0, 0),
-          child: Row(children: [
-            SizedBox(
-              width: screenWidth * .025,
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  s = true;
-                });
-              },
-              child: Container(
-                width: screenWidth * 0.13,
-                height: screenHeight * 0.17,
-                child: TapToRevealContainer(
-                  contents: NewContentContainer(
-                    image:
-                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fsneakers%201.png?alt=media&token=625bdbab-4e8d-42cd-82b4-8f79a1bedf3f",
-                    texts: ['Sneakers'],
-                    screenWidth: screenWidth,
-                    onFlip: () => makeTrue("Sneakers"),
-                  ),
-                  instructions: InstructionContainer(
-                    text: "Click for choice 1...",
-                    screenWidth: screenWidth,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: screenWidth * .025,
-            ),
-             GestureDetector(
-              onTap: () {
-                setState(() {
-                  c = true;
-                });
-              },
-              child:
-            Container(
-              width: screenWidth * 0.13,
-              height: screenHeight * 0.17,
-              child: TapToRevealContainer(
-                contents: NewContentContainer(
-                  image:
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fcollege%201.png?alt=media&token=cd5510da-9563-41a8-a2eb-bd13594312a3",
-                  texts: ['College'],
-                  screenWidth: screenWidth,
-                  onFlip: () => makeTrue("College"),
-                ),
-                instructions: InstructionContainer(
-                  text: "Click for choice 2...",
-                  screenWidth: screenWidth,
-                ),
-              ),
-            ),),
-            SizedBox(
-              width: screenWidth * .025,
-            ),
-            GestureDetector(
-              onTap: () {
-                print("CLikced");
-                setState(() {
-                  a = true;
-                });
-              },
-            child:
-            Container(
-              width: screenWidth * 0.13,
-              height: screenHeight * 0.17,
-              child: TapToRevealContainer(
-                contents: NewContentContainer(
-                  image:
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
-                  texts: ['Activities'],
-                  screenWidth: screenWidth,
-                  onFlip: () => makeTrue("Activities"),
-                ),
-                instructions: InstructionContainer(
-                  text: "Click for choice 3...",
-                  screenWidth: screenWidth,
-                ),
-              ),
-            ),),
-          ]),
-        ),
-        SizedBox(
-          height: screenHeight * 0.1,
-        ),
-        GestureDetector(
-            onTap: (wait6 )
-                ? () {
-                    scenarioController.pageIndex.value += 1;
-                  }
-                : () {},
-            child: Container(
-              decoration: BoxDecoration(
-                color: (wait6)
-                    ? LightTheme().pastelGreen
-                    : Color.fromRGBO(227, 227, 227, 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              width: screenWidth * 0.18,
-              height: screenHeight * 0.08,
-              child: Center(
-                child: Text(
-                  "Start Managing Your Money",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ))
-      ],
-    );
+          );
   }
 }
 
