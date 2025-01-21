@@ -26,6 +26,10 @@ class _AddLessonTestState extends State<AddLessonTest> {
       required Map<String, dynamic> Page3Data,
       required Map<String, dynamic> Page4Data,
       required Map<String, dynamic> Page5Data,
+      required Map<String, dynamic> Page6Data,
+      required Map<String, dynamic> Page7Data,
+      required Map<String, dynamic> Page8Data,
+      required Map<String, dynamic> Page9Data,
       required Map<String, dynamic> controllerData}) async {
     try {
       // Reference to Firestore
@@ -82,6 +86,10 @@ class _AddLessonTestState extends State<AddLessonTest> {
           "Page3": Page3Data,
           "Page4": Page4Data,
           "Page5": Page5Data,
+          "Page6": Page6Data,
+          "Page7": Page7Data,
+          "Page8": Page8Data,
+          "Page9": Page9Data,
           "Page0": controllerData,
         });
       }
@@ -240,10 +248,62 @@ class _AddLessonTestState extends State<AddLessonTest> {
                       "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
                   'containerHeading': "High School",
                   'containerSubHeading':
-                      "Jordan just started a full-time job. Should he create a monthly budget first or just wing it?",
+                      "Jordan earns \$50/week from chores. Should Jordan save 10% (\$5) or spend it all?",
                   'correctAnswer': "Save 10%",
                 },
-                Page5Data: {},
+                Page5Data: {
+                  'title': "Meet Jordan: A Life of Financial Decisions",
+                  'subTitle':
+                      "Jordan is on a journey from high school to retirement. Let's help them make smart financial choices!",
+                  'options': [
+                    "Create a monthly budget",
+                    "Wing it",
+                  ],
+                  'correct':
+                      "Smart move! This helps Jordan track\nspending and allocate money for bills,\nsavings, and fun.",
+                  'wrong':
+                      "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
+                  'containerHeading': "High School",
+                  'containerSubHeading':
+                      "Jordan just started a full-time job. Should he create a monthly budget first or just wing it?",
+                  'correctAnswer': "Create a monthly budget",
+                },
+                Page6Data: {
+                  'title': "Meet Jordan: A Life of Financial Decisions",
+                  'subTitle':
+                      "Jordan is on a journey from high school to retirement. Let's help them make smart financial choices!",
+                  'options': [
+                    "High priority",
+                    "Not that important",
+                  ],
+                  'correct':
+                      "Yes! Unexpected costs like medical\nbills or childcare can pop up. Having a\ncushion is crucial.",
+                  'wrong':
+                      "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
+                  'containerHeading': "Family Planning",
+                  'containerSubHeading':
+                      "Jordan is thinking about starting a family soon. How important is it to have an emergency fund?",
+                  'correctAnswer': "High priority",
+                },
+                Page7Data: {
+                  'title': "Meet Jordan: A Life of Financial Decisions",
+                  'subTitle':
+                      "Jordan is on a journey from high school to retirement. Let's help them make smart financial choices!",
+                  'options': [
+                    "Yes",
+                    "No",
+                  ],
+                  'correct':
+                     "Yes! Consistent budgeting helps\nensure savings last throughout\nretirement.",
+                  'wrong':
+                      "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
+                  'containerHeading': "Retirement",
+                  'containerSubHeading':
+                      "Jordan is now approaching retirement. Should they continue some form of budgeting?",
+                  'correctAnswer': "Yes",
+                },
+                Page8Data: {},
+                Page9Data: {},
               );
 
               //Here to add Scenario

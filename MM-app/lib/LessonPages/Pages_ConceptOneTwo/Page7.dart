@@ -14,30 +14,56 @@ class L1Page7 extends StatefulWidget {
 class _L1Page7State extends State<L1Page7> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  List<String> correctAnswers = ["Yes"];
-  List<String> options = [
-    "Yes",
-    "No",
-  ];
-  String _containerHeading = "Retirement";
-  String _containerSubHeading =
-      "Jordan is now approaching retirement. Should they continue some form of budgeting?";
+  List<String> correctAnswers = [];
+  List<String> options = [];
+  String containerHeading = '';
+  String containerSubHeading = '';
+
   ComponentOneTwoController componentOneTwoController = Get.find();
-  SnackBar correctAnswer = CorrectAnswerSnackBar(
-    message:
-        "Yes! Consistent budgeting helps\nensure savings last throughout\nretirement.",
-  );
 
-  SnackBar wrongAnswer = WrongAnswerSnackBar(
-    message:
-        "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
-  );
+  String title = '';
+  String subTitle = '';
+  String wrong = '';
+  String correct = '';
+  bool loading = true;
+  Future<void> setData(data) async {
+    setState(() {
+      title = data['title'];
+      subTitle = data['subTitle'];
+      wrong = data['wrong'];
+      correct = data['correct'];
+      containerHeading = data['containerHeading'];
+      containerSubHeading = data['containerSubHeading'];
+      options =
+          List<String>.from(data["options"].map((item) => item.toString()));
+      correctAnswers.add(data['correctAnswer']);
 
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+    });
+    ever(componentOneTwoController.isLoading, (_) {
+      if (!componentOneTwoController.isLoading.value) {
+        if (componentOneTwoController.pageData.isNotEmpty) {
+          setData(componentOneTwoController.pageData[7]);
+        }
+      }
+    });
+    if (title == '') {
+      setData(componentOneTwoController.pageData[7]);
+    }
+  }
   void answerQuestion(String ans) {
     currentAnswers.clear();
     if (correctAnswers.contains(ans)) {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(correctAnswer);
+      ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(message: correct));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -49,20 +75,14 @@ class _L1Page7State extends State<L1Page7> {
       );
     } else {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(wrongAnswer);
+      ScaffoldMessenger.of(context).showSnackBar(WrongAnswerSnackBar(message: wrong));
       setState(() {
         currentAnswers.add(ans);
       });
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +102,7 @@ class _L1Page7State extends State<L1Page7> {
           SizedBox(height: screenWidth * 0.02),
           //Heading
           Text(
-            "Meet Jordan: A Life of Financial Decisions",
+            title,
             softWrap: true,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -92,7 +112,7 @@ class _L1Page7State extends State<L1Page7> {
               vertical: screenHeight * 0.025, horizontal: screenWidth * 0.015),
           //SubHeading
           Text(
-            "Jordan is on a journey from high school to retirement. Let's help them make smart financial choices!",
+            subTitle,
             softWrap: true,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -131,7 +151,7 @@ class _L1Page7State extends State<L1Page7> {
                       height: screenHeight * 0.02,
                     ),
                     Text(
-                      _containerHeading,
+                      containerHeading,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 19,
@@ -141,7 +161,7 @@ class _L1Page7State extends State<L1Page7> {
                       height: screenHeight * 0.01,
                     ),
                     Text(
-                      _containerSubHeading,
+                      containerSubHeading,
                       softWrap: true,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,

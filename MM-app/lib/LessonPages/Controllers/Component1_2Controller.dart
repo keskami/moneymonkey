@@ -44,7 +44,7 @@ class ComponentOneTwoController extends GetxController {
 
   Future<void> fetchPageData() async {
     try {
-      for (int i = 1; i <= 5; i++) {
+      for (int i = 1; i <= 9; i++) {
         var data = await lessonData.getPageInfoFromFirestore(
           levelName: "Advanced",
           UnitNumber: 1,
