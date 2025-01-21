@@ -81,14 +81,12 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         ),
         Container(
           height: screenHeight * 0.65,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: screenWidth * 0.05,
-            ),
-            child: Obx(
-              () => teacherDashboardController
-                  .pages[teacherDashboardController.pageIndex.value],
-            ),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.05,
+          ),
+          child: Obx(
+            () => teacherDashboardController
+                .pages[teacherDashboardController.pageIndex.value],
           ),
         ),
       ],

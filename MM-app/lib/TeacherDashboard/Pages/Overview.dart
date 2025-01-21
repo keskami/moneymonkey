@@ -136,399 +136,401 @@ class _DashboardOverviewState extends State<DashboardOverview> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        //Lesson Progress Container
-        ShadowedContainer(
-          margin: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.02,
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.02,
-            vertical: screenHeight * 0.02,
-          ),
-          child: Column(
-            children: [
-              //Current Progress and Status Row
-              Row(
-                children: [
-                  Text(
-                    "Current Lesson Progress",
-                    style: TextStyles.containerTitle,
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      backgroundColor: WidgetStatePropertyAll(
-                        LightTheme().primaryBlue.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Text(
-                      progressStatus,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.blue.shade300,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              //Green Title for Overview
-              ColoredPaddedContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          //Lesson Progress Container
+          ShadowedContainer(
+            margin: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.02,
+              vertical: screenHeight * 0.02,
+            ),
+            child: Column(
+              children: [
+                //Current Progress and Status Row
+                Row(
                   children: [
                     Text(
-                      message1,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      message2,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //Lessons and respective status
-              ...lessonList.map(
-                (lesson) => Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.transparent,
-                      child:
-                          teacherDashboardController.getProgress(lesson[1]) ==
-                                  'Completed'
-                              ? Image.network(
-                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
-                                )
-                              : Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: teacherDashboardController
-                                              .getProgress(lesson[1]) ==
-                                          'In Progress'
-                                      ? CircularProgressIndicator(
-                                          value: double.parse(lesson[1]) / 100,
-                                          strokeWidth: 2,
-                                        )
-                                      : CircularProgressIndicator(
-                                          value: 1,
-                                          strokeWidth: 2,
-                                          color: Colors.grey,
-                                        ),
-                                ),
-                    ),
-                    Text(
-                      lesson[0],
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ).marginOnly(
-                      left: 10,
+                      "Current Lesson Progress",
+                      style: TextStyles.containerTitle,
                     ),
                     const Spacer(),
-                    Text(
-                      teacherDashboardController.getProgress(lesson[1]),
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                    TextButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        backgroundColor: WidgetStatePropertyAll(
+                          LightTheme().primaryBlue.withValues(alpha: 0.3),
+                        ),
                       ),
-                    ).marginOnly(
-                      right: 20,
+                      child: Text(
+                        progressStatus,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.blue.shade300,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
-                ).marginSymmetric(
-                  vertical: 6,
                 ),
-              ),
-            ],
-          ),
-        ),
-        //Quick Actions(Suggestions Container)
-        ShadowedContainer(
-          margin: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.02,
-          ),
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.02,
-            horizontal: screenWidth * 0.01,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Quick Actions",
-                style: TextStyles.containerTitle,
-              ),
-              ...quickActionsSuggestions.map(
-                (suggestion) => Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: screenHeight * 0.01,
+                //Green Title for Overview
+                ColoredPaddedContainer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        message1,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        message2,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
                   ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.01,
-                    vertical: screenHeight * 0.02,
+                ),
+                //Lessons and respective status
+                ...lessonList.map(
+                  (lesson) => Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.transparent,
+                        child: teacherDashboardController
+                                    .getProgress(lesson[1]) ==
+                                'Completed'
+                            ? Image.network(
+                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+                              )
+                            : Container(
+                                width: 20,
+                                height: 20,
+                                child: teacherDashboardController
+                                            .getProgress(lesson[1]) ==
+                                        'In Progress'
+                                    ? CircularProgressIndicator(
+                                        value: double.parse(lesson[1]) / 100,
+                                        strokeWidth: 2,
+                                      )
+                                    : CircularProgressIndicator(
+                                        value: 1,
+                                        strokeWidth: 2,
+                                        color: Colors.grey,
+                                      ),
+                              ),
+                      ),
+                      Text(
+                        lesson[0],
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ).marginOnly(
+                        left: 10,
+                      ),
+                      const Spacer(),
+                      Text(
+                        teacherDashboardController.getProgress(lesson[1]),
+                        style: TextStyle(
+                          color: Colors.grey.shade500,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ).marginOnly(
+                        right: 20,
+                      ),
+                    ],
+                  ).marginSymmetric(
+                    vertical: 6,
                   ),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: randomColorList[
-                            quickActionsSuggestions.indexOf(suggestion)]
-                        .withValues(alpha: 0.1),
-                  ),
-                  child: Text(
-                    suggestion,
-                    style: TextStyle(
-                      fontSize: 16,
+                ),
+              ],
+            ),
+          ),
+          //Quick Actions(Suggestions Container)
+          ShadowedContainer(
+            margin: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+            ),
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.01,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Quick Actions",
+                  style: TextStyles.containerTitle,
+                ),
+                ...quickActionsSuggestions.map(
+                  (suggestion) => Container(
+                    margin: EdgeInsets.symmetric(
+                      vertical: screenHeight * 0.01,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.01,
+                      vertical: screenHeight * 0.02,
+                    ),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
                       color: randomColorList[
-                          quickActionsSuggestions.indexOf(suggestion)],
-                      fontWeight: FontWeight.bold,
+                              quickActionsSuggestions.indexOf(suggestion)]
+                          .withValues(alpha: 0.1),
+                    ),
+                    child: Text(
+                      suggestion,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: randomColorList[
+                            quickActionsSuggestions.indexOf(suggestion)],
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
+                )
+              ],
+            ),
+          ),
+          //Discussion Container
+          ShadowedContainer(
+            margin: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.01,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Discussion Questions",
+                  style: TextStyles.containerTitle,
                 ),
-              )
-            ],
-          ),
-        ),
-        //Discussion Container
-        ShadowedContainer(
-          margin: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.02,
-          ),
-          padding: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.02,
-            horizontal: screenWidth * 0.01,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Discussion Questions",
-                style: TextStyles.containerTitle,
-              ),
-              CustomDropDownContainer(
-                initialSelection: discussionComponent,
-                width: screenWidth * 0.15,
-                items: lessonList
-                    .map(
-                      (e) => e[0],
-                    )
+                CustomDropDownContainer(
+                  initialSelection: discussionComponent,
+                  width: screenWidth * 0.15,
+                  items: lessonList
+                      .map(
+                        (e) => e[0],
+                      )
+                      .toList(),
+                  onChanged: onDiscussionComponentChanged,
+                ).marginSymmetric(
+                  vertical: screenHeight * 0.01,
+                ),
+                ...discussionQuestions[discussionComponent]!
+                    .map((question) => Container(
+                          margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.01,
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.015,
+                            horizontal: screenWidth * 0.02,
+                          ),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.blue.withValues(alpha: 0.1),
+                          ),
+                          child: Text(
+                            question,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue.shade700,
+                            ),
+                          ),
+                        ))
                     .toList(),
-                onChanged: onDiscussionComponentChanged,
-              ).marginSymmetric(
-                vertical: screenHeight * 0.01,
-              ),
-              ...discussionQuestions[discussionComponent]!
-                  .map((question) => Container(
-                        margin: EdgeInsets.symmetric(
-                          vertical: screenHeight * 0.01,
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: screenHeight * 0.015,
-                          horizontal: screenWidth * 0.02,
-                        ),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.blue.withValues(alpha: 0.1),
-                        ),
-                        child: Text(
-                          question,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blue.shade700,
-                          ),
-                        ),
-                      ))
-                  .toList(),
-            ],
+              ],
+            ),
           ),
-        ),
 
-        //Performance Highlights Container
-        ShadowedContainer(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.02,
-            horizontal: screenWidth * 0.01,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Performance Highlights",
-                style: TextStyles.containerTitle,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Flex(
-                direction: Axis.horizontal,
-                children: [
-                  //Top Performers Container
-                  Container(
-                    width: screenWidth * 0.2,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Top Performers",
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+          //Performance Highlights Container
+          ShadowedContainer(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.01,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Performance Highlights",
+                  style: TextStyles.containerTitle,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    //Top Performers Container
+                    Container(
+                      width: screenWidth * 0.2,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Top Performers",
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ...topPerformerStudents.map(
-                          (student) => Row(
-                            children: [
-                              Text(
-                                student[0],
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                "${student[1]}%",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.green,
-                                ),
-                              )
-                            ],
-                          ).marginSymmetric(
-                            vertical: 5,
+                          const SizedBox(
+                            height: 10,
                           ),
-                        ),
-                      ],
+                          ...topPerformerStudents.map(
+                            (student) => Row(
+                              children: [
+                                Text(
+                                  student[0],
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "${student[1]}%",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.green,
+                                  ),
+                                )
+                              ],
+                            ).marginSymmetric(
+                              vertical: 5,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: screenWidth * 0.05,
-                  ),
-                  //Support Students Container
-                  Container(
-                    width: screenWidth * 0.2,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Needs Support",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ...supportStudents.map(
-                          (student) => Row(
-                            children: [
-                              Text(
-                                student[0],
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                "${student[1]}%",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.red,
-                                ),
-                              )
-                            ],
-                          ).marginSymmetric(
-                            vertical: 5,
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      width: screenWidth * 0.05,
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Knowledge & Application",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                    //Support Students Container
+                    Container(
+                      width: screenWidth * 0.2,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Needs Support",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ...supportStudents.map(
+                            (student) => Row(
+                              children: [
+                                Text(
+                                  student[0],
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "${student[1]}%",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.red,
+                                  ),
+                                )
+                              ],
+                            ).marginSymmetric(
+                              vertical: 5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 10,
-                width: screenWidth * 0.65,
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.grey.shade300,
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  value: 0.7,
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Effort & Management",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                const Text(
+                  "Knowledge & Application",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 10,
-                width: screenWidth * 0.65,
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.grey.shade300,
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  value: 0.4,
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-            ],
+                Container(
+                  height: 10,
+                  width: screenWidth * 0.65,
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey.shade300,
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                    value: 0.7,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  "Effort & Management",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 10,
+                  width: screenWidth * 0.65,
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey.shade300,
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                    value: 0.4,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

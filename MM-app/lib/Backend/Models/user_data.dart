@@ -117,3 +117,5 @@ class ProfileData {
     };
   }
 }
+
+class ClassPerformance {}
