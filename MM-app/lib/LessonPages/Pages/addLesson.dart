@@ -294,7 +294,7 @@ class _AddLessonTestState extends State<AddLessonTest> {
                     "No",
                   ],
                   'correct':
-                     "Yes! Consistent budgeting helps\nensure savings last throughout\nretirement.",
+                      "Yes! Consistent budgeting helps\nensure savings last throughout\nretirement.",
                   'wrong':
                       "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
                   'containerHeading': "Retirement",
@@ -302,8 +302,53 @@ class _AddLessonTestState extends State<AddLessonTest> {
                       "Jordan is now approaching retirement. Should they continue some form of budgeting?",
                   'correctAnswer': "Yes",
                 },
-                Page8Data: {},
-                Page9Data: {},
+                Page8Data: {
+                  "title": "Quick Check: Lifelong Financial Responsibility",
+                  "button": "Check",
+                  "options1": [
+                    "Spending money the moment you get it",
+                    "Saving and investing a portion of earnings regularly",
+                    "Waiting to save until you earn a high salary",
+                  ],
+                  "options2": [
+                    "It guarantees you’ll never worry about money again",
+                    "It covers unexpected expenses, reducing stress and debt",
+                    "It means you can freely spend on luxury items without a budget",
+                  ],
+                  "correctAnswer1":
+                      "Saving and investing a portion of earnings regularly",
+                  "correctAnswer2":
+                      "It covers unexpected expenses, reducing stress and debt",
+                  "2Correct": "Yes, both these answers are correct!",
+                  "1Correct": "Only one of these answers are\ncorrect!",
+                  "0Correct": "Recheck your answer please.",
+                  "question1":
+                      "Which of the following best describes a strong financial habit at any age?",
+                  "question2":
+                      "Which is a key benefit of having an emergency fund?",
+                },
+                Page9Data: {
+                  "title": "Key Takeaways: Lifelong Financial Responsibility",
+                  "correct":
+                      "Yes! Consistent budgeting helps\nensure savings last throughout\nretirement.",
+                  "wrong":
+                      "Coins have been used since\naround 600 B.C., making them the\noldest form of money still in use.",
+                  "subTitle": "Personal Reflection",
+                  "hint":
+                      'What’s one new financial habit you’ll adopt this month?',
+                  'takeaways': [
+                    "Early habits matter",
+                    "Starting even with small amounts when young helps build bigger savings over time.",
+                    "Budgeting at Every Stage",
+                    "From first job to retirement, a budget reduces overspending and increases savings.",
+                    "Preparedness for Changes",
+                    "Plan for life transitions—like family or job changes—by maintaining an emergency fund.",
+                    "Never Too Late to Improve",
+                    "Even close to retirement, you can still refine your budget and investment approach for a more secure future."
+                  ],
+                  "image":
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2Ftakeaway_check.png?alt=media&token=9a389932-5562-4c38-a970-9ecd6bf8adcb",
+                },
               );
 
               //Here to add Scenario

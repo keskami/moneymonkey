@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
                     return StoryPage();
                   }
                 } else {
-                  return LessonOne();
+                  return HomePage();
                 }
               },
             ),

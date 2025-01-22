@@ -19,7 +19,6 @@ class ComponentOneTwoController extends GetxController {
   // To store fetched questions
   RxList<Question> questions = <Question>[].obs;
 
-
   var pages = [
     MCQPage(),
     RevealPage(),
@@ -34,7 +33,6 @@ class ComponentOneTwoController extends GetxController {
   var pageData = <int, dynamic>{}.obs;
   final LessonData lessonData = LessonData();
   RxBool isLoading = true.obs;
-  
 
   @override
   void onInit() {
@@ -59,7 +57,6 @@ class ComponentOneTwoController extends GetxController {
       print("Error fetching page data: $e");
     } finally {
       isLoading.value = false;
-      
     }
   }
 }
