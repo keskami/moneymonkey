@@ -37,6 +37,16 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
   String box2 = '';
   String box3 = '';
   String subTitle = '';
+  Future<void> noLeak(data) async {
+    if (!availableItems.contains(data) &&
+        !droppedItems1.contains(data) &&
+        !droppedItems2.contains(data) &&
+        !droppedItems3.contains(data)) {
+      setState(() {
+        availableItems.add(data);
+      });
+    }
+  }
 
   Future<void> setData(data) async {
     setState(() {
@@ -304,6 +314,7 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
           onItemDropped(data);
           onItemDropped2(data);
           availableItems.remove(data);
+          noLeak(data);
         });
 
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -330,6 +341,7 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
             if (availableItems.contains(data)) {
               setState(() {
                 availableItems.remove(data);
+                noLeak(data);
               });
             } else {
               setState(() {});
@@ -338,6 +350,7 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
             setState(() {
               if (!availableItems.contains(data)) {
                 availableItems.add(data!);
+                noLeak(data);
               }
             });
           }
@@ -405,6 +418,7 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
       onDragCompleted: () {
         setState(() {
           sourceList.remove(label);
+          noLeak(label);
         });
 
         if (droppedItems1.contains(label) ||
@@ -413,6 +427,7 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
           if (availableItems.contains(label)) {
             setState(() {
               availableItems.remove(label);
+              noLeak(label);
             });
           }
         } else {
@@ -462,66 +477,3 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
   }
 }
 
-Widget topOfLesson({
-  required double screenWidthUnit,
-  required double screenHeightUnit,
-  required double pageNumber,
-  required double totalPages,
-  required BuildContext context,
-  required int bananas,
-}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-          icon: Icon(Icons.close, color: Colors.black)),
-      TweenAnimationBuilder<double>(
-        tween: Tween<double>(
-            begin: (pageNumber - 1) / totalPages, end: pageNumber / totalPages),
-        duration: Duration(seconds: 2),
-        builder: (context, value, child) {
-          return Container(
-            height: screenHeightUnit * 25,
-            width: screenWidthUnit * 202,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(135, 206, 235, 1),
-                  Color.fromRGBO(213, 213, 213, 1),
-                ],
-                stops: [value, value],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 5,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-      SizedBox(
-        width: screenWidthUnit * 4,
-      ),
-      Image.asset("assets/images/img_monkeymoney_52.png",
-          height: screenHeightUnit * 36),
-      SizedBox(
-        width: screenWidthUnit * 1,
-      ),
-      Text("$bananas",
-          style: GoogleFonts.roboto(
-              fontSize: screenWidthUnit * 5.5, color: Colors.black)),
-    ],
-  );
-}

@@ -22,7 +22,6 @@ class _Page3State extends State<Page3> {
   int totalBanans = 0;
   PeerReflectioncontroller peerReflectionController = Get.find();
 
-
   List<String> availableItems = [];
 
   List<String> correct1 = [];
@@ -44,7 +43,8 @@ class _Page3State extends State<Page3> {
       box1 = data["box1"];
       box2 = data["box2"];
       box3 = data["box3"];
-      availableItems =  List<String>.from(data["options"].map((item) => item.toString()));
+      availableItems =
+          List<String>.from(data["options"].map((item) => item.toString()));
       correct1 =
           List<String>.from(data["correct1"].map((item) => item.toString()));
       correct2 =
@@ -67,6 +67,17 @@ class _Page3State extends State<Page3> {
       ),
     );
     setData(peerReflectionController.pageData[3]);
+  }
+
+  Future<void> noLeak(data) async {
+    if (!availableItems.contains(data) &&
+        !droppedItems1.contains(data) &&
+        !droppedItems2.contains(data) &&
+        !droppedItems3.contains(data)) {
+      setState(() {
+        availableItems.add(data);
+      });
+    }
   }
 
   Future<void> _checkCompletion() async {
@@ -132,125 +143,128 @@ class _Page3State extends State<Page3> {
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
 
-    return loading? Center(
-      child: CircularProgressIndicator()
-    ):Column(
-      children: [
-        SizedBox(height: screenHeight * .05),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-              padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
-              child: Text(
-                question,
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 6.5,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
-              )),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  WebscreenWidthUnit * 475, WebscreenHeightUnit * 26, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _buildDropZone(
-                      droppedItems1,
-                      box1,
-                      WebscreenWidthUnit,
-                      WebscreenHeightUnit,
-                      (item) => droppedItems2.remove(item),
-                      (item) => droppedItems3.remove(item),
-                      droppedItems1,
-                      droppedItems2,
-                      droppedItems3,
-                      correct1),
-                  SizedBox(width: WebscreenWidthUnit * 16),
-                  _buildDropZone(
-                      droppedItems2,
-                      box2,
-                      WebscreenWidthUnit,
-                      WebscreenHeightUnit,
-                      (item) => droppedItems1.remove(item),
-                      (item) => droppedItems3.remove(item),
-                      droppedItems1,
-                      droppedItems2,
-                      droppedItems3,
-                      correct2),
-                  SizedBox(width: WebscreenWidthUnit * 16),
-                  _buildDropZone(
-                      droppedItems3,
-                      box3,
-                      WebscreenWidthUnit,
-                      WebscreenHeightUnit,
-                      (item) => droppedItems1.remove(item),
-                      (item) => droppedItems2.remove(item),
-                      droppedItems1,
-                      droppedItems2,
-                      droppedItems3,
-                      correct3),
-                ],
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
+            children: [
+              SizedBox(height: screenHeight * .05),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                    padding:
+                        EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
+                    child: Text(
+                      question,
+                      style: GoogleFonts.baloo2(
+                        fontSize: screenWidthUnit * 6.5,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )),
               ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
-            child: Text(
-              subTitle,
-              style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 5,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          height: screenHeightUnit * 152,
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                WebscreenWidthUnit * 475,
-                0,
-                0,
-                0,
-              ),
-              child: Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: List.generate((availableItems.length / 4).ceil(),
-                      (index) {
-                    int start = index * 4;
-                    int end = (index * 4 + 4) > availableItems.length
-                        ? availableItems.length
-                        : (index * 4 + 4);
-                    return Row(
+              Align(
+                alignment: Alignment.topLeft,
+                child: Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475,
+                        WebscreenHeightUnit * 26, 0, 0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: availableItems.sublist(start, end).map((item) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: _buildDraggableItem(item),
-                        );
-                      }).toList(),
-                    );
-                  }),
+                      children: [
+                        _buildDropZone(
+                            droppedItems1,
+                            box1,
+                            WebscreenWidthUnit,
+                            WebscreenHeightUnit,
+                            (item) => droppedItems2.remove(item),
+                            (item) => droppedItems3.remove(item),
+                            droppedItems1,
+                            droppedItems2,
+                            droppedItems3,
+                            correct1),
+                        SizedBox(width: WebscreenWidthUnit * 16),
+                        _buildDropZone(
+                            droppedItems2,
+                            box2,
+                            WebscreenWidthUnit,
+                            WebscreenHeightUnit,
+                            (item) => droppedItems1.remove(item),
+                            (item) => droppedItems3.remove(item),
+                            droppedItems1,
+                            droppedItems2,
+                            droppedItems3,
+                            correct2),
+                        SizedBox(width: WebscreenWidthUnit * 16),
+                        _buildDropZone(
+                            droppedItems3,
+                            box3,
+                            WebscreenWidthUnit,
+                            WebscreenHeightUnit,
+                            (item) => droppedItems1.remove(item),
+                            (item) => droppedItems2.remove(item),
+                            droppedItems1,
+                            droppedItems2,
+                            droppedItems3,
+                            correct3),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-        /*
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
+                  child: Text(
+                    subTitle,
+                    style: GoogleFonts.baloo2(
+                      fontSize: screenWidthUnit * 5,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                height: screenHeightUnit * 152,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      WebscreenWidthUnit * 475,
+                      0,
+                      0,
+                      0,
+                    ),
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: List.generate(
+                            (availableItems.length / 4).ceil(), (index) {
+                          int start = index * 4;
+                          int end = (index * 4 + 4) > availableItems.length
+                              ? availableItems.length
+                              : (index * 4 + 4);
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children:
+                                availableItems.sublist(start, end).map((item) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: _buildDraggableItem(item),
+                              );
+                            }).toList(),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              /*
         Padding(
           padding: EdgeInsets.only(top: WebscreenHeightUnit * 0),
           child: GestureDetector(
@@ -309,8 +323,8 @@ class _Page3State extends State<Page3> {
               )),
         )
         */
-      ],
-    );
+            ],
+          );
   }
 
   Widget _buildDropZone(
@@ -332,6 +346,7 @@ class _Page3State extends State<Page3> {
           onItemDropped(data);
           onItemDropped2(data);
           availableItems.remove(data);
+          noLeak(data);
         });
 
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -358,6 +373,7 @@ class _Page3State extends State<Page3> {
             if (availableItems.contains(data)) {
               setState(() {
                 availableItems.remove(data);
+                noLeak(data);
               });
             } else {
               setState(() {});
@@ -366,6 +382,7 @@ class _Page3State extends State<Page3> {
             setState(() {
               if (!availableItems.contains(data)) {
                 availableItems.add(data!);
+                noLeak(data);
               }
             });
           }
@@ -433,6 +450,7 @@ class _Page3State extends State<Page3> {
       onDragCompleted: () {
         setState(() {
           sourceList.remove(label);
+          noLeak(label);
         });
 
         if (droppedItems1.contains(label) ||
@@ -441,6 +459,7 @@ class _Page3State extends State<Page3> {
           if (availableItems.contains(label)) {
             setState(() {
               availableItems.remove(label);
+              noLeak(label);
             });
           }
         } else {
