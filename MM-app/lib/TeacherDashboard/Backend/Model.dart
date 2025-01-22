@@ -1,220 +1,164 @@
-// File structure for the Firebase model classes and service functions
+// firebase_performance_service.dart
 
-// Model classes
-class Class {
-  String classId;
-  String teacherId;
-  List<String> studentIds;
-  String lessonId;
-  String upcomingLessonId;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Class({
-    required this.classId,
-    required this.teacherId,
-    required this.studentIds,
-    required this.lessonId,
-    required this.upcomingLessonId,
+class PerformanceData {
+  final String label;
+  final double classAverage;
+  final double participationRate;
+  final double lessonCompletion;
+
+  PerformanceData({
+    required this.label,
+    required this.classAverage,
+    required this.participationRate,
+    required this.lessonCompletion,
   });
 
-  factory Class.fromMap(Map<String, dynamic> map) {
-    return Class(
-      classId: map['classId'],
-      teacherId: map['teacherId'],
-      studentIds: List<String>.from(map['studentIds']),
-      lessonId: map['lessonID'],
-      upcomingLessonId: map['upcomingLessonId'],
+  factory PerformanceData.fromMap(Map<String, dynamic> map) {
+    return PerformanceData(
+      label: map['title'] ?? '',
+      classAverage: map['classAverage']?.toDouble() ?? 0.0,
+      participationRate: map['participationRate']?.toDouble() ?? 0.0,
+      lessonCompletion: map['completionRate']?.toDouble() ?? 0.0,
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'classId': classId,
-      'teacherId': teacherId,
-      'studentIds': studentIds,
-      'lessonID': lessonId,
-      'upcomingLessonId': upcomingLessonId,
-    };
   }
 }
 
-class Unit {
-  String unitId;
-  String title;
-  String description;
-  List<String> lessonIds;
+class FirebasePerformanceService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Unit({
-    required this.unitId,
-    required this.title,
-    required this.description,
-    required this.lessonIds,
-  });
+  Future<List<PerformanceData>> getLessonPerformanceData(
+      String classId, String lessonId) async {
+    try {
+      // Get the lesson details
+      final lessonDoc =
+          await _firestore.collection('lessons').doc(lessonId).get();
+      final components =
+          lessonDoc.data()?['components'] as Map<String, dynamic>? ?? {};
 
-  factory Unit.fromMap(Map<String, dynamic> map) {
-    return Unit(
-      unitId: map['unitId'],
-      title: map['title'],
-      description: map['description'],
-      lessonIds: List<String>.from(map['lessonIds']),
-    );
+      List<PerformanceData> performanceDataList = [];
+
+      // For each component, calculate the performance metrics
+      for (var componentEntry in components.entries) {
+        final componentId = componentEntry.key;
+        final component = componentEntry.value as Map<String, dynamic>;
+
+        // Get all student progress for this component
+        final studentsSnapshot = await _firestore
+            .collection('classes')
+            .doc(classId)
+            .collection('studentProgress')
+            .where('componentId', isEqualTo: componentId)
+            .get();
+
+        // Calculate metrics
+        double totalScore = 0;
+        double participatingStudents = 0;
+        double completedStudents = 0;
+        int totalStudents = studentsSnapshot.docs.length;
+
+        for (var doc in studentsSnapshot.docs) {
+          var data = doc.data();
+          if (data['score'] != null) {
+            totalScore += data['score'];
+            participatingStudents++;
+          }
+          if (data['status'] == 'completed') {
+            completedStudents++;
+          }
+        }
+
+        // Create performance data for this component
+        performanceDataList.add(PerformanceData(
+          label: component['title'] ?? '',
+          classAverage: totalStudents > 0 ? (totalScore / totalStudents) : 0,
+          participationRate: totalStudents > 0
+              ? (participatingStudents / totalStudents) * 100
+              : 0,
+          lessonCompletion:
+              totalStudents > 0 ? (completedStudents / totalStudents) * 100 : 0,
+        ));
+      }
+
+      return performanceDataList;
+    } catch (e) {
+      print('Error getting performance data: $e');
+      return [];
+    }
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'unitId': unitId,
-      'title': title,
-      'description': description,
-      'lessonIds': lessonIds,
-    };
-  }
-}
-
-class Lesson {
-  String lessonId;
-  String unitId;
-  String title;
-  String description;
-  Map<String, dynamic> components;
-  double progress;
-
-  Lesson({
-    required this.lessonId,
-    required this.unitId,
-    required this.title,
-    required this.description,
-    required this.components,
-    required this.progress,
-  });
-
-  factory Lesson.fromMap(Map<String, dynamic> map) {
-    return Lesson(
-      lessonId: map['lessonId'],
-      unitId: map['unitId'],
-      title: map['title'],
-      description: map['description'],
-      components: Map<String, dynamic>.from(map['components']),
-      progress: map['progress'],
-    );
+  Stream<List<PerformanceData>> streamLessonPerformance(
+      String classId, String lessonId) {
+    // Create a stream that combines multiple component updates
+    return _firestore
+        .collection('classes')
+        .doc(classId)
+        .collection('studentProgress')
+        .snapshots()
+        .asyncMap((_) => getLessonPerformanceData(classId, lessonId));
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'lessonId': lessonId,
-      'unitId': unitId,
-      'title': title,
-      'description': description,
-      'components': components,
-      'progress': progress,
-    };
-  }
-}
-
-class Component {
-  String componentId;
-  String lessonId;
-  String title;
-  String type;
-  String status;
-
-  Component({
-    required this.componentId,
-    required this.lessonId,
-    required this.title,
-    required this.type,
-    required this.status,
-  });
-
-  factory Component.fromMap(Map<String, dynamic> map) {
-    return Component(
-      componentId: map['componentId'],
-      lessonId: map['lessonId'],
-      title: map['title'],
-      type: map['type'],
-      status: map['status'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'componentId': componentId,
-      'lessonId': lessonId,
-      'title': title,
-      'type': type,
-      'status': status,
-    };
+  Future<void> updateComponentProgress(
+    String classId,
+    String lessonId,
+    String componentId,
+    String studentId,
+    double score,
+    String status,
+  ) async {
+    try {
+      await _firestore
+          .collection('classes')
+          .doc(classId)
+          .collection('studentProgress')
+          .doc('${studentId}_${componentId}')
+          .set({
+        'componentId': componentId,
+        'lessonId': lessonId,
+        'studentId': studentId,
+        'score': score,
+        'status': status,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      print('Error updating component progress: $e');
+      rethrow;
+    }
   }
 }
 
-class LessonResource {
-  String resourceId;
-  String lessonId;
-  String title;
-  String type;
-  String url;
+// Example usage in a widget:
 
-  LessonResource({
-    required this.resourceId,
-    required this.lessonId,
-    required this.title,
-    required this.type,
-    required this.url,
-  });
+// class PerformanceWidget extends StatelessWidget {
+//   final String classId;
+//   final String lessonId;
+//   final FirebasePerformanceService _performanceService =
+//       FirebasePerformanceService();
 
-  factory LessonResource.fromMap(Map<String, dynamic> map) {
-    return LessonResource(
-      resourceId: map['resourceId'],
-      lessonId: map['lessonId'],
-      title: map['title'],
-      type: map['type'],
-      url: map['url'],
-    );
-  }
+//   PerformanceWidget({
+//     Key? key,
+//     required this.classId,
+//     required this.lessonId,
+//   }) : super(key: key);
 
-  Map<String, dynamic> toMap() {
-    return {
-      'resourceId': resourceId,
-      'lessonId': lessonId,
-      'title': title,
-      'type': type,
-      'url': url,
-    };
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder<List<PerformanceData>>(
+//       stream: _performanceService.streamLessonPerformance(classId, lessonId),
+//       builder: (context, snapshot) {
+//         if (snapshot.hasError) {
+//           return Text('Error: ${snapshot.error}');
+//         }
 
-class Student {
-  String studentId;
-  String name;
-  String email;
-  String role;
-  List<String> classIds;
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return const CircularProgressIndicator();
+//         }
 
-  Student({
-    required this.studentId,
-    required this.name,
-    required this.email,
-    required this.role,
-    required this.classIds,
-  });
+//         final performanceData = snapshot.data ?? [];
 
-  factory Student.fromMap(Map<String, dynamic> map) {
-    return Student(
-      studentId: map['userId'],
-      name: map['name'],
-      email: map['email'],
-      role: map['role'],
-      classIds: List<String>.from(map['classIds']),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'userId': studentId,
-      'name': name,
-      'email': email,
-      'role': role,
-      'classIds': classIds,
-    };
-  }
-}
-
-// Firebase Service (For all CRUD operations, refer to previously defined functions)
+//         return PerformanceTrendsChart(data: performanceData);
+//       },
+//     );
+//   }
+// }

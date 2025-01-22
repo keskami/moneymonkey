@@ -13,9 +13,18 @@ class ShadowedContainer extends Container {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      padding: padding,
-      margin: margin,
+      padding: padding ??
+          EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.02,
+            vertical: screenHeight * 0.02,
+          ),
+      margin: margin ??
+          EdgeInsets.symmetric(
+            vertical: screenHeight * 0.02,
+          ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,

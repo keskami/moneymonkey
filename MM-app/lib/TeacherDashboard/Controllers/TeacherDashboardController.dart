@@ -1,14 +1,16 @@
 import 'package:get/get.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/ClassroomPreferences.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/LessonManagement.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/Overview.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/StudentPerformance.dart';
 
 class TeacherDashboardController extends GetxController {
-  RxInt pageIndex = 2.obs;
+  RxInt pageIndex = 3.obs;
   var pages = [
     DashboardOverview(),
     LessonManagement(),
     StudentPerformace(),
+    ClassroomPreferences(),
   ];
   String getProgress(String num) {
     double percentage = double.parse(num);
