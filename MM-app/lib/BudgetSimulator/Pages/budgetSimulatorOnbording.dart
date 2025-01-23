@@ -42,7 +42,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
   bool advanced = false;
   bool eventFinished = false;
   bool showSecondText = false;
-  int animatedTextIndex = 12;
+  int animatedTextIndex = 0;
 
   String? selectedScenario = '';
   @override
