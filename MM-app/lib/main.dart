@@ -50,12 +50,12 @@ class MyApp extends StatelessWidget {
                   User? user = FirebaseAuth.instance.currentUser;
                   String userId = user?.uid ?? '';
                   if (userId.isEmpty) {
-                    return BudgetSimulatorLanding();
+                    return BudgetSimulatorOnboarding();
                   } else {
-                    return BudgetSimulatorLanding();
+                    return BudgetSimulatorOnboarding();
                   }
                 } else {
-                  return BudgetSimulatorOnboarding();
+                  return BudgetSimulatorLanding();
                 }
               },
             ),
