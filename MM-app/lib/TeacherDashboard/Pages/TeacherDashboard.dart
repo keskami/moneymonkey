@@ -95,7 +95,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           horizontal: screenWidth * 0.1,
         )
         .marginOnly(
-          top: screenHeight * 0.06,
+          top: screenHeight * 0.04,
         );
   }
 }

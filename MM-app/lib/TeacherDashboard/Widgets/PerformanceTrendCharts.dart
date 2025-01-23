@@ -7,10 +7,11 @@ class PerformanceTrendsChart extends StatefulWidget {
   final List<PerformanceData> data;
   final double? width;
   final double? height;
-
+  final String filter;
   const PerformanceTrendsChart({
     Key? key,
     required this.data,
+    required this.filter,
     this.width,
     this.height,
   }) : super(key: key);
@@ -27,19 +28,20 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     final double containerHeight =
         widget.height ?? MediaQuery.of(context).size.height * 0.5;
 
-    // Calculate content width based on data points
     final double contentWidth = max(
       containerWidth,
-      widget.data.length * 100.0, // Allocate 100 pixels per data point
+      widget.data.length * 100.0,
     );
 
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(
+        milliseconds: 300,
+      ),
       width: containerWidth,
       height: containerHeight,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with title and legend
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -134,35 +136,7 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
                     maxX: (widget.data.length - 1).toDouble(),
                     minY: 0,
                     maxY: 100,
-                    lineBarsData: [
-                      generateLineData(
-                        widget.data
-                            .asMap()
-                            .entries
-                            .map((e) =>
-                                FlSpot(e.key.toDouble(), e.value.classAverage))
-                            .toList(),
-                        Colors.blue,
-                      ),
-                      generateLineData(
-                        widget.data
-                            .asMap()
-                            .entries
-                            .map((e) => FlSpot(
-                                e.key.toDouble(), e.value.participationRate))
-                            .toList(),
-                        Colors.green,
-                      ),
-                      generateLineData(
-                        widget.data
-                            .asMap()
-                            .entries
-                            .map((e) => FlSpot(
-                                e.key.toDouble(), e.value.lessonCompletion))
-                            .toList(),
-                        Colors.purple,
-                      ),
-                    ],
+                    lineBarsData: generateFilteredChart(widget.filter),
                   ),
                 ),
               ),
@@ -192,6 +166,70 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
         ),
       ],
     );
+  }
+
+  List<LineChartBarData> generateFilteredChart(String filter) {
+    if (filter == 'Class Average') {
+      return [
+        generateLineData(
+          widget.data
+              .asMap()
+              .entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value.classAverage))
+              .toList(),
+          Colors.blue,
+        ),
+      ];
+    } else if (filter == 'Participation Rate') {
+      return [
+        generateLineData(
+          widget.data
+              .asMap()
+              .entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value.participationRate))
+              .toList(),
+          Colors.green,
+        ),
+      ];
+    } else if (filter == 'Lesson Completion') {
+      return [
+        generateLineData(
+          widget.data
+              .asMap()
+              .entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value.lessonCompletion))
+              .toList(),
+          Colors.purple,
+        ),
+      ];
+    } else {
+      return [
+        generateLineData(
+          widget.data
+              .asMap()
+              .entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value.classAverage))
+              .toList(),
+          Colors.blue,
+        ),
+        generateLineData(
+          widget.data
+              .asMap()
+              .entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value.participationRate))
+              .toList(),
+          Colors.green,
+        ),
+        generateLineData(
+          widget.data
+              .asMap()
+              .entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value.lessonCompletion))
+              .toList(),
+          Colors.purple,
+        ),
+      ];
+    }
   }
 
   LineChartBarData generateLineData(List<FlSpot> spots, Color color) {
@@ -228,12 +266,9 @@ Widget bottomTitleWidgets(
 
   return Padding(
     padding: const EdgeInsets.only(top: 8.0),
-    child: Transform.rotate(
-      angle: -45 * pi / 180,
-      child: Text(
-        data[value.toInt()].label,
-        style: const TextStyle(fontSize: 12),
-      ),
+    child: Text(
+      data[value.toInt()].label,
+      style: const TextStyle(fontSize: 12),
     ),
   );
 }

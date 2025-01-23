@@ -9,7 +9,7 @@ class CustomDropDownContainer extends StatelessWidget {
     required this.onChanged,
     required this.width,
   });
-  final List items;
+  final List<String> items;
   final String? initialSelection;
   final Function(String?) onChanged;
   final double width;

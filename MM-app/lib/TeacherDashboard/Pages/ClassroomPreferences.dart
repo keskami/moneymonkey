@@ -1,8 +1,5 @@
-import 'dart:js_interop';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/Model.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
@@ -21,64 +18,71 @@ class ClassroomPreferences extends StatefulWidget {
 final List<PerformanceData> samplePerformanceData = [
   PerformanceData(
     label: "Recap",
-    classAverage: 65.0, // Blue line starts lower
-    participationRate: 75.0, // Green line starts high
-    lessonCompletion: 70.0, // Purple line starts in middle
+    classAverage: 65.0,
+    participationRate: 75.0,
+    lessonCompletion: 70.0,
   ),
   PerformanceData(
     label: "Concept 1",
-    classAverage: 75.0, // Blue line rises
-    participationRate: 85.0, // Green line peaks
-    lessonCompletion: 68.0, // Purple line slightly drops
+    classAverage: 75.0,
+    participationRate: 85.0,
+    lessonCompletion: 68.0,
   ),
   PerformanceData(
     label: "Interactive Activity 1",
-    classAverage: 80.0, // Blue line continues rising
-    participationRate: 70.0, // Green line drops
-    lessonCompletion: 58.0, // Purple line drops more
+    classAverage: 80.0,
+    participationRate: 70.0,
+    lessonCompletion: 58.0,
   ),
   PerformanceData(
     label: "Concept 2",
-    classAverage: 70.0, // Blue line dips
-    participationRate: 65.0, // Green line continues dropping
-    lessonCompletion: 90.0, // Purple line shoots up
+    classAverage: 70.0,
+    participationRate: 65.0,
+    lessonCompletion: 90.0,
   ),
   PerformanceData(
     label: "Interactive Activity 2",
-    classAverage: 82.0, // Blue line peaks
-    participationRate: 80.0, // Green line recovers
-    lessonCompletion: 85.0, // Purple line stays high
+    classAverage: 82.0,
+    participationRate: 80.0,
+    lessonCompletion: 85.0,
   ),
   PerformanceData(
     label: "Story",
-    classAverage: 75.0, // Blue line drops at end
-    participationRate: 65.0, // Green line drops at end
-    lessonCompletion: 60.0, // Purple line drops at end
+    classAverage: 75.0,
+    participationRate: 65.0,
+    lessonCompletion: 60.0,
   ),
   PerformanceData(
     label: "Scenario Simulation",
-    classAverage: 82.0, // Blue line peaks
-    participationRate: 80.0, // Green line recovers
-    lessonCompletion: 85.0, // Purple line stays high
+    classAverage: 82.0,
+    participationRate: 80.0,
+    lessonCompletion: 85.0,
   ),
   PerformanceData(
     label: "Peer Reflection",
-    classAverage: 82.0, // Blue line peaks
-    participationRate: 80.0, // Green line recovers
-    lessonCompletion: 85.0, // Purple line stays high
+    classAverage: 82.0,
+    participationRate: 80.0,
+    lessonCompletion: 85.0,
   ),
   PerformanceData(
     label: "Toolkit",
-    classAverage: 80.0, // Blue line continues rising
-    participationRate: 70.0, // Green line drops
-    lessonCompletion: 58.0, // Purple line drops more
+    classAverage: 80.0,
+    participationRate: 70.0,
+    lessonCompletion: 58.0,
   ),
   PerformanceData(
     label: "Quiz",
-    classAverage: 82.0, // Blue line peaks
-    participationRate: 80.0, // Green line recovers
-    lessonCompletion: 85.0, // Purple line stays high
+    classAverage: 82.0,
+    participationRate: 80.0,
+    lessonCompletion: 85.0,
   ),
+];
+String selectedFilter = "All Statistics";
+final List<String> filters = [
+  "All Statistics",
+  "Class Average",
+  "Participation Rate",
+  "Lesson Completion",
 ];
 
 class _ClassroomPreferencesState extends State<ClassroomPreferences> {
@@ -108,9 +112,15 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                       ),
                       const Spacer(),
                       CustomDropDownContainer(
-                          items: [],
-                          onChanged: (stat) {},
-                          width: screenWidth * 0.1),
+                          initialSelection: selectedFilter,
+                          items: filters,
+                          onChanged: (stat) {
+                            if (stat != null)
+                              setState(() {
+                                selectedFilter = stat;
+                              });
+                          },
+                          width: screenWidth * 0.2),
                     ],
                   ),
                 ),
@@ -118,19 +128,25 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                   data: samplePerformanceData,
                   width: screenWidth * 0.5,
                   height: screenHeight * 0.7,
+                  filter: selectedFilter,
                 ),
               ],
             ),
           ),
+          //Areas of Strength and Improvements
           Row(
             children: [
               Expanded(
                   flex: 1,
                   child: ShadowedContainer(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+                          style: TextStyles.containerTitle,
                           "Areas of Strength",
+                        ).marginSymmetric(
+                          vertical: 10,
                         ),
                         ...generateColoredPaddedList(
                           {
@@ -150,9 +166,13 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                   flex: 1,
                   child: ShadowedContainer(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+                          style: TextStyles.containerTitle,
                           "Areas of Improvements",
+                        ).marginSymmetric(
+                          vertical: 10,
                         ),
                         ...generateColoredPaddedList(
                           {
@@ -170,25 +190,41 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
           //Student Distribution Box
           ShadowedContainer(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "Student Distribution",
+                  style: TextStyles.containerTitle,
                 ),
+                //Performance Reflection+Distribution
                 Row(
                   children: [
                     Expanded(
                       flex: 1,
                       child: ColoredPaddedContainer(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "Top Performers",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 18,
+                                color: LightTheme().pastelGreen,
+                              ),
                             ),
                             Text(
                               "6",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 30,
+                                color: LightTheme().pastelGreen,
+                              ),
                             ),
                             Text(
                               "Above 85%",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 18,
+                                color: LightTheme().pastelGreen,
+                              ),
                             ),
                           ],
                         ),
@@ -200,16 +236,30 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                     Expanded(
                       flex: 1,
                       child: ColoredPaddedContainer(
+                        color: Colors.blue.withValues(alpha: 0.2),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Top Performers",
+                              "Average",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 18,
+                                color: Colors.blue,
+                              ),
                             ),
                             Text(
-                              "6",
+                              "12",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 30,
+                                color: Colors.blue,
+                              ),
                             ),
                             Text(
-                              "Above 85%",
+                              "70 - 85%",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 18,
+                                color: Colors.blue,
+                              ),
                             ),
                           ],
                         ),
@@ -221,16 +271,30 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                     Expanded(
                       flex: 1,
                       child: ColoredPaddedContainer(
+                        color: Colors.orange.withValues(alpha: 0.2),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Top Performers",
+                              "Needs Support",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 18,
+                                color: Colors.orange,
+                              ),
                             ),
                             Text(
                               "6",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 30,
+                                color: Colors.orange,
+                              ),
                             ),
                             Text(
-                              "Above 85%",
+                              "Below 70%",
+                              style: TextStyles.containerTitle.copyWith(
+                                fontSize: 18,
+                                color: Colors.orange,
+                              ),
                             ),
                           ],
                         ),
@@ -250,20 +314,52 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                   style: TextStyles.containerTitle,
                 ),
                 ColoredPaddedContainer(
+                  color: Colors.blue.withValues(alpha: 0.2),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.02,
+                    vertical: screenHeight * 0.02,
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Review Emergency Planning"),
                       Text(
-                          "Consider dedicating more time to emergency fund concepts, as 99% of studets scored below target in thiss area."),
+                        "Review Emergency Planning",
+                        style: TextStyles.containerTitle.copyWith(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      Text(
+                        "Consider dedicating more time to emergency fund concepts, as 99% of studets scored below target in thiss area.",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 ColoredPaddedContainer(
+                  color: Colors.purple.withValues(alpha: 0.2),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.02,
+                    vertical: screenHeight * 0.02,
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Group Activity"),
                       Text(
-                          "Consider dedicating more time to emergency fund concepts, as 99% of studets scored below target in thiss area."),
+                        "Group Activity",
+                        style: TextStyles.containerTitle.copyWith(
+                          color: Colors.purple,
+                        ),
+                      ),
+                      Text(
+                        "Consider dedicating more time to emergency fund concepts, as 99% of studets scored below target in thiss area.",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.purple,
+                        ),
+                      ),
                     ],
                   ),
                 )
