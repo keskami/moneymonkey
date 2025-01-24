@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
+import 'package:intl/intl.dart';
 
 class BudgetSimulator extends StatefulWidget {
   BudgetSimulator({
@@ -27,12 +28,15 @@ class BudgetSimulator extends StatefulWidget {
 class _BudgetSimulatorState extends State<BudgetSimulator> {
   late double netCash;
   final Headings headings = Headings();
+  final DateTime now = DateTime.now(); // Current date and time
+  String formattedDate = '';
 
   @override
   void initState() {
     super.initState();
     // Access widget fields in initState
     netCash = widget.startingBalance;
+    formattedDate = DateFormat('MMM d, y').format(now);
   }
 
   @override
@@ -257,21 +261,77 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           width: screenWidthUnit * 67,
                                         ),
                                         Column(
-                                         children: [
-                                          Text("Budget Simulator", style: GoogleFonts.baloo2(
-                                            fontSize: screenWidthUnit * 28,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black,
-                                          ),),
-                                         SizedBox(
-                                          height: screenHeightUnit * 17,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Budget Simulator",
+                                              style: GoogleFonts.baloo2(
+                                                fontSize: screenWidthUnit * 28,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: screenHeightUnit * 16,
+                                            ),
+                                            Text(formattedDate,
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 18,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color.fromRGBO(
+                                                      108, 108, 108, 1),
+                                                ))
+                                          ],
                                         ),
-                                        Text("Your Financial Journey", style: GoogleFonts.baloo2(
-                                          fontSize: screenWidthUnit * 22,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black,))
-                                          
-                                         ],
+                                        SizedBox(
+                                          width: screenWidthUnit * 670,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              top: screenHeightUnit * 25),
+                                          child: Container(
+                                            width: screenWidthUnit * 230,
+                                            height: screenHeightUnit * 63,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Color.fromRGBO(
+                                                  79, 195, 247, 1),
+                                            ),
+                                            child: Center(
+                                                child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "Allocate Funds",
+                                                  style: GoogleFonts.baloo2(
+                                                    fontSize:
+                                                        screenWidthUnit * 20,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: screenWidthUnit * 3,
+                                                ),
+                                                Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  size: screenWidthUnit *16,
+                                                  color: Colors.white,
+                                                ),
+                                                Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  size: screenWidthUnit * 16,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            )),
+                                          ),
                                         )
                                       ],
                                     )
