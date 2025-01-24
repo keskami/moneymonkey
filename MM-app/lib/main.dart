@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
-import 'package:money_monkey/BudgetSimulator/landingPage.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/landingPage.dart';
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
