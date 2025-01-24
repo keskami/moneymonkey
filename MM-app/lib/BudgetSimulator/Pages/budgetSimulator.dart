@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class BudgetSimulator extends StatefulWidget {
   BudgetSimulator({
@@ -30,6 +31,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   final Headings headings = Headings();
   final DateTime now = DateTime.now(); // Current date and time
   String formattedDate = '';
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
 
   @override
   void initState() {
@@ -227,7 +231,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       ),
                       Center(
                           child: Container(
-                        width: screenWidthUnit * 1869,
+                        width: screenWidthUnit * 1919,
                         height: screenHeightUnit * 1132,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -243,7 +247,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           children: [
                             Container(
                               height: screenHeightUnit * 1122,
-                              width: screenWidthUnit * 1323,
+                              width: screenWidthUnit * 1400,
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,54 +290,139 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           ],
                                         ),
                                         SizedBox(
-                                          width: screenWidthUnit * 670,
+                                          width: screenWidthUnit * 690,
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               top: screenHeightUnit * 25),
                                           child: Container(
                                             width: screenWidthUnit * 230,
-                                            height: screenHeightUnit * 63,
+                                            height: screenHeightUnit * 68,
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                               color: Color.fromRGBO(
                                                   79, 195, 247, 1),
                                             ),
-                                            child: Center(
-                                                child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  "Allocate Funds",
-                                                  style: GoogleFonts.baloo2(
-                                                    fontSize:
-                                                        screenWidthUnit * 20,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: screenWidthUnit * 3,
-                                                ),
-                                                Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  size: screenWidthUnit *16,
-                                                  color: Colors.white,
-                                                ),
-                                                Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  size: screenWidthUnit * 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ],
-                                            )),
+                                            child: GestureDetector(
+                                                onTap: () {},
+                                                child: Center(
+                                                    child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "Allocate Funds",
+                                                      style: GoogleFonts.baloo2(
+                                                        fontSize:
+                                                            screenWidthUnit *
+                                                                20,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                          screenWidthUnit * 3,
+                                                    ),
+                                                    Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      size:
+                                                          screenWidthUnit * 16,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      size:
+                                                          screenWidthUnit * 16,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ],
+                                                ))),
                                           ),
                                         )
                                       ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: screenHeightUnit * 16),
+                                      child: Center(
+                                        child: Container(
+                                          width: screenWidthUnit * 1290,
+                                          height: screenHeightUnit * 65,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color:
+                                                Color.fromRGBO(79, 195, 247, 1),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    TableCalendar(
+                                      focusedDay: _focusedDay,
+                                      firstDay: DateTime.utc(2022, 01, 01),
+                                      lastDay: DateTime.utc(2026, 12, 31),
+                                      calendarFormat: _calendarFormat,
+                                      selectedDayPredicate: (day) {
+                                        return isSameDay(_selectedDay, day);
+                                      },
+                                      onDaySelected: (selectedDay, focusedDay) {
+                                        setState(() {
+                                          _selectedDay = selectedDay;
+                                          _focusedDay = focusedDay;
+                                        });
+                                      },
+                                      onFormatChanged: (format) {
+                                        setState(() {
+                                          _calendarFormat = format;
+                                        });
+                                      },
+                                      calendarStyle: CalendarStyle(
+                                        todayDecoration: BoxDecoration(
+                                          color: Colors.green,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        selectedDecoration: BoxDecoration(
+                                          color: Color(0xFF51A4F1),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        weekendDecoration: BoxDecoration(
+                                          color: Color(0xFFEDEDED),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        outsideDecoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        defaultDecoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        cellMargin: EdgeInsets.all(5),
+                                      ),
+                                      headerStyle: HeaderStyle(
+                                        formatButtonVisible: false,
+                                        titleCentered: true,
+                                        titleTextStyle: TextStyle(
+                                          color: Color(0xFF222222),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        leftChevronIcon: Icon(
+                                          Icons.chevron_left,
+                                          color: Color(0xFF51A4F1),
+                                          size: 20,
+                                        ),
+                                        rightChevronIcon: Icon(
+                                          Icons.chevron_right,
+                                          color: Color(0xFF51A4F1),
+                                          size: 20,
+                                        ),
+                                      ),
                                     )
                                   ]),
                             ),
@@ -343,7 +432,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                               color: Colors.black,
                             ),
                             Container(
-                              width: screenWidthUnit * 426,
+                              width: screenWidthUnit * 349,
                             ),
                           ],
                         ),
