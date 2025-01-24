@@ -57,7 +57,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             body: Stack(
               children: [
                 Container(
-                  child: BudgetSimulator(name: 'Crush the Credit Card Debt', checkingAccountBalance: 300, savingsAccountBalance: 300, creditCardDebt: 3000, startingBalance: 600,),
+                  child: BudgetSimulator(name: 'Crush the Credit Card Debt', checkingAccountBalance: 300, savingsAccountBalance: 300, creditCardDebt: 3000, startingBalance: 600, APY: 3,),
                   color: Colors.black.withOpacity(0.5),
                 ),
                 Align(
@@ -706,7 +706,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               ],
             ),
           )
-        : BudgetSimulator(name: 'Crush the Credit Card Debt',  checkingAccountBalance: 300, savingsAccountBalance: 300, creditCardDebt: 3000, startingBalance: 600,);
+        : BudgetSimulator(name: 'Crush the Credit Card Debt',  checkingAccountBalance: 300, savingsAccountBalance: 300, creditCardDebt: 3000, startingBalance: 600,APY: 3,);
   }
 }
 

@@ -10,6 +10,7 @@ class BudgetSimulator extends StatefulWidget {
     required this.savingsAccountBalance,
     required this.creditCardDebt,
     required this.startingBalance,
+    required this.APY,
   });
 
   final String name;
@@ -18,6 +19,7 @@ class BudgetSimulator extends StatefulWidget {
   final double savingsAccountBalance;
   final double creditCardDebt;
   final double startingBalance;
+  final double APY;
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
@@ -190,28 +192,102 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       ),
                       Center(
                         child: Container(
-                          width: screenWidthUnit * 1819,
-                          height: screenHeightUnit * 106,
-                          decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                        
+                            width: screenWidthUnit * 1839,
+                            height: screenHeightUnit * 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(3),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1,
+                              ),
+                            ),
+                            child: Center(
+                              child: widget.name == "Crush the Credit Card Debt"
+                                  ? headings.crushTheCreditCardDebtHeading(
+                                      checkingAccountBalance:
+                                          widget.checkingAccountBalance,
+                                      savingsAccountBalance:
+                                          widget.savingsAccountBalance,
+                                      creditCardDebt: widget.creditCardDebt,
+                                      netCash: netCash,
+                                      screenWidthUnit: screenWidthUnit,
+                                      screenHeightUnit: screenHeightUnit,
+                                      APY: widget.APY,
+                                    )
+                                  : Container(),
+                            )),
+                      ),
+                      SizedBox(
+                        height: screenHeightUnit * 19,
+                      ),
+                      Center(
+                          child: Container(
+                        width: screenWidthUnit * 1869,
+                        height: screenHeightUnit * 1132,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(3),
                           border: Border.all(
                             color: Colors.black,
-                            width: 1.85,
-                          ),
-                          ),
-                          child: Center(
-                          child: headings.crushTheCreditCardDebtHeading(
-                            checkingAccountBalance:
-                              widget.checkingAccountBalance,
-                            savingsAccountBalance:
-                              widget.savingsAccountBalance,
-                            creditCardDebt: widget.creditCardDebt,
-                            netCash: netCash,
-                          ),
+                            width: 1,
                           ),
                         ),
-                      )
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: screenHeightUnit * 1122,
+                              width: screenWidthUnit * 1323,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: screenHeightUnit * 55,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: screenWidthUnit * 67,
+                                        ),
+                                        Column(
+                                         children: [
+                                          Text("Budget Simulator", style: GoogleFonts.baloo2(
+                                            fontSize: screenWidthUnit * 28,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black,
+                                          ),),
+                                         SizedBox(
+                                          height: screenHeightUnit * 17,
+                                        ),
+                                        Text("Your Financial Journey", style: GoogleFonts.baloo2(
+                                          fontSize: screenWidthUnit * 22,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black,))
+                                          
+                                         ],
+                                        )
+                                      ],
+                                    )
+                                  ]),
+                            ),
+                            Container(
+                              width: screenWidthUnit * 1,
+                              height: screenHeightUnit * 1122,
+                              color: Colors.black,
+                            ),
+                            Container(
+                              width: screenWidthUnit * 426,
+                            ),
+                          ],
+                        ),
+                      ))
                     ],
                   ),
                 ),
