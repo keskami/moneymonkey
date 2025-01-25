@@ -180,4 +180,6 @@ class _ProblemPageState extends State<ProblemPage> {
   }
 }
 
-extension on Color {}
+extension on Color {
+  withValues({required double alpha}) {}
+}
