@@ -12,7 +12,7 @@ class StoryPage extends StatefulWidget {
 }
 
 class _StoryPageState extends State<StoryPage> {
-  StoryController storyController = Get.put(StoryController());
+  StoryController storyController = Get.find<StoryController>();
   final String lessonId = "Lesson1";
 
 

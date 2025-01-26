@@ -13,7 +13,7 @@ class Scenario extends StatefulWidget {
 class _ScenarioState extends State<Scenario> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-  final ScenarioController scenarioController = Get.put(ScenarioController());
+  final ScenarioController scenarioController = Get.find<ScenarioController>();
 
   Future<void> _preCacheImages() async {
     await precacheImage(

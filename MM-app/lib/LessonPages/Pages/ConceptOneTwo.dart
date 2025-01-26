@@ -12,8 +12,7 @@ class LessonOne extends StatefulWidget {
 }
 
 class _LessonOneState extends State<LessonOne> {
-  ComponentOneTwoController componentOneTwoController =
-      Get.put(ComponentOneTwoController());
+  ComponentOneTwoController componentOneTwoController = Get.find<ComponentOneTwoController>();
   final String lessonId = "Lesson1";
   Future<void> _preLoadImages() async {
     await precacheImage(

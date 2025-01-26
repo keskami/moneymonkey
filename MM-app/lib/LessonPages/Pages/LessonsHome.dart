@@ -9,6 +9,7 @@ import 'package:money_monkey/LessonPages/Pages/SampleZigZagPage.dart';
 import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
 import 'package:money_monkey/LessonPages/Pages/Story.dart';
 import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
+import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
 
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -32,13 +33,34 @@ class _LessonsHomeState extends State<LessonsHome> {
   Column PolygonLessonColumn = Column();
   Column SlantLineColumn = Column();
   final List<Widget> pagesLink = [
-    LessonOne(),
-    LessonOne(),
-    StoryPage(),
-    Scenario(),
-    PeerReflection(),
-    Toolkit(),
-    PeerReflectionQuiz(),
+    LoadingPageWrapper(
+      destinationPage: LessonOne(),
+      pageType: 'lesson',
+    ),
+    LoadingPageWrapper(
+      destinationPage: LessonOne(),
+      pageType: 'lesson',
+    ),
+    LoadingPageWrapper(
+      destinationPage: StoryPage(),
+      pageType: 'story',
+    ),
+    LoadingPageWrapper(
+      destinationPage: Scenario(),
+      pageType: 'scenario',
+    ),
+    LoadingPageWrapper(
+      destinationPage: PeerReflection(),
+      pageType: 'peer_reflection',
+    ),
+    LoadingPageWrapper(
+      destinationPage: Toolkit(),
+      pageType: 'toolkit',
+    ),
+    LoadingPageWrapper(
+      destinationPage: PeerReflectionQuiz(),
+      pageType: 'peer_reflection_quiz',
+    ),
   ];
   List<String> imageLinks = [
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbulb.png?alt=media&token=f5d89615-3c3a-48fe-9b30-2aa31a1bf293",

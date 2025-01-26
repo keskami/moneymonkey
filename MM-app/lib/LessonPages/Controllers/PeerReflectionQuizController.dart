@@ -9,7 +9,7 @@ import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page5.dart';
 
 class PeerReflectionQuizcontroller extends GetxController {
   RxInt pageIndex = 0.obs;
-  RxBool isLoading = true.obs; // Track loading state
+  RxBool isLoading = false.obs; // Set default to false since loading is handled by wrapper
 
   var pages = [
     PeerReflectionQuizPage1(),
@@ -21,13 +21,6 @@ class PeerReflectionQuizcontroller extends GetxController {
 
   var pageData = <int, dynamic>{}.obs;
   final LessonData lessonData = LessonData();
-  
-
-  @override
-  void onInit() {
-    super.onInit();
-    fetchPageData();
-  }
 
   Future<void> fetchPageData() async {
     try {
@@ -39,14 +32,10 @@ class PeerReflectionQuizcontroller extends GetxController {
           TypeOfLesson: "Quiz",
           PageNumber: i,
         );
-
         pageData[i] = data;
       }
     } catch (e) {
       print("Error fetching page data: $e");
-    } finally {
-      isLoading.value = false;
-      
     }
   }
 }
