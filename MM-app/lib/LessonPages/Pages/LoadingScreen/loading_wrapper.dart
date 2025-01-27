@@ -40,10 +40,14 @@ class LoadingPageWrapper extends StatelessWidget {
   }
 
   Future<void> _preLoadImagesForPeerReflection(BuildContext context) async {
-    await precacheImage(AssetImage('assets/images/newMonkeys/Maria.png'), context);
-    await precacheImage(AssetImage('assets/images/newMonkeys/Jason.png'), context);
-    await precacheImage(AssetImage('assets/images/newMonkeys/Ava.png'), context);
-    await precacheImage(AssetImage('assets/images/img_monkeymoney_52.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/newMonkeys/Maria.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/newMonkeys/Jason.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/newMonkeys/Ava.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/img_monkeymoney_52.png'), context);
   }
 
   Future<void> _preLoadImagesForScenario(BuildContext context) async {
@@ -85,14 +89,12 @@ class LoadingPageWrapper extends StatelessWidget {
   Future<void> _preLoadImagesForLesson(BuildContext context) async {
     await precacheImage(
       NetworkImage(
-        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af"
-      ),
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af"),
       context,
     );
     await precacheImage(
       NetworkImage(
-        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c"
-      ),
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c"),
       context,
     );
   }
@@ -116,11 +118,7 @@ class LoadingPageWrapper extends StatelessWidget {
         Get.put(Toolkitcontroller());
         break;
       case 'peer_reflection_quiz':
-        print("Initializing quiz controller");
-        final controller = Get.put(PeerReflectionQuizcontroller());
-        print("Controller put in GetX");
-        await controller.fetchPageData();
-        print("Finished fetchPageData");
+        Get.put(PeerReflectionQuizcontroller());
         break;
     }
   }
