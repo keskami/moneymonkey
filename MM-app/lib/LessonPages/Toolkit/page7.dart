@@ -23,50 +23,35 @@ class _Page7State extends State<Page7> {
   int totalBanans = 0;
   bool downloaded = false;
   late Future<ListResult> futureFiles;
+  String title = '';
+  String subTitle = '';
+  bool loading = true;
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data["title"];
+      subTitle = data["subTitle"];
+      loading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
     futureFiles = FirebaseStorage.instance.ref('/pdfs').listAll();
-  }
 
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        setData(peerReflectionController.pageData[3]);
+      } else {
         setState(() {
           isLoading = false;
         });
       }
+    });
+
+    if (title == '') {
+      setData(peerReflectionController.pageData[3]);
     }
   }
 

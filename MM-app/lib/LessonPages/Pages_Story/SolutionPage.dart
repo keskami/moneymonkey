@@ -16,7 +16,54 @@ class _SolutionPageState extends State<SolutionPage> {
   double screenWidth = 0.0;
 
   final StoryController storyController = Get.find();
+  List<String> bigTexts = [];
+  List<String> smallTexts = [];
   bool isEnabled = false;
+
+  bool isLoading = true;
+  String title = '';
+  List<String> instructions = [];
+  String button = '';
+
+  Future<void> setData(Map<String, dynamic> data) async {
+    setState(() {
+      bigTexts =
+          List<String>.from(data['bigTexts'].map((item) => item.toString()));
+      smallTexts =
+          List<String>.from(data['smallTexts'].map((item) => item.toString()));
+      title = data['title'];
+      instructions = List<String>.from(
+          data['instructions'].map((item) => item.toString()));
+     
+      button = data['button'];
+
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    ever(storyController.isLoading, (_) {
+      if (!storyController.isLoading.value) {
+        setData(storyController.pageData[4]);
+      }
+    });
+
+    if (title == '') {
+      if (storyController.pageData[4] != null) {
+        setData(storyController.pageData[4]);
+      } else {
+        debugPrint("Page data for index 1 is null");
+      }
+    }
+  }
+
+  
+
+
+
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -55,7 +102,7 @@ class _SolutionPageState extends State<SolutionPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "The Solution?",
+                          title,
                           softWrap: true,
                           overflow: TextOverflow.visible,
                           style: TextStyle(
@@ -73,13 +120,13 @@ class _SolutionPageState extends State<SolutionPage> {
                               child: TapToRevealContainer(
                                 contents: ContentContainer(
                                   texts: [
-                                    "Track Spending",
-                                    "Record every expense"
+                                    bigTexts[0],
+                                    smallTexts[0]
                                   ],
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(
-                                  text: "Click to reveal solution 1",
+                                  text: instructions[0],
                                   screenWidth: screenWidth,
                                 ),
                               ),
@@ -89,11 +136,12 @@ class _SolutionPageState extends State<SolutionPage> {
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
                                 contents: ContentContainer(
-                                  texts: ["Plan Ahead", "Set monthly budget"],
+                                  texts: [bigTexts[1],
+                                    smallTexts[1]],
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(
-                                  text: "Click to reveal solution 2",
+                                  text: instructions[1],
                                   screenWidth: screenWidth,
                                 ),
                               ),
@@ -102,20 +150,21 @@ class _SolutionPageState extends State<SolutionPage> {
                               width: screenWidth * 0.15,
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
-                                onTap: () {
+                                onTap: () async{
+                                  await Future.delayed(Duration(seconds: 6));
                                   setState(() {
                                     isEnabled = true;
                                   });
                                 },
                                 contents: ContentContainer(
                                   texts: [
-                                    "Save First",
-                                    "20% of income to savings"
+                                    bigTexts[2],
+                                    smallTexts[2]
                                   ],
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(
-                                  text: "Click to reveal solution 3",
+                                  text: instructions[2],
                                   screenWidth: screenWidth,
                                 ),
                               ),

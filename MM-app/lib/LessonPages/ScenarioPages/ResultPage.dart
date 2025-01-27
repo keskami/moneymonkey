@@ -4,8 +4,51 @@ import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class ResultPage extends StatelessWidget {
+class ResultPage extends StatefulWidget {
   const ResultPage({super.key});
+
+  @override
+  _ResultPageState createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
+  late ScenarioController scenarioController;
+  late String message;
+  String subTitle = '';
+  String title = '';
+  String button = '';
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data['title'];
+      subTitle = data['subTitle'];
+      button = data['button'];
+      
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scenarioController = Get.find();
+    message = initializeMessage(scenarioController);
+     ever(scenarioController.isLoading, (_) {
+      if (!scenarioController.isLoading.value) {
+        if (scenarioController.pageData.isNotEmpty && scenarioController.pageData[3] != null) {
+          setData(scenarioController.pageData[3]);
+        }
+      }
+    });
+    
+    
+    // Initial data load attempt
+    if (!scenarioController.isLoading.value && 
+        scenarioController.pageData.isNotEmpty && 
+        scenarioController.pageData[3] != null) {
+      setData(scenarioController.pageData[3]);
+    }
+  }
+
   String initializeMessage(ScenarioController scenarioController) {
     double score = scenarioController.responsibilityScore.value;
     if (score == 100) {
@@ -13,15 +56,12 @@ class ResultPage extends StatelessWidget {
     } else if (score < 50.0) {
       return "You got quite a lot to learn!";
     } else {
-      return "There's still room for improvement in your abilities to be Financially responsible!";
+      return "There's still room for improvement in your abilities to be financially responsible!";
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final ScenarioController scenarioController = Get.find();
-    String message = initializeMessage(scenarioController);
-
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -34,8 +74,8 @@ class ResultPage extends StatelessWidget {
             const Spacer(),
             const Spacer(),
             Text(
-              "Your Financial Summary",
-              style: TextStyle(
+             title,
+              style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
@@ -63,24 +103,22 @@ class ResultPage extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: LightTheme().primaryBlue.withAlpha(70),
-            borderRadius: BorderRadius.circular(
-              10,
-            ),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Financial Responsibility Score: ${scenarioController.responsibilityScore.value.toStringAsFixed(2)}%",
+                "$subTitle ${scenarioController.responsibilityScore.value.toStringAsFixed(2)}%",
                 textAlign: TextAlign.start,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 message,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
@@ -94,16 +132,18 @@ class ResultPage extends StatelessWidget {
             const Spacer(),
             CustomNextButton(
               nextPage: () {
-                scenarioController.pageIndex.value = 0;
-                scenarioController.responsibilityScore.value = 0;
-                scenarioController.dispose();
+                setState(() {
+                  scenarioController.pageIndex.value = 0;
+                  scenarioController.responsibilityScore.value = 0;
+                  scenarioController.dispose();
+                });
                 Navigator.pop(context);
               },
               isEnabled: true,
-              text: 'Finish',
+              text: button,
             )
           ],
-        ).marginOnly(top: 10)
+        ).marginOnly(top: 10),
       ],
     );
   }

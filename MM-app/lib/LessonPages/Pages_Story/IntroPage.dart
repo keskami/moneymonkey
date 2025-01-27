@@ -13,6 +13,22 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
+  bool wait6 = false;
+
+  @override
+  void initState() {
+    super.initState();
+    wait6sec();
+  }
+
+  Future<void> wait6sec() async{
+    await Future.delayed(Duration(seconds: 6));
+    setState(() {
+      wait6 = true;
+    });
+
+  }
+  
   final StoryController storyController = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -55,9 +71,10 @@ class _IntroPageState extends State<IntroPage> {
                 Spacer(),
                 CustomNextButton(
                   nextPage: () {
+                   
                     storyController.pageIndex.value += 1;
                   },
-                  isEnabled: true,
+                  isEnabled: wait6,
                 ),
               ],
             ),

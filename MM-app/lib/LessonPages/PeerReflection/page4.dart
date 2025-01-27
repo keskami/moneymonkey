@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/home.dart';
 
@@ -22,51 +23,50 @@ class _Page4State extends State<Page4> {
   bool jasonClicked = false;
   bool avaClicked = false;
   PeerReflectioncontroller peerReflectionController = Get.find();
+  bool delay = false;
+
+  bool loading = true;
+  String title = '';
+  String subTitle = '';
+  String ava = '';
+  String maria = '';
+  String jason = '';
+  String button = '';
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data['title'];
+      subTitle = data['subTitle'];
+      ava = data['ava'];
+      maria = data['maria'];
+      jason = data['jason'];
+      button = data['button'];
+
+      loading = false;
+    });
+    _6secdelay();
+  }
 
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        if (peerReflectionController.pageData.isNotEmpty) {
+          setData(peerReflectionController.pageData[4]);
+        }
+      }
+    });
+    if (title == '') {
+      setData(peerReflectionController.pageData[4]);
+    }
   }
 
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
+  Future<void> _6secdelay() async {
+    await Future.delayed(Duration(seconds: 4));
+    setState(() {
+      delay = true;
+    });
   }
 
   @override
@@ -90,7 +90,7 @@ class _Page4State extends State<Page4> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Reflection",
+                    title,
                     style: GoogleFonts.baloo2(
                         fontSize: screenWidthUnit * 6,
                         color: Color.fromRGBO(0, 0, 0, 1),
@@ -98,7 +98,7 @@ class _Page4State extends State<Page4> {
                   ),
                   SizedBox(height: WebscreenHeightUnit * 10),
                   Text(
-                    "Which peer's financial situation do you relate to most? Why?",
+                    subTitle,
                     style: GoogleFonts.baloo2(
                         fontSize: screenWidthUnit * 4.5,
                         color: Color.fromRGBO(0, 0, 0, 1),
@@ -107,7 +107,7 @@ class _Page4State extends State<Page4> {
                   SizedBox(height: WebscreenHeightUnit * 79),
                   lessonTab(
                     image: "assets/images/newMonkeys/Maria.png",
-                    name: "Maria, because I’m focused on planning future goals",
+                    name: maria,
                     isClicked: mariaClicked,
                     onClick: () {
                       setState(() {
@@ -117,32 +117,12 @@ class _Page4State extends State<Page4> {
                           mariaClicked = true;
                           jasonClicked = false;
                           avaClicked = false;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Container(
-                              height: WebscreenHeightUnit * 103,
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.check_circle,
-                                    size: WebscreenHeightUnit * 80,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: WebscreenWidthUnit * 10),
-                                  Text(
-                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
-                                    style: GoogleFonts.baloo2(
-                                        fontSize: WebscreenWidthUnit * 25,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )),
-                            ),
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Color.fromRGBO(137, 220, 142, 1),
-                          ));
+
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          Future.delayed(Duration(seconds: 1), () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CorrectAnswerSnackBar(message: ""));
+                          });
                         }
                       });
                     },
@@ -154,7 +134,7 @@ class _Page4State extends State<Page4> {
                   lessonTab(
                     image: "assets/images/newMonkeys/Jason.png",
                     name:
-                        "Jason, because I have to prioritize needs over wants",
+                        jason,
                     isClicked: jasonClicked,
                     onClick: () {
                       setState(() {
@@ -164,32 +144,11 @@ class _Page4State extends State<Page4> {
                           jasonClicked = true;
                           avaClicked = false;
                           mariaClicked = false;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Container(
-                              height: WebscreenHeightUnit * 103,
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.check_circle,
-                                    size: WebscreenHeightUnit * 80,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: WebscreenWidthUnit * 10),
-                                  Text(
-                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
-                                    style: GoogleFonts.baloo2(
-                                        fontSize: WebscreenWidthUnit * 25,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )),
-                            ),
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Color.fromRGBO(137, 220, 142, 1),
-                          ));
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          Future.delayed(Duration(seconds: 1), () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CorrectAnswerSnackBar(message: ""));
+                          });
                         }
                       });
                     },
@@ -201,7 +160,7 @@ class _Page4State extends State<Page4> {
                   lessonTab(
                     image: "assets/images/newMonkeys/Ava.png",
                     name:
-                        "Ava, because I’m working on personal savings and investments",
+                        ava,
                     isClicked: avaClicked,
                     onClick: () {
                       setState(() {
@@ -211,32 +170,11 @@ class _Page4State extends State<Page4> {
                           avaClicked = true;
                           jasonClicked = false;
                           mariaClicked = false;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Container(
-                              height: WebscreenHeightUnit * 103,
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.check_circle,
-                                    size: WebscreenHeightUnit * 80,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: WebscreenWidthUnit * 10),
-                                  Text(
-                                    'That\'s right! Financial responsibility can start early, from\nyour first paycheck or allowance. Let\'s explore why.',
-                                    style: GoogleFonts.baloo2(
-                                        fontSize: WebscreenWidthUnit * 25,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )),
-                            ),
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Color.fromRGBO(137, 220, 142, 1),
-                          ));
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          Future.delayed(Duration(seconds: 1), () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                CorrectAnswerSnackBar(message: ""));
+                          });
                         }
                       });
                     },
@@ -251,13 +189,15 @@ class _Page4State extends State<Page4> {
           padding: EdgeInsets.only(top: WebscreenHeightUnit * 120),
           child: GestureDetector(
               onTap: () {
-                if (avaClicked || jasonClicked || mariaClicked) {
-                    
-                    Navigator.push(
+                if ((avaClicked || jasonClicked || mariaClicked) && delay) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                  );
+                } else if (!delay) {
                 } else {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Please select a peer to continue'),
                     duration: Duration(seconds: 2),
@@ -268,7 +208,7 @@ class _Page4State extends State<Page4> {
                 height: screenHeightUnit * 58,
                 width: screenWidthUnit * 81,
                 decoration: BoxDecoration(
-                  color: (avaClicked || jasonClicked || mariaClicked)
+                  color: ((avaClicked || jasonClicked || mariaClicked) && delay)
                       ? Color.fromRGBO(137, 220, 142, 1)
                       : Color.fromRGBO(224, 227, 231, 1),
                   borderRadius: BorderRadius.circular(10),
@@ -282,7 +222,7 @@ class _Page4State extends State<Page4> {
                 ),
                 child: Center(
                   child: Text(
-                    "Finish Peer Reflection",
+                    button,
                     style: GoogleFonts.baloo2(
                         fontSize: screenWidthUnit * 4.2,
                         color: Colors.white,

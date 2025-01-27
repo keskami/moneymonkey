@@ -36,7 +36,7 @@ class CustomProgressBar extends StatelessWidget {
         break;
       case 'StoryPage':
         final StoryController storyController = Get.find();
-        progress = storyController.pageIndex.value / 5;
+        progress = storyController.pageIndex.value / 6;
         break;
       case 'ScenarioPage':
         final ScenarioController scenarioController = Get.find();

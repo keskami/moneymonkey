@@ -20,6 +20,39 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
   bool firstTime = true;
   bool correct = false;
 
+  String question = '';
+  bool hasDataAdded = false;
+  String answer1 = '';
+  String answer2 = '';
+  String answer3 = '';
+  String answer4 = '';
+  bool loading = true;
+
+  int selectedOption = 0;
+  int correctAnswer = 0;
+
+  Future<void> setData(data) async {
+    setState(() {
+      question = data['question'];
+      answer1 = data['answer1'];
+      answer2 = data['answer2'];
+      answer3 = data['answer3'];
+      answer4 = data['answer4'];
+      correctAnswer = int.parse(data['correct']);
+      loading = false;
+
+    });
+
+
+    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setData(peerReflectionQuizcontroller.pageData[2]);
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -27,140 +60,173 @@ class _PeerReflectionQuizPage2State extends State<PeerReflectionQuizPage2> {
 
     double screenWidthUnit = screenWidth / 1920;
     double screenHeightUnit = screenHeight / 980;
-    return Center(
-        child: Padding(
-      padding: EdgeInsets.fromLTRB(
-          screenWidthUnit * 572, screenHeightUnit * 122, 0, 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Why is it important to have an emergency fund?",
-            style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 27,
-                fontWeight: FontWeight.w700,
-                color: Colors.black),
-          ),
-          SizedBox(
-            height: screenHeightUnit * 61,
-          ),
-          Row(children: [
-            quizOptionWithoutImage(
-                text: 'To cover unexpected expenses',
-                screenHeightUnit: screenHeightUnit,
-                option: option1,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option1 = !option1;
-                    option2 = false;
-                    option3 = false;
-                    option4 = false;
-                  });
-                },
-                context: context),
-            SizedBox(
-              width: screenWidthUnit * 20,
-            ),
-            quizOptionWithoutImage(
-                text: 'To buy luxury items',
-                screenHeightUnit: screenHeightUnit,
-                option: option2,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option2 = !option2;
-                    option1 = false;
-                    option3 = false;
-                    option4 = false;
-                  });
-                },
-                context: context),
-          ]),
-          SizedBox(
-            height: screenHeightUnit * 17,
-          ),
-          Row(children: [
-            quizOptionWithoutImage(
-                text: 'To invest in risky stocks',
-                option: option3,
-                screenHeightUnit: screenHeightUnit,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option3 = !option3;
-                    option2 = false;
-                    option1 = false;
-                    option4 = false;
-                  });
-                },
-                context: context),
-            SizedBox(
-              width: screenWidthUnit * 20,
-            ),
-            quizOptionWithoutImage(
-                text: 'To aviod working a job',
-                option: option4,
-                screenHeightUnit: screenHeightUnit,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option4 = !option4;
-                    option1 = false;
-                    option3 = false;
-                    option2 = false;
-                  });
-                },
-                context: context),
-          ]),
-          SizedBox(
-            height: screenHeightUnit * 64,
-          ),
-          bottomBar(
-            screenHeightUnit: screenHeightUnit,
-            screenWidthUnit: screenWidthUnit,
-            firstTime: firstTime,
-            option1: option1,
-            option2: option2,
-            option3: option3,
-            option4: option4,
-            correct: correct,
-            onTap: () {
-              if ((!firstTime && !correct)) {
-                setState(() {
-                  firstTime = true;
-                  option1 = false;
-                  option2 = false;
-                  option3 = false;
-                  option4 = false;
-                  correct = false;
-                });
-              }
-              if (correct) {
-                peerReflectionQuizcontroller.pageIndex.value += 1;
-              } else if (option1 || option2 || option3 || option4) {
-                if (option1) {
-                  ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(
-                      message:
-                          "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
-                  setState(() {
-                    correct = true;
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(WrongAnswerSnackBar(
-                      message:
-                          "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
-                  setState(() {
-                    firstTime = false;
-                  });
-                }
-              } else {}
-            },
+    return loading
+        ? Center(
+            child: CircularProgressIndicator(),
           )
-        ],
-      ),
-    ));
+        : Center(
+            child: Padding(
+            padding: EdgeInsets.fromLTRB(
+                screenWidthUnit * 572, screenHeightUnit * 122, 0, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  question,
+                  style: GoogleFonts.baloo2(
+                      fontSize: screenWidthUnit * 27,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: screenHeightUnit * 61,
+                ),
+                Row(children: [
+                  quizOptionWithoutImage(
+                      text: answer1,
+                      screenHeightUnit: screenHeightUnit,
+                      option: option1,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        setState(() {
+                          option1 = !option1;
+                          option2 = false;
+                          option3 = false;
+                          option4 = false;
+                          if(selectedOption != 1){
+                            selectedOption = 1;
+                          }else{
+                            selectedOption = 0;
+
+                          }
+                        });
+                      },
+                      context: context),
+                  SizedBox(
+                    width: screenWidthUnit * 20,
+                  ),
+                  quizOptionWithoutImage(
+                      text: answer2,
+                      screenHeightUnit: screenHeightUnit,
+                      option: option2,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        setState(() {
+                          option2 = !option2;
+                          option1 = false;
+                          option3 = false;
+                          option4 = false;
+                          if(selectedOption != 2){
+                            selectedOption = 2;
+                          }else{
+                            selectedOption = 0;
+
+                          }
+                        });
+                      },
+                      context: context),
+                ]),
+                SizedBox(
+                  height: screenHeightUnit * 17,
+                ),
+                Row(children: [
+                  quizOptionWithoutImage(
+                      text: answer3,
+                      option: option3,
+                      screenHeightUnit: screenHeightUnit,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        setState(() {
+                          option3 = !option3;
+                          option2 = false;
+                          option1 = false;
+                          option4 = false;
+                          if(selectedOption != 4){
+                            selectedOption = 4;
+                          }else{
+                            selectedOption = 0;
+
+                          }
+                        });
+                      },
+                      context: context),
+                  SizedBox(
+                    width: screenWidthUnit * 20,
+                  ),
+                  quizOptionWithoutImage(
+                      text: answer4,
+                      option: option4,
+                      screenHeightUnit: screenHeightUnit,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        setState(() {
+                          option4 = !option4;
+                          option1 = false;
+                          option3 = false;
+                          option2 = false;
+                          if(selectedOption != 4){
+                            selectedOption = 4;
+                          }else{
+                            selectedOption = 0;
+
+                          }
+                        });
+                      },
+                      context: context),
+                ]),
+                SizedBox(
+                  height: screenHeightUnit * 64,
+                ),
+                bottomBar(
+                  screenHeightUnit: screenHeightUnit,
+                  screenWidthUnit: screenWidthUnit,
+                  firstTime: firstTime,
+                  option1: option1,
+                  option2: option2,
+                  option3: option3,
+                  option4: option4,
+                  correct: correct,
+                  onTap: () {
+                    if ((!firstTime && !correct)) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      setState(() {
+                        firstTime = true;
+                        option1 = false;
+                        option2 = false;
+                        option3 = false;
+                        option4 = false;
+                        correct = false;
+                        selectedOption = 0;
+                      });
+                    }
+                    if (correct) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      peerReflectionQuizcontroller.pageIndex.value += 1;
+                    } else if (option1 || option2 || option3 || option4) {
+                      if (selectedOption == correctAnswer) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            CorrectAnswerSnackBar(
+                                message:
+                                    "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
+                        setState(() {
+                          correct = true;
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            WrongAnswerSnackBar(
+                                message:
+                                    "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
+                        setState(() {
+                          firstTime = false;
+                        });
+                      }
+                    } else {}
+                  },
+                )
+              ],
+            ),
+          ));
   }
 }
 
@@ -190,8 +256,8 @@ Widget quizOptionWithoutImage(
             Text(
               text,
               style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 18,
-                fontWeight: FontWeight.w600,
+                fontSize: screenWidthUnit * 22,
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),
