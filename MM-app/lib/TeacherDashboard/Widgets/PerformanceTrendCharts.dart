@@ -77,8 +77,7 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
                         fitInsideHorizontally: true,
                         fitInsideVertically: true,
                         tooltipMargin: 0,
-                        getTooltipColor: (touchedSpot) =>
-                            Colors.grey.withValues(alpha: 0.5),
+                        getTooltipColor: (touchedSpot) => Colors.white,
                         tooltipPadding: EdgeInsets.all(8),
                         getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                           return touchedBarSpots.map((barSpot) {
@@ -162,7 +161,7 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
         const SizedBox(width: 4),
         Text(
           title,
-          style: const TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 14),
         ),
       ],
     );
