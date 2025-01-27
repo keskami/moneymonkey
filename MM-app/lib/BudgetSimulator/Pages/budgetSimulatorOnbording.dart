@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulator.dart';
 
 class BudgetSimulatorOnboarding extends StatefulWidget {
@@ -57,7 +58,47 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             body: Stack(
               children: [
                 Container(
-                  child: BudgetSimulator(name: 'Crush the Credit Card Debt', checkingAccountBalance: 300, savingsAccountBalance: 300, creditCardDebt: 3000, startingBalance: 600, APY: 3,),
+                  child: BudgetSimulator(
+                    name: 'Crush the Credit Card Debt',
+                    checkingAccountBalance: 300,
+                    savingsAccountBalance: 300,
+                    creditCardDebt: 3000,
+                    startingBalance: 600,
+                    APY: 3,
+                    milestones: [
+                      Milestone(
+                          name: 'Debt Avalanche Start',
+                          description:
+                              'Pay \$300 above the minimum (\$200)\nduring Month 1, for a total of at least\n\$500 paid toward the card.',
+                          goalAmount: 500,
+                          goalType: 'Debt Reduction',
+                          startDay: DateTime.now().day,
+                          endDay: DateTime(DateTime.now().year,
+                                  DateTime.now().month + 1, 1)
+                              .day,
+                          currentAmount: 100),
+                      Milestone(
+                          name: 'Build an Emergency Cushion',
+                          description:
+                              'By the end of Month 2, accumulate at\nleast 10% of your monthly income\n(\$250) in your savings account.',
+                          goalAmount: 25,
+                          goalType: 'Savings',
+                          startDay: DateTime.now().day,
+                          endDay: DateTime(DateTime.now().year,
+                                  DateTime.now().month + 1, 1)
+                              .day,
+                          currentAmount: 17),
+                      Milestone(
+                          name: 'Two Weeks Under Budget',
+                          description:
+                              'Stay under \$50/week for entertainment\nand dining out for two weeks straight.',
+                          goalAmount: 3,
+                          goalType: 'Savings',
+                          startDay: DateTime.now().day,
+                          endDay: DateTime.now().add(Duration(days: 14)).day,
+                          currentAmount: 14)
+                    ],
+                  ),
                   color: Colors.black.withOpacity(0.5),
                 ),
                 Align(
@@ -706,7 +747,47 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               ],
             ),
           )
-        : BudgetSimulator(name: 'Crush the Credit Card Debt',  checkingAccountBalance: 300, savingsAccountBalance: 300, creditCardDebt: 3000, startingBalance: 600,APY: 3,);
+        : BudgetSimulator(
+            name: 'Crush the Credit Card Debt',
+            checkingAccountBalance: 300,
+            savingsAccountBalance: 300,
+            creditCardDebt: 3000,
+            startingBalance: 600,
+            APY: 3,
+            milestones: [
+              Milestone(
+                  name: 'Debt Avalanche Start',
+                  description:
+                      'Pay \$300 above the minimum (\$200)\nduring Month 1, for a total of at least\n\$500 paid toward the card.',
+                  goalAmount: 500,
+                  goalType: 'Debt Reduction',
+                  startDay: DateTime.now().day,
+                  endDay:
+                      DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
+                          .day,
+                  currentAmount: 100),
+              Milestone(
+                  name: 'Build an Emergency Cushion',
+                  description:
+                      'By the end of Month 2, accumulate at\nleast 10% of your monthly income\n(\$250) in your savings account.',
+                  goalAmount: 25,
+                  goalType: 'Savings',
+                  startDay: DateTime.now().day,
+                  endDay:
+                      DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
+                          .day,
+                  currentAmount: 17),
+                    Milestone(
+                          name: 'Two Weeks Under Budget',
+                          description:
+                              'Stay under \$50/week for entertainment\nand dining out for two weeks straight.',
+                          goalAmount: 14,
+                          goalType: 'Savings',
+                          startDay: DateTime.now().day,
+                          endDay: DateTime.now().add(Duration(days: 14)).day,
+                          currentAmount: 3)
+            ],
+          );
   }
 }
 

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
 import 'package:intl/intl.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/meterBox.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class BudgetSimulator extends StatefulWidget {
@@ -13,6 +16,7 @@ class BudgetSimulator extends StatefulWidget {
     required this.creditCardDebt,
     required this.startingBalance,
     required this.APY,
+    required this.milestones,
   });
 
   final String name;
@@ -22,6 +26,7 @@ class BudgetSimulator extends StatefulWidget {
   final double creditCardDebt;
   final double startingBalance;
   final double APY;
+  final List<Milestone> milestones;
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
@@ -34,6 +39,21 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  int progress = 0;
+
+
+  Future<void> getProgress() async {
+    int milestoneCount = widget.milestones.length;
+    double totalProgress = 0;
+    for (Milestone milestone in widget.milestones) {
+      totalProgress += (milestone.currentAmount / milestone.goalAmount) * 100;
+      
+    }
+    setState(() {
+     
+      progress = (totalProgress / milestoneCount).round();
+    });
+  }
 
   @override
   void initState() {
@@ -41,6 +61,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     // Access widget fields in initState
     netCash = widget.startingBalance;
     formattedDate = DateFormat('MMM d, y').format(now);
+    getProgress();
   }
 
   @override
@@ -65,7 +86,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 border: Border(
                   right: BorderSide(
                     color: Colors.black,
-                    width: screenWidthUnit * 1,
+                    width: screenWidthUnit * 1.5,
                   ),
                 ),
               ),
@@ -99,7 +120,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                               color: Colors.black),
                         )),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(screenWidthUnit * 929,
+                      padding: EdgeInsets.fromLTRB(screenWidthUnit * 999,
                           screenHeightUnit * 6, screenWidthUnit * 31, 0),
                       child: Container(
                         height: screenHeightUnit * 70,
@@ -200,7 +221,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       ),
                       Center(
                         child: Container(
-                            width: screenWidthUnit * 1839,
+                            width: screenWidthUnit * 1871,
                             height: screenHeightUnit * 120,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(3),
@@ -231,7 +252,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       ),
                       Center(
                           child: Container(
-                        width: screenWidthUnit * 1919,
+                        width: screenWidthUnit * 1871,
                         height: screenHeightUnit * 1132,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -247,7 +268,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           children: [
                             Container(
                               height: screenHeightUnit * 1122,
-                              width: screenWidthUnit * 1400,
+                              width: screenWidthUnit * 1360,
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,13 +311,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           ],
                                         ),
                                         SizedBox(
-                                          width: screenWidthUnit * 690,
+                                          width: screenWidthUnit * 810,
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               top: screenHeightUnit * 25),
                                           child: Container(
-                                            width: screenWidthUnit * 230,
+                                            width: screenWidthUnit * 195,
                                             height: screenHeightUnit * 68,
                                             decoration: BoxDecoration(
                                               borderRadius:
@@ -318,7 +339,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                       style: GoogleFonts.baloo2(
                                                         fontSize:
                                                             screenWidthUnit *
-                                                                20,
+                                                                18,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                         color: Colors.white,
@@ -331,13 +352,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     Icon(
                                                       Icons.arrow_forward_ios,
                                                       size:
-                                                          screenWidthUnit * 16,
+                                                          screenWidthUnit * 14,
                                                       color: Colors.white,
                                                     ),
                                                     Icon(
                                                       Icons.arrow_forward_ios,
                                                       size:
-                                                          screenWidthUnit * 16,
+                                                          screenWidthUnit * 14,
                                                       color: Colors.white,
                                                     ),
                                                   ],
@@ -359,81 +380,102 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                             color:
                                                 Color.fromRGBO(79, 195, 247, 1),
                                           ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(
+                                                "MO",
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                "TUES",
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                "WED",
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                "THURS",
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                "FRI",
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                "SAT",
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                "SUN",
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    TableCalendar(
-                                      focusedDay: _focusedDay,
-                                      firstDay: DateTime.utc(2022, 01, 01),
-                                      lastDay: DateTime.utc(2026, 12, 31),
-                                      calendarFormat: _calendarFormat,
-                                      selectedDayPredicate: (day) {
-                                        return isSameDay(_selectedDay, day);
-                                      },
-                                      onDaySelected: (selectedDay, focusedDay) {
-                                        setState(() {
-                                          _selectedDay = selectedDay;
-                                          _focusedDay = focusedDay;
-                                        });
-                                      },
-                                      onFormatChanged: (format) {
-                                        setState(() {
-                                          _calendarFormat = format;
-                                        });
-                                      },
-                                      calendarStyle: CalendarStyle(
-                                        todayDecoration: BoxDecoration(
-                                          color: Colors.green,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        selectedDecoration: BoxDecoration(
-                                          color: Color(0xFF51A4F1),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        weekendDecoration: BoxDecoration(
-                                          color: Color(0xFFEDEDED),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        outsideDecoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        defaultDecoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        cellMargin: EdgeInsets.all(5),
-                                      ),
-                                      headerStyle: HeaderStyle(
-                                        formatButtonVisible: false,
-                                        titleCentered: true,
-                                        titleTextStyle: TextStyle(
-                                          color: Color(0xFF222222),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        leftChevronIcon: Icon(
-                                          Icons.chevron_left,
-                                          color: Color(0xFF51A4F1),
-                                          size: 20,
-                                        ),
-                                        rightChevronIcon: Icon(
-                                          Icons.chevron_right,
-                                          color: Color(0xFF51A4F1),
-                                          size: 20,
-                                        ),
-                                      ),
-                                    )
                                   ]),
                             ),
-                            Container(
-                              width: screenWidthUnit * 1,
-                              height: screenHeightUnit * 1122,
-                              color: Colors.black,
+                            // Container(
+                            //   width: screenWidthUnit * 1,
+                            //   height: screenHeightUnit * 1122,
+                            //   color: Colors.black,
+                            // ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                MilestoneProgress(
+                              milestones: widget.milestones,
+                              screenWidthUnit: screenWidthUnit,
+                              screenHeightUnit: screenHeightUnit,
+                              progress: progress, 
                             ),
-                            Container(
-                              width: screenWidthUnit * 349,
-                            ),
+                            SizedBox(height: screenHeightUnit * 37,),
+                            MeterBox(screenHeight: screenHeightUnit, screenWidth: screenWidthUnit)
+
+                              ],
+                            )
+                            
+
                           ],
                         ),
                       ))
