@@ -1,0 +1,79 @@
+.dropdownContainer {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 999;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 3rem 0; /* Remove horizontal padding here */
+    overflow-x: hidden;
+  }
+  
+  .menuGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 8rem; /* Add padding to the grid instead */
+  }
+  
+  .menuCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .menuCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  .iconContainer {
+    margin-bottom: 1rem;
+  }
+  
+  .icon {
+    width: 32px;
+    height: 32px;
+    color: #38A4D8;
+  }
+  
+  .cardTitle {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1.25rem;
+    color: #38A4D8;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+  }
+  
+  .cardDescription {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  @media (max-width: 1200px) {
+    .menuGrid {
+      padding: 0 4rem;
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .menuGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .menuGrid {
+      grid-template-columns: 1fr;
+      padding: 0 2rem;
+    }
+  }
