@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/home.dart';
 
 class StoryPage extends StatefulWidget {
   const StoryPage({super.key});
@@ -13,6 +14,7 @@ class StoryPage extends StatefulWidget {
 class _StoryPageState extends State<StoryPage> {
   StoryController storyController = Get.put(StoryController());
   final String lessonId = "Lesson1";
+
 
   Future<void> _preCacheImages() async {
     await precacheImage(
@@ -38,13 +40,34 @@ class _StoryPageState extends State<StoryPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: screenHeight * .06,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            if (storyController.pageIndex == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            } else {
+              storyController.pageIndex -= 1;
+            }
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: screenHeight * .04,
+          ),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: screenHeight * 0.05,
+            height: screenHeight * 0.0,
           ),
           Row(
             mainAxisSize: MainAxisSize.min,

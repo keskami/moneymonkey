@@ -9,37 +9,37 @@ const EcosystemDropdown = ({ isOpen }) => {
       icon: '/icons/book.svg',
       title: 'Courses',
       description: 'Standards-aligned curriculum and learning content. Application-based learning.',
-      link: '/courses'
+      link: '/Ecosystem/courses'
     },
     {
       icon: '/icons/teacher.svg',
       title: 'Teacher/Parent Tools',
       description: 'Leverage AI and dashboards to personalize the assessment process and develop curriculum.',
-      link: '/assessment-tools'
+      link: '/Ecosystem/assessment-tools'
     },
     {
       icon: '/icons/parent.svg',
       title: 'Teaching Supplements',
       description: 'Enhance your course with lesson plans, presentations, certificates, and other resources.',
-      link: '/teaching-supplements'
+      link: '/Ecosystem/teaching-supplements'
     },
     {
       icon: '/icons/stocks.svg',
       title: 'Stock Market Simulator',
       description: 'Make fake trades on 500+ global exchanges. Teaching core principles for long term wealth.',
-      link: '/stock-simulator'
+      link: '/Ecosystem/stock-simulator'
     },
     {
       icon: '/icons/budget.svg',
       title: 'Personal Budget Simulator',
       description: 'Create budgets, make informed financial choices, and build essential consumer skills.',
-      link: '/budget-simulator'
+      link: '/Ecosystem/budget-simulator'
     },
     {
       icon: '/icons/savings.svg',
       title: 'Credit/Debt Simulator',
       description: 'Build credit, manage loans, and explore the impact of interest rates in a risk-free environment.',
-      link: '/credit-simulator'
+      link: '/Ecosystem/credit-simulator'
     }
   ];
 

@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:money_monkey/home.dart';
 
 class BudgetSimulatorLanding extends StatefulWidget {
   @override
@@ -13,7 +15,7 @@ class BudgetSimulatorLanding extends StatefulWidget {
 
 class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
-  bool isLoading = true;
+  bool isLoading = false;
   int? balance;
   int totalBanans = 0;
   bool firstTime = false;
@@ -32,42 +34,42 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    _fetchUserProfile();
+    //_fetchUserProfile();
   }
 
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
+  // Future<void> _fetchUserProfile() async {
+  //   if (userID != null) {
+  //     try {
+  //       DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
+  //           .collection('Users')
+  //           .doc(userID)
+  //           .get();
 
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
+  //       if (profileSnapshot.exists) {
+  //         setState(() {
+  //           final data = profileSnapshot.data() as Map<String, dynamic>?;
 
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
+  //           var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
 
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
+  //           if (portfolioData != null) {
+  //             balance = portfolioData['Balance'] ?? 0;
+  //             totalBanans = portfolioData['Total Bananas'] ?? 0;
+  //           }
 
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
+  //           isLoading = false;
+  //         });
+  //       } else {
+  //         setState(() {
+  //           isLoading = false;
+  //         });
+  //       }
+  //     } catch (e) {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //     }
+  //   }
+  // }
 
   final List<String> scenarios = [
     'Vacation on a Budget 🔒',
@@ -1136,7 +1138,22 @@ class _BudgetSimulatorLandingState extends State<BudgetSimulatorLanding> {
                                   ? 0
                                   : webScreenHeightUnit * 60),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              if (selectedScenario ==
+                                      "Crush the Credit Card Debt" &&
+                                  intermediate) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BudgetSimulatorOnboarding()),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    WrongAnswerSnackBar(
+                                        message:
+                                            "Please select Intermediate and Crush the Credit Card Debt"));
+                              }
+                            },
                             child: Container(
                               width: webScreenWidthUnit * 207,
                               height: webScreenHeightUnit * 120,

@@ -27,5 +27,5 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Initialize Firebase
   // Example question to add
-  await lessonOneController.initializeFirebaseWithSampleQuestions("Lesson1");
+  //await lessonOneController.initializeFirebaseWithSampleQuestions("Lesson1");
 }

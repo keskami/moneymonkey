@@ -96,7 +96,7 @@ const Feature4 = () => {
           variants={slideVariants}
         >
           <Image
-            src="/comingsoon.png"
+            src="/feature4.png"
             alt="Personalized assignments interface"
             width={800}
             height={500}

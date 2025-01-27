@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import styles from './Navbar.module.css';
 import EcosystemDropdown from './Navbar/EcosystemDropdown';
+import WhoWeServeDropdown from './Navbar/WhoWeServeDropdown';
 import Link from 'next/link';
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [ecosystemOpen, setEcosystemOpen] = useState(false);
+    const [whoWeServeOpen, setWhoWeServeOpen] = useState(false);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -28,10 +30,16 @@ export default function Navbar() {
                     onMouseEnter={() => setEcosystemOpen(true)}
                     onMouseLeave={() => setEcosystemOpen(false)}
                 >
-                    <a href="/ecosystem">Ecosystem</a>
+                    <p className={styles.desktopNavP}>Ecosystem</p>
                     <EcosystemDropdown isOpen={ecosystemOpen} />
                 </li>
-                <li><a href="/usecases">Use Cases</a></li>
+                <li
+                    onMouseEnter={() => setWhoWeServeOpen(true)}
+                    onMouseLeave={() => setWhoWeServeOpen(false)}
+                >
+                    <p className={styles.desktopNavP}>Who We Serve</p>
+                    <WhoWeServeDropdown isOpen={whoWeServeOpen} />
+                </li>
                 <li><a href="/pricing">Pricing</a></li>
                 <li><a href="/company">Company</a></li>
             </ul>
@@ -60,7 +68,7 @@ export default function Navbar() {
                         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the menu
                     >
                         <li><a href="/ecosystem">Ecosystem</a></li>
-                        <li><a href="/usecases">Use Cases</a></li>
+                        <li><a href="/usecases">Who We Serve</a></li>
                         <li><a href="/pricing">Pricing</a></li>
                         <li><a href="/company">Company</a></li>
                         <li><a href="/register">Register</a></li>

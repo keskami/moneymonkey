@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
+import 'package:money_monkey/home.dart';
 
 class PeerReflectionQuiz extends StatefulWidget {
   const PeerReflectionQuiz({super.key});
@@ -39,7 +40,10 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
               IconButton(
                 onPressed: () {
                   peerReflectionQuizcontroller.pageIndex.value = 0;
-                  Navigator.pop(context);
+                  Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
                 },
                 icon: Icon(Icons.close),
               ),
