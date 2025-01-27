@@ -39,7 +39,7 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
           ),
           child: Container(
             width: widget.screenWidthUnit * 470,
-            height: widget.screenHeightUnit * 520,
+            height: widget.screenHeightUnit * 435,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -81,13 +81,13 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
                   ),
                 ),
                 Padding(
-                    padding: EdgeInsets.only(top: widget.screenHeightUnit * 16),
+                    padding: EdgeInsets.only(top: widget.screenHeightUnit * 12),
                     child: Center(
                       child: Stack(
                         children: [
                           Container(
                             width: widget.screenWidthUnit * 420,
-                            height: widget.screenHeightUnit * 48,
+                            height: widget.screenHeightUnit * 36,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Color.fromRGBO(216, 216, 216, 1),
@@ -96,7 +96,7 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
                           FractionallySizedBox(
                             widthFactor: widget.progress / 100,
                             child: Container(
-                              height: widget.screenHeightUnit * 48,
+                              height: widget.screenHeightUnit * 36,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: Color.fromRGBO(30, 213, 58, 1),
@@ -108,7 +108,7 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
                     )),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: widget.screenHeightUnit * 24,
+                    top: widget.screenHeightUnit * 20,
                   ),
                   child: Container(
                     height: widget.screenHeightUnit * 1,
@@ -121,12 +121,12 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
                       top: widget.screenHeightUnit * 2,
                       left: widget.screenWidthUnit * 0),
                   child: Container(
-                    height: widget.screenHeightUnit * 355,
+                    height: widget.screenHeightUnit * 290,
                     width: widget.screenWidthUnit * 470,
                     child: SingleChildScrollView(
                         child: Padding(
                       padding:
-                          EdgeInsets.only(left: widget.screenWidthUnit * 27, bottom: widget.screenHeightUnit * 24),
+                          EdgeInsets.only(left: widget.screenWidthUnit * 27, bottom: widget.screenHeightUnit * 20),
                       child: Column(
                         children: widget.milestones.map((milestone) {
                           return MilestoneSubWidget(
@@ -169,14 +169,14 @@ class _MilestoneSubWidgetState extends State<MilestoneSubWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: widget.screenHeightUnit *30),
+      padding: EdgeInsets.only(top: widget.screenHeightUnit *24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: widget.screenWidthUnit * 47,
-            height: widget.screenWidthUnit * 47,
+            width: widget.screenWidthUnit * 40,
+            height: widget.screenWidthUnit * 40,
             child: Stack(
               children: [
                 Positioned.fill(

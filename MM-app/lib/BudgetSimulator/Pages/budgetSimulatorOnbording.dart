@@ -64,6 +64,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                     savingsAccountBalance: 300,
                     creditCardDebt: 3000,
                     startingBalance: 600,
+                    creditScore: 243,
                     APY: 3,
                     milestones: [
                       Milestone(
@@ -753,6 +754,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             savingsAccountBalance: 300,
             creditCardDebt: 3000,
             startingBalance: 600,
+             creditScore: 243,
             APY: 3,
             milestones: [
               Milestone(

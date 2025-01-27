@@ -5,6 +5,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/meterBox.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class BudgetSimulator extends StatefulWidget {
@@ -17,6 +18,7 @@ class BudgetSimulator extends StatefulWidget {
     required this.startingBalance,
     required this.APY,
     required this.milestones,
+    required this.creditScore,
   });
 
   final String name;
@@ -27,6 +29,7 @@ class BudgetSimulator extends StatefulWidget {
   final double startingBalance;
   final double APY;
   final List<Milestone> milestones;
+  final double creditScore;
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
@@ -41,16 +44,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   DateTime? _selectedDay;
   int progress = 0;
 
-
   Future<void> getProgress() async {
     int milestoneCount = widget.milestones.length;
     double totalProgress = 0;
     for (Milestone milestone in widget.milestones) {
       totalProgress += (milestone.currentAmount / milestone.goalAmount) * 100;
-      
     }
     setState(() {
-     
       progress = (totalProgress / milestoneCount).round();
     });
   }
@@ -464,18 +464,25 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MilestoneProgress(
-                              milestones: widget.milestones,
-                              screenWidthUnit: screenWidthUnit,
-                              screenHeightUnit: screenHeightUnit,
-                              progress: progress, 
-                            ),
-                            SizedBox(height: screenHeightUnit * 37,),
-                            MeterBox(screenHeight: screenHeightUnit, screenWidth: screenWidthUnit)
-
+                                  milestones: widget.milestones,
+                                  screenWidthUnit: screenWidthUnit,
+                                  screenHeightUnit: screenHeightUnit,
+                                  progress: progress,
+                                ),
+                                SizedBox(
+                                  height: screenHeightUnit * 30,
+                                ),
+                                MeterBox(
+                                  screenHeightUnit: screenHeightUnit,
+                                  screenWidthUnit: screenWidthUnit,
+                                  creditScore: widget.creditScore as int,
+                                ),
+                                SizedBox(
+                                  height: screenHeightUnit * 30,
+                                ),
+                                SpendingDonutChart(screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit,),
                               ],
                             )
-                            
-
                           ],
                         ),
                       ))
