@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/landingPage.dart';
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
                     return BudgetSimulatorOnboarding();
                   }
                 } else {
-                  return BudgetSimulatorOnboarding();
+                  return TeacherDashboard();
                 }
               },
             ),
