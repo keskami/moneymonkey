@@ -28,14 +28,14 @@ class PeerReflectioncontroller extends GetxController {
 
   Future<void> fetchPageData() async {
     try {
-      print("Starting to fetch quiz data");
+      print("Starting to fetch peerReflection data");
       for (int i = 1; i <= 5; i++) {
         print("Fetching page $i");
         var data = await lessonData.getPageInfoFromFirestore(
           levelName: "Advanced",
           UnitNumber: 1,
           LessonNumber: 1,
-          TypeOfLesson: "Quiz",
+          TypeOfLesson: "PeerReflection",
           PageNumber: i,
         );
         print("Got data for page $i: $data");
