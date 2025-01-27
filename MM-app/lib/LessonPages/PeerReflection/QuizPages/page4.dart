@@ -4,7 +4,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
-import 'package:money_monkey/home.dart';
 
 class PeerReflectionQuizPage4 extends StatefulWidget {
   @override
@@ -21,6 +20,39 @@ class _PeerReflectionQuizPage4State extends State<PeerReflectionQuizPage4> {
   bool firstTime = true;
   bool correct = false;
 
+  String question = '';
+  bool hasDataAdded = false;
+  String answer1 = '';
+  String answer2 = '';
+  String answer3 = '';
+  String answer4 = '';
+  bool loading = true;
+  List<int> correctAnswers = [];
+  List<int> selectedOptions = [];
+
+  Future<void> setData(data) async {
+    setState(() {
+      question = data['question'];
+
+      answer1 = data['answer1'];
+
+      answer2 = data['answer2'];
+      answer3 = data['answer3'];
+      answer4 = data['answer4'];
+      correctAnswers.add(int.parse(data['correct1']));
+      correctAnswers.add(int.parse(data['correct2']));
+      correctAnswers.add(int.parse(data['correct3']));
+      
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setData(peerReflectionQuizcontroller.pageData[4]);
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -28,131 +60,158 @@ class _PeerReflectionQuizPage4State extends State<PeerReflectionQuizPage4> {
 
     double screenWidthUnit = screenWidth / 1920;
     double screenHeightUnit = screenHeight / 980;
-    return Center(
-        child: Padding(
-      padding: EdgeInsets.fromLTRB(
-          screenWidthUnit * 572, screenHeightUnit * 122, 0, 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Which actions demonstrate finacial responsibility?",
-            style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 27,
-                fontWeight: FontWeight.w700,
-                color: Colors.black),
-          ),
-          SizedBox(
-            height: screenHeightUnit * 61,
-          ),
-          Row(children: [
-            quizOptionWithoutImage(
-                text: 'Planning for future expenses',
-                screenHeightUnit: screenHeightUnit,
-                option: option1,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option1 = !option1;
-                  });
-                },
-                context: context),
-            SizedBox(
-              width: screenWidthUnit * 20,
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Center(
+            child: Padding(
+            padding: EdgeInsets.fromLTRB(
+                screenWidthUnit * 572, screenHeightUnit * 107, 0, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  question,
+                  style: GoogleFonts.baloo2(
+                      fontSize: screenWidthUnit * 27,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  height: screenHeightUnit * 61,
+                ),
+                Row(children: [
+                  quizOptionWithoutImage(
+                      text: answer1,
+                      screenHeightUnit: screenHeightUnit,
+                      option: option1,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        setState(() {
+                          if (option1) {
+                            selectedOptions.remove(1);
+                          } else {
+                            selectedOptions.add(1);
+                          }
+                          option1 = !option1;
+                        });
+                      },
+                      context: context),
+                  SizedBox(
+                    width: screenWidthUnit * 20,
+                  ),
+                  quizOptionWithoutImage(
+                      text: answer2,
+                      screenHeightUnit: screenHeightUnit,
+                      option: option2,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        setState(() {
+                          if (option2) {
+                            selectedOptions.remove(2);
+                          } else {
+                            selectedOptions.add(2);
+                          }
+                          option2 = !option2;
+                        });
+                      },
+                      context: context),
+                ]),
+                SizedBox(
+                  height: screenHeightUnit * 17,
+                ),
+                Row(children: [
+                  quizOptionWithoutImage(
+                      text: answer3,
+                      option: option3,
+                      screenHeightUnit: screenHeightUnit,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        if (option3) {
+                          selectedOptions.remove(3);
+                        } else {
+                          selectedOptions.add(3);
+                        }
+                        setState(() {
+                          option3 = !option3;
+                        });
+                      },
+                      context: context),
+                  SizedBox(
+                    width: screenWidthUnit * 20,
+                  ),
+                  quizOptionWithoutImage(
+                      text: answer4,
+                      option: option4,
+                      screenHeightUnit: screenHeightUnit,
+                      screenWidthUnit: screenWidthUnit,
+                      onClick: () {
+                        if (option4) {
+                          selectedOptions.remove(4);
+                        } else {
+                          selectedOptions.add(4);
+                        }
+                        setState(() {
+                          option4 = !option4;
+                        });
+                      },
+                      context: context),
+                ]),
+                SizedBox(
+                  height: screenHeightUnit * 64,
+                ),
+                bottomBar(
+                  screenHeightUnit: screenHeightUnit,
+                  screenWidthUnit: screenWidthUnit,
+                  firstTime: firstTime,
+                  option1: option1,
+                  option2: option2,
+                  option3: option3,
+                  option4: option4,
+                  correct: correct,
+                  onTap: () {
+                    print(selectedOptions);
+                    if ((!firstTime && !correct)) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      setState(() {
+                        firstTime = true;
+                        option1 = false;
+                        option2 = false;
+                        option3 = false;
+                        option4 = false;
+                        correct = false;
+                        selectedOptions.clear();
+                      });
+                    }
+                    if (correct) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      peerReflectionQuizcontroller.pageIndex.value += 1;
+                    } else if (option1 || option2 || option3 || option4) {
+                      
+                        
+                        if (selectedOptions.length == correctAnswers.length && selectedOptions.every((element) => correctAnswers.contains(element))) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            CorrectAnswerSnackBar(
+                                message:
+                                    "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
+                        setState(() {
+                          correct = true;
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            WrongAnswerSnackBar(
+                                message:
+                                    "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
+                        setState(() {
+                          firstTime = false;
+                        });
+                      }
+                    } else {}
+                  },
+                )
+              ],
             ),
-            quizOptionWithoutImage(
-                text: 'Setting finacial goals',
-                screenHeightUnit: screenHeightUnit,
-                option: option2,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option2 = !option2;
-                  });
-                },
-                context: context),
-          ]),
-          SizedBox(
-            height: screenHeightUnit * 17,
-          ),
-          Row(children: [
-            quizOptionWithoutImage(
-                text: 'Spending without tracking expenses',
-                option: option3,
-                screenHeightUnit: screenHeightUnit,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option3 = !option3;
-                  });
-                },
-                context: context),
-            SizedBox(
-              width: screenWidthUnit * 20,
-            ),
-            quizOptionWithoutImage(
-                text: 'Regularly contributing to savings',
-                option: option4,
-                screenHeightUnit: screenHeightUnit,
-                screenWidthUnit: screenWidthUnit,
-                onClick: () {
-                  setState(() {
-                    option4 = !option4;
-                  });
-                },
-                context: context),
-          ]),
-          SizedBox(
-            height: screenHeightUnit * 64,
-          ),
-          bottomBar(
-            screenHeightUnit: screenHeightUnit,
-            screenWidthUnit: screenWidthUnit,
-            firstTime: firstTime,
-            option1: option1,
-            option2: option2,
-            option3: option3,
-            option4: option4,
-            correct: correct,
-            onTap: () {
-              if ((!firstTime && !correct)) {
-                setState(() {
-                  firstTime = true;
-                  option1 = false;
-                  option2 = false;
-                  option3 = false;
-                  option4 = false;
-                  correct = false;
-                });
-              }
-              if (correct) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              } else if (option1 || option2 || option3 || option4) {
-                if (option1 && !option3 && option2 && option4) {
-                  ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(
-                      message:
-                          "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
-                  setState(() {
-                    correct = true;
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(WrongAnswerSnackBar(
-                      message:
-                          "Coins have been used since around 600\nB.C., making them the oldest form of\nmoney still in use."));
-                  setState(() {
-                    firstTime = false;
-                  });
-                }
-              } else {}
-            },
-          )
-        ],
-      ),
-    ));
+          ));
   }
 }
 
@@ -182,9 +241,7 @@ Widget quizOptionWithoutImage(
             Text(
               text,
               style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 18,
-                fontWeight: FontWeight.w600,
-              ),
+                  fontSize: screenWidthUnit * 22, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ],

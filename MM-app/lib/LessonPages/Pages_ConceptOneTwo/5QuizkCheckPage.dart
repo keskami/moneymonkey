@@ -14,25 +14,71 @@ class QuickCheckPage extends StatefulWidget {
 }
 
 class _QuickCheckPageState extends State<QuickCheckPage> {
-  String title = "Lifelong Financial Responsibility";
+  String title = "";
   String question1 =
-      "Which of the following best describes a strong financial habit at any age?";
-  String question2 = "Which is a key benefit of having an emergency fund?";
-  String correctAns1 = "Saving and investing a portion of earnings regularly";
+      "";
+  String question2 = "";
+  String correctAns1 = "";
   String correctAns2 =
-      "It covers unexpected expenses, reducing stress and debt";
+      "";
   String answer1 = "";
   String answer2 = "";
   List<String> options1 = <String>[
-    "Spending money the moment you get it",
-    "Saving and investing a portion of earnings regularly",
-    "Waiting to save until you earn a high salary",
+    ".",
+    ".",
+    ".",
   ];
   List<String> options2 = [
-    "It guarantees you’ll never worry about money again",
-    "It covers unexpected expenses, reducing stress and debt",
-    "It means you can freely spend on luxury items without a budget",
+    ".",
+    ".",
+    ".",
   ];
+  String button = "";
+  String bothCorrect = '';
+  String oneCorrect = '';
+  String wrong = '';
+  bool loading = false;
+  
+  
+
+  Future<void> setData(data) async {
+    setState(() {
+      title = data['title'];
+      question1 = data['question1'];
+      question2 = data['question2'];
+      correctAns1 = data['correctAnswer1'];
+      correctAns2 = data['correctAnswer2'];
+ 
+      options1 =
+          List<String>.from(data["options1"].map((item) => item.toString()));
+          options2 =
+          List<String>.from(data["options2"].map((item) => item.toString()));
+          button = data['button'];
+          oneCorrect   = data['1Correct'];
+          bothCorrect = data['2Correct'];
+          wrong = data['0Correct'];
+    
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+    });
+    ever(componentOneTwoController.isLoading, (_) {
+      if (!componentOneTwoController.isLoading.value) {
+        if (componentOneTwoController.pageData.isNotEmpty) {
+          setData(componentOneTwoController.pageData[8]);
+        }
+      }
+    });
+    if (title == '') {
+      setData(componentOneTwoController.pageData[8]);
+    }
+  }
   bool isNextEnabled = false;
   ComponentOneTwoController componentOneTwoController = Get.find();
   void showMessage() {
@@ -40,7 +86,7 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
     if (answer1 == correctAns1 && answer2 == correctAns2) {
       ScaffoldMessenger.of(context).showSnackBar(
         CorrectAnswerSnackBar(
-          message: "Yes, both these answers are correct!",
+          message: bothCorrect,
         ),
       );
       Future.delayed(
@@ -52,13 +98,13 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
     } else if (answer1 == correctAns1 || answer2 == correctAns2) {
       ScaffoldMessenger.of(context).showSnackBar(
         WrongAnswerSnackBar(
-          message: "Only one of these answers are\ncorrect!",
+          message: oneCorrect,
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         WrongAnswerSnackBar(
-          message: "Recheck your answer please.",
+          message: wrong,
         ),
       );
     }
@@ -80,13 +126,7 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -98,13 +138,14 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
   }
 
   webDisplay(double screenWidth, double screenHeight) {
-    return Center(
+    return loading? Center(child:CircularProgressIndicator()):
+    Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "Quick Check: $title",
+            title,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 27,
@@ -134,7 +175,7 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
               ),
               child: Center(
                 child: Text(
-                  "Check",
+                  button,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -146,7 +187,7 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
         ],
       ).paddingSymmetric(
         horizontal: screenWidth * 0.25,
-        vertical: screenHeight * 0.02,
+        vertical: screenHeight * 0.018,
       ),
     );
   }
@@ -158,13 +199,14 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
       child: ShadowedBoxContainer(
         child: Column(
           children: [
+            Padding(padding: EdgeInsets.only(left: screenWidth * .014), child:
             Text(
               question,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 17,
               ),
-            ),
+            ),),
             ...options.map(
               (option) {
                 return GestureDetector(
@@ -178,12 +220,12 @@ class _QuickCheckPageState extends State<QuickCheckPage> {
                       height: screenHeight * 0.1,
                       padding: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.01,
-                        vertical: screenHeight * 0.015,
+                        vertical: screenHeight * 0.01,
                       ),
                       child: Text(
                         option,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

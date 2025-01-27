@@ -16,6 +16,7 @@ class AuthService {
   final StartFreshController startFreshController = Get.find();
   final GettingStartedController gettingStartedController = Get.find();
   String user = "";
+
   //Google Sign In
   Future<void> googleAuth(BuildContext context) async {
     try {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,49 +24,61 @@ class _Page6State extends State<Page6> {
   bool jasonClicked = false;
   bool avaClicked = false;
   Toolkitcontroller peerReflectionController = Get.find();
+  String title = '';
+  bool imagesLoaded = false;
+//String subTitle = '';
+  final List<Image> images = [
+    Image.network(
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fl1toolkit1%2Fbubble.png?alt=media&token=f24cfee3-b980-48e2-8724-da06e6a07943"),
+    Image.asset("assets/images/monkeyNoText.png"),
+  ];
+
+  Future<void> _preloadImages() async {
+    try {
+      final futures = images.map((image) {
+        final completer = Completer<void>();
+        final ImageStreamListener listener = ImageStreamListener(
+          (info, _) => completer.complete(),
+          onError: (error, _) => completer.complete(), // Handle error
+        );
+        image.image.resolve(const ImageConfiguration()).addListener(listener);
+        return completer.future;
+      });
+
+      await Future.wait(futures);
+      setState(() {
+        imagesLoaded = true;
+      });
+    } catch (e) {
+      debugPrint("Error preloading images: $e");
+    }
+  }
+
+  Future<void> setData(Map<String, dynamic> data) async {
+    setState(() {
+      title = data["title"];
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Color.fromRGBO(133, 220, 64, 1),
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-    _fetchUserProfile();
-  }
 
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
+    _preloadImages();
 
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
+    ever(peerReflectionController.isLoading, (_) {
+      if (!peerReflectionController.isLoading.value) {
+        setData(peerReflectionController.pageData[2]);
+      } else {
         setState(() {
-          isLoading = false;
+          isLoading = true;
         });
       }
+    });
+
+    if (title.isEmpty) {
+      setData(peerReflectionController.pageData[2]);
     }
   }
 
@@ -76,66 +90,69 @@ class _Page6State extends State<Page6> {
     double screenHeightUnit = screenHeight / 880;
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
-    return Column(
-      children: [
-        SizedBox(height: screenHeight * .08),
-        Align(
-          alignment: Alignment.center,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: Text(
-              "Lifelong Financial Well-Being",
-              style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 7,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.start,
-            ),
-          ),
-        ),
-        SizedBox(height: WebscreenHeightUnit * 65),
-        Image.asset(
-          "assets/images/lfwLessonPage5/bubble.png",
-          width: WebscreenWidthUnit * 700,
-        ),
-        SizedBox(height: WebscreenHeightUnit * 12),
-        Image.asset("assets/images/monkeyNoText.png",
-            height: WebscreenHeightUnit * 250),
-        Padding(
-          padding: EdgeInsets.only(top: WebscreenHeightUnit * 153),
-          child: GestureDetector(
-              onTap: () {
-                print(peerReflectionController.pageIndex.value);
-                peerReflectionController.pageIndex.value += 1;
-              },
-              child: Container(
-                height: screenHeightUnit * 58,
-                width: WebscreenWidthUnit * 291,
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(137, 220, 142, 1),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Center(
+    return (isLoading || !imagesLoaded)
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Column(
+            children: [
+              SizedBox(height: screenHeight * .08),
+              Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: Text(
-                    "Continue",
+                    title,
                     style: GoogleFonts.baloo2(
-                        fontSize: screenWidthUnit * 4.2,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
+                      fontSize: screenWidthUnit * 7,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
                 ),
-              )),
-        )
-      ],
-    );
+              ),
+              SizedBox(height: WebscreenHeightUnit * 65),
+              Container(
+                width: WebscreenWidthUnit * 700,
+                child: images[0]),
+              SizedBox(height: WebscreenHeightUnit * 12),
+              Image.asset("assets/images/monkeyNoText.png",
+                  height: WebscreenHeightUnit * 250),
+              Padding(
+                padding: EdgeInsets.only(top: WebscreenHeightUnit * 153),
+                child: GestureDetector(
+                    onTap: () {
+                      print(peerReflectionController.pageIndex.value);
+                      peerReflectionController.pageIndex.value += 1;
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 58,
+                      width: WebscreenWidthUnit * 291,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(137, 220, 142, 1),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 5,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Continue",
+                          style: GoogleFonts.baloo2(
+                              fontSize: screenWidthUnit * 4.2,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    )),
+              )
+            ],
+          );
   }
 }
 

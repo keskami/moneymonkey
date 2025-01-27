@@ -8,7 +8,7 @@ import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({
+   QuestionPage({
     super.key,
     required this.question,
     required this.correctAns,
@@ -32,6 +32,15 @@ class _QuestionPageState extends State<QuestionPage> {
   double score = 0.0;
   double questionValue = 0.0;
 
+  bool wait4 = false;
+
+  Future<void> wait4sec() async{
+    await Future.delayed(Duration(seconds: 6));
+    setState(() {
+      wait4 = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +58,7 @@ class _QuestionPageState extends State<QuestionPage> {
         score = scenarioController.responsibilityScore.value;
       }
       selectedAns = ans;
+      wait4sec();
     });
   }
 
@@ -63,7 +73,7 @@ class _QuestionPageState extends State<QuestionPage> {
       children: [
         Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RichText(
               text: TextSpan(
@@ -163,10 +173,11 @@ class _QuestionPageState extends State<QuestionPage> {
                   selectedAns = "";
                   showMessage = false;
                   hasAnsweredCorrectly = false;
+                  wait4 = false;
                 });
                 scenarioController.pageIndex.value += 1;
               },
-              isEnabled: selectedAns.isNotEmpty,
+              isEnabled:wait4,
             ),
             SizedBox(width: screenWidth * 0.01),
           ],

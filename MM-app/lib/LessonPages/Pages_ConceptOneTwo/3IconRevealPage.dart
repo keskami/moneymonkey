@@ -19,30 +19,50 @@ class _IconRevealPageState extends State<IconRevealPage> {
     false,
     false,
   ];
-  List<String> iconsLinks = [
-    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcard.png?alt=media&token=d9ad44a7-c607-4a88-9c8b-64d49e47a245",
-    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgraduation-cap.png?alt=media&token=53e1203d-816d-4512-b570-db886d53d904",
-    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fbriefcase-bag.png?alt=media&token=987a2538-9376-46ef-965e-502cf493d798",
-    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fsunset.png?alt=media&token=2ebd97df-6903-4254-bd15-3a59c404825b",
-  ];
+  List<String> iconLinks = [
+    ];
   List<String> iconContents = [
-    "Even small allowances or part-time earnings can be budgeted. Learning to save a portion of every dollar sets a foundation for bigger goals later.",
-    "This might be your first real job or college experience. Start building credit responsibly and budget for regular bills—rent, utilities, groceries.",
-    "You might buy a home or consider long-term investments. Having an emergency fund, managing debt wisely, and planning for retirement become crucial.",
-    "You live off savings, pensions, or investments made earlier. Continued budgeting helps ensure your money lasts and you maintain your desired lifestyle.",
-  ];
+    ];
   bool isNextEnabled = false;
   ComponentOneTwoController componentOneTwoController = Get.find();
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).clearSnackBars();
+  String title = '';
+  String wrong = '';
+  bool loading = true;
+
+  
+
+  Future<void> setData(data) async {
+    setState(() {
+      wrong = data['wrong'];
+      title = data['title'];
+      iconContents = List<String>.from(data["iconContents"].map((item) => item.toString()));
+      iconLinks = List<String>.from(data["iconLinks"].map((item) => item.toString()));
+      loading = false;
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+    });
+    ever(componentOneTwoController.isLoading, (_) {
+      if (!componentOneTwoController.isLoading.value) {
+        if (componentOneTwoController.pageData.isNotEmpty) {
+          setData(componentOneTwoController.pageData[3]);
+        }
+      }
+    });
+    if (title == '') {
+      setData(componentOneTwoController.pageData[3]);
+    }
+  }
+
+ 
+
   void makeIconVisible(String iconLink) {
-    int index = iconsLinks.indexOf(iconLink);
+    int index = iconLinks.indexOf(iconLink);
     if (index == 0) {
       setState(() {
         showIcon[index] = true;
@@ -53,7 +73,7 @@ class _IconRevealPageState extends State<IconRevealPage> {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           WrongAnswerSnackBar(
-              message: "Kindly go in order from Left to Right."),
+              message: wrong),
         );
         return;
       }
@@ -68,7 +88,7 @@ class _IconRevealPageState extends State<IconRevealPage> {
     //For enabling the Next Button
     if (showIcon[3]) {
       Future.delayed(
-        Duration(seconds: 2),
+        Duration(seconds: 8),
         () {
           setState(() {
             isNextEnabled = true;
@@ -89,8 +109,10 @@ class _IconRevealPageState extends State<IconRevealPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: screenWidth * 0.02),
-        Text(
-          "Definition: Financial Responsibility Over a Lifetime",
+        Padding(
+            padding: EdgeInsets.only(left: screenWidth * 0.043),
+          child: Text(
+          title,
           softWrap: true,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -100,11 +122,14 @@ class _IconRevealPageState extends State<IconRevealPage> {
           vertical: screenHeight * 0.025,
           horizontal: screenWidth * 0.015,
         ),
+
+        ),
+        
         //Icon Row
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...iconsLinks
+            ...iconLinks
                 .map(
                   (e) {
                     return TapToViewCircleAvatar(e, screenWidth);
@@ -173,7 +198,7 @@ class _IconRevealPageState extends State<IconRevealPage> {
       },
       child: CircleAvatar(
         radius: screenWidth * 0.02,
-        backgroundColor: showIcon[iconsLinks.indexOf(e)]
+        backgroundColor: showIcon[iconLinks.indexOf(e)]
             ? LightTheme().primaryBlue
             : Colors.grey,
         child: Image.network(
@@ -204,7 +229,7 @@ class _IconRevealPageState extends State<IconRevealPage> {
       ),
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.01,
-        vertical: screenHeight * 0.05,
+        vertical: screenHeight * 0.04,
       ),
       child: isVisible
           ? Text(
@@ -213,8 +238,9 @@ class _IconRevealPageState extends State<IconRevealPage> {
               overflow: TextOverflow.visible,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 15,
+                fontSize: 16.5,
               ),
+              textAlign: TextAlign.center,
             )
           : null,
     );

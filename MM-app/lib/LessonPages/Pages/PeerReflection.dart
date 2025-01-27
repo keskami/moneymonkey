@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/home.dart';
 
 class PeerReflection extends StatefulWidget {
   const PeerReflection({super.key});
@@ -15,9 +16,17 @@ class _PeerReflectionState extends State<PeerReflection> {
       Get.put(PeerReflectioncontroller());
   final String lessonId = "PeerReflection";
 
+  Future<void> _preloadImages() async {
+  precacheImage(AssetImage('assets/images/newMonkeys/Maria.png'), context);
+  precacheImage(AssetImage('assets/images/newMonkeys/Jason.png'), context);
+  precacheImage(AssetImage('assets/images/newMonkeys/Ava.png'), context);
+  precacheImage(AssetImage('assets/images/img_monkeymoney_52.png'), context);
+}
+
   @override
   void initState() {
     super.initState();
+    _preloadImages();
   }
 
   @override
@@ -26,11 +35,32 @@ class _PeerReflectionState extends State<PeerReflection> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        toolbarHeight: screenHeight * .06,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            if (peerReflectioncontroller.pageIndex == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            } else {
+              peerReflectioncontroller.pageIndex -= 1;
+            }
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: screenHeight * .04,
+          ),
+        ),
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: screenHeight * 0.05,
+            height: screenHeight * 0.00,
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -39,7 +69,10 @@ class _PeerReflectionState extends State<PeerReflection> {
               IconButton(
                 onPressed: () {
                   peerReflectioncontroller.pageIndex.value = 0;
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
                 },
                 icon: Icon(Icons.close),
               ),
@@ -49,7 +82,7 @@ class _PeerReflectionState extends State<PeerReflection> {
                   pageName: 'PeerReflection',
                   width: screenWidth * 0.44,
                   key: ValueKey(peerReflectioncontroller
-                      .pageIndex.value), // Add key to force rebuild
+                      .pageIndex.value), 
                 ),
               ),
               const SizedBox(
