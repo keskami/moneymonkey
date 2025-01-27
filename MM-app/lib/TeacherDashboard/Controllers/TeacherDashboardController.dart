@@ -5,7 +5,7 @@ import 'package:money_monkey/TeacherDashboard/Pages/Overview.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/StudentPerformance.dart';
 
 class TeacherDashboardController extends GetxController {
-  RxInt pageIndex = 3.obs;
+  RxInt pageIndex = 0.obs;
   var pages = [
     DashboardOverview(),
     LessonManagement(),
