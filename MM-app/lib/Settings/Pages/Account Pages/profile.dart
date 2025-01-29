@@ -5,7 +5,7 @@ import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container
 import 'package:money_monkey/Backend/Services/settings_service.dart';
 import 'package:money_monkey/Settings/Widgets/custom_container.dart';
 
-import '../../../Backend/Models/user_data.dart';
+import '../../../Backend/Models/StudentData.dart';
 import '../../../Backend/Services/firestore_service.dart';
 import '../../../themes/color_themes.dart';
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Models/Teacher.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/SubPageSelectorRow.dart';
@@ -12,11 +14,31 @@ class TeacherDashboard extends StatefulWidget {
 }
 
 class _TeacherDashboardState extends State<TeacherDashboard> {
+  Teacher currentTeacher = Teacher(
+    name: "Mrs. Anderson",
+    id: "temporaryTeacherId2025",
+    classRooms: [
+      Classroom(
+        classId: 'tempClassId2025',
+        name: "Class1",
+        teacherId: 'temporaryTeacherId2025',
+        studentIds: [],
+        lessonId: 'tempLessonId2025',
+        upcomingLessonId: 'tempUpcomingLessonId2025',
+        performanceData: PerformanceTrends(
+          classAverage: 76,
+          participationRate: 56.5,
+          lessonCompletion: 87.7,
+        ),
+      ),
+    ],
+  );
   String currentPage = "OverView";
   String selectedClass = "All Classes";
   final String teacherName = "Mrs. Anderson";
   final String progressStatus = "In-Progress";
-  final List<String> classes = [
+  Map<String, String> classes = {};
+  final List<String> Tclasses = [
     'All Classes',
     'Batch 1',
     'Batch 2',
@@ -31,6 +53,11 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
       setState(() {
         selectedClass = className;
       });
+  }
+
+  void getClasses() {
+    classes = currentTeacher.getClasses();
+    ;
   }
 
   @override
@@ -67,7 +94,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             const Spacer(),
             CustomDropDownContainer(
               width: screenWidth * 0.4,
-              items: classes,
+              items: classes.entries.map((entry) {
+                return entry.value;
+              }).toList(),
               onChanged: onClassPicked,
               initialSelection: selectedClass,
             ),

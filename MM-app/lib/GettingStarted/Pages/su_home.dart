@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Models/user_data.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Resources/Resources.dart';
-import 'package:money_monkey/TeacherDashboard/Backend/Model.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/PerformanceTrendCharts.dart';
@@ -15,62 +15,62 @@ class ClassroomPreferences extends StatefulWidget {
   State<ClassroomPreferences> createState() => _ClassroomPreferencesState();
 }
 
-final List<PerformanceData> samplePerformanceData = [
-  PerformanceData(
+final List<PerformanceTrends> samplePerformanceData = [
+  PerformanceTrends(
     label: "Recap",
     classAverage: 65.0,
     participationRate: 75.0,
     lessonCompletion: 70.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Concept 1",
     classAverage: 75.0,
     participationRate: 85.0,
     lessonCompletion: 68.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Interactive Activity 1",
     classAverage: 80.0,
     participationRate: 70.0,
     lessonCompletion: 58.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Concept 2",
     classAverage: 70.0,
     participationRate: 65.0,
     lessonCompletion: 90.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Interactive Activity 2",
     classAverage: 82.0,
     participationRate: 80.0,
     lessonCompletion: 85.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Story",
     classAverage: 75.0,
     participationRate: 65.0,
     lessonCompletion: 60.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Scenario Simulation",
     classAverage: 82.0,
     participationRate: 80.0,
     lessonCompletion: 85.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Peer Reflection",
     classAverage: 82.0,
     participationRate: 80.0,
     lessonCompletion: 85.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Toolkit",
     classAverage: 80.0,
     participationRate: 70.0,
     lessonCompletion: 58.0,
   ),
-  PerformanceData(
+  PerformanceTrends(
     label: "Quiz",
     classAverage: 82.0,
     participationRate: 80.0,

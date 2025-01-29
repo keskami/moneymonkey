@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:money_monkey/TeacherDashboard/Backend/Model.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
 
 class PerformanceTrendsChart extends StatefulWidget {
-  final List<PerformanceData> data;
+  final List<PerformanceTrends> data;
   final double? width;
   final double? height;
   final String filter;
@@ -260,7 +260,7 @@ Widget leftTitleWidgets(double value, TitleMeta meta) {
 }
 
 Widget bottomTitleWidgets(
-    double value, TitleMeta meta, List<PerformanceData> data) {
+    double value, TitleMeta meta, List<PerformanceTrends> data) {
   if (value.toInt() >= data.length) return const SizedBox.shrink();
 
   return Padding(
