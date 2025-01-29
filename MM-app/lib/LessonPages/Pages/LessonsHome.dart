@@ -11,6 +11,7 @@ import 'package:money_monkey/LessonPages/Pages/Story.dart';
 import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
 
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
+import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class LessonsHome extends StatefulWidget {
@@ -196,7 +197,7 @@ class _LessonsHomeState extends State<LessonsHome> {
                     //Diamond
                     Image.network(
                       height: screenHeight * 0.1,
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMoneyMonkey.png?alt=media&token=8bc3b244-749e-49bf-a663-28664c2b4714",
+                      AppResources.mmLogoLink,
                     ),
                     const Spacer(),
                     Text("10"),
