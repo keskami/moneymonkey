@@ -5,10 +5,16 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class SpendingDonutChart extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
+  final List<String> types;
+  final List<double> percentage;
+  double total = 0;
 
   SpendingDonutChart({
     required this.screenHeightUnit,
     required this.screenWidthUnit,
+    required this.types,
+    required this.percentage,
+    required this.total,
   });
   @override
   _SpendingDonutChartState createState() => _SpendingDonutChartState();
@@ -20,26 +26,23 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
     Colors.blue,
     Colors.teal,
     Colors.orange,
+    Colors.yellow,
+    Colors.pink
   ];
-  List<double> percentage = [41, 19, 22, 18];
-
-  List<String> type = [
-    "Rent",
-    "Utilities",
-    "Travel",
-    "CC Debt",
-  ];
-
-  late List<_ChartData> chartData;
+  int total = 0;
+  
+  List<_ChartData> chartData = [];
+  Future<void> getData() async {
+    for(int i = 0; i < widget.types.length; i++) {
+      chartData.add(_ChartData(widget.types[i], widget.percentage[i], colors[i]));
+      total += widget.percentage[i].toInt();
+    }
+    
+  }
 
   @override
   void initState() {
-    chartData = [
-      _ChartData(type[0], percentage[0], colors[0]),
-      _ChartData(type[1], percentage[1], colors[1]),
-      _ChartData(type[2], percentage[2], colors[2]),
-      _ChartData(type[3], percentage[3], colors[3]),
-    ];
+    getData();
     super.initState();
   }
 
@@ -90,7 +93,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
                   annotations: <CircularChartAnnotation>[
                     CircularChartAnnotation(
                       widget: Text(
-                        '4,000\$',
+                        '${widget.total}\$',
                         style: TextStyle(
                           fontSize: widget.screenWidthUnit * 16,
                           fontWeight: FontWeight.bold,
@@ -117,35 +120,14 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      spendingSidePart(
-                        screenHeightUnit: widget.screenHeightUnit,
-                        screenWidthUnit: widget.screenWidthUnit,
-                        type: type[0],
-                        percentage: percentage[0] as int,
-                        color: colors[0],
-                      ),
-                      
-                      spendingSidePart(
-                        screenHeightUnit: widget.screenHeightUnit,
-                        screenWidthUnit: widget.screenWidthUnit,
-                        type: type[1],
-                        percentage: percentage[1] as int,
-                        color: colors[1],
-                      ),
-                      spendingSidePart(
-                        screenHeightUnit: widget.screenHeightUnit,
-                        screenWidthUnit: widget.screenWidthUnit,
-                        type: type[2],
-                        percentage: percentage[2] as int,
-                        color: colors[2],
-                      ),
-                      spendingSidePart(
-                        screenHeightUnit: widget.screenHeightUnit,
-                        screenWidthUnit: widget.screenWidthUnit,
-                        type: type[3],
-                        percentage: percentage[3] as int,
-                        color: colors[3],
-                      ),
+                      for (int i = 0; i < widget.types.length; i++)
+                        spendingSidePart(
+                          screenHeightUnit: widget.screenHeightUnit,
+                          screenWidthUnit: widget.screenWidthUnit,
+                          type: widget.types[i],
+                          percentage: widget.percentage[i].toInt(),
+                          color: colors[i],
+                        ),
                     ],
                   ),
                 ),

@@ -99,6 +99,28 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                           endDay: DateTime.now().add(Duration(days: 14)).day,
                           currentAmount: 14)
                     ],
+                    expenses: [
+                      Expense(
+                          name: "Rent",
+                          amount: 21,
+                          dueDateType: "Fixed",
+                          dueDay: 5),
+                      Expense(
+                          name: "Utilites",
+                          amount: 29,
+                          dueDateType: "Fixed",
+                          dueDay: 5),
+                      Expense(
+                          name: "Travel",
+                          amount: 11,
+                          dueDateType: "Fixed",
+                          dueDay: 5),
+                      Expense(
+                          name: "CC Debt",
+                          amount: 39,
+                          dueDateType: "Fixed",
+                          dueDay: 5)
+                    ],
                   ),
                   color: Colors.black.withOpacity(0.5),
                 ),
@@ -754,7 +776,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             savingsAccountBalance: 300,
             creditCardDebt: 3000,
             startingBalance: 600,
-             creditScore: 243,
+            creditScore: 243,
             APY: 3,
             milestones: [
               Milestone(
@@ -779,16 +801,38 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                       DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
                           .day,
                   currentAmount: 17),
-                    Milestone(
-                          name: 'Two Weeks Under Budget',
-                          description:
-                              'Stay under \$50/week for entertainment\nand dining out for two weeks straight.',
-                          goalAmount: 14,
-                          goalType: 'Savings',
-                          startDay: DateTime.now().day,
-                          endDay: DateTime.now().add(Duration(days: 14)).day,
-                          currentAmount: 3)
+              Milestone(
+                  name: 'Two Weeks Under Budget',
+                  description:
+                      'Stay under \$50/week for entertainment\nand dining out for two weeks straight.',
+                  goalAmount: 14,
+                  goalType: 'Savings',
+                  startDay: DateTime.now().day,
+                  endDay: DateTime.now().add(Duration(days: 14)).day,
+                  currentAmount: 3)
             ],
+            expenses: [
+                      Expense(
+                          name: "Rent",
+                          amount: 21,
+                          dueDateType: "Fixed",
+                          dueDay: 5),
+                      Expense(
+                          name: "Utilites",
+                          amount: 29,
+                          dueDateType: "Fixed",
+                          dueDay: 5),
+                      Expense(
+                          name: "Travel",
+                          amount: 11,
+                          dueDateType: "Fixed",
+                          dueDay: 5),
+                      Expense(
+                          name: "CC Debt",
+                          amount: 39,
+                          dueDateType: "Fixed",
+                          dueDay: 5)
+                    ],
           );
   }
 }

@@ -19,6 +19,7 @@ class BudgetSimulator extends StatefulWidget {
     required this.APY,
     required this.milestones,
     required this.creditScore,
+    required this.expenses,
   });
 
   final String name;
@@ -30,6 +31,7 @@ class BudgetSimulator extends StatefulWidget {
   final double APY;
   final List<Milestone> milestones;
   final double creditScore;
+  List<Expense> expenses;
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
@@ -41,8 +43,48 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   String formattedDate = '';
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
   int progress = 0;
+  List<String> types = [];
+  List<double> percentage = [];
+  double totalSpending = 0;
+  late ValueNotifier<List<Event>> _selectedEvents;
+  Map<DateTime, List<Event>> _events = {
+    DateTime.now(): [Event('Event 1')]
+  };
+  DateTime _selectedDay = DateTime.now();
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return _events[day] ?? [];
+  }
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    setState(() {
+      _selectedDay = selectedDay;
+      _focusedDay = focusedDay;
+    });
+    _selectedEvents.value = _getEventsForDay(selectedDay);
+  }
+
+  void _addEvent() {
+    final event = Event('New Event');
+    if (_events[_selectedDay] == null) {
+      _events[_selectedDay] = [];
+    }
+    setState(() {
+      _events[_selectedDay]!.add(event);
+    });
+    _selectedEvents.value = _getEventsForDay(_selectedDay!);
+  }
+
+  Future<void> getExpenses() async {
+    for (Expense expense in widget.expenses) {
+      types.add(expense.name);
+      totalSpending += expense.amount;
+    }
+    for (Expense expense in widget.expenses) {
+      percentage.add((expense.amount / totalSpending) * 100);
+    }
+  }
 
   Future<void> getProgress() async {
     int milestoneCount = widget.milestones.length;
@@ -62,6 +104,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     netCash = widget.startingBalance;
     formattedDate = DateFormat('MMM d, y').format(now);
     getProgress();
+    getExpenses();
   }
 
   @override
@@ -452,6 +495,39 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         ),
                                       ),
                                     ),
+                                    Container(
+                                      height: screenHeightUnit * 870,
+                                      width: screenWidthUnit * 1500,
+                                      child: TableCalendar(
+                                        firstDay: DateTime.utc(2025, 1, 1),
+                                        lastDay: DateTime.utc(2025, 1, 31),
+                                        focusedDay: _focusedDay,
+                                        selectedDayPredicate: (day) =>
+                                            isSameDay(_selectedDay, day),
+                                        onDaySelected: _onDaySelected,
+                                        eventLoader: _getEventsForDay,
+                                        headerStyle: HeaderStyle(
+                                          formatButtonVisible:
+                                              false, // Hides the header format button
+                                          titleCentered:
+                                              true, // Centers the title
+                                          leftChevronVisible:
+                                              false, // Hides the left chevron button
+                                          rightChevronVisible:
+                                              false, // Hides the right chevron button
+                                        ),
+                                        calendarStyle: CalendarStyle(
+                                          outsideDaysVisible:
+                                              false, // Hides the outside days of the current month
+                                        ),
+                                        daysOfWeekStyle: DaysOfWeekStyle(
+                                          weekdayStyle: TextStyle(
+                                            color: Colors
+                                                .transparent, // Makes weekday names invisible
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   ]),
                             ),
                             // Container(
@@ -480,7 +556,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 SizedBox(
                                   height: screenHeightUnit * 30,
                                 ),
-                                SpendingDonutChart(screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit,),
+                                SpendingDonutChart(
+                                  screenWidthUnit: screenWidthUnit,
+                                  screenHeightUnit: screenHeightUnit,
+                                  types: types,
+                                  percentage: percentage,
+                                  total: totalSpending,
+                                ),
                               ],
                             )
                           ],
@@ -496,4 +578,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       ),
     );
   }
+}
+
+class Event {
+  final String title;
+
+  Event(this.title);
 }

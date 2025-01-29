@@ -534,3 +534,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     );
   }
 }
+
+extension on Color {
+  withValues({required double alpha}) {}
+}
