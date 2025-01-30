@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 
 class Teacher {
@@ -29,13 +28,17 @@ class Teacher {
 
   Map<String, String> getClasses() {
     Map<String, String> tempClasses = {};
-    tempClasses.addAll(Map.fromEntries(classRooms?.map(
-          (classRoom) => MapEntry(
-            classRoom.classId,
-            classRoom.name,
-          ),
-        ) ??
-        []));
+    tempClasses.addAll(
+      Map.fromEntries(
+        classRooms?.map(
+              (classRoom) => MapEntry(
+                classRoom.classId,
+                classRoom.name,
+              ),
+            ) ??
+            [],
+      ),
+    );
     return tempClasses;
   }
 }

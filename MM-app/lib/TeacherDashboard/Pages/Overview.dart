@@ -32,7 +32,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     "Start “Emergency Fun Challenge”",
     "Begin “Spending Decisions Quiz”",
   ];
-  final List<List<String>> lessonList = [
+  final List<List<String>> componentsList = [
     ["Recap", "100"],
     ["Concept 1", "100"],
     ["Interactive Activity 1", "100"],
@@ -208,7 +208,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   ),
                 ),
                 //Lessons and respective status
-                ...lessonList.map(
+                ...componentsList.map(
                   (lesson) => Row(
                     children: [
                       CircleAvatar(
@@ -332,7 +332,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 CustomDropDownContainer(
                   initialSelection: discussionComponent,
                   width: screenWidth * 0.15,
-                  items: lessonList
+                  items: componentsList
                       .map(
                         (e) => e[0],
                       )

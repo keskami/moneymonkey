@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  UserData? userData; // Make userData nullable
+  Student? userData; // Make userData nullable
   bool isLoading = true; // Track loading state
   final FirestoreService firestoreService = FirestoreService();
 

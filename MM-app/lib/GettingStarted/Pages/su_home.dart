@@ -27,7 +27,7 @@ class _SignUpDetailsHomeState extends State<SignUpDetailsHome> {
     FirestoreService firestoreService = FirestoreService();
 
     // Pass the user's ID (you might fetch it from FirebaseAuth.currentUser.uid)
-    UserData? userData = await firestoreService.getUserData('someUserId');
+    Student? userData = await firestoreService.getUserData('someUserId');
 
     if (userData != null) {
       print("User Email: ${userData.email}");

@@ -25,7 +25,7 @@ class _friendProfileState extends State<friendProfile> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  UserData? userData;
+  Student? userData;
   bool isLoading = true;
   late bool isFollowing = false;
   final FirestoreService firestoreService = FirestoreService();

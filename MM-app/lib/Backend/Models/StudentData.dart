@@ -1,33 +1,36 @@
 import 'package:money_monkey/Backend/Models/settings.dart';
 
-class UserData {
-  String userId;
+class Student {
+  String studentId;
   String email;
   String phoneNumber;
   int age;
   int knowledgeLevel;
   int learningGoalPerDay;
   int startingLevel;
+  List<String>? classRooms;
   ProfileData profile;
   SettingsData settings;
 
-  UserData({
-    required this.userId,
+  Student({
+    required this.studentId,
     required this.email,
     required this.phoneNumber,
     required this.age,
     required this.knowledgeLevel,
     required this.learningGoalPerDay,
     required this.startingLevel,
+    this.classRooms,
     required this.profile,
     required this.settings,
   });
 
-  factory UserData.fromFirestore(Map<String, dynamic> data, String id) {
-    return UserData(
-      userId: id,
+  /// Factory constructor to create a `Student` object from Firestore data.
+  factory Student.fromFirestore(Map<String, dynamic> data, String id) {
+    return Student(
+      studentId: id,
       email: data['Email'] ?? '',
-      phoneNumber: data['Phone Number'] ?? '', // Retrieve phone number
+      phoneNumber: data['Phone Number'] ?? '',
       age: data['Age'] is int ? data['Age'] : 0,
       knowledgeLevel:
           data['Knowledge Level'] is int ? data['Knowledge Level'] : 0,
@@ -35,22 +38,26 @@ class UserData {
           ? data['Learning Goal Per Day']
           : 0,
       startingLevel: data['Starting Level'] is int ? data['Starting Level'] : 0,
+      classRooms: data['ClassRooms'] != null
+          ? List<String>.from(data['ClassRooms'])
+          : [],
       profile: ProfileData.fromFirestore(data['Profile'] ?? {}),
-      settings: SettingsData.fromFirestore(
-          data['Settings'] ?? {}), // Retrieve settings
+      settings: SettingsData.fromFirestore(data['Settings'] ?? {}),
     );
   }
 
+  /// Converts a `Student` object to a Firestore-compatible map.
   Map<String, dynamic> toFirestore() {
     return {
       'Email': email,
-      'Phone Number': phoneNumber, // Save phone number
+      'Phone Number': phoneNumber,
       'Age': age,
       'Knowledge Level': knowledgeLevel,
       'Learning Goal Per Day': learningGoalPerDay,
       'Starting Level': startingLevel,
+      'ClassRooms': classRooms ?? [],
       'Profile': profile.toFirestore(),
-      'Settings': settings.toFirestore(), // Save settings
+      'Settings': settings.toFirestore(),
     };
   }
 }

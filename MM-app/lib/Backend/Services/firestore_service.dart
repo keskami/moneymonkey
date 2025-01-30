@@ -4,7 +4,7 @@ import 'package:money_monkey/Backend/Models/StudentData.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<UserData?> getUserData(String userId) async {
+  Future<Student?> getUserData(String userId) async {
     try {
       // Reference the document in Firestore using the userId
       DocumentSnapshot<Map<String, dynamic>> snapshot =
@@ -14,7 +14,7 @@ class FirestoreService {
         // Convert the Firestore document into a UserData object
         Map<String, dynamic>? data = snapshot.data();
         if (data != null) {
-          return UserData.fromFirestore(data, snapshot.id);
+          return Student.fromFirestore(data, snapshot.id);
         }
       }
       return null;

@@ -27,7 +27,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  UserData? userData;
+  Student? userData;
   bool isLoading = true;
   final FirestoreService firestoreService = FirestoreService();
 

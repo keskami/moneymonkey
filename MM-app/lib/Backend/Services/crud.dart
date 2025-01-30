@@ -353,7 +353,7 @@ class FirebaseService {
     }
   }
 
-  Future<UserData?> follow(String userId, String otherId) async {
+  Future<Student?> follow(String userId, String otherId) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> userSnapshot =
           await _firestore.collection('Users').doc(userId).get();

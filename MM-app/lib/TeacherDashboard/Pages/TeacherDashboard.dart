@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/Teacher.dart';
+import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/SubPageSelectorRow.dart';
 
@@ -14,50 +15,32 @@ class TeacherDashboard extends StatefulWidget {
 }
 
 class _TeacherDashboardState extends State<TeacherDashboard> {
-  Teacher currentTeacher = Teacher(
-    name: "Mrs. Anderson",
-    id: "temporaryTeacherId2025",
-    classRooms: [
-      Classroom(
-        classId: 'tempClassId2025',
-        name: "Class1",
-        teacherId: 'temporaryTeacherId2025',
-        studentIds: [],
-        lessonId: 'tempLessonId2025',
-        upcomingLessonId: 'tempUpcomingLessonId2025',
-        performanceData: PerformanceTrends(
-          classAverage: 76,
-          participationRate: 56.5,
-          lessonCompletion: 87.7,
-        ),
-      ),
-    ],
-  );
+  Teacher _sampleTeacher = sampleTeacher;
   String currentPage = "OverView";
-  String selectedClass = "All Classes";
+  String selectedClassId = "";
   final String teacherName = "Mrs. Anderson";
   final String progressStatus = "In-Progress";
   Map<String, String> classes = {};
-  final List<String> Tclasses = [
-    'All Classes',
-    'Batch 1',
-    'Batch 2',
-    'Batch 3',
-    'Batch 4',
-  ];
   final TeacherDashboardController teacherDashboardController =
       Get.put(TeacherDashboardController());
 
   void onClassPicked(String? className) {
-    if (className != null)
+    if (className != null) {
       setState(() {
-        selectedClass = className;
+        selectedClassId =
+            classes.entries.firstWhere((entry) => entry.value == className).key;
       });
+    }
   }
 
   void getClasses() {
-    classes = currentTeacher.getClasses();
-    ;
+    classes = _sampleTeacher.getClasses();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getClasses();
   }
 
   @override
@@ -93,12 +76,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             ),
             const Spacer(),
             CustomDropDownContainer(
-              width: screenWidth * 0.4,
-              items: classes.entries.map((entry) {
-                return entry.value;
-              }).toList(),
+              width: screenWidth * 0.3,
+              items: classes.values.toList(),
               onChanged: onClassPicked,
-              initialSelection: selectedClass,
             ),
           ],
         ).marginSymmetric(
@@ -113,10 +93,12 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           padding: EdgeInsets.symmetric(
             horizontal: screenWidth * 0.05,
           ),
-          child: Obx(
-            () => teacherDashboardController
-                .pages[teacherDashboardController.pageIndex.value],
-          ),
+          child: selectedClassId == ""
+              ? TeacherDashoardPlaceHolderPage()
+              : Obx(
+                  () => teacherDashboardController
+                      .pages[teacherDashboardController.pageIndex.value],
+                ),
         ),
       ],
     )
