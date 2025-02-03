@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Resources/Resources.dart';
+import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class StudentPerformace extends StatefulWidget {
-  const StudentPerformace({super.key});
-
+  const StudentPerformace({
+    super.key,
+    required this.classStudents,
+  });
+  final List<Student> classStudents;
   @override
   State<StudentPerformace> createState() => _StudentPerformaceState();
 }
 
 class _StudentPerformaceState extends State<StudentPerformace> {
+  Map<String, List<Student>> categorizedStudents = {};
+  void getCategorizedStudents() {}
   int selectedStudentIndex = 0;
   final List<List<String>> topPerformerStudents = [
     [
@@ -35,16 +42,12 @@ class _StudentPerformaceState extends State<StudentPerformace> {
       "12",
     ],
   ];
-  final List<List<String>> allStudents = [
-    ["Kid 1", "98"],
-    ["Kid 2", "98"],
-    ["Kid 3", "34"],
-    ["Kid 4", "12"],
-    ["Kid 5", "67"],
-    ["Kid 6", "75"],
-    ["Kid 7", "82"],
-    ["Kid 8", "56"],
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final Map<String, String> actions = {
     "What about those \$150 sneakers?": "Wait for next paycheck",
     "Planning for Emergencies": "Set aside \$150",
@@ -59,38 +62,37 @@ class _StudentPerformaceState extends State<StudentPerformace> {
       children: [
         Expanded(
           flex: 2,
-          child: SingleChildScrollView(
-            child: ShadowedContainer(
-              padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.02,
-                horizontal: screenWidth * 0.02,
-              ),
-              child: Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Students",
-                      style: TextStyles.containerTitle,
-                    ),
-                    FilterStudentsButton(
-                      filter: "All Students",
-                    ),
-                    FilterStudentsButton(
-                      filter: "Top Performers",
-                    ),
-                    FilterStudentsButton(
-                      filter: "Needs Support",
-                    ),
-                    ...showStudents(
-                      allStudents,
-                      screenWidth,
-                      screenHeight,
-                    ),
-                  ],
+          child: ShadowedContainer(
+            height: screenHeight * 0.85, // Increased from 0.65
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.02,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Students",
+                  style: TextStyles.containerTitle,
                 ),
-              ),
+                FilterStudentsButton(filter: "All Students"),
+                FilterStudentsButton(filter: "Top Performers"),
+                FilterStudentsButton(filter: "Needs Support"),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...showStudents(
+                          widget.classStudents,
+                          screenWidth,
+                          screenHeight,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -282,14 +284,22 @@ class _StudentPerformaceState extends State<StudentPerformace> {
   }
 
   Iterable showStudents(
-    List<List<String>> students,
+    List<Student> students,
     double screenWidth,
     double screenHeight,
   ) {
     return students.map(
       (student) {
-        String status = teacherDashboardController.getStudentStatus(student[1]);
-        Color progressColor = status == 'Ahead'
+        print(sampleTeacher.classRooms!
+            .firstWhere((classRoom) =>
+                classRoom.classId == teacherDashboardController.classId.value)
+            .lessonId);
+        StudentStatus status = student.getCurrentLessonProgress(sampleTeacher
+            .classRooms!
+            .firstWhere((classRoom) =>
+                classRoom.classId == teacherDashboardController.classId.value)
+            .lessonId);
+        Color progressColor = status.name == 'Ahead'
             ? LightTheme().primaryBlue
             : status == 'On-Track'
                 ? LightTheme().pastelGreen
@@ -315,7 +325,7 @@ class _StudentPerformaceState extends State<StudentPerformace> {
             child: Row(
               children: [
                 Text(
-                  student[0],
+                  student.profile.fullName,
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.grey.shade500,
@@ -331,7 +341,7 @@ class _StudentPerformaceState extends State<StudentPerformace> {
                   ),
                   color: progressColor.withValues(alpha: 0.3),
                   child: Text(
-                    status,
+                    status.name.toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 13,

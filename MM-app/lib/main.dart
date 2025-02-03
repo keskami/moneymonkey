@@ -4,18 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
-import 'package:money_monkey/BudgetSimulator/Pages/landingPage.dart';
-import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
-import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
-import 'package:money_monkey/LessonPages/Pages/Story.dart';
-import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
-import 'package:money_monkey/LessonPages/Pages/addLesson.dart';
-import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'firebase_options.dart';
-import 'home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -9,7 +9,7 @@ import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page5.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page6.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/5QuizkCheckPage.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/6TakeawayPage.dart';
-import 'package:money_monkey/LessonPages/Models/Question_Model.dart';
+import 'package:money_monkey/LessonPages/Models/Concept1_2.dart';
 
 import '../Pages_ConceptOneTwo/Page7.dart';
 

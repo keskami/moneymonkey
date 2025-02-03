@@ -16,8 +16,7 @@ Teacher sampleTeacher = Teacher(
         "S789012", // Emma Wilson
         "S345678", // Michael Smith
       ],
-      lessonId: 'tempLessonId1_2025',
-      upcomingLessonId: 'tempUpcomingLessonId1_2025',
+      lessonId: 'A.1.1.5',
     ),
     Classroom(
       classId: 'tempClassId2_2025',
@@ -28,8 +27,7 @@ Teacher sampleTeacher = Teacher(
         "S567890", // Daniel Miller
         "S123456", // John Doe (in multiple classes)
       ],
-      lessonId: 'tempLessonId2_2025',
-      upcomingLessonId: 'tempUpcomingLessonId2_2025',
+      lessonId: 'A.1.1.5',
     ),
     Classroom(
       classId: 'tempClassId3_2025',
@@ -39,8 +37,7 @@ Teacher sampleTeacher = Teacher(
         "S901234", // Sophia Jones (in multiple classes)
         "S789012", // Emma Wilson (in multiple classes)
       ],
-      lessonId: 'tempLessonId3_2025',
-      upcomingLessonId: 'tempUpcomingLessonId3_2025',
+      lessonId: 'A.1.2.5',
     ),
     Classroom(
       classId: 'tempClassId4_2025',
@@ -50,11 +47,17 @@ Teacher sampleTeacher = Teacher(
         "S567890", // Daniel Miller (in multiple classes)
         "S345678", // Michael Smith (in multiple classes)
       ],
-      lessonId: 'tempLessonId4_2025',
-      upcomingLessonId: 'tempUpcomingLessonId4_2025',
+      lessonId: 'A.1.3.5',
     ),
   ],
 );
+List<Student> sampleStudents = [
+  sampleStudent1,
+  sampleStudent2,
+  sampleStudent3,
+  sampleStudent4,
+  sampleStudent5,
+];
 Student sampleStudent1 = Student(
   studentId: "S123456",
   email: "john.doe@example.com",
@@ -64,6 +67,7 @@ Student sampleStudent1 = Student(
   learningGoalPerDay: 5,
   startingLevel: 1,
   classRooms: ['tempClassId1_2025', 'tempClassId2_2025'],
+  progress: "A.1.2.6",
   profile: ProfileData(
     fullName: "John Doe",
     username: "john_doe_25",
@@ -87,6 +91,7 @@ Student sampleStudent2 = Student(
   learningGoalPerDay: 4,
   startingLevel: 2,
   classRooms: ['tempClassId1_2025', 'tempClassId3_2025'],
+  progress: "A.1.3.6",
   profile: ProfileData(
     fullName: "Emma Wilson",
     username: "emma_w_20",
@@ -110,6 +115,7 @@ Student sampleStudent3 = Student(
   learningGoalPerDay: 6,
   startingLevel: 1,
   classRooms: ['tempClassId1_2025', 'tempClassId4_2025'],
+  progress: "A.1.2.1",
   profile: ProfileData(
     fullName: "Michael Smith",
     username: "mike_smith21",
@@ -133,6 +139,7 @@ Student sampleStudent4 = Student(
   learningGoalPerDay: 7,
   startingLevel: 3,
   classRooms: ['tempClassId2_2025', 'tempClassId3_2025'],
+  progress: "A.1.2.1",
   profile: ProfileData(
     fullName: "Sophia Jones",
     username: "sophia_j19",
@@ -156,6 +163,7 @@ Student sampleStudent5 = Student(
   learningGoalPerDay: 5,
   startingLevel: 2,
   classRooms: ['tempClassId2_2025', 'tempClassId4_2025'],
+  progress: "A.1.2.7",
   profile: ProfileData(
     fullName: "Daniel Miller",
     username: "danielm_23",

@@ -38,7 +38,6 @@ class _ImpactPageState extends State<ImpactPage> {
       ba = List<String>.from(
           data['before/after'].map((item) => item.toString()));
       button = data['button'];
-
       isLoading = false;
     });
   }

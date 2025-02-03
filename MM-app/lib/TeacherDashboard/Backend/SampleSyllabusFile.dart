@@ -1,147 +1,103 @@
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/LessonPages/Models/Concept1_2.dart';
 
-// Sample Performance Trends
-final mockPerformanceTrends = PerformanceTrends(
-  label: 'Week 1',
-  classAverage: 85.5,
-  participationRate: 92.0,
-  lessonCompletion: 78.5,
-  lastUpdated: DateTime.now(),
-);
-
-// Sample Components
-final Map<String, Component> mockComponents = {
-  'comp1': Component(
-    componentId: 'comp1',
-    lessonId: 'lesson1',
-    title: 'Introduction to the Topic',
-    type: ComponentType.concept,
-    componentStatus: Status.active,
-    progress: 100.0,
-    discussionQuestions: [
-      'What are your thoughts on this concept?',
-      'How would you apply this in real life?'
-    ],
-  ),
-  'comp2': Component(
-    componentId: 'comp2',
-    lessonId: 'lesson1',
-    title: 'Interactive Exercise',
-    type: ComponentType.interactiveActivity,
-    componentStatus: Status.inProgress,
-    progress: 60.0,
-    questionData: {
-      'questions': [
-        {'text': 'What is the main idea?', 'correctAnswer': 'Growth mindset'},
-        {'text': 'How does it work?', 'correctAnswer': 'Through practice'}
-      ]
-    },
-  ),
-  'comp3': Component(
-    componentId: 'comp3',
-    lessonId: 'lesson1',
-    title: 'Final Quiz',
-    type: ComponentType.quiz,
-    componentStatus: Status.inactive,
-    progress: 0.0,
-  ),
-};
-
-// Sample Lessons
-final Map<String, Lesson> mockLessons = {
-  'lesson1': Lesson(
-    lessonId: 'lesson1',
-    unitId: 'unit1',
-    title: 'Understanding Core Concepts',
-    description: 'An introduction to the fundamental principles',
-    lessonStatus: Status.inProgress,
-    components: mockComponents,
-    progress: 65.0,
-    discussionQuestions: [
-      'What was your biggest takeaway?',
-      'How can we improve this process?'
-    ],
-    performanceTrends: mockPerformanceTrends,
-    startedAt: DateTime.now().subtract(const Duration(days: 2)),
-  ),
-  'lesson2': Lesson(
-    lessonId: 'lesson2',
-    unitId: 'unit1',
-    title: 'Advanced Applications',
-    description: 'Taking your knowledge to the next level',
-    lessonStatus: Status.inactive,
-    components: {},
-    progress: 0.0,
-    discussionQuestions: [],
-    performanceTrends: PerformanceTrends(
-      label: 'Not Started',
-      classAverage: 0.0,
-      participationRate: 0.0,
-      lessonCompletion: 0.0,
+List<Question> sampleComponent1 = [
+  Question(
+    type: QuestionType.multipleChoice,
+    data: MultipleChoice(
+      question: "When Should Financial Responsibility Begin?",
+      questionExplanation: "Before we dive in, let’s see what you think!",
+      options: [
+        "Once I have a full-time job.",
+        "As soon as I start earning money (even if it’s part-time or allowance)",
+        "After I graduate from college.",
+        "Only when I’m ready to plan for retirement."
+      ],
+      correctAnswers: [
+        "As soon as I start earning money (even if it’s part-time or allowance)"
+      ],
+      prompts: Prompt(
+          correct:
+              "That's right! Financial responsibility can start early, from your first paycheck or allowance. Let's explore why.",
+          incorrect:
+              "Coins have been used since around 600 B.C., making them the oldest form of money still in use."),
     ),
   ),
-};
-
-// Sample Units
-final Map<String, Unit> mockUnits = {
-  'unit1': Unit(
-    unitId: 'unit1',
-    title: 'Getting Started',
-    description: 'The foundation of our learning journey',
-    lessonIds: ['lesson1', 'lesson2'],
-    difficulty: 'Intermediate',
-    unitStatus: Status.active,
-    createdAt: DateTime.now().subtract(const Duration(days: 30)),
-    updatedAt: DateTime.now(),
+  Question(
+    type: QuestionType.revealCard,
+    data: RevealCard(
+      definition:
+          "Financial responsibility over a lifetime means consistently making informed decisions about earning, saving, spending, and investing, starting from your earliest income and continuing through retirement.",
+      tapInstruction:
+          "Click for what it really means to be financially responsible over a lifetime...",
+      revealInformation: [
+        "Financial responsibility over a lifetime means consistently making informed decisions about earning, saving, spending, and investing, starting from your earliest income and continuing through retirement.",
+        "Why does it matter? Because small habits formed early—like setting aside a little money or comparing prices—can grow into long-term financial stability."
+      ],
+    ),
   ),
-  'unit2': Unit(
-    unitId: 'unit2',
-    title: 'Advanced Topics',
-    description: 'Deep dive into complex subjects',
-    lessonIds: [],
-    difficulty: 'Advanced',
+  Question(
+    type: QuestionType.iconReveal,
+    data: IconReveal(
+      iconLinks: [
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcard.png?alt=media&token=d9ad44a7-c607-4a88-9c8b-64d49e47a245",
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgraduation-cap.png?alt=media&token=53e1203d-816d-4512-b570-db886d53d904"
+      ],
+      contents: [
+        "Even small allowances or part-time earnings can be budgeted. Learning to save a portion of every dollar sets a foundation for bigger goals later.",
+        "This might be your first real job or college experience. Start building credit responsibly and budget for regular bills—rent, utilities, groceries."
+      ],
+    ),
+  ),
+  Question(
+    type: QuestionType.lerningCheck,
+    data: LearningCheck(
+        question1:
+            "Which of the following best describes a strong financial habit at any age?",
+        question2: "Which is a key benefit of having an emergency fund?",
+        options1: [
+          "Spending money the moment you get it",
+          "Saving and investing a portion of earnings regularly",
+          "Waiting to save until you earn a high salary"
+        ],
+        options2: [
+          "It guarantees you’ll never worry about money again",
+          "It covers unexpected expenses, reducing stress and debt",
+          "It means you can freely spend on luxury items without a budget"
+        ],
+        correctAns1: "Saving and investing a portion of earnings regularly",
+        correctAns2: "It covers unexpected expenses, reducing stress and debt"),
+  ),
+  Question(
+    type: QuestionType.keyTakeaways,
+    data: KeyTakeaways(
+      takeaway: {
+        "Budgeting at Every Stage":
+            "From first job to retirement, a budget reduces overspending and increases savings.",
+        "Early habits matter":
+            "Starting even with small amounts when young helps build bigger savings over time.",
+        "Never Too Late to Improve":
+            "Even close to retirement, you can still refine your budget and investment approach for a more secure future.",
+        "Preparedness for Changes":
+            "Plan for life transitions—like family or job changes—by maintaining an emergency fund."
+      },
+    ),
+  ),
+];
+
+List<Unit> sampleAdvancedSyllabus = [
+  Unit(
+    unitId: "A.1",
+    title: "What is Money?",
+    description: "Unit 1 Description",
+    lessonIds: [
+      "A.1.1",
+      "A.1.2",
+      "A.1.3",
+      "A.1.4",
+      "A.1.5",
+      "A.1.6",
+    ],
     unitStatus: Status.inactive,
-    createdAt: DateTime.now().subtract(const Duration(days: 15)),
-    updatedAt: DateTime.now(),
   ),
-};
-
-// Sample Classrooms
-final Map<String, Classroom> mockClassrooms = {
-  'class1': Classroom(
-    classId: 'class1',
-    name: 'Morning Session A',
-    teacherId: 'teacher1',
-    studentIds: ['student1', 'student2', 'student3'],
-    lessonId: 'lesson1',
-    upcomingLessonId: 'lesson2',
-  ),
-  'class2': Classroom(
-    classId: 'class2',
-    name: 'Afternoon Session B',
-    teacherId: 'teacher2',
-    studentIds: ['student4', 'student5', 'student6', 'student7'],
-    lessonId: 'lesson2',
-    upcomingLessonId: '',
-  ),
-};
-
-// Helper function to get a classroom by ID
-Classroom? getClassroomById(String id) {
-  return mockClassrooms[id];
-}
-
-// Helper function to get a unit by ID
-Unit? getUnitById(String id) {
-  return mockUnits[id];
-}
-
-// Helper function to get a lesson by ID
-Lesson? getLessonById(String id) {
-  return mockLessons[id];
-}
-
-// Helper function to get a component by ID
-Component? getComponentById(String lessonId, String componentId) {
-  return mockLessons[lessonId]?.components[componentId];
-}
+];

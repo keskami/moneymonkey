@@ -50,7 +50,6 @@ class Classroom {
   String teacherId;
   List<String> studentIds;
   String lessonId;
-  String upcomingLessonId;
 
   Classroom({
     required this.classId,
@@ -58,7 +57,6 @@ class Classroom {
     required this.teacherId,
     required this.studentIds,
     required this.lessonId,
-    required this.upcomingLessonId,
   });
 
   factory Classroom.fromFirestore(Map<String, dynamic> data, String id) {
@@ -68,7 +66,6 @@ class Classroom {
       teacherId: data['TeacherId'] ?? '',
       studentIds: List<String>.from(data['StudentIds'] ?? []),
       lessonId: data['LessonId'] ?? '',
-      upcomingLessonId: data['UpcomingLessonId'] ?? '',
     );
   }
 
@@ -78,17 +75,15 @@ class Classroom {
       'TeacherId': teacherId,
       'StudentIds': studentIds,
       'LessonId': lessonId,
-      'UpcomingLessonId': upcomingLessonId,
     };
   }
 }
 
 class Unit {
-  String unitId;
+  String unitId; //"A.1"
   String title;
   String description;
   List<String> lessonIds;
-  String difficulty;
   Status unitStatus;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -98,7 +93,6 @@ class Unit {
     required this.title,
     required this.description,
     required this.lessonIds,
-    required this.difficulty,
     required this.unitStatus,
     this.createdAt,
     this.updatedAt,
@@ -110,7 +104,6 @@ class Unit {
       title: data['Title'] ?? '',
       description: data['Description'] ?? '',
       lessonIds: List<String>.from(data['LessonIds'] ?? []),
-      difficulty: data['Difficulty'] ?? '',
       unitStatus: statusFromFirestore(data['UnitStatus'] ?? 'inactive'),
       createdAt: data['CreatedAt']?.toDate(),
       updatedAt: data['UpdatedAt']?.toDate(),
@@ -122,17 +115,26 @@ class Unit {
       'Title': title,
       'Description': description,
       'LessonIds': lessonIds,
-      'Difficulty': difficulty,
       'UnitStatus': statusToFirestore(unitStatus),
       'CreatedAt': createdAt,
       'UpdatedAt': DateTime.now(),
     };
   }
+
+  String getDifficulty() {
+    switch (unitId[0]) {
+      case 'A':
+        return "Advanced";
+      case "I":
+        return "Intermediate";
+      default:
+        return "Beginner";
+    }
+  }
 }
 
 class Lesson {
   String lessonId;
-  String unitId;
   String title;
   String description;
   Status lessonStatus;
@@ -145,7 +147,6 @@ class Lesson {
 
   Lesson({
     required this.lessonId,
-    required this.unitId,
     required this.title,
     required this.description,
     required this.lessonStatus,
@@ -160,7 +161,6 @@ class Lesson {
   factory Lesson.fromFirestore(Map<String, dynamic> data, String id) {
     return Lesson(
       lessonId: id,
-      unitId: data['UnitId'] ?? '',
       title: data['Title'] ?? '',
       description: data['Description'] ?? '',
       lessonStatus: statusFromFirestore(data['LessonStatus'] ?? 'inactive'),
@@ -185,7 +185,6 @@ class Lesson {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'UnitId': unitId,
       'Title': title,
       'Description': description,
       'LessonStatus': statusToFirestore(lessonStatus),
@@ -197,6 +196,20 @@ class Lesson {
       'StartedAt': startedAt,
       'CompletedAt': completedAt,
     };
+  }
+
+  Component? getLatestActiveComponent() {
+    var activeComponents = components.values
+        .where((component) => component.componentStatus == Status.active)
+        .toList();
+
+    // If there are no active components, return null
+    if (activeComponents.isEmpty) return null;
+
+    // Sort components by 'startedAt' or any other relevant property
+    activeComponents.sort((a, b) => b.progress.compareTo(a.progress));
+
+    return activeComponents.first;
   }
 }
 
@@ -243,7 +256,6 @@ class PerformanceTrends {
 
 class Component {
   String componentId;
-  String lessonId;
   String title;
   ComponentType type;
   Status componentStatus;
@@ -253,7 +265,6 @@ class Component {
 
   Component({
     required this.componentId,
-    required this.lessonId,
     required this.title,
     required this.type,
     required this.componentStatus,
@@ -265,7 +276,6 @@ class Component {
   factory Component.fromFirestore(Map<String, dynamic> data, String id) {
     return Component(
       componentId: id,
-      lessonId: data['LessonId'] ?? '',
       title: data['Title'] ?? '',
       type: ComponentTypeExtension.fromString(data['Type'] ?? ''),
       componentStatus:
@@ -280,7 +290,6 @@ class Component {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'LessonId': lessonId,
       'Title': title,
       'Type': type.name,
       'ComponentStatus': statusToFirestore(componentStatus),

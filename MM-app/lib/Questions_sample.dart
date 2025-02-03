@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
-import 'package:money_monkey/LessonPages/Models/Question_Model.dart';
+import 'package:money_monkey/LessonPages/Models/Concept1_2.dart';
 
 // Assuming your model classes and extensions are already imported
 
