@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/meterBox.dart';
@@ -48,33 +49,28 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<String> types = [];
   List<double> percentage = [];
   double totalSpending = 0;
-  late ValueNotifier<List<Event>> _selectedEvents;
-  Map<DateTime, List<Event>> _events = {
-    DateTime.now(): [Event('Event 1')]
-  };
-  DateTime _selectedDay = DateTime.now();
 
-  List<Event> _getEventsForDay(DateTime day) {
-    return _events[day] ?? [];
+  final Map<DateTime, List<Expense>> expensesMapped = {};
+  final List<Expense> expenses = [];
+
+  void mapExpenses() {
+    for (Expense expense in widget.expenses) {
+      DateTime normalizedDate = normalizeDate(expense.dueDay);
+      if (expensesMapped.containsKey(normalizedDate)) {
+        expensesMapped[normalizedDate]!.add(expense);
+      } else {
+        expensesMapped[normalizedDate] = [expense];
+      }
+    }
   }
+
+  DateTime _selectedDay = DateTime.now();
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _selectedDay = selectedDay;
       _focusedDay = focusedDay;
     });
-    _selectedEvents.value = _getEventsForDay(selectedDay);
-  }
-
-  void _addEvent() {
-    final event = Event('New Event');
-    if (_events[_selectedDay] == null) {
-      _events[_selectedDay] = [];
-    }
-    setState(() {
-      _events[_selectedDay]!.add(event);
-    });
-    _selectedEvents.value = _getEventsForDay(_selectedDay!);
   }
 
   Future<void> getExpenses() async {
@@ -85,6 +81,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     for (Expense expense in widget.expenses) {
       percentage.add((expense.amount / totalSpending) * 100);
     }
+  }
+
+  DateTime normalizeDate(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  Future<void> filterPayDays() async {
+    var filterdEvents =
+        widget.expenses.where((element) => element.name != "Pay Day");
+    setState(() {
+      widget.expenses = filterdEvents.toList();
+    });
   }
 
   Future<void> getProgress() async {
@@ -100,8 +108,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   @override
   void initState() {
+    mapExpenses();
+    filterPayDays();
     super.initState();
-    // Access widget fields in initState
     netCash = widget.startingBalance;
     formattedDate = DateFormat('MMM d, y').format(_selectedDay);
     getProgress();
@@ -370,7 +379,30 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                   79, 195, 247, 1),
                                             ),
                                             child: GestureDetector(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        content: Container(
+                                                          width: 300,
+                                                          height: 300,
+                                                          color: Colors.white,
+                                                          child: Center(
+                                                            child: Text(
+                                                              'Allocate Funds',
+                                                              style: GoogleFonts.baloo2(
+                                                                fontSize: 24,
+                                                                fontWeight: FontWeight.w600,
+                                                                color: Colors.black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
                                                 child: Center(
                                                     child: Row(
                                                   mainAxisAlignment:
@@ -510,6 +542,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           selectedDayPredicate: (day) {
                                             return isSameDay(_selectedDay, day);
                                           },
+                                          eventLoader: (day) {
+                                            final normalizdDay =
+                                                normalizeDate(day);
+                                            return expensesMapped[
+                                                    normalizdDay] ??
+                                                [];
+                                          },
                                           onDaySelected:
                                               (selectedDay, focusedDay) {
                                             setState(() {
@@ -618,6 +657,34 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                           ),
                                                         )),
                                                   ],
+                                                ),
+                                              );
+                                            },
+                                            markerBuilder:
+                                                (context, day, events) {
+                                              if (events.isEmpty) {
+                                                return const SizedBox
+                                                    .shrink(); // No events, no markers
+                                              }
+
+                                              return Positioned(
+                                                bottom: 5,
+                                                left: 5,
+                                                right: 5,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: events.map((e) {
+                                                    final myExpense =
+                                                        e as Expense;
+                                                    return Expenselabel(
+                                                      expense: myExpense,
+                                                      screenHeightUnit:
+                                                          screenHeightUnit,
+                                                      screenWidthUnit:
+                                                          screenWidthUnit,
+                                                    );
+                                                  }).toList(),
                                                 ),
                                               );
                                             },

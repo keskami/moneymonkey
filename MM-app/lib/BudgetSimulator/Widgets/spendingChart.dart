@@ -30,14 +30,14 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
     Colors.pink
   ];
   int total = 0;
-  
+
   List<_ChartData> chartData = [];
   Future<void> getData() async {
-    for(int i = 0; i < widget.types.length; i++) {
-      chartData.add(_ChartData(widget.types[i], widget.percentage[i], colors[i]));
+    for (int i = 0; i < widget.types.length; i++) {
+      chartData
+          .add(_ChartData(widget.types[i], widget.percentage[i], colors[i]));
       total += widget.percentage[i].toInt();
     }
-    
   }
 
   @override
@@ -114,14 +114,14 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
               ),
               Container(
                 height: 260 * widget.screenHeightUnit,
-                width: 150 * widget.screenHeightUnit,
+                width: 300 * widget.screenHeightUnit,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       for (int i = 0; i < widget.types.length; i++)
-                        spendingSidePart(
+                        SpendingSidePart(
                           screenHeightUnit: widget.screenHeightUnit,
                           screenWidthUnit: widget.screenWidthUnit,
                           type: widget.types[i],
@@ -140,39 +140,59 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
   }
 }
 
-Widget spendingSidePart({
-  required double screenHeightUnit,
-  required double screenWidthUnit,
-  required String type,
-  required int percentage,
-  required Color color,
-}) {
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: screenHeightUnit * 12),
-    child: Row(
-      children: [
-        Container(
-          height: screenHeightUnit * 25,
-          width: screenHeightUnit * 25,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
+class SpendingSidePart extends StatelessWidget {
+  final double screenHeightUnit;
+  final double screenWidthUnit;
+  final String type;
+  final int percentage;
+  final Color color;
+
+  SpendingSidePart({
+    required this.screenHeightUnit,
+    required this.screenWidthUnit,
+    required this.type,
+    required this.percentage,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenHeightUnit * 12),
+      child: Row(
+        children: [
+          Container(
+            height: screenHeightUnit * 25,
+            width: screenHeightUnit * 25,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+            ),
           ),
-        ),
-        SizedBox(
-          width: screenWidthUnit * 10,
-        ),
-        Text(
-          type,
-          style: GoogleFonts.baloo2(
-            fontSize: screenHeightUnit * 22,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
+          SizedBox(
+            width: screenWidthUnit * 10,
           ),
-        ),
-      ],
-    ),
-  );
+          Text(
+            type,
+            style: GoogleFonts.baloo2(
+              fontSize: screenHeightUnit * 24,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
+          Spacer(),
+          Padding(
+            padding: EdgeInsets.only(left: screenWidthUnit * 15),
+            child: Text("$percentage%", style: GoogleFonts.baloo2(
+              fontSize: screenHeightUnit * 24,
+              color: Colors.black,
+              fontWeight: FontWeight.w600
+            ),),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 class _ChartData {

@@ -102,10 +102,10 @@ class Expense {
  final String name;
  final double amount;
  final String dueDateType; // "Fixed" or "Gradual"
- final int dueDay; // For fixed expenses (e.g., Day 5)
+ final DateTime dueDay; // For fixed expenses (e.g., Day 5)
 
 
- Expense({
+ Expense( {
    required this.name,
    required this.amount,
    required this.dueDateType,
