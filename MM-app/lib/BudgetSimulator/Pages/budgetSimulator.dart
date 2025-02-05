@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/meterBox.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/bottomWarning.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class BudgetSimulator extends StatefulWidget {
@@ -42,7 +43,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   final DateTime now = DateTime.now(); // Current date and time
   String formattedDate = '';
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now().add(Duration(days: 0));
   int progress = 0;
   List<String> types = [];
   List<double> percentage = [];
@@ -102,7 +103,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     super.initState();
     // Access widget fields in initState
     netCash = widget.startingBalance;
-    formattedDate = DateFormat('MMM d, y').format(now);
+    formattedDate = DateFormat('MMM d, y').format(_selectedDay);
     getProgress();
     getExpenses();
   }
@@ -265,7 +266,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       Center(
                         child: Container(
                             width: screenWidthUnit * 1871,
-                            height: screenHeightUnit * 120,
+                            height: screenHeightUnit * 110,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(3),
                               color: Colors.white,
@@ -317,7 +318,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(
-                                      height: screenHeightUnit * 55,
+                                      height: screenHeightUnit * 38,
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -341,7 +342,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: screenHeightUnit * 16,
+                                              height: screenHeightUnit * 12,
                                             ),
                                             Text(formattedDate,
                                                 style: GoogleFonts.baloo2(
@@ -358,7 +359,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
-                                              top: screenHeightUnit * 25),
+                                              top: screenHeightUnit * 20),
                                           child: Container(
                                             width: screenWidthUnit * 195,
                                             height: screenHeightUnit * 68,
@@ -412,11 +413,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          top: screenHeightUnit * 16),
+                                          top: screenHeightUnit * 10,
+                                          bottom: screenHeightUnit * 25),
                                       child: Center(
                                         child: Container(
                                           width: screenWidthUnit * 1290,
-                                          height: screenHeightUnit * 65,
+                                          height: screenHeightUnit * 60,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(20),
@@ -425,7 +427,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           ),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                                MainAxisAlignment.spaceAround,
                                             children: [
                                               Text(
                                                 "MO",
@@ -495,39 +497,179 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         ),
                                       ),
                                     ),
-                                    Container(
-                                      height: screenHeightUnit * 870,
-                                      width: screenWidthUnit * 1500,
-                                      child: TableCalendar(
-                                        firstDay: DateTime.utc(2025, 1, 1),
-                                        lastDay: DateTime.utc(2025, 1, 31),
-                                        focusedDay: _focusedDay,
-                                        selectedDayPredicate: (day) =>
-                                            isSameDay(_selectedDay, day),
-                                        onDaySelected: _onDaySelected,
-                                        eventLoader: _getEventsForDay,
-                                        headerStyle: HeaderStyle(
-                                          formatButtonVisible:
-                                              false, // Hides the header format button
-                                          titleCentered:
-                                              true, // Centers the title
-                                          leftChevronVisible:
-                                              false, // Hides the left chevron button
-                                          rightChevronVisible:
-                                              false, // Hides the right chevron button
-                                        ),
-                                        calendarStyle: CalendarStyle(
-                                          outsideDaysVisible:
-                                              false, // Hides the outside days of the current month
-                                        ),
-                                        daysOfWeekStyle: DaysOfWeekStyle(
-                                          weekdayStyle: TextStyle(
-                                            color: Colors
-                                                .transparent, // Makes weekday names invisible
+                                    Center(
+                                      child: Container(
+                                        height: screenHeightUnit * 750,
+                                        width: screenWidthUnit * 1290,
+                                        child: TableCalendar(
+                                          focusedDay: _focusedDay,
+                                          firstDay: DateTime.utc(2022, 01, 01),
+                                          lastDay: DateTime.utc(2026, 01, 01),
+                                          calendarFormat: CalendarFormat.month,
+                                          daysOfWeekVisible: false,
+                                          selectedDayPredicate: (day) {
+                                            return isSameDay(_selectedDay, day);
+                                          },
+                                          onDaySelected:
+                                              (selectedDay, focusedDay) {
+                                            setState(() {
+                                              _selectedDay = selectedDay;
+                                              _focusedDay = focusedDay;
+                                              formattedDate =
+                                                  DateFormat('MMM d, y')
+                                                      .format(_selectedDay);
+                                            });
+                                          },
+                                          headerVisible: false,
+                                          calendarStyle: CalendarStyle(
+                                            outsideDaysVisible: false,
+                                            cellMargin: EdgeInsets.all(2),
+                                            defaultTextStyle:
+                                                TextStyle(color: Colors.black),
+                                            outsideTextStyle:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                          rowHeight: screenHeightUnit * 123,
+                                          calendarBuilders: CalendarBuilders(
+                                            defaultBuilder:
+                                                (context, day, focusedDay) {
+                                              final bool isToday = isSameDay(
+                                                  day, DateTime.now());
+                                              final bool isSelected =
+                                                  _selectedDay != null &&
+                                                      isSameDay(
+                                                          _selectedDay, day);
+                                              final bool isFocused =
+                                                  isSameDay(day, _focusedDay);
+                                              final bool isTodayNotSelected =
+                                                  isToday && !isSelected;
+
+                                              // Set fill and border color dynamically
+                                              Color fillColor = Colors.white;
+                                              Color borderColor = Colors.grey;
+
+                                              if (isTodayNotSelected) {
+                                                borderColor = Colors
+                                                    .green; // Green border when today is not selected
+                                              } else if (isSelected) {
+                                                borderColor = const Color(
+                                                    0xFF51A4F1); // Blue border for selected
+                                              } else if (isFocused) {
+                                                borderColor = Colors
+                                                    .blueAccent; // Light blue for focused
+                                              }
+
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  color: fillColor,
+                                                  border: Border.all(
+                                                    color: borderColor,
+                                                    width: isTodayNotSelected
+                                                        ? 10
+                                                        : (isSelected ||
+                                                                isFocused
+                                                            ? 2
+                                                            : 1),
+                                                  ),
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                      top: 5,
+                                                      right: 5,
+                                                      child: Text(
+                                                        '${day.day}',
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            todayBuilder:
+                                                (context, day, focusedDay) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black,
+                                                      width: 2),
+                                                  color: Colors.white,
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                        top: 5,
+                                                        right: 5,
+                                                        child: Container(
+                                                          child: Text(
+                                                            '${day.day}',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                        )),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            selectedBuilder:
+                                                (context, day, focusedDay) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: const Color(
+                                                          0xFF51A4F1),
+                                                      width: 2),
+                                                  color: Colors.white,
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                      top: 5,
+                                                      right: 5,
+                                                      child: Text(
+                                                        '${day.day}',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       ),
-                                    )
+                                    ),
+                                    Spacer(),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: screenHeightUnit * 40),
+                                      child: Center(
+                                        child: Bottomwarning(
+                                          screenHeightUnit: screenHeightUnit,
+                                          screenWidthUnit: screenWidthUnit,
+                                          color:
+                                              Color.fromRGBO(135, 218, 255, 1),
+                                          text:
+                                              "Hint: Consider reducing entertainment spendings to boost your savings. ",
+                                          textColor:
+                                              Color.fromRGBO(32, 84, 116, 1),
+                                        ),
+                                      ),
+                                    ),
                                   ]),
                             ),
                             // Container(

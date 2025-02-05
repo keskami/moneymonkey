@@ -13,7 +13,7 @@ class Headings {
   }) {
     return Container(
       color: Colors.white,
-      height: screenHeightUnit * 120,
+      height: screenHeightUnit * 110,
       width: screenWidthUnit * 1839,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

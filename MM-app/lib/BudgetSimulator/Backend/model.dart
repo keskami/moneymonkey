@@ -96,6 +96,7 @@ class ScenarioLevelConfig {
 
 
 
+
 // Supporting models for expenses, random events, milestones, penalties, and rewards
 class Expense {
  final String name;
