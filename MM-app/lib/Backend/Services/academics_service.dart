@@ -76,9 +76,9 @@ class LocalAcademicService {
     Map<String, Lesson>? lessons,
     Map<String, Component>? components,
   })  : _classrooms = classrooms ?? sampleClassrooms,
-        _units = units ?? sampleUnits,
-        _lessons = lessons ?? sampleLessons,
-        _components = components ?? sampleComponents;
+        _units = units ?? advancedUnits,
+        _lessons = lessons ?? advancedLessons,
+        _components = components ?? advancedComponents;
 
   Classroom getClassRoom(String classRoomId) {
     final classroom = _classrooms[classRoomId];
@@ -96,6 +96,11 @@ class LocalAcademicService {
     final lesson = _lessons[lessonId];
     if (lesson == null) throw Exception('Lesson not found: $lessonId');
     return lesson;
+  }
+
+  String getLessonName(String lessonId) {
+    Lesson _lesson = getLesson(lessonId);
+    return _lesson.title;
   }
 
   String getNextLessonId(String currentLessonId) {

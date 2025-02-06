@@ -204,143 +204,121 @@ List<Unit> sampleAdvancedSyllabus = [
   ),
 ];
 
-Map<String, Lesson> sampleLessons = {
-  'A.1.1': Lesson(
-    lessonId: 'A.1.1',
-    title: 'Trading Basics',
-    description: 'Understanding market fundamentals',
-    lessonStatus: Status.Active,
-    components: {
-      'A.1.1.1': Component(
-        componentId: 'A.1.1.1',
-        title: 'What is Trading?',
-        type: ComponentType.concept,
-        componentStatus: Status.Completed,
-      ),
-      'A.1.1.2': Component(
-        componentId: 'A.1.1.2',
-        title: 'Market Types',
-        type: ComponentType.interactiveActivity,
-        componentStatus: Status.Completed,
-      ),
-    },
-    progress: 100,
-    discussionQuestions: ['How do markets function?', 'What moves prices?'],
-    performanceTrends: PerformanceTrends(
-      label: 'Week 1',
-      classAverage: 85,
-      participationRate: 0.9,
-      lessonCompletion: 1.0,
-    ),
-    totalComponents: 2,
-  ),
-  'A.1.2': Lesson(
-    lessonId: 'A.1.2',
-    title: 'Technical Analysis',
-    description: 'Learn to read charts and patterns',
-    lessonStatus: Status.Active,
-    components: {
-      'A.1.2.1': Component(
-        componentId: 'A.1.2.1',
-        title: 'Chart Basics',
-        type: ComponentType.concept,
-        componentStatus: Status.Active,
-      ),
-    },
-    progress: 50,
-    discussionQuestions: ['What are key chart patterns?'],
-    performanceTrends: PerformanceTrends(
-      label: 'Week 2',
-      classAverage: 78,
-      participationRate: 0.85,
-      lessonCompletion: 0.7,
-    ),
-    totalComponents: 1,
-  ),
-};
-
-final Map<String, List<String>> classLessonProgress = {
-  'tempClassId1_2025': ['A.1.1', 'A.1.2', 'A.1.3'],
-  'tempClassId2_2025': ['A.1.1', 'A.1.2'],
-  'tempClassId3_2025': ['A.2.1', 'A.2.2'],
-  'tempClassId4_2025': ['A.1.1'],
-};
-
-final Map<String, Map<String, double>> studentPerformance = {
-  'S123456': {'A.1.1': 95, 'A.1.2': 88, 'A.1.3': 92},
-  'S789012': {'A.1.1': 87, 'A.1.2': 85},
-  'S345678': {'A.1.1': 90, 'A.2.1': 85},
-  'S901234': {'A.1.1': 93, 'A.1.2': 91},
-  'S567890': {'A.1.1': 89, 'A.2.1': 86},
-};
-
-Map<String, Component> sampleComponents = {
-  'A.1.1.1': Component(
-    componentId: 'A.1.1.1',
-    title: 'Introduction to Markets',
-    type: ComponentType.concept,
-    componentStatus: Status.Active,
-    progress: 100,
-    discussionQuestions: ['What is a financial market?'],
-  ),
-  'A.1.1.2': Component(
-    componentId: 'A.1.1.2',
-    title: 'Market Types Quiz',
-    type: ComponentType.quiz,
-    componentStatus: Status.Active,
-    progress: 80,
-    questionData: {
-      'questions': [
-        {'question': 'What is a stock market?', 'correctAnswer': 'A'},
-        {'question': 'Define market liquidity', 'correctAnswer': 'B'},
-      ]
-    },
-  ),
-  'A.1.2.1': Component(
-    componentId: 'A.1.2.1',
-    title: 'Reading Charts',
-    type: ComponentType.interactiveActivity,
-    componentStatus: Status.Inactive,
-    progress: 60,
-  ),
-  'A.1.3.1': Component(
-    componentId: 'A.1.3.1',
-    title: 'Trading Strategies',
-    type: ComponentType.concept,
-    componentStatus: Status.Inactive,
-    progress: 0,
-  ),
-};
-
-Map<String, Unit> sampleUnits = {
+Map<String, Unit> advancedUnits = {
   'A.1': Unit(
     unitId: 'A.1',
-    title: 'Financial Markets Fundamentals',
-    description: 'Understanding market basics and trading foundations',
-    lessonIds: ['A.1.1', 'A.1.2', 'A.1.3'],
+    title: 'Fundamentals of Trading',
+    description: 'Introduction to market structures and trading basics',
+    lessonIds: [
+      'A.1.1',
+      'A.1.2',
+      'A.1.3',
+      'A.1.4',
+      'A.1.5',
+      'A.1.6',
+      'A.1.7',
+      'A.1.8'
+    ],
     unitStatus: Status.Active,
-    totalLessons: 12,
+    totalLessons: 8,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   ),
   'A.2': Unit(
     unitId: 'A.2',
-    title: 'Technical Analysis',
-    description: 'Learn chart patterns and technical indicators',
-    lessonIds: ['A.2.1', 'A.2.2'],
-    unitStatus: Status.Inactive,
+    title: 'Advanced Market Analysis',
+    description: 'Master technical and fundamental analysis',
+    lessonIds: [
+      'A.2.1',
+      'A.2.2',
+      'A.2.3',
+      'A.2.4',
+      'A.2.5',
+      'A.2.6',
+      'A.2.7',
+      'A.2.8'
+    ],
+    unitStatus: Status.Active,
     totalLessons: 8,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   ),
-  'I.1': Unit(
-    unitId: 'I.1',
-    title: 'Risk Management',
-    description: 'Master risk assessment and portfolio management',
-    lessonIds: ['I.1.1', 'I.1.2'],
-    unitStatus: Status.Inactive,
-    totalLessons: 10,
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
+};
+
+Map<String, Lesson> advancedLessons = {
+  for (int i = 1; i <= 8; i++)
+    'A.1.$i': Lesson(
+      lessonId: 'A.1.$i',
+      title: 'Fundamentals Topic $i',
+      description: 'Understanding the basics of topic $i',
+      lessonStatus: Status.Active,
+      components: {
+        for (int j = 1; j <= 5; j++)
+          'A.1.$i.$j': Component(
+            componentId: 'A.1.$i.$j',
+            title: 'Concept $j of Fundamentals Topic $i',
+            type: ComponentType.concept,
+            componentStatus: Status.Active,
+          ),
+      },
+      progress: 0,
+      discussionQuestions: [
+        'What are the key aspects of Fundamentals Topic $i?',
+        'How does Fundamentals Topic $i impact financial markets?',
+      ],
+      performanceTrends: PerformanceTrends(
+        label: 'Week $i',
+        classAverage: 80 + i.toDouble(),
+        participationRate: 0.85,
+        lessonCompletion: 0.7,
+      ),
+      totalComponents: 5,
+    ),
+  for (int i = 1; i <= 8; i++)
+    'A.2.$i': Lesson(
+      lessonId: 'A.2.$i',
+      title: 'Advanced Topic $i',
+      description: 'Deep dive into topic $i',
+      lessonStatus: Status.Active,
+      components: {
+        for (int j = 1; j <= 5; j++)
+          'A.2.$i.$j': Component(
+            componentId: 'A.2.$i.$j',
+            title: 'Concept $j of Advanced Topic $i',
+            type: ComponentType.concept,
+            componentStatus: Status.Active,
+          ),
+      },
+      progress: 0,
+      discussionQuestions: [
+        'What are the key aspects of Advanced Topic $i?',
+        'How does Advanced Topic $i impact financial markets?',
+      ],
+      performanceTrends: PerformanceTrends(
+        label: 'Week $i',
+        classAverage: 80 + i.toDouble(),
+        participationRate: 0.85,
+        lessonCompletion: 0.7,
+      ),
+      totalComponents: 5,
+    ),
+};
+
+Map<String, Component> advancedComponents = {
+  for (int i = 1; i <= 8; i++)
+    for (int j = 1; j <= 5; j++)
+      'A.1.$i.$j': Component(
+        componentId: 'A.1.$i.$j',
+        title: 'Deep Dive on Concept $j of Fundamentals Topic $i',
+        type: ComponentType.concept,
+        componentStatus: Status.Active,
+      ),
+  for (int i = 1; i <= 8; i++)
+    for (int j = 1; j <= 5; j++)
+      'A.2.$i.$j': Component(
+        componentId: 'A.2.$i.$j',
+        title: 'Deep Dive on Concept $j of Advanced Topic $i',
+        type: ComponentType.concept,
+        componentStatus: Status.Active,
+      ),
 };

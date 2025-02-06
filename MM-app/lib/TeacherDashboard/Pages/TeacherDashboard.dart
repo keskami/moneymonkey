@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
+import 'package:money_monkey/Backend/Services/TeacherServices.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/ClassroomPreferences.dart';
@@ -21,33 +22,34 @@ class TeacherDashboard extends StatefulWidget {
 class _TeacherDashboardState extends State<TeacherDashboard> {
   final TeacherDashboardController teacherDashboardController =
       Get.put(TeacherDashboardController());
+  TeacherService _teacherService =
+      TeacherService(currentTeacher: sampleTeacher);
   List<Student> classRoomStudents = [];
-  Map<String, List<Student>> categorizedStudents = {};
   String selectedClassId = "";
   late Map<String, String> classes;
 
-  void getClassStudents() {
-    classRoomStudents = sampleStudents
-        .where(
-          (student) => student.classRooms
-              .contains(teacherDashboardController.classId.value),
-        )
-        .toList();
+  String getClassId(String className) {
+    if (classes.isNotEmpty) {
+      return classes.entries
+          .firstWhere(
+            (tr) => tr.value == className,
+          )
+          .key;
+    }
+    throw Exception('Class not found');
   }
 
   void onClassPicked(String? className) {
     if (className != null) {
-      String selectedClassId =
-          classes.entries.firstWhere((entry) => entry.value == className).key;
-      print(selectedClassId);
+      selectedClassId = getClassId(className);
       teacherDashboardController.classId.value = selectedClassId;
-      print(teacherDashboardController.classId.value);
+      print("************Retrieved Id: $selectedClassId");
+      setState(() {
+        print(
+            "************Retrieved Students: ${_teacherService.getClassStudents(selectedClassId)}");
 
-      teacherDashboardController.lessonId.value =
-          sampleClassrooms[selectedClassId]?.lessonId ?? '';
-
-      getClassStudents();
-      categorizeStudents();
+        classRoomStudents = _teacherService.getClassStudents(selectedClassId);
+      });
     }
   }
 
@@ -57,61 +59,6 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         (entry) => MapEntry(entry.key, entry.value.name),
       ),
     );
-  }
-
-  void categorizeStudents() {
-    String currentLessonId =
-        sampleClassrooms[teacherDashboardController.classId.value]?.lessonId ??
-            '';
-
-    final topPerformers = <Student>[];
-    final needsSupport = <Student>[];
-
-    for (var student in classRoomStudents) {
-      StudentStatus status = student.getCurrentLessonProgress(currentLessonId);
-      double score = calculateStudentScore(student, status);
-
-      if (score >= 85) {
-        topPerformers.add(student);
-      } else if (score <= 40 || status == StudentStatus.Behind) {
-        needsSupport.add(student);
-      }
-    }
-
-    topPerformers.sort(
-        (a, b) => b.profile.portfolioScore.compareTo(a.profile.portfolioScore));
-    needsSupport.sort(
-        (a, b) => a.profile.portfolioScore.compareTo(b.profile.portfolioScore));
-
-    categorizedStudents = {
-      'topPerformers': topPerformers,
-      'needsSupport': needsSupport,
-    };
-  }
-
-  double calculateStudentScore(Student student, StudentStatus status) {
-    double score = student.profile.portfolioScore * 0.4;
-    score += (student.profile.streak / 60) * 25;
-
-    switch (status) {
-      case StudentStatus.Ahead:
-        score += 35;
-        break;
-      case StudentStatus.On_Track:
-        score += 25;
-        break;
-      case StudentStatus.Behind:
-        score += 10;
-        break;
-    }
-
-    final unitProgress = student.getCurrentUnitProgress(
-      teacherDashboardController.lessonId.value,
-    );
-
-    if (unitProgress < 0) score *= 0.8;
-
-    return score;
   }
 
   @override
@@ -165,6 +112,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 case 1:
                   return LessonManagement();
                 case 2:
+                  print("************Sending Students $classRoomStudents");
                   return StudentPerformace(classStudents: classRoomStudents);
                 default:
                   return ClassroomPreferences();

@@ -1,14 +1,15 @@
-import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 
 class StudentService {
-  StudentService({required this.student});
+  StudentService({
+    required this.student,
+  });
   final Student student;
   List<String> progress = [];
   LocalAcademicService _localAcademicService = LocalAcademicService();
-  void initializeProgress() {
+  init() {
     progress = student.progress.split(".");
   }
 
@@ -40,10 +41,23 @@ class StudentService {
   }
 
   double getLessonProgress() {
+    print("****************Entered getLessonProgress");
+    init();
     //Getting current Lesson
     Lesson _currentLesson = _localAcademicService
         .getLesson("${progress[0]}.${progress[1]}.${progress[2]}");
     //Dividing the current progress from total number of Components in that particular lesson
     return int.parse(progress[3]) / _currentLesson.totalComponents;
+  }
+
+  StudentStatus getStatusFromProgress() {
+    double progress = getLessonProgress();
+    if (progress > 1) {
+      return StudentStatus.Ahead;
+    } else if (progress > 0.6) {
+      return StudentStatus.On_Track;
+    } else {
+      return StudentStatus.Behind;
+    }
   }
 }
