@@ -41,7 +41,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
           Padding(
               padding: EdgeInsets.only(
                   top: widget.screenHeightUnit * 15,
-                  left: widget.screenWidthUnit * 175),
+                  left: widget.screenWidthUnit * 145),
               child: Row(
                 children: [
                   Text(
@@ -51,8 +51,10 @@ class _AllocatefundingState extends State<Allocatefunding> {
                         color: Colors.black,
                         fontWeight: FontWeight.w600),
                   ),
-                  SizedBox(width: widget.screenWidthUnit * 100,),
-              Text(
+                  SizedBox(
+                    width: widget.screenWidthUnit * 100,
+                  ),
+                  Text(
                     "1,000",
                     style: GoogleFonts.baloo2(
                         fontSize: widget.screenWidthUnit * 45,
@@ -61,9 +63,47 @@ class _AllocatefundingState extends State<Allocatefunding> {
                   ),
                 ],
               )),
-              
+          Padding(
+            padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  height: widget.screenHeightUnit * 450,
+                  width: widget.screenWidthUnit * 380,
+                  child:
+                      Column(children: [ItemPriceChanger(price: 10, type: "Test",)]),
+                ),
+              ),
+            ),
+          )
         ],
       ),
+    );
+  }
+}
+
+class ItemPriceChanger extends StatefulWidget {
+  int price;
+  String type;
+   
+
+  ItemPriceChanger({required this.price, required this.type});
+
+  @override
+  _ItemPriceChangerState createState() => _ItemPriceChangerState();
+}
+
+class _ItemPriceChangerState extends State<ItemPriceChanger> {
+  late double _currentPrice;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text("type")
+      ],
+      
     );
   }
 }
