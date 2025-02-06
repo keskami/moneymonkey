@@ -1,8 +1,9 @@
 // Enums and Extensions
 enum Status {
-  inactive,
-  inProgress,
-  active,
+  Inactive,
+  InProgress,
+  Active,
+  Completed,
 }
 
 enum ComponentType {
@@ -34,11 +35,11 @@ String statusToFirestore(Status status) {
 Status statusFromFirestore(String status) {
   switch (status) {
     case 'inactive':
-      return Status.inactive;
+      return Status.Inactive;
     case 'inProgress':
-      return Status.inProgress;
+      return Status.InProgress;
     case 'active':
-      return Status.active;
+      return Status.Active;
     default:
       throw ArgumentError('Invalid status: $status');
   }
@@ -85,6 +86,7 @@ class Unit {
   String description;
   List<String> lessonIds;
   Status unitStatus;
+  int totalLessons;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -94,6 +96,7 @@ class Unit {
     required this.description,
     required this.lessonIds,
     required this.unitStatus,
+    required this.totalLessons,
     this.createdAt,
     this.updatedAt,
   });
@@ -105,6 +108,7 @@ class Unit {
       description: data['Description'] ?? '',
       lessonIds: List<String>.from(data['LessonIds'] ?? []),
       unitStatus: statusFromFirestore(data['UnitStatus'] ?? 'inactive'),
+      totalLessons: data['totalComponents'] ?? 0,
       createdAt: data['CreatedAt']?.toDate(),
       updatedAt: data['UpdatedAt']?.toDate(),
     );
@@ -117,6 +121,7 @@ class Unit {
       'LessonIds': lessonIds,
       'UnitStatus': statusToFirestore(unitStatus),
       'CreatedAt': createdAt,
+      'totalComponents': totalLessons,
       'UpdatedAt': DateTime.now(),
     };
   }
@@ -142,6 +147,7 @@ class Lesson {
   double progress;
   List<String> discussionQuestions;
   PerformanceTrends performanceTrends;
+  int totalComponents;
   DateTime? startedAt;
   DateTime? completedAt;
 
@@ -153,6 +159,7 @@ class Lesson {
     required this.components,
     required this.progress,
     required this.discussionQuestions,
+    required this.totalComponents,
     required this.performanceTrends,
     this.startedAt,
     this.completedAt,
@@ -178,6 +185,7 @@ class Lesson {
               participationRate: 0,
               lessonCompletion: 0,
             ),
+      totalComponents: int.parse(data['totalComponents']),
       startedAt: data['StartedAt']?.toDate(),
       completedAt: data['CompletedAt']?.toDate(),
     );
@@ -193,6 +201,7 @@ class Lesson {
       'Components':
           components.map((key, value) => MapEntry(key, value.toFirestore())),
       'PerformanceTrends': performanceTrends.toFirestore(),
+      'totalComponents': totalComponents,
       'StartedAt': startedAt,
       'CompletedAt': completedAt,
     };
@@ -200,7 +209,7 @@ class Lesson {
 
   Component? getLatestActiveComponent() {
     var activeComponents = components.values
-        .where((component) => component.componentStatus == Status.active)
+        .where((component) => component.componentStatus == Status.Active)
         .toList();
 
     // If there are no active components, return null

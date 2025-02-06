@@ -1,14 +1,12 @@
-import 'package:money_monkey/Backend/Models/Academic.dart';
-
 class Teacher {
   final String name;
   final String id;
-  final List<Classroom>? classRooms;
+  final List<String> classRooms;
 
   Teacher({
     required this.name,
     required this.id,
-    this.classRooms,
+    required this.classRooms,
   });
 
   factory Teacher.fromFirestore(Map<String, dynamic> data, String id) {
@@ -24,21 +22,5 @@ class Teacher {
       'id': id,
       'classRooms': classRooms,
     };
-  }
-
-  Map<String, String> getClasses() {
-    Map<String, String> tempClasses = {};
-    tempClasses.addAll(
-      Map.fromEntries(
-        classRooms?.map(
-              (classRoom) => MapEntry(
-                classRoom.classId,
-                classRoom.name,
-              ),
-            ) ??
-            [],
-      ),
-    );
-    return tempClasses;
   }
 }

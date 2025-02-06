@@ -42,18 +42,18 @@ class _StudentPerformaceState extends State<StudentPerformace> {
       "12",
     ],
   ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   final Map<String, String> actions = {
     "What about those \$150 sneakers?": "Wait for next paycheck",
     "Planning for Emergencies": "Set aside \$150",
     "What about those \$120 sneakers?": "Wait for next paycheck",
   };
   final TeacherDashboardController teacherDashboardController = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -283,79 +283,89 @@ class _StudentPerformaceState extends State<StudentPerformace> {
     );
   }
 
-  Iterable showStudents(
+  Iterable<Widget> showStudents(
     List<Student> students,
     double screenWidth,
     double screenHeight,
   ) {
-    return students.map(
-      (student) {
-        print(sampleTeacher.classRooms!
-            .firstWhere((classRoom) =>
-                classRoom.classId == teacherDashboardController.classId.value)
-            .lessonId);
-        StudentStatus status = student.getCurrentLessonProgress(sampleTeacher
-            .classRooms!
-            .firstWhere((classRoom) =>
-                classRoom.classId == teacherDashboardController.classId.value)
-            .lessonId);
-        Color progressColor = status.name == 'Ahead'
-            ? LightTheme().primaryBlue
-            : status == 'On-Track'
-                ? LightTheme().pastelGreen
-                : LightTheme().pastelRed;
-        bool isSelected = students.indexOf(student) == selectedStudentIndex;
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              selectedStudentIndex = students.indexOf(student);
-            });
-          },
-          child: ColoredPaddedContainer(
-            margin: EdgeInsets.symmetric(
-              vertical: 5,
-            ),
-            padding: EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 10,
-            ),
-            color: isSelected
-                ? LightTheme().primaryBlue.withValues(alpha: 0.2)
-                : Colors.transparent,
-            child: Row(
-              children: [
-                Text(
-                  student.profile.fullName,
+    final currentClassroom =
+        sampleClassrooms[teacherDashboardController.classId.value];
+    if (currentClassroom == null) return [];
+
+    return students.map((student) {
+      final status =
+          student.getCurrentLessonProgress(currentClassroom.lessonId);
+      final unitId = currentClassroom.lessonId.split('.').take(2).join('.');
+      final unitProgress = student.getCurrentUnitProgress(unitId);
+
+      Color progressColor;
+      switch (status) {
+        case StudentStatus.Ahead:
+          progressColor = LightTheme().primaryBlue;
+          break;
+        case StudentStatus.On_Track:
+          progressColor = LightTheme().pastelGreen;
+          break;
+        default:
+          progressColor = LightTheme().pastelRed;
+      }
+
+      bool isSelected = students.indexOf(student) == selectedStudentIndex;
+
+      return GestureDetector(
+        onTap: () =>
+            setState(() => selectedStudentIndex = students.indexOf(student)),
+        child: ColoredPaddedContainer(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+          color: isSelected
+              ? LightTheme().primaryBlue.withOpacity(0.2)
+              : Colors.transparent,
+          child: Row(
+            children: [
+              Text(
+                student.profile.fullName,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey.shade500,
+                ),
+              ),
+              const Spacer(),
+              ColoredPaddedContainer(
+                width: screenWidth * 0.06,
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+                color: progressColor.withOpacity(0.3),
+                child: Text(
+                  status.name,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey.shade500,
+                    fontSize: 13,
+                    color: progressColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Spacer(),
-                ColoredPaddedContainer(
-                  width: screenWidth * 0.06,
-                  margin: EdgeInsets.all(0),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
-                  ),
-                  color: progressColor.withValues(alpha: 0.3),
+              ),
+              if (unitProgress > 0)
+                Container(
+                  width: 60,
+                  margin: EdgeInsets.only(left: 8),
                   child: Text(
-                    status.name.toString(),
-                    textAlign: TextAlign.center,
+                    '${(unitProgress * 100).toStringAsFixed(0)}%',
                     style: TextStyle(
-                      fontSize: 13,
-                      color: progressColor,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade600,
+                      fontSize: 14,
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+            ],
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
 }
 

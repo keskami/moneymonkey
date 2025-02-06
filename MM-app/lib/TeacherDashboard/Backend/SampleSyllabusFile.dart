@@ -98,6 +98,7 @@ List<Unit> sampleAdvancedSyllabus = [
       "A.1.5",
       "A.1.6",
     ],
-    unitStatus: Status.inactive,
+    totalLessons: 20,
+    unitStatus: Status.Inactive,
   ),
 ];

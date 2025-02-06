@@ -1,337 +1,165 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 
-class FirestoreService {
+class AcademicService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Base collections
-  CollectionReference get _difficulties =>
-      _firestore.collection('difficulties');
-  CollectionReference get _classrooms => _firestore.collection('classrooms');
+  Future<Classroom> getClassRoom(String classRoomId) async {
+    final doc =
+        await _firestore.collection('classrooms').doc(classRoomId).get();
+    if (!doc.exists) throw Exception('Classroom not found: $classRoomId');
+    return Classroom.fromFirestore(doc.data()!, doc.id);
+  }
 
-  // Nested collection references
-  CollectionReference _unitsCollection(String difficultyId) =>
-      _difficulties.doc(difficultyId).collection('units');
+  Future<Unit> getUnit(String unitId) async {
+    final doc = await _firestore.collection('units').doc(unitId).get();
+    if (!doc.exists) throw Exception('Unit not found: $unitId');
+    return Unit.fromFirestore(doc.data()!, doc.id);
+  }
 
-  CollectionReference _lessonsCollection(String difficultyId, String unitId) =>
-      _difficulties
-          .doc(difficultyId)
-          .collection('units')
-          .doc(unitId)
-          .collection('lessons');
+  Future<Lesson> getLesson(String lessonId) async {
+    final doc = await _firestore.collection('lessons').doc(lessonId).get();
+    if (!doc.exists) throw Exception('Lesson not found: $lessonId');
+    return Lesson.fromFirestore(doc.data()!, doc.id);
+  }
 
-  CollectionReference _componentsCollection(
-          String difficultyId, String unitId, String lessonId) =>
-      _difficulties
-          .doc(difficultyId)
-          .collection('units')
-          .doc(unitId)
-          .collection('lessons')
-          .doc(lessonId)
-          .collection('components');
+  Future<String> getNextLessonId(String currentLessonId) async {
+    final parts = currentLessonId.split('.');
+    if (parts.length != 3) throw Exception('Invalid lesson ID format');
 
-  CollectionReference _lessonResourcesCollection(
-          String difficultyId, String unitId, String lessonId) =>
-      _difficulties
-          .doc(difficultyId)
-          .collection('units')
-          .doc(unitId)
-          .collection('lessons')
-          .doc(lessonId)
-          .collection('lessonResources');
+    final nextLessonNumber = int.parse(parts[2]) + 1;
+    final nextLessonId = '${parts[0]}.${parts[1]}.$nextLessonNumber';
 
-  // Difficulty methods
-  Future<List<String>> getDifficulties() async {
     try {
-      QuerySnapshot snapshot = await _difficulties.get();
-      return snapshot.docs.map((doc) => doc.id).toList();
+      await getLesson(nextLessonId);
+      return nextLessonId;
     } catch (e) {
-      print('Error fetching difficulties: $e');
-      rethrow;
+      // If next lesson doesn't exist, try next unit
+      final nextUnitNumber = int.parse(parts[1]) + 1;
+      return '${parts[0]}.$nextUnitNumber.1';
     }
   }
 
-  // Unit methods
-  Future<List<Unit>> getUnits(String difficultyId) async {
+  Future<Component> getComponent(String componentId) async {
+    final lessonId = componentId.split('.').take(3).join('.');
+    final doc = await _firestore.collection('lessons').doc(lessonId).get();
+    if (!doc.exists)
+      throw Exception('Lesson not found for component: $componentId');
+
+    final lesson = Lesson.fromFirestore(doc.data()!, doc.id);
+    final component = lesson.components[componentId];
+    if (component == null) throw Exception('Component not found: $componentId');
+
+    return component;
+  }
+
+  Future<String> getActiveComponentStatus(String componentId) async {
     try {
-      QuerySnapshot snapshot = await _unitsCollection(difficultyId).get();
-      return snapshot.docs
-          .map((doc) =>
-              Unit.fromFirestore(doc.data() as Map<String, dynamic>, doc.id))
-          .toList();
+      final component = await getComponent(componentId);
+      return statusToFirestore(component.componentStatus);
     } catch (e) {
-      print('Error fetching units: $e');
-      rethrow;
+      return 'inactive';
+    }
+  }
+}
+
+class LocalAcademicService {
+  final Map<String, Classroom> _classrooms;
+  final Map<String, Unit> _units;
+  final Map<String, Lesson> _lessons;
+  final Map<String, Component> _components;
+
+  LocalAcademicService({
+    Map<String, Classroom>? classrooms,
+    Map<String, Unit>? units,
+    Map<String, Lesson>? lessons,
+    Map<String, Component>? components,
+  })  : _classrooms = classrooms ?? sampleClassrooms,
+        _units = units ?? sampleUnits,
+        _lessons = lessons ?? sampleLessons,
+        _components = components ?? sampleComponents;
+
+  Classroom getClassRoom(String classRoomId) {
+    final classroom = _classrooms[classRoomId];
+    if (classroom == null) throw Exception('Classroom not found: $classRoomId');
+    return classroom;
+  }
+
+  Unit getUnit(String unitId) {
+    final unit = _units[unitId];
+    if (unit == null) throw Exception('Unit not found: $unitId');
+    return unit;
+  }
+
+  Lesson getLesson(String lessonId) {
+    final lesson = _lessons[lessonId];
+    if (lesson == null) throw Exception('Lesson not found: $lessonId');
+    return lesson;
+  }
+
+  String getNextLessonId(String currentLessonId) {
+    final parts = currentLessonId.split('.');
+    if (parts.length != 3) throw Exception('Invalid lesson ID format');
+
+    final nextLessonNumber = int.parse(parts[2]) + 1;
+    final nextLessonId = '${parts[0]}.${parts[1]}.$nextLessonNumber';
+
+    if (_lessons.containsKey(nextLessonId)) {
+      return nextLessonId;
+    }
+
+    final nextUnitNumber = int.parse(parts[1]) + 1;
+    final nextUnitLessonId = '${parts[0]}.$nextUnitNumber.1';
+
+    if (_lessons.containsKey(nextUnitLessonId)) {
+      return nextUnitLessonId;
+    }
+
+    throw Exception('No next lesson found');
+  }
+
+  Component getComponent(String componentId) {
+    final component = _components[componentId];
+    if (component == null) throw Exception('Component not found: $componentId');
+    return component;
+  }
+
+  String getActiveComponentStatus(String componentId) {
+    try {
+      return statusToFirestore(getComponent(componentId).componentStatus);
+    } catch (e) {
+      return 'inactive';
     }
   }
 
-  Future<Unit?> getUnit(String difficultyId, String unitId) async {
-    try {
-      DocumentSnapshot doc =
-          await _unitsCollection(difficultyId).doc(unitId).get();
-      if (!doc.exists) return null;
-      return Unit.fromFirestore(doc.data() as Map<String, dynamic>, doc.id);
-    } catch (e) {
-      print('Error fetching unit: $e');
-      rethrow;
-    }
+  List<Unit> getUnitsForDifficulty(String difficulty) {
+    return _units.values
+        .where((unit) => unit.unitId.startsWith(difficulty))
+        .toList();
   }
 
-  Future<void> createUnit(String difficultyId, Unit unit) async {
-    try {
-      await _unitsCollection(difficultyId)
-          .doc(unit.unitId)
-          .set(unit.toFirestore());
-    } catch (e) {
-      print('Error creating unit: $e');
-      rethrow;
-    }
+  int getLessonComponentCount(String lessonId) {
+    Lesson _lesson = getLesson(lessonId);
+    return _lesson.totalComponents;
   }
 
-  Future<void> updateUnit(String difficultyId, Unit unit) async {
-    try {
-      await _unitsCollection(difficultyId)
-          .doc(unit.unitId)
-          .update(unit.toFirestore());
-    } catch (e) {
-      print('Error updating unit: $e');
-      rethrow;
-    }
+  int getUnitLessonsCount(String unitId) {
+    Unit _unit = getUnit(unitId);
+    return _unit.totalLessons;
   }
 
-  Future<void> deleteUnit(String difficultyId, String unitId) async {
-    try {
-      await _unitsCollection(difficultyId).doc(unitId).delete();
-    } catch (e) {
-      print('Error deleting unit: $e');
-      rethrow;
-    }
-  }
-
-  // Lesson methods
-  Future<List<Lesson>> getLessons(String difficultyId, String unitId) async {
-    try {
-      QuerySnapshot snapshot =
-          await _lessonsCollection(difficultyId, unitId).get();
-      return snapshot.docs
-          .map((doc) =>
-              Lesson.fromFirestore(doc.data() as Map<String, dynamic>, doc.id))
-          .toList();
-    } catch (e) {
-      print('Error fetching lessons: $e');
-      rethrow;
-    }
-  }
-
-  Future<Lesson?> getLesson(
-      String difficultyId, String unitId, String lessonId) async {
-    try {
-      DocumentSnapshot doc =
-          await _lessonsCollection(difficultyId, unitId).doc(lessonId).get();
-      if (!doc.exists) return null;
-      return Lesson.fromFirestore(doc.data() as Map<String, dynamic>, doc.id);
-    } catch (e) {
-      print('Error fetching lesson: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> createLesson(
-      String difficultyId, String unitId, Lesson lesson) async {
-    try {
-      await _lessonsCollection(difficultyId, unitId)
-          .doc(lesson.lessonId)
-          .set(lesson.toFirestore());
-    } catch (e) {
-      print('Error creating lesson: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> updateLesson(
-      String difficultyId, String unitId, Lesson lesson) async {
-    try {
-      await _lessonsCollection(difficultyId, unitId)
-          .doc(lesson.lessonId)
-          .update(lesson.toFirestore());
-    } catch (e) {
-      print('Error updating lesson: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> deleteLesson(
-      String difficultyId, String unitId, String lessonId) async {
-    try {
-      await _lessonsCollection(difficultyId, unitId).doc(lessonId).delete();
-    } catch (e) {
-      print('Error deleting lesson: $e');
-      rethrow;
-    }
-  }
-
-  // Component methods
-  Future<List<Component>> getComponents(
-      String difficultyId, String unitId, String lessonId) async {
-    try {
-      QuerySnapshot snapshot =
-          await _componentsCollection(difficultyId, unitId, lessonId).get();
-      return snapshot.docs
-          .map((doc) => Component.fromFirestore(
-              doc.data() as Map<String, dynamic>, doc.id))
-          .toList();
-    } catch (e) {
-      print('Error fetching components: $e');
-      rethrow;
-    }
-  }
-
-  Future<Component?> getComponent(String difficultyId, String unitId,
-      String lessonId, String componentId) async {
-    try {
-      DocumentSnapshot doc =
-          await _componentsCollection(difficultyId, unitId, lessonId)
-              .doc(componentId)
-              .get();
-      if (!doc.exists) return null;
-      return Component.fromFirestore(
-          doc.data() as Map<String, dynamic>, doc.id);
-    } catch (e) {
-      print('Error fetching component: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> createComponent(String difficultyId, String unitId,
-      String lessonId, Component component) async {
-    try {
-      await _componentsCollection(difficultyId, unitId, lessonId)
-          .doc(component.componentId)
-          .set(component.toFirestore());
-    } catch (e) {
-      print('Error creating component: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> updateComponent(String difficultyId, String unitId,
-      String lessonId, Component component) async {
-    try {
-      await _componentsCollection(difficultyId, unitId, lessonId)
-          .doc(component.componentId)
-          .update(component.toFirestore());
-    } catch (e) {
-      print('Error updating component: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> deleteComponent(String difficultyId, String unitId,
-      String lessonId, String componentId) async {
-    try {
-      await _componentsCollection(difficultyId, unitId, lessonId)
-          .doc(componentId)
-          .delete();
-    } catch (e) {
-      print('Error deleting component: $e');
-      rethrow;
-    }
-  }
-
-  // Classroom methods (remaining at root level)
-  Future<List<Classroom>> getClassrooms() async {
-    try {
-      QuerySnapshot snapshot = await _classrooms.get();
-      return snapshot.docs
-          .map((doc) => Classroom.fromFirestore(
-              doc.data() as Map<String, dynamic>, doc.id))
-          .toList();
-    } catch (e) {
-      print('Error fetching classrooms: $e');
-      rethrow;
-    }
-  }
-
-  Future<Classroom?> getClassroom(String classId) async {
-    try {
-      DocumentSnapshot doc = await _classrooms.doc(classId).get();
-      if (!doc.exists) return null;
-      return Classroom.fromFirestore(
-          doc.data() as Map<String, dynamic>, doc.id);
-    } catch (e) {
-      print('Error fetching classroom: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> createClassroom(Classroom classroom) async {
-    try {
-      await _classrooms.doc(classroom.classId).set(classroom.toFirestore());
-    } catch (e) {
-      print('Error creating classroom: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> updateClassroom(Classroom classroom) async {
-    try {
-      await _classrooms.doc(classroom.classId).update(classroom.toFirestore());
-    } catch (e) {
-      print('Error updating classroom: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> deleteClassroom(String classId) async {
-    try {
-      await _classrooms.doc(classId).delete();
-    } catch (e) {
-      print('Error deleting classroom: $e');
-      rethrow;
-    }
-  }
-
-  // Utility methods
-  Future<void> updateLessonStatus(String difficultyId, String unitId,
-      String lessonId, Status newStatus) async {
-    try {
-      await _lessonsCollection(difficultyId, unitId)
-          .doc(lessonId)
-          .update({'LessonStatus': statusToFirestore(newStatus)});
-    } catch (e) {
-      print('Error updating lesson status: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> updateComponentStatus(String difficultyId, String unitId,
-      String lessonId, String componentId, Status newStatus) async {
-    try {
-      await _componentsCollection(difficultyId, unitId, lessonId)
-          .doc(componentId)
-          .update({'ComponentStatus': statusToFirestore(newStatus)});
-    } catch (e) {
-      print('Error updating component status: $e');
-      rethrow;
-    }
-  }
-
-  // Helper method to get lesson with all components
-  Future<Map<String, dynamic>> getLessonWithComponents(
-      String difficultyId, String unitId, String lessonId) async {
-    try {
-      final lesson = await getLesson(difficultyId, unitId, lessonId);
-      if (lesson == null) throw Exception('Lesson not found');
-
-      final components = await getComponents(difficultyId, unitId, lessonId);
-
-      return {
-        'lesson': lesson,
-        'components': components,
-      };
-    } catch (e) {
-      print('Error fetching lesson with components: $e');
-      rethrow;
-    }
+  int getUnitTotalComponents(String unitId) {
+    //Get current Unit
+    Unit _unit = getUnit(unitId);
+    int totalComponents = 0;
+    //Iterate through all lessons in that particular Unit
+    _unit.lessonIds.forEach((lesson) {
+      //Get each lesson
+      Lesson _lesson = getLesson(lesson);
+      //Get total components
+      totalComponents += _lesson.totalComponents;
+    });
+    return totalComponents;
   }
 }
