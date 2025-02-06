@@ -104,32 +104,38 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                           name: "Pay Day",
                           amount: -2000,
                           dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,1) ),
-                          Expense(
+                          dueDay: DateTime(2025, 2, 1),
+                          amountPaid: 0),
+                      Expense(
                           name: "Pay Day",
                           amount: -2000,
                           dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,15) ),
+                          dueDay: DateTime(2025, 2, 15),
+                          amountPaid: 0),
                       Expense(
                           name: "Rent",
                           amount: 21,
                           dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,5) ),
+                          dueDay: DateTime(2025, 2, 5),
+                          amountPaid: 21),
                       Expense(
                           name: "Utilites",
                           amount: 29,
                           dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,10)),
+                          dueDay: DateTime(2025, 2, 10),
+                          amountPaid: 29),
                       Expense(
                           name: "Travel",
                           amount: 11,
                           dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,28)),
+                          dueDay: DateTime(2025, 2, 28),
+                          amountPaid: 11),
                       Expense(
                           name: "CC Debt",
                           amount: 39,
                           dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,25))
+                          dueDay: DateTime(2025, 2, 25),
+                          amountPaid: 125)
                     ],
                   ),
                   color: Colors.black.withOpacity(0.5),
@@ -822,37 +828,43 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   currentAmount: 3)
             ],
             expenses: [
-                      Expense(
-                          name: "Pay Day",
-                          amount: -2000,
-                          dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,1) ),
-                          Expense(
-                          name: "Pay Day",
-                          amount: -2000,
-                          dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,15) ),
-                      Expense(
-                          name: "Rent",
-                          amount: 21,
-                          dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,5) ),
-                      Expense(
-                          name: "Utilites",
-                          amount: 29,
-                          dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,10)),
-                      Expense(
-                          name: "Travel",
-                          amount: 11,
-                          dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,28)),
-                      Expense(
-                          name: "CC Debt",
-                          amount: 39,
-                          dueDateType: "Fixed",
-                          dueDay: DateTime(2025,2,25))
-                    ],
+              Expense(
+                  name: "Pay Day",
+                  amount: -2000,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 2, 1),
+                  amountPaid: 0),
+              Expense(
+                  name: "Pay Day",
+                  amount: -2000,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 2, 15),
+                  amountPaid: 0),
+              Expense(
+                  name: "Rent",
+                  amount: 21,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 2, 5),
+                  amountPaid: 21),
+              Expense(
+                  name: "Utilites",
+                  amount: 29,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 2, 10),
+                  amountPaid: 29),
+              Expense(
+                  name: "Travel",
+                  amount: 11,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 2, 28),
+                  amountPaid: 11),
+              Expense(
+                  name: "CC Debt",
+                  amount: 39,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 2, 25),
+                  amountPaid: 125)
+            ],
           );
   }
 }

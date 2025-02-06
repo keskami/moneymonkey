@@ -103,6 +103,7 @@ class Expense {
  final double amount;
  final String dueDateType; // "Fixed" or "Gradual"
  final DateTime dueDay; // For fixed expenses (e.g., Day 5)
+ final double amountPaid;
 
 
  Expense( {
@@ -110,6 +111,7 @@ class Expense {
    required this.amount,
    required this.dueDateType,
    required this.dueDay,
+   required this.amountPaid
  });
 }
 
