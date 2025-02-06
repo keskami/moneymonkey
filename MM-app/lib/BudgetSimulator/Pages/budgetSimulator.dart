@@ -50,9 +50,32 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<String> types = [];
   List<double> percentage = [];
   double totalSpending = 0;
+  bool smallBoxes = true;
 
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
+
+  Future<void> getUniqueWeekCountForMonth(int year, int month) async {
+    final firstDayOfMonth = DateTime(year, month, 1);
+
+    final lastDayOfMonth = DateTime(year, month + 1, 0);
+    int mondays = 0;
+
+    if (firstDayOfMonth.weekday != DateTime.monday) {
+      mondays += 1;
+    }
+
+    for (int day = 2; day <= lastDayOfMonth.day; day++) {
+      if (DateTime(year, month, day).weekday == DateTime.monday) {
+        mondays += 1;
+      }
+    }
+    if (mondays <= 5) {
+      setState(() {
+        smallBoxes = false;
+      });
+    }
+  }
 
   void mapExpenses() {
     for (Expense expense in widget.expenses) {
@@ -116,6 +139,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     formattedDate = DateFormat('MMM d, y').format(_selectedDay);
     getProgress();
     getExpenses();
+    getUniqueWeekCountForMonth(_focusedDay.year, _focusedDay.month);
   }
 
   @override
@@ -151,25 +175,25 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: screenHeightUnit * 90,
+                height: screenHeightUnit * 70,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                        padding: EdgeInsets.fromLTRB(screenWidthUnit * 25,
-                            screenHeightUnit * 24, 0, screenWidthUnit * 8),
+                        padding: EdgeInsets.fromLTRB(screenWidthUnit * 15,
+                            screenHeightUnit * 16, 0, screenWidthUnit * 8),
                         child: Icon(
                           Icons.arrow_back_ios,
-                          size: screenWidthUnit * 32,
+                          size: screenWidthUnit * 24,
                           color: Colors.black,
                         )),
                     Padding(
-                        padding: EdgeInsets.only(top: screenWidthUnit * 6),
+                        padding: EdgeInsets.only(top: screenWidthUnit * 4),
                         child: Text(
                           'Quit ${widget.name}',
                           style: GoogleFonts.baloo2(
-                              fontSize: screenWidthUnit * 28,
+                              fontSize: screenWidthUnit * 22,
                               fontWeight: FontWeight.w600,
                               color: Colors.black),
                         )),
@@ -266,7 +290,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               FittedBox(
                 child: Container(
                   width: screenWidthUnit * 1919,
-                  height: screenHeight - (screenHeightUnit * 90),
+                  height: screenHeight - (screenHeightUnit * 70),
                   color: Color.fromRGBO(135, 206, 235, 1),
                   child: Column(
                     children: [
@@ -276,7 +300,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       Center(
                         child: Container(
                             width: screenWidthUnit * 1871,
-                            height: screenHeightUnit * 110,
+                            height: screenHeightUnit * 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(3),
                               color: Colors.white,
@@ -295,7 +319,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                       creditCardDebt: widget.creditCardDebt,
                                       netCash: netCash,
                                       screenWidthUnit: screenWidthUnit,
-                                      screenHeightUnit: screenHeightUnit,
+                                      screenHeightUnit: screenHeightUnit * .9,
                                       APY: widget.APY,
                                     )
                                   : Container(),
@@ -307,7 +331,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       Center(
                           child: Container(
                         width: screenWidthUnit * 1871,
-                        height: screenHeightUnit * 1132,
+                        height: screenHeightUnit * 1170,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(3),
@@ -321,14 +345,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              height: screenHeightUnit * 1122,
+                              height: screenHeightUnit * 1170,
                               width: screenWidthUnit * 1360,
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(
-                                      height: screenHeightUnit * 38,
+                                      height: screenHeightUnit * 25,
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -352,7 +376,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: screenHeightUnit * 12,
+                                              height: screenHeightUnit * 10,
                                             ),
                                             Text(formattedDate,
                                                 style: GoogleFonts.baloo2(
@@ -369,10 +393,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
-                                              top: screenHeightUnit * 20),
+                                              top: screenHeightUnit * 15),
                                           child: Container(
                                             width: screenWidthUnit * 195,
-                                            height: screenHeightUnit * 68,
+                                            height: screenHeightUnit * 60,
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -408,7 +432,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                       style: GoogleFonts.baloo2(
                                                         fontSize:
                                                             screenWidthUnit *
-                                                                18,
+                                                                16,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                         color: Colors.white,
@@ -421,13 +445,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     Icon(
                                                       Icons.arrow_forward_ios,
                                                       size:
-                                                          screenWidthUnit * 14,
+                                                          screenWidthUnit * 13,
                                                       color: Colors.white,
                                                     ),
                                                     Icon(
                                                       Icons.arrow_forward_ios,
                                                       size:
-                                                          screenWidthUnit * 14,
+                                                          screenWidthUnit * 13,
                                                       color: Colors.white,
                                                     ),
                                                   ],
@@ -438,12 +462,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          top: screenHeightUnit * 10,
-                                          bottom: screenHeightUnit * 25),
+                                          top: screenHeightUnit * 8,
+                                          bottom: screenHeightUnit * 18),
                                       child: Center(
                                         child: Container(
                                           width: screenWidthUnit * 1290,
-                                          height: screenHeightUnit * 60,
+                                          height: screenHeightUnit * 55,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(20),
@@ -458,7 +482,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 "MO",
                                                 style: GoogleFonts.baloo2(
                                                   fontSize:
-                                                      screenWidthUnit * 20,
+                                                      screenWidthUnit * 18,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -467,7 +491,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 "TUES",
                                                 style: GoogleFonts.baloo2(
                                                   fontSize:
-                                                      screenWidthUnit * 20,
+                                                      screenWidthUnit * 18,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -476,7 +500,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 "WED",
                                                 style: GoogleFonts.baloo2(
                                                   fontSize:
-                                                      screenWidthUnit * 20,
+                                                      screenWidthUnit * 18,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -485,7 +509,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 "THURS",
                                                 style: GoogleFonts.baloo2(
                                                   fontSize:
-                                                      screenWidthUnit * 20,
+                                                      screenWidthUnit * 18,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -494,7 +518,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 "FRI",
                                                 style: GoogleFonts.baloo2(
                                                   fontSize:
-                                                      screenWidthUnit * 20,
+                                                      screenWidthUnit * 18,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -503,7 +527,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 "SAT",
                                                 style: GoogleFonts.baloo2(
                                                   fontSize:
-                                                      screenWidthUnit * 20,
+                                                      screenWidthUnit * 18,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -512,7 +536,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 "SUN",
                                                 style: GoogleFonts.baloo2(
                                                   fontSize:
-                                                      screenWidthUnit * 20,
+                                                      screenWidthUnit * 18,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -524,7 +548,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     ),
                                     Center(
                                       child: Container(
-                                        height: screenHeightUnit * 750,
+                                        height: screenHeightUnit * 830,
                                         width: screenWidthUnit * 1290,
                                         child: TableCalendar(
                                           focusedDay: _focusedDay,
@@ -561,21 +585,21 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                             outsideTextStyle:
                                                 TextStyle(color: Colors.grey),
                                           ),
-                                          rowHeight: screenHeightUnit * 123,
+                                          rowHeight: smallBoxes
+                                              ? screenHeightUnit * 135
+                                              : screenHeightUnit * 165,
                                           calendarBuilders: CalendarBuilders(
                                             outsideBuilder:
                                                 (context, day, focusedDay) {
-                                              
                                               return Container(
-                                                
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white,
+                                                  color: Color.fromRGBO(
+                                                      192, 192, 192, .5),
                                                   border: Border.all(
                                                     color: Colors.grey,
                                                     width: 1,
                                                   ),
                                                 ),
-                                                
                                               );
                                             },
                                             defaultBuilder:
@@ -722,106 +746,102 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                             },
                                             selectedBuilder:
                                                 (context, day, focusedDay) {
-                                              return day.month != now.month ? Container(
-                                                
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 1,
-                                                  ),
-                                                ),
-                                                
-                                              ):
-                                              
-                                              isSameDay(day, now)
+                                              return day.month != now.month
                                                   ? Container(
                                                       decoration: BoxDecoration(
+                                                        color: Color.fromRGBO(
+                                                            192, 192, 192, .5),
                                                         border: Border.all(
-                                                            color: const Color(
-                                                                0xFF51A4F1),
-                                                            width: 2),
-                                                        color: Colors.white,
+                                                          color: Colors.grey,
+                                                          width: 1,
+                                                        ),
                                                       ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Positioned(
-                                                              top: 5,
-                                                              right: 5,
-                                                              child: Container(
-                                                                  width:
-                                                                      screenHeightUnit *
-                                                                          50,
-                                                                  height:
-                                                                      screenHeightUnit *
-                                                                          50,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    color: Color
-                                                                        .fromRGBO(
+                                                    )
+                                                  : isSameDay(day, now)
+                                                      ? Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                                color: const Color(
+                                                                    0xFF51A4F1),
+                                                                width: 2),
+                                                            color: Colors.white,
+                                                          ),
+                                                          child: Stack(
+                                                            children: [
+                                                              Positioned(
+                                                                  top: 5,
+                                                                  right: 5,
+                                                                  child: Container(
+                                                                      width: screenHeightUnit * 50,
+                                                                      height: screenHeightUnit * 50,
+                                                                      decoration: BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: Color.fromRGBO(
                                                                             243,
                                                                             52,
                                                                             53,
                                                                             1),
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      '${day.day}',
-                                                                      style: GoogleFonts
-                                                                          .baloo2(
-                                                                        fontSize:
-                                                                            screenWidthUnit *
-                                                                                25,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        color: Color.fromRGBO(
-                                                                            255,
-                                                                            255,
-                                                                            255,
-                                                                            1),
                                                                       ),
-                                                                    ),
-                                                                  ))),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : Container(
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: const Color(
-                                                                0xFF51A4F1),
-                                                            width: 2),
-                                                        color: Colors.white,
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Positioned(
-                                                            top: 5,
-                                                            right: 5,
-                                                            child: Text(
-                                                              '${day.day}',
-                                                              style: GoogleFonts
-                                                                  .baloo2(
-                                                                fontSize:
-                                                                    screenWidthUnit *
-                                                                        25,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        108,
-                                                                        108,
-                                                                        108,
-                                                                        1),
-                                                              ),
-                                                            ),
+                                                                      child: Center(
+                                                                        child:
+                                                                            Text(
+                                                                          '${day.day}',
+                                                                          style:
+                                                                              GoogleFonts.baloo2(
+                                                                            fontSize:
+                                                                                screenWidthUnit * 25,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            color: Color.fromRGBO(
+                                                                                255,
+                                                                                255,
+                                                                                255,
+                                                                                1),
+                                                                          ),
+                                                                        ),
+                                                                      ))),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      ),
-                                                    );
+                                                        )
+                                                      : Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                                color: const Color(
+                                                                    0xFF51A4F1),
+                                                                width: 2),
+                                                            color: Colors.white,
+                                                          ),
+                                                          child: Stack(
+                                                            children: [
+                                                              Positioned(
+                                                                top: 5,
+                                                                right: 5,
+                                                                child: Text(
+                                                                  '${day.day}',
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .baloo2(
+                                                                    fontSize:
+                                                                        screenWidthUnit *
+                                                                            25,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            108,
+                                                                            108,
+                                                                            108,
+                                                                            1),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
                                             },
                                           ),
                                         ),
@@ -830,10 +850,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     Spacer(),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          bottom: screenHeightUnit * 40),
+                                          bottom: screenHeightUnit * 30),
                                       child: Center(
                                         child: Bottomwarning(
-                                          screenHeightUnit: screenHeightUnit,
+                                          screenHeightUnit:
+                                              screenHeightUnit * .9,
                                           screenWidthUnit: screenWidthUnit,
                                           color:
                                               Color.fromRGBO(135, 218, 255, 1),
