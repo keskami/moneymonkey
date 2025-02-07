@@ -262,10 +262,6 @@ Map<String, Lesson> advancedLessons = {
           ),
       },
       progress: 0,
-      discussionQuestions: [
-        'What are the key aspects of Fundamentals Topic $i?',
-        'How does Fundamentals Topic $i impact financial markets?',
-      ],
       performanceTrends: PerformanceTrends(
         label: 'Week $i',
         classAverage: 80 + i.toDouble(),
@@ -290,10 +286,6 @@ Map<String, Lesson> advancedLessons = {
           ),
       },
       progress: 0,
-      discussionQuestions: [
-        'What are the key aspects of Advanced Topic $i?',
-        'How does Advanced Topic $i impact financial markets?',
-      ],
       performanceTrends: PerformanceTrends(
         label: 'Week $i',
         classAverage: 80 + i.toDouble(),

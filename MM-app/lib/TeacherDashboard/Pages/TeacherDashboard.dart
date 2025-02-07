@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/TeacherServices.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/ClassroomPreferences.dart';
@@ -24,6 +25,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
       Get.put(TeacherDashboardController());
   TeacherService _teacherService =
       TeacherService(currentTeacher: sampleTeacher);
+  LocalAcademicService localAcademicService = LocalAcademicService();
   List<Student> classRoomStudents = [];
   String selectedClassId = "";
   late Map<String, String> classes;
@@ -113,7 +115,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   return LessonManagement();
                 case 2:
                   print("************Sending Students $classRoomStudents");
-                  return StudentPerformace(classStudents: classRoomStudents);
+                  return StudentPerformance(classStudents: classRoomStudents);
                 default:
                   return ClassroomPreferences();
               }

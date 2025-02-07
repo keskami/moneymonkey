@@ -103,6 +103,11 @@ class LocalAcademicService {
     return _lesson.title;
   }
 
+  String getUnitName(String unitId) {
+    Unit _unit = getUnit(unitId);
+    return _unit.title;
+  }
+
   String getNextLessonId(String currentLessonId) {
     final parts = currentLessonId.split('.');
     if (parts.length != 3) throw Exception('Invalid lesson ID format');

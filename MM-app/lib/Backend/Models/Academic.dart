@@ -145,7 +145,6 @@ class Lesson {
   Status lessonStatus;
   Map<String, Component> components;
   double progress;
-  List<String> discussionQuestions;
   PerformanceTrends performanceTrends;
   int totalComponents;
   DateTime? startedAt;
@@ -158,7 +157,6 @@ class Lesson {
     required this.lessonStatus,
     required this.components,
     required this.progress,
-    required this.discussionQuestions,
     required this.totalComponents,
     required this.performanceTrends,
     this.startedAt,
@@ -172,7 +170,6 @@ class Lesson {
       description: data['Description'] ?? '',
       lessonStatus: statusFromFirestore(data['LessonStatus'] ?? 'inactive'),
       progress: (data['Progress'] is num ? data['Progress'] : 0).toDouble(),
-      discussionQuestions: List<String>.from(data['DiscussionQuestions'] ?? []),
       components: (data['Components'] as Map<String, dynamic>?)?.map(
             (key, value) => MapEntry(key, Component.fromFirestore(value, key)),
           ) ??
@@ -197,7 +194,6 @@ class Lesson {
       'Description': description,
       'LessonStatus': statusToFirestore(lessonStatus),
       'Progress': progress,
-      'DiscussionQuestions': discussionQuestions,
       'Components':
           components.map((key, value) => MapEntry(key, value.toFirestore())),
       'PerformanceTrends': performanceTrends.toFirestore(),

@@ -1,183 +1,331 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
-import 'package:money_monkey/Backend/Models/settings.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
-import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class StudentPerformace extends StatefulWidget {
-  const StudentPerformace({
+class StudentPerformance extends StatefulWidget {
+  const StudentPerformance({
     super.key,
     required this.classStudents,
   });
   final List<Student> classStudents;
   @override
-  State<StudentPerformace> createState() => _StudentPerformaceState();
+  State<StudentPerformance> createState() => _StudentPerformanceState();
 }
 
-class _StudentPerformaceState extends State<StudentPerformace> {
-  // LocalAcademicService _localAcademicService = LocalAcademicService();
+class _StudentPerformanceState extends State<StudentPerformance> {
+  // State variables
   Map<String, List<Student>> categorizedStudents = {};
-  // final List<List<String>> topPerformerStudents = [
-  //   [
-  //     "Kid 1",
-  //     "98",
-  //   ],
-  //   [
-  //     "Kid 2",
-  //     "98",
-  //   ],
-  // ];
-  // final List<List<String>> supportStudents = [
-  //   [
-  //     "Kid 1",
-  //     "34",
-  //   ],
-  //   [
-  //     "Kid 2",
-  //     "12",
-  //   ],
-  // ];
   final Map<String, String> actions = {
     "What about those \$150 sneakers?": "Wait for next paycheck",
     "Planning for Emergencies": "Set aside \$150",
     "What about those \$120 sneakers?": "Wait for next paycheck",
   };
-  final TeacherDashboardController teacherDashboardController = Get.find();
-  int selectedStudentIndex = 0; // Change to nullable
-  Student selectedStudent = Student(
-    studentId: "S123456",
-    email: "john.doe@example.com",
-    phoneNumber: "+1234567890",
-    age: 22,
-    knowledgeLevel: 3,
-    learningGoalPerDay: 5,
-    startingLevel: 1,
-    classRooms: ['tempClassId1_2025', 'tempClassId2_2025'],
-    progress: "A.1.2.6",
-    profile: ProfileData(
-      fullName: "John Doe",
-      username: "john_doe_25",
-      numberOfFollowers: 1500,
-      following: 180,
-      topAchievements: 5,
-      streak: 30,
-      totalProfit: 2500.75,
-      portfolioScore: 88.4,
-      averageMonthlyGrowth: 7.5,
-    ),
-    settings: SettingsData(
-      preferences: Preferences(
-        soundEffects: true,
-        audio: true,
-        darkMode: true,
-      ),
-      notifications: Notifications(
-        reminders: RemindersNotifications(
-          practiceEmail: true,
-          practicePhone: false,
-          weeklyProgress: true,
-          reminderTime: '07:30 AM',
-        ),
-        friends: FriendsNotifications(
-          newFollowerEmail: true,
-          newFollowerPhone: false,
-          friendActivityEmail: true,
-          friendActivityPhone: false,
-        ),
-        announcements: AnnouncementsNotifications(
-          marketingNotificationsEmail: true,
-          marketingNotificationsPhone: true,
-          educationalTipsEmail: false,
-          educationalTipsPhone: true,
-        ),
-      ),
-      privacySettings: PrivacySettings(publicProfile: true),
-    ),
-  );
-  late StudentService studentService;
-  void selectStudent(int index) {
-    if (index < widget.classStudents.length) {
-      setState(() => selectedStudentIndex = index);
-    }
-  }
 
-  void setSelectedStudent(int index) {
-    setState(() {
-      selectedStudentIndex = index;
-      selectedStudent = widget.classStudents[index];
-      studentService = StudentService(student: selectedStudent);
-    });
-  }
+  int selectedStudentIndex = 0;
+  List<Student> topPerformers = [];
+  List<Student> supportStudents = [];
+  List<Student> studentList = [];
+  String currentFilter = 'allStudents';
+  late Student selectedStudent;
+  late StudentService studentService;
+  final LocalAcademicService localAcademicService = LocalAcademicService();
 
   @override
   void initState() {
     super.initState();
-    if (widget.classStudents.isNotEmpty) {
-      selectedStudentIndex = 0;
-      selectedStudent = widget.classStudents[0];
-      studentService = StudentService(student: widget.classStudents[0]);
+    initializeData();
+  }
+
+  @override
+  void didUpdateWidget(StudentPerformance oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.classStudents != oldWidget.classStudents) {
+      initializeData();
     }
+  }
+
+  void initializeData() {
+    if (widget.classStudents.isNotEmpty) {
+      setState(() {
+        currentFilter = 'allStudents';
+        studentList = widget.classStudents;
+        selectedStudent = widget.classStudents[0];
+        selectedStudentIndex = 0;
+        studentService = StudentService(student: selectedStudent);
+        getCategorizedStudents();
+      });
+    } else {
+      setState(() {
+        currentFilter = 'allStudents';
+        studentList = [];
+        topPerformers = [];
+        supportStudents = [];
+      });
+    }
+  }
+
+  void getCategorizedStudents() {
+    Map<String, List<Student>> categorizedSt =
+        StudentService(student: selectedStudent)
+            .getCategorizedStudents(widget.classStudents);
+    setState(() {
+      topPerformers = categorizedSt['topPeformers']?.toList() ?? [];
+      supportStudents = categorizedSt['needSupport']?.toList() ?? [];
+    });
+  }
+
+  void setSelectedStudent(int index) {
+    if (index >= 0 && index < studentList.length) {
+      setState(() {
+        selectedStudentIndex = index;
+        selectedStudent = studentList[index];
+        studentService = StudentService(student: selectedStudent);
+      });
+    }
+  }
+
+  Color getFilterButtonColor(String filter) {
+    if (currentFilter == filter) {
+      return LightTheme().primaryBlue.withValues(alpha: 0.2);
+    }
+    return Colors.transparent;
+  }
+
+  Color getFilterTextColor(String filter) {
+    if (currentFilter == filter) {
+      return LightTheme().primaryBlue;
+    }
+    return Colors.grey.shade500;
+  }
+
+  void filterStudents(String category) {
+    setState(() {
+      currentFilter = category;
+      switch (category) {
+        case 'allStudents':
+          studentList = widget.classStudents;
+          break;
+        case 'topPerformers':
+          studentList = topPerformers;
+          break;
+        case 'needSupport':
+          studentList = supportStudents;
+          break;
+      }
+      // Reset selection to first student in filtered list if list is not empty
+      if (studentList.isNotEmpty) {
+        setSelectedStudent(0);
+      }
+    });
+  }
+
+  Color getStatusColor(StudentStatus status) {
+    switch (status) {
+      case StudentStatus.Ahead:
+        return LightTheme().primaryBlue;
+      case StudentStatus.On_Track:
+        return LightTheme().pastelGreen;
+      case StudentStatus.Behind:
+        return LightTheme().pastelRed;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  StudentStatus getStudentStatus(double progress) {
+    if (progress > 1) {
+      return StudentStatus.Ahead;
+    } else if (progress > 0.6) {
+      return StudentStatus.On_Track;
+    } else {
+      return StudentStatus.Behind;
+    }
+  }
+
+  Widget _buildProgressSection(String title, String subtitle, double progress) {
+    Color progressColor =
+        progress > 0.6 ? LightTheme().pastelGreen : LightTheme().pastelRed;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyles.containerTitle.copyWith(
+            fontSize: 20,
+          ),
+        ),
+        Text(
+          subtitle,
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey.shade400,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Stack(
+          children: [
+            LinearProgressIndicator(
+              backgroundColor: Colors.grey.shade300,
+              color: progressColor,
+              minHeight: 10,
+              borderRadius: BorderRadius.circular(10),
+              value: progress.clamp(0.0, 1.0),
+            ),
+            Positioned(
+              right: 8,
+              top: -4,
+              child: Text(
+                '${(progress * 100).toStringAsFixed(0)}%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: progressColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Widget.ClassStudents: ${widget.classStudents}");
+    if (widget.classStudents.isEmpty) {
+      return const SizedBox(
+        child: Text("Either there are no students, or they're being loaded."),
+      );
+    }
+
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return widget.classStudents.isEmpty
-        ? SizedBox(
-            child:
-                Text("Either there are no students, or they're being loaded."),
-          )
-        : Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: ShadowedContainer(
-                  height: screenHeight * 0.85, // Increased from 0.65
-                  padding: EdgeInsets.symmetric(
-                    vertical: screenHeight * 0.02,
-                    horizontal: screenWidth * 0.02,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Students",
-                        style: TextStyles.containerTitle,
-                      ),
-                      FilterStudentsButton(filter: "All Students"),
-                      FilterStudentsButton(filter: "Top Performers"),
-                      FilterStudentsButton(filter: "Needs Support"),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ...showStudents(
-                                widget.classStudents,
-                                screenWidth,
-                                screenHeight,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left Panel - Student List
+        Expanded(
+          flex: 2,
+          child: ShadowedContainer(
+            height: screenHeight * 0.85,
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.02,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Students",
+                  style: TextStyles.containerTitle,
+                ),
+                const SizedBox(height: 8),
+                // Filter Buttons with improved highlighting
+                FilterStudentsButton(
+                  filter: "All Students",
+                  onPressed: () => filterStudents('allStudents'),
+                  backgroundColor: getFilterButtonColor('allStudents'),
+                  textColor: getFilterTextColor('allStudents'),
+                ),
+                FilterStudentsButton(
+                  filter: "Top Performers",
+                  onPressed: () => filterStudents('topPerformers'),
+                  backgroundColor: getFilterButtonColor('topPerformers'),
+                  textColor: getFilterTextColor('topPerformers'),
+                ),
+                FilterStudentsButton(
+                  filter: "Needs Support",
+                  onPressed: () => filterStudents('needSupport'),
+                  backgroundColor: getFilterButtonColor('needSupport'),
+                  textColor: getFilterTextColor('needSupport'),
+                ),
+                const SizedBox(height: 8),
+                // Scrollable Student List
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: studentList.isEmpty
+                          ? [const Text("No students in Class")]
+                          : List.generate(studentList.length, (index) {
+                              final student = studentList[index];
+                              final studentService =
+                                  StudentService(student: student);
+                              final lessonProgress =
+                                  studentService.getLessonProgress();
+                              final status = getStudentStatus(lessonProgress);
+                              final statusColor = getStatusColor(status);
+
+                              return GestureDetector(
+                                onTap: () => setSelectedStudent(index),
+                                child: ColoredPaddedContainer(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                  color: selectedStudentIndex == index
+                                      ? LightTheme()
+                                          .primaryBlue
+                                          .withValues(alpha: 0.2)
+                                      : Colors.transparent,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          student.profile.fullName,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey.shade500,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      ColoredPaddedContainer(
+                                        width: screenWidth * 0.06,
+                                        margin: EdgeInsets.zero,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 10,
+                                        ),
+                                        color:
+                                            statusColor.withValues(alpha: 0.3),
+                                        child: Text(
+                                          status.name.replaceAll('_', ' '),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: statusColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                flex: 5,
-                child: ShadowedContainer(
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 20),
+        // Right Panel - Student Details
+        Expanded(
+          flex: 5,
+          child: studentList.isEmpty
+              ? const Center(child: Text("No student selected"))
+              : ShadowedContainer(
                   padding: EdgeInsets.symmetric(
                     vertical: screenHeight * 0.02,
                     horizontal: screenWidth * 0.02,
@@ -186,311 +334,129 @@ class _StudentPerformaceState extends State<StudentPerformace> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        //Student and Lesson Info Row
+                        // Student Header with dynamic status color
                         Row(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  selectedStudent.profile.fullName,
-                                  style: TextStyles.containerTitle,
-                                ),
-                                Text(
-                                  "Current Lesson: ",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade400,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    selectedStudent.profile.fullName,
+                                    style: TextStyles.containerTitle,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    "Current Lesson: ${localAcademicService.getLessonName(selectedStudent.progress.substring(0, 5))}",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade400,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            const Spacer(),
+                            const SizedBox(width: 16),
                             ColoredPaddedContainer(
                               width: screenWidth * 0.08,
-                              margin: EdgeInsets.all(0),
-                              padding: EdgeInsets.symmetric(
+                              margin: EdgeInsets.zero,
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 16,
                               ),
-                              color: LightTheme()
-                                  .pastelGreen
+                              color: getStatusColor(
+                                      studentService.getStatusFromProgress())
                                   .withValues(alpha: 0.3),
                               child: Text(
-                                studentService.getStatusFromProgress().name,
+                                studentService
+                                    .getStatusFromProgress()
+                                    .name
+                                    .replaceAll('_', ' '),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: LightTheme().pastelGreen,
+                                  color: getStatusColor(
+                                      studentService.getStatusFromProgress()),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        //Progress Row
+                        const SizedBox(height: 40),
+                        // Progress sections with improved visual feedback
                         Row(
                           children: [
                             Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Lesson Progress",
-                                    style: TextStyles.containerTitle.copyWith(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Current Lesson",
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  LinearProgressIndicator(
-                                    backgroundColor: Colors.grey.shade300,
-                                    minHeight: 10,
-                                    borderRadius: BorderRadius.circular(10),
-                                    value: studentService.getLessonProgress(),
-                                  ),
-                                ],
+                              child: _buildProgressSection(
+                                "Lesson Progress",
+                                "Current Lesson",
+                                studentService.getLessonProgress(),
                               ),
                             ),
-                            const SizedBox(
-                              width: 50,
-                            ),
+                            const SizedBox(width: 50),
                             Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Overall Progress",
-                                    style: TextStyles.containerTitle.copyWith(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Course Completion",
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  LinearProgressIndicator(
-                                    backgroundColor: Colors.grey.shade300,
-                                    minHeight: 10,
-                                    borderRadius: BorderRadius.circular(10),
-                                    value: studentService.getOverallProgress(),
-                                  ),
-                                ],
+                              child: _buildProgressSection(
+                                "Overall Progress",
+                                "Course Completion",
+                                studentService.getOverallProgress(),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 40,
-                        ),
+                        const SizedBox(height: 40),
+                        // Recent Progress Section
                         Text(
                           "Recent Progress",
                           style: TextStyles.containerTitle,
                         ),
-                        ...actions.entries
-                            .map(
-                              (entry) => ColoredPaddedContainer(
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          entry.key,
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                        ...actions.entries.map(
+                          (entry) => ColoredPaddedContainer(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        entry.key,
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        Text(
-                                          entry.value,
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    CircleAvatar(
-                                      radius: 12,
-                                      backgroundColor: Colors.transparent,
-                                      child: Image.network(
-                                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
                                       ),
-                                    )
-                                  ],
+                                      Text(entry.value),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
+                                CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: Colors.transparent,
+                                  child: Image.network(
+                                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: TextButton(
                             onPressed: () {},
-                            child: Text(
-                              "See more",
-                            ),
+                            child: const Text("See more"),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-              )
-            ],
-          );
-  }
-
-  Iterable<Widget> showStudents(
-    List<Student> students,
-    double screenWidth,
-    double screenHeight,
-  ) {
-    if (students.isEmpty) {
-      students = [
-        Student(
-          studentId: "S123456",
-          email: "john.doe@example.com",
-          phoneNumber: "+1234567890",
-          age: 22,
-          knowledgeLevel: 3,
-          learningGoalPerDay: 5,
-          startingLevel: 1,
-          classRooms: ['tempClassId1_2025', 'tempClassId2_2025'],
-          progress: "A.1.2.6",
-          profile: ProfileData(
-            fullName: "John Doe",
-            username: "john_doe_25",
-            numberOfFollowers: 1500,
-            following: 180,
-            topAchievements: 5,
-            streak: 30,
-            totalProfit: 2500.75,
-            portfolioScore: 88.4,
-            averageMonthlyGrowth: 7.5,
-          ),
-          settings: SettingsData(
-            preferences: Preferences(
-              soundEffects: true,
-              audio: true,
-              darkMode: true,
-            ),
-            notifications: Notifications(
-              reminders: RemindersNotifications(
-                practiceEmail: true,
-                practicePhone: false,
-                weeklyProgress: true,
-                reminderTime: '07:30 AM',
-              ),
-              friends: FriendsNotifications(
-                newFollowerEmail: true,
-                newFollowerPhone: false,
-                friendActivityEmail: true,
-                friendActivityPhone: false,
-              ),
-              announcements: AnnouncementsNotifications(
-                marketingNotificationsEmail: true,
-                marketingNotificationsPhone: true,
-                educationalTipsEmail: false,
-                educationalTipsPhone: true,
-              ),
-            ),
-            privacySettings: PrivacySettings(publicProfile: true),
-          ),
         ),
-      ];
-    }
-
-    return List.generate(students.length, (index) {
-      print("****************Entered List Generate");
-      final student = students[index];
-      print("****************Student= ${student.profile.fullName}");
-      final StudentService studentService = StudentService(student: student);
-      print("****************Got studentService $studentService");
-      final lessonProgress = studentService.getLessonProgress();
-      print("************Retrieved lesson Progress $lessonProgress");
-
-      final unitProgress = studentService.getOverallProgress();
-      print("************Retrieved Unit Progress $unitProgress");
-
-      StudentStatus status;
-      Color progressColor;
-
-      if (lessonProgress > 1) {
-        status = StudentStatus.Ahead;
-        progressColor = LightTheme().primaryBlue;
-      } else if (lessonProgress > 0.6) {
-        status = StudentStatus.On_Track;
-        progressColor = LightTheme().pastelGreen;
-      } else {
-        status = StudentStatus.Behind;
-        progressColor = LightTheme().pastelRed;
-      }
-      print("************Retrieved status:${status.name}");
-      print("************Retrieved Color: $progressColor");
-
-      return GestureDetector(
-        onTap: () => setSelectedStudent(index),
-        child: ColoredPaddedContainer(
-          margin: EdgeInsets.symmetric(vertical: 5),
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-          color: selectedStudentIndex == index
-              ? LightTheme().primaryBlue.withValues(alpha: 0.2)
-              : Colors.transparent,
-          child: Row(
-            children: [
-              Text(
-                student.profile.fullName,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey.shade500,
-                ),
-              ),
-              const Spacer(),
-              ColoredPaddedContainer(
-                width: screenWidth * 0.06,
-                margin: EdgeInsets.zero,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 10,
-                ),
-                color: progressColor.withValues(alpha: 0.3),
-                child: Text(
-                  status.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: progressColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+      ],
+    );
   }
 }
 
@@ -498,26 +464,38 @@ class FilterStudentsButton extends StatelessWidget {
   const FilterStudentsButton({
     super.key,
     required this.filter,
+    required this.onPressed,
+    required this.backgroundColor,
+    required this.textColor,
   });
+
   final String filter;
+  final VoidCallback onPressed;
+  final Color backgroundColor;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      style: ButtonStyle(
-        padding: WidgetStatePropertyAll(
-          EdgeInsets.symmetric(
-            vertical: 15,
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TextButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+          padding: const MaterialStatePropertyAll(
+            EdgeInsets.symmetric(vertical: 15),
           ),
         ),
-      ),
-      child: Text(
-        filter,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.grey.shade500,
+        child: Text(
+          filter,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
         ),
       ),
     );

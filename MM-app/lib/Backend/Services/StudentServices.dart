@@ -9,17 +9,19 @@ class StudentService {
   final Student student;
   List<String> progress = [];
   LocalAcademicService _localAcademicService = LocalAcademicService();
-  init() {
+
+  void init() {
     progress = student.progress.split(".");
   }
 
   double getOverallProgress() {
+    init();
     int totalComponents = _localAcademicService
         .getUnitTotalComponents("${progress[0]}.${progress[1]}");
     int completedComponents = 0;
     int currentUnit = int.parse(progress[1]);
     int currentLesson = int.parse(progress[2]);
-    //Iterate through all previous lessons to get their total components.
+
     for (int i = 1; i <= currentUnit; i++) {
       Unit _u = _localAcademicService.getUnit("${progress[0]}.$i");
       if (i != currentUnit) {
@@ -28,26 +30,26 @@ class StudentService {
           completedComponents += _l.totalComponents;
         }
       } else {
-        //Goign through all lessons in current unit but before current lesson.
         for (int j = 1; j < currentLesson; j++) {
           Lesson _l = _localAcademicService.getLesson("${progress[0]}.$i.$j");
           completedComponents += _l.totalComponents;
         }
       }
     }
-    //Add current lesson's completed
     completedComponents += int.parse(progress[3]);
     return completedComponents / totalComponents;
   }
 
+  double getLessonProgressForStudent(Student student) {
+    List<String> studentProgress = student.progress.split(".");
+    Lesson currentLesson = _localAcademicService.getLesson(
+        "${studentProgress[0]}.${studentProgress[1]}.${studentProgress[2]}");
+    return (int.parse(studentProgress[3]) / currentLesson.totalComponents);
+  }
+
   double getLessonProgress() {
-    print("****************Entered getLessonProgress");
     init();
-    //Getting current Lesson
-    Lesson _currentLesson = _localAcademicService
-        .getLesson("${progress[0]}.${progress[1]}.${progress[2]}");
-    //Dividing the current progress from total number of Components in that particular lesson
-    return int.parse(progress[3]) / _currentLesson.totalComponents;
+    return getLessonProgressForStudent(student);
   }
 
   StudentStatus getStatusFromProgress() {
@@ -59,5 +61,26 @@ class StudentService {
     } else {
       return StudentStatus.Behind;
     }
+  }
+
+  Map<String, List<Student>> getCategorizedStudents(
+      List<Student> classStudents) {
+    Map<String, List<Student>> categorizedSt = {
+      'topPeformers': [],
+      'needSupport': [],
+    };
+
+    for (Student st in classStudents) {
+      // Use the student-specific progress checker for each student
+      double studentProgress = getLessonProgressForStudent(st);
+
+      if (studentProgress > 0.9) {
+        categorizedSt['topPeformers']?.add(st);
+      } else if (studentProgress <= 0.6) {
+        categorizedSt['needSupport']?.add(st);
+      }
+    }
+
+    return categorizedSt;
   }
 }
