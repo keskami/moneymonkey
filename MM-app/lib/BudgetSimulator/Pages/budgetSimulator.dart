@@ -416,6 +416,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                             screenHeightUnit,
                                                         screenWidthUnit:
                                                             screenWidthUnit,
+                                                            types: types,
                                                       ));
                                                     },
                                                   );
@@ -432,7 +433,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                       style: GoogleFonts.baloo2(
                                                         fontSize:
                                                             screenWidthUnit *
-                                                                16,
+                                                                18,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                         color: Colors.white,
@@ -445,13 +446,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     Icon(
                                                       Icons.arrow_forward_ios,
                                                       size:
-                                                          screenWidthUnit * 13,
+                                                          screenWidthUnit * 15,
                                                       color: Colors.white,
                                                     ),
                                                     Icon(
                                                       Icons.arrow_forward_ios,
                                                       size:
-                                                          screenWidthUnit * 13,
+                                                          screenWidthUnit * 15,
                                                       color: Colors.white,
                                                     ),
                                                   ],
