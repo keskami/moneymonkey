@@ -49,7 +49,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 344 * widget.screenHeightUnit,
+      height: 314 * widget.screenHeightUnit,
       width: 470 * widget.screenWidthUnit,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -64,7 +64,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(
-              widget.screenWidthUnit * 24,
+              widget.screenWidthUnit * 20,
               widget.screenHeightUnit * 8,
               0,
               widget.screenHeightUnit * 8,
@@ -87,7 +87,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: 270 * widget.screenHeightUnit,
+                height: 240 * widget.screenHeightUnit,
                 width: 350 * widget.screenHeightUnit,
                 child: SfCircularChart(
                   annotations: <CircularChartAnnotation>[
@@ -113,7 +113,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
                 ),
               ),
               Container(
-                height: 260 * widget.screenHeightUnit,
+                height: 225 * widget.screenHeightUnit,
                 width: 300 * widget.screenHeightUnit,
                 child: SingleChildScrollView(
                   child: Column(
@@ -162,8 +162,8 @@ class SpendingSidePart extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: screenHeightUnit * 25,
-            width: screenHeightUnit * 25,
+            height: screenHeightUnit * 23,
+            width: screenHeightUnit * 23,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: color,
@@ -175,7 +175,7 @@ class SpendingSidePart extends StatelessWidget {
           Text(
             type,
             style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 24,
+              fontSize: screenHeightUnit * 22,
               fontWeight: FontWeight.w600,
               color: Colors.black,
             ),
@@ -184,7 +184,7 @@ class SpendingSidePart extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: screenWidthUnit * 15),
             child: Text("$percentage%", style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 24,
+              fontSize: screenHeightUnit * 22,
               color: Colors.black,
               fontWeight: FontWeight.w600
             ),),
