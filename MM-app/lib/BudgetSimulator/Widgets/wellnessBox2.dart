@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class WellnessBox extends StatefulWidget {
+class WellnessBox2 extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
   final double wellnessScore;
 
-  WellnessBox(
+  WellnessBox2(
       {required this.screenHeightUnit,
       required this.screenWidthUnit,
       required this.wellnessScore});
 
   @override
-  _WellnessBoxState createState() => _WellnessBoxState();
+  _WellnessBox2State createState() => _WellnessBox2State();
 }
 
-class _WellnessBoxState extends State<WellnessBox> {
+class _WellnessBox2State extends State<WellnessBox2> {
   final List<Color> sectionColors = [
     Colors.red,
     Color.fromRGBO(251, 176, 59, 1),
@@ -44,27 +44,23 @@ class _WellnessBoxState extends State<WellnessBox> {
     });
 
     return Container(
-      height: widget.screenHeightUnit * 190,
-      width: widget.screenWidthUnit * 470,
+      height: widget.screenHeightUnit * 260,
+      width: widget.screenWidthUnit * 440,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Colors.black,
-          width: widget.screenWidthUnit,
-        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(widget.screenWidthUnit * 16,
+            padding: EdgeInsets.fromLTRB(widget.screenWidthUnit * 20,
                 widget.screenHeightUnit * 8, 0, widget.screenHeightUnit * 8),
             child: Text(
               "Wellness Score",
               style: GoogleFonts.baloo2(
-                  fontSize: widget.screenHeightUnit * 34,
+                  fontSize: widget.screenHeightUnit * 38,
                   fontWeight: FontWeight.w600,
                   color: Colors.black),
             ),
@@ -83,13 +79,13 @@ class _WellnessBoxState extends State<WellnessBox> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          widget.screenWidthUnit * 25, widget.screenHeightUnit * 10, 0, 0),
+                      padding: EdgeInsets.fromLTRB(widget.screenWidthUnit * 25,
+                          widget.screenHeightUnit * 15, 0, 0),
                       child: Row(
                         children: [
                           Text('${widget.wellnessScore}',
                               style: GoogleFonts.baloo2(
-                                fontSize: widget.screenWidthUnit * 50,
+                                fontSize: widget.screenWidthUnit * 54,
                                 fontWeight: FontWeight.w600,
                                 color: widget.wellnessScore >
                                         ((max - min) / numberOfSections) * 4
@@ -112,12 +108,12 @@ class _WellnessBoxState extends State<WellnessBox> {
                               textAlign: TextAlign.start),
                           Padding(
                             padding: EdgeInsets.only(
-                              top: widget.screenHeightUnit * 32,
+                              top: widget.screenHeightUnit * 34,
                             ),
                             child: Text(
                               '/1000',
                               style: GoogleFonts.baloo2(
-                                fontSize: widget.screenWidthUnit * 30,
+                                fontSize: widget.screenWidthUnit * 34,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -128,12 +124,12 @@ class _WellnessBoxState extends State<WellnessBox> {
                 ],
               ),
               SizedBox(
-                width: widget.screenWidthUnit * 50,
+                width: widget.screenWidthUnit * 30,
               ),
               Padding(
-                padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),
+                padding: EdgeInsets.only(top: widget.screenHeightUnit * 70),
                 child: Container(
-                  height: widget.screenHeightUnit * 80,
+                  height: widget.screenHeightUnit * 115,
                   width: widget.screenWidthUnit * 220,
                   child: SfRadialGauge(
                     animationDuration: 1000,

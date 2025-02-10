@@ -327,7 +327,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                       APY: widget.APY,
                                       checkingTransfer: checkingTransfer,
                                       savingsTransfer: savingsTransfer,
-                                      
                                     )
                                   : Container(),
                             )),
@@ -416,15 +415,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
-                                                      return AlertDialog(
-                                                          content:
-                                                              Allocatefunding(
-                                                        screenHeightUnit:
-                                                            screenHeightUnit,
-                                                        screenWidthUnit:
-                                                            screenWidthUnit,
-                                                        types: types,
-                                                      ));
+                                                      return Dialog(
+                                                        backgroundColor: Colors
+                                                            .transparent, // Remove background color
+                                                        child: Allocatefunding(
+                                                          screenHeightUnit:
+                                                              screenHeightUnit,
+                                                          screenWidthUnit:
+                                                              screenWidthUnit,
+                                                          types: types,
+                                                          wellnessScore: wellnessScore,
+                                                        ),
+                                                      );
                                                     },
                                                   );
                                                 },
@@ -979,7 +981,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 WellnessBox(
                                   screenHeightUnit: screenHeightUnit,
                                   screenWidthUnit: screenWidthUnit,
-                                   wellnessScore: wellnessScore,
+                                  wellnessScore: wellnessScore,
                                 ),
                                 SizedBox(
                                   height: screenHeightUnit * 15,
