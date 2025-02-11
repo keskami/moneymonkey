@@ -1,6 +1,4 @@
 import 'package:money_monkey/Backend/Models/settings.dart';
-import 'package:money_monkey/Lesson%20Flow/controller/controller.dart';
-import 'package:money_monkey/TeacherDashboard/Backend/SampleSyllabusFile.dart';
 
 enum StudentStatus {
   Behind,
@@ -66,7 +64,7 @@ class Student {
       'Knowledge Level': knowledgeLevel,
       'Learning Goal Per Day': learningGoalPerDay,
       'Starting Level': startingLevel,
-      'ClassRooms': classRooms ?? [],
+      'ClassRooms': classRooms,
       'progress': progress,
       'Profile': profile.toFirestore(),
       'Settings': settings.toFirestore(),

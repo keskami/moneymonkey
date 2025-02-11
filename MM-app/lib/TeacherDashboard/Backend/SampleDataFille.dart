@@ -14,28 +14,28 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Financial Basics 101",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S123456", "S789012", "S345678"],
-    lessonId: 'A.1.1.5',
+    lessonId: 'A.1.1',
   ),
   'tempClassId2_2025': Classroom(
     classId: 'tempClassId2_2025',
     name: "Investment Fundamentals",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S567890", "S123456"],
-    lessonId: 'A.1.1.5',
+    lessonId: 'A.1.1',
   ),
   'tempClassId3_2025': Classroom(
     classId: 'tempClassId3_2025',
     name: "Advanced Trading",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S789012"],
-    lessonId: 'A.1.2.5',
+    lessonId: 'A.1.2',
   ),
   'tempClassId4_2025': Classroom(
     classId: 'tempClassId4_2025',
     name: "Personal Finance",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S567890", "S345678"],
-    lessonId: 'A.1.3.5',
+    lessonId: 'A.1.3',
   ),
 };
 List<Student> sampleStudents = [
@@ -304,6 +304,11 @@ Map<String, Component> advancedComponents = {
         title: 'Deep Dive on Concept $j of Fundamentals Topic $i',
         type: ComponentType.concept,
         componentStatus: Status.Active,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
       ),
   for (int i = 1; i <= 8; i++)
     for (int j = 1; j <= 5; j++)

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
+import 'package:money_monkey/Backend/Services/StudentServices.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
@@ -8,13 +11,96 @@ import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class DashboardOverview extends StatefulWidget {
-  const DashboardOverview({super.key});
-
+  const DashboardOverview({
+    super.key,
+    required this.supportStudents,
+    required this.topPerformers,
+    required this.components,
+    required this.currentLessonId,
+  });
+  final List<Student> topPerformers;
+  final List<Student> supportStudents;
+  final List<String> components;
+  final String currentLessonId;
   @override
   State<DashboardOverview> createState() => _DashboardOverviewState();
 }
 
 class _DashboardOverviewState extends State<DashboardOverview> {
+  final LocalAcademicService localAcademicService = LocalAcademicService();
+  final TeacherDashboardController teacherDashboardController = Get.find();
+  Map<String, String> componentMap = {}; // ID to Name mapping
+  String selectedComponentId = '';
+  List<String> componentNames = []; // List of component names for dropdown
+  Map<String, List<String>> discussionQuestions =
+      {}; // Store discussion questions
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDiscussionQuestions();
+    // Listen to class changes
+    ever(teacherDashboardController.classId, (_) {
+      initializeDiscussionQuestions();
+    });
+  }
+
+  void initializeDiscussionQuestions() {
+    if (widget.components.isNotEmpty) {
+      // Clear previous data
+      componentMap.clear();
+      componentNames.clear();
+
+      setState(() {
+        for (String componentId in widget.components) {
+          try {
+            String componentName =
+                localAcademicService.getComponentName(componentId);
+            componentMap[componentId] = componentName;
+            componentNames.add(componentName);
+          } catch (e) {
+            print('Error getting component name for $componentId: $e');
+          }
+        }
+        // Set initial selected component
+        if (componentMap.isNotEmpty) {
+          selectedComponentId = widget.components.first;
+        }
+        // Fetch new discussion questions for current lesson
+        discussionQuestions = localAcademicService
+            .getComponentDiscussionQuestionsForLesson(widget.currentLessonId);
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(DashboardOverview oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Check if components or lessonId changed
+    if (oldWidget.components != widget.components ||
+        oldWidget.currentLessonId != widget.currentLessonId) {
+      initializeDiscussionQuestions();
+    }
+  }
+
+  void onDiscussionComponentChanged(String? componentName) {
+    if (componentName != null) {
+      // Find the component ID for the selected name
+      String? selectedId = componentMap.entries
+          .firstWhere(
+            (entry) => entry.value == componentName,
+            orElse: () => MapEntry('', ''),
+          )
+          .key;
+
+      if (selectedId.isNotEmpty) {
+        setState(() {
+          selectedComponentId = selectedId;
+        });
+      }
+    }
+  }
+
   final String teacherName = "Mrs. Anderson";
   final String progressStatus = "In-progress";
   final String message1 = "Financial Responsibility Over a Lifetime ";
@@ -32,6 +118,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     "Start “Emergency Fun Challenge”",
     "Begin “Spending Decisions Quiz”",
   ];
+  List<String> componentIds = [];
   final List<List<String>> componentsList = [
     ["Recap", "100"],
     ["Concept 1", "100"],
@@ -44,93 +131,13 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     ["Toolkit", "0"],
     ["Quiz", "0"],
   ];
-  final List<List<String>> topPerformerStudents = [
-    [
-      "Kid 1",
-      "98",
-    ],
-    [
-      "Kid 2",
-      "98",
-    ],
-  ];
-  final List<List<String>> supportStudents = [
-    [
-      "Kid 1",
-      "34",
-    ],
-    [
-      "Kid 2",
-      "12",
-    ],
-  ];
-  final TeacherDashboardController teacherDashboardController = Get.find();
+
   final List<Color> randomColorList = [
     Color.fromARGB(255, 122, 180, 255),
     Color.fromARGB(255, 189, 122, 255),
     Color.fromARGB(255, 123, 255, 169),
   ];
-  final Map<String, List<String>> discussionQuestions = {
-    "Recap": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Concept 1": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Interactive Activity 1": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Concept 2": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Interactive Activity 2": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Story": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Scenario Simulation": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Peer Reflection": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Toolkit": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Quiz": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-  };
   String discussionComponent = "Concept 2";
-  //handles Change in selecting another Lesson Component to get discussion questions for
-  void onDiscussionComponentChanged(String? lesson) {
-    if (lesson != null) {
-      setState(() {
-        discussionComponent = lesson;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -315,6 +322,8 @@ class _DashboardOverviewState extends State<DashboardOverview> {
           ),
           //Discussion Container
           ShadowedContainer(
+            width: double.infinity,
+            height: screenHeight * 0.3,
             margin: EdgeInsets.symmetric(
               vertical: screenHeight * 0.02,
             ),
@@ -330,45 +339,41 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   style: TextStyles.containerTitle,
                 ),
                 CustomDropDownContainer(
-                  initialSelection: discussionComponent,
-                  width: screenWidth * 0.15,
-                  items: componentsList
-                      .map(
-                        (e) => e[0],
-                      )
-                      .toList(),
+                  initialSelection: componentMap[selectedComponentId] ?? '',
+                  width: screenWidth * 0.3,
+                  items: componentNames,
                   onChanged: onDiscussionComponentChanged,
                 ).marginSymmetric(
                   vertical: screenHeight * 0.01,
                 ),
-                ...discussionQuestions[discussionComponent]!
-                    .map((question) => Container(
-                          margin: EdgeInsets.symmetric(
-                            vertical: screenHeight * 0.01,
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: screenHeight * 0.015,
-                            horizontal: screenWidth * 0.02,
-                          ),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.blue.withValues(alpha: 0.1),
-                          ),
-                          child: Text(
-                            question,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue.shade700,
+                if (discussionQuestions.containsKey(selectedComponentId))
+                  ...discussionQuestions[selectedComponentId]!
+                      .map((question) => Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: screenHeight * 0.01,
                             ),
-                          ),
-                        ))
-                    .toList(),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.01,
+                              vertical: screenHeight * 0.02,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.blue.withValues(alpha: 0.1),
+                            ),
+                            child: Text(
+                              question,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                          ))
+                      .toList(),
               ],
             ),
           ),
-
-          //Performance Highlights Container
+//Performance Highlights Container
           ShadowedContainer(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
@@ -376,7 +381,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
               horizontal: screenWidth * 0.01,
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -388,12 +393,12 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 ),
                 Flex(
                   direction: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //Top Performers Container
                     Container(
                       width: screenWidth * 0.2,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
@@ -407,18 +412,18 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...topPerformerStudents.map(
+                          ...widget.topPerformers.map(
                             (student) => Row(
                               children: [
                                 Text(
-                                  student[0],
+                                  student.profile.fullName,
                                   style: TextStyle(
                                     fontSize: 15,
                                   ),
                                 ),
                                 const Spacer(),
                                 Text(
-                                  "${student[1]}%",
+                                  "${StudentService(student: student).getLessonProgress()}%",
                                   style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.green,
@@ -453,18 +458,18 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...supportStudents.map(
+                          ...widget.supportStudents.map(
                             (student) => Row(
                               children: [
                                 Text(
-                                  student[0],
+                                  student.profile.fullName,
                                   style: TextStyle(
                                     fontSize: 15,
                                   ),
                                 ),
                                 const Spacer(),
                                 Text(
-                                  "${student[1]}%",
+                                  "${StudentService(student: student).getLessonProgress()}%",
                                   style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.red,

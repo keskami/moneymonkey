@@ -80,6 +80,15 @@ class LocalAcademicService {
         _lessons = lessons ?? advancedLessons,
         _components = components ?? advancedComponents;
 
+  // Get all classes mapped by their IDs and names
+  Map<String, String> getAllClassrooms() {
+    return Map.fromEntries(
+      _classrooms.entries.map(
+        (entry) => MapEntry(entry.key, entry.value.name),
+      ),
+    );
+  }
+
   Classroom getClassRoom(String classRoomId) {
     final classroom = _classrooms[classRoomId];
     if (classroom == null) throw Exception('Classroom not found: $classRoomId');
@@ -96,6 +105,13 @@ class LocalAcademicService {
     final lesson = _lessons[lessonId];
     if (lesson == null) throw Exception('Lesson not found: $lessonId');
     return lesson;
+  }
+
+  Component getComponent(String componentId) {
+    print("___________Entered getComponent _component: $_components");
+    final component = _components[componentId];
+    if (component == null) throw Exception('Component not found: $componentId');
+    return component;
   }
 
   String getLessonName(String lessonId) {
@@ -127,12 +143,6 @@ class LocalAcademicService {
     }
 
     throw Exception('No next lesson found');
-  }
-
-  Component getComponent(String componentId) {
-    final component = _components[componentId];
-    if (component == null) throw Exception('Component not found: $componentId');
-    return component;
   }
 
   String getActiveComponentStatus(String componentId) {
@@ -171,5 +181,59 @@ class LocalAcademicService {
       totalComponents += _lesson.totalComponents;
     });
     return totalComponents;
+  }
+
+  List<String> getLessonComponents(String lessonId) {
+    print('*****Lesson Id:$lessonId');
+    try {
+      final lesson = getLesson(lessonId);
+      return lesson.components.entries
+          .map((component) => component.key)
+          .toList();
+    } catch (e) {
+      print('Error getting lesson components by type: $e');
+      return [];
+    }
+  }
+
+  // Get discussion questions for a component
+  Map<String, List<String>> getComponentDiscussionQuestionsForLesson(
+      String lessonId) {
+    print("______________Entered Component Questions For Lesson");
+    try {
+      final lesson = getLesson(lessonId);
+      print("______________Got Lesson $lesson \n");
+      Map<String, List<String>> questionsMap = {};
+
+      for (String componentId in lesson.components.keys) {
+        print('Component Id: $componentId]/n/n/n/n/n');
+        try {
+          Component component = getComponent(componentId);
+          print("******************Got Component ${component.title}");
+          print(
+              "******************Got Component ${component.discussionQuestions}");
+          print(
+              "______________Got Component Questions: ${component.discussionQuestions}\n");
+          if (component.discussionQuestions != null) {
+            print(
+                "*********Discussion Questions for ${component.title} are ${component.discussionQuestions}");
+            questionsMap[componentId] = component.discussionQuestions!;
+          }
+        } catch (e) {
+          print(
+              'Error getting discussion questions for component $componentId: $e');
+        }
+      }
+      print("Questions Map: $questionsMap");
+      return questionsMap;
+    } catch (e) {
+      print('Error getting lesson discussion questions: $e');
+      return {};
+    }
+  }
+
+  String getComponentName(String componentId) {
+    Component _component = getComponent(componentId);
+    return _component.title;
   }
 }

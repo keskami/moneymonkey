@@ -9,8 +9,15 @@ import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class ClassroomPreferences extends StatefulWidget {
-  const ClassroomPreferences({super.key});
-
+  const ClassroomPreferences({
+    super.key,
+    required this.supportStudentsCount,
+    required this.topPerformersCounts,
+    required this.totalStudentsCount,
+  });
+  final int totalStudentsCount;
+  final int supportStudentsCount;
+  final int topPerformersCounts;
   @override
   State<ClassroomPreferences> createState() => _ClassroomPreferencesState();
 }
@@ -213,7 +220,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                               ),
                             ),
                             Text(
-                              "6",
+                              widget.topPerformersCounts.toString(),
                               style: TextStyles.containerTitle.copyWith(
                                 fontSize: 30,
                                 color: LightTheme().pastelGreen,
@@ -248,7 +255,10 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                               ),
                             ),
                             Text(
-                              "12",
+                              (widget.totalStudentsCount -
+                                      (widget.topPerformersCounts +
+                                          widget.supportStudentsCount))
+                                  .toString(),
                               style: TextStyles.containerTitle.copyWith(
                                 fontSize: 30,
                                 color: Colors.blue,
@@ -283,7 +293,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                               ),
                             ),
                             Text(
-                              "6",
+                              widget.supportStudentsCount.toString(),
                               style: TextStyles.containerTitle.copyWith(
                                 fontSize: 30,
                                 color: Colors.orange,

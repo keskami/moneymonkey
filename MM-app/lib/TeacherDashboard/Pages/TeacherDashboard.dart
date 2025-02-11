@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
+import 'package:money_monkey/Backend/Services/StudentServices.dart';
 import 'package:money_monkey/Backend/Services/TeacherServices.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
@@ -27,8 +29,13 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
       TeacherService(currentTeacher: sampleTeacher);
   LocalAcademicService localAcademicService = LocalAcademicService();
   List<Student> classRoomStudents = [];
+  List<Student> topPerformers = [];
+  List<Student> supportStudents = [];
   String selectedClassId = "";
+  late Classroom selectedClass;
   late Map<String, String> classes;
+  //ids of all child Components
+  late List<String> childComponents;
 
   String getClassId(String className) {
     if (classes.isNotEmpty) {
@@ -47,12 +54,17 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
       teacherDashboardController.classId.value = selectedClassId;
       print("************Retrieved Id: $selectedClassId");
       setState(() {
-        print(
-            "************Retrieved Students: ${_teacherService.getClassStudents(selectedClassId)}");
-
         classRoomStudents = _teacherService.getClassStudents(selectedClassId);
+        getCategorizedStudents();
+        getClassroom();
+        getComponents();
       });
     }
+  }
+
+  void getClassroom() {
+    selectedClass = localAcademicService.getClassRoom(selectedClassId);
+    print("******Retrieved Classroom ${selectedClass.lessonId}");
   }
 
   void getClasses() {
@@ -61,6 +73,25 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         (entry) => MapEntry(entry.key, entry.value.name),
       ),
     );
+  }
+
+  void getComponents() {
+    if (selectedClassId.isNotEmpty) {
+      childComponents =
+          localAcademicService.getLessonComponents(selectedClass.lessonId);
+    }
+    print("********Components: $childComponents");
+  }
+
+  void getCategorizedStudents() {
+    Map<String, List<Student>> categorizedSt =
+        StudentService(student: classRoomStudents[0])
+            .getCategorizedStudents(classRoomStudents);
+    setState(() {
+      topPerformers = categorizedSt['topPeformers']?.toList() ?? [];
+      supportStudents = categorizedSt['needSupport']?.toList() ?? [];
+      print("********Retrieved categorized students $topPerformers");
+    });
   }
 
   @override
@@ -110,14 +141,27 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             else {
               switch (teacherDashboardController.pageIndex.value) {
                 case 0:
-                  return DashboardOverview();
+                  return DashboardOverview(
+                    supportStudents: supportStudents,
+                    topPerformers: topPerformers,
+                    components: childComponents,
+                    currentLessonId: selectedClass.lessonId,
+                  );
                 case 1:
                   return LessonManagement();
                 case 2:
                   print("************Sending Students $classRoomStudents");
-                  return StudentPerformance(classStudents: classRoomStudents);
+                  return StudentPerformance(
+                    classStudents: classRoomStudents,
+                    topPerformers: topPerformers,
+                    supportStudents: supportStudents,
+                  );
                 default:
-                  return ClassroomPreferences();
+                  return ClassroomPreferences(
+                    supportStudentsCount: supportStudents.length,
+                    topPerformersCounts: topPerformers.length,
+                    totalStudentsCount: classRoomStudents.length,
+                  );
               }
             }
           }),

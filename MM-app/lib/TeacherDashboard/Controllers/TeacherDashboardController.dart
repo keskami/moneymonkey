@@ -37,4 +37,6 @@ class TeacherDashboardController extends GetxController {
       return "Start";
     }
   }
+
+  getComponentProgress(String key) {}
 }

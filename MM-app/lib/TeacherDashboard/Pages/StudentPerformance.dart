@@ -11,8 +11,12 @@ class StudentPerformance extends StatefulWidget {
   const StudentPerformance({
     super.key,
     required this.classStudents,
+    required this.topPerformers,
+    required this.supportStudents,
   });
   final List<Student> classStudents;
+  final List<Student> topPerformers;
+  final List<Student> supportStudents;
   @override
   State<StudentPerformance> createState() => _StudentPerformanceState();
 }
@@ -57,7 +61,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
         selectedStudent = widget.classStudents[0];
         selectedStudentIndex = 0;
         studentService = StudentService(student: selectedStudent);
-        getCategorizedStudents();
+        topPerformers = widget.topPerformers;
+        supportStudents = widget.supportStudents;
       });
     } else {
       setState(() {
@@ -69,15 +74,15 @@ class _StudentPerformanceState extends State<StudentPerformance> {
     }
   }
 
-  void getCategorizedStudents() {
-    Map<String, List<Student>> categorizedSt =
-        StudentService(student: selectedStudent)
-            .getCategorizedStudents(widget.classStudents);
-    setState(() {
-      topPerformers = categorizedSt['topPeformers']?.toList() ?? [];
-      supportStudents = categorizedSt['needSupport']?.toList() ?? [];
-    });
-  }
+  // void getCategorizedStudents() {
+  //   Map<String, List<Student>> categorizedSt =
+  //       StudentService(student: selectedStudent)
+  //           .getCategorizedStudents(widget.classStudents);
+  //   setState(() {
+  //     topPerformers = categorizedSt['topPeformers']?.toList() ?? [];
+  //     supportStudents = categorizedSt['needSupport']?.toList() ?? [];
+  //   });
+  // }
 
   void setSelectedStudent(int index) {
     if (index >= 0 && index < studentList.length) {
