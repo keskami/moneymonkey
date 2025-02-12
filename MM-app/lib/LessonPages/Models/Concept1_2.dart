@@ -5,6 +5,7 @@ enum QuestionType {
   lerningCheck,
   scenario,
   keyTakeaways,
+  revealCardStory,
 }
 
 extension QuestionTypeExtension on QuestionType {
