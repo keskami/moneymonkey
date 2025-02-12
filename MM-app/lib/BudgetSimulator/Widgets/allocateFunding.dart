@@ -11,20 +11,22 @@ class Allocatefunding extends StatefulWidget {
   final double screenWidthUnit;
   final List<String> types;
   final double wellnessScore;
+  int checkingAccountBalance;
+  int creditCardDebt;
 
-  Allocatefunding({
-    required this.screenHeightUnit,
-    required this.screenWidthUnit,
-    required this.types,
-    required this.wellnessScore,
-  });
+  Allocatefunding(
+      {required this.screenHeightUnit,
+      required this.screenWidthUnit,
+      required this.types,
+      required this.wellnessScore,
+      required this.checkingAccountBalance,
+      required this.creditCardDebt});
 
   @override
   _AllocatefundingState createState() => _AllocatefundingState();
 }
 
 class _AllocatefundingState extends State<Allocatefunding> {
-  int RemainingFunds = 1000;
   int toCredCardDebt = 0;
   int toEntertainment = 0;
   int toFitness = 0;
@@ -58,12 +60,107 @@ class _AllocatefundingState extends State<Allocatefunding> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: widget.screenHeightUnit * 270,
-                        width: widget.screenWidthUnit * 470,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
+                          height: widget.screenHeightUnit * 270,
+                          width: widget.screenWidthUnit * 470,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: widget.screenWidthUnit * 30,
+                                      top: widget.screenHeightUnit * 25),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.account_balance,
+                                        size: widget.screenHeightUnit * 48,
+                                        color: Colors.black,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: widget.screenWidthUnit * 10,
+                                              top: widget.screenHeightUnit * 5),
+                                          child: Text(
+                                            "Overview",
+                                            style: GoogleFonts.baloo2(
+                                                fontSize:
+                                                    widget.screenHeightUnit *
+                                                        38,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black),
+                                          )),
+                                    ],
+                                  )),
+                              SizedBox(height: widget.screenHeightUnit * 8),
+                              Container(
+                                  height: widget.screenHeightUnit * 1,
+                                  width: widget.screenWidthUnit * 470,
+                                  color: Colors.black),
+                              SizedBox(height: widget.screenHeightUnit * 25),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Total to spend",
+                                        style: GoogleFonts.baloo2(
+                                            fontSize:
+                                                widget.screenHeightUnit * 25,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                108, 108, 108, 1)),
+                                      ),
+                                      SizedBox(
+                                          height: widget.screenHeightUnit * 5),
+                                      Text(
+                                        "\$${widget.checkingAccountBalance}",
+                                        style: GoogleFonts.baloo2(
+                                            fontSize:
+                                                widget.screenHeightUnit * 65,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(0, 0, 0, 1)),
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Credit Debt",
+                                        style: GoogleFonts.baloo2(
+                                            fontSize:
+                                                widget.screenHeightUnit * 25,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                108, 108, 108, 1)),
+                                      ),
+                                      SizedBox(
+                                          height: widget.screenHeightUnit * 5),
+                                      Text(
+                                        "-\$${widget.creditCardDebt}",
+                                        style: GoogleFonts.baloo2(
+                                            fontSize:
+                                                widget.screenHeightUnit * 65,
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Color.fromRGBO(243, 52, 52, 1)),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          )),
                       SizedBox(
                         width: widget.screenWidthUnit * 10,
                       ),
@@ -136,7 +233,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           if (toEntertainment > 0) {
                                             setState(() {
                                               toEntertainment -= 10;
-                                              RemainingFunds += 10;
+                                              widget.checkingAccountBalance += 10;
                                             });
                                           }
                                         },
@@ -179,10 +276,10 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          if (RemainingFunds > 10) {
+                                          if (widget.checkingAccountBalance > 10) {
                                             setState(() {
                                               toEntertainment += 10;
-                                              RemainingFunds -= 10;
+                                              widget.checkingAccountBalance -= 10;
                                             });
                                           }
                                         },
@@ -237,7 +334,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           if (toFitness > 0) {
                                             setState(() {
                                               toFitness -= 10;
-                                              RemainingFunds += 10;
+                                              widget.checkingAccountBalance += 10;
                                             });
                                           }
                                         },
@@ -280,14 +377,12 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          if(RemainingFunds > 0){
+                                          if (widget.checkingAccountBalance > 0) {
                                             setState(() {
-                                            toFitness += 10;
-                                            RemainingFunds -= 10;
-                                          });
-
+                                              toFitness += 10;
+                                              widget.checkingAccountBalance -= 10;
+                                            });
                                           }
-                                          
                                         },
                                         child: Container(
                                           width: 50 * widget.screenHeightUnit,
@@ -372,8 +467,9 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                   onTap: () {
                                     if (toCredCardDebt > 0) {
                                       setState(() {
+                                        widget.creditCardDebt += 10;
+                                        widget.checkingAccountBalance += 10;
                                         toCredCardDebt -= 10;
-                                        RemainingFunds += 10;
                                       });
                                     }
                                   },
@@ -411,14 +507,13 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    if(RemainingFunds > 0){
+                                    if (widget.checkingAccountBalance > 0) {
                                       setState(() {
-                                      toCredCardDebt += 10;
-                                      RemainingFunds -= 10;
-                                    });
-
+                                        toCredCardDebt += 10;
+                                        widget.checkingAccountBalance -= 10;
+                                        widget.creditCardDebt -= 10;
+                                      });
                                     }
-                                    
                                   },
                                   child: Container(
                                     width: 70 * widget.screenHeightUnit,
@@ -547,7 +642,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                         width: widget.screenWidthUnit * 100,
                       ),
                       Text(
-                        "$RemainingFunds",
+                        "$widget.creditCardDebt",
                         style: GoogleFonts.baloo2(
                           fontSize: widget.screenWidthUnit * 45,
                           color: Colors.black,
@@ -591,7 +686,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                   if (prices[i] > 0) {
                                     setState(() {
                                       prices[i] -= 10;
-                                      RemainingFunds += 10;
+                                      widget.creditCardDebt += 10;
                                     });
                                   }
                                 },
@@ -634,7 +729,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                 onTap: () {
                                   setState(() {
                                     prices[i] += 10;
-                                    RemainingFunds -= 10;
+                                    widget.creditCardDebt -= 10;
                                   });
                                 },
                                 child: Container(

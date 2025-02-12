@@ -54,6 +54,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   double totalSpending = 0;
   bool smallBoxes = true;
   double wellnessScore = 675;
+  int checkingAccountBalance = 600;
 
   double checkingTransfer = 300;
   double savingsTransfer = -300;
@@ -425,6 +426,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                               screenWidthUnit,
                                                           types: types,
                                                           wellnessScore: wellnessScore,
+                                                          checkingAccountBalance: checkingAccountBalance,
+                                                          creditCardDebt: widget.creditCardDebt as int,
                                                         ),
                                                       );
                                                     },
