@@ -15,7 +15,6 @@ class Allocatefunding extends StatefulWidget {
   int creditCardDebt;
   int savingsAccountBalance;
   List<Expense> expenses;
- 
 
   Allocatefunding({
     required this.screenHeightUnit,
@@ -42,29 +41,28 @@ class Allocatefunding extends StatefulWidget {
   Future<void> getOutOfs() async {
     for (var expense in expenses) {
       switch (expense.name) {
-      case 'Rent':
-        rentOutOf = expense.amount as int;
-        rentSpent = expense.amountPaid as int;
-        break;
-      case 'Groceries':
-        groceriesOutOf = expense.amount as int;
-        groceriesSpent = expense.amountPaid as int;
-        break;
-      case 'Transportation':
-        transportationOutOf = expense.amount as int;
-        transportationSpent = expense.amountPaid as int;
-        break;
-      case 'Utilities':
-        utilitiesOutOf = expense.amount as int;
-        utilitiesSpent = expense.amountPaid as int;
-        break;
-      default:
-        break;
+        case 'Rent':
+          rentOutOf = expense.amount as int;
+          rentSpent = expense.amountPaid as int;
+          break;
+        case 'Groceries':
+          groceriesOutOf = expense.amount as int;
+          groceriesSpent = expense.amountPaid as int;
+          break;
+        case 'Transportation':
+          transportationOutOf = expense.amount as int;
+          transportationSpent = expense.amountPaid as int;
+          break;
+        case 'Utilities':
+          utilitiesOutOf = expense.amount as int;
+          utilitiesSpent = expense.amountPaid as int;
+          break;
+        default:
+          break;
       }
     }
   }
 }
-
 
 class _AllocatefundingState extends State<Allocatefunding> {
   int toCredCardDebt = 0;
@@ -72,6 +70,12 @@ class _AllocatefundingState extends State<Allocatefunding> {
   int toFitness = 0;
   int toChecking = 0;
   int toSavings = 0;
+
+  int rentSpentNow = 0;
+  int utilitiesSpentNow = 0;
+  int groceriesSpentNow = 0;
+  int travelSpentNow = 0;
+
   List<Color> colors = [
     Colors.pink,
     Colors.blue,
@@ -81,10 +85,10 @@ class _AllocatefundingState extends State<Allocatefunding> {
     Colors.pink
   ];
   @override
-void initState() {
-  super.initState();
-  widget.getOutOfs();
-}
+  void initState() {
+    super.initState();
+    widget.getOutOfs();
+  }
 
   List<int> prices = [100, 10, 20, 0, 0, 0];
 
@@ -888,7 +892,7 @@ void initState() {
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
-                                          children: [
+                                            children: [
                                             RequiredMeter(
                                               screenHeightUnit:
                                                 widget.screenHeightUnit,
@@ -896,7 +900,28 @@ void initState() {
                                                 widget.screenWidthUnit,
                                               type: "Rent",
                                               outOf: widget.rentOutOf,
-                                              spent: widget.rentSpent),
+                                              spent: widget.rentSpent,
+                                              spentNow: rentSpentNow,
+                                              onTapAdd: () {
+                                              if (widget.checkingAccountBalance > 0 &&
+                                                widget.rentSpent < widget.rentOutOf) {
+                                                setState(() {
+                                                widget.checkingAccountBalance -= 10;
+                                                widget.rentSpent += 10;
+                                                rentSpentNow += 10;
+                                                });
+                                              }
+                                              },
+                                              onTapSub: () {
+                                              if (rentSpentNow > 0) {
+                                                setState(() {
+                                                widget.checkingAccountBalance += 10;
+                                                rentSpentNow -= 10;
+                                                widget.rentSpent -= 10;
+                                                });
+                                              }
+                                              },
+                                            ),
                                             RequiredMeter(
                                               screenHeightUnit:
                                                 widget.screenHeightUnit,
@@ -904,7 +929,28 @@ void initState() {
                                                 widget.screenWidthUnit,
                                               type: "Groceries",
                                               outOf: widget.groceriesOutOf,
-                                              spent: widget.groceriesSpent),
+                                              spent: widget.groceriesSpent,
+                                              spentNow: groceriesSpentNow,
+                                              onTapAdd: () {
+                                              if (widget.checkingAccountBalance > 0 &&
+                                                widget.groceriesSpent < widget.groceriesOutOf) {
+                                                setState(() {
+                                                widget.checkingAccountBalance -= 10;
+                                                widget.groceriesSpent += 10;
+                                                groceriesSpentNow += 10;
+                                                });
+                                              }
+                                              },
+                                              onTapSub: () {
+                                              if (groceriesSpentNow > 0) {
+                                                setState(() {
+                                                widget.checkingAccountBalance += 10;
+                                                groceriesSpentNow -= 10;
+                                                widget.groceriesSpent -= 10;
+                                                });
+                                              }
+                                              },
+                                            ),
                                             RequiredMeter(
                                               screenHeightUnit:
                                                 widget.screenHeightUnit,
@@ -912,7 +958,28 @@ void initState() {
                                                 widget.screenWidthUnit,
                                               type: "Transportation",
                                               outOf: widget.transportationOutOf,
-                                              spent: widget.transportationSpent),
+                                              spent: widget.transportationSpent,
+                                              spentNow: travelSpentNow,
+                                              onTapAdd: () {
+                                              if (widget.checkingAccountBalance > 0 &&
+                                                widget.transportationSpent < widget.transportationOutOf) {
+                                                setState(() {
+                                                widget.checkingAccountBalance -= 10;
+                                                widget.transportationSpent += 10;
+                                                travelSpentNow += 10;
+                                                });
+                                              }
+                                              },
+                                              onTapSub: () {
+                                              if (travelSpentNow > 0) {
+                                                setState(() {
+                                                widget.checkingAccountBalance += 10;
+                                                travelSpentNow -= 10;
+                                                widget.transportationSpent -= 10;
+                                                });
+                                              }
+                                              },
+                                            ),
                                             RequiredMeter(
                                               screenHeightUnit:
                                                 widget.screenHeightUnit,
@@ -920,8 +987,28 @@ void initState() {
                                                 widget.screenWidthUnit,
                                               type: "Utilities",
                                               outOf: widget.utilitiesOutOf,
-                                              spent: widget.utilitiesSpent),
-                                            
+                                              spent: widget.utilitiesSpent,
+                                              spentNow: utilitiesSpentNow,
+                                              onTapAdd: () {
+                                              if (widget.checkingAccountBalance > 0 &&
+                                                widget.utilitiesSpent < widget.utilitiesOutOf) {
+                                                setState(() {
+                                                widget.checkingAccountBalance -= 10;
+                                                widget.utilitiesSpent += 10;
+                                                utilitiesSpentNow += 10;
+                                                });
+                                              }
+                                              },
+                                              onTapSub: () {
+                                              if (utilitiesSpentNow > 0) {
+                                                setState(() {
+                                                widget.checkingAccountBalance += 10;
+                                                utilitiesSpentNow -= 10;
+                                                widget.utilitiesSpent -= 10;
+                                                });
+                                              }
+                                              },
+                                            ),
                                           ],
                                         )))
                               ])),
@@ -1331,6 +1418,9 @@ class RequiredMeter extends StatefulWidget {
   final String type;
   int spent;
   int outOf;
+  int spentNow;
+  Function onTapAdd;
+  Function onTapSub;
 
   RequiredMeter({
     required this.screenHeightUnit,
@@ -1338,6 +1428,9 @@ class RequiredMeter extends StatefulWidget {
     required this.type,
     required this.outOf,
     required this.spent,
+    required this.spentNow,
+    required this.onTapAdd,
+    required this.onTapSub
   });
 
   @override
@@ -1349,6 +1442,139 @@ class _RequiredMeterState extends State<RequiredMeter> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(widget.type);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  widget.type,
+                  style: GoogleFonts.baloo2(
+                      fontSize: widget.screenHeightUnit * 30,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  width: widget.screenWidthUnit * 8,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: widget.screenHeightUnit * 10),
+                  child: Text(
+                    "\$${widget.spent}/${widget.outOf}",
+                    style: GoogleFonts.baloo2(
+                        fontSize: widget.screenHeightUnit * 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: widget.screenHeightUnit * 5,
+            ),
+            Stack(
+              children: [
+                Container(
+                  width: widget.screenWidthUnit * 300,
+                  height: widget.screenHeightUnit * 13,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Color.fromRGBO(216, 216, 216, 1),
+                  ),
+                ),
+                Container(
+                  width: widget.screenWidthUnit *
+                      300 *
+                      (widget.outOf > 0
+                          ? (widget.spent / widget.outOf).clamp(0.0, 1.0)
+                          : 0.0),
+                  height: widget.screenHeightUnit * 13,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Color.fromRGBO(251, 176, 59, 1),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              left: widget.screenWidthUnit * 75,
+              top: widget.screenHeightUnit * 0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  
+                    widget.onTapSub();
+                    
+                  
+                  
+                  
+                },
+                child: Container(
+                  width: 50 * widget.screenHeightUnit,
+                  height: 50 * widget.screenHeightUnit,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(79, 195, 247, 1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.remove,
+                      size: widget.screenHeightUnit * 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: widget.screenHeightUnit * 0),
+                  child: Container(
+                    width: widget.screenWidthUnit * 140,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        "\+${widget.spentNow}",
+                        style: GoogleFonts.baloo2(
+                          fontSize: widget.screenHeightUnit * 38,
+                          color: Color.fromRGBO(30, 213, 58, 1),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  )),
+              GestureDetector(
+                onTap: () {
+                  widget.onTapAdd();
+                },
+                child: Container(
+                  width: 50 * widget.screenHeightUnit,
+                  height: 50 * widget.screenHeightUnit,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(79, 195, 247, 1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      size: widget.screenHeightUnit * 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }
 }

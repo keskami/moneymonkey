@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
 import 'package:intl/intl.dart';
@@ -58,10 +59,24 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   double checkingTransfer = 0;
   double savingsTransfer = 0;
-  
 
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
+
+  Future<void> getEvents() async {
+    DateTime normalizedToday = normalizeDate(_focusedDay);
+    if (expensesMapped.containsKey(normalizedToday)) {
+      List<Expense> todayExpenses = expensesMapped[normalizedToday]!;
+      for (Expense expense in todayExpenses) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return EventPopUp();
+          },
+        );
+      }
+    }
+  }
 
   Future<void> getUniqueWeekCountForMonth(int year, int month) async {
     final firstDayOfMonth = DateTime(year, month, 1);
@@ -146,6 +161,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     getProgress();
     getExpenses();
     getUniqueWeekCountForMonth(_focusedDay.year, _focusedDay.month);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getEvents();
+    });
   }
 
   @override
@@ -323,7 +341,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                       savingsAccountBalance:
                                           widget.savingsAccountBalance,
                                       creditCardDebt: widget.creditCardDebt,
-                                      netCash: widget.checkingAccountBalance +  widget.savingsAccountBalance,
+                                      netCash: widget.checkingAccountBalance +
+                                          widget.savingsAccountBalance,
                                       screenWidthUnit: screenWidthUnit,
                                       screenHeightUnit: screenHeightUnit * .9,
                                       APY: widget.APY,
@@ -426,12 +445,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                           screenWidthUnit:
                                                               screenWidthUnit,
                                                           types: types,
-                                                          wellnessScore: wellnessScore,
-                                                          checkingAccountBalance: checkingAccountBalance,
-                                                          creditCardDebt: widget.creditCardDebt as int,
-                                                          savingsAccountBalance: widget.savingsAccountBalance as int,
-                                                          expenses: widget.expenses,
-                                                         
+                                                          wellnessScore:
+                                                              wellnessScore,
+                                                          checkingAccountBalance:
+                                                              checkingAccountBalance,
+                                                          creditCardDebt: widget
+                                                                  .creditCardDebt
+                                                              as int,
+                                                          savingsAccountBalance:
+                                                              widget.savingsAccountBalance
+                                                                  as int,
+                                                          expenses:
+                                                              widget.expenses,
                                                         ),
                                                       );
                                                     },
