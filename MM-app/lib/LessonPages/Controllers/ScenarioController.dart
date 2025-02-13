@@ -33,7 +33,7 @@ class ScenarioController extends GetxController {
       );
       print(data);
 
-      if (data != null && data is Map<String, dynamic>) {
+      if (data is Map<String, dynamic>) {
         answers = List<String>.from(data["correctAnswers"]);
         questions = List<String>.from(data["questions"] );
         options1 = List<String>.from(data["options1"] );

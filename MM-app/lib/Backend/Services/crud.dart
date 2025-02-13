@@ -223,90 +223,88 @@ class FirebaseService {
     if (userSnapshot.exists) {
       Map<String, dynamic>? userData = userSnapshot.data();
 
-      if (userData != null) {
-        List<String>? userFollowing =
-            List<String>.from(userData['following'] ?? []);
+      List<String>? userFollowing =
+          List<String>.from(userData?['following'] ?? []);
 
-        for (String followedUserId in userFollowing) {
-          DocumentSnapshot<Map<String, dynamic>> followedUserSnapshot =
-              await _firestore.collection('Users').doc(followedUserId).get();
+      for (String followedUserId in userFollowing) {
+        DocumentSnapshot<Map<String, dynamic>> followedUserSnapshot =
+            await _firestore.collection('Users').doc(followedUserId).get();
 
-          if (followedUserSnapshot.exists) {
-            Map<String, dynamic>? followedUserData =
-                followedUserSnapshot.data();
-            if (followedUserData != null) {
-              List<String>? followedUserFollowing =
-                  List<String>.from(followedUserData['following'] ?? []);
+        if (followedUserSnapshot.exists) {
+          Map<String, dynamic>? followedUserData =
+              followedUserSnapshot.data();
+          if (followedUserData != null) {
+            List<String>? followedUserFollowing =
+                List<String>.from(followedUserData['following'] ?? []);
 
-              for (String potentialMutualId in followedUserFollowing) {
-                if (potentialMutualId != userId &&
-                    potentialMutualId != followedUserId) {
-                  mutualCounts[potentialMutualId] =
-                      (mutualCounts[potentialMutualId] ?? 0) + 1;
+            for (String potentialMutualId in followedUserFollowing) {
+              if (potentialMutualId != userId &&
+                  potentialMutualId != followedUserId) {
+                mutualCounts[potentialMutualId] =
+                    (mutualCounts[potentialMutualId] ?? 0) + 1;
 
-                  mutualConnections.putIfAbsent(potentialMutualId, () => []);
-                  mutualConnections[potentialMutualId]!.add(followedUserId);
-                }
+                mutualConnections.putIfAbsent(potentialMutualId, () => []);
+                mutualConnections[potentialMutualId]!.add(followedUserId);
               }
             }
           }
-        }
-
-        Random random = Random();
-        for (String mutualId in mutualCounts.keys) {
-          DocumentSnapshot<Map<String, dynamic>> mutualUserSnapshot =
-              await _firestore.collection('Users').doc(mutualId).get();
-
-          if (mutualUserSnapshot.exists && !userFollowing.contains(mutualId)) {
-            Map<String, dynamic>? mutualUserData = mutualUserSnapshot.data();
-            if (mutualUserData != null) {
-              List<String> connections = mutualConnections[mutualId] ?? [];
-              String randomConnectionId = connections.isNotEmpty
-                  ? connections[random.nextInt(connections.length)]
-                  : 'Unknown';
-
-              String randomConnectionName = 'Unknown';
-              if (randomConnectionId != 'Unknown') {
-                DocumentSnapshot<Map<String, dynamic>>
-                    randomConnectionSnapshot = await _firestore
-                        .collection('Users')
-                        .doc(randomConnectionId)
-                        .get();
-                if (randomConnectionSnapshot.exists) {
-                  Map<String, dynamic>? randomConnectionData =
-                      randomConnectionSnapshot.data();
-                  randomConnectionName = randomConnectionData?['Profile']
-                          ['Full Name'] ??
-                      'Unknown';
-                }
-              }
-
-              mutualFriends.add({
-                'otherID': mutualId,
-                'name': mutualUserData['Profile']['Full Name'] ?? 'Unknown',
-                'count': mutualCounts[mutualId].toString(),
-                'randomConnection': randomConnectionName,
-                'whySuggested': 'Followed by $randomConnectionName'
-              });
-            }
-          }
-        }
-
-        mutualFriends.sort((a, b) {
-          int countComparison =
-              int.parse(b['count']!).compareTo(int.parse(a['count']!));
-          if (countComparison != 0) {
-            return countComparison;
-          } else {
-            return a['name']!.compareTo(b['name']!);
-          }
-        });
-
-        if (mutualFriends.length > howManyWanted) {
-          mutualFriends = mutualFriends.sublist(0, howManyWanted);
         }
       }
-    }
+
+      Random random = Random();
+      for (String mutualId in mutualCounts.keys) {
+        DocumentSnapshot<Map<String, dynamic>> mutualUserSnapshot =
+            await _firestore.collection('Users').doc(mutualId).get();
+
+        if (mutualUserSnapshot.exists && !userFollowing.contains(mutualId)) {
+          Map<String, dynamic>? mutualUserData = mutualUserSnapshot.data();
+          if (mutualUserData != null) {
+            List<String> connections = mutualConnections[mutualId] ?? [];
+            String randomConnectionId = connections.isNotEmpty
+                ? connections[random.nextInt(connections.length)]
+                : 'Unknown';
+
+            String randomConnectionName = 'Unknown';
+            if (randomConnectionId != 'Unknown') {
+              DocumentSnapshot<Map<String, dynamic>>
+                  randomConnectionSnapshot = await _firestore
+                      .collection('Users')
+                      .doc(randomConnectionId)
+                      .get();
+              if (randomConnectionSnapshot.exists) {
+                Map<String, dynamic>? randomConnectionData =
+                    randomConnectionSnapshot.data();
+                randomConnectionName = randomConnectionData?['Profile']
+                        ['Full Name'] ??
+                    'Unknown';
+              }
+            }
+
+            mutualFriends.add({
+              'otherID': mutualId,
+              'name': mutualUserData['Profile']['Full Name'] ?? 'Unknown',
+              'count': mutualCounts[mutualId].toString(),
+              'randomConnection': randomConnectionName,
+              'whySuggested': 'Followed by $randomConnectionName'
+            });
+          }
+        }
+      }
+
+      mutualFriends.sort((a, b) {
+        int countComparison =
+            int.parse(b['count']!).compareTo(int.parse(a['count']!));
+        if (countComparison != 0) {
+          return countComparison;
+        } else {
+          return a['name']!.compareTo(b['name']!);
+        }
+      });
+
+      if (mutualFriends.length > howManyWanted) {
+        mutualFriends = mutualFriends.sublist(0, howManyWanted);
+      }
+        }
 
     return mutualFriends;
   }
@@ -323,7 +321,7 @@ class FirebaseService {
         Map<String, dynamic>? userData = userSnapshot.data();
         Map<String, dynamic>? otherData = otherSnapshot.data();
 
-        if (userData != null && otherData != null) {
+        if (otherData != null) {
           List<String>? otherFollowers =
               List<String>.from(otherData['followers'] ?? []);
           int otherCurrentFollowers =
@@ -335,8 +333,8 @@ class FirebaseService {
           });
 
           List<String>? userFollowing =
-              List<String>.from(userData['following'] ?? []);
-          int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
+              List<String>.from(userData?['following'] ?? []);
+          int userCurrentFollowing = userData?['Profile']['Following'] ?? 0;
           if (userFollowing.contains(otherID)) {
             userFollowing.remove(otherID);
             await _firestore.collection('Users').doc(userId).update({
@@ -365,7 +363,7 @@ class FirebaseService {
         Map<String, dynamic>? userData = userSnapshot.data();
         Map<String, dynamic>? otherData = otherSnapshot.data();
 
-        if (userData != null && otherData != null) {
+        if (otherData != null) {
           List<String>? otherFollowers =
               List<String>.from(otherData['followers'] ?? []);
           int otherCurrentFollowers =
@@ -377,8 +375,8 @@ class FirebaseService {
           });
 
           List<String>? userFollowing =
-              List<String>.from(userData['following'] ?? []);
-          int userCurrentFollowing = userData['Profile']['Following'] ?? 0;
+              List<String>.from(userData?['following'] ?? []);
+          int userCurrentFollowing = userData?['Profile']['Following'] ?? 0;
           if (!userFollowing.contains(otherId)) {
             userFollowing.add(otherId);
             await _firestore.collection('Users').doc(userId).update({

@@ -13,10 +13,8 @@ class FirestoreService {
       if (snapshot.exists) {
         // Convert the Firestore document into a UserData object
         Map<String, dynamic>? data = snapshot.data();
-        if (data != null) {
-          return Student.fromFirestore(data, snapshot.id);
-        }
-      }
+        return Student.fromFirestore(data!, snapshot.id);
+            }
       return null;
     } catch (e) {
       print("Error fetching user data: $e");
@@ -32,13 +30,11 @@ class FirestoreService {
       if (snapshot.exists) {
         Map<String, dynamic>? data = snapshot.data();
 
-        if (data != null) {
-          List<String>? userFollowing =
-              List<String>.from(data['following'] ?? []);
+        List<String>? userFollowing =
+            List<String>.from(data?['following'] ?? []);
 
-          return userFollowing.contains(otherID);
-        }
-      }
+        return userFollowing.contains(otherID);
+            }
       return false;
     } catch (e) {
       print("Error fetching user data: $e");

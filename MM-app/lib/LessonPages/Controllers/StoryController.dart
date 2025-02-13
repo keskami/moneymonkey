@@ -44,7 +44,7 @@ class StoryController extends GetxController {
         PageNumber: i,
       );
 
-      if (data != null && data is Map<String, dynamic>) {
+      if (data is Map<String, dynamic>) {
         pageData[i] = data;
       } else {
         print("Page $i data is null or invalid.");

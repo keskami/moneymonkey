@@ -37,29 +37,25 @@ class _TopBarState extends State<TopBar> {
       var currentUser = FirebaseAuth.instance.currentUser;
       String? userId = currentUser?.uid;
 
-      if (userId != null) {
-        // Reference to the user's Progression sub-collection
-        final progressionRef = FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId) // Use the real userId here
-            .collection('Progression')
-            .doc('Progression');
+      // Reference to the user's Progression sub-collection
+      final progressionRef = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId) // Use the real userId here
+          .collection('Progression')
+          .doc('Progression');
 
-        // print("Fetching earnings for user: $userId");
-        final docSnapshot = await progressionRef.get();
+      // print("Fetching earnings for user: $userId");
+      final docSnapshot = await progressionRef.get();
 
-        if (docSnapshot.exists) {
-          final earnings = docSnapshot['Earnings from Lesson'];
-          setState(() {
-            bananas = earnings['Bananas'] ?? 0;
-            diamonds = earnings['Diamonds'] ?? 0;
-            monkeys = earnings['Monkeys'] ?? 0;
-          });
-        }
-      } else {
-        print("Error: User is not logged in.");
+      if (docSnapshot.exists) {
+        final earnings = docSnapshot['Earnings from Lesson'];
+        setState(() {
+          bananas = earnings['Bananas'] ?? 0;
+          diamonds = earnings['Diamonds'] ?? 0;
+          monkeys = earnings['Monkeys'] ?? 0;
+        });
       }
-    } catch (e) {
+        } catch (e) {
       print("Error fetching earnings: $e");
     }
   }
