@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
@@ -29,7 +30,7 @@ class BudgetSimulator extends StatefulWidget {
 
   final String name;
 
-  final double checkingAccountBalance;
+  double checkingAccountBalance;
   final double savingsAccountBalance;
   final double creditCardDebt;
   final double startingBalance;
@@ -39,6 +40,8 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
+
+  static changeMoney(double amount, String s) {}
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
@@ -56,24 +59,45 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   bool smallBoxes = true;
   double wellnessScore = 675;
   int checkingAccountBalance = 600;
-
+  bool eventProccesed = false;
   double checkingTransfer = 0;
   double savingsTransfer = 0;
 
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
 
+  Future<void> changeMoney(int amount, String type) async {
+    if (type == "Checking Account") {
+      checkingAccountBalance += amount;
+    }
+  }
+
   Future<void> getEvents() async {
     DateTime normalizedToday = normalizeDate(_focusedDay);
     if (expensesMapped.containsKey(normalizedToday)) {
       List<Expense> todayExpenses = expensesMapped[normalizedToday]!;
       for (Expense expense in todayExpenses) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return EventPopUp();
-          },
-        );
+        if (expense.name == "Pay Day") {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return EventPopUp(
+                expense: expense,
+                onTouch: () {
+                  setState(() {
+                    widget.checkingAccountBalance -= expense.amount as int;
+                    eventProccesed = true;
+                    Navigator.of(context).pop();
+                  });
+                },
+              );
+            },
+          );
+          if (!eventProccesed) {
+            widget.checkingAccountBalance -= expense.amount as int;
+            eventProccesed = true;
+          }
+        }
       }
     }
   }
