@@ -122,14 +122,14 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                           amountPaid: 21,
                           penalty: 25),
                       Expense(
-                          name: "Utilites",
+                          name: "Utilities",
                           amount: 200,
                           dueDateType: "Fixed",
                           dueDay: DateTime(2025, 5, 10),
                           amountPaid: 29,
                           penalty: 25),
                       Expense(
-                          name: "Travel",
+                          name: "Transportation",
                           amount: 100,
                           dueDateType: "Fixed",
                           dueDay: DateTime(2025, 5, 28),
@@ -140,6 +140,13 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                           amount: 1000,
                           dueDateType: "Fixed",
                           dueDay: DateTime(2025, 5, 25),
+                          amountPaid: 125,
+                          penalty: 0),
+                          Expense(
+                          name: "Groceries",
+                          amount: 250,
+                          dueDateType: "Fixed",
+                          dueDay: DateTime(2028, 5, 25),
                           amountPaid: 125,
                           penalty: 0),
                     ],
@@ -856,18 +863,19 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   amountPaid: 21,
                   penalty: 25),
               Expense(
-                  name: "Utilites",
+                  name: "Utilities",
                   amount: 200,
                   dueDateType: "Fixed",
                   dueDay: DateTime(2025, 5, 10),
                   amountPaid: 29,
                   penalty: 25),
-              Expense(
-                  name: "Travel",
+             
+                Expense(
+                  name: "Transportation",
                   amount: 100,
                   dueDateType: "Fixed",
                   dueDay: DateTime(2025, 5, 28),
-                  amountPaid: 11,
+                  amountPaid: 0,
                   penalty: 0),
               Expense(
                   name: "CC Debt",
@@ -876,6 +884,13 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   dueDay: DateTime(2025, 5, 25),
                   amountPaid: 125,
                   penalty: 0),
+                  Expense(
+                          name: "Groceries",
+                          amount: 250,
+                          dueDateType: "Fixed",
+                          dueDay: DateTime(2028, 5, 25),
+                          amountPaid: 125,
+                          penalty: 0),
             ],
           );
   }

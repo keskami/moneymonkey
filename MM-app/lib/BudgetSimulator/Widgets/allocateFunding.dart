@@ -13,23 +13,65 @@ class Allocatefunding extends StatefulWidget {
   final double wellnessScore;
   int checkingAccountBalance;
   int creditCardDebt;
+  int savingsAccountBalance;
+  List<Expense> expenses;
+ 
 
-  Allocatefunding(
-      {required this.screenHeightUnit,
-      required this.screenWidthUnit,
-      required this.types,
-      required this.wellnessScore,
-      required this.checkingAccountBalance,
-      required this.creditCardDebt});
+  Allocatefunding({
+    required this.screenHeightUnit,
+    required this.screenWidthUnit,
+    required this.types,
+    required this.wellnessScore,
+    required this.checkingAccountBalance,
+    required this.creditCardDebt,
+    required this.savingsAccountBalance,
+    required this.expenses,
+  });
 
   @override
   _AllocatefundingState createState() => _AllocatefundingState();
+  late int rentOutOf;
+  late int groceriesOutOf;
+  late int transportationOutOf;
+  late int utilitiesOutOf;
+  late int groceriesSpent;
+  late int rentSpent;
+  late int transportationSpent;
+  late int utilitiesSpent;
+
+  Future<void> getOutOfs() async {
+    for (var expense in expenses) {
+      switch (expense.name) {
+      case 'Rent':
+        rentOutOf = expense.amount as int;
+        rentSpent = expense.amountPaid as int;
+        break;
+      case 'Groceries':
+        groceriesOutOf = expense.amount as int;
+        groceriesSpent = expense.amountPaid as int;
+        break;
+      case 'Transportation':
+        transportationOutOf = expense.amount as int;
+        transportationSpent = expense.amountPaid as int;
+        break;
+      case 'Utilities':
+        utilitiesOutOf = expense.amount as int;
+        utilitiesSpent = expense.amountPaid as int;
+        break;
+      default:
+        break;
+      }
+    }
+  }
 }
+
 
 class _AllocatefundingState extends State<Allocatefunding> {
   int toCredCardDebt = 0;
   int toEntertainment = 0;
   int toFitness = 0;
+  int toChecking = 0;
+  int toSavings = 0;
   List<Color> colors = [
     Colors.pink,
     Colors.blue,
@@ -38,6 +80,11 @@ class _AllocatefundingState extends State<Allocatefunding> {
     Colors.yellow,
     Colors.pink
   ];
+  @override
+void initState() {
+  super.initState();
+  widget.getOutOfs();
+}
 
   List<int> prices = [100, 10, 20, 0, 0, 0];
 
@@ -110,6 +157,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                 children: [
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Total to spend",
@@ -119,6 +168,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                             fontWeight: FontWeight.w600,
                                             color: Color.fromRGBO(
                                                 108, 108, 108, 1)),
+                                        textAlign: TextAlign.start,
                                       ),
                                       SizedBox(
                                           height: widget.screenHeightUnit * 5),
@@ -143,6 +193,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                             fontWeight: FontWeight.w600,
                                             color: Color.fromRGBO(
                                                 108, 108, 108, 1)),
+                                        textAlign: TextAlign.start,
                                       ),
                                       SizedBox(
                                           height: widget.screenHeightUnit * 5),
@@ -168,8 +219,380 @@ class _AllocatefundingState extends State<Allocatefunding> {
                         height: widget.screenHeightUnit * 270,
                         width: widget.screenWidthUnit * 660,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: widget.screenWidthUnit * 30,
+                                      top: widget.screenHeightUnit * 25),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: widget.screenHeightUnit * 45,
+                                        width: widget.screenHeightUnit * 45,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Icon(
+                                          Icons.swap_horiz,
+                                          color: Colors.white,
+                                          size: widget.screenHeightUnit * 40,
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: widget.screenWidthUnit * 10,
+                                              top: widget.screenHeightUnit * 3),
+                                          child: Text(
+                                            "Transfer Money",
+                                            style: GoogleFonts.baloo2(
+                                                fontSize:
+                                                    widget.screenHeightUnit *
+                                                        38,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black),
+                                          )),
+                                    ],
+                                  )),
+                              SizedBox(height: widget.screenHeightUnit * 10),
+                              Container(
+                                  height: widget.screenHeightUnit * 1,
+                                  width: widget.screenWidthUnit * 660,
+                                  color: Colors.black),
+                              SizedBox(height: widget.screenHeightUnit * 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Checking",
+                                        style: GoogleFonts.baloo2(
+                                            fontSize:
+                                                widget.screenHeightUnit * 30,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      SizedBox(
+                                        height: widget.screenHeightUnit * 14,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (widget
+                                                      .checkingAccountBalance >
+                                                  0) {
+                                                setState(() {
+                                                  widget.savingsAccountBalance +=
+                                                      10;
+                                                  widget.checkingAccountBalance +=
+                                                      10;
+                                                  toChecking -= 10;
+                                                  toSavings += 10;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              width:
+                                                  55 * widget.screenHeightUnit,
+                                              height:
+                                                  55 * widget.screenHeightUnit,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromRGBO(
+                                                    79, 195, 247, 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  size:
+                                                      widget.screenHeightUnit *
+                                                          45,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    widget.screenWidthUnit * 0),
+                                            child: Container(
+                                                width: widget.screenWidthUnit *
+                                                    120,
+                                                child: Center(
+                                                    child: toChecking == 0
+                                                        ? Text(
+                                                            "0",
+                                                            style: GoogleFonts
+                                                                .baloo2(
+                                                              fontSize: widget
+                                                                      .screenHeightUnit *
+                                                                  45,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          )
+                                                        : toChecking > 0
+                                                            ? Text(
+                                                                "+${toChecking}",
+                                                                style: GoogleFonts.baloo2(
+                                                                    fontSize:
+                                                                        widget.screenHeightUnit *
+                                                                            45,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            30,
+                                                                            213,
+                                                                            58,
+                                                                            1)),
+                                                              )
+                                                            : Text(
+                                                                "${toChecking}",
+                                                                style: GoogleFonts.baloo2(
+                                                                    fontSize:
+                                                                        widget.screenHeightUnit *
+                                                                            45,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            243,
+                                                                            52,
+                                                                            52,
+                                                                            1)),
+                                                              ))),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (widget.savingsAccountBalance >
+                                                  0) {
+                                                setState(() {
+                                                  widget.savingsAccountBalance -=
+                                                      10;
+                                                  widget.checkingAccountBalance +=
+                                                      10;
+                                                  toChecking += 10;
+                                                  toSavings -= 10;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              width:
+                                                  55 * widget.screenHeightUnit,
+                                              height:
+                                                  55 * widget.screenHeightUnit,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromRGBO(
+                                                    79, 195, 247, 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size:
+                                                      widget.screenHeightUnit *
+                                                          45,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          top: widget.screenHeightUnit * 45),
+                                      child: Image.network(
+                                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fdouble-arrow%20(1)%201.png?alt=media&token=8ba81355-4ecb-4af3-af33-49ccc6b947ae",
+                                        height: widget.screenHeightUnit * 73,
+                                        width: widget.screenWidthUnit * 73,
+                                      )),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Savings",
+                                        style: GoogleFonts.baloo2(
+                                            fontSize:
+                                                widget.screenHeightUnit * 30,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      SizedBox(
+                                        height: widget.screenHeightUnit * 14,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (widget.savingsAccountBalance >
+                                                  0) {
+                                                setState(() {
+                                                  widget.savingsAccountBalance -=
+                                                      10;
+                                                  widget.checkingAccountBalance +=
+                                                      10;
+                                                  toChecking += 10;
+                                                  toSavings -= 10;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              width:
+                                                  55 * widget.screenHeightUnit,
+                                              height:
+                                                  55 * widget.screenHeightUnit,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromRGBO(
+                                                    79, 195, 247, 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  size:
+                                                      widget.screenHeightUnit *
+                                                          45,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    widget.screenWidthUnit * 0),
+                                            child: Container(
+                                                width: widget.screenWidthUnit *
+                                                    120,
+                                                child: Center(
+                                                    child: toSavings == 0
+                                                        ? Text(
+                                                            "0",
+                                                            style: GoogleFonts
+                                                                .baloo2(
+                                                              fontSize: widget
+                                                                      .screenHeightUnit *
+                                                                  45,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          )
+                                                        : toSavings > 0
+                                                            ? Text(
+                                                                "+${toSavings}",
+                                                                style: GoogleFonts.baloo2(
+                                                                    fontSize:
+                                                                        widget.screenHeightUnit *
+                                                                            45,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            30,
+                                                                            213,
+                                                                            58,
+                                                                            1)),
+                                                              )
+                                                            : Text(
+                                                                "${toSavings}",
+                                                                style: GoogleFonts.baloo2(
+                                                                    fontSize:
+                                                                        widget.screenHeightUnit *
+                                                                            45,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            243,
+                                                                            52,
+                                                                            52,
+                                                                            1)),
+                                                              ))),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (widget
+                                                      .checkingAccountBalance >
+                                                  0) {
+                                                setState(() {
+                                                  widget.savingsAccountBalance +=
+                                                      10;
+                                                  widget.checkingAccountBalance -=
+                                                      10;
+                                                  toChecking -= 10;
+                                                  toSavings += 10;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              width:
+                                                  55 * widget.screenHeightUnit,
+                                              height:
+                                                  55 * widget.screenHeightUnit,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromRGBO(
+                                                    79, 195, 247, 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size:
+                                                      widget.screenHeightUnit *
+                                                          45,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ]),
                       ),
                     ],
                   ),
@@ -233,7 +656,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           if (toEntertainment > 0) {
                                             setState(() {
                                               toEntertainment -= 10;
-                                              widget.checkingAccountBalance += 10;
+                                              widget.checkingAccountBalance +=
+                                                  10;
                                             });
                                           }
                                         },
@@ -276,10 +700,12 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          if (widget.checkingAccountBalance > 10) {
+                                          if (widget.checkingAccountBalance >
+                                              10) {
                                             setState(() {
                                               toEntertainment += 10;
-                                              widget.checkingAccountBalance -= 10;
+                                              widget.checkingAccountBalance -=
+                                                  10;
                                             });
                                           }
                                         },
@@ -334,7 +760,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           if (toFitness > 0) {
                                             setState(() {
                                               toFitness -= 10;
-                                              widget.checkingAccountBalance += 10;
+                                              widget.checkingAccountBalance +=
+                                                  10;
                                             });
                                           }
                                         },
@@ -377,10 +804,12 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          if (widget.checkingAccountBalance > 0) {
+                                          if (widget.checkingAccountBalance >
+                                              0) {
                                             setState(() {
                                               toFitness += 10;
-                                              widget.checkingAccountBalance -= 10;
+                                              widget.checkingAccountBalance -=
+                                                  10;
                                             });
                                           }
                                         },
@@ -413,12 +842,89 @@ class _AllocatefundingState extends State<Allocatefunding> {
                         width: widget.screenWidthUnit * 10,
                       ),
                       Container(
-                        height: widget.screenHeightUnit * 530,
-                        width: widget.screenWidthUnit * 660,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
+                          height: widget.screenHeightUnit * 530,
+                          width: widget.screenWidthUnit * 660,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: widget.screenWidthUnit * 30,
+                                        top: widget.screenHeightUnit * 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: widget.screenHeightUnit *
+                                                    5),
+                                            child: Text(
+                                              "Required Payments",
+                                              style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      widget.screenHeightUnit *
+                                                          38,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.black),
+                                            )),
+                                      ],
+                                    )),
+                                SizedBox(height: widget.screenHeightUnit * 8),
+                                Container(
+                                    height: widget.screenHeightUnit * 1,
+                                    width: widget.screenWidthUnit * 660,
+                                    color: Colors.black),
+                                Expanded(
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: widget.screenWidthUnit * 32),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            RequiredMeter(
+                                              screenHeightUnit:
+                                                widget.screenHeightUnit,
+                                              screenWidthUnit:
+                                                widget.screenWidthUnit,
+                                              type: "Rent",
+                                              outOf: widget.rentOutOf,
+                                              spent: widget.rentSpent),
+                                            RequiredMeter(
+                                              screenHeightUnit:
+                                                widget.screenHeightUnit,
+                                              screenWidthUnit:
+                                                widget.screenWidthUnit,
+                                              type: "Groceries",
+                                              outOf: widget.groceriesOutOf,
+                                              spent: widget.groceriesSpent),
+                                            RequiredMeter(
+                                              screenHeightUnit:
+                                                widget.screenHeightUnit,
+                                              screenWidthUnit:
+                                                widget.screenWidthUnit,
+                                              type: "Transportation",
+                                              outOf: widget.transportationOutOf,
+                                              spent: widget.transportationSpent),
+                                            RequiredMeter(
+                                              screenHeightUnit:
+                                                widget.screenHeightUnit,
+                                              screenWidthUnit:
+                                                widget.screenWidthUnit,
+                                              type: "Utilities",
+                                              outOf: widget.utilitiesOutOf,
+                                              spent: widget.utilitiesSpent),
+                                            
+                                          ],
+                                        )))
+                              ])),
                     ],
                   ),
                   SizedBox(
@@ -438,8 +944,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  height: widget.screenHeightUnit * 50,
-                                  width: widget.screenHeightUnit * 50,
+                                  height: widget.screenHeightUnit * 45,
+                                  width: widget.screenHeightUnit * 45,
                                   decoration: BoxDecoration(
                                     color: Colors.black,
                                     borderRadius: BorderRadius.circular(5),
@@ -447,7 +953,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                   child: Icon(
                                     Icons.swap_horiz,
                                     color: Colors.white,
-                                    size: widget.screenHeightUnit * 30,
+                                    size: widget.screenHeightUnit * 40,
                                   ),
                                 ),
                                 SizedBox(
@@ -816,5 +1322,33 @@ class _AllocatefundingState extends State<Allocatefunding> {
               ],
             ),
           );
+  }
+}
+
+class RequiredMeter extends StatefulWidget {
+  final double screenHeightUnit;
+  final double screenWidthUnit;
+  final String type;
+  int spent;
+  int outOf;
+
+  RequiredMeter({
+    required this.screenHeightUnit,
+    required this.screenWidthUnit,
+    required this.type,
+    required this.outOf,
+    required this.spent,
+  });
+
+  @override
+  _RequiredMeterState createState() => _RequiredMeterState();
+}
+
+class _RequiredMeterState extends State<RequiredMeter> {
+  int currentPayments = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(widget.type);
   }
 }

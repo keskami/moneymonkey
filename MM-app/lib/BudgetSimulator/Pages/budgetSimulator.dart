@@ -56,8 +56,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   double wellnessScore = 675;
   int checkingAccountBalance = 600;
 
-  double checkingTransfer = 300;
-  double savingsTransfer = -300;
+  double checkingTransfer = 0;
+  double savingsTransfer = 0;
+  
 
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
@@ -322,7 +323,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                       savingsAccountBalance:
                                           widget.savingsAccountBalance,
                                       creditCardDebt: widget.creditCardDebt,
-                                      netCash: netCash,
+                                      netCash: widget.checkingAccountBalance +  widget.savingsAccountBalance,
                                       screenWidthUnit: screenWidthUnit,
                                       screenHeightUnit: screenHeightUnit * .9,
                                       APY: widget.APY,
@@ -428,6 +429,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                           wellnessScore: wellnessScore,
                                                           checkingAccountBalance: checkingAccountBalance,
                                                           creditCardDebt: widget.creditCardDebt as int,
+                                                          savingsAccountBalance: widget.savingsAccountBalance as int,
+                                                          expenses: widget.expenses,
+                                                         
                                                         ),
                                                       );
                                                     },

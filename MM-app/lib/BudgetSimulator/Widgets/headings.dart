@@ -224,105 +224,116 @@ class Headings {
           ),
           SizedBox(
             width: screenWidthUnit * 135.8,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-              Text(
-                "\$${savingsAccountBalance}",
-                style: GoogleFonts.baloo2(
-                  fontSize: screenHeightUnit * 34,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    "Transfer",
-                    style: GoogleFonts.baloo2(
-                      fontSize: screenHeightUnit * 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
+            child: (savingsTransfer == 0 && checkingTransfer == 0)
+                ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      "\$${savingsAccountBalance}",
+                      style: GoogleFonts.baloo2(
+                        fontSize: screenHeightUnit * 34,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: screenWidthUnit * 2,
-                  ),
-                  (savingsTransfer > 0)
-                      ? Text(
-                          "+",
+                  ])
+                : Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Text(
+                      "\$${savingsAccountBalance}",
+                      style: GoogleFonts.baloo2(
+                        fontSize: screenHeightUnit * 34,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Transfer",
                           style: GoogleFonts.baloo2(
                             fontSize: screenHeightUnit * 20,
-                            color: Color.fromRGBO(72, 209, 38, 1),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : Text(
-                          "-",
-                          style: GoogleFonts.baloo2(
-                            fontSize: screenHeightUnit * 20,
-                            color: Color.fromRGBO(243, 52, 52, 1),
+                            color: Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                  SizedBox(
-                    width: screenWidthUnit * 2,
-                  ),
-                  Text(
-                    "\$${savingsTransfer.abs()}",
-                    style: GoogleFonts.baloo2(
-                      fontSize: screenHeightUnit * 20,
-                      color: (savingsTransfer > 0)
-                          ? Color.fromRGBO(72, 209, 38, 1)
-                          : Color.fromRGBO(243, 52, 52, 1),
-                      fontWeight: FontWeight.w600,
+                        SizedBox(
+                          width: screenWidthUnit * 2,
+                        ),
+                        (savingsTransfer > 0)
+                            ? Text(
+                                "+",
+                                style: GoogleFonts.baloo2(
+                                  fontSize: screenHeightUnit * 20,
+                                  color: Color.fromRGBO(72, 209, 38, 1),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            : Text(
+                                "-",
+                                style: GoogleFonts.baloo2(
+                                  fontSize: screenHeightUnit * 20,
+                                  color: Color.fromRGBO(243, 52, 52, 1),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                        SizedBox(
+                          width: screenWidthUnit * 2,
+                        ),
+                        Text(
+                          "\$${savingsTransfer.abs()}",
+                          style: GoogleFonts.baloo2(
+                            fontSize: screenHeightUnit * 20,
+                            color: (savingsTransfer > 0)
+                                ? Color.fromRGBO(72, 209, 38, 1)
+                                : Color.fromRGBO(243, 52, 52, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidthUnit * 2,
+                        ),
+                        Text(
+                          "->",
+                          style: GoogleFonts.baloo2(
+                            fontSize: screenHeightUnit * 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidthUnit * 2,
+                        ),
+                        Text(
+                          "(",
+                          style: GoogleFonts.baloo2(
+                            fontSize: screenHeightUnit * 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          "\$${savingsAccountBalance + savingsTransfer}",
+                          style: GoogleFonts.baloo2(
+                            fontSize: screenHeightUnit * 20,
+                            color: (savingsTransfer > 0)
+                                ? Color.fromRGBO(72, 209, 38, 1)
+                                : Color.fromRGBO(243, 52, 52, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          ")",
+                          style: GoogleFonts.baloo2(
+                            fontSize: screenHeightUnit * 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    width: screenWidthUnit * 2,
-                  ),
-                  Text(
-                    "->",
-                    style: GoogleFonts.baloo2(
-                      fontSize: screenHeightUnit * 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(
-                    width: screenWidthUnit * 2,
-                  ),
-                  Text(
-                    "(",
-                    style: GoogleFonts.baloo2(
-                      fontSize: screenHeightUnit * 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    "\$${savingsAccountBalance + savingsTransfer}",
-                    style: GoogleFonts.baloo2(
-                      fontSize: screenHeightUnit * 20,
-                      color: (savingsTransfer > 0)
-                          ? Color.fromRGBO(72, 209, 38, 1)
-                          : Color.fromRGBO(243, 52, 52, 1),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    ")",
-                    style: GoogleFonts.baloo2(
-                      fontSize: screenHeightUnit * 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: screenHeightUnit * 5,)
-            ]),
+                    SizedBox(
+                      height: screenHeightUnit * 5,
+                    )
+                  ]),
           ),
           SizedBox(
             width: screenWidthUnit * 38.5, // Increased by 10%
