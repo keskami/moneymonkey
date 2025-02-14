@@ -1,6 +1,7 @@
+// peer_reflection_quiz_controller.dart
+
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Services/auth_service.dart';
-import 'package:money_monkey/Backend/Services/lessonData.dart';
+import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page1.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page2.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page3.dart';
@@ -8,10 +9,19 @@ import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page4.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page5.dart';
 
 class PeerReflectionQuizcontroller extends GetxController {
+  final int lessonNumber;
+  final int unitNumber;
+
+  PeerReflectionQuizcontroller({required this.unitNumber, required this.lessonNumber});
+
+  final LessonServices lessonServices = Get.find<LessonServices>();
+
   RxInt pageIndex = 0.obs;
   RxBool isLoading = true.obs;
 
-  var pages = [
+  var pageData = <int, dynamic>{}.obs;
+
+  final pages = [
     PeerReflectionQuizPage1(),
     PeerReflectionQuizPage2(),
     PeerReflectionQuizPage3(),
@@ -19,34 +29,27 @@ class PeerReflectionQuizcontroller extends GetxController {
     PeerReflectionQuizPage5(),
   ];
 
-  var pageData = <int, dynamic>{}.obs;
-  final LessonData lessonData = LessonData();
-
   @override
   void onInit() {
     super.onInit();
-    fetchPageData();
+    loadQuizData();
   }
 
-  Future<void> fetchPageData() async {
-    print("QUIZ: Starting fetchPageData");
+  Future<void> loadQuizData() async {
     try {
       for (int i = 1; i <= 5; i++) {
-        print("QUIZ: Trying to fetch page $i");
-        var data = await lessonData.getPageInfoFromFirestore(
+        final data = await lessonServices.loadSinglePageData(
           levelName: "Advanced",
-          UnitNumber: 1,
-          LessonNumber: 1,
-          TypeOfLesson: "Quiz",
-          PageNumber: i,
+          unitNumber: unitNumber,
+          lessonNumber: lessonNumber,
+          componentType: "Quiz",
+          pageNumber: i,
         );
-        print("QUIZ: Data for page $i: $data");
         pageData[i] = data;
       }
     } catch (e) {
       print("QUIZ Error: $e");
     } finally {
-      print("QUIZ: isLoading set to false");
       isLoading.value = false;
     }
   }

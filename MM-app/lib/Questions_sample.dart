@@ -22,8 +22,8 @@ Future<void> addQuestion(String lessonId, Question question) async {
 }
 
 void main() async {
-  ComponentOneTwoController lessonOneController =
-      Get.put(ComponentOneTwoController());
+  // ComponentOneTwoController lessonOneController =
+  //     Get.put(ComponentOneTwoController());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Initialize Firebase
   // Example question to add

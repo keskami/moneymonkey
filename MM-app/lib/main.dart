@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:money_monkey/LessonPages/Pages/addLessonNew.dart';
+import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/landingPage.dart';
@@ -12,7 +15,7 @@ import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
 import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
 import 'package:money_monkey/LessonPages/Pages/Story.dart';
 import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
-import 'package:money_monkey/LessonPages/Pages/addLesson.dart';
+import 'package:money_monkey/LessonPages/Repositories/addLesson.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'firebase_options.dart';
@@ -23,6 +26,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.put(LessonServices());
   runApp(const MyApp());
 }
 
@@ -52,12 +56,12 @@ class MyApp extends StatelessWidget {
                   User? user = FirebaseAuth.instance.currentUser;
                   String userId = user?.uid ?? '';
                   if (userId.isEmpty) {
-                    return RefactoredAddLessonTest();
+                    return LoginScreen();
                   } else {
-                    return RefactoredAddLessonTest();
+                    return LoginScreen();
                   }
                 } else {
-                  return RefactoredAddLessonTest();
+                  return LoginScreen();
                 }
               },
             ),

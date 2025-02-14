@@ -11,11 +11,15 @@ import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading.dart';
 class LoadingPageWrapper extends StatelessWidget {
   final Widget destinationPage;
   final String pageType;
+  final int lessonNumber;  
+  final int unitNumber;
 
   const LoadingPageWrapper({
     Key? key,
     required this.destinationPage,
     required this.pageType,
+    required this.lessonNumber,
+    required this.unitNumber,
   }) : super(key: key);
 
   Future<void> _preLoadImagesForToolkit(BuildContext context) async {
@@ -101,31 +105,33 @@ class LoadingPageWrapper extends StatelessWidget {
 
   Future<void> _initializeController() async {
     switch (pageType) {
-      case 'lesson':
-        Get.put(ComponentOneTwoController());
+      case 'concept':
+        Get.put(ComponentOneTwoController(unitNumber: unitNumber, lessonNumber: lessonNumber, conceptNumber: 2));
+        break;
+      case 'concept2':
+        Get.put(ComponentOneTwoController(unitNumber: unitNumber, lessonNumber: lessonNumber, conceptNumber: 2));
         break;
       case 'story':
-        Get.put(StoryController());
+        Get.put(StoryController(unitNumber: unitNumber, lessonNumber: lessonNumber));
         break;
       case 'scenario':
-        final controller = Get.put(ScenarioController());
-        await controller.getControllerData();
+        Get.put(ScenarioController(unitNumber: unitNumber, lessonNumber: lessonNumber));
         break;
       case 'peer_reflection':
-        Get.put(PeerReflectioncontroller());
-        break;
-      case 'toolkit':
-        Get.put(Toolkitcontroller());
+        Get.put(PeerReflectioncontroller(unitNumber: unitNumber, lessonNumber: lessonNumber));
         break;
       case 'peer_reflection_quiz':
-        Get.put(PeerReflectionQuizcontroller());
+        Get.put(PeerReflectionQuizcontroller(unitNumber: unitNumber, lessonNumber: lessonNumber));
         break;
     }
   }
 
   Future<void> _preLoadImages(BuildContext context) async {
     switch (pageType) {
-      case 'lesson':
+      case 'concept':
+        await _preLoadImagesForLesson(context);
+        break;
+      case 'concept2':
         await _preLoadImagesForLesson(context);
         break;
       case 'story':

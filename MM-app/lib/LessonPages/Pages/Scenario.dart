@@ -39,9 +39,6 @@ class _ScenarioState extends State<Scenario> {
   @override
   void initState() {
     super.initState();
-    scenarioController.getControllerData().then((_) {
-      _preCacheImages();
-    });
   }
 
   @override

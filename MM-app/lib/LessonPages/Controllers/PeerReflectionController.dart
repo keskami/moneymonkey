@@ -1,51 +1,54 @@
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:money_monkey/Backend/Services/lessonData.dart';
+// peer_reflection_controller.dart
+
+import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page1.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page2.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page3.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
+import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 
 class PeerReflectioncontroller extends GetxController {
-  RxInt pageIndex = 0.obs;
+  final int lessonNumber;
+  final int unitNumber;
 
-  var pages = [
+  PeerReflectioncontroller({required this.unitNumber, required this.lessonNumber});
+
+  final LessonServices lessonServices = Get.find<LessonServices>();
+
+  RxInt pageIndex = 0.obs;
+  RxBool isLoading = true.obs;
+
+  var pageData = <int, dynamic>{}.obs;
+
+  // UI pages
+  final pages = [
     Page1(),
     Page2(),
     Page3(),
     Page4(),
   ];
 
-  var pageData = <int, dynamic>{}.obs;
-  final LessonData lessonData = LessonData();
-  RxBool isLoading = true.obs;
-
   @override
   void onInit() {
     super.onInit();
-    fetchPageData();
+    loadPeerReflectionData();
   }
 
-  Future<void> fetchPageData() async {
+  Future<void> loadPeerReflectionData() async {
     try {
-      print("Starting to fetch peerReflection data");
       for (int i = 1; i <= 5; i++) {
-        print("Fetching page $i");
-        var data = await lessonData.getPageInfoFromFirestore(
+        final data = await lessonServices.loadSinglePageData(
           levelName: "Advanced",
-          UnitNumber: 1,
-          LessonNumber: 1,
-          TypeOfLesson: "PeerReflection",
-          PageNumber: i,
+          unitNumber: unitNumber,
+          lessonNumber: lessonNumber,
+          componentType: "PeerReflection",
+          pageNumber: i,
         );
-        print("Got data for page $i: $data");
         pageData[i] = data;
       }
-      print("All quiz data fetched");
     } catch (e) {
-      print("Error fetching page data: $e");
+      print("Error fetching peerReflection data: $e");
     } finally {
-      print("Setting isLoading to false");
       isLoading.value = false;
     }
   }
