@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBox2.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
@@ -15,6 +16,9 @@ class Allocatefunding extends StatefulWidget {
   int creditCardDebt;
   int savingsAccountBalance;
   List<Expense> expenses;
+  Function onConfirm;
+  int savingsTransfer;
+  int checkingTransfer;
 
   Allocatefunding({
     required this.screenHeightUnit,
@@ -25,6 +29,9 @@ class Allocatefunding extends StatefulWidget {
     required this.creditCardDebt,
     required this.savingsAccountBalance,
     required this.expenses,
+    required this.onConfirm,
+    required this.savingsTransfer,
+    required this.checkingTransfer,
   });
 
   @override
@@ -37,6 +44,9 @@ class Allocatefunding extends StatefulWidget {
   late int rentSpent;
   late int transportationSpent;
   late int utilitiesSpent;
+
+  BudgetSimulatorFunctions model = BudgetSimulatorFunctions();
+
 
   Future<void> getOutOfs() async {
     for (var expense in expenses) {
@@ -76,6 +86,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
   int groceriesSpentNow = 0;
   int travelSpentNow = 0;
 
+  late int toSpend;
+
   List<Color> colors = [
     Colors.pink,
     Colors.blue,
@@ -88,6 +100,9 @@ class _AllocatefundingState extends State<Allocatefunding> {
   void initState() {
     super.initState();
     widget.getOutOfs();
+    setState(() {
+      toSpend = widget.checkingAccountBalance;
+    });
   }
 
   List<int> prices = [100, 10, 20, 0, 0, 0];
@@ -177,7 +192,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       SizedBox(
                                           height: widget.screenHeightUnit * 5),
                                       Text(
-                                        "\$${widget.checkingAccountBalance}",
+                                        toChecking >= 0 ? 
+                                        "\$${widget.checkingAccountBalance}" : "\$${widget.checkingAccountBalance + toChecking}",
                                         style: GoogleFonts.baloo2(
                                             fontSize:
                                                 widget.screenHeightUnit * 65,
@@ -300,16 +316,19 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (widget
-                                                      .checkingAccountBalance >
-                                                  0) {
+                                              if ((widget
+                                                      .checkingAccountBalance) + toChecking + widget.checkingTransfer >
+                                                  0 && (widget
+                                                      .checkingAccountBalance) + toChecking > 0) {
                                                 setState(() {
-                                                  widget.savingsAccountBalance +=
-                                                      10;
-                                                  widget.checkingAccountBalance +=
-                                                      10;
+                                                  //widget.savingsAccountBalance +=
+                                                    //  10;
+                                                  //widget.checkingAccountBalance -=
+                                                      //10;
+                                                 
                                                   toChecking -= 10;
                                                   toSavings += 10;
+                                                  
                                                 });
                                               }
                                             },
@@ -394,15 +413,18 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if (widget.savingsAccountBalance >
+                                              if ((widget.savingsAccountBalance + toSavings + widget.savingsTransfer) >
+                                                  0  &&(widget.savingsAccountBalance + toSavings) >
                                                   0) {
                                                 setState(() {
-                                                  widget.savingsAccountBalance -=
-                                                      10;
-                                                  widget.checkingAccountBalance +=
-                                                      10;
+                                                  
+                                                  //widget.savingsAccountBalance -=
+                                                      //10;
+                                                  //widget.checkingAccountBalance +=
+                                                      //10;
                                                   toChecking += 10;
                                                   toSavings -= 10;
+                                                  //toSpend -= 10;
                                                 });
                                               }
                                             },
@@ -462,13 +484,14 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (widget.savingsAccountBalance >
+                                              if (widget.savingsAccountBalance  + toSavings + widget.savingsTransfer>
+                                                  0 && widget.savingsAccountBalance  + toSavings>
                                                   0) {
                                                 setState(() {
-                                                  widget.savingsAccountBalance -=
-                                                      10;
-                                                  widget.checkingAccountBalance +=
-                                                      10;
+                                                  //widget.savingsAccountBalance -=
+                                                      //10;
+                                                  //widget.checkingAccountBalance +=
+                                                      //10;
                                                   toChecking += 10;
                                                   toSavings -= 10;
                                                 });
@@ -556,15 +579,23 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           GestureDetector(
                                             onTap: () {
                                               if (widget
-                                                      .checkingAccountBalance >
+                                                      .checkingAccountBalance  + toChecking>
+                                                  0 &&  widget
+                                                      .checkingAccountBalance  + toChecking + widget.checkingTransfer>
                                                   0) {
                                                 setState(() {
-                                                  widget.savingsAccountBalance +=
-                                                      10;
-                                                  widget.checkingAccountBalance -=
-                                                      10;
+                                                  //widget.savingsAccountBalance +=
+                                                      //10;
+                                                  //widget.checkingAccountBalance -=
+                                                      //10;
+
                                                   toChecking -= 10;
                                                   toSavings += 10;
+                                                  if(toChecking < 0){
+                                                    toSpend -= 10;
+
+                                                  }
+                                                  
                                                 });
                                               }
                                             },
@@ -1142,7 +1173,22 @@ class _AllocatefundingState extends State<Allocatefunding> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).pop();
+                                    widget.onConfirm(
+                                    toSavings,
+                                    toChecking,
+                                    toChecking >=0? widget.checkingAccountBalance : widget.checkingAccountBalance + toChecking , 
+                                    rentSpentNow,
+                                    groceriesSpentNow,
+                                    travelSpentNow,
+                                    utilitiesSpentNow,
+                                    toFitness,
+                                    toEntertainment,
+                                    toCredCardDebt,
+                                    
+                                    );
+                                     Navigator.of(context).pop();
+                                    
+                                 
                                 },
                                 child: Container(
                                     height: widget.screenHeightUnit * 65,

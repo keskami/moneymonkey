@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SpendingDonutChart extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
-  final List<String> types;
-  final List<double> percentage;
+  List<String> types;
+  List<double> percentage;
   double total = 0;
 
   SpendingDonutChart({
@@ -27,15 +28,22 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
     Colors.teal,
     Colors.orange,
     Colors.yellow,
-    Colors.pink
+    Colors.pink,
+    Colors.blue,
+    Colors.teal,
+    Colors.orange,
+    Colors.yellow,
   ];
   int total = 0;
 
   List<_ChartData> chartData = [];
   Future<void> getData() async {
+    chartData.clear();
+    total = 0;
+
     for (int i = 0; i < widget.types.length; i++) {
-      chartData
-          .add(_ChartData(widget.types[i], widget.percentage[i], colors[i]));
+      chartData.add(_ChartData(
+          widget.types[i], widget.percentage[i], colors[i % colors.length]));
       total += widget.percentage[i].toInt();
     }
   }
@@ -124,9 +132,10 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
                         SpendingSidePart(
                           screenHeightUnit: widget.screenHeightUnit,
                           screenWidthUnit: widget.screenWidthUnit,
-                          type: widget.types[i],
-                          percentage: widget.percentage[i].toInt(),
-                          color: colors[i],
+                          type: widget.types[i % colors.length],
+                          percentage:
+                              widget.percentage[i % colors.length].toInt(),
+                          color: colors[i % colors.length],
                         ),
                     ],
                   ),
@@ -183,11 +192,13 @@ class SpendingSidePart extends StatelessWidget {
           Spacer(),
           Padding(
             padding: EdgeInsets.only(left: screenWidthUnit * 15),
-            child: Text("$percentage%", style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 22,
-              color: Colors.black,
-              fontWeight: FontWeight.w600
-            ),),
+            child: Text(
+              "$percentage%",
+              style: GoogleFonts.baloo2(
+                  fontSize: screenHeightUnit * 22,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600),
+            ),
           )
         ],
       ),

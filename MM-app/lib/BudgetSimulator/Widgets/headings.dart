@@ -223,7 +223,7 @@ class Headings {
             width: screenWidthUnit * 14.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 135.8,
+            width: screenWidthUnit * 145.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Text(
@@ -330,8 +330,9 @@ class Headings {
                         ),
                       ],
                     ),
+                    
                     SizedBox(
-                      height: screenHeightUnit * 5,
+                      height: screenHeightUnit * 8,
                     )
                   ]),
           ),

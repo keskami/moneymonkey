@@ -31,8 +31,8 @@ class BudgetSimulator extends StatefulWidget {
   final String name;
 
   double checkingAccountBalance;
-  final double savingsAccountBalance;
-  final double creditCardDebt;
+  double savingsAccountBalance;
+  double creditCardDebt;
   final double startingBalance;
   final double APY;
   final List<Milestone> milestones;
@@ -47,7 +47,7 @@ class BudgetSimulator extends StatefulWidget {
 class _BudgetSimulatorState extends State<BudgetSimulator> {
   late double netCash;
   final Headings headings = Headings();
-  final DateTime now = DateTime(2025, 5, 1); // Current date and time
+  DateTime now = DateTime(2025, 5, 1); // Current date and time
   DateTime _focusedDay = DateTime(2025, 5, 1);
   DateTime _selectedDay = DateTime(2025, 5, 1);
   String formattedDate = '';
@@ -65,6 +65,17 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
+
+  Future<void> nextDay() async{
+
+
+    setState(() {
+      now = now.add(Duration(days: 1));
+      _focusedDay = _focusedDay.add(Duration(days: 1));
+      _selectedDay = _selectedDay.add(Duration(days: 1));
+      formattedDate = DateFormat('MMM d, y').format(_focusedDay);
+    });
+  }
 
   Future<void> changeMoney(int amount, String type) async {
     if (type == "Checking Account") {
@@ -85,7 +96,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 expense: expense,
                 onTouch: () {
                   setState(() {
-                    widget.checkingAccountBalance -= expense.amount as int;
+                    widget.checkingAccountBalance -= expense.amount;
                     eventProccesed = true;
                     Navigator.of(context).pop();
                   });
@@ -94,11 +105,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             },
           );
           if (!eventProccesed) {
-            widget.checkingAccountBalance -= expense.amount as int;
-            eventProccesed = true;
+            setState(() {
+              widget.checkingAccountBalance -= expense.amount as int;
+              eventProccesed = true;
+            });
           }
+        }else{
+          print(expense.name);
+
         }
       }
+      
+      
     }
   }
 
@@ -125,6 +143,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   void mapExpenses() {
+    expensesMapped.clear();
+
     for (Expense expense in widget.expenses) {
       DateTime normalizedDate = normalizeDate(expense.dueDay);
       if (expensesMapped.containsKey(normalizedDate)) {
@@ -140,6 +160,43 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       _selectedDay = selectedDay;
       _focusedDay = focusedDay;
     });
+  }
+
+  Future<void> spendOnExpense(int amount, String type) async {
+    for (Expense expense in widget.expenses) {
+      if (expense.name == type) {
+        setState(() {
+          expense.amountPaid += amount;
+        });
+        break;
+      }
+    }
+  }
+
+  Future<void> recalculatePercentages() async {
+    //types.clear();
+    //percentage.clear();
+    totalSpending = 0;
+    int i = 0;
+
+    for (Expense expense in widget.expenses) {
+      if (expense.name != "Pay Day") {
+        types[i] = expense.name;
+        totalSpending += expense.amountPaid;
+        i += 1;
+      }
+    }
+    int j = 0;
+
+    for (Expense expense in widget.expenses) {
+      if (expense.name != "Pay Day") {
+        percentage[j] = (expense.amountPaid / totalSpending) * 100;
+
+        j += 1;
+      }
+
+      //percentage.add((expense.amountPaid / totalSpending) * 100);
+    }
   }
 
   Future<void> getExpenses() async {
@@ -472,15 +529,87 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                           wellnessScore:
                                                               wellnessScore,
                                                           checkingAccountBalance:
-                                                              checkingAccountBalance,
+                                                              widget.checkingAccountBalance
+                                                                  as int,
                                                           creditCardDebt: widget
                                                                   .creditCardDebt
                                                               as int,
                                                           savingsAccountBalance:
                                                               widget.savingsAccountBalance
                                                                   as int,
+                                                          checkingTransfer:
+                                                              checkingTransfer
+                                                                  as int,
+                                                          savingsTransfer:
+                                                              savingsTransfer
+                                                                  as int,
                                                           expenses:
                                                               widget.expenses,
+                                                          onConfirm: (
+                                                            int toSavings,
+                                                            int toChecking,
+                                                            int newChecking,
+                                                            int rentSpent,
+                                                            int groceriesSpent,
+                                                            int travelSpentNow,
+                                                            int utilitiesSpent,
+                                                            int toFitness,
+                                                            int toEntertainment,
+                                                            int toCredCardDebt,
+                                                          ) {
+                                                            setState(() {
+                                                              widget.checkingAccountBalance =
+                                                                  newChecking
+                                                                      as double;
+                                                              widget.checkingAccountBalance +=
+                                                                  checkingTransfer;
+                                                              checkingTransfer =
+                                                                  toChecking
+                                                                      as double;
+                                                              widget.savingsAccountBalance +=
+                                                                  savingsTransfer;
+                                                              savingsTransfer =
+                                                                  toSavings
+                                                                      as double;
+                                                              widget.creditCardDebt -=
+                                                                  toCredCardDebt; // easier to do double here than fix past
+
+                                                              spendOnExpense(
+                                                                  rentSpent,
+                                                                  "Rent");
+                                                              spendOnExpense(
+                                                                  groceriesSpent,
+                                                                  "Groceries");
+                                                              spendOnExpense(
+                                                                  travelSpentNow,
+                                                                  "Transportation");
+                                                              spendOnExpense(
+                                                                  utilitiesSpent,
+                                                                  "Utilities");
+                                                              spendOnExpense(
+                                                                  toFitness,
+                                                                  "Fitness");
+                                                              spendOnExpense(
+                                                                  toEntertainment,
+                                                                  "Entertainment");
+                                                              spendOnExpense(
+                                                                  toCredCardDebt,
+                                                                  "CC Debt");
+
+                                                              recalculatePercentages();
+
+                                                              mapExpenses();
+
+                                                              nextDay();
+
+                                                              WidgetsBinding
+                                                                  .instance
+                                                                  .addPostFrameCallback(
+                                                                      (_) {
+                                                                getEvents();
+                                                              });
+                                                            });
+                                                          },
                                                         ),
                                                       );
                                                     },
