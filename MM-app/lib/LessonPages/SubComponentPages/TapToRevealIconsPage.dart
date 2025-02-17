@@ -5,14 +5,14 @@ import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class IconRevealPage extends StatefulWidget {
-  const IconRevealPage({super.key});
+class TapToRevealIconsPage extends StatefulWidget {
+  const TapToRevealIconsPage({super.key});
 
   @override
-  State<IconRevealPage> createState() => _IconRevealPageState();
+  State<TapToRevealIconsPage> createState() => _TapToRevealIconsPageState();
 }
 
-class _IconRevealPageState extends State<IconRevealPage> {
+class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
   List<bool> showIcon = [
     false,
     false,

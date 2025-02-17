@@ -2,17 +2,16 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 
-class NewStoryLanding extends StatefulWidget {
+class MonkeyLandingPage extends StatefulWidget {
   @override
-  _NewStoryLandingState createState() => _NewStoryLandingState();
+  _MonkeyLandingPageState createState() => _MonkeyLandingPageState();
 }
 
-class _NewStoryLandingState extends State<NewStoryLanding> {
+class _MonkeyLandingPageState extends State<MonkeyLandingPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 

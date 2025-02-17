@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/ShadowedBoxContainer.dart';
 import 'package:money_monkey/home.dart';
 
-class TakeawayPage extends StatefulWidget {
-  const TakeawayPage({super.key});
+class ComponentTakeawaysPage extends StatefulWidget {
+  const ComponentTakeawaysPage({super.key});
 
   @override
-  State<TakeawayPage> createState() => _TakeawayPageState();
+  State<ComponentTakeawaysPage> createState() => _ComponentTakeawaysPageState();
 }
 
-class _TakeawayPageState extends State<TakeawayPage> {
+class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
   List<List<String>> takeAways = [
     [],
     [],

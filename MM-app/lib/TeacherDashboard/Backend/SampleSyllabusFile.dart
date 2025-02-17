@@ -1,9 +1,9 @@
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/LessonPages/Models/Concept1_2.dart';
+import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 
-List<Question> sampleComponent1 = [
-  Question(
-    type: QuestionType.multipleChoice,
+List<SubComponent> sampleComponent1 = [
+  SubComponent(
+    type: SubComponentType.multipleChoice,
     data: MultipleChoice(
       question: "When Should Financial Responsibility Begin?",
       questionExplanation: "Before we dive in, let’s see what you think!",
@@ -23,8 +23,8 @@ List<Question> sampleComponent1 = [
               "Coins have been used since around 600 B.C., making them the oldest form of money still in use."),
     ),
   ),
-  Question(
-    type: QuestionType.revealCard,
+  SubComponent(
+    type: SubComponentType.revealCard,
     data: RevealCard(
       definition:
           "Financial responsibility over a lifetime means consistently making informed decisions about earning, saving, spending, and investing, starting from your earliest income and continuing through retirement.",
@@ -36,8 +36,8 @@ List<Question> sampleComponent1 = [
       ],
     ),
   ),
-  Question(
-    type: QuestionType.iconReveal,
+  SubComponent(
+    type: SubComponentType.iconReveal,
     data: IconReveal(
       iconLinks: [
         "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcard.png?alt=media&token=d9ad44a7-c607-4a88-9c8b-64d49e47a245",
@@ -49,8 +49,8 @@ List<Question> sampleComponent1 = [
       ],
     ),
   ),
-  Question(
-    type: QuestionType.lerningCheck,
+  SubComponent(
+    type: SubComponentType.lerningCheck,
     data: LearningCheck(
         question1:
             "Which of the following best describes a strong financial habit at any age?",
@@ -68,8 +68,8 @@ List<Question> sampleComponent1 = [
         correctAns1: "Saving and investing a portion of earnings regularly",
         correctAns2: "It covers unexpected expenses, reducing stress and debt"),
   ),
-  Question(
-    type: QuestionType.keyTakeaways,
+  SubComponent(
+    type: SubComponentType.keyTakeaways,
     data: KeyTakeaways(
       takeaway: {
         "Budgeting at Every Stage":

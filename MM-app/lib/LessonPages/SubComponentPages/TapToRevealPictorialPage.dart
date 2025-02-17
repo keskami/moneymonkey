@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
-import 'package:money_monkey/LessonPages/Pages_Story/ImpactPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class IntroductionPage extends StatefulWidget {
-  const IntroductionPage({super.key});
+class TapToRevealPictorialPage extends StatefulWidget {
+  const TapToRevealPictorialPage({super.key});
 
   @override
-  _IntroductionPageState createState() => _IntroductionPageState();
+  _TapToRevealPictorialPageState createState() => _TapToRevealPictorialPageState();
 }
 
-class _IntroductionPageState extends State<IntroductionPage> {
+class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
   final ScenarioController scenarioController = Get.find();
   bool wait6 = false;
   bool c = false;

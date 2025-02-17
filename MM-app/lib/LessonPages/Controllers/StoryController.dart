@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Services/lessonData.dart';
-import 'package:money_monkey/LessonPages/Pages_Story/ImpactPage.dart';
-import 'package:money_monkey/LessonPages/Pages_Story/IntroPage.dart';
-import 'package:money_monkey/LessonPages/Pages_Story/ProblemPage.dart';
-import 'package:money_monkey/LessonPages/Pages_Story/SolutionPage.dart';
-import 'package:money_monkey/LessonPages/Pages_Story/newlanding.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyIntroPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ComponentProblemPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ComponentSolutionsPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyLandingPage.dart';
 
 class StoryController extends GetxController {
 
@@ -14,11 +14,11 @@ class StoryController extends GetxController {
   RxBool toImpact = false.obs;
 
   var pages = <Widget>[
-    NewStoryLanding(),
-    IntroPage(),
-    ProblemPage(),
-    SolutionPage(),
-    ImpactPage(),
+    MonkeyLandingPage(),
+    MonkeyIntroPage(),
+    ComponentProblemPage(),
+    ComponentSolutionsPage(),
+    ComponentImapctPage(),
   ];
 
 
@@ -44,13 +44,8 @@ class StoryController extends GetxController {
         PageNumber: i,
       );
 
-      if (data is Map<String, dynamic>) {
-        pageData[i] = data;
-      } else {
-        print("Page $i data is null or invalid.");
-        pageData[i] = {}; // Set a default empty map to avoid errors
-      }
-    }
+      pageData[i] = data;
+        }
   } catch (e) {
     print("Error fetching page data: $e");
   } finally {

@@ -4,18 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
-class RevealPage extends StatefulWidget {
-  const RevealPage({
+class TapToRevealPage extends StatefulWidget {
+  const TapToRevealPage({
     super.key,
   });
 
   @override
-  State<RevealPage> createState() {
-    return _RevealPageState();
+  State<TapToRevealPage> createState() {
+    return _TapToRevealPageState();
   }
 }
 
-class _RevealPageState extends State<RevealPage> {
+class _TapToRevealPageState extends State<TapToRevealPage> {
   ComponentOneTwoController componentOneTwoController = Get.find();
   String before = '';
   bool showContent = false;

@@ -3,18 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/home.dart';
 
-class Page3 extends StatefulWidget {
+class DragNDropQuestionPage extends StatefulWidget {
   @override
-  _Page3State createState() => _Page3State();
+  _DragNDropQuestionPageState createState() => _DragNDropQuestionPageState();
 }
 
-class _Page3State extends State<Page3> {
+class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;
@@ -100,6 +99,7 @@ class _Page3State extends State<Page3> {
     }
   }
 
+  // ignore: unused_element
   Future<void> _fetchUserProfile() async {
     if (userID != null) {
       try {
@@ -340,11 +340,11 @@ class _Page3State extends State<Page3> {
     List<String> correctItems,
   ) {
     return DragTarget<String>(
-      onAccept: (data) {
+      onAcceptWithDetails: (data) {
         setState(() {
-          droppedItems.add(data);
-          onItemDropped(data);
-          onItemDropped2(data);
+          droppedItems.add(data as String);
+          onItemDropped(data as String);
+          onItemDropped2(data as String);
           availableItems.remove(data);
           noLeak(data);
         });
@@ -359,7 +359,7 @@ class _Page3State extends State<Page3> {
           //.showSnackBar(WrongAnswerSnackBar(message: ''));
         }
       },
-      onWillAccept: (data) => true,
+      onWillAcceptWithDetails: (data) => true,
       onLeave: (data) {
         setState(() {
           if (data != null && droppedItems.contains(data)) {

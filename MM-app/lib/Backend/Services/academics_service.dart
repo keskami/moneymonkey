@@ -127,7 +127,8 @@ class LocalAcademicService {
   String getNextLessonId(String currentLessonId) {
     final parts = currentLessonId.split('.');
     if (parts.length != 3) throw Exception('Invalid lesson ID format');
-
+//a.1.2
+//a.1.3
     final nextLessonNumber = int.parse(parts[2]) + 1;
     final nextLessonId = '${parts[0]}.${parts[1]}.$nextLessonNumber';
 

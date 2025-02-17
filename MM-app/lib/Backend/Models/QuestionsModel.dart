@@ -1,4 +1,4 @@
-enum QuestionType {
+enum SubComponentType {
   multipleChoice,
   revealCard,
   iconReveal,
@@ -6,13 +6,14 @@ enum QuestionType {
   scenario,
   keyTakeaways,
   revealCardStory,
+  tapToRevealStory,
 }
 
-extension QuestionTypeExtension on QuestionType {
+extension QuestionTypeExtension on SubComponentType {
   String get name => toString().split('.').last;
 
-  static QuestionType fromString(String name) {
-    return QuestionType.values.firstWhere((e) => e.name == name, orElse: () {
+  static SubComponentType fromString(String name) {
+    return SubComponentType.values.firstWhere((e) => e.name == name, orElse: () {
       throw Exception("Invalid question type: $name");
     });
   }
@@ -245,16 +246,16 @@ class KeyTakeaways {
   }
 }
 
-class Question {
-  const Question({
+class SubComponent {
+  const SubComponent({
     required this.type,
     required this.data,
   });
 
-  final QuestionType type;
+  final SubComponentType type;
   final dynamic data;
 
-  factory Question.fromMap(Map<String, dynamic> map) {
+  factory SubComponent.fromMap(Map<String, dynamic> map) {
     print("Parsing Question with data: $map"); // Debug log
 
     final typeStr = map['type'] as String?;
@@ -271,44 +272,44 @@ class Question {
 
     try {
       switch (type) {
-        case QuestionType.multipleChoice:
+        case SubComponentType.multipleChoice:
           print("Parsing MultipleChoice question");
-          return Question(
+          return SubComponent(
             type: type,
             data: MultipleChoice.fromMap(data),
           );
 
-        case QuestionType.revealCard:
+        case SubComponentType.revealCard:
           print("Parsing RevealCard question");
-          return Question(
+          return SubComponent(
             type: type,
             data: RevealCard.fromMap(data),
           );
 
-        case QuestionType.iconReveal:
+        case SubComponentType.iconReveal:
           print("Parsing IconReveal question");
-          return Question(
+          return SubComponent(
             type: type,
             data: IconReveal.fromMap(data),
           );
 
-        case QuestionType.lerningCheck:
+        case SubComponentType.lerningCheck:
           print("Parsing LearningCheck question");
-          return Question(
+          return SubComponent(
             type: type,
             data: LearningCheck.fromMap(data),
           );
 
-        case QuestionType.scenario:
+        case SubComponentType.scenario:
           print("Parsing Scenario question");
-          return Question(
+          return SubComponent(
             type: type,
             data: Scenario.fromMap(data),
           );
 
-        case QuestionType.keyTakeaways:
+        case SubComponentType.keyTakeaways:
           print("Parsing KeyTakeaways question");
-          return Question(
+          return SubComponent(
             type: type,
             data: KeyTakeaways.fromMap(data),
           );

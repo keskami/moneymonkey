@@ -1,18 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/home.dart';
 
-class Page1 extends StatefulWidget {
+class ImagesIntroPage extends StatefulWidget {
   @override
-  _Page1State createState() => _Page1State();
+  _ImagesIntroPageState createState() => _ImagesIntroPageState();
 }
 
-class _Page1State extends State<Page1> {
+class _ImagesIntroPageState extends State<ImagesIntroPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;

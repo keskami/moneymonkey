@@ -1,20 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 
-class Page2 extends StatefulWidget {
-  const Page2({super.key});
+class TapToExpandPage extends StatefulWidget {
+  const TapToExpandPage({super.key});
 
   @override
-  State<Page2> createState() => _Page2State();
+  State<TapToExpandPage> createState() => _TapToExpandPageState();
 }
 
-class _Page2State extends State<Page2> {
+class _TapToExpandPageState extends State<TapToExpandPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;

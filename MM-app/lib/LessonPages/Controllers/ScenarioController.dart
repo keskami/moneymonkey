@@ -2,9 +2,9 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Services/lessonData.dart';
-import 'package:money_monkey/LessonPages/ScenarioPages/IntroductionPage.dart';
-import 'package:money_monkey/LessonPages/ScenarioPages/QuestionPage.dart';
-import 'package:money_monkey/LessonPages/ScenarioPages/ResultPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/TapToRevealPictorialPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyMCQPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/GraphicalResultPage.dart';
 
 class ScenarioController extends GetxController {
   RxInt pageIndex = 0.obs;
@@ -33,18 +33,14 @@ class ScenarioController extends GetxController {
       );
       print(data);
 
-      if (data is Map<String, dynamic>) {
-        answers = List<String>.from(data["correctAnswers"]);
-        questions = List<String>.from(data["questions"] );
-        options1 = List<String>.from(data["options1"] );
-        options2 = List<String>.from(data["options2"] );
-        options3 = List<String>.from(data["options3"] );
-        questions = List<String>.from(data["questions"] );
-        correctMessages = List<String>.from(data["correctMessages"] );
-      } else {
-        print("Data format is unexpected or null.");
-      }
-    } catch (e) {
+      answers = List<String>.from(data["correctAnswers"]);
+      questions = List<String>.from(data["questions"] );
+      options1 = List<String>.from(data["options1"] );
+      options2 = List<String>.from(data["options2"] );
+      options3 = List<String>.from(data["options3"] );
+      questions = List<String>.from(data["questions"] );
+      correctMessages = List<String>.from(data["correctMessages"] );
+        } catch (e) {
       print("Error fetching page data: $e");
     } finally {
       
@@ -74,8 +70,8 @@ class ScenarioController extends GetxController {
 
   void initializePages() {
     pages = [
-      IntroductionPage(),
-      QuestionPage(
+      TapToRevealPictorialPage(),
+      MonkeyMCQPage(
         question:  questions[0] ,
         correctAns:  answers[0] ,
         options: [
@@ -86,7 +82,7 @@ class ScenarioController extends GetxController {
         correctMessage: correctMessages[0]
             ,
       ),
-      QuestionPage(
+      MonkeyMCQPage(
         question:  questions[1] ,
         correctAns:  answers[1] ,
         options: [
@@ -97,7 +93,7 @@ class ScenarioController extends GetxController {
         correctMessage: correctMessages[1]
             ,
       ),
-      QuestionPage(
+      MonkeyMCQPage(
         question:  questions[2] ,
         correctAns:  answers[2] ,
         options: [
@@ -108,7 +104,7 @@ class ScenarioController extends GetxController {
         correctMessage: correctMessages[2]
             ,
       ),
-      ResultPage(),
+      GraphicalResultPage(),
     ];
     isControllerLoading.value = false;
   }

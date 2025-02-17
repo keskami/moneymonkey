@@ -1,4 +1,6 @@
 // Enums and Extensions
+import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
+
 enum Status {
   Inactive,
   InProgress,
@@ -258,7 +260,6 @@ class PerformanceTrends {
     };
   }
 }
-
 class Component {
   String componentId;
   String title;
@@ -266,16 +267,16 @@ class Component {
   Status componentStatus;
   double progress;
   List<String>? discussionQuestions;
-  Map<String, dynamic>? questionData;
+  List<SubComponent> subComponentData;
 
   Component({
     required this.componentId,
     required this.title,
     required this.type,
     required this.componentStatus,
-    this.progress = 0,
+    this.progress = 0.0,
     this.discussionQuestions,
-    this.questionData,
+    required this.subComponentData,
   });
 
   factory Component.fromFirestore(Map<String, dynamic> data, String id) {
@@ -283,13 +284,16 @@ class Component {
       componentId: id,
       title: data['Title'] ?? '',
       type: ComponentTypeExtension.fromString(data['Type'] ?? ''),
-      componentStatus:
-          statusFromFirestore(data['ComponentStatus'] ?? 'inactive'),
+      componentStatus: statusFromFirestore(data['ComponentStatus'] ?? 'inactive'),
       progress: (data['Progress'] is num ? data['Progress'] : 0).toDouble(),
       discussionQuestions: data['DiscussionQuestions'] != null
           ? List<String>.from(data['DiscussionQuestions'])
           : null,
-      questionData: data['QuestionData'] as Map<String, dynamic>?,
+      subComponentData: data['SubComponentData'] != null
+          ? (data['SubComponentData'] as List)
+              .map((q) => SubComponent.fromMap(q as Map<String, dynamic>))
+              .toList()
+          : [],
     );
   }
 
@@ -299,9 +303,9 @@ class Component {
       'Type': type.name,
       'ComponentStatus': statusToFirestore(componentStatus),
       'Progress': progress,
-      if (discussionQuestions != null)
-        'DiscussionQuestions': discussionQuestions,
-      if (questionData != null) 'QuestionData': questionData,
+      if (discussionQuestions != null) 'DiscussionQuestions': discussionQuestions,
+      'SubComponentData': subComponentData.map((q) => q.toMap()).toList(),
     };
   }
 }
+

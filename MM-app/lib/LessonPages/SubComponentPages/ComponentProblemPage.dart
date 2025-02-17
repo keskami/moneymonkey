@@ -5,14 +5,14 @@ import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class ProblemPage extends StatefulWidget {
-  ProblemPage({super.key});
+class ComponentProblemPage extends StatefulWidget {
+  ComponentProblemPage({super.key});
 
   @override
-  State<ProblemPage> createState() => _ProblemPageState();
+  State<ComponentProblemPage> createState() => _ComponentProblemPageState();
 }
 
-class _ProblemPageState extends State<ProblemPage> {
+class _ComponentProblemPageState extends State<ComponentProblemPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
   final StoryController storyController = Get.find();

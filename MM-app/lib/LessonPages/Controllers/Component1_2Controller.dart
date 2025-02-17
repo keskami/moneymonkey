@@ -1,15 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Services/lessonData.dart';
-import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/1MCQPage.dart';
-import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/2RevealPage.dart';
-import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/3IconRevealPage.dart';
-import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/4ScenarioPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/MCQPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/TapToRevealPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/TapToRevealIconsPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ScenarioPage.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page5.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page6.dart';
-import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/5QuizkCheckPage.dart';
-import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/6TakeawayPage.dart';
-import 'package:money_monkey/LessonPages/Models/Concept1_2.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/LearningCheckPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ComponentTakeawaysPage.dart';
+import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 
 import '../Pages_ConceptOneTwo/Page7.dart';
 
@@ -17,18 +16,18 @@ class ComponentOneTwoController extends GetxController {
   RxInt pageIndex = 0.obs;
 
   // To store fetched questions
-  RxList<Question> questions = <Question>[].obs;
+  RxList<SubComponent> questions = <SubComponent>[].obs;
 
   var pages = [
     MCQPage(),
-    RevealPage(),
-    IconRevealPage(),
+    TapToRevealPage(),
+    TapToRevealIconsPage(),
     ScenarioPage(),
     L1Page5(),
     L1Page6(),
     L1Page7(),
-    QuickCheckPage(),
-    TakeawayPage(),
+    LearningCheckPage(),
+    ComponentTakeawaysPage(),
   ];
   var pageData = <int, dynamic>{}.obs;
   final LessonData lessonData = LessonData();

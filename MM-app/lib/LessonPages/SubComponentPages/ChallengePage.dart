@@ -1,18 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
 import 'package:money_monkey/home.dart';
 
-class Page8 extends StatefulWidget {
+class ChallengePage extends StatefulWidget {
   @override
-  _Page8State createState() => _Page8State();
+  _ChallengePageState createState() => _ChallengePageState();
 }
 
-class _Page8State extends State<Page8> {
+class _ChallengePageState extends State<ChallengePage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;

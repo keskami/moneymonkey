@@ -6,14 +6,14 @@ import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 import 'package:money_monkey/LessonPages/Widgets/ShadowedBoxContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class QuickCheckPage extends StatefulWidget {
-  const QuickCheckPage({super.key});
+class LearningCheckPage extends StatefulWidget {
+  const LearningCheckPage({super.key});
 
   @override
-  State<QuickCheckPage> createState() => _QuickCheckPageState();
+  State<LearningCheckPage> createState() => _LearningCheckPageState();
 }
 
-class _QuickCheckPageState extends State<QuickCheckPage> {
+class _LearningCheckPageState extends State<LearningCheckPage> {
   String title = "";
   String question1 =
       "";

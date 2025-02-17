@@ -1,21 +1,19 @@
 import 'dart:html' as html;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
 import 'package:money_monkey/home.dart';
 
-class Page7 extends StatefulWidget {
+class ResourcesDownloaderPage extends StatefulWidget {
   @override
-  _Page7State createState() => _Page7State();
+  _ResourcesDownloaderPageState createState() => _ResourcesDownloaderPageState();
 }
 
-class _Page7State extends State<Page7> {
+class _ResourcesDownloaderPageState extends State<ResourcesDownloaderPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
   bool isLoading = true;

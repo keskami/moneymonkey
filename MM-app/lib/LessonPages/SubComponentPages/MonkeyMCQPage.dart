@@ -7,8 +7,8 @@ import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class QuestionPage extends StatefulWidget {
-   QuestionPage({
+class MonkeyMCQPage extends StatefulWidget {
+   MonkeyMCQPage({
     super.key,
     required this.question,
     required this.correctAns,
@@ -21,10 +21,10 @@ class QuestionPage extends StatefulWidget {
   final String correctMessage;
 
   @override
-  State<QuestionPage> createState() => _QuestionPageState();
+  State<MonkeyMCQPage> createState() => _MonkeyMCQPageState();
 }
 
-class _QuestionPageState extends State<QuestionPage> {
+class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
   final ScenarioController scenarioController = Get.find();
   String selectedAns = "";
   bool showMessage = false;

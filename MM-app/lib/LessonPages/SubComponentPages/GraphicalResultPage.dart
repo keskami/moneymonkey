@@ -4,14 +4,14 @@ import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class ResultPage extends StatefulWidget {
-  const ResultPage({super.key});
+class GraphicalResultPage extends StatefulWidget {
+  const GraphicalResultPage({super.key});
 
   @override
-  _ResultPageState createState() => _ResultPageState();
+  _GraphicalResultPageState createState() => _GraphicalResultPageState();
 }
 
-class _ResultPageState extends State<ResultPage> {
+class _GraphicalResultPageState extends State<GraphicalResultPage> {
   late ScenarioController scenarioController;
   late String message;
   String subTitle = '';

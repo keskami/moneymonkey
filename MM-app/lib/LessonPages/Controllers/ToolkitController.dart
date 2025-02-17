@@ -3,8 +3,8 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:money_monkey/Backend/Services/lessonData.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page5.dart';
 import 'package:money_monkey/LessonPages/Toolkit/page6.dart';
-import 'package:money_monkey/LessonPages/Toolkit/page7.dart';
-import 'package:money_monkey/LessonPages/Toolkit/page8.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ResourcesDownloaderPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/ChallengePage.dart';
 
 class Toolkitcontroller extends GetxController {
   RxInt pageIndex = 0.obs;
@@ -12,8 +12,8 @@ class Toolkitcontroller extends GetxController {
   var pages = [
     Page5(),
     Page6(),
-    Page7(),
-    Page8(),
+    ResourcesDownloaderPage(),
+    ChallengePage(),
   ];
 
   var pageData = <int, dynamic>{}.obs;

@@ -490,7 +490,7 @@ class FilterStudentsButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          padding: const MaterialStatePropertyAll(
+          padding: const WidgetStatePropertyAll(
             EdgeInsets.symmetric(vertical: 15),
           ),
         ),

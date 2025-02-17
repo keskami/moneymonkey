@@ -4,39 +4,40 @@ import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 
-class SolutionPage extends StatefulWidget {
-  SolutionPage({super.key});
+class ComponentImapctPage extends StatefulWidget {
+  ComponentImapctPage({super.key});
 
   @override
-  State<SolutionPage> createState() => _SolutionPageState();
+  State<ComponentImapctPage> createState() => _ComponentImapctPageState();
 }
 
-class _SolutionPageState extends State<SolutionPage> {
+class _ComponentImapctPageState extends State<ComponentImapctPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-
+  List<String> beforeText = [];
+  List<String> afterText = [];
+  List<String> ba = [];
   final StoryController storyController = Get.find();
-  List<String> bigTexts = [];
-  List<String> smallTexts = [];
   bool isEnabled = false;
 
   bool isLoading = true;
+  String problem = '';
   String title = '';
   List<String> instructions = [];
   String button = '';
 
   Future<void> setData(Map<String, dynamic> data) async {
     setState(() {
-      bigTexts =
-          List<String>.from(data['bigTexts'].map((item) => item.toString()));
-      smallTexts =
-          List<String>.from(data['smallTexts'].map((item) => item.toString()));
+      afterText =
+          List<String>.from(data['after'].map((item) => item.toString()));
+      beforeText =
+          List<String>.from(data['before'].map((item) => item.toString()));
       title = data['title'];
       instructions = List<String>.from(
           data['instructions'].map((item) => item.toString()));
-     
+      ba = List<String>.from(
+          data['before/after'].map((item) => item.toString()));
       button = data['button'];
-
       isLoading = false;
     });
   }
@@ -47,22 +48,18 @@ class _SolutionPageState extends State<SolutionPage> {
 
     ever(storyController.isLoading, (_) {
       if (!storyController.isLoading.value) {
-        setData(storyController.pageData[4]);
+        setData(storyController.pageData[5]);
       }
     });
 
     if (title == '') {
-      if (storyController.pageData[4] != null) {
-        setData(storyController.pageData[4]);
+      if (storyController.pageData[5] != null) {
+        setData(storyController.pageData[5]);
       } else {
         debugPrint("Page data for index 1 is null");
       }
     }
   }
-
-  
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +87,7 @@ class _SolutionPageState extends State<SolutionPage> {
                     height: screenHeight * 0.4,
                     width: screenWidth * 0.004,
                     decoration: BoxDecoration(
-                      color: Colors.lightGreenAccent,
+                      color: Colors.orange.shade300,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -119,11 +116,10 @@ class _SolutionPageState extends State<SolutionPage> {
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
                                 contents: ContentContainer(
-                                  texts: [
-                                    bigTexts[0],
-                                    smallTexts[0]
-                                  ],
+                                  isBefore: true,
+                                  texts: beforeText,
                                   screenWidth: screenWidth,
+                                  ba: ba,
                                 ),
                                 instructions: InstructionContainer(
                                   text: instructions[0],
@@ -131,40 +127,28 @@ class _SolutionPageState extends State<SolutionPage> {
                                 ),
                               ),
                             ),
-                            Container(
-                              width: screenWidth * 0.15,
-                              height: screenHeight * 0.2,
-                              child: TapToRevealContainer(
-                                contents: ContentContainer(
-                                  texts: [bigTexts[1],
-                                    smallTexts[1]],
-                                  screenWidth: screenWidth,
-                                ),
-                                instructions: InstructionContainer(
-                                  text: instructions[1],
-                                  screenWidth: screenWidth,
-                                ),
-                              ),
+                            Icon(
+                              Icons.arrow_forward,
+                              size: screenHeight * 0.15,
                             ),
                             Container(
                               width: screenWidth * 0.15,
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
-                                onTap: () async{
+                                onTap: () async {
                                   await Future.delayed(Duration(seconds: 6));
                                   setState(() {
                                     isEnabled = true;
                                   });
                                 },
                                 contents: ContentContainer(
-                                  texts: [
-                                    bigTexts[2],
-                                    smallTexts[2]
-                                  ],
+                                  isBefore: false,
+                                  texts: afterText,
                                   screenWidth: screenWidth,
+                                  ba: ba,
                                 ),
                                 instructions: InstructionContainer(
-                                  text: instructions[2],
+                                  text: instructions[1],
                                   screenWidth: screenWidth,
                                 ),
                               ),
@@ -182,9 +166,13 @@ class _SolutionPageState extends State<SolutionPage> {
                 Spacer(),
                 CustomNextButton(
                   nextPage: () {
-                    storyController.pageIndex.value += 1;
+                    storyController.pageIndex.value = 0;
+                    storyController.toImpact.value = false;
+                    storyController.toSolution.value = false;
+                    Navigator.pop(context);
                   },
                   isEnabled: isEnabled,
+                  text: 'Finish',
                 ),
               ],
             ),
@@ -200,14 +188,17 @@ class _SolutionPageState extends State<SolutionPage> {
 }
 
 class ContentContainer extends StatelessWidget {
-  const ContentContainer({
-    super.key,
-    required this.texts,
-    required this.screenWidth,
-  });
+  const ContentContainer(
+      {super.key,
+      required this.texts,
+      required this.screenWidth,
+      required this.isBefore,
+      required this.ba});
 
   final List<String> texts;
+  final bool isBefore;
   final double screenWidth;
+  final List<String> ba;
 
   @override
   Widget build(BuildContext context) {
@@ -224,25 +215,39 @@ class ContentContainer extends StatelessWidget {
           children: [
             const Spacer(),
             Text(
-              texts[0],
+              isBefore ? "Before" : "After",
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
+                color: isBefore ? Colors.red : Colors.green,
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.start,
             ),
-            const Spacer(),
-            Text(
-              texts[1],
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
+            ...texts.map(
+              (text) {
+                return Row(
+                  children: [
+                    Image.network(
+                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FStoryPages%2FDIamond.png?alt=media&token=98ad4d6e-dbda-4112-9e0c-d0429eef9d37",
+                      height: 20,
+                    ),
+                    Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                    ),
+                  ],
+                );
+              },
             ),
             const Spacer(),
           ],
-        ),
+        ).marginSymmetric(horizontal: screenWidth * 0.012),
       ),
     );
   }

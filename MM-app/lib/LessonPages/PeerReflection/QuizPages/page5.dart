@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
@@ -308,11 +306,11 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
     List<String> correctItems,
   ) {
     return DragTarget<String>(
-      onAccept: (data) {
+      onAcceptWithDetails: (data) {
         setState(() {
-          droppedItems.add(data);
-          onItemDropped(data);
-          onItemDropped2(data);
+          droppedItems.add(data as String);
+          onItemDropped(data as String);
+          onItemDropped2(data as String);
           availableItems.remove(data);
           noLeak(data);
         });
@@ -327,7 +325,7 @@ class _PeerReflectionQuizPage5State extends State<PeerReflectionQuizPage5> {
           //.showSnackBar(WrongAnswerSnackBar(message: ''));
         }
       },
-      onWillAccept: (data) => true,
+      onWillAcceptWithDetails: (data) => true,
       onLeave: (data) {
         setState(() {
           if (data != null && droppedItems.contains(data)) {

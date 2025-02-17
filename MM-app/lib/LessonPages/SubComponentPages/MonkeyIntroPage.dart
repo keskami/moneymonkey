@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
-class IntroPage extends StatefulWidget {
-  IntroPage({super.key});
+class MonkeyIntroPage extends StatefulWidget {
+  MonkeyIntroPage({super.key});
 
   @override
-  State<IntroPage> createState() => _IntroPageState();
+  State<MonkeyIntroPage> createState() => _MonkeyIntroPageState();
 }
 
-class _IntroPageState extends State<IntroPage> {
+class _MonkeyIntroPageState extends State<MonkeyIntroPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
   bool wait6 = false;

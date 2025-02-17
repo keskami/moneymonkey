@@ -259,6 +259,7 @@ Map<String, Lesson> advancedLessons = {
             title: 'Concept $j of Fundamentals Topic $i',
             type: ComponentType.concept,
             componentStatus: Status.Active,
+        subComponentData: [],
           ),
       },
       progress: 0,
@@ -283,6 +284,7 @@ Map<String, Lesson> advancedLessons = {
             title: 'Concept $j of Advanced Topic $i',
             type: ComponentType.concept,
             componentStatus: Status.Active,
+            subComponentData: [],
           ),
       },
       progress: 0,
@@ -309,6 +311,7 @@ Map<String, Component> advancedComponents = {
           "How do financial decisions impact our future?",
           "What role do emergency funds play?",
         ],
+        subComponentData: [],
       ),
   for (int i = 1; i <= 8; i++)
     for (int j = 1; j <= 5; j++)
@@ -317,5 +320,6 @@ Map<String, Component> advancedComponents = {
         title: 'Deep Dive on Concept $j of Advanced Topic $i',
         type: ComponentType.concept,
         componentStatus: Status.Active,
+        subComponentData: [],
       ),
 };

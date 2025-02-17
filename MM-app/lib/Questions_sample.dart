@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:money_monkey/LessonPages/Models/Concept1_2.dart';
+import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 
 // Assuming your model classes and extensions are already imported
 
-Future<void> addQuestion(String lessonId, Question question) async {
+Future<void> addQuestion(String lessonId, SubComponent question) async {
   try {
     final questionRef = FirebaseFirestore.instance
         .collection('Lessons')
