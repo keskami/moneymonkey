@@ -26,6 +26,7 @@ class BudgetSimulator extends StatefulWidget {
     required this.milestones,
     required this.creditScore,
     required this.expenses,
+    required this.wellnessScore,
   });
 
   final String name;
@@ -33,6 +34,7 @@ class BudgetSimulator extends StatefulWidget {
   double checkingAccountBalance;
   double savingsAccountBalance;
   double creditCardDebt;
+  int wellnessScore;
   final double startingBalance;
   final double APY;
   final List<Milestone> milestones;
@@ -57,18 +59,19 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<double> percentage = [];
   double totalSpending = 0;
   bool smallBoxes = true;
-  double wellnessScore = 675;
+  double wellnessScore = 600;
   int checkingAccountBalance = 600;
   bool eventProccesed = false;
   double checkingTransfer = 0;
   double savingsTransfer = 0;
 
+  int monthlyFitness = 0;
+  int monthlyEntertainment = 0;
+
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
 
-  Future<void> nextDay() async{
-
-
+  Future<void> nextDay() async {
     setState(() {
       now = now.add(Duration(days: 1));
       _focusedDay = _focusedDay.add(Duration(days: 1));
@@ -84,7 +87,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   Future<void> getEvents() async {
-    DateTime normalizedToday = normalizeDate(_focusedDay);
+    DateTime normalizedToday = normalizeDate(now);
     if (expensesMapped.containsKey(normalizedToday)) {
       List<Expense> todayExpenses = expensesMapped[normalizedToday]!;
       for (Expense expense in todayExpenses) {
@@ -110,14 +113,46 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               eventProccesed = true;
             });
           }
-        }else{
+        } else if (expense.name == "Rent") {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return EventPopUp(
+                expense: expense,
+                onTouch: () {
+                  expense.amountPaid >= expense.amount
+                      ? setState(() {
+                          eventProccesed = true;
+                          Navigator.of(context).pop();
+                        })
+                      : setState(() {
+                          expense.amount += expense.penalty;
+                          eventProccesed = true;
+                          Navigator.of(context).pop();
+                        });
+                },
+              );
+            },
+          );
+          if (!eventProccesed) {
+            if (expense.amountPaid < expense.amount) {
+              setState(() {
+                expense.amount += expense.penalty;
+              });
+            }
+            setState(() {
+              eventProccesed = true;
+              
+            });
+          }
+        } else {
           print(expense.name);
-
         }
       }
-      
-      
     }
+    setState(() {
+      eventProccesed = false;
+    });
   }
 
   Future<void> getUniqueWeekCountForMonth(int year, int month) async {
@@ -526,8 +561,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                           screenWidthUnit:
                                                               screenWidthUnit,
                                                           types: types,
-                                                          wellnessScore:
-                                                              wellnessScore,
+                                                          wellnessScore: widget
+                                                              .wellnessScore,
                                                           checkingAccountBalance:
                                                               widget.checkingAccountBalance
                                                                   as int,
@@ -545,6 +580,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                                   as int,
                                                           expenses:
                                                               widget.expenses,
+                                                          monthlyFitness:
+                                                              monthlyFitness,
+                                                          monthlyEntertainment:
+                                                              monthlyEntertainment,
                                                           onConfirm: (
                                                             int toSavings,
                                                             int toChecking,
@@ -556,6 +595,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                             int toFitness,
                                                             int toEntertainment,
                                                             int toCredCardDebt,
+                                                            int monthlyEntertainment,
+                                                            int monthlyFitness,
+                                                            int wellnessScore,
                                                           ) {
                                                             setState(() {
                                                               widget.checkingAccountBalance =
@@ -573,6 +615,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                                       as double;
                                                               widget.creditCardDebt -=
                                                                   toCredCardDebt; // easier to do double here than fix past
+                                                              monthlyEntertainment =
+                                                                  monthlyEntertainment;
+                                                              monthlyFitness =
+                                                                  monthlyFitness;
+                                                              widget.wellnessScore =
+                                                                  wellnessScore;
 
                                                               spendOnExpense(
                                                                   rentSpent,
@@ -597,11 +645,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                                   "CC Debt");
 
                                                               recalculatePercentages();
-
                                                               mapExpenses();
-
                                                               nextDay();
-
                                                               WidgetsBinding
                                                                   .instance
                                                                   .addPostFrameCallback(
@@ -1166,7 +1211,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 WellnessBox(
                                   screenHeightUnit: screenHeightUnit,
                                   screenWidthUnit: screenWidthUnit,
-                                  wellnessScore: wellnessScore,
+                                  wellnessScore: widget.wellnessScore,
                                 ),
                                 SizedBox(
                                   height: screenHeightUnit * 15,

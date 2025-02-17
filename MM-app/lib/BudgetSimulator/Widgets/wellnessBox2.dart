@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 class WellnessBox2 extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
-  final double wellnessScore;
+   int wellnessScore;
 
   WellnessBox2(
       {required this.screenHeightUnit,

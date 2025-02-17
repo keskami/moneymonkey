@@ -59,6 +59,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
+                    wellnessScore: 300,
                     name: 'Crush the Credit Card Debt',
                     checkingAccountBalance: 300,
                     savingsAccountBalance: 300,
@@ -814,6 +815,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
+            wellnessScore: 300,
             name: 'Crush the Credit Card Debt',
             checkingAccountBalance: 300,
             savingsAccountBalance: 300,
@@ -887,7 +889,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   name: "Transportation",
                   amount: 100,
                   dueDateType: "Fixed",
-                  dueDay: DateTime(2025, 5, 28),
+                  dueDay: DateTime(2026, 5, 28),
                   amountPaid: 10,
                   penalty: 0),
               Expense(

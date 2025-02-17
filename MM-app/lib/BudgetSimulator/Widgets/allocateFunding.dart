@@ -11,7 +11,7 @@ class Allocatefunding extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
   final List<String> types;
-  final double wellnessScore;
+  int wellnessScore;
   int checkingAccountBalance;
   int creditCardDebt;
   int savingsAccountBalance;
@@ -19,6 +19,8 @@ class Allocatefunding extends StatefulWidget {
   Function onConfirm;
   int savingsTransfer;
   int checkingTransfer;
+  int monthlyEntertainment;
+  int monthlyFitness;
 
   Allocatefunding({
     required this.screenHeightUnit,
@@ -32,6 +34,8 @@ class Allocatefunding extends StatefulWidget {
     required this.onConfirm,
     required this.savingsTransfer,
     required this.checkingTransfer,
+    required this.monthlyEntertainment,
+    required this.monthlyFitness,
   });
 
   @override
@@ -44,9 +48,6 @@ class Allocatefunding extends StatefulWidget {
   late int rentSpent;
   late int transportationSpent;
   late int utilitiesSpent;
-
-  BudgetSimulatorFunctions model = BudgetSimulatorFunctions();
-
 
   Future<void> getOutOfs() async {
     for (var expense in expenses) {
@@ -87,6 +88,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
   int travelSpentNow = 0;
 
   late int toSpend;
+  BudgetSimulatorFunctions budgetSimulatorFunctions =
+      BudgetSimulatorFunctions();
 
   List<Color> colors = [
     Colors.pink,
@@ -192,8 +195,9 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       SizedBox(
                                           height: widget.screenHeightUnit * 5),
                                       Text(
-                                        toChecking >= 0 ? 
-                                        "\$${widget.checkingAccountBalance}" : "\$${widget.checkingAccountBalance + toChecking}",
+                                        toChecking >= 0
+                                            ? "\$${widget.checkingAccountBalance}"
+                                            : "\$${widget.checkingAccountBalance + toChecking}",
                                         style: GoogleFonts.baloo2(
                                             fontSize:
                                                 widget.screenHeightUnit * 65,
@@ -316,19 +320,22 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if ((widget
-                                                      .checkingAccountBalance) + toChecking + widget.checkingTransfer >
-                                                  0 && (widget
-                                                      .checkingAccountBalance) + toChecking > 0) {
+                                              if ((widget.checkingAccountBalance) +
+                                                          toChecking +
+                                                          widget
+                                                              .checkingTransfer >
+                                                      0 &&
+                                                  (widget.checkingAccountBalance) +
+                                                          toChecking >
+                                                      0) {
                                                 setState(() {
                                                   //widget.savingsAccountBalance +=
-                                                    //  10;
+                                                  //  10;
                                                   //widget.checkingAccountBalance -=
-                                                      //10;
-                                                 
+                                                  //10;
+
                                                   toChecking -= 10;
                                                   toSavings += 10;
-                                                  
                                                 });
                                               }
                                             },
@@ -413,15 +420,19 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if ((widget.savingsAccountBalance + toSavings + widget.savingsTransfer) >
-                                                  0  &&(widget.savingsAccountBalance + toSavings) >
-                                                  0) {
+                                              if ((widget.savingsAccountBalance +
+                                                          toSavings +
+                                                          widget
+                                                              .savingsTransfer) >
+                                                      0 &&
+                                                  (widget.savingsAccountBalance +
+                                                          toSavings) >
+                                                      0) {
                                                 setState(() {
-                                                  
                                                   //widget.savingsAccountBalance -=
-                                                      //10;
+                                                  //10;
                                                   //widget.checkingAccountBalance +=
-                                                      //10;
+                                                  //10;
                                                   toChecking += 10;
                                                   toSavings -= 10;
                                                   //toSpend -= 10;
@@ -484,14 +495,19 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (widget.savingsAccountBalance  + toSavings + widget.savingsTransfer>
-                                                  0 && widget.savingsAccountBalance  + toSavings>
-                                                  0) {
+                                              if (widget.savingsAccountBalance +
+                                                          toSavings +
+                                                          widget
+                                                              .savingsTransfer >
+                                                      0 &&
+                                                  widget.savingsAccountBalance +
+                                                          toSavings >
+                                                      0) {
                                                 setState(() {
                                                   //widget.savingsAccountBalance -=
-                                                      //10;
+                                                  //10;
                                                   //widget.checkingAccountBalance +=
-                                                      //10;
+                                                  //10;
                                                   toChecking += 10;
                                                   toSavings -= 10;
                                                 });
@@ -578,24 +594,25 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if (widget
-                                                      .checkingAccountBalance  + toChecking>
-                                                  0 &&  widget
-                                                      .checkingAccountBalance  + toChecking + widget.checkingTransfer>
-                                                  0) {
+                                              if (widget.checkingAccountBalance +
+                                                          toChecking >
+                                                      0 &&
+                                                  widget.checkingAccountBalance +
+                                                          toChecking +
+                                                          widget
+                                                              .checkingTransfer >
+                                                      0) {
                                                 setState(() {
                                                   //widget.savingsAccountBalance +=
-                                                      //10;
+                                                  //10;
                                                   //widget.checkingAccountBalance -=
-                                                      //10;
+                                                  //10;
 
                                                   toChecking -= 10;
                                                   toSavings += 10;
-                                                  if(toChecking < 0){
+                                                  if (toChecking < 0) {
                                                     toSpend -= 10;
-
                                                   }
-                                                  
                                                 });
                                               }
                                             },
@@ -693,6 +710,15 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                               toEntertainment -= 10;
                                               widget.checkingAccountBalance +=
                                                   10;
+
+                                              widget.wellnessScore =
+                                                  budgetSimulatorFunctions
+                                                      .calculateWellnessEntertainment(
+                                                          widget.wellnessScore,
+                                                          -10,
+                                                          widget
+                                                              .monthlyEntertainment);
+                                                              widget.monthlyEntertainment -= 10;
                                             });
                                           }
                                         },
@@ -741,6 +767,14 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                               toEntertainment += 10;
                                               widget.checkingAccountBalance -=
                                                   10;
+                                               widget.wellnessScore =
+                                                  budgetSimulatorFunctions
+                                                      .calculateWellnessEntertainment(
+                                                          widget.wellnessScore,
+                                                          10,
+                                                          widget
+                                                              .monthlyEntertainment);
+                                                              widget.monthlyEntertainment += 10;
                                             });
                                           }
                                         },
@@ -797,6 +831,15 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                               toFitness -= 10;
                                               widget.checkingAccountBalance +=
                                                   10;
+
+                                              widget.wellnessScore =
+                                                  budgetSimulatorFunctions
+                                                      .calculateWellnessFitness(
+                                                          widget.wellnessScore,
+                                                          -10,
+                                                          widget
+                                                              .monthlyFitness);
+                                              widget.monthlyFitness -= 10;
                                             });
                                           }
                                         },
@@ -845,6 +888,15 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                               toFitness += 10;
                                               widget.checkingAccountBalance -=
                                                   10;
+                                              widget.wellnessScore =
+                                                  budgetSimulatorFunctions
+                                                      .calculateWellnessFitness(
+                                                          widget.wellnessScore,
+                                                          10,
+                                                          widget
+                                                              .monthlyFitness);
+
+                                              widget.monthlyFitness += 10;
                                             });
                                           }
                                         },
@@ -923,121 +975,140 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
-                                            children: [
+                                          children: [
                                             RequiredMeter(
                                               screenHeightUnit:
-                                                widget.screenHeightUnit,
+                                                  widget.screenHeightUnit,
                                               screenWidthUnit:
-                                                widget.screenWidthUnit,
+                                                  widget.screenWidthUnit,
                                               type: "Rent",
                                               outOf: widget.rentOutOf,
                                               spent: widget.rentSpent,
                                               spentNow: rentSpentNow,
                                               onTapAdd: () {
-                                              if (widget.checkingAccountBalance > 0 &&
-                                                widget.rentSpent < widget.rentOutOf) {
-                                                setState(() {
-                                                widget.checkingAccountBalance -= 10;
-                                                widget.rentSpent += 10;
-                                                rentSpentNow += 10;
-                                                });
-                                              }
+                                                if (widget.checkingAccountBalance >
+                                                        0 &&
+                                                    widget.rentSpent <
+                                                        widget.rentOutOf) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance -=
+                                                        10;
+                                                    widget.rentSpent += 10;
+                                                    rentSpentNow += 10;
+                                                  });
+                                                }
                                               },
                                               onTapSub: () {
-                                              if (rentSpentNow > 0) {
-                                                setState(() {
-                                                widget.checkingAccountBalance += 10;
-                                                rentSpentNow -= 10;
-                                                widget.rentSpent -= 10;
-                                                });
-                                              }
+                                                if (rentSpentNow > 0) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance +=
+                                                        10;
+                                                    rentSpentNow -= 10;
+                                                    widget.rentSpent -= 10;
+                                                  });
+                                                }
                                               },
                                             ),
                                             RequiredMeter(
                                               screenHeightUnit:
-                                                widget.screenHeightUnit,
+                                                  widget.screenHeightUnit,
                                               screenWidthUnit:
-                                                widget.screenWidthUnit,
+                                                  widget.screenWidthUnit,
                                               type: "Groceries",
                                               outOf: widget.groceriesOutOf,
                                               spent: widget.groceriesSpent,
                                               spentNow: groceriesSpentNow,
                                               onTapAdd: () {
-                                              if (widget.checkingAccountBalance > 0 &&
-                                                widget.groceriesSpent < widget.groceriesOutOf) {
-                                                setState(() {
-                                                widget.checkingAccountBalance -= 10;
-                                                widget.groceriesSpent += 10;
-                                                groceriesSpentNow += 10;
-                                                });
-                                              }
+                                                if (widget.checkingAccountBalance >
+                                                        0 &&
+                                                    widget.groceriesSpent <
+                                                        widget.groceriesOutOf) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance -=
+                                                        10;
+                                                    widget.groceriesSpent += 10;
+                                                    groceriesSpentNow += 10;
+                                                  });
+                                                }
                                               },
                                               onTapSub: () {
-                                              if (groceriesSpentNow > 0) {
-                                                setState(() {
-                                                widget.checkingAccountBalance += 10;
-                                                groceriesSpentNow -= 10;
-                                                widget.groceriesSpent -= 10;
-                                                });
-                                              }
+                                                if (groceriesSpentNow > 0) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance +=
+                                                        10;
+                                                    groceriesSpentNow -= 10;
+                                                    widget.groceriesSpent -= 10;
+                                                  });
+                                                }
                                               },
                                             ),
                                             RequiredMeter(
                                               screenHeightUnit:
-                                                widget.screenHeightUnit,
+                                                  widget.screenHeightUnit,
                                               screenWidthUnit:
-                                                widget.screenWidthUnit,
+                                                  widget.screenWidthUnit,
                                               type: "Transportation",
                                               outOf: widget.transportationOutOf,
                                               spent: widget.transportationSpent,
                                               spentNow: travelSpentNow,
                                               onTapAdd: () {
-                                              if (widget.checkingAccountBalance > 0 &&
-                                                widget.transportationSpent < widget.transportationOutOf) {
-                                                setState(() {
-                                                widget.checkingAccountBalance -= 10;
-                                                widget.transportationSpent += 10;
-                                                travelSpentNow += 10;
-                                                });
-                                              }
+                                                if (widget.checkingAccountBalance >
+                                                        0 &&
+                                                    widget.transportationSpent <
+                                                        widget
+                                                            .transportationOutOf) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance -=
+                                                        10;
+                                                    widget.transportationSpent +=
+                                                        10;
+                                                    travelSpentNow += 10;
+                                                  });
+                                                }
                                               },
                                               onTapSub: () {
-                                              if (travelSpentNow > 0) {
-                                                setState(() {
-                                                widget.checkingAccountBalance += 10;
-                                                travelSpentNow -= 10;
-                                                widget.transportationSpent -= 10;
-                                                });
-                                              }
+                                                if (travelSpentNow > 0) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance +=
+                                                        10;
+                                                    travelSpentNow -= 10;
+                                                    widget.transportationSpent -=
+                                                        10;
+                                                  });
+                                                }
                                               },
                                             ),
                                             RequiredMeter(
                                               screenHeightUnit:
-                                                widget.screenHeightUnit,
+                                                  widget.screenHeightUnit,
                                               screenWidthUnit:
-                                                widget.screenWidthUnit,
+                                                  widget.screenWidthUnit,
                                               type: "Utilities",
                                               outOf: widget.utilitiesOutOf,
                                               spent: widget.utilitiesSpent,
                                               spentNow: utilitiesSpentNow,
                                               onTapAdd: () {
-                                              if (widget.checkingAccountBalance > 0 &&
-                                                widget.utilitiesSpent < widget.utilitiesOutOf) {
-                                                setState(() {
-                                                widget.checkingAccountBalance -= 10;
-                                                widget.utilitiesSpent += 10;
-                                                utilitiesSpentNow += 10;
-                                                });
-                                              }
+                                                if (widget.checkingAccountBalance >
+                                                        0 &&
+                                                    widget.utilitiesSpent <
+                                                        widget.utilitiesOutOf) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance -=
+                                                        10;
+                                                    widget.utilitiesSpent += 10;
+                                                    utilitiesSpentNow += 10;
+                                                  });
+                                                }
                                               },
                                               onTapSub: () {
-                                              if (utilitiesSpentNow > 0) {
-                                                setState(() {
-                                                widget.checkingAccountBalance += 10;
-                                                utilitiesSpentNow -= 10;
-                                                widget.utilitiesSpent -= 10;
-                                                });
-                                              }
+                                                if (utilitiesSpentNow > 0) {
+                                                  setState(() {
+                                                    widget.checkingAccountBalance +=
+                                                        10;
+                                                    utilitiesSpentNow -= 10;
+                                                    widget.utilitiesSpent -= 10;
+                                                  });
+                                                }
                                               },
                                             ),
                                           ],
@@ -1173,10 +1244,13 @@ class _AllocatefundingState extends State<Allocatefunding> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                    widget.onConfirm(
+                                  widget.onConfirm(
                                     toSavings,
                                     toChecking,
-                                    toChecking >=0? widget.checkingAccountBalance : widget.checkingAccountBalance + toChecking , 
+                                    toChecking >= 0
+                                        ? widget.checkingAccountBalance
+                                        : widget.checkingAccountBalance +
+                                            toChecking,
                                     rentSpentNow,
                                     groceriesSpentNow,
                                     travelSpentNow,
@@ -1184,11 +1258,11 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                     toFitness,
                                     toEntertainment,
                                     toCredCardDebt,
-                                    
-                                    );
-                                     Navigator.of(context).pop();
-                                    
-                                 
+                                    widget.monthlyEntertainment,
+                                    widget.monthlyFitness,
+                                    widget.wellnessScore,
+                                  );
+                                  Navigator.of(context).pop();
                                 },
                                 child: Container(
                                     height: widget.screenHeightUnit * 65,
@@ -1468,16 +1542,15 @@ class RequiredMeter extends StatefulWidget {
   Function onTapAdd;
   Function onTapSub;
 
-  RequiredMeter({
-    required this.screenHeightUnit,
-    required this.screenWidthUnit,
-    required this.type,
-    required this.outOf,
-    required this.spent,
-    required this.spentNow,
-    required this.onTapAdd,
-    required this.onTapSub
-  });
+  RequiredMeter(
+      {required this.screenHeightUnit,
+      required this.screenWidthUnit,
+      required this.type,
+      required this.outOf,
+      required this.spent,
+      required this.spentNow,
+      required this.onTapAdd,
+      required this.onTapSub});
 
   @override
   _RequiredMeterState createState() => _RequiredMeterState();
@@ -1558,12 +1631,7 @@ class _RequiredMeterState extends State<RequiredMeter> {
             children: [
               GestureDetector(
                 onTap: () {
-                  
-                    widget.onTapSub();
-                    
-                  
-                  
-                  
+                  widget.onTapSub();
                 },
                 child: Container(
                   width: 50 * widget.screenHeightUnit,

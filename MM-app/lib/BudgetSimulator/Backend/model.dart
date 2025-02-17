@@ -72,7 +72,9 @@ class ScenarioLevelConfig {
  final List<RandomEvent> randomEvents; // Randomized events during the simulation
  final List<Milestone> milestones; // Milestones for tracking progress
  final List<Penalty> penalties; // Penalties for poor decisions
- final List<Reward> rewards; // Rewards for good decisions
+ final List<Reward> rewards;
+ int wellnessScore;
+  // Rewards for good decisions
 
 
  ScenarioLevelConfig(this.credidCardDebt, {
@@ -90,6 +92,7 @@ class ScenarioLevelConfig {
    required this.milestones,
    required this.penalties,
    required this.rewards,
+   required this.wellnessScore,
  });
 }
 
@@ -100,7 +103,7 @@ class ScenarioLevelConfig {
 // Supporting models for expenses, random events, milestones, penalties, and rewards
 class Expense {
  final String name;
- final double amount;
+  double amount;
  final String dueDateType; // "Fixed" or "Gradual"
  final DateTime dueDay; // For fixed expenses (e.g., Day 5)
   double amountPaid;
