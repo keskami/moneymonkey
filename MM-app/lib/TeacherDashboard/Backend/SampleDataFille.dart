@@ -299,11 +299,9 @@ Map<String, Lesson> advancedLessons = {
 };
 
 Map<String, Component> advancedComponents = {
-  for (int i = 1; i <= 8; i++)
-    for (int j = 1; j <= 5; j++)
-      'A.1.$i.$j': Component(
-        componentId: 'A.1.$i.$j',
-        title: 'Deep Dive on Concept $j of Fundamentals Topic $i',
+  'A.1.1.1': Component(
+        componentId: 'A.1.1.1',
+        title: 'Concept 1',
         type: ComponentType.concept,
         componentStatus: Status.Active,
         discussionQuestions: [
@@ -313,13 +311,188 @@ Map<String, Component> advancedComponents = {
         ],
         subComponentData: [],
       ),
-  for (int i = 1; i <= 8; i++)
-    for (int j = 1; j <= 5; j++)
-      'A.2.$i.$j': Component(
-        componentId: 'A.2.$i.$j',
-        title: 'Deep Dive on Concept $j of Advanced Topic $i',
+  
+  'A.1.1.2': Component(
+        componentId: 'A.1.1.2',
+        title: 'Interactive Activity',
+        type: ComponentType.interactiveActivity,
+        componentStatus: Status.Active,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.1.3': Component(
+        componentId: 'A.1.1.3',
+        title: 'Concept 2',
+        type: ComponentType.concept,
+        componentStatus: Status.InProgress,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.1.4': Component(
+        componentId: 'A.1.1.4',
+        title: 'Story',
+        type: ComponentType.story,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.1.5': Component(
+        componentId: 'A.1.1.5',
+        title: 'Scenario Simulation',
+        type: ComponentType.scenarioSimulation,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.1.6': Component(
+        componentId: 'A.1.1.6',
+        title: 'Peer Reflection',
+        type: ComponentType.peerReflection,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.1.7': Component(
+        componentId: 'A.1.1.7',
+        title: 'Toolkit',
+        type: ComponentType.toolkit,
+        componentStatus: Status.Active,
+        discussionQuestions: [
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.1.8': Component(
+        componentId: 'A.1.1.8',
+        title: 'Concept 1',
+        type: ComponentType.quiz,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  'A.1.2.1': Component(
+        componentId: 'A.1.2.1',
+        title: 'Concept 1',
         type: ComponentType.concept,
         componentStatus: Status.Active,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.2.2': Component(
+        componentId: 'A.1.2.2',
+        title: 'Interactive Activity',
+        type: ComponentType.interactiveActivity,
+        componentStatus: Status.Active,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.2.3': Component(
+        componentId: 'A.1.2.3',
+        title: 'Concept 2',
+        type: ComponentType.concept,
+        componentStatus: Status.InProgress,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.2.4': Component(
+        componentId: 'A.1.2.4',
+        title: 'Story',
+        type: ComponentType.story,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.2.5': Component(
+        componentId: 'A.1.2.5',
+        title: 'Scenario Simulation',
+        type: ComponentType.scenarioSimulation,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.2.6': Component(
+        componentId: 'A.1.2.6',
+        title: 'Peer Reflection',
+        type: ComponentType.peerReflection,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.2.7': Component(
+        componentId: 'A.1.2.7',
+        title: 'Toolkit',
+        type: ComponentType.toolkit,
+        componentStatus: Status.Active,
+        discussionQuestions: [
+          "What role do emergency funds play?",
+        ],
+        subComponentData: [],
+      ),
+  
+  'A.1.2.8': Component(
+        componentId: 'A.1.2.8',
+        title: 'Concept 1',
+        type: ComponentType.quiz,
+        componentStatus: Status.Inactive,
+        discussionQuestions: [
+          "When should financial responsibility begin?",
+          "How do financial decisions impact our future?",
+          "What role do emergency funds play?",
+        ],
         subComponentData: [],
       ),
 };

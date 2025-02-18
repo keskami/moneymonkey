@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/StudentServices.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 
 class AcademicService {
@@ -237,4 +238,19 @@ class LocalAcademicService {
     Component _component = getComponent(componentId);
     return _component.title;
   }
+  //Get Status Functions
+  Status getComponentStatus(String componentId){
+    return getComponent(componentId).componentStatus;
+  }
+  Status getLessonStatus(String LessonId){
+    return getLesson(LessonId).lessonStatus;
+  }
+  // double getComponentMathematicalProgress(String componentId,String classRoomId){
+  //   Component _component=getComponent(componentId);
+  //   int studentCount=getClassRoom(classRoomId).studentIds.length;
+  //   for(String st in getClassRoom(classRoomId).studentIds){
+  //     StudentService(student:st)
+  //   }
+  //   return (_component.subComponentData.length)/
+  // }
 }

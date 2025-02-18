@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
@@ -215,59 +216,62 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   ),
                 ),
                 //Lessons and respective status
-                ...componentsList.map(
-                  (lesson) => Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Colors.transparent,
-                        child: teacherDashboardController
-                                    .getProgress(lesson[1]) ==
-                                'Completed'
-                            ? Image.network(
-                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
-                              )
-                            : Container(
-                                width: 20,
-                                height: 20,
-                                child: teacherDashboardController
-                                            .getProgress(lesson[1]) ==
-                                        'In Progress'
-                                    ? CircularProgressIndicator(
-                                        value: double.parse(lesson[1]) / 100,
-                                        strokeWidth: 2,
-                                      )
-                                    : CircularProgressIndicator(
-                                        value: 1,
-                                        strokeWidth: 2,
-                                        color: Colors.grey,
-                                      ),
-                              ),
-                      ),
-                      Text(
-                        lesson[0],
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                ...componentMap.entries.map(
+                  (component) {
+                    print("***************Component Id: $component");
+                    Status currentComponentStatus=localAcademicService.getComponentStatus(component.key);
+                    return Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.transparent,
+                          child: currentComponentStatus ==
+                                  Status.Completed
+                              ? Image.network(
+                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FcomponentPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+                                )
+                              : Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: currentComponentStatus ==
+                                          Status.InProgress
+                                      ? CircularProgressIndicator(
+                                          value:
+                                              double.parse("24") / 100,
+                                          strokeWidth: 2,
+                                        )
+                                      : CircularProgressIndicator(
+                                          value: 1,
+                                          strokeWidth: 2,
+                                          color: Colors.grey,
+                                        ),
+                                ),
                         ),
-                      ).marginOnly(
-                        left: 10,
-                      ),
-                      const Spacer(),
-                      Text(
-                        teacherDashboardController.getProgress(lesson[1]),
-                        style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
+                        Text(
+                          component.value,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ).marginOnly(
+                          left: 10,
                         ),
-                      ).marginOnly(
-                        right: 20,
-                      ),
-                    ],
-                  ).marginSymmetric(
-                    vertical: 6,
-                  ),
+                        const Spacer(),
+                        Text(
+                          localAcademicService.getComponentStatus(component.key).name,
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ).marginOnly(
+                          right: 20,
+                        ),
+                      ],
+                    ).marginSymmetric(
+                      vertical: 6,
+                    );
+                  },
                 ),
               ],
             ),
