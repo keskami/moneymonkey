@@ -6,8 +6,13 @@ import 'package:money_monkey/Backend/Models/settings.dart';
 Teacher sampleTeacher = Teacher(
   name: "Mrs. Anderson",
   id: "temporaryTeacherId2025",
-  classRooms: [],
+  classRooms: [
+    'tempClassId1_2025',
+    'tempClassId3_2025',
+    'tempClassId4_2025',
+  ],
 );
+
 Map<String, Classroom> sampleClassrooms = {
   'tempClassId1_2025': Classroom(
     classId: 'tempClassId1_2025',
@@ -21,14 +26,14 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Investment Fundamentals",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S567890", "S123456"],
-    lessonId: 'A.1.1',
+    lessonId: 'A.1.2',
   ),
   'tempClassId3_2025': Classroom(
     classId: 'tempClassId3_2025',
     name: "Advanced Trading",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S789012"],
-    lessonId: 'A.1.2',
+    lessonId: 'A.1.1',
   ),
   'tempClassId4_2025': Classroom(
     classId: 'tempClassId4_2025',
@@ -38,6 +43,7 @@ Map<String, Classroom> sampleClassrooms = {
     lessonId: 'A.1.3',
   ),
 };
+
 List<Student> sampleStudents = [
   Student(
     studentId: "S123456",
@@ -155,6 +161,7 @@ List<Student> sampleStudents = [
     settings: settingsData,
   ),
 ];
+
 SettingsData settingsData = SettingsData(
   preferences: Preferences(
     soundEffects: true,
@@ -183,6 +190,7 @@ SettingsData settingsData = SettingsData(
   ),
   privacySettings: PrivacySettings(publicProfile: true),
 );
+
 List<Unit> sampleAdvancedSyllabus = [
   Unit(
     unitId: 'A.1',
@@ -215,9 +223,6 @@ Map<String, Unit> advancedUnits = {
       'A.1.3',
       'A.1.4',
       'A.1.5',
-      'A.1.6',
-      'A.1.7',
-      'A.1.8'
     ],
     unitStatus: Status.Active,
     totalLessons: 8,
@@ -234,9 +239,6 @@ Map<String, Unit> advancedUnits = {
       'A.2.3',
       'A.2.4',
       'A.2.5',
-      'A.2.6',
-      'A.2.7',
-      'A.2.8'
     ],
     unitStatus: Status.Active,
     totalLessons: 8,
@@ -245,254 +247,561 @@ Map<String, Unit> advancedUnits = {
   ),
 };
 
+// Refactored lessons with no embedded component initializations
 Map<String, Lesson> advancedLessons = {
-  for (int i = 1; i <= 8; i++)
-    'A.1.$i': Lesson(
-      lessonId: 'A.1.$i',
-      title: 'Fundamentals Topic $i',
-      description: 'Understanding the basics of topic $i',
-      lessonStatus: Status.Active,
-      components: {
-        for (int j = 1; j <= 5; j++)
-          'A.1.$i.$j': Component(
-            componentId: 'A.1.$i.$j',
-            title: 'Concept $j of Fundamentals Topic $i',
-            type: ComponentType.concept,
-            componentStatus: Status.Active,
-        subComponentData: [],
-          ),
-      },
-      progress: 0,
-      performanceTrends: PerformanceTrends(
-        label: 'Week $i',
-        classAverage: 80 + i.toDouble(),
-        participationRate: 0.85,
-        lessonCompletion: 0.7,
-      ),
-      totalComponents: 5,
+  'A.1.1': Lesson(
+    lessonId: 'A.1.1',
+    title: 'Market Basics',
+    description: 'Understanding financial markets and their structure',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(8, (index) => 'A.1.1.${index + 1}'), // 8 components
+    progress: 0,
+    performanceTrends: PerformanceTrends(
+      label: 'Week 1',
+      classAverage: 81.0,
+      participationRate: 0.85,
+      lessonCompletion: 0.7,
     ),
-  for (int i = 1; i <= 8; i++)
-    'A.2.$i': Lesson(
-      lessonId: 'A.2.$i',
-      title: 'Advanced Topic $i',
-      description: 'Deep dive into topic $i',
-      lessonStatus: Status.Active,
-      components: {
-        for (int j = 1; j <= 5; j++)
-          'A.2.$i.$j': Component(
-            componentId: 'A.2.$i.$j',
-            title: 'Concept $j of Advanced Topic $i',
-            type: ComponentType.concept,
-            componentStatus: Status.Active,
-            subComponentData: [],
-          ),
-      },
-      progress: 0,
-      performanceTrends: PerformanceTrends(
-        label: 'Week $i',
-        classAverage: 80 + i.toDouble(),
-        participationRate: 0.85,
-        lessonCompletion: 0.7,
-      ),
-      totalComponents: 5,
+    totalComponents: 8,
+  ),
+  'A.1.2': Lesson(
+    lessonId: 'A.1.2',
+    title: 'Trading Principles',
+    description: 'Core principles of successful trading strategies',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(8, (index) => 'A.1.2.${index + 1}'), // 8 components
+    progress: 0,
+    performanceTrends: PerformanceTrends(
+      label: 'Week 2',
+      classAverage: 82.0,
+      participationRate: 0.87,
+      lessonCompletion: 0.72,
     ),
+    totalComponents: 8,
+  ),
+  'A.1.3': Lesson(
+    lessonId: 'A.1.3',
+    title: 'Risk Management',
+    description: 'Understanding and mitigating trading risks',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(6, (index) => 'A.1.3.${index + 1}'), // 6 components
+    progress: 0,
+    performanceTrends: PerformanceTrends(
+      label: 'Week 3',
+      classAverage: 83.0,
+      participationRate: 0.83,
+      lessonCompletion: 0.75,
+    ),
+    totalComponents: 6,
+  ),
+  'A.1.4': Lesson(
+    lessonId: 'A.1.4',
+    title: 'Technical Analysis Basics',
+    description: 'Introduction to chart patterns and indicators',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(7, (index) => 'A.1.4.${index + 1}'), // 7 components
+    progress: 0,
+    performanceTrends: PerformanceTrends(
+      label: 'Week 4',
+      classAverage: 84.0,
+      participationRate: 0.81,
+      lessonCompletion: 0.68,
+    ),
+    totalComponents: 7,
+  ),
+  'A.1.5': Lesson(
+    lessonId: 'A.1.5',
+    title: 'Fundamental Analysis',
+    description: 'Evaluating assets based on financial metrics',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(6, (index) => 'A.1.5.${index + 1}'), // 6 components
+    progress: 0,
+    performanceTrends: PerformanceTrends(
+      label: 'Week 5',
+      classAverage: 85.0,
+      participationRate: 0.79,
+      lessonCompletion: 0.67,
+    ),
+    totalComponents: 6,
+  ),
+  'A.2.1': Lesson(
+    lessonId: 'A.2.1',
+    title: 'Advanced Chart Patterns',
+    description: 'Complex chart formations and their implications',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(8, (index) => 'A.2.1.${index + 1}'), // 8 components
+    progress: 0,
+    performanceTrends: PerformanceTrends(
+      label: 'Advanced Week 1',
+      classAverage: 86.0,
+      participationRate: 0.88,
+      lessonCompletion: 0.76,
+    ),
+    totalComponents: 8,
+  ),
+  'A.2.2': Lesson(
+    lessonId: 'A.2.2',
+    title: 'Trading Psychology',
+    description: 'Mental aspects of successful trading',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(5, (index) => 'A.2.2.${index + 1}'), // 5 components
+    progress: 0,
+    performanceTrends: PerformanceTrends(
+      label: 'Advanced Week 2',
+      classAverage: 87.0,
+      participationRate: 0.86,
+      lessonCompletion: 0.74,
+    ),
+    totalComponents: 5,
+  ),
 };
 
+// Expanded component database with unique components for each lesson
 Map<String, Component> advancedComponents = {
+  // Components for Lesson A.1.1
   'A.1.1.1': Component(
-        componentId: 'A.1.1.1',
-        title: 'Concept 1',
-        type: ComponentType.concept,
-        componentStatus: Status.Active,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.1.1',
+    title: 'What are Financial Markets?',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do financial markets impact everyday life?",
+      "What roles do different market participants play?",
+      "Why is market efficiency important?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.1.2': Component(
-        componentId: 'A.1.1.2',
-        title: 'Interactive Activity',
-        type: ComponentType.interactiveActivity,
-        componentStatus: Status.Active,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.1.2',
+    title: 'Market Types Exploration',
+    type: ComponentType.interactiveActivity,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do stocks differ from bonds?",
+      "What makes forex markets unique?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.1.3': Component(
-        componentId: 'A.1.1.3',
-        title: 'Concept 2',
-        type: ComponentType.concept,
-        componentStatus: Status.InProgress,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.1.3',
+    title: 'Market Participants',
+    type: ComponentType.concept,
+    componentStatus: Status.InProgress,
+    discussionQuestions: [
+      "What motivates institutional investors?",
+      "How do retail traders affect market dynamics?",
+      "What role do market makers serve?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.1.4': Component(
-        componentId: 'A.1.1.4',
-        title: 'Story',
-        type: ComponentType.story,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.1.4',
+    title: 'The Great Crash of 1929',
+    type: ComponentType.story,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "What lessons can modern investors learn from historical crashes?",
+      "How did market regulation evolve after major crashes?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.1.5': Component(
-        componentId: 'A.1.1.5',
-        title: 'Scenario Simulation',
-        type: ComponentType.scenarioSimulation,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.1.5',
+    title: 'Market Opening Simulation',
+    type: ComponentType.scenarioSimulation,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "What factors drive price movement at market open?",
+      "How should traders approach market volatility periods?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.1.6': Component(
-        componentId: 'A.1.1.6',
-        title: 'Peer Reflection',
-        type: ComponentType.peerReflection,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.1.6',
+    title: 'Analyzing Market News',
+    type: ComponentType.peerReflection,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "How do you identify market-moving news?",
+      "What biases affect our interpretation of financial news?",
+      "How can we verify the credibility of market information?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.1.7': Component(
-        componentId: 'A.1.1.7',
-        title: 'Toolkit',
-        type: ComponentType.toolkit,
-        componentStatus: Status.Active,
-        discussionQuestions: [
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.1.7',
+    title: 'Market Research Resources',
+    type: ComponentType.toolkit,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What sources provide reliable market data?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.1.8': Component(
-        componentId: 'A.1.1.8',
-        title: 'Concept 1',
-        type: ComponentType.quiz,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
+    componentId: 'A.1.1.8',
+    title: 'Market Basics Assessment',
+    type: ComponentType.quiz,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "How well do you understand market structures?",
+      "Can you identify different market participants?",
+      "Do you understand market terminology?",
+    ],
+    subComponentData: [],
+  ),
+
+  // Components for Lesson A.1.2
   'A.1.2.1': Component(
-        componentId: 'A.1.2.1',
-        title: 'Concept 1',
-        type: ComponentType.concept,
-        componentStatus: Status.Active,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.2.1',
+    title: 'Core Trading Concepts',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What defines a good trading strategy?",
+      "How do risk and reward relate in trading?",
+      "Why is consistency more important than occasional big wins?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.2.2': Component(
-        componentId: 'A.1.2.2',
-        title: 'Interactive Activity',
-        type: ComponentType.interactiveActivity,
-        componentStatus: Status.Active,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.2.2',
+    title: 'Trading Journal Exercise',
+    type: ComponentType.interactiveActivity,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How does journaling improve trading performance?",
+      "What metrics should traders track?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.2.3': Component(
-        componentId: 'A.1.2.3',
-        title: 'Concept 2',
-        type: ComponentType.concept,
-        componentStatus: Status.InProgress,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.2.3',
+    title: 'Position Sizing Strategies',
+    type: ComponentType.concept,
+    componentStatus: Status.InProgress,
+    discussionQuestions: [
+      "How does position sizing affect portfolio risk?",
+      "What position sizing methods work best for different markets?",
+      "When should position sizes be adjusted?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.2.4': Component(
-        componentId: 'A.1.2.4',
-        title: 'Story',
-        type: ComponentType.story,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.2.4',
+    title: 'The Market Wizard',
+    type: ComponentType.story,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "What traits do successful traders share?",
+      "How do trading legends handle losing streaks?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.2.5': Component(
-        componentId: 'A.1.2.5',
-        title: 'Scenario Simulation',
-        type: ComponentType.scenarioSimulation,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.2.5',
+    title: 'Bull vs Bear Market Trading',
+    type: ComponentType.scenarioSimulation,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "How should strategies adapt to market cycles?",
+      "What indicators signal market direction changes?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.2.6': Component(
-        componentId: 'A.1.2.6',
-        title: 'Peer Reflection',
-        type: ComponentType.peerReflection,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.2.6',
+    title: 'Trade Review Session',
+    type: ComponentType.peerReflection,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "What can we learn from examining trades objectively?",
+      "How do emotions influence trading decisions?",
+      "What patterns emerge from your trading history?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.2.7': Component(
-        componentId: 'A.1.2.7',
-        title: 'Toolkit',
-        type: ComponentType.toolkit,
-        componentStatus: Status.Active,
-        discussionQuestions: [
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
-  
+    componentId: 'A.1.2.7',
+    title: 'Trading Plan Template',
+    type: ComponentType.toolkit,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What elements make a trading plan effective?",
+    ],
+    subComponentData: [],
+  ),
+
   'A.1.2.8': Component(
-        componentId: 'A.1.2.8',
-        title: 'Concept 1',
-        type: ComponentType.quiz,
-        componentStatus: Status.Inactive,
-        discussionQuestions: [
-          "When should financial responsibility begin?",
-          "How do financial decisions impact our future?",
-          "What role do emergency funds play?",
-        ],
-        subComponentData: [],
-      ),
+    componentId: 'A.1.2.8',
+    title: 'Trading Principles Evaluation',
+    type: ComponentType.quiz,
+    componentStatus: Status.Inactive,
+    discussionQuestions: [
+      "Can you identify proper position sizing techniques?",
+      "Do you understand trading plan requirements?",
+      "How well can you evaluate risk/reward ratios?",
+    ],
+    subComponentData: [],
+  ),
+
+  // Components for Lesson A.1.3
+  'A.1.3.1': Component(
+    componentId: 'A.1.3.1',
+    title: 'Risk Management Fundamentals',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "Why do most traders fail due to poor risk management?",
+      "How does portfolio diversification reduce risk?",
+      "What role does volatility play in risk assessment?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.1.3.2': Component(
+    componentId: 'A.1.3.2',
+    title: 'Stop Loss Calculator',
+    type: ComponentType.interactiveActivity,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How tight should stop losses be?",
+      "When should trailing stops be used?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.1.3.3': Component(
+    componentId: 'A.1.3.3',
+    title: 'Risk-Reward Ratios',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What is an acceptable risk-reward ratio?",
+      "How do win rates relate to risk-reward ratios?",
+      "When should risk parameters be adjusted?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.1.3.4': Component(
+    componentId: 'A.1.3.4',
+    title: 'The Recovered Trader',
+    type: ComponentType.story,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How does psychological recovery happen after big losses?",
+      "What habits separate resilient traders from others?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.1.3.5': Component(
+    componentId: 'A.1.3.5',
+    title: 'Market Crash Simulation',
+    type: ComponentType.scenarioSimulation,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do your risk management systems hold up under extreme stress?",
+      "What contingency plans should traders develop?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.1.3.6': Component(
+    componentId: 'A.1.3.6',
+    title: 'Risk Management Assessment',
+    type: ComponentType.quiz,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "Can you calculate position sizes based on risk percentages?",
+      "Do you understand correlation in portfolio construction?",
+      "How well can you design a comprehensive risk management plan?",
+    ],
+    subComponentData: [],
+  ),
+
+  // Components for A.2.1
+  'A.2.1.1': Component(
+    componentId: 'A.2.1.1',
+    title: 'Complex Chart Pattern Recognition',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What makes harmonic patterns reliable?",
+      "How do volume patterns confirm price patterns?",
+      "When do pattern failures provide trading opportunities?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.1.2': Component(
+    componentId: 'A.2.1.2',
+    title: 'Pattern Scanner Workshop',
+    type: ComponentType.interactiveActivity,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How can pattern recognition be automated?",
+      "What filters reduce false pattern signals?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.1.3': Component(
+    componentId: 'A.2.1.3',
+    title: 'Multi-timeframe Analysis',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do patterns on higher timeframes influence lower ones?",
+      "What is the optimal timeframe combination for day trading?",
+      "How does fractal theory apply to market patterns?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.1.4': Component(
+    componentId: 'A.2.1.4',
+    title: 'The Pattern Master',
+    type: ComponentType.story,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What processes do professional pattern traders follow?",
+      "How has pattern trading evolved with technology?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.1.5': Component(
+    componentId: 'A.2.1.5',
+    title: 'Pattern Trading Simulation',
+    type: ComponentType.scenarioSimulation,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How reliable are patterns during different market conditions?",
+      "What confirmation indicators strengthen pattern signals?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.1.6': Component(
+    componentId: 'A.2.1.6',
+    title: 'Pattern Analysis Review',
+    type: ComponentType.peerReflection,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What biases affect our pattern recognition?",
+      "How do we evaluate pattern quality objectively?",
+      "What statistical methods help validate pattern effectiveness?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.1.7': Component(
+    componentId: 'A.2.1.7',
+    title: 'Advanced Pattern Toolkit',
+    type: ComponentType.toolkit,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "What tools enhance pattern identification accuracy?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.1.8': Component(
+    componentId: 'A.2.1.8',
+    title: 'Advanced Pattern Mastery Test',
+    type: ComponentType.quiz,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "Can you identify complex harmonic patterns?",
+      "Do you understand pattern completion ratios?",
+      "How well can you integrate patterns with other analysis methods?",
+    ],
+    subComponentData: [],
+  ),
+
+  // Components for A.2.2 - Trading Psychology
+  'A.2.2.1': Component(
+    componentId: 'A.2.2.1',
+    title: 'The Trader\'s Mind',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do cognitive biases affect trading decisions?",
+      "What psychological traits define successful traders?",
+      "How does stress impact trading performance?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.2.2': Component(
+    componentId: 'A.2.2.2',
+    title: 'Emotional Response Tracking',
+    type: ComponentType.interactiveActivity,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do emotions correlate with trading mistakes?",
+      "What techniques help manage trading emotions?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.2.3': Component(
+    componentId: 'A.2.2.3',
+    title: 'Trading Performance Optimization',
+    type: ComponentType.concept,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do elite performers maintain mental clarity?",
+      "What routines support consistent decision-making?",
+      "How does mindfulness improve trading results?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.2.4': Component(
+    componentId: 'A.2.2.4',
+    title: 'The Mind Trader',
+    type: ComponentType.story,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "How do professional traders handle prolonged drawdowns?",
+      "What mental techniques preserve capital during slumps?",
+    ],
+    subComponentData: [],
+  ),
+
+  'A.2.2.5': Component(
+    componentId: 'A.2.2.5',
+    title: 'Trading Psychology Assessment',
+    type: ComponentType.quiz,
+    componentStatus: Status.Active,
+    discussionQuestions: [
+      "Can you identify your psychological trading weaknesses?",
+      "Do you understand the impact of cognitive biases?",
+      "How well can you implement mental performance techniques?",
+    ],
+    subComponentData: [],
+  ),
 };

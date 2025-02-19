@@ -39,18 +39,19 @@ class _DashboardOverviewState extends State<DashboardOverview> {
   @override
   void initState() {
     super.initState();
-    initializeDiscussionQuestions();
+    initializeData();
     // Listen to class changes
     ever(teacherDashboardController.classId, (_) {
-      initializeDiscussionQuestions();
+      initializeData();
     });
   }
 
-  void initializeDiscussionQuestions() {
+  void initializeData() {
     if (widget.components.isNotEmpty) {
       // Clear previous data
       componentMap.clear();
       componentNames.clear();
+      componentIds.clear();
 
       setState(() {
         for (String componentId in widget.components) {
@@ -70,6 +71,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
         // Fetch new discussion questions for current lesson
         discussionQuestions = localAcademicService
             .getComponentDiscussionQuestionsForLesson(widget.currentLessonId);
+            componentIds=widget.components;
       });
     }
   }
@@ -80,7 +82,8 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     // Check if components or lessonId changed
     if (oldWidget.components != widget.components ||
         oldWidget.currentLessonId != widget.currentLessonId) {
-      initializeDiscussionQuestions();
+      initializeData();
+      print("####################### Components: $componentIds");
     }
   }
 
@@ -219,14 +222,14 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 ...componentMap.entries.map(
                   (component) {
                     print("***************Component Id: $component");
-                    Status currentComponentStatus=localAcademicService.getComponentStatus(component.key);
+                    Status currentComponentStatus =
+                        localAcademicService.getComponentStatus(component.key);
                     return Row(
                       children: [
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: currentComponentStatus ==
-                                  Status.Completed
+                          child: currentComponentStatus == Status.Completed
                               ? Image.network(
                                   "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FcomponentPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
                                 )
@@ -236,8 +239,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                                   child: currentComponentStatus ==
                                           Status.InProgress
                                       ? CircularProgressIndicator(
-                                          value:
-                                              double.parse("24") / 100,
+                                          value: double.parse("24") / 100,
                                           strokeWidth: 2,
                                         )
                                       : CircularProgressIndicator(
@@ -258,7 +260,9 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         ),
                         const Spacer(),
                         Text(
-                          localAcademicService.getComponentStatus(component.key).name,
+                          localAcademicService
+                              .getComponentStatus(component.key)
+                              .name,
                           style: TextStyle(
                             color: Colors.grey.shade500,
                             fontWeight: FontWeight.w600,

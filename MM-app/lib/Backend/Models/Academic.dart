@@ -139,18 +139,17 @@ class Unit {
     }
   }
 }
-
 class Lesson {
-  String lessonId;
-  String title;
-  String description;
-  Status lessonStatus;
-  Map<String, Component> components;
-  double progress;
-  PerformanceTrends performanceTrends;
-  int totalComponents;
-  DateTime? startedAt;
-  DateTime? completedAt;
+  final String lessonId;
+  final String title;
+  final String description;
+  final Status lessonStatus;
+  final List<String> components; // Changed to List<String>
+  final double progress;
+  final int totalComponents;
+  final PerformanceTrends performanceTrends;
+  final DateTime? startedAt;
+  final DateTime? completedAt;
 
   Lesson({
     required this.lessonId,
@@ -172,10 +171,7 @@ class Lesson {
       description: data['Description'] ?? '',
       lessonStatus: statusFromFirestore(data['LessonStatus'] ?? 'inactive'),
       progress: (data['Progress'] is num ? data['Progress'] : 0).toDouble(),
-      components: (data['Components'] as Map<String, dynamic>?)?.map(
-            (key, value) => MapEntry(key, Component.fromFirestore(value, key)),
-          ) ??
-          {},
+      components: List<String>.from(data['Components'] ?? []), // Updated line
       performanceTrends: data['PerformanceTrends'] != null
           ? PerformanceTrends.fromFirestore(data['PerformanceTrends'])
           : PerformanceTrends(
@@ -184,7 +180,7 @@ class Lesson {
               participationRate: 0,
               lessonCompletion: 0,
             ),
-      totalComponents: int.parse(data['totalComponents']),
+      totalComponents: int.parse(data['totalComponents'].toString()),
       startedAt: data['StartedAt']?.toDate(),
       completedAt: data['CompletedAt']?.toDate(),
     );
@@ -196,27 +192,12 @@ class Lesson {
       'Description': description,
       'LessonStatus': statusToFirestore(lessonStatus),
       'Progress': progress,
-      'Components':
-          components.map((key, value) => MapEntry(key, value.toFirestore())),
+      'Components': components, // Updated line
       'PerformanceTrends': performanceTrends.toFirestore(),
       'totalComponents': totalComponents,
       'StartedAt': startedAt,
       'CompletedAt': completedAt,
     };
-  }
-
-  Component? getLatestActiveComponent() {
-    var activeComponents = components.values
-        .where((component) => component.componentStatus == Status.Active)
-        .toList();
-
-    // If there are no active components, return null
-    if (activeComponents.isEmpty) return null;
-
-    // Sort components by 'startedAt' or any other relevant property
-    activeComponents.sort((a, b) => b.progress.compareTo(a.progress));
-
-    return activeComponents.first;
   }
 }
 
