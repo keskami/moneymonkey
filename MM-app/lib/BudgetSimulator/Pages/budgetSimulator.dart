@@ -13,6 +13,8 @@ import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomWarning.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 
 class BudgetSimulator extends StatefulWidget {
   BudgetSimulator({
@@ -42,11 +44,12 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
+  
 
-  static changeMoney(double amount, String s) {}
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
+  
   late double netCash;
   final Headings headings = Headings();
   DateTime now = DateTime(2025, 5, 1); // Current date and time
@@ -64,8 +67,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   bool eventProccesed = false;
   double checkingTransfer = 0;
   double savingsTransfer = 0;
-  int daysSinceStart = 0;
-
 
   int monthlyFitness = 0;
   int monthlyEntertainment = 0;
@@ -77,26 +78,24 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
 
-
-  int startingDebt  = 1;
+  int startingDebt = 1;
   int startingRent = 1;
   int startingCCMin = 1;
   int startingUtilites = 1;
   int startingTransportaion = 100;
   int startingGroceries = 250;
 
-
   Future<void> editMilestonesCCD(
       int toCredCardDebt, int toSavings, int toLuxary) async {
     for (Milestone milestone in widget.milestones) {
       if (milestone.name == 'Debt Avalanche Start') {
-        if (daysSinceStart < 31) {
+        if (monthsOccurd < 1) {
           setState(() {
             milestone.currentAmount += toCredCardDebt;
           });
         }
       } else if (milestone.name == 'Build an Emergency Cushion') {
-        if (daysSinceStart < 61) {
+        if (monthsOccurd < 2) {
           setState(() {
             milestone.currentAmount = widget.savingsAccountBalance;
           });
@@ -131,26 +130,56 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       }
     }
   }
-  int monthsOccurd  = 0;
 
-  Future<void> nextMonth() async{
-    if(monthsOccurd < 2){
-      for (Expense event in widget.expenses){
-      
+  int monthsOccurd = 0;
 
+  Future<void> nextMonth() async {
+    if (monthsOccurd < 2) {
+      for (Expense expense in widget.expenses) {
+        if (expense.name == "Pay Day") {
+          setState(() {
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
+        } else if (expense.name == "Transportation") {
+          setState(() {
+            expense.amount += startingTransportaion;
+          });
+        } else if (expense.name == "Groceries") {
+          setState(() {
+            expense.amount += startingGroceries;
+          });
+        } else if (expense.name == "Rent") {
+          setState(() {
+            expense.amount += startingRent;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
+        } else if (expense.name == "CC Debt") {
+          setState(() {
+            expense.amount += startingCCMin;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
+        }
       }
-
     }
-
+    setState(() {
+      monthsOccurd += 1;
+    });
+    mapExpenses();
   }
 
   Future<void> nextDay() async {
+    if (now.month != now.add(Duration(days: 1)).month) {
+      nextMonth();
+    }
+
     setState(() {
       now = now.add(Duration(days: 1));
       _focusedDay = _focusedDay.add(Duration(days: 1));
       _selectedDay = _selectedDay.add(Duration(days: 1));
       formattedDate = DateFormat('MMM d, y').format(_focusedDay);
-      daysSinceStart += 1;
     });
   }
 
@@ -252,7 +281,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             });
           }
         } else {
-          print(expense.name);
+          
         }
       }
     }
@@ -314,30 +343,31 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     }
   }
 
-  Future<void> recalculatePercentages() async {
-    //types.clear();
-    //percentage.clear();
+  recalculatePercentages() {
     totalSpending = 0;
     int i = 0;
 
     for (Expense expense in widget.expenses) {
       if (expense.name != "Pay Day") {
-        types[i] = expense.name;
-        totalSpending += expense.amountPaid;
-        i += 1;
+        setState(() {
+          totalSpending += expense.amountPaid;
+          i += 1;
+        });
       }
     }
-    int j = 0;
-
+   
+    List<double> newPercentage = [];
     for (Expense expense in widget.expenses) {
       if (expense.name != "Pay Day") {
-        percentage[j] = (expense.amountPaid / totalSpending) * 100;
-
-        j += 1;
+        newPercentage.add((expense.amountPaid / totalSpending) * 100);
+       
       }
-
-      //percentage.add((expense.amountPaid / totalSpending) * 100);
     }
+    setState(() {
+      percentage = newPercentage;
+    });
+
+    getChartData();
   }
 
   Future<void> getExpenses() async {
@@ -346,7 +376,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       totalSpending += expense.amountPaid;
     }
     for (Expense expense in widget.expenses) {
-      percentage.add((expense.amountPaid / totalSpending) * 100);
+      setState(() {
+        percentage.add((expense.amountPaid / totalSpending) * 100);
+      });
     }
   }
 
@@ -373,29 +405,28 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     });
   }
 
-  Future<void> getStartingExpenses () async{
+  Future<void> getStartingExpenses() async {
     setState(() {
       startingDebt = widget.creditCardDebt as int;
     });
     for (Expense expense in widget.expenses) {
       if (expense.name == "CC Debt") {
-      setState(() {
-        startingCCMin = expense.amount as int;
-      });
+        setState(() {
+          startingCCMin = expense.amount as int;
+        });
       } else if (expense.name == "Rent") {
-      setState(() {
-        startingRent = expense.amount as int;
-      });
+        setState(() {
+          startingRent = expense.amount as int;
+        });
       } else if (expense.name == "Utilities") {
-      setState(() {
-        startingUtilites = expense.amount as int;
-      });
+        setState(() {
+          startingUtilites = expense.amount as int;
+        });
       } else if (expense.name == "Transportation") {
-      setState(() {
-        startingTransportaion = expense.amount as int;
-      });
-      }
-      else if (expense.name == "Groceries"){
+        setState(() {
+          startingTransportaion = expense.amount as int;
+        });
+      } else if (expense.name == "Groceries") {
         startingGroceries = expense.amount as int;
       }
     }
@@ -415,8 +446,36 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       getEvents();
     });
     getStartingExpenses();
-    
+    getChartData();
   }
+
+  List<ChartData> chartData = [];
+  int xtotal = 0;
+  List<Color> colors = [
+    Colors.pink,
+    Colors.blue,
+    Colors.teal,
+    Colors.orange,
+    Colors.yellow,
+    Colors.purple,
+  
+  ];
+
+
+  Future<void> getChartData() async {
+    setState(() {
+      chartData.clear();
+      xtotal = 0;
+
+      for (int i = 0; i < types.length; i++) {
+        chartData.add(ChartData(
+            types[i], percentage[i], colors[i % colors.length]));
+        xtotal += percentage[i].toInt();
+      }
+    });
+  }
+    
+
 
   @override
   Widget build(BuildContext context) {
@@ -424,6 +483,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeightUnit = screenHeight / 1406;
     double screenWidthUnit = screenWidth / 2079;
+    
 
     return Container(
       height: screenHeight,
@@ -1366,6 +1426,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   types: types,
                                   percentage: percentage,
                                   total: totalSpending,
+                                  chartData: chartData,
                                 ),
                               ],
                             )
@@ -1388,4 +1449,12 @@ class Event {
   final String title;
 
   Event(this.title);
+}
+
+  class ChartData {
+  final String category;
+  final double percentage;
+  final Color color;
+
+  ChartData(this.category, this.percentage, this.color);
 }

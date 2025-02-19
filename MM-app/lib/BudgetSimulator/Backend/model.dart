@@ -105,7 +105,7 @@ class Expense {
  final String name;
   double amount;
  final String dueDateType; // "Fixed" or "Gradual"
- final DateTime dueDay; // For fixed expenses (e.g., Day 5)
+  DateTime dueDay; // For fixed expenses (e.g., Day 5)
   double amountPaid;
  final double penalty;
 

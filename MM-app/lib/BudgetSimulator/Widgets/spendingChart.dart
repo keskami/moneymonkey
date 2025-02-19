@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SpendingDonutChart extends StatefulWidget {
@@ -9,6 +10,8 @@ class SpendingDonutChart extends StatefulWidget {
   List<String> types;
   List<double> percentage;
   double total = 0;
+  List<ChartData> chartData = [];
+  
 
   SpendingDonutChart({
     required this.screenHeightUnit,
@@ -16,6 +19,7 @@ class SpendingDonutChart extends StatefulWidget {
     required this.types,
     required this.percentage,
     required this.total,
+    required this.chartData,
   });
   @override
   _SpendingDonutChartState createState() => _SpendingDonutChartState();
@@ -28,30 +32,21 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
     Colors.teal,
     Colors.orange,
     Colors.yellow,
-    Colors.pink,
+    Colors.black,
     Colors.blue,
     Colors.teal,
     Colors.orange,
     Colors.yellow,
   ];
-  int total = 0;
+  
 
-  List<_ChartData> chartData = [];
-  Future<void> getData() async {
-    chartData.clear();
-    total = 0;
-
-    for (int i = 0; i < widget.types.length; i++) {
-      chartData.add(_ChartData(
-          widget.types[i], widget.percentage[i], colors[i % colors.length]));
-      total += widget.percentage[i].toInt();
-    }
-  }
+  
+  
 
   @override
   void initState() {
-    getData();
     super.initState();
+  
   }
 
   @override
@@ -109,12 +104,12 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
                       ),
                     )
                   ],
-                  series: <CircularSeries<_ChartData, String>>[
-                    DoughnutSeries<_ChartData, String>(
-                      dataSource: chartData,
-                      xValueMapper: (_ChartData data, _) => data.category,
-                      yValueMapper: (_ChartData data, _) => data.percentage,
-                      pointColorMapper: (_ChartData data, _) => data.color,
+                  series: <CircularSeries<ChartData, String>>[
+                    DoughnutSeries<ChartData, String>(
+                      dataSource: widget.chartData,
+                      xValueMapper: (ChartData data, _) => data.category,
+                      yValueMapper: (ChartData data, _) => data.percentage,
+                      pointColorMapper: (ChartData data, _) => data.color,
                       innerRadius: '60%',
                     )
                   ],
@@ -205,7 +200,6 @@ class SpendingSidePart extends StatelessWidget {
     );
   }
 }
-
 class _ChartData {
   final String category;
   final double percentage;
@@ -213,3 +207,5 @@ class _ChartData {
 
   _ChartData(this.category, this.percentage, this.color);
 }
+
+
