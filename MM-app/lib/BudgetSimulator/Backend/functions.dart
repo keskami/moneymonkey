@@ -1,4 +1,13 @@
+import 'dart:math';
+
 class BudgetSimulatorFunctions {
+
+  
+
+
+
+
+
   int calculateWellnessFitness(
       int score, int fitnessAdded, int monthlyFitness) {
     if (fitnessAdded < 0) {
@@ -19,7 +28,7 @@ class BudgetSimulatorFunctions {
       }
     }
 
-    return score;
+    return min(score,1000);
   }
 
   int calculateWellnessEntertainment(
@@ -42,6 +51,6 @@ class BudgetSimulatorFunctions {
       }
     }
 
-    return score;
+    return min(score,1000);
   }
 }

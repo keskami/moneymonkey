@@ -33,10 +33,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
     Colors.orange,
     Colors.yellow,
     Colors.black,
-    Colors.blue,
-    Colors.teal,
-    Colors.orange,
-    Colors.yellow,
+    Colors.purple,
   ];
   
 

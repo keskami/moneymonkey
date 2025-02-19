@@ -17,7 +17,6 @@ import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-
 class BudgetSimulator extends StatefulWidget {
   BudgetSimulator({
     super.key,
@@ -31,6 +30,7 @@ class BudgetSimulator extends StatefulWidget {
     required this.creditScore,
     required this.expenses,
     required this.wellnessScore,
+    required this.randomEvents,
   });
 
   final String name;
@@ -42,20 +42,18 @@ class BudgetSimulator extends StatefulWidget {
   final double startingBalance;
   final double APY;
   final List<Milestone> milestones;
-  final double creditScore;
+  double creditScore;
   List<Expense> expenses;
+  List<RandomEvent> randomEvents;
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
-  
-
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
-  
   late double netCash;
   final Headings headings = Headings();
   final Headings2 headings2 = Headings2();
-  DateTime now = DateTime(2025, 5, 1); // Current date and time
+  DateTime now = DateTime(2025, 5, 1); 
   DateTime _focusedDay = DateTime(2025, 5, 1);
   DateTime _selectedDay = DateTime(2025, 5, 1);
   String formattedDate = '';
@@ -69,7 +67,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int checkingAccountBalance = 600;
   bool eventProccesed = false;
   double checkingTransfer = 0;
-  double savingsTransfer =0;
+  double savingsTransfer = 0;
 
   int monthlyFitness = 0;
   int monthlyEntertainment = 0;
@@ -87,6 +85,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingUtilites = 1;
   int startingTransportaion = 100;
   int startingGroceries = 250;
+
+  bool noLatePayments = true;
+
+
 
   Future<void> editMilestonesCCD(
       int toCredCardDebt, int toSavings, int toLuxary) async {
@@ -170,7 +172,23 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     setState(() {
       monthsOccurd += 1;
     });
+    if (noLatePayments) {
+      setState(() {
+        widget.creditScore += 10;
+      });
+    }
+    setState(() {
+      noLatePayments = true;
+    });
     mapExpenses();
+    
+
+  
+  }
+
+  Future<void> endGame() async{
+    // Credit Score
+
   }
 
   Future<void> nextDay() async {
@@ -233,6 +251,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                         })
                       : setState(() {
                           expense.amount += expense.penalty;
+                          widget.creditScore -= 10;
+                          noLatePayments = false;
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         });
@@ -244,6 +264,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             if (expense.amountPaid < expense.amount) {
               setState(() {
                 expense.amount += expense.penalty;
+                widget.creditScore -= 10;
+                noLatePayments = false;
               });
             }
             setState(() {
@@ -265,6 +287,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                       : setState(() {
                           expense.amount += expense.penalty;
                           widget.creditCardDebt += expense.penalty;
+                          widget.creditScore -= 10;
+                          noLatePayments = false;
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         });
@@ -277,15 +301,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               setState(() {
                 expense.amount += expense.penalty;
                 widget.creditCardDebt += expense.penalty;
+                widget.creditScore -= 10;
+                noLatePayments = false;
               });
             }
             setState(() {
               eventProccesed = true;
             });
           }
-        } else {
-          
-        }
+        } else {}
       }
     }
     setState(() {
@@ -358,12 +382,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         });
       }
     }
-   
+
     List<double> newPercentage = [];
     for (Expense expense in widget.expenses) {
       if (expense.name != "Pay Day") {
         newPercentage.add((expense.amountPaid / totalSpending) * 100);
-       
       }
     }
     setState(() {
@@ -434,6 +457,30 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       }
     }
   }
+  List<RandomEvent> allocatedEvents = [];
+
+  List<List<int>> dayRanges = [[5,7],[18,20],[25,27], [37,39],[43,46], [52,56], [61,68], [72,85]];
+
+  Future<void> alocateEvents() async{
+    for (var range in dayRanges) {
+      int randomDay = range[0] + (range[1] - range[0]) * (DateTime.now().millisecondsSinceEpoch % 100) ~/ 100;
+      DateTime eventDay = now.add(Duration(days: randomDay));
+      RandomEvent? event = widget.randomEvents.isNotEmpty ? widget.randomEvents.removeAt(0) : null;
+      setState(() {
+        event?.trigerDay = eventDay;
+      });
+      if (event != null) {
+      setState(() {
+        print(event.name);
+        print(event.trigerDay);
+        allocatedEvents.add(event);
+      });
+      }
+    }
+
+
+
+  }
 
   @override
   void initState() {
@@ -450,6 +497,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     });
     getStartingExpenses();
     getChartData();
+    alocateEvents();
   }
 
   List<ChartData> chartData = [];
@@ -460,10 +508,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     Colors.teal,
     Colors.orange,
     Colors.yellow,
+    Colors.black,
     Colors.purple,
-  
+    
   ];
-
 
   Future<void> getChartData() async {
     setState(() {
@@ -471,14 +519,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       xtotal = 0;
 
       for (int i = 0; i < types.length; i++) {
-        chartData.add(ChartData(
-            types[i], percentage[i], colors[i % colors.length]));
+        chartData
+            .add(ChartData(types[i], percentage[i], colors[i % colors.length]));
         xtotal += percentage[i].toInt();
       }
     });
   }
-    
-
 
   @override
   Widget build(BuildContext context) {
@@ -486,7 +532,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeightUnit = screenHeight / 1406;
     double screenWidthUnit = screenWidth / 2079;
-    
 
     return Container(
       height: screenHeight,
@@ -1454,7 +1499,7 @@ class Event {
   Event(this.title);
 }
 
-  class ChartData {
+class ChartData {
   final String category;
   final double percentage;
   final Color color;

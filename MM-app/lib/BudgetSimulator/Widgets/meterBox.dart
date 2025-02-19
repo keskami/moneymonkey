@@ -27,8 +27,8 @@ class _MeterBoxState extends State<MeterBox> {
 
   @override
   Widget build(BuildContext context) {
-    final double min = 0;
-    final double max = 850;
+    final double min = 550;
+    final double max = 700;
     final int numberOfSections = 5;
     final double sectionSize = (max - min) / numberOfSections;
     final List<GaugeRange> ranges = List.generate(numberOfSections, (index) {
@@ -91,20 +91,16 @@ class _MeterBoxState extends State<MeterBox> {
                                 fontSize: widget.screenWidthUnit * 50,
                                 fontWeight: FontWeight.w600,
                                 color: widget.creditScore >
-                                        ((max - min) / numberOfSections) * 4
+                                        670
                                     ? sectionColors[4]
                                     : widget.creditScore >
-                                            ((max - min) / numberOfSections) * 3
+                                            640
                                         ? sectionColors[3]
                                         : widget.creditScore >
-                                                ((max - min) /
-                                                        numberOfSections) *
-                                                    2
+                                                610
                                             ? sectionColors[2]
                                             : widget.creditScore >
-                                                    ((max - min) /
-                                                            numberOfSections) *
-                                                        1
+                                                    580
                                                 ? sectionColors[1]
                                                 : sectionColors[0],
                               ),

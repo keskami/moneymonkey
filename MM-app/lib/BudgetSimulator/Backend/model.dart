@@ -63,7 +63,7 @@ class ScenarioLevelConfig {
  final double monthlyIncome; // Total monthly income
  final List<double> biweeklyPaychecks; // Income distribution (e.g., $1250 biweekly)
  final int scenarioLengthMonths; // Duration of the scenario
- final double creditScore; // Starting credit score
+  double creditScore; // Starting credit score
  final Map<String, double> monthlySpendingBreakdown; // Breakdown of spendings by category
  final double savingsAccountBalance; // Starting savings account balance
  final double checkingAccountBalance;// Starting checking account balance
@@ -123,18 +123,20 @@ class Expense {
 
 class RandomEvent {
  final String name;
- final double impactAmount; // Positive or negative
- final String impactType; // "Expense" or "Income"
- final int frequencyPerMonth; // Approximate frequency
- final List<int> possibleTriggerDays;
+ final String description; 
+ final List<String> options; 
+ DateTime trigerDay;
+ final int cost;
+
 
 
  RandomEvent({
    required this.name,
-   required this.impactAmount,
-   required this.impactType,
-   required this.frequencyPerMonth,
-   required this.possibleTriggerDays,
+   required this.description,
+   required this.options,
+   required this.trigerDay,
+   required this.cost,
+   
  });
 }
 
