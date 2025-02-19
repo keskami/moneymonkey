@@ -89,7 +89,7 @@ class _ExpenselabelState extends State<Expenselabel> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(left: widget.screenWidthUnit * 10),
+                  padding: EdgeInsets.only(left: widget.screenWidthUnit * 7),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,13 +106,13 @@ class _ExpenselabelState extends State<Expenselabel> {
                         width: widget.screenWidthUnit * 12,
                       ),
                       (widget.expense.name == "Utilites" ||
-                              widget.expense.name == "Rent")
+                              widget.expense.name == "Rent" || widget.expense.name == "CC Debt")
                           ? Padding(
                               padding: EdgeInsets.only(
                                   top: widget.screenHeightUnit * 10),
                               child: Container(
                                 height: widget.screenHeightUnit * 35,
-                                width: widget.screenWidthUnit * 70,
+                                width: widget.screenWidthUnit * 80,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(5)),

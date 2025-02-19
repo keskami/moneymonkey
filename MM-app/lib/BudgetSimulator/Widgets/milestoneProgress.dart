@@ -7,13 +7,15 @@ class MilestoneProgress extends StatefulWidget {
   final List<Milestone> milestones;
   final double screenWidthUnit;
   final double screenHeightUnit;
-  final int progress;
+  final int startingDebt;
+  int currentDebt;
 
   MilestoneProgress({
     required this.milestones,
     required this.screenWidthUnit,
     required this.screenHeightUnit,
-    required this.progress,
+    required this.startingDebt,
+    required this.currentDebt,
     Key? key,
   }) : super(key: key);
 
@@ -64,19 +66,18 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
                           color: Colors.black,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: widget.screenWidthUnit * 110,
-                        ),
+                      Container(
+                        width: widget.screenWidthUnit * 290,
                         child: Text(
-                          "${widget.progress}% Completed",
+                          "${(((widget.startingDebt - widget.currentDebt) * 2) / widget.startingDebt * 100).clamp(0, 100).toStringAsFixed(0)}% Completed",
                           style: GoogleFonts.baloo2(
                             fontSize: widget.screenWidthUnit * 28,
                             fontWeight: FontWeight.w700,
                             color: Color.fromRGBO(103, 103, 103, 1),
                           ),
+                          textAlign: TextAlign.right,
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -94,7 +95,13 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
                             ),
                           ),
                           FractionallySizedBox(
-                            widthFactor: widget.progress / 100,
+                            widthFactor: ((1.8 *
+                                        ((widget.startingDebt -
+                                            widget.currentDebt)) /
+                                        widget.startingDebt *
+                                        100) /
+                                    100)
+                                .clamp(0, .9),
                             child: Container(
                               height: widget.screenHeightUnit * 36,
                               decoration: BoxDecoration(
@@ -125,8 +132,9 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
                     width: widget.screenWidthUnit * 470,
                     child: SingleChildScrollView(
                         child: Padding(
-                      padding:
-                          EdgeInsets.only(left: widget.screenWidthUnit * 27, bottom: widget.screenHeightUnit * 10),
+                      padding: EdgeInsets.only(
+                          left: widget.screenWidthUnit * 27,
+                          bottom: widget.screenHeightUnit * 10),
                       child: Column(
                         children: widget.milestones.map((milestone) {
                           return MilestoneSubWidget(
@@ -169,7 +177,7 @@ class _MilestoneSubWidgetState extends State<MilestoneSubWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: widget.screenHeightUnit *24),
+      padding: EdgeInsets.only(top: widget.screenHeightUnit * 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,

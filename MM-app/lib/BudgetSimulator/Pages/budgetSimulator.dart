@@ -64,12 +64,85 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   bool eventProccesed = false;
   double checkingTransfer = 0;
   double savingsTransfer = 0;
+  int daysSinceStart = 0;
+
 
   int monthlyFitness = 0;
   int monthlyEntertainment = 0;
 
+  int toLuxaryForWeek = 0;
+  int daysUnderLuxary = 0;
+  bool daysUnderLuxaryDone = false;
+
   final Map<DateTime, List<Expense>> expensesMapped = {};
   final List<Expense> expenses = [];
+
+
+  int startingDebt  = 1;
+  int startingRent = 1;
+  int startingCCMin = 1;
+  int startingUtilites = 1;
+  int startingTransportaion = 100;
+  int startingGroceries = 250;
+
+
+  Future<void> editMilestonesCCD(
+      int toCredCardDebt, int toSavings, int toLuxary) async {
+    for (Milestone milestone in widget.milestones) {
+      if (milestone.name == 'Debt Avalanche Start') {
+        if (daysSinceStart < 31) {
+          setState(() {
+            milestone.currentAmount += toCredCardDebt;
+          });
+        }
+      } else if (milestone.name == 'Build an Emergency Cushion') {
+        if (daysSinceStart < 61) {
+          setState(() {
+            milestone.currentAmount = widget.savingsAccountBalance;
+          });
+        }
+      } else if (milestone.name == 'Two Weeks Under Budget') {
+        if (!daysUnderLuxaryDone) {
+          if (toLuxaryForWeek + toLuxary >= 50) {
+            setState(() {
+              milestone.currentAmount = 0;
+              daysUnderLuxary = 0;
+              toLuxaryForWeek = 0;
+            });
+          } else if (daysUnderLuxary == 13) {
+            setState(() {
+              milestone.currentAmount = 14;
+              daysUnderLuxaryDone = true;
+            });
+          } else if (daysUnderLuxary == 6) {
+            setState(() {
+              milestone.currentAmount += 1;
+              toLuxaryForWeek = 0;
+              daysUnderLuxary += 1;
+            });
+          } else {
+            setState(() {
+              milestone.currentAmount += 1;
+              toLuxaryForWeek += toLuxary;
+              daysUnderLuxary += 1;
+            });
+          }
+        }
+      }
+    }
+  }
+  int monthsOccurd  = 0;
+
+  Future<void> nextMonth() async{
+    if(monthsOccurd < 2){
+      for (Expense event in widget.expenses){
+      
+
+      }
+
+    }
+
+  }
 
   Future<void> nextDay() async {
     setState(() {
@@ -77,6 +150,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       _focusedDay = _focusedDay.add(Duration(days: 1));
       _selectedDay = _selectedDay.add(Duration(days: 1));
       formattedDate = DateFormat('MMM d, y').format(_focusedDay);
+      daysSinceStart += 1;
     });
   }
 
@@ -142,7 +216,39 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             }
             setState(() {
               eventProccesed = true;
-              
+            });
+          }
+        } else if (expense.name == "CC Debt") {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return EventPopUp(
+                expense: expense,
+                onTouch: () {
+                  expense.amountPaid >= expense.amount
+                      ? setState(() {
+                          eventProccesed = true;
+                          Navigator.of(context).pop();
+                        })
+                      : setState(() {
+                          expense.amount += expense.penalty;
+                          widget.creditCardDebt += expense.penalty;
+                          eventProccesed = true;
+                          Navigator.of(context).pop();
+                        });
+                },
+              );
+            },
+          );
+          if (!eventProccesed) {
+            if (expense.amountPaid < expense.amount) {
+              setState(() {
+                expense.amount += expense.penalty;
+                widget.creditCardDebt += expense.penalty;
+              });
+            }
+            setState(() {
+              eventProccesed = true;
             });
           }
         } else {
@@ -267,6 +373,34 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     });
   }
 
+  Future<void> getStartingExpenses () async{
+    setState(() {
+      startingDebt = widget.creditCardDebt as int;
+    });
+    for (Expense expense in widget.expenses) {
+      if (expense.name == "CC Debt") {
+      setState(() {
+        startingCCMin = expense.amount as int;
+      });
+      } else if (expense.name == "Rent") {
+      setState(() {
+        startingRent = expense.amount as int;
+      });
+      } else if (expense.name == "Utilities") {
+      setState(() {
+        startingUtilites = expense.amount as int;
+      });
+      } else if (expense.name == "Transportation") {
+      setState(() {
+        startingTransportaion = expense.amount as int;
+      });
+      }
+      else if (expense.name == "Groceries"){
+        startingGroceries = expense.amount as int;
+      }
+    }
+  }
+
   @override
   void initState() {
     mapExpenses();
@@ -280,6 +414,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getEvents();
     });
+    getStartingExpenses();
+    
   }
 
   @override
@@ -621,6 +757,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                                   monthlyFitness;
                                                               widget.wellnessScore =
                                                                   wellnessScore;
+
+                                                              editMilestonesCCD(
+                                                                  toCredCardDebt,
+                                                                  widget.savingsAccountBalance
+                                                                      as int,
+                                                                  (toFitness +
+                                                                      toEntertainment));
 
                                                               spendOnExpense(
                                                                   rentSpent,
@@ -1195,7 +1338,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   milestones: widget.milestones,
                                   screenWidthUnit: screenWidthUnit,
                                   screenHeightUnit: screenHeightUnit,
-                                  progress: progress,
+                                  startingDebt: startingDebt,
+                                  currentDebt: widget.creditCardDebt as int,
                                 ),
                                 SizedBox(
                                   height: screenHeightUnit * 15,

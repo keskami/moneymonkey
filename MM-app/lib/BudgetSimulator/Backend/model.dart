@@ -143,7 +143,7 @@ class Milestone {
  final String name;
  final String description;
  final double goalAmount; // Specific target (e.g., pay down $300 above minimum)
- final double currentAmount; // Current progress towards the goal (Josh Added)
+double currentAmount; // Current progress towards the goal (Josh Added)
  final String goalType; // "DebtReduction", "SpendingLimit", etc.
  final int startDay;
  final int endDay; // Valid time window for achieving the milestone

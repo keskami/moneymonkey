@@ -818,7 +818,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             wellnessScore: 300,
             name: 'Crush the Credit Card Debt',
             checkingAccountBalance: 300,
-            savingsAccountBalance: 300,
+            savingsAccountBalance: 0,
             creditCardDebt: 3000,
             startingBalance: 600,
             creditScore: 243,
@@ -834,18 +834,18 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   endDay:
                       DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
                           .day,
-                  currentAmount: 100),
+                  currentAmount: 0),
               Milestone(
                   name: 'Build an Emergency Cushion',
                   description:
                       'By the end of Month 2, accumulate at\nleast 10% of your monthly income\n(\$250) in your savings account.',
-                  goalAmount: 25,
+                  goalAmount: 250,
                   goalType: 'Savings',
                   startDay: DateTime.now().day,
                   endDay:
                       DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
                           .day,
-                  currentAmount: 17),
+                  currentAmount: 0),
               Milestone(
                   name: 'Two Weeks Under Budget',
                   description:
@@ -854,7 +854,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   goalType: 'Savings',
                   startDay: DateTime.now().day,
                   endDay: DateTime.now().add(Duration(days: 14)).day,
-                  currentAmount: 3)
+                  currentAmount: 0)
             ],
             expenses: [
               Expense(
@@ -894,11 +894,11 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   penalty: 0),
               Expense(
                   name: "CC Debt",
-                  amount: 1000,
+                  amount: 200,
                   dueDateType: "Fixed",
                   dueDay: DateTime(2025, 5, 25),
                   amountPaid: 0,
-                  penalty: 0),
+                  penalty: 100),
               Expense(
                   name: "Groceries",
                   amount: 250,
