@@ -6,6 +6,8 @@ import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
+
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/meterBox.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
@@ -52,6 +54,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   
   late double netCash;
   final Headings headings = Headings();
+  final Headings2 headings2 = Headings2();
   DateTime now = DateTime(2025, 5, 1); // Current date and time
   DateTime _focusedDay = DateTime(2025, 5, 1);
   DateTime _selectedDay = DateTime(2025, 5, 1);
@@ -66,7 +69,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int checkingAccountBalance = 600;
   bool eventProccesed = false;
   double checkingTransfer = 0;
-  double savingsTransfer = 0;
+  double savingsTransfer =0;
 
   int monthlyFitness = 0;
   int monthlyEntertainment = 0;
@@ -647,7 +650,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                             ),
                             child: Center(
                               child: widget.name == "Crush the Credit Card Debt"
-                                  ? headings.crushTheCreditCardDebtHeading(
+                                  ? headings2.crushTheCreditCardDebtHeading(
                                       checkingAccountBalance:
                                           widget.checkingAccountBalance,
                                       savingsAccountBalance:
