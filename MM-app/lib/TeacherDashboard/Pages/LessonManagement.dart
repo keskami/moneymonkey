@@ -59,7 +59,7 @@ class _LessonManagementState extends State<LessonManagement> {
         try {
           Lesson currentLesson = localAcademicService.getLesson(widget.currentLessonId);
           message1 = currentLesson.title;
-          message2 = currentLesson.description ?? "No description available";
+          message2 = currentLesson.description;
         } catch (e) {
           print('Error getting lesson info: $e');
           message1 = "Financial Responsibility Over a Lifetime";
