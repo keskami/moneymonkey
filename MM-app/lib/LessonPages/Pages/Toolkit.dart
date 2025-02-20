@@ -12,7 +12,7 @@ class Toolkit extends StatefulWidget {
 }
 
 class _ToolkitState extends State<Toolkit> {
-  Toolkitcontroller toolkitcontroller = Get.put(Toolkitcontroller());
+  Toolkitcontroller toolkitcontroller = Get.find<Toolkitcontroller>();
   final String lessonId = "PeerReflectionQuiz";
 
   Future<void> _preCacheImages() async {

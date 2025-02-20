@@ -13,7 +13,7 @@ class PeerReflection extends StatefulWidget {
 
 class _PeerReflectionState extends State<PeerReflection> {
   PeerReflectioncontroller peerReflectioncontroller =
-      Get.put(PeerReflectioncontroller());
+      Get.find<PeerReflectioncontroller>();
   final String lessonId = "PeerReflection";
 
   Future<void> _preloadImages() async {

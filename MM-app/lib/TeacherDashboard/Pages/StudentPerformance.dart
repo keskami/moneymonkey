@@ -46,12 +46,14 @@ class _StudentPerformanceState extends State<StudentPerformance> {
   }
 
   @override
-  void didUpdateWidget(StudentPerformance oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.classStudents != oldWidget.classStudents) {
-      initializeData();
-    }
+void didUpdateWidget(StudentPerformance oldWidget) {
+  super.didUpdateWidget(oldWidget);
+  if (widget.classStudents != oldWidget.classStudents ||
+      widget.topPerformers != oldWidget.topPerformers ||
+      widget.supportStudents != oldWidget.supportStudents) {
+    initializeData();
   }
+}
 
   void initializeData() {
     if (widget.classStudents.isNotEmpty) {
@@ -74,15 +76,6 @@ class _StudentPerformanceState extends State<StudentPerformance> {
     }
   }
 
-  // void getCategorizedStudents() {
-  //   Map<String, List<Student>> categorizedSt =
-  //       StudentService(student: selectedStudent)
-  //           .getCategorizedStudents(widget.classStudents);
-  //   setState(() {
-  //     topPerformers = categorizedSt['topPeformers']?.toList() ?? [];
-  //     supportStudents = categorizedSt['needSupport']?.toList() ?? [];
-  //   });
-  // }
 
   void setSelectedStudent(int index) {
     if (index >= 0 && index < studentList.length) {

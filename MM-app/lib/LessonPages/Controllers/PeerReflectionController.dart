@@ -1,57 +1,48 @@
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:money_monkey/Backend/Services/lessonData.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/ImagesIntroPage.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/TapToExpandPage.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/DragNDropQuestionPage.dart';
+// peer_reflection_controller.dart
+
+import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
+import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 
+class PeerReflectioncontroller extends GetxController {
+  final int lessonNumber;
+  final int unitNumber;
 
-class PeerReflectioncontroller  extends GetxController{
+  PeerReflectioncontroller({required this.unitNumber, required this.lessonNumber});
 
-   RxInt pageIndex = 0.obs;
+  final LessonServices lessonServices = Get.find<LessonServices>();
 
-   var pages = [
-    ImagesIntroPage(),
-    TapToExpandPage(),
-    DragNDropQuestionPage(),
-    Page4(),
-    
-   ];
-
-
-   var pageData = <int, dynamic>{}.obs;
-  final LessonData lessonData = LessonData();
+  RxInt pageIndex = 0.obs;
   RxBool isLoading = true.obs;
-  
+
+  var pageData = <int, dynamic>{}.obs;
+
+  // UI pages
+  final pages = [
+  ];
 
   @override
   void onInit() {
     super.onInit();
-    fetchPageData();
+    loadPeerReflectionData();
   }
 
-  Future<void> fetchPageData() async {
+  Future<void> loadPeerReflectionData() async {
     try {
-      for (int i = 1; i <= 4; i++) {
-        var data = await lessonData.getPageInfoFromFirestore(
+      for (int i = 1; i <= 5; i++) {
+        final data = await lessonServices.loadSinglePageData(
           levelName: "Advanced",
-          UnitNumber: 1,
-          LessonNumber: 1,
-          TypeOfLesson: "PeerReflection",
-          PageNumber: i,
+          unitNumber: unitNumber,
+          lessonNumber: lessonNumber,
+          componentType: "PeerReflection",
+          pageNumber: i,
         );
-
         pageData[i] = data;
       }
     } catch (e) {
-      print("Error fetching page data: $e");
+      print("Error fetching peerReflection data: $e");
     } finally {
       isLoading.value = false;
-      
     }
   }
-
-
-
 }

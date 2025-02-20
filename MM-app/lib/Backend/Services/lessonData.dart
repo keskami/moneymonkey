@@ -11,6 +11,12 @@ class LessonData {
       required int LessonNumber,
       required String TypeOfLesson,
       required int PageNumber}) async {
+    print("FETCH: Starting with parameters:");
+    print("FETCH: Level: $levelName");
+    print("FETCH: Unit: $UnitNumber");
+    print("FETCH: Lesson: $LessonNumber");
+    print("FETCH: Type: $TypeOfLesson");
+    print("FETCH: Page: $PageNumber");
     try {
       final firestore = FirebaseFirestore.instance;
       DocumentReference levelDoc =

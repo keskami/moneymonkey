@@ -13,7 +13,7 @@ class PeerReflectionQuiz extends StatefulWidget {
 
 class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
   PeerReflectionQuizcontroller peerReflectionQuizcontroller =
-      Get.put(PeerReflectionQuizcontroller());
+      Get.find<PeerReflectionQuizcontroller>();
   final String lessonId = "PeerReflectionQuiz";
 
   @override
@@ -41,9 +41,9 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
                 onPressed: () {
                   peerReflectionQuizcontroller.pageIndex.value = 0;
                   Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
                 },
                 icon: Icon(Icons.close),
               ),
@@ -59,8 +59,9 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
                 width: 5,
               ),
               Image.network(
-                  width: 30,
-                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FbananasWorth.png?alt=media&token=551b2c7b-08d9-4624-a077-31641e5bd003"),
+                width: 30,
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FbananasWorth.png?alt=media&token=551b2c7b-08d9-4624-a077-31641e5bd003",
+              ),
               Text(
                 "3",
                 style: TextStyle(
@@ -70,9 +71,11 @@ class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
               ),
             ],
           ),
-          Obx(
-            () => peerReflectionQuizcontroller
-                .pages[peerReflectionQuizcontroller.pageIndex.value],
+          Expanded(
+            child: Obx(
+              () => peerReflectionQuizcontroller
+                  .pages[peerReflectionQuizcontroller.pageIndex.value],
+            ),
           ),
         ],
       ),

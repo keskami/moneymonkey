@@ -1,19 +1,29 @@
+// story_controller.dart
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Services/lessonData.dart';
+import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyIntroPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentProblemPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentSolutionsPage.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyIntroPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyLandingPage.dart';
 
 class StoryController extends GetxController {
+  final int lessonNumber;
+  final int unitNumber;
+
+  StoryController({required this.unitNumber, required this.lessonNumber});
+
+  final LessonServices lessonServices = Get.find<LessonServices>();
 
   RxInt pageIndex = 0.obs;
   RxBool toSolution = false.obs;
   RxBool toImpact = false.obs;
+  RxBool isLoading = true.obs;
 
-  var pages = <Widget>[
+  // UI pages
+  final pages = <Widget>[
     MonkeyLandingPage(),
     MonkeyIntroPage(),
     ComponentProblemPage(),
@@ -21,37 +31,31 @@ class StoryController extends GetxController {
     ComponentImapctPage(),
   ];
 
-
   var pageData = <int, dynamic>{}.obs;
-  final LessonData lessonData = LessonData();
-  RxBool isLoading = true.obs;
-  
 
   @override
   void onInit() {
     super.onInit();
-    fetchPageData();
+    loadStoryData();
   }
 
-  Future<void> fetchPageData() async {
-  try {
-    for (int i = 1; i <= 5; i++) {
-      var data = await lessonData.getPageInfoFromFirestore(
-        levelName: "Advanced",
-        UnitNumber: 1,
-        LessonNumber: 1,
-        TypeOfLesson: "Story",
-        PageNumber: i,
-      );
-
-      pageData[i] = data;
-        }
-  } catch (e) {
-    print("Error fetching page data: $e");
-  } finally {
-    isLoading.value = false;
-    print(pageData);
+  Future<void> loadStoryData() async {
+    try {
+      // For pages 1..5
+      for (int i = 1; i <= 5; i++) {
+        final data = await lessonServices.loadSinglePageData(
+          levelName: "Advanced",
+          unitNumber: unitNumber,
+          lessonNumber: lessonNumber,
+          componentType: "Story",
+          pageNumber: i,
+        );
+        pageData[i] = (data is Map<String, dynamic>) ? data : {};
+      }
+    } catch (e) {
+      print("Error fetching story data: $e");
+    } finally {
+      isLoading.value = false;
+    }
   }
-}
-
 }
