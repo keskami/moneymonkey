@@ -40,67 +40,73 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   late List<String> childComponents;
 
   String getClassId(String className) {
-    return classes.entries
-        .firstWhere((tr) => tr.value == className)
-        .key;
+    return classes.entries.firstWhere((tr) => tr.value == className).key;
+  }
+
+  Future<void> refreshClassData() async {
+    try {
+      // Clear previous data first
+      setState(() {
+        classRoomStudents = [];
+        childComponents = [];
+        topPerformers = [];
+        supportStudents = [];
+      });
+
+      // Get the updated classroom data
+      selectedClass = localAcademicService.getClassRoom(selectedClassId);
+
+      // Create new lists to ensure reference changes are detected
+      final List<Student> students =
+          _teacherService.getClassStudents(selectedClassId);
+      final List<String> components = List<String>.from(
+          localAcademicService.getLessonComponents(selectedClass.lessonId));
+
+      // Update state with new data
+      setState(() {
+        classRoomStudents = students;
+        childComponents = components;
+      });
+
+      // Categorize students after state update
+      if (classRoomStudents.isNotEmpty) {
+        getCategorizedStudents();
+      }
+
+      // Debug output
+      print('refreshClassData: Updated components: $childComponents');
+    } catch (e) {
+      print('Error refreshing class data: $e');
+    }
   }
 
   Future<void> onClassPicked(String? className) async {
-  if (className != null) {
-    // Update the selected class ID
-    selectedClassId = getClassId(className);
-    teacherDashboardController.classId.value = selectedClassId;
-    
-    // Refresh class data with proper state management
-    await refreshClassData();
-  }
-}
+    if (className != null) {
+      // Update the selected class ID
+      selectedClassId = getClassId(className);
+      teacherDashboardController.classId.value = selectedClassId;
 
-Future<void> refreshClassData() async {
-  try {
-    // Get the updated classroom data
-    selectedClass = localAcademicService.getClassRoom(selectedClassId);
-    
-    // Fetch students and components in a way that ensures proper state updates
-    final students = _teacherService.getClassStudents(selectedClassId);
-    final components = localAcademicService.getLessonComponents(selectedClass.lessonId);
-    
-    // Update state properly with setState to trigger UI updates
-    setState(() {
-      classRoomStudents = students;
-      childComponents = components;
-      
-      // Clear and update categorized students lists within setState
-      topPerformers = [];
-      supportStudents = [];
-    });
-    
-    // Categorize students after state update
-    if (classRoomStudents.isNotEmpty) {
-      getCategorizedStudents();
+      // Refresh class data with proper state management
+      await refreshClassData();
     }
-  } catch (e) {
-    // Handle potential errors
-    print('Error refreshing class data: $e');
-    // Could show a snackbar or dialog here to inform user
   }
-}
 
-void getCategorizedStudents() {
-  if (classRoomStudents.isEmpty) return;
-  
-  try {
-    final categorizedSt = StudentService(student: classRoomStudents[0])
-        .getCategorizedStudents(classRoomStudents);
-    
-    setState(() {
-      topPerformers = categorizedSt['topPeformers'] ?? [];
-      supportStudents = categorizedSt['needSupport'] ?? [];
-    });
-  } catch (e) {
-    print('Error categorizing students: $e');
+  void getCategorizedStudents() {
+    if (classRoomStudents.isEmpty) return;
+
+    try {
+      final categorizedSt = StudentService(student: classRoomStudents[0])
+          .getCategorizedStudents(classRoomStudents);
+
+      setState(() {
+        topPerformers = categorizedSt['topPeformers'] ?? [];
+        supportStudents = categorizedSt['needSupport'] ?? [];
+      });
+    } catch (e) {
+      print('Error categorizing students: $e');
+    }
   }
-}
+
   void getClasses() {
     classes = Map.fromEntries(
       sampleClassrooms.entries
@@ -109,12 +115,12 @@ void getCategorizedStudents() {
     );
   }
 
-
   @override
   void initState() {
     super.initState();
     getClasses();
   }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -163,7 +169,10 @@ void getCategorizedStudents() {
                     currentLessonId: selectedClass.lessonId,
                   );
                 case 1:
-                  return LessonManagement();
+                  return LessonManagement(
+                    components: childComponents,
+                    currentLessonId: selectedClass.lessonId,
+                  );
                 case 2:
                   print("************Sending Students $classRoomStudents");
                   return StudentPerformance(

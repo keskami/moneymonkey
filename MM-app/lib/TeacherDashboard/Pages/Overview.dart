@@ -71,7 +71,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
         // Fetch new discussion questions for current lesson
         discussionQuestions = localAcademicService
             .getComponentDiscussionQuestionsForLesson(widget.currentLessonId);
-            componentIds=widget.components;
+        componentIds = widget.components;
       });
     }
   }
@@ -102,6 +102,32 @@ class _DashboardOverviewState extends State<DashboardOverview> {
           selectedComponentId = selectedId;
         });
       }
+    }
+  }
+
+  Widget getProgressIndicator(Status status) {
+    switch (status) {
+      case Status.Completed:
+        return Image.network(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+        );
+      case Status.InProgress:
+        return CircularProgressIndicator(
+          value: double.parse("24") / 100,
+          strokeWidth: 2,
+        );
+      case Status.Active:
+        return CircularProgressIndicator(
+          value: 0.1,
+          strokeWidth: 2,
+        );
+      case Status.Inactive:
+      default:
+        return CircularProgressIndicator(
+          value: 1,
+          strokeWidth: 2,
+          color: Colors.grey,
+        );
     }
   }
 
@@ -229,25 +255,11 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: currentComponentStatus == Status.Completed
-                              ? Image.network(
-                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FcomponentPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
-                                )
-                              : Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: currentComponentStatus ==
-                                          Status.InProgress
-                                      ? CircularProgressIndicator(
-                                          value: double.parse("24") / 100,
-                                          strokeWidth: 2,
-                                        )
-                                      : CircularProgressIndicator(
-                                          value: 1,
-                                          strokeWidth: 2,
-                                          color: Colors.grey,
-                                        ),
-                                ),
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child: getProgressIndicator(currentComponentStatus),
+                          ),
                         ),
                         Text(
                           component.value,

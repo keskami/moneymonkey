@@ -33,7 +33,7 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Advanced Trading",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S789012"],
-    lessonId: 'A.1.1',
+    lessonId: 'A.1.4',
   ),
   'tempClassId4_2025': Classroom(
     classId: 'tempClassId4_2025',
@@ -370,7 +370,7 @@ Map<String, Component> advancedComponents = {
     componentId: 'A.1.1.1',
     title: 'What are Financial Markets?',
     type: ComponentType.concept,
-    componentStatus: Status.Active,
+    componentStatus: Status.Completed,
     discussionQuestions: [
       "How do financial markets impact everyday life?",
       "What roles do different market participants play?",
