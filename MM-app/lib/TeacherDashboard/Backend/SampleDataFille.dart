@@ -236,9 +236,6 @@ Map<String, Unit> advancedUnits = {
     lessonIds: [
       'A.2.1',
       'A.2.2',
-      'A.2.3',
-      'A.2.4',
-      'A.2.5',
     ],
     unitStatus: Status.Active,
     totalLessons: 8,

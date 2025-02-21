@@ -458,6 +458,10 @@ void didUpdateWidget(StudentPerformance oldWidget) {
   }
 }
 
+extension on Color {
+  withValues({required double alpha}) {}
+}
+
 class FilterStudentsButton extends StatelessWidget {
   const FilterStudentsButton({
     super.key,
