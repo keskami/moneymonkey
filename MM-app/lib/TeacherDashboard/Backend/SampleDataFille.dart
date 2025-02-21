@@ -2,6 +2,7 @@ import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Models/Teacher.dart';
 import 'package:money_monkey/Backend/Models/settings.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 
 Teacher sampleTeacher = Teacher(
   name: "Mrs. Anderson",
@@ -373,7 +374,28 @@ Map<String, Component> advancedComponents = {
       "What roles do different market participants play?",
       "Why is market efficiency important?",
     ],
-    subComponentData: [],
+    questionData: [
+      // A sample multiple choice question
+      Question(
+        type: QuestionType.multipleChoice,
+        data: MultipleChoice(
+          question: "What is a financial market?",
+          questionExplanation:
+              "It is a platform where financial instruments such as stocks and bonds are traded.",
+          options: [
+            "Stock market",
+            "Bond market",
+            "Commodity market",
+            "Real estate market"
+          ],
+          correctAnswers: ["Stock market"],
+          prompts: Prompt(
+            correct: "Correct!",
+            incorrect: "Try again. Review the basics of market functions.",
+          ),
+        ),
+      ),
+    ],
   ),
 
   'A.1.1.2': Component(
@@ -385,7 +407,7 @@ Map<String, Component> advancedComponents = {
       "How do stocks differ from bonds?",
       "What makes forex markets unique?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.1.3': Component(
@@ -398,7 +420,7 @@ Map<String, Component> advancedComponents = {
       "How do retail traders affect market dynamics?",
       "What role do market makers serve?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.1.4': Component(
@@ -410,7 +432,7 @@ Map<String, Component> advancedComponents = {
       "What lessons can modern investors learn from historical crashes?",
       "How did market regulation evolve after major crashes?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.1.5': Component(
@@ -422,7 +444,7 @@ Map<String, Component> advancedComponents = {
       "What factors drive price movement at market open?",
       "How should traders approach market volatility periods?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.1.6': Component(
@@ -435,7 +457,7 @@ Map<String, Component> advancedComponents = {
       "What biases affect our interpretation of financial news?",
       "How can we verify the credibility of market information?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.1.7': Component(
@@ -446,7 +468,7 @@ Map<String, Component> advancedComponents = {
     discussionQuestions: [
       "What sources provide reliable market data?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.1.8': Component(
@@ -459,7 +481,7 @@ Map<String, Component> advancedComponents = {
       "Can you identify different market participants?",
       "Do you understand market terminology?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   // Components for Lesson A.1.2
@@ -473,7 +495,7 @@ Map<String, Component> advancedComponents = {
       "How do risk and reward relate in trading?",
       "Why is consistency more important than occasional big wins?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.2.2': Component(
@@ -485,7 +507,7 @@ Map<String, Component> advancedComponents = {
       "How does journaling improve trading performance?",
       "What metrics should traders track?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.2.3': Component(
@@ -498,7 +520,7 @@ Map<String, Component> advancedComponents = {
       "What position sizing methods work best for different markets?",
       "When should position sizes be adjusted?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.2.4': Component(
@@ -510,7 +532,7 @@ Map<String, Component> advancedComponents = {
       "What traits do successful traders share?",
       "How do trading legends handle losing streaks?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.2.5': Component(
@@ -522,7 +544,7 @@ Map<String, Component> advancedComponents = {
       "How should strategies adapt to market cycles?",
       "What indicators signal market direction changes?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.2.6': Component(
@@ -535,7 +557,7 @@ Map<String, Component> advancedComponents = {
       "How do emotions influence trading decisions?",
       "What patterns emerge from your trading history?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.2.7': Component(
@@ -546,7 +568,7 @@ Map<String, Component> advancedComponents = {
     discussionQuestions: [
       "What elements make a trading plan effective?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.2.8': Component(
@@ -559,7 +581,7 @@ Map<String, Component> advancedComponents = {
       "Do you understand trading plan requirements?",
       "How well can you evaluate risk/reward ratios?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   // Components for Lesson A.1.3
@@ -573,7 +595,7 @@ Map<String, Component> advancedComponents = {
       "How does portfolio diversification reduce risk?",
       "What role does volatility play in risk assessment?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.3.2': Component(
@@ -585,7 +607,7 @@ Map<String, Component> advancedComponents = {
       "How tight should stop losses be?",
       "When should trailing stops be used?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.3.3': Component(
@@ -598,7 +620,7 @@ Map<String, Component> advancedComponents = {
       "How do win rates relate to risk-reward ratios?",
       "When should risk parameters be adjusted?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.3.4': Component(
@@ -610,7 +632,7 @@ Map<String, Component> advancedComponents = {
       "How does psychological recovery happen after big losses?",
       "What habits separate resilient traders from others?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.3.5': Component(
@@ -622,7 +644,7 @@ Map<String, Component> advancedComponents = {
       "How do your risk management systems hold up under extreme stress?",
       "What contingency plans should traders develop?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.1.3.6': Component(
@@ -635,7 +657,7 @@ Map<String, Component> advancedComponents = {
       "Do you understand correlation in portfolio construction?",
       "How well can you design a comprehensive risk management plan?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   // Components for A.2.1
@@ -649,7 +671,7 @@ Map<String, Component> advancedComponents = {
       "How do volume patterns confirm price patterns?",
       "When do pattern failures provide trading opportunities?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.1.2': Component(
@@ -661,7 +683,7 @@ Map<String, Component> advancedComponents = {
       "How can pattern recognition be automated?",
       "What filters reduce false pattern signals?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.1.3': Component(
@@ -674,7 +696,7 @@ Map<String, Component> advancedComponents = {
       "What is the optimal timeframe combination for day trading?",
       "How does fractal theory apply to market patterns?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.1.4': Component(
@@ -686,7 +708,7 @@ Map<String, Component> advancedComponents = {
       "What processes do professional pattern traders follow?",
       "How has pattern trading evolved with technology?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.1.5': Component(
@@ -698,7 +720,7 @@ Map<String, Component> advancedComponents = {
       "How reliable are patterns during different market conditions?",
       "What confirmation indicators strengthen pattern signals?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.1.6': Component(
@@ -711,7 +733,7 @@ Map<String, Component> advancedComponents = {
       "How do we evaluate pattern quality objectively?",
       "What statistical methods help validate pattern effectiveness?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.1.7': Component(
@@ -722,7 +744,7 @@ Map<String, Component> advancedComponents = {
     discussionQuestions: [
       "What tools enhance pattern identification accuracy?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.1.8': Component(
@@ -735,7 +757,7 @@ Map<String, Component> advancedComponents = {
       "Do you understand pattern completion ratios?",
       "How well can you integrate patterns with other analysis methods?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   // Components for A.2.2 - Trading Psychology
@@ -749,7 +771,7 @@ Map<String, Component> advancedComponents = {
       "What psychological traits define successful traders?",
       "How does stress impact trading performance?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.2.2': Component(
@@ -761,7 +783,7 @@ Map<String, Component> advancedComponents = {
       "How do emotions correlate with trading mistakes?",
       "What techniques help manage trading emotions?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.2.3': Component(
@@ -774,7 +796,7 @@ Map<String, Component> advancedComponents = {
       "What routines support consistent decision-making?",
       "How does mindfulness improve trading results?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.2.4': Component(
@@ -786,7 +808,7 @@ Map<String, Component> advancedComponents = {
       "How do professional traders handle prolonged drawdowns?",
       "What mental techniques preserve capital during slumps?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 
   'A.2.2.5': Component(
@@ -799,6 +821,6 @@ Map<String, Component> advancedComponents = {
       "Do you understand the impact of cognitive biases?",
       "How well can you implement mental performance techniques?",
     ],
-    subComponentData: [],
+    questionData: [],
   ),
 };
