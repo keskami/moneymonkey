@@ -4,44 +4,18 @@ import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading.dart';
 
 class LoadingPageWrapper extends StatelessWidget {
   final Widget destinationPage;
-  final String pageType;
-  final int lessonNumber;  
-  final int unitNumber;
+  final String componentId;
 
   const LoadingPageWrapper({
     Key? key,
     required this.destinationPage,
-    required this.pageType,
-    required this.lessonNumber,
-    required this.unitNumber,
+    required this.componentId
   }) : super(key: key);
-
-  Future<void> _preLoadImagesForToolkit(BuildContext context) async {
-    await precacheImage(
-      NetworkImage(
-        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fl1toolkit1%2Fpiggy.png?alt=media&token=67260651-2b47-40bf-8d11-9cdd6e5cf6e4",
-      ),
-      context,
-    );
-    await precacheImage(
-      NetworkImage(
-        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fl1toolkit1%2Fhouse.png?alt=media&token=870308c5-a116-429f-a711-6bc7186fb15c",
-      ),
-      context,
-    );
-    await precacheImage(
-      NetworkImage(
-        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fl1toolkit1%2Fgrad.png?alt=media&token=110526d2-737d-4e6e-9dcf-8d1fd205d36a",
-      ),
-      context,
-    );
-  }
 
   Future<void> _preLoadImagesForPeerReflection(BuildContext context) async {
     await precacheImage(
@@ -104,30 +78,30 @@ class LoadingPageWrapper extends StatelessWidget {
   }
 
   Future<void> _initializeController() async {
-    switch (pageType) {
-      case 'concept':
-        Get.put(ComponentOneTwoController(unitNumber: unitNumber, lessonNumber: lessonNumber, conceptNumber: 1));
+    switch (componentId[6]) {
+      case '1':
+        Get.put(ComponentOneTwoController(componentId: componentId));
         break;
-      case 'concept2':
-        Get.put(ComponentOneTwoController(unitNumber: unitNumber, lessonNumber: lessonNumber, conceptNumber: 2));
+      case '2':
+        Get.put(ComponentOneTwoController(componentId: componentId));
         break;
-      case 'story':
-        Get.put(StoryController(unitNumber: unitNumber, lessonNumber: lessonNumber));
+      case '3':
+        Get.put(StoryController(componentId: componentId));
         break;
-      case 'scenario':
-        Get.put(ScenarioController(unitNumber: unitNumber, lessonNumber: lessonNumber));
+      case '4':
+        Get.put(ScenarioController(componentId: componentId));
         break;
-      case 'peer_reflection':
-        Get.put(PeerReflectioncontroller(unitNumber: unitNumber, lessonNumber: lessonNumber));
+      case '5':
+        Get.put(PeerReflectioncontroller(componentId: componentId));
         break;
-      case 'peer_reflection_quiz':
-        Get.put(PeerReflectionQuizcontroller(unitNumber: unitNumber, lessonNumber: lessonNumber));
+      case '6':
+        Get.put(PeerReflectionQuizcontroller(componentId: componentId));
         break;
     }
   }
 
   Future<void> _preLoadImages(BuildContext context) async {
-    switch (pageType) {
+    switch (componentId[6]) {
       case 'concept':
         await _preLoadImagesForLesson(context);
         break;
@@ -143,9 +117,6 @@ class LoadingPageWrapper extends StatelessWidget {
       case 'peer_reflection':
         await _preLoadImagesForPeerReflection(context);
         break;
-      case 'toolkit':
-        await _preLoadImagesForToolkit(context);
-        break;
     }
   }
 
@@ -155,7 +126,7 @@ class LoadingPageWrapper extends StatelessWidget {
       destinationPage: destinationPage,
       preLoadImages: () => _preLoadImages(context),
       requiresController: true,
-      pageType: pageType,
+      pageType: componentId[6],
       initializeController: _initializeController,
     );
   }

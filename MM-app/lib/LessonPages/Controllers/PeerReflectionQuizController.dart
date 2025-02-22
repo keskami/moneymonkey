@@ -1,6 +1,8 @@
 // peer_reflection_quiz_controller.dart
 
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page1.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page2.dart';
@@ -9,10 +11,10 @@ import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page4.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/QuizPages/page5.dart';
 
 class PeerReflectionQuizcontroller extends GetxController {
-  final int lessonNumber;
-  final int unitNumber;
+  final LocalAcademicService localAcademicService = LocalAcademicService();
+  final String componentId;
 
-  PeerReflectionQuizcontroller({required this.unitNumber, required this.lessonNumber});
+  PeerReflectionQuizcontroller({required this.componentId});
 
   final LessonServices lessonServices = Get.find<LessonServices>();
 
@@ -37,18 +39,12 @@ class PeerReflectionQuizcontroller extends GetxController {
 
   Future<void> loadQuizData() async {
     try {
-      for (int i = 1; i <= 5; i++) {
-        final data = await lessonServices.loadSinglePageData(
-          levelName: "Advanced",
-          unitNumber: unitNumber,
-          lessonNumber: lessonNumber,
-          componentType: "Quiz",
-          pageNumber: i,
-        );
-        pageData[i] = data;
+      final Component data = await localAcademicService.getComponent(componentId);
+      for (int i = 0; i < data.questionData.length; i++) {
+        pageData[i] = data.questionData[i];
       }
     } catch (e) {
-      print("QUIZ Error: $e");
+      print("Error fetching quiz data: $e");
     } finally {
       isLoading.value = false;
     }

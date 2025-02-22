@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentProblemPage.dart';
@@ -10,10 +12,10 @@ import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyIntroPage.dart'
 import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyLandingPage.dart';
 
 class StoryController extends GetxController {
-  final int lessonNumber;
-  final int unitNumber;
+  final LocalAcademicService localAcademicService = LocalAcademicService();
+  final String componentId;
 
-  StoryController({required this.unitNumber, required this.lessonNumber});
+  StoryController({required this.componentId});
 
   final LessonServices lessonServices = Get.find<LessonServices>();
 
@@ -41,16 +43,9 @@ class StoryController extends GetxController {
 
   Future<void> loadStoryData() async {
     try {
-      // For pages 1..5
-      for (int i = 1; i <= 5; i++) {
-        final data = await lessonServices.loadSinglePageData(
-          levelName: "Advanced",
-          unitNumber: unitNumber,
-          lessonNumber: lessonNumber,
-          componentType: "Story",
-          pageNumber: i,
-        );
-        pageData[i] = (data is Map<String, dynamic>) ? data : {};
+      final Component data = await localAcademicService.getComponent(componentId);
+      for (int i = 0; i < data.questionData.length; i++) {
+        pageData[i] = data.questionData[i];
       }
     } catch (e) {
       print("Error fetching story data: $e");

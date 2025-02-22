@@ -2,17 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
-import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
-import 'package:money_monkey/LessonPages/Pages/Story.dart';
-import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
+import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
-import 'package:money_monkey/GlobalWidgets/Scoreboard.dart';
-import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class LessonsHomeUnit extends StatefulWidget {
@@ -32,18 +25,17 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
 
-  // We used "lessonTypes" to build 7 polygons. Adjust as needed:
-  final List<int> lessonTypes = [0, 1, 2, 3, 4, 5, 6];
+  // We used "lessonTypes" to build 6 polygons. Adjust as needed:
+  final List<int> lessonTypes = [0, 1, 2, 3, 4, 5];
 
   // Example "pagesLink" from your snippet:
-  final List<Widget> pagesLink = [
-    LessonOne(),
-    LessonOne(),
-    StoryPage(),
-    Scenario(),
-    PeerReflection(),
-    PeerReflectionQuiz(),
-  ];
+  List<Widget> getPages(List<String> componentIds) {
+    final List<Widget> pagesLink = [];
+    for (int i = 0; i < componentIds.length; i++) {
+      pagesLink.add(LoadingPageWrapper(destinationPage: LessonOne(), componentId: componentIds[i]));
+    }
+    return pagesLink;
+  }
 
   List<String> imageLinks = [
     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%20Icons%2Fbulb.png?alt=media&token=f5d89615-3c3a-48fe-9b30-2aa31a1bf293",
@@ -112,6 +104,9 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
 
   /// Builds one "lesson" section: heading + polygons + lines
   Widget _buildLessonSection(Lesson lesson) {
+    final List<String> componentIds= lesson.components;
+
+    final List<Widget> pagesLink= getPages(componentIds);
     // The chain of lines
     final slantLinesColumn = Column(
       children: [
@@ -131,7 +126,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
         SizedBox(height: screenHeight * 0.1),
         for (int i = 0; i < lessonTypes.length; i++)
           CustomPolygonRow(
-            index: lessonTypes[i],
+            index: i,
             isActivated: true,
             width: polygonWidth,
             imageLinks: imageLinks,

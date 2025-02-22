@@ -1,14 +1,16 @@
 // peer_reflection_controller.dart
 
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
 import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 
 class PeerReflectioncontroller extends GetxController {
-  final int lessonNumber;
-  final int unitNumber;
+  final LocalAcademicService localAcademicService = LocalAcademicService();
+  final String componentId;
 
-  PeerReflectioncontroller({required this.unitNumber, required this.lessonNumber});
+  PeerReflectioncontroller({required this.componentId});
 
   final LessonServices lessonServices = Get.find<LessonServices>();
 
@@ -29,15 +31,9 @@ class PeerReflectioncontroller extends GetxController {
 
   Future<void> loadPeerReflectionData() async {
     try {
-      for (int i = 1; i <= 5; i++) {
-        final data = await lessonServices.loadSinglePageData(
-          levelName: "Advanced",
-          unitNumber: unitNumber,
-          lessonNumber: lessonNumber,
-          componentType: "PeerReflection",
-          pageNumber: i,
-        );
-        pageData[i] = data;
+      final Component data = await localAcademicService.getComponent(componentId);
+      for (int i = 0; i < data.questionData.length; i++) {
+        pageData[i] = data.questionData[i];
       }
     } catch (e) {
       print("Error fetching peerReflection data: $e");

@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page5.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page6.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page7.dart';
@@ -12,15 +14,10 @@ import 'package:money_monkey/LessonPages/SubComponentPages/TapToRevealIconsPage.
 import 'package:money_monkey/LessonPages/SubComponentPages/TapToRevealPage.dart';
 
 class ComponentOneTwoController extends GetxController {
-  final int lessonNumber;
-  final int unitNumber;
-  final int conceptNumber; // 1 => "Concept", 2 => "Concept2" perhaps
+  final LocalAcademicService localAcademicService = LocalAcademicService();
+  final String componentId;
 
-  ComponentOneTwoController({
-    required this.lessonNumber,
-    required this.unitNumber,
-    required this.conceptNumber,
-  });
+  ComponentOneTwoController({required this.componentId});
 
   // Pages:
   RxInt pageIndex = 0.obs;
@@ -55,18 +52,9 @@ class ComponentOneTwoController extends GetxController {
 
   Future<void> loadConceptData() async {
     try {
-      // For each page i in [1..9], fetch from "Concept" or "Concept2"
-      final String componentType = (conceptNumber == 1) ? 'Concept' : 'Concept2';
-
-      for (int i = 1; i <= 9; i++) {
-        final data = await lessonServices.loadSinglePageData(
-          levelName: "Advanced",
-          unitNumber: unitNumber,
-          lessonNumber: lessonNumber,
-          componentType: componentType,
-          pageNumber: i,
-        );
-        pageData[i] = data;
+      final Component data = await localAcademicService.getComponent(componentId);
+      for (int i = 0; i < data.questionData.length; i++) {
+        pageData[i] = data.questionData[i];
       }
     } catch (e) {
       print("Error loading concept data: $e");
