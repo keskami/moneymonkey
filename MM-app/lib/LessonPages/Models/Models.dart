@@ -13,6 +13,7 @@ enum QuestionType {
   scenariointro,
   scenarioquestion,
   scenarioresults,
+  scenariochoice,
   peerintro,
   peerstories,
   peermatch,
@@ -25,9 +26,12 @@ extension QuestionTypeExtension on QuestionType {
   String get name => toString().split('.').last;
 
   static QuestionType fromString(String name) {
-    return QuestionType.values.firstWhere((e) => e.name == name, orElse: () {
-      throw Exception("Invalid question type: $name");
-    });
+    return QuestionType.values.firstWhere(
+      (e) => e.name.toLowerCase() == name.toLowerCase(),
+      orElse: () {
+        throw Exception("Invalid question type: $name");
+      },
+    );
   }
 }
 
@@ -236,27 +240,51 @@ class LearningCheck {
   }
 }
 
-class KeyTakeaways {
-  const KeyTakeaways({
-    required this.takeaway,
+class Takeaway {
+  const Takeaway({
+    required this.title,
+    required this.description,
   });
 
-  final Map<String, String> takeaway;
+  final String title;
+  final String description;
 
-  factory KeyTakeaways.fromMap(Map<String, dynamic> map) {
-    final takeawayMap = Map<String, String>.from(map['takeaway'] as Map);
-
-    return KeyTakeaways(
-      takeaway: takeawayMap,
+  factory Takeaway.fromMap(Map<String, dynamic> map) {
+    return Takeaway(
+      title: map['title'],
+      description: map['description'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'takeaway': takeaway,
+      'title': title,
+      'description': description,
     };
   }
 }
+
+class KeyTakeaways {
+  const KeyTakeaways({
+    required this.takeaways,
+  });
+
+  final List<Takeaway> takeaways;
+
+  factory KeyTakeaways.fromMap(Map<String, dynamic> map) {
+    final takeawayList = List<Map<String, dynamic>>.from(map['takeaways']);
+    return KeyTakeaways(
+      takeaways: takeawayList.map((takeaway) => Takeaway.fromMap(takeaway)).toList(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'takeaways': takeaways.map((t) => t.toMap()).toList(),
+    };
+  }
+}
+
 
 // Story Page
 
@@ -526,43 +554,87 @@ class ScenarioQuestion {
   }
 }
 
-// Scenario Results page
 class ScenarioResult {
-  const ScenarioResult({
-    required this.savings,
-    required this.sneakers,
-    required this.emergencyFund,
-    required this.remaining,
+  ScenarioResult({
+    required this.selectedChoices, // User's choices affecting finances
     required this.finalScore,
-    required this.feedback,
-  });
+  }) {
+    _calculateResults(); // Automatically compute results on initialization
+  }
 
-  final int savings;
-  final int sneakers;
-  final int emergencyFund;
-  final int remaining;
-  final int finalScore;
-  final String feedback;
+  final List<ScenarioChoice> selectedChoices; // Tracks what the user picked
+  int finalScore;
+  Map<String, int> categories = {}; // Holds calculated financial breakdown
+  String feedback = ""; // Final feedback message
 
+  // Method to calculate the financial impact dynamically
+  void _calculateResults() {
+    int totalScore = 0;
+
+    for (var choice in selectedChoices) {
+      categories[choice.category] = (categories[choice.category] ?? 0) + choice.value;
+      totalScore += choice.scoreImpact;
+    }
+
+    finalScore = totalScore.clamp(0, 100); // Ensures score stays between 0-100
+    feedback = getFeedback(finalScore);
+  }
+
+  static String getFeedback(int score) {
+    if (score >= 80) {
+      return "Amazing! You’re doing a fantastic job at making responsible financial decisions. You’re well on your way to building strong financial habits for the future. Keep up the great work!";
+    } else if (score >= 50) {
+      return "Good effort! You’re on the right track, but there’s room for improvement. Try focusing more on saving and planning for future expenses. Keep practicing to build stronger financial habits.";
+    } else {
+      return "You’ve got some work to do when it comes to financial responsibility. Remember, saving and planning are key to avoiding financial stress. Review what you’ve learned and keep practicing to improve.";
+    }
+  }
+
+  // ✅ **Fix: fromMap constructor added**
   factory ScenarioResult.fromMap(Map<String, dynamic> map) {
     return ScenarioResult(
-      savings: map['savings'] ?? 0,
-      sneakers: map['sneakers'] ?? 0,
-      emergencyFund: map['emergencyFund'] ?? 0,
-      remaining: map['remaining'] ?? 0,
+      selectedChoices: (map['selectedChoices'] as List<dynamic>?)?.map((choice) => ScenarioChoice.fromMap(choice)).toList() ?? [],
       finalScore: map['finalScore'] ?? 0,
-      feedback: map['feedback'] ?? "No feedback available",
     );
   }
 
+  // ✅ **Fix: toMap conversion**
   Map<String, dynamic> toMap() {
     return {
-      'savings': savings,
-      'sneakers': sneakers,
-      'emergencyFund': emergencyFund,
-      'remaining': remaining,
+      'selectedChoices': selectedChoices.map((choice) => choice.toMap()).toList(),
+      'categories': categories,
       'finalScore': finalScore,
       'feedback': feedback,
+    };
+  }
+}
+
+class ScenarioChoice {
+  const ScenarioChoice({
+    required this.category, // The category (e.g., "Savings", "Sneakers")
+    required this.value, // Amount allocated (e.g., $250)
+    required this.scoreImpact, // How much it affects the final score
+  });
+
+  final String category;
+  final int value;
+  final int scoreImpact;
+
+  // ✅ **Fix: fromMap constructor**
+  factory ScenarioChoice.fromMap(Map<String, dynamic> map) {
+    return ScenarioChoice(
+      category: map['category'] ?? "Unknown",
+      value: map['value'] ?? 0,
+      scoreImpact: map['scoreImpact'] ?? 0,
+    );
+  }
+
+  // ✅ **Fix: toMap conversion**
+  Map<String, dynamic> toMap() {
+    return {
+      'category': category,
+      'value': value,
+      'scoreImpact': scoreImpact,
     };
   }
 }
@@ -573,25 +645,25 @@ class ScenarioResult {
 // Peer Reflection MODELS
 // ==============================
 
-// Peer Charater model for reusability
+// Peer Character Model for Reusability
 class PeerCharacter {
   const PeerCharacter({
     required this.name,
-    required this.shortDescription, // Shown before clicking
-    required this.fullDescription,  // Shown after clicking
+    required this.role, // Instead of shortDescription
+    required this.story,  // Instead of fullDescription
     required this.imageUrl,
   });
 
   final String name;
-  final String shortDescription;
-  final String fullDescription;
+  final String role; // Example: "The Planner", "Family Provider"
+  final String story; // The character's financial reflection
   final String imageUrl;
 
   factory PeerCharacter.fromMap(Map<String, dynamic> map) {
     return PeerCharacter(
       name: map['name'] ?? "Unknown",
-      shortDescription: map['shortDescription'] ?? "No description available",
-      fullDescription: map['fullDescription'] ?? "No story available",
+      role: map['role'] ?? "No role defined",
+      story: map['story'] ?? "No story available",
       imageUrl: map['imageUrl'] ?? "assets/images/default.png",
     );
   }
@@ -599,37 +671,32 @@ class PeerCharacter {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'shortDescription': shortDescription,
-      'fullDescription': fullDescription,
+      'role': role,
+      'story': story,
       'imageUrl': imageUrl,
     };
   }
 }
 
-
-// Peer Reflection Page
+// Peer Reflection Intro Model (Now Supports Dynamic Characters)
 class PeerReflectionIntro {
   const PeerReflectionIntro({
     required this.title,
     required this.subTitle,
-    required this.maria,
-    required this.jason,
-    required this.ava,
+    required this.characters, // A dynamic list of peer characters
   });
 
   final String title;
   final String subTitle;
-  final PeerCharacter maria;
-  final PeerCharacter jason;
-  final PeerCharacter ava;
+  final List<PeerCharacter> characters; // Replacing hardcoded names
 
   factory PeerReflectionIntro.fromMap(Map<String, dynamic> map) {
     return PeerReflectionIntro(
       title: map['title'] ?? "Missing title",
       subTitle: map['subTitle'] ?? "Missing subtitle",
-      maria: PeerCharacter.fromMap(map['maria']),
-      jason: PeerCharacter.fromMap(map['jason']),
-      ava: PeerCharacter.fromMap(map['ava']),
+      characters: (map['characters'] as List<dynamic>?)
+          ?.map((char) => PeerCharacter.fromMap(char))
+          .toList() ?? [],
     );
   }
 
@@ -637,9 +704,7 @@ class PeerReflectionIntro {
     return {
       'title': title,
       'subTitle': subTitle,
-      'maria': maria.toMap(),
-      'jason': jason.toMap(),
-      'ava': ava.toMap(),
+      'characters': characters.map((char) => char.toMap()).toList(),
     };
   }
 }
@@ -1021,8 +1086,8 @@ class Question {
             data: Impact.fromMap(data)
         );
 
-        case QuestionType.impact:
-          print("Parsing Itroduction Page");
+        case QuestionType.scenariointro:
+          print("Parsing Scednario Introoduction Page");
           return Question(
             type: type,
             data: IntroductionPage.fromMap(data)
@@ -1035,12 +1100,20 @@ class Question {
               data: ScenarioQuestion.fromMap(data)
         );
 
+        case QuestionType.scenariochoice:
+          print("Parsing choices page");
+          return Question(
+              type: type,
+              data: ScenarioChoice.fromMap(data)
+        );
+        
+        
         case QuestionType.scenarioresults:
           print("Parsing results page");
           return Question(
-              type: type,
-              data: ScenarioResult.fromMap(data)
-        );
+            type: type,
+            data: ScenarioResult.fromMap(data),
+          );
 
         case QuestionType.peerintro:
           print("Parsing Peer Intro page");
