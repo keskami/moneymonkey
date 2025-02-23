@@ -167,6 +167,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                     topPerformers: topPerformers,
                     components: childComponents,
                     currentLessonId: selectedClass.lessonId,
+                    lessonStatus: localAcademicService.getLessonStatus(selectedClass.lessonId),
                   );
                 case 1:
                   return LessonManagement(

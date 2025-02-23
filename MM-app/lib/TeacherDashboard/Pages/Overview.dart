@@ -18,11 +18,13 @@ class DashboardOverview extends StatefulWidget {
     required this.topPerformers,
     required this.components,
     required this.currentLessonId,
+    required this.lessonStatus,
   });
   final List<Student> topPerformers;
   final List<Student> supportStudents;
   final List<String> components;
   final String currentLessonId;
+  final Status lessonStatus;
   @override
   State<DashboardOverview> createState() => _DashboardOverviewState();
 }
@@ -131,36 +133,16 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     }
   }
 
-  final String teacherName = "Mrs. Anderson";
-  final String progressStatus = "In-progress";
   final String message1 = "Financial Responsibility Over a Lifetime ";
   final String message2 =
       "Making informed decisions about earning, saving, spending, and investing ";
-  final List<String> classes = [
-    'All Classes',
-    'Batch 1',
-    'Batch 2',
-    'Batch 3',
-    'Batch 4',
-  ];
+ 
   final List<String> quickActionsSuggestions = [
     "Launch “Jordan’s Journey Scenario”",
     "Start “Emergency Fun Challenge”",
     "Begin “Spending Decisions Quiz”",
   ];
   List<String> componentIds = [];
-  final List<List<String>> componentsList = [
-    ["Recap", "100"],
-    ["Concept 1", "100"],
-    ["Interactive Activity 1", "100"],
-    ["Concept 2", "80"],
-    ["Interactive Activity 2", "0"],
-    ["Story", "0"],
-    ["Scenario Simulation", "0"],
-    ["Peer Reflection", "0"],
-    ["Toolkit", "0"],
-    ["Quiz", "0"],
-  ];
 
   final List<Color> randomColorList = [
     Color.fromARGB(255, 122, 180, 255),
@@ -208,7 +190,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         ),
                       ),
                       child: Text(
-                        progressStatus,
+                        widget.lessonStatus.name,
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.blue.shade300,
@@ -558,12 +540,4 @@ class _DashboardOverviewState extends State<DashboardOverview> {
       ),
     );
   }
-}
-
-extension on Color {
-  withValues({required double alpha}) {}
-}
-
-extension on MaterialColor {
-  withValues({required double alpha}) {}
 }
