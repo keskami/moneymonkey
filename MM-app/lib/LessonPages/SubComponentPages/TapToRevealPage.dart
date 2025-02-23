@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
 class TapToRevealPage extends StatefulWidget {
@@ -26,13 +27,13 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
   String bigBottom = '';
   String little = '';
   late Column contents;
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      before = data['before'] ?? '';
-      title = data['title'];
-      bigBottom = data['bigBottom'];
-      bigTop = data['bigTop'];
-      little = data['little'];
+      before = data.data.tapInstruction ?? '';
+      title = data.data.definition;
+      bigBottom = data.data.revealInformation[0];
+      bigTop = "Definition:";
+      little = data.data.revealInformation[1];
       loading = false;
     });
   }
@@ -46,12 +47,12 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
     ever(componentOneTwoController.isLoading, (_) {
       if (!componentOneTwoController.isLoading.value) {
         if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[2]);
+          setData(componentOneTwoController.pageData[1]);
         }
       }
     });
     if (title == '') {
-      setData(componentOneTwoController.pageData[2]);
+      setData(componentOneTwoController.pageData[1]);
     }
   }
 

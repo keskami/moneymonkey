@@ -2,10 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
+import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
+import 'package:money_monkey/LessonPages/Pages/Story.dart';
+import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
+import 'package:money_monkey/GlobalWidgets/Scoreboard.dart';
+import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class LessonsHomeUnit extends StatefulWidget {
@@ -32,7 +40,24 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
   List<Widget> getPages(List<String> componentIds) {
     final List<Widget> pagesLink = [];
     for (int i = 0; i < componentIds.length; i++) {
-      pagesLink.add(LoadingPageWrapper(destinationPage: LessonOne(), componentId: componentIds[i]));
+      if (i == 0) {
+        pagesLink.add(LoadingPageWrapper(destinationPage: LessonOne(), componentId: componentIds[i]));
+      }
+      else if (i == 1) {
+        pagesLink.add(LoadingPageWrapper(destinationPage: LessonOne(), componentId: componentIds[i]));
+      }
+      else if (i == 2) {
+        pagesLink.add(LoadingPageWrapper(destinationPage: StoryPage(), componentId: componentIds[i]));
+      }
+      else if (i == 3) {
+        pagesLink.add(LoadingPageWrapper(destinationPage: Scenario(), componentId: componentIds[i]));
+      }
+      else if (i == 4) {
+        pagesLink.add(LoadingPageWrapper(destinationPage: PeerReflection(), componentId: componentIds[i]));
+      }
+      else if (i == 5) {
+        pagesLink.add(LoadingPageWrapper(destinationPage: PeerReflectionQuiz(), componentId: componentIds[i]));
+      }
     }
     return pagesLink;
   }

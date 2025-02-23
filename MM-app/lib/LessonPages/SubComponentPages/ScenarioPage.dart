@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
@@ -27,9 +28,10 @@ class _ScenarioPageState extends State<ScenarioPage> {
   String correct = '';
   bool loading = true;
   Future<void> setData(data) async {
+    final MultipleChoice question = data.data.questions[0];
     setState(() {
-      title = data['title'];
-      subTitle = data['subTitle'];
+      title = data.data.title;
+      subTitle = data.data.scenarioExplanation;
       wrong = data['wrong'];
       correct = data['correct'];
       containerHeading = data['containerHeading'];
@@ -51,12 +53,12 @@ class _ScenarioPageState extends State<ScenarioPage> {
     ever(componentOneTwoController.isLoading, (_) {
       if (!componentOneTwoController.isLoading.value) {
         if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[4]);
+          setData(componentOneTwoController.pageData[3]);
         }
       }
     });
     if (title == '') {
-      setData(componentOneTwoController.pageData[4]);
+      setData(componentOneTwoController.pageData[3]);
     }
   }
 

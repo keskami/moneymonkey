@@ -4,6 +4,7 @@ import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class MCQPage extends StatefulWidget {
@@ -33,33 +34,32 @@ class _MCQPageState extends State<MCQPage> {
   String question = '';
   bool loading = true;
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      correct = data['correct'];
-      wrong = data['wrong'];
-      title = data['title'];
-      question = data['question'];
+      correct = data.data.prompts.correct;
+      wrong = data.data.prompts.incorrect;
+      title = data.data.questionExplanation;
+      question = data.data.question;
       options =
-          List<String>.from(data["options"].map((item) => item.toString()));
-      correctAnswers.add(data['correctAnswer']);
-      loading = false;
+          List<String>.from(data.data.options.map((item) => item.toString()));
+      correctAnswers.add(data.data.correctAnswers);
+      // No need to update local 'loading' here, since we're using the controller's flag.
     });
   }
 
   @override
   void initState() {
     super.initState();
+    // Listen for when the controller finishes loading.
     ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[1]);
-        }
+      if (!componentOneTwoController.isLoading.value &&
+          componentOneTwoController.pageData.isNotEmpty &&
+          question.isEmpty) {
+        // Only call setData once when the data becomes available.
+        print("PageData[0]: ${componentOneTwoController.pageData[0]}");
+        setData(componentOneTwoController.pageData[0]);
       }
     });
-    if (title == '') {
-     
-      setData(componentOneTwoController.pageData[1]);
-    }
   }
 
   void answerQuestion(String ans) {
@@ -88,12 +88,23 @@ class _MCQPageState extends State<MCQPage> {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return screenWidth > screenHeight
-        ? webDisplay(screenWidth, screenHeight)
-        : mobileDisplay();
+    return Obx(() {
+      // Use the controller's loading flag directly.
+      if (componentOneTwoController.isLoading.value) {
+        return Center(child: CircularProgressIndicator());
+      }
+      if (componentOneTwoController.pageData.isEmpty) {
+        return Center(child: Text("No data available"));
+      }
+      // At this point, if the question is still empty, setData() should be called.
+      // (Our ever() listener above should handle this.)
+      return screenWidth > screenHeight
+          ? webDisplay(screenWidth, screenHeight)
+          : mobileDisplay();
+    });
   }
 
   Widget webDisplay(double screenWidth, double screenHeight) {

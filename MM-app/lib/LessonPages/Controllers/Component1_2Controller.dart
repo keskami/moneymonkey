@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page5.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page6.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page7.dart';
@@ -23,8 +24,7 @@ class ComponentOneTwoController extends GetxController {
   RxInt pageIndex = 0.obs;
   RxBool isLoading = true.obs;
 
-  // If you want to store the page data
-  var pageData = <int, dynamic>{}.obs;
+  List<Question> pageData = [];
 
   // Optional: store fetched questions in a list
   RxList<SubComponent> questions = <SubComponent>[].obs;
@@ -42,8 +42,6 @@ class ComponentOneTwoController extends GetxController {
     ComponentTakeawaysPage(),
   ];
 
-  final LessonServices lessonServices = Get.find<LessonServices>();
-
   @override
   void onInit() {
     super.onInit();
@@ -54,7 +52,8 @@ class ComponentOneTwoController extends GetxController {
     try {
       final Component data = await localAcademicService.getComponent(componentId);
       for (int i = 0; i < data.questionData.length; i++) {
-        pageData[i] = data.questionData[i];
+        pageData.add(data.questionData[i]);
+        print(pageData[i].data.toString());
       }
     } catch (e) {
       print("Error loading concept data: $e");

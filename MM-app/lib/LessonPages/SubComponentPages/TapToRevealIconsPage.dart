@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -31,12 +32,12 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
 
   
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      wrong = data['wrong'];
-      title = data['title'];
-      iconContents = List<String>.from(data["iconContents"].map((item) => item.toString()));
-      iconLinks = List<String>.from(data["iconLinks"].map((item) => item.toString()));
+      wrong = "Please click all the icons before moving on";
+      title = data.data.title;
+      iconContents = List<String>.from(data.data.contents.map((item) => item.toString()));
+      iconLinks = List<String>.from(data.data.iconLinks.map((item) => item.toString()));
       loading = false;
     });
   }
@@ -50,12 +51,12 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
     ever(componentOneTwoController.isLoading, (_) {
       if (!componentOneTwoController.isLoading.value) {
         if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[3]);
+          setData(componentOneTwoController.pageData[2]);
         }
       }
     });
     if (title == '') {
-      setData(componentOneTwoController.pageData[3]);
+      setData(componentOneTwoController.pageData[2]);
     }
   }
 

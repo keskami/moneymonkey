@@ -124,14 +124,16 @@ class RevealCard {
 class IconReveal {
   const IconReveal({
     required this.iconLinks,
-    required this.contents,
+    required this.contents, required this.title,
   });
 
   final List<String> iconLinks;
   final List<String> contents;
+  final String title;
 
   factory IconReveal.fromMap(Map<String, dynamic> map) {
     return IconReveal(
+      title: "",
       iconLinks: List<String>.from(map['iconLinks']),
       contents: List<String>.from(map['contents']),
     );
@@ -139,6 +141,7 @@ class IconReveal {
 
   Map<String, dynamic> toMap() {
     return {
+      'title': title,
       'iconLinks': iconLinks,
       'contents': contents,
     };
