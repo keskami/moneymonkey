@@ -42,7 +42,6 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
     StoryPage(),
     Scenario(),
     PeerReflection(),
-    Toolkit(),
     PeerReflectionQuiz(),
   ];
 

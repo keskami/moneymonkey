@@ -106,7 +106,7 @@ class LoadingPageWrapper extends StatelessWidget {
   Future<void> _initializeController() async {
     switch (pageType) {
       case 'concept':
-        Get.put(ComponentOneTwoController(unitNumber: unitNumber, lessonNumber: lessonNumber, conceptNumber: 2));
+        Get.put(ComponentOneTwoController(unitNumber: unitNumber, lessonNumber: lessonNumber, conceptNumber: 1));
         break;
       case 'concept2':
         Get.put(ComponentOneTwoController(unitNumber: unitNumber, lessonNumber: lessonNumber, conceptNumber: 2));

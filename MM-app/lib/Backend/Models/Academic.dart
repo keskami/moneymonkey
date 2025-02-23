@@ -1,5 +1,6 @@
 // Enums and Extensions
 import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 
 enum Status {
   Inactive,
@@ -248,7 +249,7 @@ class Component {
   Status componentStatus;
   double progress;
   List<String>? discussionQuestions;
-  List<SubComponent> subComponentData;
+  List<Question> questionData;
 
   Component({
     required this.componentId,
@@ -257,7 +258,7 @@ class Component {
     required this.componentStatus,
     this.progress = 0.0,
     this.discussionQuestions,
-    required this.subComponentData,
+    required this.questionData,
   });
 
   factory Component.fromFirestore(Map<String, dynamic> data, String id) {
@@ -270,9 +271,9 @@ class Component {
       discussionQuestions: data['DiscussionQuestions'] != null
           ? List<String>.from(data['DiscussionQuestions'])
           : null,
-      subComponentData: data['SubComponentData'] != null
-          ? (data['SubComponentData'] as List)
-              .map((q) => SubComponent.fromMap(q as Map<String, dynamic>))
+      questionData: data['QuestionData'] != null
+          ? (data['QuestionData'] as List)
+            .map((q) => Question.fromMap(q as Map<String, dynamic>))
               .toList()
           : [],
     );
@@ -285,7 +286,7 @@ class Component {
       'ComponentStatus': statusToFirestore(componentStatus),
       'Progress': progress,
       if (discussionQuestions != null) 'DiscussionQuestions': discussionQuestions,
-      'SubComponentData': subComponentData.map((q) => q.toMap()).toList(),
+      'QuestionData': questionData.map((q) => q.toMap()).toList(),
     };
   }
 }
