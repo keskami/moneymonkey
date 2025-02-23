@@ -46,16 +46,7 @@ class _PeerReflectionQuizPage1State extends State<PeerReflectionQuizPage1> {
   @override
   void initState() {
     super.initState();
-
-    // If the controller has already finished loading before this widget is built:
-    if (!peerReflectionQuizcontroller.isLoading.value) {
-      setData(peerReflectionQuizcontroller.pageData[1]);
-    }
-    ever(peerReflectionQuizcontroller.isLoading, (loadingValue) {
-      if (loadingValue == false) {
-        setData(peerReflectionQuizcontroller.pageData[1]);
-      }
-    });
+    setData(peerReflectionQuizcontroller.pageData[1]);
   }
 
   @override

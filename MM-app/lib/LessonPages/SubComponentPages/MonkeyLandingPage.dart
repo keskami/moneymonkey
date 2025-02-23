@@ -59,12 +59,7 @@ class _MonkeyLandingPageState extends State<MonkeyLandingPage> {
     super.initState();
 
     _preloadImages();
-
-    ever(storyController.isLoading, (_) {
-      if (!storyController.isLoading.value) {
-        setData(storyController.pageData[1]);
-      }
-    });
+    setData(storyController.pageData[1]);
 
     if (button == '') {
       if (storyController.pageData[1] != null) {

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentProblemPage.dart';
@@ -11,7 +13,7 @@ import 'package:money_monkey/LessonPages/SubComponentPages/ComponentSolutionsPag
 import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyIntroPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyLandingPage.dart';
 
-class StoryController extends GetxController {
+class StoryController extends BaseLessonController {
   final LocalAcademicService localAcademicService = LocalAcademicService();
   final String componentId;
 
@@ -33,7 +35,7 @@ class StoryController extends GetxController {
     ComponentImapctPage(),
   ];
 
-  var pageData = <int, dynamic>{}.obs;
+  RxList<Question> pageData = <Question>[].obs;
 
   @override
   void onInit() {
@@ -43,7 +45,8 @@ class StoryController extends GetxController {
 
   Future<void> loadStoryData() async {
     try {
-      final Component data = await localAcademicService.getComponent(componentId);
+      final Component data =
+          await localAcademicService.getComponent(componentId);
       for (int i = 0; i < data.questionData.length; i++) {
         pageData[i] = data.questionData[i];
       }

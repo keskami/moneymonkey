@@ -23,7 +23,6 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
       title = data['title'];
       subTitle = data['subTitle'];
       button = data['button'];
-      
     });
   }
 
@@ -32,18 +31,7 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
     super.initState();
     scenarioController = Get.find();
     message = initializeMessage(scenarioController);
-     ever(scenarioController.isLoading, (_) {
-      if (!scenarioController.isLoading.value) {
-        if (scenarioController.pageData.isNotEmpty && scenarioController.pageData[3] != null) {
-          setData(scenarioController.pageData[3]);
-        }
-      }
-    });
-    
-    
-    // Initial data load attempt
-    if (!scenarioController.isLoading.value && 
-        scenarioController.pageData.isNotEmpty && 
+    if (scenarioController.pageData.isNotEmpty &&
         scenarioController.pageData[3] != null) {
       setData(scenarioController.pageData[3]);
     }
@@ -74,7 +62,7 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
             const Spacer(),
             const Spacer(),
             Text(
-             title,
+              title,
               style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,

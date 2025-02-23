@@ -131,7 +131,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
   Widget _buildLessonSection(Lesson lesson) {
     final List<String> componentIds= lesson.components;
 
-    final List<Widget> pagesLink= getPages(componentIds);
+    final List<Widget> pagesLink = getPages(componentIds);
     // The chain of lines
     final slantLinesColumn = Column(
       children: [

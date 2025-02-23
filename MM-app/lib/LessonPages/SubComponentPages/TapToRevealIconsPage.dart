@@ -20,24 +20,22 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
     false,
     false,
   ];
-  List<String> iconLinks = [
-    ];
-  List<String> iconContents = [
-    ];
+  List<String> iconLinks = [];
+  List<String> iconContents = [];
   bool isNextEnabled = false;
   ComponentOneTwoController componentOneTwoController = Get.find();
   String title = '';
   String wrong = '';
   bool loading = true;
 
-  
-
   Future<void> setData(Question data) async {
     setState(() {
       wrong = "Please click all the icons before moving on";
       title = data.data.title;
-      iconContents = List<String>.from(data.data.contents.map((item) => item.toString()));
-      iconLinks = List<String>.from(data.data.iconLinks.map((item) => item.toString()));
+      iconContents =
+          List<String>.from(data.data.contents.map((item) => item.toString()));
+      iconLinks =
+          List<String>.from(data.data.iconLinks.map((item) => item.toString()));
       loading = false;
     });
   }
@@ -45,22 +43,16 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
   @override
   void initState() {
     super.initState();
-     WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[2]);
-        }
-      }
-    });
+    if (componentOneTwoController.pageData.isNotEmpty) {
+      setData(componentOneTwoController.pageData[2]);
+    }
     if (title == '') {
       setData(componentOneTwoController.pageData[2]);
     }
   }
-
- 
 
   void makeIconVisible(String iconLink) {
     int index = iconLinks.indexOf(iconLink);
@@ -73,8 +65,7 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
       if (showIcon[i] == false) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
-          WrongAnswerSnackBar(
-              message: wrong),
+          WrongAnswerSnackBar(message: wrong),
         );
         return;
       }
@@ -111,21 +102,20 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
       children: [
         SizedBox(height: screenWidth * 0.02),
         Padding(
-            padding: EdgeInsets.only(left: screenWidth * 0.043),
+          padding: EdgeInsets.only(left: screenWidth * 0.043),
           child: Text(
-          title,
-          softWrap: true,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 27,
+            title,
+            softWrap: true,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 27,
+            ),
+          ).marginSymmetric(
+            vertical: screenHeight * 0.025,
+            horizontal: screenWidth * 0.015,
           ),
-        ).marginSymmetric(
-          vertical: screenHeight * 0.025,
-          horizontal: screenWidth * 0.015,
         ),
 
-        ),
-        
         //Icon Row
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

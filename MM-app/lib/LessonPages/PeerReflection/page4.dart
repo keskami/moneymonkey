@@ -48,13 +48,9 @@ class _Page4State extends State<Page4> {
   @override
   void initState() {
     super.initState();
-    ever(peerReflectionController.isLoading, (_) {
-      if (!peerReflectionController.isLoading.value) {
-        if (peerReflectionController.pageData.isNotEmpty) {
-          setData(peerReflectionController.pageData[4]);
-        }
-      }
-    });
+    if (peerReflectionController.pageData.isNotEmpty) {
+      setData(peerReflectionController.pageData[4]);
+    }
     if (title == '') {
       setData(peerReflectionController.pageData[4]);
     }
@@ -131,8 +127,7 @@ class _Page4State extends State<Page4> {
                   SizedBox(height: WebscreenHeightUnit * 29),
                   lessonTab(
                     image: "assets/images/newMonkeys/Jason.png",
-                    name:
-                        jason,
+                    name: jason,
                     isClicked: jasonClicked,
                     onClick: () {
                       setState(() {
@@ -157,8 +152,7 @@ class _Page4State extends State<Page4> {
                   SizedBox(height: WebscreenHeightUnit * 29),
                   lessonTab(
                     image: "assets/images/newMonkeys/Ava.png",
-                    name:
-                        ava,
+                    name: ava,
                     isClicked: avaClicked,
                     onClick: () {
                       setState(() {

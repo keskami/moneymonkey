@@ -45,18 +45,6 @@ class _ScenarioState extends State<Scenario> {
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
-    return Obx(
-      () => scenarioController.isControllerLoading.value
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : screenWidth > screenHeight
-              ? webDisplay()
-              : mobileDisplay(),
-    );
-  }
-
-  Widget webDisplay() {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(

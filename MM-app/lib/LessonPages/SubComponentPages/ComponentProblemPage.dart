@@ -35,12 +35,7 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
   @override
   void initState() {
     super.initState();
-
-    ever(storyController.isLoading, (_) {
-      if (!storyController.isLoading.value) {
-        setData(storyController.pageData[3]);
-      }
-    });
+    setData(storyController.pageData[3]);
 
     if (title == '') {
       if (storyController.pageData[3] != null) {

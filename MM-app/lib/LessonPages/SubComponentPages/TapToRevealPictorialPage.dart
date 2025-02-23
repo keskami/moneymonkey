@@ -10,7 +10,8 @@ class TapToRevealPictorialPage extends StatefulWidget {
   const TapToRevealPictorialPage({super.key});
 
   @override
-  _TapToRevealPictorialPageState createState() => _TapToRevealPictorialPageState();
+  _TapToRevealPictorialPageState createState() =>
+      _TapToRevealPictorialPageState();
 }
 
 class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
@@ -31,7 +32,8 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
       title = data['title'];
       button = data['button'];
       items = List<String>.from(data["items"].map((item) => item.toString()));
-      instructions = List<String>.from(data["instructions"].map((item) => item.toString()));
+      instructions = List<String>.from(
+          data["instructions"].map((item) => item.toString()));
       wait6sec();
       loading = false;
     });
@@ -40,22 +42,13 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
   @override
   void initState() {
     super.initState();
-    ever(scenarioController.isLoading, (_) {
-      if (!scenarioController.isLoading.value) {
-        if (scenarioController.pageData.isNotEmpty && scenarioController.pageData[1] != null) {
-          setData(scenarioController.pageData[1]);
-        }
-      }
-    });
-    
-    // Initial data load attempt
-    if (!scenarioController.isLoading.value && 
-        scenarioController.pageData.isNotEmpty && 
+    if (scenarioController.pageData.isNotEmpty &&
         scenarioController.pageData[1] != null) {
       setData(scenarioController.pageData[1]);
     }
   }
-  Future<void> wait6sec() async{
+
+  Future<void> wait6sec() async {
     await Future.delayed(Duration(seconds: 6));
     setState(() {
       wait6 = true;
@@ -196,7 +189,7 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
                         contents: NewContentContainer(
                           image:
                               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
-                         texts: [items[2]],
+                          texts: [items[2]],
                           screenWidth: screenWidth,
                           onFlip: () => makeTrue(items[2]),
                         ),

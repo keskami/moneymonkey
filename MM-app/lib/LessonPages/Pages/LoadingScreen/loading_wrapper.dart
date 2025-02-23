@@ -1,5 +1,7 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
@@ -11,11 +13,9 @@ class LoadingPageWrapper extends StatelessWidget {
   final Widget destinationPage;
   final String componentId;
 
-  const LoadingPageWrapper({
-    Key? key,
-    required this.destinationPage,
-    required this.componentId
-  }) : super(key: key);
+  const LoadingPageWrapper(
+      {Key? key, required this.destinationPage, required this.componentId})
+      : super(key: key);
 
   Future<void> _preLoadImagesForPeerReflection(BuildContext context) async {
     await precacheImage(
@@ -77,27 +77,38 @@ class LoadingPageWrapper extends StatelessWidget {
     );
   }
 
-  Future<void> _initializeController() async {
+  Future<BaseLessonController> _initializeController() async {
+    BaseLessonController controller;
     switch (componentId[6]) {
       case '1':
-        Get.put(ComponentOneTwoController(componentId: componentId));
+        controller = Get.put<ComponentOneTwoController>(
+          ComponentOneTwoController(componentId: componentId),
+        );
         break;
       case '2':
-        Get.put(ComponentOneTwoController(componentId: componentId));
+        controller = Get.put<ComponentOneTwoController>(
+            ComponentOneTwoController(componentId: componentId));
         break;
       case '3':
-        Get.put(StoryController(componentId: componentId));
+        controller =
+            Get.put<StoryController>(StoryController(componentId: componentId));
         break;
       case '4':
-        Get.put(ScenarioController(componentId: componentId));
+        controller = Get.put<ScenarioController>(
+            ScenarioController(componentId: componentId));
         break;
       case '5':
-        Get.put(PeerReflectioncontroller(componentId: componentId));
+        controller = Get.put<PeerReflectioncontroller>(
+            PeerReflectioncontroller(componentId: componentId));
         break;
       case '6':
-        Get.put(PeerReflectionQuizcontroller(componentId: componentId));
+        controller = Get.put<PeerReflectionQuizcontroller>(
+            PeerReflectionQuizcontroller(componentId: componentId));
         break;
+      default:
+        throw Exception("Unknown component type");
     }
+    return controller;
   }
 
   Future<void> _preLoadImages(BuildContext context) async {

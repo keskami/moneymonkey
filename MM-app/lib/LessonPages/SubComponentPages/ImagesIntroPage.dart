@@ -50,17 +50,13 @@ class _ImagesIntroPageState extends State<ImagesIntroPage> {
   @override
   void initState() {
     super.initState();
-    ever(peerReflectionController.isLoading, (_) {
-      if (!peerReflectionController.isLoading.value) {
-        if (peerReflectionController.pageData.isNotEmpty) {
-          setData(peerReflectionController.pageData[1]);
-        }
-      }
-    });
+    if (peerReflectionController.pageData.isNotEmpty) {
+      setData(peerReflectionController.pageData[1]);
+    }
     if (title == '') {
-    setState(() {
-      isLoading = true;
-    });
+      setState(() {
+        isLoading = true;
+      });
       setData(peerReflectionController.pageData[1]);
     }
   }
@@ -194,4 +190,3 @@ Widget newMonkey({
             fontWeight: FontWeight.w700)),
   ]);
 }
-

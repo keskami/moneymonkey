@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 
 class LoadingPage extends StatefulWidget {
   final Widget destinationPage;
@@ -7,7 +8,7 @@ class LoadingPage extends StatefulWidget {
   final bool requiresController;
   final String pageType;
   final Function initializeController;
-  
+
   const LoadingPage({
     Key? key,
     required this.destinationPage,
@@ -21,7 +22,8 @@ class LoadingPage extends StatefulWidget {
   State<LoadingPage> createState() => _LoadingPageState();
 }
 
-class _LoadingPageState extends State<LoadingPage> with SingleTickerProviderStateMixin {
+class _LoadingPageState extends State<LoadingPage>
+    with SingleTickerProviderStateMixin {
   double targetProgress = 0.0;
   bool _controllerDataLoaded = false;
   late AnimationController _progressController;
@@ -35,8 +37,7 @@ class _LoadingPageState extends State<LoadingPage> with SingleTickerProviderStat
       duration: Duration(milliseconds: 500),
     );
     _progressAnimation = Tween<double>(begin: 0.0, end: 0.0).animate(
-      CurvedAnimation(parent: _progressController, curve: Curves.easeInOut)
-    );
+        CurvedAnimation(parent: _progressController, curve: Curves.easeInOut));
     _startLoading();
   }
 
@@ -47,7 +48,8 @@ class _LoadingPageState extends State<LoadingPage> with SingleTickerProviderStat
     _progressAnimation = Tween<double>(
       begin: _progressAnimation.value,
       end: newProgress,
-    ).animate(CurvedAnimation(parent: _progressController, curve: Curves.easeInOut));
+    ).animate(
+        CurvedAnimation(parent: _progressController, curve: Curves.easeInOut));
     _progressController.forward(from: 0.0);
   }
 
@@ -55,13 +57,15 @@ class _LoadingPageState extends State<LoadingPage> with SingleTickerProviderStat
     try {
       if (widget.requiresController) {
         _updateProgress(0.1);
-        
-        await widget.initializeController();
+        final BaseLessonController controller =
+            await widget.initializeController();
         _updateProgress(0.3);
-        
-        // Add a small delay to ensure controller is initialized
-        await Future.delayed(Duration(milliseconds: 500));
-        
+
+        // Wait until the controller finishes loading data
+        while (controller.isLoading.value) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+
         _updateProgress(0.6);
         _controllerDataLoaded = true;
       } else {
@@ -126,7 +130,7 @@ class _LoadingPageState extends State<LoadingPage> with SingleTickerProviderStat
               height: screenHeight * 0.5,
             ),
             SizedBox(height: screenHeight * 0.05),
-            
+
             // Progress Bar Container with overflow allowed
             Container(
               width: screenWidth * 0.8,
@@ -173,7 +177,9 @@ class _LoadingPageState extends State<LoadingPage> with SingleTickerProviderStat
                     animation: _progressAnimation,
                     builder: (context, child) {
                       return Positioned(
-                        left: (screenWidth * 0.2) + (screenWidth * 0.4 * _progressAnimation.value) - (screenHeight * 0.04),
+                        left: (screenWidth * 0.2) +
+                            (screenWidth * 0.4 * _progressAnimation.value) -
+                            (screenHeight * 0.04),
                         top: screenHeight * 0.02,
                         child: Image.network(
                           "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMM_Silhouette.png?alt=media&token=3bf54556-da0d-446e-94c6-5a5ca59e9ce5",
@@ -185,10 +191,12 @@ class _LoadingPageState extends State<LoadingPage> with SingleTickerProviderStat
                 ],
               ),
             ),
-            
+
             SizedBox(height: screenHeight * 0.03),
             Text(
-              widget.pageType == 'story' ? 'Loading story...' : 'Loading lesson...',
+              widget.pageType == 'story'
+                  ? 'Loading story...'
+                  : 'Loading lesson...',
               style: TextStyle(
                 fontSize: screenHeight * 0.02,
                 color: Colors.grey[600],

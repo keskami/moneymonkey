@@ -45,12 +45,7 @@ class _ComponentImapctPageState extends State<ComponentImapctPage> {
   @override
   void initState() {
     super.initState();
-
-    ever(storyController.isLoading, (_) {
-      if (!storyController.isLoading.value) {
-        setData(storyController.pageData[5]);
-      }
-    });
+    setData(storyController.pageData[5]);
 
     if (title == '') {
       if (storyController.pageData[5] != null) {

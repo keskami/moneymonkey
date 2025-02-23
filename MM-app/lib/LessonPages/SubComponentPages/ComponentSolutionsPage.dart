@@ -34,7 +34,7 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
       title = data['title'];
       instructions = List<String>.from(
           data['instructions'].map((item) => item.toString()));
-     
+
       button = data['button'];
 
       isLoading = false;
@@ -44,12 +44,7 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
   @override
   void initState() {
     super.initState();
-
-    ever(storyController.isLoading, (_) {
-      if (!storyController.isLoading.value) {
-        setData(storyController.pageData[4]);
-      }
-    });
+    setData(storyController.pageData[4]);
 
     if (title == '') {
       if (storyController.pageData[4] != null) {
@@ -59,10 +54,6 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
       }
     }
   }
-
-  
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +110,7 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
                                 contents: ContentContainer(
-                                  texts: [
-                                    bigTexts[0],
-                                    smallTexts[0]
-                                  ],
+                                  texts: [bigTexts[0], smallTexts[0]],
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(
@@ -136,8 +124,7 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
                                 contents: ContentContainer(
-                                  texts: [bigTexts[1],
-                                    smallTexts[1]],
+                                  texts: [bigTexts[1], smallTexts[1]],
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(
@@ -150,17 +137,14 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
                               width: screenWidth * 0.15,
                               height: screenHeight * 0.2,
                               child: TapToRevealContainer(
-                                onTap: () async{
+                                onTap: () async {
                                   await Future.delayed(Duration(seconds: 6));
                                   setState(() {
                                     isEnabled = true;
                                   });
                                 },
                                 contents: ContentContainer(
-                                  texts: [
-                                    bigTexts[2],
-                                    smallTexts[2]
-                                  ],
+                                  texts: [bigTexts[2], smallTexts[2]],
                                   screenWidth: screenWidth,
                                 ),
                                 instructions: InstructionContainer(

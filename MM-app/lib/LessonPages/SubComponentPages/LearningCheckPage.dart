@@ -15,12 +15,10 @@ class LearningCheckPage extends StatefulWidget {
 
 class _LearningCheckPageState extends State<LearningCheckPage> {
   String title = "";
-  String question1 =
-      "";
+  String question1 = "";
   String question2 = "";
   String correctAns1 = "";
-  String correctAns2 =
-      "";
+  String correctAns2 = "";
   String answer1 = "";
   String answer2 = "";
   List<String> options1 = <String>[
@@ -38,26 +36,24 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
   String oneCorrect = '';
   String wrong = '';
   bool loading = false;
-  
-  
 
   Future<void> setData(data) async {
     setState(() {
-      title = data['title'];
-      question1 = data['question1'];
-      question2 = data['question2'];
-      correctAns1 = data['correctAnswer1'];
-      correctAns2 = data['correctAnswer2'];
- 
+      title = data.data.title;
+      question1 = data.data.question1;
+      question2 = data.data.question2;
+      correctAns1 = data.data.correctAns1;
+      correctAns2 = data.data.correctAns2;
+
       options1 =
-          List<String>.from(data["options1"].map((item) => item.toString()));
-          options2 =
-          List<String>.from(data["options2"].map((item) => item.toString()));
-          button = data['button'];
-          oneCorrect   = data['1Correct'];
-          bothCorrect = data['2Correct'];
-          wrong = data['0Correct'];
-    
+          List<String>.from(data.data.options1.map((item) => item.toString()));
+      options2 =
+          List<String>.from(data.data.options2.map((item) => item.toString()));
+      button = "Check";
+      oneCorrect = "One question is incorrect";
+      bothCorrect = "Great job!";
+      wrong = "Both questions are incorrect";
+
       loading = false;
     });
   }
@@ -68,17 +64,14 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[8]);
-        }
-      }
-    });
+    if (componentOneTwoController.pageData.isNotEmpty) {
+      setData(componentOneTwoController.pageData[7]);
+    }
     if (title == '') {
-      setData(componentOneTwoController.pageData[8]);
+      setData(componentOneTwoController.pageData[7]);
     }
   }
+
   bool isNextEnabled = false;
   ComponentOneTwoController componentOneTwoController = Get.find();
   void showMessage() {
@@ -126,8 +119,6 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -138,58 +129,61 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
   }
 
   webDisplay(double screenWidth, double screenHeight) {
-    return loading? Center(child:CircularProgressIndicator()):
-    Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 27,
-            ),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              FlextibleMCQ(screenWidth, screenHeight, question1, options1),
-              SizedBox(width: screenWidth * 0.02),
-              FlextibleMCQ(screenWidth, screenHeight, question2, options2),
-            ],
-          ).marginSymmetric(
-            vertical: screenHeight * 0.025,
-          ),
-          GestureDetector(
-            onTap: () {
-              showMessage();
-            },
-            child: Container(
-              width: screenWidth * 0.6,
-              height: screenHeight * 0.08,
-              decoration: BoxDecoration(
-                color: LightTheme().pastelGreen,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  button,
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
                   style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 27,
                   ),
                 ),
-              ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    FlextibleMCQ(
+                        screenWidth, screenHeight, question1, options1),
+                    SizedBox(width: screenWidth * 0.02),
+                    FlextibleMCQ(
+                        screenWidth, screenHeight, question2, options2),
+                  ],
+                ).marginSymmetric(
+                  vertical: screenHeight * 0.025,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showMessage();
+                  },
+                  child: Container(
+                    width: screenWidth * 0.6,
+                    height: screenHeight * 0.08,
+                    decoration: BoxDecoration(
+                      color: LightTheme().pastelGreen,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        button,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ).paddingSymmetric(
+              horizontal: screenWidth * 0.25,
+              vertical: screenHeight * 0.018,
             ),
-          ),
-        ],
-      ).paddingSymmetric(
-        horizontal: screenWidth * 0.25,
-        vertical: screenHeight * 0.018,
-      ),
-    );
+          );
   }
 
   Flexible FlextibleMCQ(double screenWidth, double screenHeight,
@@ -199,14 +193,16 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
       child: ShadowedBoxContainer(
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.only(left: screenWidth * .014), child:
-            Text(
-              question,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 17,
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * .014),
+              child: Text(
+                question,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
+                ),
               ),
-            ),),
+            ),
             ...options.map(
               (option) {
                 return GestureDetector(

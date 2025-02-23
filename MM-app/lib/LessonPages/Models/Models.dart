@@ -61,12 +61,14 @@ class Prompt {
 
 class MultipleChoice {
   const MultipleChoice({
+    required this.questionHeading,
     required this.question,
     required this.questionExplanation,
     required this.options,
     required this.correctAnswers,
     required this.prompts,
   });
+  final String questionHeading;
   final String question;
   final String questionExplanation;
   final List<String> correctAnswers;
@@ -75,6 +77,7 @@ class MultipleChoice {
 
   factory MultipleChoice.fromMap(Map<String, dynamic> map) {
     return MultipleChoice(
+      questionHeading: map['questionHeading'],
       question: map['question'],
       questionExplanation: map['questionExplanation'],
       options: List<String>.from(map['options']),
@@ -85,6 +88,7 @@ class MultipleChoice {
 
   Map<String, dynamic> toMap() {
     return {
+      'questionHeading': questionHeading,
       'question': question,
       'questionExplanation': questionExplanation,
       'options': options,
@@ -133,7 +137,7 @@ class IconReveal {
 
   factory IconReveal.fromMap(Map<String, dynamic> map) {
     return IconReveal(
-      title: "",
+      title: map['title'],
       iconLinks: List<String>.from(map['iconLinks']),
       contents: List<String>.from(map['contents']),
     );
@@ -201,6 +205,7 @@ class Scenario {
 
 class LearningCheck {
   const LearningCheck({
+    required this.title,
     required this.question1,
     required this.question2,
     required this.options1,
@@ -209,6 +214,7 @@ class LearningCheck {
     required this.correctAns2,
   });
 
+  final String title;
   final String question1;
   final String question2;
   final String correctAns1;
@@ -220,6 +226,7 @@ class LearningCheck {
     print("Parsing LearningCheck with data: $map"); // Debug log
 
     return LearningCheck(
+      title: map["title"] ?? "Missing title",
       question1: map["question1"] ?? "Missing question",
       question2: map["question2"] ?? "Missing question",
       options1: List<String>.from(map["options1"] ?? []),
@@ -233,6 +240,7 @@ class LearningCheck {
 
   Map<String, dynamic> toMap() {
     return {
+      'title': title,
       'question1': question1,
       'question2': question2,
       'options1': options1,
@@ -269,20 +277,28 @@ class Takeaway {
 
 class KeyTakeaways {
   const KeyTakeaways({
+    required this.title,
+    required this.hint,
     required this.takeaways,
   });
 
+  final String title;
+  final String hint;
   final List<Takeaway> takeaways;
 
   factory KeyTakeaways.fromMap(Map<String, dynamic> map) {
     final takeawayList = List<Map<String, dynamic>>.from(map['takeaways']);
     return KeyTakeaways(
+      title: map['title'],
+      hint: map['hint'],
       takeaways: takeawayList.map((takeaway) => Takeaway.fromMap(takeaway)).toList(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'title': title,
+      'hint': hint,
       'takeaways': takeaways.map((t) => t.toMap()).toList(),
     };
   }

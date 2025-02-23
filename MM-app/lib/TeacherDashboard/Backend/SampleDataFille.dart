@@ -253,7 +253,7 @@ Map<String, Lesson> advancedLessons = {
     description: 'Understanding financial markets and their structure',
     lessonStatus: Status.Active,
     components:
-        List.generate(8, (index) => 'A.1.1.${index + 1}'), // 8 components
+        List.generate(6, (index) => 'A.1.1.${index + 1}'),
     progress: 0,
     performanceTrends: PerformanceTrends(
       label: 'Week 1',
@@ -269,7 +269,7 @@ Map<String, Lesson> advancedLessons = {
     description: 'Core principles of successful trading strategies',
     lessonStatus: Status.Active,
     components:
-        List.generate(8, (index) => 'A.1.2.${index + 1}'), // 8 components
+        List.generate(6, (index) => 'A.1.1.${index + 1}'), // 6 components
     progress: 0,
     performanceTrends: PerformanceTrends(
       label: 'Week 2',
@@ -379,220 +379,7 @@ Map<String, Component> advancedComponents = {
       Question(
         type: QuestionType.multipleChoice,
         data: MultipleChoice(
-          question:
-              "When is the best time to start practicing financial responsibility?",
-          questionExplanation: "Before we dive in, let’s see what you think!",
-          options: [
-            "When I get my first job after college.",
-            "When I start earning money, even if it's from chores or an allowance.",
-            "Only after I start earning a high salary.",
-            "Once I’m ready to start saving for retirement."
-          ],
-          correctAnswers: [
-            "When I start earning money, even if it's from chores or an allowance."
-          ],
-          prompts: Prompt(
-            correct:
-                "That’s right! You can start practicing financial responsibility early by saving or budgeting your allowance or earnings from part-time work.",
-            incorrect:
-                "Not quite! Financial responsibility begins as soon as you start earning money. Learning to manage it early builds healthy habits for life.",
-          ),
-        ),
-      ),
-
-      Question(
-        type: QuestionType.revealCard,
-        data: RevealCard(
-          definition:
-              "Financial responsibility involves managing your money and other assets in a way that is productive and in your best interest. This includes living within your means, budgeting, saving, investing wisely, and planning for both foreseeable and unforeseen expenses throughout your life.",
-          tapInstruction:
-              "Click to reveal what it really means to be financially responsible over a lifetime.",
-          revealInformation: [
-            "Living within your means helps prevent debt and financial stress.",
-            "Budgeting allows you to plan for necessary expenses and avoid overspending.",
-            "Saving ensures that you have funds available for emergencies and future goals.",
-            "Investing wisely helps grow wealth over time and secure financial stability.",
-            "Planning for foreseeable and unforeseen expenses helps maintain long-term financial health."
-          ],
-        ),
-      ),
-
-      Question(
-        type: QuestionType.iconReveal,
-        data: IconReveal(
-          iconLinks: [
-            "assets/icons/teenage_years.png",
-            "assets/icons/young_adulthood.png",
-            "assets/icons/midlife.png",
-            "assets/icons/retirement.png"
-          ],
-          contents: [
-            "Teenage Years: Even small allowances or part-time job earnings can be budgeted. Learning to save a portion of every dollar lays a foundation for bigger financial goals later.",
-            "Young Adulthood: This might be your first real job or college experience. Budgeting for regular expenses like rent, utilities, and groceries becomes essential.",
-            "Midlife: You might buy a home, manage debt, and start long-term investments. Building an emergency fund and saving for retirement are key priorities.",
-            "Retirement: You live off savings, pensions, or investments made earlier. Continued budgeting ensures your money lasts through retirement."
-          ],
-        ),
-      ),
-
-      Question(
-        type: QuestionType.scenario,
-        data: Scenario(
-          title: "Meet Jordan: A Life of Financial Decisions",
-          scenarioExplanation:
-              "Jordan is on a journey from high school to retirement. Let’s help them make smart financial choices!",
-          questions: [
-            MultipleChoice(
-              question:
-                  "Jordan earns \$50/week from chores. Should Jordan save 10% (\$5) or spend it all?",
-              questionExplanation:
-                  "Starting financial habits early can lead to long-term success.",
-              options: [
-                "Save 10%",
-                "Spend all of it",
-              ],
-              correctAnswers: ["Save 10%"],
-              prompts: Prompt(
-                correct:
-                    "Great choice! Saving a portion of your earnings builds a habit that can lead to financial security over time.",
-                incorrect:
-                    "Spending everything means missing out on the chance to build financial habits that pay off in the future.",
-              ),
-            ),
-            MultipleChoice(
-              question:
-                  "Jordan just started their first job. Should they create a budget or spend as they go?",
-              questionExplanation:
-                  "Budgeting is key to financial stability and achieving long-term goals.",
-              options: [
-                "Create a budget",
-                "Spend as they go",
-              ],
-              correctAnswers: ["Create a budget"],
-              prompts: Prompt(
-                correct:
-                    "Smart decision! A budget helps manage spending, ensuring that important goals like savings and bills are covered.",
-                incorrect:
-                    "Without a budget, it’s easy to overspend and miss out on reaching financial goals.",
-              ),
-            ),
-            MultipleChoice(
-              question:
-                  "Jordan is planning to start a family. How important is having an emergency fund?",
-              questionExplanation:
-                  "An emergency fund can provide financial security for unexpected life events.",
-              options: [
-                "High priority",
-                "Not that important",
-              ],
-              correctAnswers: ["High priority"],
-              prompts: Prompt(
-                correct:
-                    "Yes! An emergency fund protects against unexpected expenses like medical bills or home repairs.",
-                incorrect:
-                    "Without an emergency fund, unexpected costs can cause serious financial stress.",
-              ),
-            ),
-            MultipleChoice(
-              question:
-                  "Jordan is approaching retirement. Should they continue budgeting?",
-              questionExplanation:
-                  "Budgeting in retirement ensures financial stability for the years ahead.",
-              options: [
-                "Yes",
-                "No",
-              ],
-              correctAnswers: ["Yes"],
-              prompts: Prompt(
-                correct:
-                    "Correct! Even in retirement, budgeting helps ensure that savings last for the long haul.",
-                incorrect:
-                    "Without budgeting, it’s easy to run out of savings before retirement is over.",
-              ),
-            ),
-          ],
-        ),
-      ),
-
-      Question(
-        type: QuestionType.learningCheck,
-        data: LearningCheck(
-          question1:
-              "Which of the following best describes a responsible way to handle your income?",
-          question2: "What is a key benefit of creating a budget?",
-          options1: [
-            "Spend most of it on things you enjoy, since you earned it.",
-            "Save some for emergencies and future goals.",
-            "Only worry about saving when you start making a lot of money."
-          ],
-          options2: [
-            "It helps you plan your expenses and save for future goals.",
-            "It lets you avoid worrying about how much you spend.",
-            "It guarantees you’ll never run out of money."
-          ],
-          correctAns1: "Save some for emergencies and future goals.",
-          correctAns2:
-              "It helps you plan your expenses and save for future goals.",
-        ),
-      ),
-
-      Question(
-        type: QuestionType.keyTakeaways,
-        data: KeyTakeaways(
-          takeaways: [
-            Takeaway(
-              title: "Start Small, Think Big",
-              description:
-                  "Even saving small amounts early helps build a strong financial foundation over time.",
-            ),
-            Takeaway(
-              title: "Budget for Every Stage",
-              description:
-                  "Whether it’s your first paycheck or retirement income, budgeting ensures you stay in control of your finances.",
-            ),
-            Takeaway(
-              title: "Be Prepared for the Unexpected",
-              description:
-                  "Life changes like job transitions or starting a family can bring unexpected expenses—an emergency fund is key.",
-            ),
-            Takeaway(
-              title: "It’s Never Too Late to Improve",
-              description:
-                  "No matter your age, you can always adjust your financial habits to improve your future stability.",
-            ),
-          ],
-        ),
-      ),
-    ],
-  ),
-
-  // 'A.1.1.2': Component(
-  //   componentId: 'A.1.1.2',
-  //   title: 'Market Types Exploration',
-  //   type: ComponentType.interactiveActivity,
-  //   componentStatus: Status.Active,
-  //   discussionQuestions: [
-  //     "How do stocks differ from bonds?",
-  //     "What makes forex markets unique?",
-  //   ],
-  //   questionData: [
-  //   ],
-  // ),
-
-  'A.1.1.2': Component(
-    componentId: 'A.1.1.2',
-    title: 'Market Participants',
-    type: ComponentType.concept,
-    componentStatus: Status.InProgress,
-    discussionQuestions: [
-      "What motivates institutional investors?",
-      "How do retail traders affect market dynamics?",
-      "What role do market makers serve?",
-    ],
-    questionData: [
-      Question(
-        type: QuestionType.multipleChoice,
-        data: MultipleChoice(
+          questionHeading: "",
           question:
               "When is the best time to start practicing financial responsibility?",
           questionExplanation: "Before we dive in, let’s see what you think!",
@@ -652,6 +439,7 @@ Map<String, Component> advancedComponents = {
               "Jordan is on a journey from high school to retirement. Let’s help them make smart financial choices!",
           questions: [
             MultipleChoice(
+              questionHeading: "High School",
               question:
                   "Jordan earns \$50/week from chores. Should Jordan save 10% (\$5) or spend it all?",
               questionExplanation:
@@ -669,6 +457,7 @@ Map<String, Component> advancedComponents = {
               ),
             ),
             MultipleChoice(
+              questionHeading: "High School",
               question:
                   "Jordan just started their first job. Should they create a budget or spend as they go?",
               questionExplanation:
@@ -686,6 +475,7 @@ Map<String, Component> advancedComponents = {
               ),
             ),
             MultipleChoice(
+              questionHeading: "Family Planning",
               question:
                   "Jordan is planning to start a family. How important is having an emergency fund?",
               questionExplanation:
@@ -703,6 +493,7 @@ Map<String, Component> advancedComponents = {
               ),
             ),
             MultipleChoice(
+              questionHeading: "Retirement",
               question:
                   "Jordan is approaching retirement. Should they continue budgeting?",
               questionExplanation:
@@ -725,6 +516,7 @@ Map<String, Component> advancedComponents = {
       Question(
         type: QuestionType.learningCheck,
         data: LearningCheck(
+          title: "Quick Check: Lifelong Financial Responsibility",
           question1:
               "Which of the following best describes a responsible way to handle your income?",
           question2: "What is a key benefit of creating a budget?",
@@ -746,6 +538,223 @@ Map<String, Component> advancedComponents = {
       Question(
         type: QuestionType.keyTakeaways,
         data: KeyTakeaways(
+          title: "Key Takeaways: Lifelong Financial Responsibility",
+          hint: "What’s one new financial habit you’ll adopt this month?",
+          takeaways: [
+            Takeaway(
+              title: "Start Small, Think Big",
+              description:
+                  "Even saving small amounts early helps build a strong financial foundation over time.",
+            ),
+            Takeaway(
+              title: "Budget for Every Stage",
+              description:
+                  "Whether it’s your first paycheck or retirement income, budgeting ensures you stay in control of your finances.",
+            ),
+            Takeaway(
+              title: "Be Prepared for the Unexpected",
+              description:
+                  "Life changes like job transitions or starting a family can bring unexpected expenses—an emergency fund is key.",
+            ),
+            Takeaway(
+              title: "It’s Never Too Late to Improve",
+              description:
+                  "No matter your age, you can always adjust your financial habits to improve your future stability.",
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+
+  // 'A.1.1.2': Component(
+  //   componentId: 'A.1.1.2',
+  //   title: 'Market Types Exploration',
+  //   type: ComponentType.interactiveActivity,
+  //   componentStatus: Status.Active,
+  //   discussionQuestions: [
+  //     "How do stocks differ from bonds?",
+  //     "What makes forex markets unique?",
+  //   ],
+  //   questionData: [
+  //   ],
+  // ),
+
+  'A.1.1.2': Component(
+    componentId: 'A.1.1.2',
+    title: 'Market Participants',
+    type: ComponentType.concept,
+    componentStatus: Status.InProgress,
+    discussionQuestions: [
+      "What motivates institutional investors?",
+      "How do retail traders affect market dynamics?",
+      "What role do market makers serve?",
+    ],
+    questionData: [
+      Question(
+        type: QuestionType.multipleChoice,
+        data: MultipleChoice(
+          questionHeading: "",
+          question:
+              "When is the best time to start practicing financial responsibility?",
+          questionExplanation: "Before we dive in, let’s see what you think!",
+          options: [
+            "When I get my first job after college.",
+            "When I start earning money, even if it's from chores or an allowance.",
+            "Only after I start earning a high salary.",
+            "Once I’m ready to start saving for retirement."
+          ],
+          correctAnswers: [
+            "When I start earning money, even if it's from chores or an allowance."
+          ],
+          prompts: Prompt(
+            correct:
+                "That’s right! You can start practicing financial responsibility early by saving or budgeting your allowance or earnings from part-time work.",
+            incorrect:
+                "Not quite! Financial responsibility begins as soon as you start earning money. Learning to manage it early builds healthy habits for life.",
+          ),
+        ),
+      ),
+      Question(
+        type: QuestionType.revealCard,
+        data: RevealCard(
+          definition:
+              "Financial responsibility involves managing your money and other assets in a way that is productive and in your best interest. This includes living within your means, budgeting, saving, investing wisely, and planning for both foreseeable and unforeseen expenses throughout your life.",
+          tapInstruction:
+              "Click to reveal what it really means to be financially responsible over a lifetime.",
+          revealInformation: [
+            "Financial responsibility over a lifetime means consistently making informed decisions about earning, saving, spending, and investing, starting from your earliest income and continuing through retirement.",
+            "Why does it matter? Because small habits formed early—like setting aside a little money or comparing prices—can grow into long-term financial stability.",
+          ],
+        ),
+      ),
+      Question(
+        type: QuestionType.iconReveal,
+        data: IconReveal(
+          title: "Definition: Financial Responsibility Over a Lifetime",
+          iconLinks: [
+            "assets/icons/teenage_years.png",
+            "assets/icons/young_adulthood.png",
+            "assets/icons/midlife.png",
+            "assets/icons/retirement.png"
+          ],
+          contents: [
+            "Teenage Years: Even small allowances or part-time job earnings can be budgeted. Learning to save a portion of every dollar lays a foundation for bigger financial goals later.",
+            "Young Adulthood: This might be your first real job or college experience. Budgeting for regular expenses like rent, utilities, and groceries becomes essential.",
+            "Midlife: You might buy a home, manage debt, and start long-term investments. Building an emergency fund and saving for retirement are key priorities.",
+            "Retirement: You live off savings, pensions, or investments made earlier. Continued budgeting ensures your money lasts through retirement."
+          ],
+        ),
+      ),
+      Question(
+        type: QuestionType.scenario,
+        data: Scenario(
+          title: "Meet Jordan: A Life of Financial Decisions",
+          scenarioExplanation:
+              "Jordan is on a journey from high school to retirement. Let’s help them make smart financial choices!",
+          questions: [
+            MultipleChoice(
+              questionHeading: "High School",
+              question:
+                  "Jordan earns \$50/week from chores. Should Jordan save 10% (\$5) or spend it all?",
+              questionExplanation:
+                  "Starting financial habits early can lead to long-term success.",
+              options: [
+                "Save 10%",
+                "Spend all of it",
+              ],
+              correctAnswers: ["Save 10%"],
+              prompts: Prompt(
+                correct:
+                    "Great choice! Saving a portion of your earnings builds a habit that can lead to financial security over time.",
+                incorrect:
+                    "Spending everything means missing out on the chance to build financial habits that pay off in the future.",
+              ),
+            ),
+            MultipleChoice(
+              questionHeading: "High School",
+              question:
+                  "Jordan just started their first job. Should they create a budget or spend as they go?",
+              questionExplanation:
+                  "Budgeting is key to financial stability and achieving long-term goals.",
+              options: [
+                "Create a budget",
+                "Spend as they go",
+              ],
+              correctAnswers: ["Create a budget"],
+              prompts: Prompt(
+                correct:
+                    "Smart decision! A budget helps manage spending, ensuring that important goals like savings and bills are covered.",
+                incorrect:
+                    "Without a budget, it’s easy to overspend and miss out on reaching financial goals.",
+              ),
+            ),
+            MultipleChoice(
+              questionHeading: "Family Planning",
+              question:
+                  "Jordan is planning to start a family. How important is having an emergency fund?",
+              questionExplanation:
+                  "An emergency fund can provide financial security for unexpected life events.",
+              options: [
+                "High priority",
+                "Not that important",
+              ],
+              correctAnswers: ["High priority"],
+              prompts: Prompt(
+                correct:
+                    "Yes! An emergency fund protects against unexpected expenses like medical bills or home repairs.",
+                incorrect:
+                    "Without an emergency fund, unexpected costs can cause serious financial stress.",
+              ),
+            ),
+            MultipleChoice(
+              questionHeading: "Retirement",
+              question:
+                  "Jordan is approaching retirement. Should they continue budgeting?",
+              questionExplanation:
+                  "Budgeting in retirement ensures financial stability for the years ahead.",
+              options: [
+                "Yes",
+                "No",
+              ],
+              correctAnswers: ["Yes"],
+              prompts: Prompt(
+                correct:
+                    "Correct! Even in retirement, budgeting helps ensure that savings last for the long haul.",
+                incorrect:
+                    "Without budgeting, it’s easy to run out of savings before retirement is over.",
+              ),
+            ),
+          ],
+        ),
+      ),
+      Question(
+        type: QuestionType.learningCheck,
+        data: LearningCheck(
+          title: "Quick Check: Lifelong Financial Responsibility",
+          question1:
+              "Which of the following best describes a responsible way to handle your income?",
+          question2: "What is a key benefit of creating a budget?",
+          options1: [
+            "Spend most of it on things you enjoy, since you earned it.",
+            "Save some for emergencies and future goals.",
+            "Only worry about saving when you start making a lot of money."
+          ],
+          options2: [
+            "It helps you plan your expenses and save for future goals.",
+            "It lets you avoid worrying about how much you spend.",
+            "It guarantees you’ll never run out of money."
+          ],
+          correctAns1: "Save some for emergencies and future goals.",
+          correctAns2:
+              "It helps you plan your expenses and save for future goals.",
+        ),
+      ),
+      Question(
+        type: QuestionType.keyTakeaways,
+        data: KeyTakeaways(
+          title: "Key Takeaways: Lifelong Financial Responsibility",
+          hint: "What’s one new financial habit you’ll adopt this month?",
           takeaways: [
             Takeaway(
               title: "Start Small, Think Big",

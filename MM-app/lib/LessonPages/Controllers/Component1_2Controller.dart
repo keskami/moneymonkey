@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page5.dart';
 import 'package:money_monkey/LessonPages/Pages_ConceptOneTwo/Page6.dart';
@@ -14,7 +15,7 @@ import 'package:money_monkey/LessonPages/SubComponentPages/ScenarioPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/TapToRevealIconsPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/TapToRevealPage.dart';
 
-class ComponentOneTwoController extends GetxController {
+class ComponentOneTwoController extends BaseLessonController {
   final LocalAcademicService localAcademicService = LocalAcademicService();
   final String componentId;
 
@@ -22,9 +23,8 @@ class ComponentOneTwoController extends GetxController {
 
   // Pages:
   RxInt pageIndex = 0.obs;
-  RxBool isLoading = true.obs;
 
-  List<Question> pageData = [];
+  RxList<Question> pageData = <Question>[].obs;
 
   // Optional: store fetched questions in a list
   RxList<SubComponent> questions = <SubComponent>[].obs;
@@ -50,15 +50,15 @@ class ComponentOneTwoController extends GetxController {
 
   Future<void> loadConceptData() async {
     try {
-      final Component data = await localAcademicService.getComponent(componentId);
+      final Component data =
+          await localAcademicService.getComponent(componentId);
       for (int i = 0; i < data.questionData.length; i++) {
         pageData.add(data.questionData[i]);
-        print(pageData[i].data.toString());
       }
     } catch (e) {
       print("Error loading concept data: $e");
     } finally {
-      isLoading.value = false;
+      isLoading.value = false; // using the inherited property
     }
   }
 }

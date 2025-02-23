@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class ScenarioPage extends StatefulWidget {
@@ -32,12 +32,12 @@ class _ScenarioPageState extends State<ScenarioPage> {
     setState(() {
       title = data.data.title;
       subTitle = data.data.scenarioExplanation;
-      wrong = data['wrong'];
-      correct = data['correct'];
-      containerHeading = data['containerHeading'];
-      containerSubHeading = data['containerSubHeading'];
+      wrong = question.prompts.incorrect;
+      correct = question.prompts.correct;
+      containerHeading = question.questionHeading;
+      containerSubHeading = question.question;
       options =
-          List<String>.from(data["options"].map((item) => item.toString()));
+          List<String>.from(question.options.map((item) => item.toString()));
       correctAnswers.add(data['correctAnswer']);
 
       loading = false;
@@ -50,13 +50,9 @@ class _ScenarioPageState extends State<ScenarioPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[3]);
-        }
-      }
-    });
+    if (componentOneTwoController.pageData.isNotEmpty) {
+      setData(componentOneTwoController.pageData[3]);
+    }
     if (title == '') {
       setData(componentOneTwoController.pageData[3]);
     }

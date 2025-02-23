@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class L1Page6 extends StatefulWidget {
@@ -12,7 +13,7 @@ class L1Page6 extends StatefulWidget {
 }
 
 class _L1Page6State extends State<L1Page6> {
- String currentQuestion = "";
+  String currentQuestion = "";
   List<String> currentAnswers = [];
   List<String> correctAnswers = [];
   List<String> options = [];
@@ -27,15 +28,16 @@ class _L1Page6State extends State<L1Page6> {
   String correct = '';
   bool loading = true;
   Future<void> setData(data) async {
+    final MultipleChoice question = data.data.questions[2];
     setState(() {
-      title = data['title'];
-      subTitle = data['subTitle'];
-      wrong = data['wrong'];
-      correct = data['correct'];
-      containerHeading = data['containerHeading'];
-      containerSubHeading = data['containerSubHeading'];
+      title = data.data.title;
+      subTitle = data.data.scenarioExplanation;
+      wrong = question.prompts.incorrect;
+      correct = question.prompts.correct;
+      containerHeading = question.questionHeading;
+      containerSubHeading = question.question;
       options =
-          List<String>.from(data["options"].map((item) => item.toString()));
+          List<String>.from(question.options.map((item) => item.toString()));
       correctAnswers.add(data['correctAnswer']);
 
       loading = false;
@@ -48,15 +50,8 @@ class _L1Page6State extends State<L1Page6> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[6]);
-        }
-      }
-    });
-    if (title == '') {
-      setData(componentOneTwoController.pageData[6]);
+    if (componentOneTwoController.pageData.isNotEmpty) {
+      setData(componentOneTwoController.pageData[5]);
     }
   }
 
@@ -64,7 +59,8 @@ class _L1Page6State extends State<L1Page6> {
     currentAnswers.clear();
     if (correctAnswers.contains(ans)) {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(message: correct));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CorrectAnswerSnackBar(message: correct));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -76,14 +72,13 @@ class _L1Page6State extends State<L1Page6> {
       );
     } else {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(WrongAnswerSnackBar(message: wrong));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(WrongAnswerSnackBar(message: wrong));
       setState(() {
         currentAnswers.add(ans);
       });
     }
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +98,7 @@ class _L1Page6State extends State<L1Page6> {
           SizedBox(height: screenWidth * 0.02),
           //Heading
           Text(
-           title,
+            title,
             softWrap: true,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -113,7 +108,7 @@ class _L1Page6State extends State<L1Page6> {
               vertical: screenHeight * 0.025, horizontal: screenWidth * 0.015),
           //SubHeading
           Text(
-           subTitle,
+            subTitle,
             softWrap: true,
             style: TextStyle(
               fontWeight: FontWeight.w600,

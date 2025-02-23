@@ -31,20 +31,19 @@ class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
 
   Future<void> setData(data) async {
     setState(() {
-      title = data['title'];
-      subTitle = data['subTitle'];
-      hint = data['hint'];
-      image = data['image'];
-      takeawayList =
-          List<String>.from(data["takeaways"].map((item) => item.toString()));
-      takeAways[0].add(takeawayList[0]);
-      takeAways[0].add(takeawayList[1]);
-      takeAways[1].add(takeawayList[2]);
-      takeAways[1].add(takeawayList[3]);
-      takeAways[2].add(takeawayList[4]);
-      takeAways[2].add(takeawayList[5]);
-      takeAways[3].add(takeawayList[6]);
-      takeAways[3].add(takeawayList[7]);
+      title = data.data.title;
+      subTitle = "Personal Reflection";
+      hint = data.data.hint;
+      image =
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2Ftakeaway_check.png?alt=media&token=9a389932-5562-4c38-a970-9ecd6bf8adcb";
+      takeAways[0].add(data.data.takeaways[0].title);
+      takeAways[0].add(data.data.takeaways[0].description);
+      takeAways[1].add(data.data.takeaways[1].title);
+      takeAways[1].add(data.data.takeaways[1].description);
+      takeAways[2].add(data.data.takeaways[2].title);
+      takeAways[2].add(data.data.takeaways[2].description);
+      takeAways[3].add(data.data.takeaways[3].title);
+      takeAways[3].add(data.data.takeaways[3].description);
 
       loading = false;
     });
@@ -56,15 +55,11 @@ class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[9]);
-        }
-      }
-    });
+    if (componentOneTwoController.pageData.isNotEmpty) {
+      setData(componentOneTwoController.pageData[8]);
+    }
     if (title == '') {
-      setData(componentOneTwoController.pageData[9]);
+      setData(componentOneTwoController.pageData[8]);
     }
   }
 
@@ -208,8 +203,10 @@ class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
                         nextPage: () {
                           // componentOneTwoController.pageIndex.value = 0;
                           componentOneTwoController.dispose();
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => HomePage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
                         },
                         isEnabled: personalReflectionController.text.isNotEmpty,
                       ),

@@ -3,10 +3,12 @@
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/PeerReflection/page4.dart';
 import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 
-class PeerReflectioncontroller extends GetxController {
+class PeerReflectioncontroller extends BaseLessonController {
   final LocalAcademicService localAcademicService = LocalAcademicService();
   final String componentId;
 
@@ -17,7 +19,7 @@ class PeerReflectioncontroller extends GetxController {
   RxInt pageIndex = 0.obs;
   RxBool isLoading = true.obs;
 
-  var pageData = <int, dynamic>{}.obs;
+  RxList<Question> pageData = <Question>[].obs;
 
   // UI pages
   final pages = [

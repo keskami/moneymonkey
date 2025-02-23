@@ -32,7 +32,6 @@ class _MCQPageState extends State<MCQPage> {
   String correct = '';
   String title = '';
   String question = '';
-  bool loading = true;
 
   Future<void> setData(Question data) async {
     setState(() {
@@ -43,23 +42,13 @@ class _MCQPageState extends State<MCQPage> {
       options =
           List<String>.from(data.data.options.map((item) => item.toString()));
       correctAnswers.add(data.data.correctAnswers);
-      // No need to update local 'loading' here, since we're using the controller's flag.
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // Listen for when the controller finishes loading.
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value &&
-          componentOneTwoController.pageData.isNotEmpty &&
-          question.isEmpty) {
-        // Only call setData once when the data becomes available.
-        print("PageData[0]: ${componentOneTwoController.pageData[0]}");
-        setData(componentOneTwoController.pageData[0]);
-      }
-    });
+    setData(componentOneTwoController.pageData[0]);
   }
 
   void answerQuestion(String ans) {
@@ -92,10 +81,6 @@ class _MCQPageState extends State<MCQPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Obx(() {
-      // Use the controller's loading flag directly.
-      if (componentOneTwoController.isLoading.value) {
-        return Center(child: CircularProgressIndicator());
-      }
       if (componentOneTwoController.pageData.isEmpty) {
         return Center(child: Text("No data available"));
       }
@@ -108,78 +93,74 @@ class _MCQPageState extends State<MCQPage> {
   }
 
   Widget webDisplay(double screenWidth, double screenHeight) {
-    return loading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: screenWidth * 0.02),
-              Text(
-                question,
-                softWrap: true,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 27,
-                ),
-              ).marginSymmetric(
-                vertical: screenHeight * 0.025,
-                horizontal: screenWidth * 0.015,
-              ),
-              Text(
-                title,
-                softWrap: true,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 19,
-                ),
-              ).marginSymmetric(
-                vertical: screenHeight * 0.01,
-                horizontal: screenWidth * 0.015,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Container(
-                height: screenHeight * 0.5,
-                child: Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: options.map((answer) {
-                        return GestureDetector(
-                          onTap: () {
-                            answerQuestion(answer);
-                          },
-                          child: OptionsTile(
-                            isSelected: currentAnswers.contains(answer),
-                            childWidget: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 15,
-                              ),
-                              child: Text(
-                                answer,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenWidth * 0.02),
+        Text(
+          question,
+          softWrap: true,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 27,
+          ),
+        ).marginSymmetric(
+          vertical: screenHeight * 0.025,
+          horizontal: screenWidth * 0.015,
+        ),
+        Text(
+          title,
+          softWrap: true,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 19,
+          ),
+        ).marginSymmetric(
+          vertical: screenHeight * 0.01,
+          horizontal: screenWidth * 0.015,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Container(
+          height: screenHeight * 0.5,
+          child: Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: options.map((answer) {
+                  return GestureDetector(
+                    onTap: () {
+                      answerQuestion(answer);
+                    },
+                    child: OptionsTile(
+                      isSelected: currentAnswers.contains(answer),
+                      childWidget: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 15,
+                        ),
+                        child: Text(
+                          answer,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                           ),
-                        );
-                      }).toList(),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }).toList(),
               ),
-              SizedBox(
-                height: screenHeight * 0.1,
-              ),
-            ],
-          ).paddingSymmetric(horizontal: screenWidth * 0.25);
+            ),
+          ),
+        ),
+        SizedBox(
+          height: screenHeight * 0.1,
+        ),
+      ],
+    ).paddingSymmetric(horizontal: screenWidth * 0.25);
   }
 
   Scaffold mobileDisplay() {

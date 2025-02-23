@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class L1Page5 extends StatefulWidget {
@@ -12,7 +13,6 @@ class L1Page5 extends StatefulWidget {
 }
 
 class _L1Page5State extends State<L1Page5> {
-
   String currentQuestion = "";
   List<String> currentAnswers = [];
   List<String> correctAnswers = [];
@@ -28,15 +28,16 @@ class _L1Page5State extends State<L1Page5> {
   String correct = '';
   bool loading = true;
   Future<void> setData(data) async {
+    final MultipleChoice question = data.data.questions[1];
     setState(() {
-      title = data['title'];
-      subTitle = data['subTitle'];
-      wrong = data['wrong'];
-      correct = data['correct'];
-      containerHeading = data['containerHeading'];
-      containerSubHeading = data['containerSubHeading'];
+      title = data.data.title;
+      subTitle = data.data.scenarioExplanation;
+      wrong = question.prompts.incorrect;
+      correct = question.prompts.correct;
+      containerHeading = question.questionHeading;
+      containerSubHeading = question.question;
       options =
-          List<String>.from(data["options"].map((item) => item.toString()));
+          List<String>.from(question.options.map((item) => item.toString()));
       correctAnswers.add(data['correctAnswer']);
 
       loading = false;
@@ -49,24 +50,17 @@ class _L1Page5State extends State<L1Page5> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[5]);
-        }
-      }
-    });
-    if (title == '') {
-      setData(componentOneTwoController.pageData[5]);
+    if (componentOneTwoController.pageData.isNotEmpty) {
+      setData(componentOneTwoController.pageData[4]);
     }
   }
-
 
   void answerQuestion(String ans) {
     currentAnswers.clear();
     if (correctAnswers.contains(ans)) {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(CorrectAnswerSnackBar(message: correct));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CorrectAnswerSnackBar(message: correct));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -78,14 +72,13 @@ class _L1Page5State extends State<L1Page5> {
       );
     } else {
       ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(WrongAnswerSnackBar(message: wrong));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(WrongAnswerSnackBar(message: wrong));
       setState(() {
         currentAnswers.add(ans);
       });
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {

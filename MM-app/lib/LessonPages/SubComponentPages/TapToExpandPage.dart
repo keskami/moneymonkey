@@ -22,7 +22,7 @@ class _TapToExpandPageState extends State<TapToExpandPage> {
   bool avaClicked = false;
   PeerReflectioncontroller peerReflectionController = Get.find();
   bool delay = false;
-bool loading = true;
+  bool loading = true;
   String title = '';
   String subTitle = '';
   String ava1 = '';
@@ -52,19 +52,13 @@ bool loading = true;
   @override
   void initState() {
     super.initState();
-    ever(peerReflectionController.isLoading, (_) {
-      if (!peerReflectionController.isLoading.value) {
-        if (peerReflectionController.pageData.isNotEmpty) {
-          setData(peerReflectionController.pageData[2]);
-        }
-      }
-    });
+    if (peerReflectionController.pageData.isNotEmpty) {
+      setData(peerReflectionController.pageData[2]);
+    }
     if (title == '') {
       setData(peerReflectionController.pageData[2]);
     }
   }
-
-
 
   Future<void> _6secdelay() async {
     await Future.delayed(Duration(seconds: 6));
@@ -72,8 +66,6 @@ bool loading = true;
       delay = true;
     });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +104,7 @@ bool loading = true;
               lessonTab(
                 image: "assets/images/newMonkeys/Maria.png",
                 name: maria1,
-                discription:
-                    maria2,
+                discription: maria2,
                 isClicked: mariaClicked,
                 onClick: () {
                   setState(() {
@@ -128,8 +119,7 @@ bool loading = true;
               lessonTab(
                 image: "assets/images/newMonkeys/Jason.png",
                 name: jason1,
-                discription:
-                     jason2,
+                discription: jason2,
                 isClicked: jasonClicked,
                 onClick: () {
                   setState(() {
@@ -144,8 +134,7 @@ bool loading = true;
               lessonTab(
                 image: "assets/images/newMonkeys/Ava.png",
                 name: ava1,
-                discription:
-                    ava2,
+                discription: ava2,
                 isClicked: avaClicked,
                 onClick: () {
                   setState(() {
@@ -166,10 +155,8 @@ bool loading = true;
               if (avaClicked && jasonClicked && mariaClicked && delay) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 peerReflectionController.pageIndex.value += 1;
-              } else if (!delay){
-
-              }
-              else {
+              } else if (!delay) {
+              } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Please read all the stories to continue'),
                   duration: Duration(seconds: 2),

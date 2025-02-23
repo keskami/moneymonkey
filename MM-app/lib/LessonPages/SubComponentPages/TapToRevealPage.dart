@@ -44,13 +44,9 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    ever(componentOneTwoController.isLoading, (_) {
-      if (!componentOneTwoController.isLoading.value) {
-        if (componentOneTwoController.pageData.isNotEmpty) {
-          setData(componentOneTwoController.pageData[1]);
-        }
-      }
-    });
+    if (componentOneTwoController.pageData.isNotEmpty) {
+      setData(componentOneTwoController.pageData[1]);
+    }
     if (title == '') {
       setData(componentOneTwoController.pageData[1]);
     }
@@ -203,8 +199,7 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
                   ),
                   children: [
                     TextSpan(
-                      text:
-                          bigBottom,
+                      text: bigBottom,
                       style: GoogleFonts.baloo2(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -229,7 +224,7 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
               color: Colors.grey.shade200,
             ),
             child: Text(
-             little,
+              little,
               style: GoogleFonts.baloo2(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
