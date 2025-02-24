@@ -1,23 +1,28 @@
 enum QuestionType {
+  // concept
   multipleChoice,
   revealCard,
   iconReveal,
   learningCheck,
   scenario,
   keyTakeaways,
+  // story
   intro,
   newlanding,
   problem,
   solution,
   impact,
+  // scenario
   scenariointro,
   scenarioquestion,
   scenarioresults,
   scenariochoice,
+  // peer review
   peerintro,
   peerstories,
   peermatch,
   peerreflectionend,
+  // quiz
   quizimagemcquestion,
   quiztextmcquestion,
 }
