@@ -2,17 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
 import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
 import 'package:money_monkey/LessonPages/Pages/Story.dart';
-import 'package:money_monkey/LessonPages/Pages/Toolkit.dart';
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
-import 'package:money_monkey/GlobalWidgets/Scoreboard.dart';
-import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class LessonsHomeUnit extends StatefulWidget {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
+import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/PerformanceTrendCharts.dart';
@@ -10,80 +11,11 @@ import 'package:money_monkey/themes/color_themes.dart';
 
 class ClassroomPreferences extends StatefulWidget {
   const ClassroomPreferences({
-    super.key,
-    required this.supportStudentsCount,
-    required this.topPerformersCounts,
-    required this.totalStudentsCount,
-  });
-  final int totalStudentsCount;
-  final int supportStudentsCount;
-  final int topPerformersCounts;
+    super.key });
   @override
   State<ClassroomPreferences> createState() => _ClassroomPreferencesState();
 }
 
-final List<PerformanceTrends> samplePerformanceData = [
-  PerformanceTrends(
-    label: "Recap",
-    classAverage: 65.0,
-    participationRate: 75.0,
-    lessonCompletion: 70.0,
-  ),
-  PerformanceTrends(
-    label: "Concept 1",
-    classAverage: 75.0,
-    participationRate: 85.0,
-    lessonCompletion: 68.0,
-  ),
-  PerformanceTrends(
-    label: "Interactive Activity 1",
-    classAverage: 80.0,
-    participationRate: 70.0,
-    lessonCompletion: 58.0,
-  ),
-  PerformanceTrends(
-    label: "Concept 2",
-    classAverage: 70.0,
-    participationRate: 65.0,
-    lessonCompletion: 90.0,
-  ),
-  PerformanceTrends(
-    label: "Interactive Activity 2",
-    classAverage: 82.0,
-    participationRate: 80.0,
-    lessonCompletion: 85.0,
-  ),
-  PerformanceTrends(
-    label: "Story",
-    classAverage: 75.0,
-    participationRate: 65.0,
-    lessonCompletion: 60.0,
-  ),
-  PerformanceTrends(
-    label: "Scenario Simulation",
-    classAverage: 82.0,
-    participationRate: 80.0,
-    lessonCompletion: 85.0,
-  ),
-  PerformanceTrends(
-    label: "Peer Reflection",
-    classAverage: 82.0,
-    participationRate: 80.0,
-    lessonCompletion: 85.0,
-  ),
-  PerformanceTrends(
-    label: "Toolkit",
-    classAverage: 80.0,
-    participationRate: 70.0,
-    lessonCompletion: 58.0,
-  ),
-  PerformanceTrends(
-    label: "Quiz",
-    classAverage: 82.0,
-    participationRate: 80.0,
-    lessonCompletion: 85.0,
-  ),
-];
 String selectedFilter = "All Statistics";
 final List<String> filters = [
   "All Statistics",
@@ -93,6 +25,8 @@ final List<String> filters = [
 ];
 
 class _ClassroomPreferencesState extends State<ClassroomPreferences> {
+  LocalAcademicService localAcademicService=LocalAcademicService();
+  TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardController>();
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -132,7 +66,6 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                   ),
                 ),
                 PerformanceTrendsChart(
-                  data: samplePerformanceData,
                   width: screenWidth * 0.5,
                   height: screenHeight * 0.7,
                   filter: selectedFilter,
@@ -220,7 +153,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                               ),
                             ),
                             Text(
-                              widget.topPerformersCounts.toString(),
+                              teacherDashboardController.topPerformers.value.length.toString(),
                               style: TextStyles.containerTitle.copyWith(
                                 fontSize: 30,
                                 color: LightTheme().pastelGreen,
@@ -255,9 +188,9 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                               ),
                             ),
                             Text(
-                              (widget.totalStudentsCount -
-                                      (widget.topPerformersCounts +
-                                          widget.supportStudentsCount))
+                              (teacherDashboardController.classRoomStudents.value.length -
+                                      (teacherDashboardController.topPerformers.value.length +
+                                         teacherDashboardController.supportStudents.value.length))
                                   .toString(),
                               style: TextStyles.containerTitle.copyWith(
                                 fontSize: 30,
@@ -293,7 +226,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                               ),
                             ),
                             Text(
-                              widget.supportStudentsCount.toString(),
+                              teacherDashboardController.supportStudents.value.length.toString(),
                               style: TextStyles.containerTitle.copyWith(
                                 fontSize: 30,
                                 color: Colors.orange,

@@ -1,87 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
+import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class StudentPerformance extends StatefulWidget {
   const StudentPerformance({
-    super.key,
-    required this.classStudents,
-    required this.topPerformers,
-    required this.supportStudents,
-  });
-  final List<Student> classStudents;
-  final List<Student> topPerformers;
-  final List<Student> supportStudents;
+    super.key});
   @override
   State<StudentPerformance> createState() => _StudentPerformanceState();
 }
 
 class _StudentPerformanceState extends State<StudentPerformance> {
   // State variables
-  Map<String, List<Student>> categorizedStudents = {};
-  final Map<String, String> actions = {
-    "What about those \$150 sneakers?": "Wait for next paycheck",
-    "Planning for Emergencies": "Set aside \$150",
-    "What about those \$120 sneakers?": "Wait for next paycheck",
-  };
+  
 
-  int selectedStudentIndex = 0;
-  List<Student> topPerformers = [];
-  List<Student> supportStudents = [];
-  List<Student> studentList = [];
   String currentFilter = 'allStudents';
   late Student selectedStudent;
   late StudentService studentService;
+  int selectedStudentIndex=0;
+  List<Student> studentList=[];
   final LocalAcademicService localAcademicService = LocalAcademicService();
+  TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardController>();
 
   @override
   void initState() {
     super.initState();
-    initializeData();
-  }
-
-  @override
-void didUpdateWidget(StudentPerformance oldWidget) {
-  super.didUpdateWidget(oldWidget);
-  if (widget.classStudents != oldWidget.classStudents ||
-      widget.topPerformers != oldWidget.topPerformers ||
-      widget.supportStudents != oldWidget.supportStudents) {
-    initializeData();
-  }
-}
-
-  void initializeData() {
-    if (widget.classStudents.isNotEmpty) {
-      setState(() {
-        currentFilter = 'allStudents';
-        studentList = widget.classStudents;
-        selectedStudent = widget.classStudents[0];
-        selectedStudentIndex = 0;
-        studentService = StudentService(student: selectedStudent);
-        topPerformers = widget.topPerformers;
-        supportStudents = widget.supportStudents;
-      });
-    } else {
-      setState(() {
-        currentFilter = 'allStudents';
-        studentList = [];
-        topPerformers = [];
-        supportStudents = [];
-      });
-    }
   }
 
 
   void setSelectedStudent(int index) {
-    if (index >= 0 && index < studentList.length) {
+    if (index >= 0 && index < teacherDashboardController.classRoomStudents.value.length) {
       setState(() {
-        selectedStudentIndex = index;
-        selectedStudent = studentList[index];
+        selectedStudent = teacherDashboardController.classRoomStudents.value[index];
         studentService = StudentService(student: selectedStudent);
       });
     }
@@ -106,13 +62,13 @@ void didUpdateWidget(StudentPerformance oldWidget) {
       currentFilter = category;
       switch (category) {
         case 'allStudents':
-          studentList = widget.classStudents;
+          studentList = teacherDashboardController.classRoomStudents.value;
           break;
         case 'topPerformers':
-          studentList = topPerformers;
+          studentList = teacherDashboardController.topPerformers.value;
           break;
         case 'needSupport':
-          studentList = supportStudents;
+          studentList = teacherDashboardController.supportStudents.value;
           break;
       }
       // Reset selection to first student in filtered list if list is not empty
@@ -196,7 +152,7 @@ void didUpdateWidget(StudentPerformance oldWidget) {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.classStudents.isEmpty) {
+    if (teacherDashboardController.classRoomStudents.value.isEmpty) {
       return const SizedBox(
         child: Text("Either there are no students, or they're being loaded."),
       );
@@ -409,7 +365,7 @@ void didUpdateWidget(StudentPerformance oldWidget) {
                           "Recent Progress",
                           style: TextStyles.containerTitle,
                         ),
-                        ...actions.entries.map(
+                        ...teacherDashboardController.actions.entries.map(
                           (entry) => ColoredPaddedContainer(
                             child: Row(
                               children: [
@@ -456,10 +412,6 @@ void didUpdateWidget(StudentPerformance oldWidget) {
       ],
     );
   }
-}
-
-extension on Color {
-  withValues({required double alpha}) {}
 }
 
 class FilterStudentsButton extends StatelessWidget {

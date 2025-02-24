@@ -9,12 +9,7 @@ import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 
 class LessonManagement extends StatefulWidget {
   const LessonManagement({
-    super.key,
-    required this.components,
-    required this.currentLessonId,
-  });
-  final List<String> components;
-  final String currentLessonId;
+    super.key  });
 
   @override
   State<LessonManagement> createState() => _LessonManagementState();
@@ -24,122 +19,12 @@ class _LessonManagementState extends State<LessonManagement> {
   final LocalAcademicService localAcademicService = LocalAcademicService();
   final TeacherDashboardController teacherDashboardController = Get.find();
   
-  String message1 = "";
-  String message2 = "";
   
-  // Store component data
-  Map<String, String> componentMap = {}; // ID to Name mapping
-  List<String> componentIds = [];
-  List<Map<String, dynamic>> lessonComponentsList = [];
-
-  final String nextLessonTitle = "Smart Spending Decisions";
-  final String nextLessonDescription =
-      "Learning to make informed purchase decisions and understanding the value of money through practical exercises and real-world scenarios.";
 
   @override
   void initState() {
     super.initState();
-    initializeData();
-    // Listen to class changes
-    ever(teacherDashboardController.classId, (_) {
-      initializeData();
-    });
   }
-
-  void initializeData() {
-    print("LessonManagement: initializeData called with components: ${widget.components}");
-    
-    if (widget.components.isNotEmpty) {
-      // Clear previous data
-      componentMap.clear();
-      lessonComponentsList.clear();
-
-      setState(() {
-        // Get lesson information
-        try {
-          Lesson currentLesson = localAcademicService.getLesson(widget.currentLessonId);
-          message1 = currentLesson.title;
-          message2 = currentLesson.description;
-        } catch (e) {
-          print('Error getting lesson info: $e');
-          message1 = "Financial Responsibility Over a Lifetime";
-          message2 = "Making informed decisions about earning, saving, spending, and investing";
-        }
-
-        // Process components
-        for (String componentId in widget.components) {
-          try {
-            Component component = localAcademicService.getComponent(componentId);
-            String componentName = component.title;
-            Status componentStatus = component.componentStatus;
-            
-            componentMap[componentId] = componentName;
-            lessonComponentsList.add({
-              "name": componentName,
-              "status": componentStatus
-            });
-          } catch (e) {
-            print('Error getting component data for $componentId: $e');
-          }
-        }
-        
-        // Keep track of component IDs
-        componentIds = List<String>.from(widget.components);
-      });
-      
-      print("LessonManagement: Components initialized: $componentIds");
-      print("LessonManagement: Component list: $lessonComponentsList");
-    } else {
-      print("LessonManagement: Warning: Received empty components list");
-      // Set defaults if no components
-      setState(() {
-        message1 = "Financial Responsibility Over a Lifetime";
-        message2 = "Making informed decisions about earning, saving, spending, and investing";
-        // Default components with Status enum values
-        
-      });
-    }
-  }
-
-  @override
-  void didUpdateWidget(LessonManagement oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    
-    // Debug prints
-    print("LessonManagement: didUpdateWidget called");
-    print("LessonManagement: Old components: ${oldWidget.components}");
-    print("LessonManagement: New components: ${widget.components}");
-    
-    // More thorough comparison to detect changes
-    bool componentsChanged = false;
-    if (oldWidget.components.length != widget.components.length) {
-      componentsChanged = true;
-    } else {
-      // Check each element
-      for (int i = 0; i < oldWidget.components.length; i++) {
-        if (i >= widget.components.length || oldWidget.components[i] != widget.components[i]) {
-          componentsChanged = true;
-          break;
-        }
-      }
-    }
-    
-    if (componentsChanged || oldWidget.currentLessonId != widget.currentLessonId) {
-      print("LessonManagement: Change detected - reinitializing data");
-      initializeData();
-    }
-  }
-
-  @override
-  void dispose() {
-    // Clean up
-    componentMap.clear();
-    lessonComponentsList.clear();
-    componentIds.clear();
-    super.dispose();
-  }
-
-  // Helper method to get appropriate action based on component status
   String getActionForStatus(Status status) {
     switch (status) {
       case Status.Completed:
@@ -155,7 +40,6 @@ class _LessonManagementState extends State<LessonManagement> {
     }
   }
 
-  // Helper method to determine progress indicator appearance
   Widget getProgressIndicator(Status status) {
     switch (status) {
       case Status.Completed:
@@ -210,7 +94,7 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        message1,
+                        teacherDashboardController.lessonManagementMessage1,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -221,7 +105,7 @@ class _LessonManagementState extends State<LessonManagement> {
                         height: 5,
                       ),
                       Text(
-                        message2,
+                        teacherDashboardController.lessonManagementMessage2,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -230,7 +114,7 @@ class _LessonManagementState extends State<LessonManagement> {
                     ],
                   ),
                 ),
-                ...lessonComponentsList.map(
+                ...teacherDashboardController.childComponents.value.map(
                   (component) => ColoredPaddedContainer(
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.01,
@@ -249,12 +133,12 @@ class _LessonManagementState extends State<LessonManagement> {
                           child: Container(
                             width: 20,
                             height: 20,
-                            child: getProgressIndicator(component["status"]),
+                            child: getProgressIndicator(component.componentStatus),
                           ),
                         ),
                         //Component Name
                         Text(
-                          component["name"],
+                          component.title,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -277,7 +161,7 @@ class _LessonManagementState extends State<LessonManagement> {
                             ),
                             child: Center(
                               child: Text(
-                                getActionForStatus(component["status"]),
+                                getActionForStatus(component.componentStatus),
                                 style: TextStyle(
                                   color: Colors.grey.shade700,
                                   fontWeight: FontWeight.w600,
@@ -466,14 +350,14 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        nextLessonTitle,
+                        localAcademicService.getNextLessonId(teacherDashboardController.presentLesson.lessonId),
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        nextLessonDescription,
+                        localAcademicService.getNextLessonDescription(teacherDashboardController.presentLesson.lessonId),
                         style: TextStyle(
                           fontSize: 18,
                         ),

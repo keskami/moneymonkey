@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Resources/Resources.dart';
 
 class ScoreboardWidget extends StatelessWidget {
   const ScoreboardWidget({Key? key}) : super(key: key);

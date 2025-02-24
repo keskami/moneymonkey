@@ -1,16 +1,16 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 
 class PerformanceTrendsChart extends StatefulWidget {
-  final List<PerformanceTrends> data;
   final double? width;
   final double? height;
   final String filter;
   const PerformanceTrendsChart({
     Key? key,
-    required this.data,
     required this.filter,
     this.width,
     this.height,
@@ -21,6 +21,7 @@ class PerformanceTrendsChart extends StatefulWidget {
 }
 
 class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
+TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardController>();
   @override
   Widget build(BuildContext context) {
     final double containerWidth =
@@ -30,7 +31,7 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
 
     final double contentWidth = max(
       containerWidth,
-      widget.data.length * 100.0,
+      teacherDashboardController.childComponents.value.length * 100.0,
     );
 
     return AnimatedContainer(
@@ -112,7 +113,7 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
                         sideTitles: SideTitles(
                           showTitles: true,
                           getTitlesWidget: (value, meta) =>
-                              bottomTitleWidgets(value, meta, widget.data),
+                              bottomTitleWidgets(value, meta, teacherDashboardController.childComponents.value),
                           interval: 1,
                           reservedSize: 50,
                         ),
@@ -132,7 +133,7 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
                     ),
                     borderData: FlBorderData(show: false),
                     minX: 0,
-                    maxX: (widget.data.length - 1).toDouble(),
+                    maxX: (teacherDashboardController.childComponents.value.length - 1).toDouble(),
                     minY: 0,
                     maxY: 100,
                     lineBarsData: generateFilteredChart(widget.filter),
@@ -171,10 +172,10 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     if (filter == 'Class Average') {
       return [
         generateLineData(
-          widget.data
+          teacherDashboardController.childComponents.value
               .asMap()
               .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.classAverage))
+              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.classAverage))
               .toList(),
           Colors.blue,
         ),
@@ -182,10 +183,10 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     } else if (filter == 'Participation Rate') {
       return [
         generateLineData(
-          widget.data
+           teacherDashboardController.childComponents.value
               .asMap()
               .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.participationRate))
+              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.participationRate))
               .toList(),
           Colors.green,
         ),
@@ -193,10 +194,10 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     } else if (filter == 'Lesson Completion') {
       return [
         generateLineData(
-          widget.data
+           teacherDashboardController.childComponents.value
               .asMap()
               .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.lessonCompletion))
+              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.lessonCompletion))
               .toList(),
           Colors.purple,
         ),
@@ -204,26 +205,26 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     } else {
       return [
         generateLineData(
-          widget.data
+           teacherDashboardController.childComponents.value
               .asMap()
               .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.classAverage))
+              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.classAverage))
               .toList(),
           Colors.blue,
         ),
         generateLineData(
-          widget.data
+           teacherDashboardController.childComponents.value
               .asMap()
               .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.participationRate))
+              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.participationRate))
               .toList(),
           Colors.green,
         ),
         generateLineData(
-          widget.data
+           teacherDashboardController.childComponents.value
               .asMap()
               .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.lessonCompletion))
+              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.lessonCompletion))
               .toList(),
           Colors.purple,
         ),
@@ -260,13 +261,13 @@ Widget leftTitleWidgets(double value, TitleMeta meta) {
 }
 
 Widget bottomTitleWidgets(
-    double value, TitleMeta meta, List<PerformanceTrends> data) {
+    double value, TitleMeta meta, List<Component> data) {
   if (value.toInt() >= data.length) return const SizedBox.shrink();
 
   return Padding(
     padding: const EdgeInsets.only(top: 8.0),
     child: Text(
-      data[value.toInt()].label,
+      data[value.toInt()].title,
       style: const TextStyle(fontSize: 12),
     ),
   );

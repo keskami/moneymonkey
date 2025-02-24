@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
@@ -14,78 +13,30 @@ import 'package:money_monkey/themes/color_themes.dart';
 class DashboardOverview extends StatefulWidget {
   const DashboardOverview({
     super.key,
-    required this.supportStudents,
-    required this.topPerformers,
-    required this.components,
-    required this.currentLessonId,
-    required this.lessonStatus,
   });
-  final List<Student> topPerformers;
-  final List<Student> supportStudents;
-  final List<String> components;
-  final String currentLessonId;
-  final Status lessonStatus;
   @override
   State<DashboardOverview> createState() => _DashboardOverviewState();
 }
 
 class _DashboardOverviewState extends State<DashboardOverview> {
-  final LocalAcademicService localAcademicService = LocalAcademicService();
   final TeacherDashboardController teacherDashboardController = Get.find();
-  Map<String, String> componentMap = {}; // ID to Name mapping
+  LocalAcademicService localAcademicService = LocalAcademicService();
   String selectedComponentId = '';
-  List<String> componentNames = []; // List of component names for dropdown
-  Map<String, List<String>> discussionQuestions =
-      {}; // Store discussion questions
+  late Map<String, String> componentMap;
+  late List<String> componentNames;
+  late Map<String, List<String>> discussionQuestions;
 
   @override
   void initState() {
     super.initState();
-    initializeData();
-    // Listen to class changes
-    ever(teacherDashboardController.classId, (_) {
-      initializeData();
-    });
-  }
-
-  void initializeData() {
-    if (widget.components.isNotEmpty) {
-      // Clear previous data
-      componentMap.clear();
-      componentNames.clear();
-      componentIds.clear();
-
-      setState(() {
-        for (String componentId in widget.components) {
-          try {
-            String componentName =
-                localAcademicService.getComponentName(componentId);
-            componentMap[componentId] = componentName;
-            componentNames.add(componentName);
-          } catch (e) {
-            print('Error getting component name for $componentId: $e');
-          }
-        }
-        // Set initial selected component
-        if (componentMap.isNotEmpty) {
-          selectedComponentId = widget.components.first;
-        }
-        // Fetch new discussion questions for current lesson
-        discussionQuestions = localAcademicService
-            .getComponentDiscussionQuestionsForLesson(widget.currentLessonId);
-        componentIds = widget.components;
-      });
-    }
-  }
-
-  @override
-  void didUpdateWidget(DashboardOverview oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Check if components or lessonId changed
-    if (oldWidget.components != widget.components ||
-        oldWidget.currentLessonId != widget.currentLessonId) {
-      initializeData();
-      print("####################### Components: $componentIds");
+    // Initialize the component map and related variables
+    componentMap = {}; // This should be populated from your data source
+    componentNames = componentMap.values.toList();
+    discussionQuestions = {}; // Initialize with your discussion questions data
+    
+    // Initialize the selectedComponentId if the component map is not empty
+    if (componentMap.isNotEmpty) {
+      selectedComponentId = componentMap.keys.first;
     }
   }
 
@@ -133,17 +84,6 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     }
   }
 
-  final String message1 = "Financial Responsibility Over a Lifetime ";
-  final String message2 =
-      "Making informed decisions about earning, saving, spending, and investing ";
- 
-  final List<String> quickActionsSuggestions = [
-    "Launch “Jordan’s Journey Scenario”",
-    "Start “Emergency Fun Challenge”",
-    "Begin “Spending Decisions Quiz”",
-  ];
-  List<String> componentIds = [];
-
   final List<Color> randomColorList = [
     Color.fromARGB(255, 122, 180, 255),
     Color.fromARGB(255, 189, 122, 255),
@@ -190,7 +130,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         ),
                       ),
                       child: Text(
-                        widget.lessonStatus.name,
+                        teacherDashboardController.presentLesson.title,
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.blue.shade300,
@@ -206,7 +146,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        message1,
+                        teacherDashboardController.overviewMessage1,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -217,7 +157,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         height: 5,
                       ),
                       Text(
-                        message2,
+                        teacherDashboardController.overviewMessage1,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -227,50 +167,49 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   ),
                 ),
                 //Lessons and respective status
-                ...componentMap.entries.map(
-                  (component) {
-                    print("***************Component Id: $component");
-                    Status currentComponentStatus =
-                        localAcademicService.getComponentStatus(component.key);
-                    return Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.transparent,
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            child: getProgressIndicator(currentComponentStatus),
-                          ),
-                        ),
-                        Text(
-                          component.value,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ).marginOnly(
-                          left: 10,
-                        ),
-                        const Spacer(),
-                        Text(
-                          localAcademicService
-                              .getComponentStatus(component.key)
-                              .name,
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ).marginOnly(
-                          right: 20,
-                        ),
-                      ],
-                    ).marginSymmetric(
-                      vertical: 6,
-                    );
-                  },
-                ),
+                Obx(() => Column(
+                  children: [
+                    ...teacherDashboardController.childComponents.value.map(
+                      (component) {
+                        return Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Colors.transparent,
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                child: getProgressIndicator(component.componentStatus),
+                              ),
+                            ),
+                            Text(
+                              component.title,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ).marginOnly(
+                              left: 10,
+                            ),
+                            const Spacer(),
+                            Text(
+                              component.componentStatus.name,
+                              style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ).marginOnly(
+                              right: 20,
+                            ),
+                          ],
+                        ).marginSymmetric(
+                          vertical: 6,
+                        );
+                      },
+                    ),
+                  ],
+                )),
               ],
             ),
           ),
@@ -292,7 +231,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   "Quick Actions",
                   style: TextStyles.containerTitle,
                 ),
-                ...quickActionsSuggestions.map(
+                ...teacherDashboardController.quickActionsSuggestions.map(
                   (suggestion) => Container(
                     margin: EdgeInsets.symmetric(
                       vertical: screenHeight * 0.01,
@@ -305,7 +244,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: randomColorList[
-                              quickActionsSuggestions.indexOf(suggestion)]
+                              teacherDashboardController.quickActionsSuggestions.indexOf(suggestion)]
                           .withValues(alpha: 0.1),
                     ),
                     child: Text(
@@ -313,7 +252,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                       style: TextStyle(
                         fontSize: 16,
                         color: randomColorList[
-                            quickActionsSuggestions.indexOf(suggestion)],
+                            teacherDashboardController.quickActionsSuggestions.indexOf(suggestion)],
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -375,7 +314,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
               ],
             ),
           ),
-//Performance Highlights Container
+          //Performance Highlights Container
           ShadowedContainer(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
@@ -414,28 +353,33 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...widget.topPerformers.map(
-                            (student) => Row(
-                              children: [
-                                Text(
-                                  student.profile.fullName,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                          // Using Obx to observe topPerformers List changes
+                          Obx(() => Column(
+                            children: [
+                              ...teacherDashboardController.topPerformers.value.map(
+                                (student) => Row(
+                                  children: [
+                                    Text(
+                                      student.profile.fullName,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "${StudentService(student: student).getLessonProgress()}%",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.green,
+                                      ),
+                                    )
+                                  ],
+                                ).marginSymmetric(
+                                  vertical: 5,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  "${StudentService(student: student).getLessonProgress()}%",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.green,
-                                  ),
-                                )
-                              ],
-                            ).marginSymmetric(
-                              vertical: 5,
-                            ),
-                          ),
+                              ),
+                            ],
+                          )),
                         ],
                       ),
                     ),
@@ -460,28 +404,33 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...widget.supportStudents.map(
-                            (student) => Row(
-                              children: [
-                                Text(
-                                  student.profile.fullName,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                          // Using Obx to observe supportStudents List changes
+                          Obx(() => Column(
+                            children: [
+                              ...teacherDashboardController.supportStudents.value.map(
+                                (student) => Row(
+                                  children: [
+                                    Text(
+                                      student.profile.fullName,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "${StudentService(student: student).getLessonProgress()}%",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  ],
+                                ).marginSymmetric(
+                                  vertical: 5,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  "${StudentService(student: student).getLessonProgress()}%",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.red,
-                                  ),
-                                )
-                              ],
-                            ).marginSymmetric(
-                              vertical: 5,
-                            ),
-                          ),
+                              ),
+                            ],
+                          )),
                         ],
                       ),
                     )
