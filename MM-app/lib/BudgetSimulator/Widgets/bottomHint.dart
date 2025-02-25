@@ -59,7 +59,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                 Text(
                   "Day ${widget.dayNumber}",
                   style: GoogleFonts.baloo2(
-                    fontSize: 34 * widget.screenHeightUnit,
+                    fontSize: 24 * widget.screenWidthUnit,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -79,7 +79,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                     ? Text(
                         "No More Required Payments This Month",
                         style: GoogleFonts.baloo2(
-                          fontSize: 34 * widget.screenHeightUnit,
+                          fontSize: 24 * widget.screenWidthUnit,
                           fontWeight: FontWeight.w700,
                         ),
                       )
@@ -101,7 +101,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                                     ? "No More Required Payments This Month"
                                     : "Next Required Payment | ${widget.nextExpense.name} Due in ${widget.nextExpense.dueDay.difference(widget.baseDate).inDays} days",
                         style: GoogleFonts.baloo2(
-                          fontSize: 34 * widget.screenHeightUnit,
+                          fontSize: 24 * widget.screenWidthUnit,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -124,7 +124,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                 width: 1290 * widget.screenWidthUnit,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color.fromRGBO(135, 218, 255, 1),
+                  color: widget.hints[0].good ?  Color.fromRGBO(135, 218, 255, 1) : Color.fromRGBO(255, 208, 204, 1),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -132,13 +132,13 @@ class _BottomwarningtState extends State<Bottomwarning> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          left: 50 * widget.screenWidthUnit,
+                          left: 20 * widget.screenWidthUnit,
                           top: 4 * widget.screenHeightUnit),
                       child: Text(
                         widget.hints[0].text,
                         style: GoogleFonts.baloo2(
-                          fontSize: 28 * widget.screenHeightUnit,
-                          color: Color.fromRGBO(32, 84, 116, 1),
+                          fontSize: 20 * widget.screenWidthUnit,
+                          color: widget.hints[0].good?  Color.fromRGBO(32, 84, 116, 1) : Color.fromRGBO(243, 52, 52, 1),
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -155,7 +155,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                           child: Icon(
                             Icons.close,
                             size: 60 * widget.screenHeightUnit,
-                            color: Color.fromRGBO(32, 84, 116, 1),
+                            color: widget.hints[0].good?  Color.fromRGBO(32, 84, 116, 1) : Color.fromRGBO(243, 52, 52, 1),
                           )),
                     )
                   ],
@@ -168,10 +168,10 @@ class _BottomwarningtState extends State<Bottomwarning> {
                   children: [
                     Container(
                       height: 90 * widget.screenHeightUnit,
-                      width: 1070 * widget.screenWidthUnit,
+                      width: 1085 * widget.screenWidthUnit,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromRGBO(135, 218, 255, 1),
+                        color: widget.hints[0].good ?  Color.fromRGBO(135, 218, 255, 1) : Color.fromRGBO(255, 208, 204, 1),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -179,13 +179,13 @@ class _BottomwarningtState extends State<Bottomwarning> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 50 * widget.screenWidthUnit,
+                                left: 20 * widget.screenWidthUnit,
                                 top: 4 * widget.screenHeightUnit),
                             child: Text(
                               widget.hints[0].text,
                               style: GoogleFonts.baloo2(
-                                fontSize: 28 * widget.screenHeightUnit,
-                                color: Color.fromRGBO(32, 84, 116, 1),
+                                fontSize: 20 * widget.screenWidthUnit,
+                                color: widget.hints[0].good?  Color.fromRGBO(32, 84, 116, 1) : Color.fromRGBO(243, 52, 52, 1),
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -193,7 +193,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                           Spacer(),
                           Padding(
                             padding: EdgeInsets.only(
-                                right: 20 * widget.screenWidthUnit,
+                                right: 15 * widget.screenWidthUnit,
                                 top: 4 * widget.screenHeightUnit),
                             child: GestureDetector(
                                 onTap: () {
@@ -202,21 +202,21 @@ class _BottomwarningtState extends State<Bottomwarning> {
                                 child: Icon(
                                   Icons.close,
                                   size: 60 * widget.screenHeightUnit,
-                                  color: Color.fromRGBO(32, 84, 116, 1),
+                                  color: widget.hints[0].good?  Color.fromRGBO(32, 84, 116, 1) : Color.fromRGBO(243, 52, 52, 1),
                                 )),
                           )
                         ],
                       ),
                     ),
                     SizedBox(
-                      width: 20 * widget.screenWidthUnit,
+                      width: 15 * widget.screenWidthUnit,
                     ),
                     Container(
                       height: 90 * widget.screenHeightUnit,
-                      width: 200 * widget.screenWidthUnit,
+                      width: 190 * widget.screenWidthUnit,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        color: Color.fromRGBO(135, 218, 255, 1),
+                        color: widget.hints[0].good ?  Color.fromRGBO(135, 218, 255, 1) : Color.fromRGBO(255, 208, 204, 1),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -224,13 +224,13 @@ class _BottomwarningtState extends State<Bottomwarning> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                              left: widget.screenWidthUnit * 25,
+                              left: widget.screenWidthUnit * 15,
                               right: widget.screenWidthUnit * 10,
                             ),
                             child: Text(
                               "${widget.hints.length}",
                               style: GoogleFonts.baloo2(
-                                fontSize: 70 * widget.screenHeightUnit,
+                                fontSize: 50 * widget.screenWidthUnit,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -241,7 +241,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                               child: Text(
                             "hints\npending",
                             style: GoogleFonts.baloo2(
-                              fontSize: 22 * widget.screenHeightUnit,
+                              fontSize: 16 * widget.screenWidthUnit,
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
                               height: 1, // Adjust the line spacing
@@ -251,7 +251,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                           Spacer(),
                           Padding(
                             padding: EdgeInsets.only(
-                                right: 10 * widget.screenWidthUnit,
+                                right: 6 * widget.screenWidthUnit,
                                 top: 4 * widget.screenHeightUnit),
                             child: GestureDetector(
                                 onTap: () {
@@ -259,8 +259,8 @@ class _BottomwarningtState extends State<Bottomwarning> {
                                 },
                                 child: Icon(
                                   Icons.close,
-                                  size: 60 * widget.screenHeightUnit,
-                                  color: Color.fromRGBO(32, 84, 116, 1),
+                                  size: 50 * widget.screenHeightUnit,
+                                  color: widget.hints[0].good?  Color.fromRGBO(32, 84, 116, 1) : Color.fromRGBO(243, 52, 52, 1),
                                 )),
                           )
                         ],

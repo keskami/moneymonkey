@@ -327,6 +327,85 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         good: true,
       ));
     }
+    else if(type == "Car Repair Surprise"){
+      widget.hints.add(Hint(
+        text:
+            "Your car might need urgent repairs soon, costing around \$250. You can pay for it in full to ensure\nsafety, or skip it and switch to public transportation. Weigh your needs and available funds.",
+        good: false,
+      ));
+      
+    }
+    else if(type == "Home Appliance Breakdown"){
+      widget.hints.add(Hint(
+        //GOOD
+        text:
+            "A home appliance may break soon, costing \$100. You can either pay the full cost immediately\nto fix it or skip repairs and adjust your routine. Consider your current cash flow and priorities.",
+        good: false,
+      ));
+      
+    }
+    else if(type == "Class Registration or Certification Fee"){
+      //GOOD
+      widget.hints.add(Hint(
+        text:
+            "An education opportunity with a \$200 fee is approaching. You can enroll immediately to invest in\nyour future, or postpone enrollment to conserve funds. Reflect on your goals and situation.",
+        good: false,
+      ));
+      
+    }
+    else if(type == "Impulse Buy"){
+      widget.hints.add(Hint(
+        text:
+            "Watch for an impulse buy opportunity soon—a \$200 gadget or event invite. You can purchase it immediately\nto satisfy the urge or resist and preserve your funds. Reflect on your priorities before deciding.",
+        good: false,
+      ));
+      
+    }
+    else if(type == "Unexpected Windfall"){
+      //Good
+      widget.hints.add(Hint(
+        text:
+            "Good news—a \$150 windfall is coming! You could use it entirely to reduce your debt or spend it on \nentertainment. Consider your current debt load versus your need for a morale boost.",
+        good: true,
+      ));
+      
+    }
+    else if(type == "Wedding Invitation"){
+      widget.hints.add(Hint(
+        //GOOD
+        text:
+            "A wedding invitation is on the horizon, costing about \$150. You can attend fully by covering all expenses\nor decline the invitation altogether. Consider the social benefits versus the financial impact",
+        good: false,
+      ));
+      
+    }
+    else if(type == "Medical Bill"){
+      widget.hints.add(Hint(
+        //GOOD
+        text:
+            "A \$300 medical bill is approaching. You might settle it in full now with your cash or charge it to your\ncredit card to keep cash on hand. Think about how you wish to manage this expense.",
+        good: false,
+      ));
+      
+    }
+    else if(type == "Family Emergency Request"){
+      widget.hints.add(Hint(
+        //GOOD
+        text:
+            "A family member might request a \$200 loan soon. You can choose to lend the full amount to help, or politely\ndecline to protect your funds. Consider your capacity to assist versus your own financial stability.",
+        good: false,
+      ));
+      
+    }else if(type == "Small Bonus / Part-Time Gig"){
+      widget.hints.add(Hint(
+        text:
+            "A \$100 bonus from a side gig is coming. You could use it entirely to lower your debt or spend it on\nleisure.Think about whether reducing your liabilities or boosting your morale is more critical right now.",
+        good: true,
+      ));
+      
+    }
+    
+    
   }
 
   Future<void> getEvents() async {
@@ -617,17 +696,30 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   List<RandomEvent> allocatedEvents = [];
 
-  List<List<int>> dayRanges = [
-    [5, 8],
-    [18, 21],
-    [25, 28],
-    [37, 40],
-    [43, 47],
-    [52, 57],
-    [61, 69],
-    [72, 86]
-  ];
+  // List<List<int>> dayRanges = [
+  //   [5, 8],
+  //   [18, 21],
+  //   [25, 28],
+  //   [37, 40],
+  //   [43, 47],
+  //   [52, 57],
+  //   [61, 69],
+  //   [72, 86]
+  // ];
 
+  List<List<int>> dayRanges = [
+    [2, 2],
+    [2, 2],
+    [2, 2],
+    [2, 2],
+    [2, 2],
+    [2, 2],
+    [2, 2],
+    [2, 2],
+    [2, 2],
+    
+  
+  ];
   Future<void> alocateEvents() async {
     for (var range in dayRanges) {
       int randomDay = range[0] +
@@ -655,10 +747,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   Future<void> checkRandomEvents() async {
     DateTime normalizedToday = normalizeDate(now);
+    DateTime normalizedTodayPlusTwo = normalizedToday.add(Duration(days: 2));
 
     for (RandomEvent randomEvent in allocatedEvents) {
       if (isSameDay(normalizedToday, randomEvent.trigerDay)) {
         print("here");
+      }
+      if(isSameDay(normalizedTodayPlusTwo, randomEvent.trigerDay)){
+        addHint(randomEvent.name);
       }
     }
   }
