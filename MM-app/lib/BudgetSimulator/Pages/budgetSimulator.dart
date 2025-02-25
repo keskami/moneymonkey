@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +16,9 @@ import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
+import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
+import 'package:money_monkey/Profile/profile_page.dart';
+import 'package:money_monkey/home.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -65,6 +70,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int progress = 0;
   List<String> types = [];
   List<double> percentage = [];
+  int toSpend = 0;
 
   void updateNextExpense() {
     if (widget.expenses.isNotEmpty) {
@@ -245,7 +251,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int dayNumber = 1;
 
   Future<void> nextDay() async {
+    setState(() {
+      toSpend = widget.checkingAccountBalance as int;
+    });
+
     if (now.month != now.add(Duration(days: 1)).month) {
+      getInterestCCDebt();
       nextMonth();
     }
 
@@ -326,86 +337,67 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             "Tomorrow the credit card minimum is due (\$200). If you can, try to pay\nextra—remember, early extra payments help reduce your",
         good: true,
       ));
-    }
-    else if(type == "Car Repair Surprise"){
+    } else if (type == "Car Repair Surprise") {
       widget.hints.add(Hint(
         text:
             "Your car might need urgent repairs soon, costing around \$250. You can pay for it in full to ensure\nsafety, or skip it and switch to public transportation. Weigh your needs and available funds.",
         good: false,
       ));
-      
-    }
-    else if(type == "Home Appliance Breakdown"){
+    } else if (type == "Home Appliance Breakdown") {
       widget.hints.add(Hint(
         //GOOD
         text:
             "A home appliance may break soon, costing \$100. You can either pay the full cost immediately\nto fix it or skip repairs and adjust your routine. Consider your current cash flow and priorities.",
         good: false,
       ));
-      
-    }
-    else if(type == "Class Registration or Certification Fee"){
+    } else if (type == "Class Registration or Certification Fee") {
       //GOOD
       widget.hints.add(Hint(
         text:
             "An education opportunity with a \$200 fee is approaching. You can enroll immediately to invest in\nyour future, or postpone enrollment to conserve funds. Reflect on your goals and situation.",
         good: false,
       ));
-      
-    }
-    else if(type == "Impulse Buy"){
+    } else if (type == "Impulse Buy") {
       widget.hints.add(Hint(
         text:
             "Watch for an impulse buy opportunity soon—a \$200 gadget or event invite. You can purchase it immediately\nto satisfy the urge or resist and preserve your funds. Reflect on your priorities before deciding.",
         good: false,
       ));
-      
-    }
-    else if(type == "Unexpected Windfall"){
+    } else if (type == "Unexpected Windfall") {
       //Good
       widget.hints.add(Hint(
         text:
             "Good news—a \$150 windfall is coming! You could use it entirely to reduce your debt or spend it on \nentertainment. Consider your current debt load versus your need for a morale boost.",
         good: true,
       ));
-      
-    }
-    else if(type == "Wedding Invitation"){
+    } else if (type == "Wedding Invitation") {
       widget.hints.add(Hint(
         //GOOD
         text:
             "A wedding invitation is on the horizon, costing about \$150. You can attend fully by covering all expenses\nor decline the invitation altogether. Consider the social benefits versus the financial impact",
         good: false,
       ));
-      
-    }
-    else if(type == "Medical Bill"){
+    } else if (type == "Medical Bill") {
       widget.hints.add(Hint(
         //GOOD
         text:
             "A \$300 medical bill is approaching. You might settle it in full now with your cash or charge it to your\ncredit card to keep cash on hand. Think about how you wish to manage this expense.",
         good: false,
       ));
-      
-    }
-    else if(type == "Family Emergency Request"){
+    } else if (type == "Family Emergency Request") {
       widget.hints.add(Hint(
         //GOOD
         text:
             "A family member might request a \$200 loan soon. You can choose to lend the full amount to help, or politely\ndecline to protect your funds. Consider your capacity to assist versus your own financial stability.",
         good: false,
       ));
-      
-    }else if(type == "Small Bonus / Part-Time Gig"){
+    } else if (type == "Small Bonus / Part-Time Gig") {
       widget.hints.add(Hint(
         text:
             "A \$100 bonus from a side gig is coming. You could use it entirely to lower your debt or spend it on\nleisure.Think about whether reducing your liabilities or boosting your morale is more critical right now.",
         good: true,
       ));
-      
     }
-    
-    
   }
 
   Future<void> getEvents() async {
@@ -425,6 +417,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                     widget.checkingAccountBalance -= expense.amount;
                     eventProccesed = true;
                     Navigator.of(context).pop();
+                    setState(() {
+                      toSpend = checkingAccountBalance;
+                    });
                   });
                 },
               );
@@ -434,6 +429,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             setState(() {
               widget.checkingAccountBalance -= expense.amount as int;
               eventProccesed = true;
+            });
+            setState(() {
+              toSpend = checkingAccountBalance;
             });
           }
         } else if (expense.name == "Rent") {
@@ -667,6 +665,41 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     });
   }
 
+  double savingsLeftOver = 0;
+
+  void getInterestSavings() {
+    if (widget.savingsAccountBalance > 0) {
+      double dailyRate = pow(1 + (widget.savingsAPY / 100), 1 / 365) - 1;
+      double interest = widget.savingsAccountBalance * dailyRate;
+      setState(() {
+        savingsLeftOver += interest;
+      });
+
+      if (savingsLeftOver >= 10) {
+        setState(() {
+          widget.savingsAccountBalance += 10;
+          savingsLeftOver -= 10;
+        });
+      }
+    }
+  }
+
+  void getInterestCCDebt() {
+    double interest =
+        widget.creditCardDebt * (pow(1 + (widget.ccAPY / 100), 1 / 12) - 1);
+    int roundedInterest = (interest / 10).round() * 10;
+    setState(() {
+      widget.creditCardDebt += roundedInterest;
+    });
+    for (Expense expense in widget.expenses) {
+      if (expense.name == "CC Debt") {
+        setState(() {
+          expense.amount += roundedInterest;
+        });
+      }
+    }
+  }
+
   Future<void> getStartingExpenses() async {
     setState(() {
       startingDebt = widget.creditCardDebt as int;
@@ -696,30 +729,17 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   List<RandomEvent> allocatedEvents = [];
 
-  // List<List<int>> dayRanges = [
-  //   [5, 8],
-  //   [18, 21],
-  //   [25, 28],
-  //   [37, 40],
-  //   [43, 47],
-  //   [52, 57],
-  //   [61, 69],
-  //   [72, 86]
-  // ];
-
   List<List<int>> dayRanges = [
-    [2, 2],
-    [2, 2],
-    [2, 2],
-    [2, 2],
-    [2, 2],
-    [2, 2],
-    [2, 2],
-    [2, 2],
-    [2, 2],
-    
-  
+    [5, 8],
+    [18, 21],
+    [25, 28],
+    [37, 40],
+    [43, 47],
+    [52, 57],
+    [61, 69],
+    [72, 86]
   ];
+
   Future<void> alocateEvents() async {
     for (var range in dayRanges) {
       int randomDay = range[0] +
@@ -753,7 +773,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       if (isSameDay(normalizedToday, randomEvent.trigerDay)) {
         print("here");
       }
-      if(isSameDay(normalizedTodayPlusTwo, randomEvent.trigerDay)){
+      if (isSameDay(normalizedTodayPlusTwo, randomEvent.trigerDay)) {
         addHint(randomEvent.name);
       }
     }
@@ -828,6 +848,114 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                     width: screenWidthUnit * 1.5,
                   ),
                 ),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: screenHeightUnit * 80,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 100,
+                      width: screenWidthUnit * 130,
+                      child: Center(
+                        child: Container(
+                          height: screenHeightUnit * 60,
+                          width: screenWidthUnit * 60,
+                          child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FLesson%20Page.png?alt=media&token=1e20b2e4-ee49-49cc-bc01-dcf08b21104b"),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PortfolioScreen()),
+                      );
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 100,
+                      width: screenWidthUnit * 130,
+                      child: Center(
+                        child: Container(
+                          height: screenHeightUnit * 60,
+                          width: screenWidthUnit * 60,
+                          child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FPortfolio.png?alt=media&token=d2012e7d-19fb-4766-9777-ce09231e4021"),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 100,
+                      width: screenWidthUnit * 130,
+                      child: Center(
+                        child: Container(
+                          height: screenHeightUnit * 60,
+                          width: screenWidthUnit * 60,
+                          child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FTrading.png?alt=media&token=2037e6b1-6fb6-48af-aecf-5f288c2159b0"),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: screenHeightUnit * 100,
+                      width: screenWidthUnit * 100,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(225, 243, 254, 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: screenHeightUnit * 60,
+                          width: screenWidthUnit * 60,
+                          child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FbudgetingSimulator.png?alt=media&token=27735960-da68-4e24-ae22-4a977b929264"),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileScreen()),
+                      );
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 100,
+                      width: screenWidthUnit * 130,
+                      child: Center(
+                        child: Container(
+                          height: screenHeightUnit * 60,
+                          width: screenWidthUnit * 60,
+                          child: Image.network(
+                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FProfile.png?alt=media&token=80ec6904-46b7-4f76-85e1-dc21531e7a7c"),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -973,6 +1101,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                             child: Center(
                               child: widget.name == "Crush the Credit Card Debt"
                                   ? headings2.crushTheCreditCardDebtHeading(
+                                      savingsLeftOver: savingsLeftOver,
                                       checkingAccountBalance:
                                           widget.checkingAccountBalance,
                                       savingsAccountBalance:
@@ -1077,6 +1206,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                         backgroundColor: Colors
                                                             .transparent, // Remove background color
                                                         child: Allocatefunding(
+                                                          toCheckingTransfer:
+                                                              checkingTransfer
+                                                                  as int,
                                                           screenHeightUnit:
                                                               screenHeightUnit,
                                                           screenWidthUnit:
@@ -1120,10 +1252,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                             int monthlyFitness,
                                                             int wellnessScore,
                                                           ) {
+                                                            getInterestSavings();
                                                             setState(() {
-                                                              widget.checkingAccountBalance =
-                                                                  newChecking
-                                                                      as double;
+                                                              toSpend -= min(0,
+                                                                  toChecking);
+
                                                               widget.checkingAccountBalance +=
                                                                   checkingTransfer;
                                                               checkingTransfer =
@@ -1183,6 +1316,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                                   .addPostFrameCallback(
                                                                       (_) {
                                                                 getEvents();
+                                                                
                                                               });
                                                             });
                                                           },

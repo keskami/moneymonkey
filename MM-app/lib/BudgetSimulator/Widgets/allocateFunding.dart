@@ -21,6 +21,7 @@ class Allocatefunding extends StatefulWidget {
   int checkingTransfer;
   int monthlyEntertainment;
   int monthlyFitness;
+  int toCheckingTransfer;
 
   Allocatefunding({
     required this.screenHeightUnit,
@@ -36,6 +37,7 @@ class Allocatefunding extends StatefulWidget {
     required this.checkingTransfer,
     required this.monthlyEntertainment,
     required this.monthlyFitness,
+    required this.toCheckingTransfer,
   });
 
   @override
@@ -195,9 +197,9 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       SizedBox(
                                           height: widget.screenHeightUnit * 5),
                                       Text(
-                                        toChecking >= 0
+                                        widget.toCheckingTransfer >= 0
                                             ? "\$${widget.checkingAccountBalance}"
-                                            : "\$${widget.checkingAccountBalance + toChecking}",
+                                            : "\$${widget.checkingAccountBalance + widget.toCheckingTransfer}",
                                         style: GoogleFonts.baloo2(
                                             fontSize:
                                                 widget.screenHeightUnit * 65,

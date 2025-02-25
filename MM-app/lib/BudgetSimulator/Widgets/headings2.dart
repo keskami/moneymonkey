@@ -11,7 +11,10 @@ class Headings2 {
       required double screenHeightUnit,
       required double APY,
       required double savingsTransfer,
-      required double checkingTransfer}) {
+      required double checkingTransfer,
+      required double savingsLeftOver
+      
+      }) {
     return Container(
       color: Colors.white,
       height: screenHeightUnit * 110,
@@ -50,7 +53,7 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 165.8,
+            width: screenWidthUnit * 175.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -239,14 +242,15 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 165.8,
+            width: screenWidthUnit * 175.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                         Text(
-                          "\$${savingsAccountBalance}",
+
+                          "\$${double.parse((savingsAccountBalance + savingsLeftOver).toStringAsFixed(2))}",
                           style: GoogleFonts.baloo2(
                             fontSize: screenHeightUnit * 34,
                             color: Colors.black,
@@ -342,7 +346,7 @@ class Headings2 {
                               ),
                             ),
                             Text(
-                              "\$${savingsAccountBalance + savingsTransfer}",
+                              "\$${ double.parse((savingsAccountBalance + savingsTransfer + savingsLeftOver).toStringAsFixed(2))}",
                               style: GoogleFonts.baloo2(
                                 fontSize: screenHeightUnit * 20,
                                 color: (savingsTransfer > 0)
@@ -397,7 +401,7 @@ class Headings2 {
             width: screenWidthUnit * 85.8, // Increased by 10%
           ),
           Text(
-            "\$${netCash}",
+            "\$${ double.parse((netCash + savingsLeftOver).toStringAsFixed(2))}",
             style: GoogleFonts.baloo2(
               fontSize: screenHeightUnit * 34,
               color: Colors.black,
