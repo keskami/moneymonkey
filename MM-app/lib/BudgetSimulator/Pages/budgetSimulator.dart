@@ -9,10 +9,10 @@ import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
 
 import 'package:intl/intl.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/meterBox.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/creditScoreBox.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/bottomWarning.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -25,12 +25,14 @@ class BudgetSimulator extends StatefulWidget {
     required this.savingsAccountBalance,
     required this.creditCardDebt,
     required this.startingBalance,
-    required this.APY,
+    required this.savingsAPY,
+    required this.ccAPY,
     required this.milestones,
     required this.creditScore,
     required this.expenses,
     required this.wellnessScore,
     required this.randomEvents,
+    required this.hints,
   });
 
   final String name;
@@ -38,13 +40,16 @@ class BudgetSimulator extends StatefulWidget {
   double checkingAccountBalance;
   double savingsAccountBalance;
   double creditCardDebt;
+  List<Hint> hints;
   int wellnessScore;
   final double startingBalance;
-  final double APY;
+  final double savingsAPY;
+  final double ccAPY;
   final List<Milestone> milestones;
   double creditScore;
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
+
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
@@ -53,7 +58,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   late double netCash;
   final Headings headings = Headings();
   final Headings2 headings2 = Headings2();
-  DateTime now = DateTime(2025, 5, 1); 
+  DateTime now = DateTime(2025, 5, 1);
   DateTime _focusedDay = DateTime(2025, 5, 1);
   DateTime _selectedDay = DateTime(2025, 5, 1);
   String formattedDate = '';
@@ -61,6 +66,36 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int progress = 0;
   List<String> types = [];
   List<double> percentage = [];
+
+  void updateNextExpense() {
+    if (widget.expenses.isNotEmpty) {
+      widget.expenses.sort((a, b) => a.dueDay.compareTo(b.dueDay));
+      setState(() {
+        nextExpense = widget.expenses.firstWhere(
+          (expense) => expense.dueDay.isAfter(now) && expense.name != "Pay Day",
+          orElse: () => widget.expenses.firstWhere((expense) => expense.name != "Pay Day", orElse: () => widget.expenses.first),
+        );
+      });
+      if (nextExpense == null) {
+        nextExpense = Expense(
+          name: '',
+          amount: 0,
+          amountPaid: 0,
+          dueDay: DateTime(2029, 5, 1),
+          penalty: 50,
+          dueDateType: '',
+        );
+      }
+    }
+  }
+   Expense nextExpense = Expense(
+    name: '',
+    amount: 0,
+    amountPaid: 0,
+    dueDay: DateTime(2029, 5, 1),
+    penalty: 50, dueDateType: '',
+  );
+
   double totalSpending = 0;
   bool smallBoxes = true;
   double wellnessScore = 600;
@@ -87,8 +122,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingGroceries = 250;
 
   bool noLatePayments = true;
-
-
 
   Future<void> editMilestonesCCD(
       int toCredCardDebt, int toSavings, int toLuxary) async {
@@ -181,15 +214,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       noLatePayments = true;
     });
     mapExpenses();
-    
-
-  
   }
 
-  Future<void> endGame() async{
+  Future<void> endGame() async {
     // Credit Score
-
   }
+
+  int dayNumber = 1;
 
   Future<void> nextDay() async {
     if (now.month != now.add(Duration(days: 1)).month) {
@@ -201,6 +232,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       _focusedDay = _focusedDay.add(Duration(days: 1));
       _selectedDay = _selectedDay.add(Duration(days: 1));
       formattedDate = DateFormat('MMM d, y').format(_focusedDay);
+      dayNumber += 1;
     });
   }
 
@@ -457,29 +489,56 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       }
     }
   }
+
   List<RandomEvent> allocatedEvents = [];
 
-  List<List<int>> dayRanges = [[5,7],[18,20],[25,27], [37,39],[43,46], [52,56], [61,68], [72,85]];
+  List<List<int>> dayRanges = [
+    [5, 8],
+    [18, 21],
+    [25, 28],
+    [37, 40],
+    [43, 47],
+    [52, 57],
+    [61, 69],
+    [72, 86]
+  ];
 
-  Future<void> alocateEvents() async{
+  Future<void> alocateEvents() async {
     for (var range in dayRanges) {
-      int randomDay = range[0] + (range[1] - range[0]) * (DateTime.now().millisecondsSinceEpoch % 100) ~/ 100;
+      int randomDay = range[0] +
+          (range[1] - range[0]) *
+              (DateTime.now().millisecondsSinceEpoch % 100) ~/
+              100;
+
       DateTime eventDay = now.add(Duration(days: randomDay));
-      RandomEvent? event = widget.randomEvents.isNotEmpty ? widget.randomEvents.removeAt(0) : null;
-      setState(() {
-        event?.trigerDay = eventDay;
-      });
+      int randomIndex =
+          (DateTime.now().millisecondsSinceEpoch % widget.randomEvents.length);
+      RandomEvent? event = widget.randomEvents.isNotEmpty
+          ? widget.randomEvents.removeAt(randomIndex)
+          : null;
+
       if (event != null) {
-      setState(() {
-        print(event.name);
-        print(event.trigerDay);
-        allocatedEvents.add(event);
-      });
+        setState(() {
+          event.trigerDay = eventDay;
+          print(event.name);
+          print(event.trigerDay);
+          allocatedEvents.add(event);
+        });
       }
     }
+  }
 
+  Future<void> checkRandomEvents() async {
+    DateTime normalizedToday = normalizeDate(now);
 
+    for(RandomEvent randomEvent in allocatedEvents){
+      if(isSameDay(normalizedToday, randomEvent.trigerDay)){
+        print("here");
+        
 
+      }
+    }
+    
   }
 
   @override
@@ -498,6 +557,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     getStartingExpenses();
     getChartData();
     alocateEvents();
+    updateNextExpense();
   }
 
   List<ChartData> chartData = [];
@@ -510,7 +570,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     Colors.yellow,
     Colors.black,
     Colors.purple,
-    
   ];
 
   Future<void> getChartData() async {
@@ -705,7 +764,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           widget.savingsAccountBalance,
                                       screenWidthUnit: screenWidthUnit,
                                       screenHeightUnit: screenHeightUnit * .9,
-                                      APY: widget.APY,
+                                      APY: widget.savingsAPY,
                                       checkingTransfer: checkingTransfer,
                                       savingsTransfer: savingsTransfer,
                                     )
@@ -866,6 +925,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                               widget.wellnessScore =
                                                                   wellnessScore;
 
+                                                              checkRandomEvents();
+
                                                               editMilestonesCCD(
                                                                   toCredCardDebt,
                                                                   widget.savingsAccountBalance
@@ -898,6 +959,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                               recalculatePercentages();
                                                               mapExpenses();
                                                               nextDay();
+                                                              updateNextExpense();
                                                               WidgetsBinding
                                                                   .instance
                                                                   .addPostFrameCallback(
@@ -1416,18 +1478,16 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     Spacer(),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          bottom: screenHeightUnit * 30),
+                                          bottom: screenHeightUnit * 20),
                                       child: Center(
                                         child: Bottomwarning(
                                           screenHeightUnit:
-                                              screenHeightUnit * .9,
+                                              screenHeightUnit,
                                           screenWidthUnit: screenWidthUnit,
-                                          color:
-                                              Color.fromRGBO(135, 218, 255, 1),
-                                          text:
-                                              "Hint: Consider reducing entertainment spendings to boost your savings. ",
-                                          textColor:
-                                              Color.fromRGBO(32, 84, 116, 1),
+                                          hints: widget.hints,
+                                          nextExpense: nextExpense,
+                                          dayNumber: dayNumber,
+                                          baseDate: now,
                                         ),
                                       ),
                                     ),

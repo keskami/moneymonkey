@@ -67,7 +67,9 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                     creditCardDebt: 3000,
                     startingBalance: 600,
                     creditScore: 243,
-                    APY: 3,
+                    savingsAPY: 3,
+                    ccAPY: 19.99,
+                    hints: [Hint(text: "", good: true)],
                     milestones: [
                       Milestone(
                           name: 'Debt Avalanche Start',
@@ -872,22 +874,14 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   name: "Car Repair Surprise",
                   description:
                       "Brake pads or tires need urgent replacement, costing \$250.",
-                  options: [
-                    'Pay In Full',
-                    'Put On Card',
-                    'Delay / Partial'
-                  ],
+                  options: ['Pay In Full', 'Put On Card', 'Delay / Partial'],
                   trigerDay: DateTime(0, 0, 0),
                   cost: 250),
               RandomEvent(
                   name: "Wedding Invitation",
                   description:
                       "A close friend or family wedding out of town costs \$150 for travel, gift, and attire.",
-                  options: [
-                    'Attend Fully',
-                    'Go on a Budget',
-                    'Send Regrets'
-                  ],
+                  options: ['Attend Fully', 'Go on a Budget', 'Send Regrets'],
                   trigerDay: DateTime(0, 0, 0),
                   cost: 150),
               RandomEvent(
@@ -924,7 +918,9 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   cost: 200,
                   trigerDay: DateTime(0, 0, 0))
             ],
-            APY: 3,
+            savingsAPY: 3,
+            ccAPY: 19.99,
+            hints: [Hint(text: "Welcome! You start with a \$3,000 balance at 19.99% APR, two biweekly paychecks,\nand fixed bills. Use these hints from the bottom panel to help manage your cash flow\nand meet your milestones", good: true)],
             milestones: [
               Milestone(
                   name: 'Debt Avalanche Start',
