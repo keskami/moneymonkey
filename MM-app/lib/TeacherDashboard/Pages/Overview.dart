@@ -7,6 +7,7 @@ import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -21,38 +22,27 @@ class DashboardOverview extends StatefulWidget {
 class _DashboardOverviewState extends State<DashboardOverview> {
   final TeacherDashboardController teacherDashboardController = Get.find();
   LocalAcademicService localAcademicService = LocalAcademicService();
-  String selectedComponentId = '';
-  late Map<String, String> componentMap;
-  late List<String> componentNames;
-  late Map<String, List<String>> discussionQuestions;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the component map and related variables
-    componentMap = {}; // This should be populated from your data source
-    componentNames = componentMap.values.toList();
-    discussionQuestions = {}; // Initialize with your discussion questions data
-    
-    // Initialize the selectedComponentId if the component map is not empty
-    if (componentMap.isNotEmpty) {
-      selectedComponentId = componentMap.keys.first;
-    }
   }
 
   void onDiscussionComponentChanged(String? componentName) {
     if (componentName != null) {
       // Find the component ID for the selected name
-      String? selectedId = componentMap.entries
-          .firstWhere(
-            (entry) => entry.value == componentName,
-            orElse: () => MapEntry('', ''),
-          )
-          .key;
+      String? selectedComponent =
+          teacherDashboardController.childComponents.value
+              .firstWhere(
+                (entry) => entry.title == componentName,
+              )
+              .title;
 
-      if (selectedId.isNotEmpty) {
+      if (selectedComponent.isNotEmpty) {
         setState(() {
-          selectedComponentId = selectedId;
+          teacherDashboardController.selectedComponent =
+              teacherDashboardController.childComponents.value
+                  .firstWhere((comp) => comp.title == componentName);
         });
       }
     }
@@ -89,12 +79,13 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     Color.fromARGB(255, 189, 122, 255),
     Color.fromARGB(255, 123, 255, 169),
   ];
-  String discussionComponent = "Concept 2";
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    if (teacherDashboardController.selectedClassId.isEmpty)
+      return TeacherDashoardPlaceHolderPage();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -168,48 +159,49 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 ),
                 //Lessons and respective status
                 Obx(() => Column(
-                  children: [
-                    ...teacherDashboardController.childComponents.value.map(
-                      (component) {
-                        return Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 20,
-                                height: 20,
-                                child: getProgressIndicator(component.componentStatus),
-                              ),
-                            ),
-                            Text(
-                              component.title,
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ).marginOnly(
-                              left: 10,
-                            ),
-                            const Spacer(),
-                            Text(
-                              component.componentStatus.name,
-                              style: TextStyle(
-                                color: Colors.grey.shade500,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
-                            ).marginOnly(
-                              right: 20,
-                            ),
-                          ],
-                        ).marginSymmetric(
-                          vertical: 6,
-                        );
-                      },
-                    ),
-                  ],
-                )),
+                      children: [
+                        ...teacherDashboardController.childComponents.value.map(
+                          (component) {
+                            return Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: Colors.transparent,
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    child: getProgressIndicator(
+                                        component.componentStatus),
+                                  ),
+                                ),
+                                Text(
+                                  component.title,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ).marginOnly(
+                                  left: 10,
+                                ),
+                                const Spacer(),
+                                Text(
+                                  component.componentStatus.name,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                  ),
+                                ).marginOnly(
+                                  right: 20,
+                                ),
+                              ],
+                            ).marginSymmetric(
+                              vertical: 6,
+                            );
+                          },
+                        ),
+                      ],
+                    )),
               ],
             ),
           ),
@@ -243,16 +235,18 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: randomColorList[
-                              teacherDashboardController.quickActionsSuggestions.indexOf(suggestion)]
+                      color: randomColorList[teacherDashboardController
+                              .quickActionsSuggestions
+                              .indexOf(suggestion)]
                           .withValues(alpha: 0.1),
                     ),
                     child: Text(
                       suggestion,
                       style: TextStyle(
                         fontSize: 16,
-                        color: randomColorList[
-                            teacherDashboardController.quickActionsSuggestions.indexOf(suggestion)],
+                        color: randomColorList[teacherDashboardController
+                            .quickActionsSuggestions
+                            .indexOf(suggestion)],
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -280,15 +274,21 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   style: TextStyles.containerTitle,
                 ),
                 CustomDropDownContainer(
-                  initialSelection: componentMap[selectedComponentId] ?? '',
+                  initialSelection:
+                      teacherDashboardController.selectedComponent.title,
                   width: screenWidth * 0.3,
-                  items: componentNames,
+                  items: teacherDashboardController.componentNames.value,
                   onChanged: onDiscussionComponentChanged,
                 ).marginSymmetric(
                   vertical: screenHeight * 0.01,
                 ),
-                if (discussionQuestions.containsKey(selectedComponentId))
-                  ...discussionQuestions[selectedComponentId]!
+                if (teacherDashboardController
+                            .selectedComponent.discussionQuestions !=
+                        null &&
+                    teacherDashboardController
+                        .selectedComponent.discussionQuestions!.isNotEmpty)
+                  ...teacherDashboardController
+                      .selectedComponent.discussionQuestions!
                       .map((question) => Container(
                             margin: EdgeInsets.symmetric(
                               vertical: screenHeight * 0.01,
@@ -354,9 +354,10 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                             height: 10,
                           ),
                           // Using Obx to observe topPerformers List changes
-                          Obx(() => Column(
+                          Column(
                             children: [
-                              ...teacherDashboardController.topPerformers.value.map(
+                              ...teacherDashboardController.topPerformers.value
+                                  .map(
                                 (student) => Row(
                                   children: [
                                     Text(
@@ -379,7 +380,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                                 ),
                               ),
                             ],
-                          )),
+                          ),
                         ],
                       ),
                     ),
@@ -405,9 +406,11 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                             height: 10,
                           ),
                           // Using Obx to observe supportStudents List changes
-                          Obx(() => Column(
+                          Column(
                             children: [
-                              ...teacherDashboardController.supportStudents.value.map(
+                              ...teacherDashboardController
+                                  .supportStudents.value
+                                  .map(
                                 (student) => Row(
                                   children: [
                                     Text(
@@ -430,7 +433,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                                 ),
                               ),
                             ],
-                          )),
+                          ),
                         ],
                       ),
                     )

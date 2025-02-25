@@ -5,11 +5,11 @@ import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 
 class LessonManagement extends StatefulWidget {
-  const LessonManagement({
-    super.key  });
+  const LessonManagement({super.key});
 
   @override
   State<LessonManagement> createState() => _LessonManagementState();
@@ -18,13 +18,12 @@ class LessonManagement extends StatefulWidget {
 class _LessonManagementState extends State<LessonManagement> {
   final LocalAcademicService localAcademicService = LocalAcademicService();
   final TeacherDashboardController teacherDashboardController = Get.find();
-  
-  
 
   @override
   void initState() {
     super.initState();
   }
+
   String getActionForStatus(Status status) {
     switch (status) {
       case Status.Completed:
@@ -70,6 +69,8 @@ class _LessonManagementState extends State<LessonManagement> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    if (teacherDashboardController.selectedClassId.isEmpty)
+      return TeacherDashoardPlaceHolderPage();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -133,7 +134,8 @@ class _LessonManagementState extends State<LessonManagement> {
                           child: Container(
                             width: 20,
                             height: 20,
-                            child: getProgressIndicator(component.componentStatus),
+                            child:
+                                getProgressIndicator(component.componentStatus),
                           ),
                         ),
                         //Component Name
@@ -180,7 +182,7 @@ class _LessonManagementState extends State<LessonManagement> {
               ],
             ),
           ),
-          
+
           // Rest of your code remains the same
           //Resources Row
           ShadowedContainer(
@@ -350,14 +352,16 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        localAcademicService.getNextLessonId(teacherDashboardController.presentLesson.lessonId),
+                        localAcademicService.getNextLessonId(
+                            teacherDashboardController.presentLesson.lessonId),
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        localAcademicService.getNextLessonDescription(teacherDashboardController.presentLesson.lessonId),
+                        localAcademicService.getNextLessonDescription(
+                            teacherDashboardController.presentLesson.lessonId),
                         style: TextStyle(
                           fontSize: 18,
                         ),

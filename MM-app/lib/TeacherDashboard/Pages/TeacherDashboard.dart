@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
-import 'package:money_monkey/TeacherDashboard/Pages/ClassroomPreferences.dart';
-import 'package:money_monkey/TeacherDashboard/Pages/LessonManagement.dart';
-import 'package:money_monkey/TeacherDashboard/Pages/Overview.dart';
-import 'package:money_monkey/TeacherDashboard/Pages/StudentPerformance.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
-import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/SubPageSelectorRow.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -20,9 +15,16 @@ class TeacherDashboard extends StatefulWidget {
 class _TeacherDashboardState extends State<TeacherDashboard> {
   final TeacherDashboardController teacherDashboardController =
       Get.put(TeacherDashboardController());
-  void onClassPicked(String? classId){
-
+  void onClassPicked(String? classId) {
+    if (classId != null) {
+      print("**********CLass id: $classId");
+      teacherDashboardController.selectedClassId = teacherDashboardController.classes.entries.firstWhere((entry)=>entry.value==classId).key ;
+      print(("***************Selected ID: ${teacherDashboardController.selectedClassId}"));
+      teacherDashboardController.refreshAllData();
+      
+    }
   }
+
   @override
   void initState() {
     super.initState();
@@ -63,22 +65,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         Container(
           height: screenHeight * 0.65,
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: Obx(() {
-            if (teacherDashboardController.classId.value.isEmpty)
-              return TeacherDashoardPlaceHolderPage();
-            else {
-              switch (teacherDashboardController.pageIndex.value) {
-                case 0:
-                  return DashboardOverview();
-                case 1:
-                  return LessonManagement();
-                case 2:
-                  return StudentPerformance();
-                default:
-                  return ClassroomPreferences();
-              }
-            }
-          }),
+          child: Obx(() =>teacherDashboardController.currentPage.value),
         ),
       ],
     )

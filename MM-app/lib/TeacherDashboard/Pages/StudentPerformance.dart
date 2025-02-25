@@ -6,39 +6,42 @@ import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class StudentPerformance extends StatefulWidget {
-  const StudentPerformance({
-    super.key});
+  const StudentPerformance({super.key});
   @override
   State<StudentPerformance> createState() => _StudentPerformanceState();
 }
 
 class _StudentPerformanceState extends State<StudentPerformance> {
   // State variables
-  
 
   String currentFilter = 'allStudents';
-  late Student selectedStudent;
-  late StudentService studentService;
-  int selectedStudentIndex=0;
-  List<Student> studentList=[];
+  int selectedStudentIndex = 0;
+  List<Student> studentList = [];
   final LocalAcademicService localAcademicService = LocalAcademicService();
-  TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardController>();
+  TeacherDashboardController teacherDashboardController =
+      Get.find<TeacherDashboardController>();
 
   @override
   void initState() {
     super.initState();
+    initializeStudents();
   }
 
+  void initializeStudents() {
+    studentList = teacherDashboardController.classRoomStudents.value;
+  }
 
   void setSelectedStudent(int index) {
-    if (index >= 0 && index < teacherDashboardController.classRoomStudents.value.length) {
+    if (index >= 0 &&
+        index < teacherDashboardController.classRoomStudents.value.length) {
       setState(() {
-        selectedStudent = teacherDashboardController.classRoomStudents.value[index];
-        studentService = StudentService(student: selectedStudent);
+        teacherDashboardController.selectedStudent =
+            teacherDashboardController.classRoomStudents.value[index];
       });
     }
   }
@@ -152,6 +155,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
 
   @override
   Widget build(BuildContext context) {
+    if (teacherDashboardController.selectedClassId.isEmpty)
+      return TeacherDashoardPlaceHolderPage();
     if (teacherDashboardController.classRoomStudents.value.isEmpty) {
       return const SizedBox(
         child: Text("Either there are no students, or they're being loaded."),
@@ -296,12 +301,13 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    selectedStudent.profile.fullName,
+                                    teacherDashboardController
+                                        .selectedStudent.profile.fullName,
                                     style: TextStyles.containerTitle,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
-                                    "Current Lesson: ${localAcademicService.getLessonName(selectedStudent.progress.substring(0, 5))}",
+                                    "Current Lesson: ${localAcademicService.getLessonName(teacherDashboardController.selectedStudent.progress.substring(0, 5))}",
                                     style: TextStyle(
                                       color: Colors.grey.shade400,
                                       fontSize: 17,
@@ -319,11 +325,12 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                 horizontal: 12,
                                 vertical: 16,
                               ),
-                              color: getStatusColor(
-                                      studentService.getStatusFromProgress())
+                              color: getStatusColor(teacherDashboardController
+                                      .studentService
+                                      .getStatusFromProgress())
                                   .withValues(alpha: 0.3),
                               child: Text(
-                                studentService
+                                teacherDashboardController.studentService
                                     .getStatusFromProgress()
                                     .name
                                     .replaceAll('_', ' '),
@@ -331,7 +338,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                 style: TextStyle(
                                   fontSize: 17,
                                   color: getStatusColor(
-                                      studentService.getStatusFromProgress()),
+                                      teacherDashboardController.studentService
+                                          .getStatusFromProgress()),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -346,7 +354,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                               child: _buildProgressSection(
                                 "Lesson Progress",
                                 "Current Lesson",
-                                studentService.getLessonProgress(),
+                                teacherDashboardController.studentService
+                                    .getLessonProgress(),
                               ),
                             ),
                             const SizedBox(width: 50),
@@ -354,7 +363,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                               child: _buildProgressSection(
                                 "Overall Progress",
                                 "Course Completion",
-                                studentService.getOverallProgress(),
+                                teacherDashboardController.studentService
+                                    .getOverallProgress(),
                               ),
                             ),
                           ],
