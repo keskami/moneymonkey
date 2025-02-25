@@ -50,7 +50,6 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
 
-
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
 
@@ -73,7 +72,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       setState(() {
         nextExpense = widget.expenses.firstWhere(
           (expense) => expense.dueDay.isAfter(now) && expense.name != "Pay Day",
-          orElse: () => widget.expenses.firstWhere((expense) => expense.name != "Pay Day", orElse: () => widget.expenses.first),
+          orElse: () => widget.expenses.firstWhere(
+              (expense) => expense.name != "Pay Day",
+              orElse: () => widget.expenses.first),
         );
       });
       if (nextExpense == null) {
@@ -88,12 +89,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       }
     }
   }
-   Expense nextExpense = Expense(
+
+  Expense nextExpense = Expense(
     name: '',
     amount: 0,
     amountPaid: 0,
     dueDay: DateTime(2029, 5, 1),
-    penalty: 50, dueDateType: '',
+    penalty: 50,
+    dueDateType: '',
   );
 
   double totalSpending = 0;
@@ -199,6 +202,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             expense.dueDay = DateTime(expense.dueDay.year,
                 expense.dueDay.month + 1, expense.dueDay.day);
           });
+        } else if (expense.name == "Utilities") {
+          setState(() {
+            expense.amount += startingCCMin;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
         }
       }
     }
@@ -214,6 +223,19 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       noLatePayments = true;
     });
     mapExpenses();
+  }
+
+  bool checkPaid(String type) {
+    for (Expense expense in widget.expenses) {
+      if (expense.name == type) {
+        if (expense.amountPaid >= expense.amount) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    return false;
   }
 
   Future<void> endGame() async {
@@ -234,11 +256,76 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       formattedDate = DateFormat('MMM d, y').format(_focusedDay);
       dayNumber += 1;
     });
+
+    if (now.day == 2) {
+      if (!checkPaid("Rent")) {
+        addHint("Rent");
+      }
+    } else if (now.day == 8) {
+      if (!checkPaid("Utilities")) {
+        addHint("Utilities");
+      }
+    } else if (now.day == 24) {
+      if (!checkPaid("CC Debt")) {
+        addHint("CC Min");
+      }
+    } else if ((now.month == 2 && now.day == 27) ||
+        (now.month != 2 && now.day == 29)) {
+      addHint("End of Month");
+    }
   }
 
   Future<void> changeMoney(int amount, String type) async {
     if (type == "Checking Account") {
       checkingAccountBalance += amount;
+    }
+  }
+
+  void addHint(
+    String type,
+  ) {
+    if (type == "Pay Day") {
+      if (now.day == 1) {
+        setState(() {
+          widget.hints.add(Hint(
+            text:
+                "Today you receive \$1,250. Plan ahead—allocate funds for rent (\$500 due by the 5th),\nutilities, and extra debt payments to kickstart your Debt Avalanche.",
+            good: true,
+          ));
+        });
+      } else {
+        setState(() {
+          widget.hints.add(Hint(
+            text:
+                "New paycheck received! Consider whether to boost your debt repayment or cover\nupcoming expenses. Every decision now affects your future costs.",
+            good: true,
+          ));
+        });
+      }
+    } else if (type == "End of Month") {
+      widget.hints.add(Hint(
+        text:
+            "Month’s end: Review your performance. Have you met your payment milestones\nand avoided excess fees? Use this recap to adjust your strategy for next month.",
+        good: true,
+      ));
+    } else if (type == "Rent") {
+      widget.hints.add(Hint(
+        text:
+            "Heads up: Rent (\$500) is due on the 5th. Ensure you’ve set aside enough funds\nto avoid a \$25 late fee.",
+        good: true,
+      ));
+    } else if (type == "Utilities") {
+      widget.hints.add(Hint(
+        text:
+            "Reminder: Utilities (\$150) are due by the 10th. Reserve funds now to prevent any\nlate fee.",
+        good: true,
+      ));
+    } else if (type == "CC Min") {
+      widget.hints.add(Hint(
+        text:
+            "Tomorrow the credit card minimum is due (\$200). If you can, try to pay\nextra—remember, early extra payments help reduce your",
+        good: true,
+      ));
     }
   }
 
@@ -248,6 +335,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       List<Expense> todayExpenses = expensesMapped[normalizedToday]!;
       for (Expense expense in todayExpenses) {
         if (expense.name == "Pay Day") {
+          addHint("Pay Day");
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -341,7 +429,44 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               eventProccesed = true;
             });
           }
-        } else {}
+        } else if (expense.name == "Utilities") {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return EventPopUp(
+                expense: expense,
+                onTouch: () {
+                  expense.amountPaid >= expense.amount
+                      ? setState(() {
+                          eventProccesed = true;
+                          Navigator.of(context).pop();
+                        })
+                      : setState(() {
+                          expense.amount += expense.penalty;
+                          widget.creditScore -= 10;
+                          noLatePayments = false;
+                          eventProccesed = true;
+                          Navigator.of(context).pop();
+                        });
+                },
+              );
+            },
+          );
+          if (!eventProccesed) {
+            if (expense.amountPaid < expense.amount) {
+              setState(() {
+                expense.amount += expense.penalty;
+                widget.creditScore -= 10;
+                noLatePayments = false;
+              });
+            }
+            setState(() {
+              eventProccesed = true;
+            });
+          }
+        } else {
+          print(expense.name);
+        }
       }
     }
     setState(() {
@@ -531,14 +656,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   Future<void> checkRandomEvents() async {
     DateTime normalizedToday = normalizeDate(now);
 
-    for(RandomEvent randomEvent in allocatedEvents){
-      if(isSameDay(normalizedToday, randomEvent.trigerDay)){
+    for (RandomEvent randomEvent in allocatedEvents) {
+      if (isSameDay(normalizedToday, randomEvent.trigerDay)) {
         print("here");
-        
-
       }
     }
-    
   }
 
   @override
@@ -1478,16 +1600,21 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     Spacer(),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          bottom: screenHeightUnit * 20),
+                                          bottom: screenHeightUnit * 15),
                                       child: Center(
                                         child: Bottomwarning(
                                           screenHeightUnit:
-                                              screenHeightUnit,
+                                              screenHeightUnit * 1.1,
                                           screenWidthUnit: screenWidthUnit,
                                           hints: widget.hints,
                                           nextExpense: nextExpense,
                                           dayNumber: dayNumber,
                                           baseDate: now,
+                                          close: () {
+                                            setState(() {
+                                              widget.hints.removeAt(0);
+                                            });
+                                          },
                                         ),
                                       ),
                                     ),

@@ -92,7 +92,7 @@ class _EventPopUpState extends State<EventPopUp> {
                   ],
                 )),
           )
-        : widget.expense.name == "Rent"
+        : widget.expense.name == "Rent" ||  widget.expense.name =="Utilities"
             ? Center(
                 child: Container(
                     height: screenHeightUnit * 646,
@@ -131,7 +131,7 @@ class _EventPopUpState extends State<EventPopUp> {
                             ),
                             children: [
                               TextSpan(
-                                text: "Your rent was due for\n",
+                                text: "Your ${widget.expense.name} was due for\n",
                                 style: TextStyle(
                                     color: Color.fromRGBO(108, 108, 108, 1)),
                               ),
@@ -151,7 +151,7 @@ class _EventPopUpState extends State<EventPopUp> {
                         ),
                         widget.expense.amountPaid >= widget.expense.amount
                             ? Text(
-                                "You paid your rent on time\n and incurred no penalty",
+                                "You paid your ${widget.expense.name} on time\n and incurred no penalty",
                                 style: GoogleFonts.baloo2(
                                     fontSize: screenWidthUnit * 20,
                                     fontWeight: FontWeight.w600,
@@ -168,7 +168,7 @@ class _EventPopUpState extends State<EventPopUp> {
                                   children: [
                                     TextSpan(
                                       text:
-                                          "You did not pay your rent on time\nand owe penalty of ",
+                                          "You did not pay your ${widget.expense.name} on time\nand owe penalty of ",
                                       style: TextStyle(
                                           color:
                                               Color.fromRGBO(108, 108, 108, 1)),

@@ -11,6 +11,7 @@ class Bottomwarning extends StatefulWidget {
   final List<Hint> hints;
   final int dayNumber;
   DateTime baseDate;
+  Function close;
 
   Bottomwarning(
       {required this.screenHeightUnit,
@@ -18,14 +19,8 @@ class Bottomwarning extends StatefulWidget {
       this.hints = const [],
       required this.nextExpense,
       required this.dayNumber,
-      required this.baseDate});
-
-  // color:
-  //                                             Color.fromRGBO(135, 218, 255, 1),
-  //                                         text:
-  //                                             "Hint: Consider reducing entertainment spendings to boost your savings. ",
-  //                                         textColor:
-  //                                             Color.fromRGBO(32, 84, 116, 1),
+      required this.baseDate,
+      required this.close});
 
   @override
   _BottomwarningtState createState() => _BottomwarningtState();
@@ -80,7 +75,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                 SizedBox(
                   width: 20 * widget.screenWidthUnit,
                 ),
-                widget.nextExpense.name == ""
+                widget.nextExpense.dueDay.year > 2025 == ""
                     ? Text(
                         "No More Required Payments This Month",
                         style: GoogleFonts.baloo2(
@@ -99,7 +94,12 @@ class _BottomwarningtState extends State<Bottomwarning> {
                                         .inDays ==
                                     1
                                 ? "Next Required Payment | ${widget.nextExpense.name} Due in ${widget.nextExpense.dueDay.difference(widget.baseDate).inDays} day"
-                                : "Next Required Payment | ${widget.nextExpense.name} Due in ${widget.nextExpense.dueDay.difference(widget.baseDate).inDays} days",
+                                : widget.nextExpense.dueDay
+                                            .difference(widget.baseDate)
+                                            .inDays >
+                                        35
+                                    ? "No More Required Payments This Month"
+                                    : "Next Required Payment | ${widget.nextExpense.name} Due in ${widget.nextExpense.dueDay.difference(widget.baseDate).inDays} days",
                         style: GoogleFonts.baloo2(
                           fontSize: 34 * widget.screenHeightUnit,
                           fontWeight: FontWeight.w700,
@@ -118,26 +118,155 @@ class _BottomwarningtState extends State<Bottomwarning> {
               ],
             ),
           )
-        : Container(
-            height: 90 * widget.screenHeightUnit,
-            width: 1290 * widget.screenWidthUnit,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.black,
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: 30 * widget.screenWidthUnit,
-                  top: 21 * widget.screenHeightUnit),
-              child: Text(
-                "Hint: Consider reducing entertainment spendings to boost your savings. ",
-                style: GoogleFonts.baloo2(
-                  fontSize: 34 * widget.screenHeightUnit,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
+        : widget.hints.length == 1
+            ? Container(
+                height: 90 * widget.screenHeightUnit,
+                width: 1290 * widget.screenWidthUnit,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color.fromRGBO(135, 218, 255, 1),
                 ),
-              ),
-            ),
-          );
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 50 * widget.screenWidthUnit,
+                          top: 4 * widget.screenHeightUnit),
+                      child: Text(
+                        widget.hints[0].text,
+                        style: GoogleFonts.baloo2(
+                          fontSize: 28 * widget.screenHeightUnit,
+                          color: Color.fromRGBO(32, 84, 116, 1),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          right: 20 * widget.screenWidthUnit,
+                          top: 4 * widget.screenHeightUnit),
+                      child: GestureDetector(
+                          onTap: () {
+                            widget.close();
+                          },
+                          child: Icon(
+                            Icons.close,
+                            size: 60 * widget.screenHeightUnit,
+                            color: Color.fromRGBO(32, 84, 116, 1),
+                          )),
+                    )
+                  ],
+                ))
+            : Container(
+                height: 90 * widget.screenHeightUnit,
+                width: 1290 * widget.screenWidthUnit,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 90 * widget.screenHeightUnit,
+                      width: 1070 * widget.screenWidthUnit,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromRGBO(135, 218, 255, 1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 50 * widget.screenWidthUnit,
+                                top: 4 * widget.screenHeightUnit),
+                            child: Text(
+                              widget.hints[0].text,
+                              style: GoogleFonts.baloo2(
+                                fontSize: 28 * widget.screenHeightUnit,
+                                color: Color.fromRGBO(32, 84, 116, 1),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                right: 20 * widget.screenWidthUnit,
+                                top: 4 * widget.screenHeightUnit),
+                            child: GestureDetector(
+                                onTap: () {
+                                  widget.close();
+                                },
+                                child: Icon(
+                                  Icons.close,
+                                  size: 60 * widget.screenHeightUnit,
+                                  color: Color.fromRGBO(32, 84, 116, 1),
+                                )),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20 * widget.screenWidthUnit,
+                    ),
+                    Container(
+                      height: 90 * widget.screenHeightUnit,
+                      width: 200 * widget.screenWidthUnit,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color.fromRGBO(135, 218, 255, 1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: widget.screenWidthUnit * 25,
+                              right: widget.screenWidthUnit * 10,
+                            ),
+                            child: Text(
+                              "${widget.hints.length}",
+                              style: GoogleFonts.baloo2(
+                                fontSize: 70 * widget.screenHeightUnit,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          Center(
+                              child: Text(
+                            "hints\npending",
+                            style: GoogleFonts.baloo2(
+                              fontSize: 22 * widget.screenHeightUnit,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              height: 1, // Adjust the line spacing
+                            ),
+                            textAlign: TextAlign.left,
+                          )),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                right: 10 * widget.screenWidthUnit,
+                                top: 4 * widget.screenHeightUnit),
+                            child: GestureDetector(
+                                onTap: () {
+                                  widget.close();
+                                },
+                                child: Icon(
+                                  Icons.close,
+                                  size: 60 * widget.screenHeightUnit,
+                                  color: Color.fromRGBO(32, 84, 116, 1),
+                                )),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ));
   }
 }

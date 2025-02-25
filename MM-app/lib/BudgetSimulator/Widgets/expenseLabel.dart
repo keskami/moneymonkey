@@ -105,7 +105,7 @@ class _ExpenselabelState extends State<Expenselabel> {
                       SizedBox(
                         width: widget.screenWidthUnit * 12,
                       ),
-                      (widget.expense.name == "Utilites" ||
+                      (widget.expense.name == "Utilities" ||
                               widget.expense.name == "Rent" || widget.expense.name == "CC Debt")
                           ? Padding(
                               padding: EdgeInsets.only(
@@ -156,7 +156,7 @@ class _ExpenselabelState extends State<Expenselabel> {
         return Color.fromRGBO(255, 204, 229, 1);
       case "CC Debt":
         return Color.fromRGBO(148, 189, 255, 1);
-      case "Utilites":
+      case "Utilities":
         return Color.fromRGBO(79, 195, 247, 1);
       default:
         return Colors.transparent;
@@ -171,7 +171,7 @@ class _ExpenselabelState extends State<Expenselabel> {
         return Color.fromRGBO(236, 72, 135, 1);
       case "CC Debt":
         return Color.fromRGBO(35, 102, 210, 1);
-      case "Utilites":
+      case "Utilities":
         return Color.fromRGBO(255, 255, 255, 1);
       default:
         return Colors.black;
@@ -186,7 +186,7 @@ class _ExpenselabelState extends State<Expenselabel> {
         return "Rent Due";
       case "CC Debt":
         return "CC Min. Due";
-      case "Utilites":
+      case "Utilities":
         return "Utilities Due";
       default:
         return "";
