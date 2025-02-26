@@ -180,7 +180,7 @@ class _QuizMCQImagesPageState extends State<QuizMCQImagesPage> {
                 if (widget.correctAnswer == selectedOption) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       CorrectAnswerSnackBar(
-                          message: widget.feedback[widget.correctAnswer] ?? ''));
+                          message: widget.feedback[selectedOption] ?? ''));
                   setState(() {
                     correct = true;
                   });

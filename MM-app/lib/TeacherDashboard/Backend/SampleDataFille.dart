@@ -1217,14 +1217,14 @@ Map<String, Component> advancedComponents = {
       ),
       Question(
         type: QuestionType.quiztextmcquestion,
-        data: QuizMultipleChoice(
+        data: TextBasedQuestion(
           question:
               "Which of the following are good strategies for financial responsibility? (Select all that apply)",
           options: [
-            QuizOption(text: "Set aside money for emergencies"),
-            QuizOption(text: "Spend all your income on entertainment"),
-            QuizOption(text: "Create a budget and stick to it"),
-            QuizOption(text: "Ignore long-term financial goals"),
+            "Set aside money for emergencies",
+            "Spend all your income on entertainment",
+            "Create a budget and stick to it",
+            "Ignore long-term financial goals",
           ],
           correctAnswers: [
             "Set aside money for emergencies",
@@ -1271,14 +1271,14 @@ Map<String, Component> advancedComponents = {
       ),
       Question(
         type: QuestionType.quiztextmcquestion,
-        data: QuizMultipleChoice(
+        data: TextBasedQuestion(
           question:
               "Which actions demonstrate financial responsibility? (Select all that apply)",
           options: [
-            QuizOption(text: "Planning for future expenses"),
-            QuizOption(text: "Setting financial goals"),
-            QuizOption(text: "Spending without tracking expenses"),
-            QuizOption(text: "Regularly contributing to savings"),
+            "Planning for future expenses",
+            "Setting financial goals",
+            "Spending without tracking expenses",
+            "Regularly contributing to savings",
           ],
           correctAnswers: [
             "Planning for future expenses",

@@ -89,7 +89,7 @@ class _QuizMCQPageState extends State<QuizMCQPage> {
               width: screenWidthUnit * 20,
             ),
             quizOptionWithoutImage(
-                text: widget.answers[2],
+                text: widget.answers[1],
                 screenHeightUnit: screenHeightUnit,
                 option: option2,
                 screenWidthUnit: screenWidthUnit,

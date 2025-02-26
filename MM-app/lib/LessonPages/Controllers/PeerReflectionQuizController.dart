@@ -1,5 +1,6 @@
 // peer_reflection_quiz_controller.dart
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
@@ -29,11 +30,7 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
   String correctAnswer = "";
   List<String> answerImages = [];
 
-  final pages = [
-    PeerReflectionQuizPage3(),
-    PeerReflectionQuizPage4(),
-    PeerReflectionQuizPage5(),
-  ];
+  List<Widget> pages = [];
 
   @override
   void onInit() {
@@ -48,23 +45,47 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
       for (int i = 0; i < data.questionData.length; i++) {
         pageData.add(data.questionData[i]);
         if (pageData[i].type == QuestionType.quiztextmcquestion) {
+          question = pageData[i].data.question;
+          answers = pageData[i].data.options;
+          correctAnswer = pageData[i].data.correctAnswers[0];
+          feedback = pageData[i].data.feedbackMessages ?? {};
+          pages.add(QuizMCQPage(
+              question: question,
+              answers: answers,
+              feedback: feedback,
+              correctAnswer: correctAnswer));
+          print("REACHED");
+        } else if (pageData[i].type == QuestionType.quizimagemcquestion) {
+          try {
             question = pageData[i].data.question;
-            answers = pageData[i].data.options;
-            correctAnswer = pageData[i].data.correct[0];
-            feedback = pageData[i].data.feedbackMessages ?? {};
-            pages.add(QuizMCQPage(question: question, answers: answers, feedback: feedback, correctAnswer: correctAnswer));
-        }
-        if (pageData[i].type == QuestionType.quizimagemcquestion) {
-            question = pageData[i].data.question;
-            answers = pageData[i].data.options.map((option) => option.text).toList();
-            answerImages = pageData[i].data.options.map((option) => option.imageUrl).toList();
-            correctAnswer = pageData[i].data.correct[0];
-            feedback = pageData[i].data.feedbackMessages ?? {};
-            pages.add(QuizMCQImagesPage(question: question, answers: answers, answerImages: answerImages, feedback: feedback, correctAnswer: correctAnswer));
-        }
 
+            // Add explicit type casting to String
+            answers = pageData[i]
+                .data
+                .options
+                .map<String>((QuizOption option) => option.text)
+                .toList();
+
+            answerImages = pageData[i]
+                .data
+                .options
+                .map<String>((QuizOption option) => option.imageUrl ?? "")
+                .toList();
+
+            correctAnswer = pageData[i].data.correctAnswers[0];
+            feedback = pageData[i].data.feedbackMessages ?? {};
+
+            pages.add(QuizMCQImagesPage(
+                question: question,
+                answers: answers,
+                answerImages: answerImages,
+                feedback: feedback,
+                correctAnswer: correctAnswer));
+          } catch (e) {
+            print("ERROR in image MCQ processing: $e");
+          }
+        }
       }
-
     } catch (e) {
       print("Error fetching quiz data: $e");
     } finally {
