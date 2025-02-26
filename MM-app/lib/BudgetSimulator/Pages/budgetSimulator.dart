@@ -13,6 +13,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditScoreBox.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBoxNew.dart';
@@ -763,7 +764,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<RandomEvent> allocatedEvents = [];
 
   List<List<int>> dayRanges = [
-    [4, 8],
+    [1, 1],
     [18, 21],
     [25, 28],
     [37, 40],
@@ -811,19 +812,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return WillPopScope(
-                onWillPop: () async => false,
-                child: Dialog(
-                  child: Container(
-                    height: 300,
-                    width: 300,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(randomEvent.name)),
-                  ),
-                ),
-              );
+                  onWillPop: () async => false,
+                  child: Dialog(
+                    child: RandomEventPop(
+                      event: randomEvent,
+                    ),
+                  ));
             },
           );
         }
@@ -1926,44 +1920,44 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 SizedBox(
                                   height: screenHeightUnit * 20,
                                 ),
-                                WellnessBoxNew(
-                                    screenHeightUnit: screenHeightUnit,
-                                    screenWidthUnit: screenWidthUnit,
-                                    score: widget.physicalScore,
-                                    type: "Physical"),
-                                     SizedBox(
-                                  height: screenHeightUnit * 20,
-                                ),
-                                WellnessBoxNew(
-                                    screenHeightUnit: screenHeightUnit,
-                                    screenWidthUnit: screenWidthUnit,
-                                    score: widget.emotionalScore,
-                                    type: "Emotional"),
-                                     SizedBox(
-                                  height: screenHeightUnit * 20,
-                                ),
-                                WellnessBoxNew(
-                                    screenHeightUnit: screenHeightUnit,
-                                    screenWidthUnit: screenWidthUnit,
-                                    score: widget.mentalScore,
-                                    type: "Mental"),
+                                // WellnessBoxNew(
+                                //     screenHeightUnit: screenHeightUnit,
+                                //     screenWidthUnit: screenWidthUnit,
+                                //     score: widget.physicalScore,
+                                //     type: "Physical"),
+                                //      SizedBox(
+                                //   height: screenHeightUnit * 20,
+                                // ),
+                                // WellnessBoxNew(
+                                //     screenHeightUnit: screenHeightUnit,
+                                //     screenWidthUnit: screenWidthUnit,
+                                //     score: widget.emotionalScore,
+                                //     type: "Emotional"),
+                                //      SizedBox(
+                                //   height: screenHeightUnit * 20,
+                                // ),
+                                // WellnessBoxNew(
+                                //     screenHeightUnit: screenHeightUnit,
+                                //     screenWidthUnit: screenWidthUnit,
+                                //     score: widget.mentalScore,
+                                //     type: "Mental"),
 
-                                SizedBox(
-                                  height: screenHeightUnit * 20,
-                                ),
+                                // SizedBox(
+                                //   height: screenHeightUnit * 20,
+                                // ),
                                 MeterBox(
                                   screenHeightUnit: screenHeightUnit,
                                   screenWidthUnit: screenWidthUnit,
                                   creditScore: widget.creditScore as int,
                                 ),
-                                // SizedBox(
-                                //   height: screenHeightUnit * 20,
-                                // ),
-                                // WellnessBox(
-                                //   screenHeightUnit: screenHeightUnit,
-                                //   screenWidthUnit: screenWidthUnit,
-                                //   wellnessScore: widget.wellnessScore,
-                                // ),
+                                SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
+                                WellnessBox(
+                                  screenHeightUnit: screenHeightUnit,
+                                  screenWidthUnit: screenWidthUnit,
+                                  wellnessScore: widget.wellnessScore,
+                                ),
                                 SizedBox(
                                   height: screenHeightUnit * 20,
                                 ),
@@ -1975,7 +1969,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   total: totalSpending,
                                   chartData: chartData,
                                 ),
-                                 SizedBox(
+                                SizedBox(
                                   height: screenHeightUnit * 20,
                                 ),
                               ],

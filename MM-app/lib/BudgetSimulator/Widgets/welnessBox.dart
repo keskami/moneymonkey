@@ -44,7 +44,7 @@ class _WellnessBoxState extends State<WellnessBox> {
     });
 
     return Container(
-      height: widget.screenHeightUnit * 190,
+      height: widget.screenHeightUnit * 225,
       width: widget.screenWidthUnit * 470,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -64,7 +64,7 @@ class _WellnessBoxState extends State<WellnessBox> {
             child: Text(
               "Wellness Score",
               style: GoogleFonts.baloo2(
-                  fontSize: widget.screenHeightUnit * 34,
+                  fontSize: widget.screenHeightUnit * 36,
                   fontWeight: FontWeight.w600,
                   color: Colors.black),
             ),
@@ -89,7 +89,7 @@ class _WellnessBoxState extends State<WellnessBox> {
                         children: [
                           Text('${widget.wellnessScore}',
                               style: GoogleFonts.baloo2(
-                                fontSize: widget.screenWidthUnit * 50,
+                                fontSize: widget.screenWidthUnit * 52,
                                 fontWeight: FontWeight.w600,
                                 color: widget.wellnessScore >
                                         ((max - min) / numberOfSections) * 4
@@ -112,7 +112,7 @@ class _WellnessBoxState extends State<WellnessBox> {
                               textAlign: TextAlign.start),
                           Padding(
                             padding: EdgeInsets.only(
-                              top: widget.screenHeightUnit * 32,
+                              top: widget.screenHeightUnit * 36,
                             ),
                             child: Text(
                               '/1000',
@@ -131,9 +131,9 @@ class _WellnessBoxState extends State<WellnessBox> {
                 width: widget.screenWidthUnit * 50,
               ),
               Padding(
-                padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),
+                padding: EdgeInsets.only(top: widget.screenHeightUnit * 50),
                 child: Container(
-                  height: widget.screenHeightUnit * 80,
+                  height: widget.screenHeightUnit * 100,
                   width: widget.screenWidthUnit * 220,
                   child: SfRadialGauge(
                     animationDuration: 1000,
