@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class MeterBox extends StatefulWidget {
+class WellnessBoxNew extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
-  final int creditScore;
+  final int score;
+  final String type;
 
-  MeterBox(
+  WellnessBoxNew(
       {required this.screenHeightUnit,
       required this.screenWidthUnit,
-      required this.creditScore});
+      required this.score,
+      required this.type});
 
   @override
-  _MeterBoxState createState() => _MeterBoxState();
+  _WellnessBoxNewState createState() => _WellnessBoxNewState();
 }
 
-class _MeterBoxState extends State<MeterBox> {
+class _WellnessBoxNewState extends State<WellnessBoxNew> {
   final List<Color> sectionColors = [
     Colors.red,
     Color.fromRGBO(251, 176, 59, 1),
@@ -27,8 +29,8 @@ class _MeterBoxState extends State<MeterBox> {
 
   @override
   Widget build(BuildContext context) {
-    final double min = 550;
-    final double max = 700;
+    final double min = 0;
+    final double max = 1000;
     final int numberOfSections = 5;
     final double sectionSize = (max - min) / numberOfSections;
     final List<GaugeRange> ranges = List.generate(numberOfSections, (index) {
@@ -61,7 +63,7 @@ class _MeterBoxState extends State<MeterBox> {
             padding: EdgeInsets.fromLTRB(widget.screenWidthUnit * 16,
                 widget.screenHeightUnit * 8, 0, widget.screenHeightUnit * 8),
             child: Text(
-              "Credit Score",
+              "${widget.type} Health Score",
               style: GoogleFonts.baloo2(
                   fontSize: widget.screenHeightUnit * 36,
                   fontWeight: FontWeight.w600,
@@ -86,21 +88,21 @@ class _MeterBoxState extends State<MeterBox> {
                           widget.screenWidthUnit * 25, widget.screenHeightUnit * 10, 0, 0),
                       child: Row(
                         children: [
-                          Text('${widget.creditScore}',
+                          Text('${widget.score}',
                               style: GoogleFonts.baloo2(
                                 fontSize: widget.screenWidthUnit * 52,
                                 fontWeight: FontWeight.w600,
-                                color: widget.creditScore >
-                                        670
+                                color: widget.score >
+                                        800
                                     ? sectionColors[4]
-                                    : widget.creditScore >
-                                            640
+                                    : widget.score >
+                                            600
                                         ? sectionColors[3]
-                                        : widget.creditScore >
-                                                610
+                                        : widget.score >
+                                                400
                                             ? sectionColors[2]
-                                            : widget.creditScore >
-                                                    580
+                                            : widget.score >
+                                                    200
                                                 ? sectionColors[1]
                                                 : sectionColors[0],
                               ),
@@ -110,7 +112,7 @@ class _MeterBoxState extends State<MeterBox> {
                               top: widget.screenHeightUnit * 36,
                             ),
                             child: Text(
-                              '/850',
+                              '/1000',
                               style: GoogleFonts.baloo2(
                                 fontSize: widget.screenWidthUnit * 30,
                                 color: Colors.black,
@@ -146,7 +148,7 @@ class _MeterBoxState extends State<MeterBox> {
                         ranges: ranges,
                         pointers: <GaugePointer>[
                           NeedlePointer(
-                            value: widget.creditScore.toDouble(),
+                            value: widget.score.toDouble(),
                             needleEndWidth: 5,
                             needleStartWidth: 1,
                             enableAnimation: true,

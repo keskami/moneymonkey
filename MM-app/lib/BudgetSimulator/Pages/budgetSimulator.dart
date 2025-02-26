@@ -15,6 +15,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/creditScoreBox.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBoxNew.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
@@ -38,9 +39,15 @@ class BudgetSimulator extends StatefulWidget {
     required this.wellnessScore,
     required this.randomEvents,
     required this.hints,
+    required this.emotionalScore,
+    required this.physicalScore,
+    required this.mentalScore,
   });
 
   final String name;
+  int emotionalScore;
+  int physicalScore;
+  int mentalScore;
 
   double checkingAccountBalance;
   double savingsAccountBalance;
@@ -783,8 +790,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       if (event != null) {
         setState(() {
           event.trigerDay = eventDay;
-          print(event.name);
-          print(event.trigerDay);
+
           allocatedEvents.add(event);
         });
       }
@@ -1904,7 +1910,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                             //   height: screenHeightUnit * 1122,
                             //   color: Colors.black,
                             // ),
-                            Column(
+
+                            SingleChildScrollView(
+                                child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -1916,23 +1924,48 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   currentDebt: widget.creditCardDebt as int,
                                 ),
                                 SizedBox(
-                                  height: screenHeightUnit * 15,
+                                  height: screenHeightUnit * 20,
+                                ),
+                                WellnessBoxNew(
+                                    screenHeightUnit: screenHeightUnit,
+                                    screenWidthUnit: screenWidthUnit,
+                                    score: widget.physicalScore,
+                                    type: "Physical"),
+                                     SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
+                                WellnessBoxNew(
+                                    screenHeightUnit: screenHeightUnit,
+                                    screenWidthUnit: screenWidthUnit,
+                                    score: widget.emotionalScore,
+                                    type: "Emotional"),
+                                     SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
+                                WellnessBoxNew(
+                                    screenHeightUnit: screenHeightUnit,
+                                    screenWidthUnit: screenWidthUnit,
+                                    score: widget.mentalScore,
+                                    type: "Mental"),
+
+                                SizedBox(
+                                  height: screenHeightUnit * 20,
                                 ),
                                 MeterBox(
                                   screenHeightUnit: screenHeightUnit,
                                   screenWidthUnit: screenWidthUnit,
                                   creditScore: widget.creditScore as int,
                                 ),
+                                // SizedBox(
+                                //   height: screenHeightUnit * 20,
+                                // ),
+                                // WellnessBox(
+                                //   screenHeightUnit: screenHeightUnit,
+                                //   screenWidthUnit: screenWidthUnit,
+                                //   wellnessScore: widget.wellnessScore,
+                                // ),
                                 SizedBox(
-                                  height: screenHeightUnit * 15,
-                                ),
-                                WellnessBox(
-                                  screenHeightUnit: screenHeightUnit,
-                                  screenWidthUnit: screenWidthUnit,
-                                  wellnessScore: widget.wellnessScore,
-                                ),
-                                SizedBox(
-                                  height: screenHeightUnit * 15,
+                                  height: screenHeightUnit * 20,
                                 ),
                                 SpendingDonutChart(
                                   screenWidthUnit: screenWidthUnit,
@@ -1942,8 +1975,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   total: totalSpending,
                                   chartData: chartData,
                                 ),
+                                 SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
                               ],
-                            )
+                            ))
                           ],
                         ),
                       ))

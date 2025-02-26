@@ -59,6 +59,10 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
+                    emotionalScore: 300,
+                    mentalScore: 300,
+                    physicalScore: 300,
+
                     randomEvents: [],
                     wellnessScore: 300,
                     name: 'Crush the Credit Card Debt',
@@ -818,6 +822,9 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
+          emotionalScore: 300,
+                    mentalScore: 300,
+                    physicalScore: 300,
             wellnessScore: 300,
             name: 'Crush the Credit Card Debt',
             checkingAccountBalance: 300,
