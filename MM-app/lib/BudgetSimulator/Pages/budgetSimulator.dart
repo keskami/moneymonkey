@@ -763,8 +763,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   List<RandomEvent> allocatedEvents = [];
 
+
+
   List<List<int>> dayRanges = [
-    [1, 1],
+    [4, 8],
     [18, 21],
     [25, 28],
     [37, 40],
@@ -816,6 +818,48 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                   child: Dialog(
                     child: RandomEventPop(
                       event: randomEvent,
+                      onConfirm: (
+                        String Source,
+                        int amount,
+                        String effect1,
+                        int effect1Amount,
+                        String effect2,
+                        int effect2Amount,
+                      ) {
+                        Navigator.of(context).pop();
+                        if (Source == "Cash") {
+                          setState(() {
+                            widget.checkingAccountBalance += amount;
+                          });
+                        } else if (Source == "CC") {
+                          setState(() {
+                            widget.creditCardDebt -= amount;
+                          });
+                        }
+
+                        if (effect1 == "Credit Score") {
+                          setState(() {
+                            widget.creditScore += effect1Amount;
+                          });
+                        } else {
+                          int x = widget.wellnessScore + effect1Amount;
+                          setState(() {
+                            widget.wellnessScore = min(x, 1000);
+                            widget.wellnessScore = max(0, widget.wellnessScore);
+                          });
+                        }
+                        if (effect2 == "Credit Score") {
+                          setState(() {
+                            widget.creditScore += effect2Amount;
+                          });
+                        } else {
+                          int x = widget.wellnessScore + effect2Amount;
+                          setState(() {
+                            widget.wellnessScore = min(x, 1000);
+                            widget.wellnessScore = max(0, widget.wellnessScore);
+                          });
+                        }
+                      },
                     ),
                   ));
             },
