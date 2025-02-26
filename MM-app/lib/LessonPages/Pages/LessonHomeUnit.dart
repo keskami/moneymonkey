@@ -202,11 +202,11 @@ class SlantLinePainter extends CustomPainter {
       ..color = isActivated ? Colors.blue : Colors.grey.shade300
       ..strokeWidth = 4
       ..strokeCap = StrokeCap.round;
-
+//Bhavya: Changed here to get height-25.
     if (RightToLeft) {
-      canvas.drawLine(Offset(size.width, 0), Offset(0, size.height), paint);
+      canvas.drawLine(Offset(size.width, 0), Offset(0, size.height-25), paint);
     } else {
-      canvas.drawLine(Offset(0, 0), Offset(size.width, size.height), paint);
+      canvas.drawLine(Offset(0, 0), Offset(size.width, size.height-25), paint);
     }
   }
 
