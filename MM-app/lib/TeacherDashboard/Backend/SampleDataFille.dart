@@ -1019,9 +1019,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 86,
+      participationRate: 54,
+      lessonCompletion: 59,
     ),
   ),
 
@@ -1037,9 +1037,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 74,
+      participationRate: 81,
+      lessonCompletion: 73,
     ),
   ),
 
@@ -1054,9 +1054,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 57,
+      participationRate: 50,
+      lessonCompletion: 65,
     ),
   ),
 
@@ -1071,9 +1071,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 62,
+      participationRate: 63,
+      lessonCompletion: 45,
     ),
   ),
 
@@ -1089,9 +1089,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 58,
+      participationRate: 88,
+      lessonCompletion: 62,
     ),
   ),
 
@@ -1105,9 +1105,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 71,
+      participationRate: 81,
+      lessonCompletion: 45,
     ),
   ),
 
@@ -1123,13 +1123,12 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 58,
+      participationRate: 44,
+      lessonCompletion: 81,
     ),
   ),
 
-  // Components for Lesson A.1.2
   'A.1.2.1': Component(
     componentId: 'A.1.2.1',
     title: 'Core Trading Concepts',
@@ -1142,9 +1141,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 85,
+      participationRate: 42,
+      lessonCompletion: 42,
     ),
   ),
 
@@ -1159,9 +1158,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 76,
+      participationRate: 40,
+      lessonCompletion: 71,
     ),
   ),
 
@@ -1177,9 +1176,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 50,
+      participationRate: 83,
+      lessonCompletion: 64,
     ),
   ),
 
@@ -1194,9 +1193,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 63,
+      participationRate: 65,
+      lessonCompletion: 47,
     ),
   ),
 
@@ -1211,9 +1210,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 88,
+      participationRate: 69,
+      lessonCompletion: 53,
     ),
   ),
 
@@ -1229,9 +1228,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 50,
+      participationRate: 82,
+      lessonCompletion: 43,
     ),
   ),
 
@@ -1245,9 +1244,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 67,
+      participationRate: 68,
+      lessonCompletion: 88,
     ),
   ),
 
@@ -1263,13 +1262,12 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 80,
+      participationRate: 40,
+      lessonCompletion: 78,
     ),
   ),
 
-  // Components for Lesson A.1.3
   'A.1.3.1': Component(
     componentId: 'A.1.3.1',
     title: 'Risk Management Fundamentals',
@@ -1282,9 +1280,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 51,
+      participationRate: 61,
+      lessonCompletion: 63,
     ),
   ),
 
@@ -1299,9 +1297,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 58,
+      participationRate: 89,
+      lessonCompletion: 78,
     ),
   ),
 
@@ -1317,9 +1315,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 94,
+      participationRate: 68,
+      lessonCompletion: 73,
     ),
   ),
 
@@ -1334,9 +1332,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 59,
+      participationRate: 88,
+      lessonCompletion: 31,
     ),
   ),
 
@@ -1351,9 +1349,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 35,
+      participationRate: 48,
+      lessonCompletion: 79,
     ),
   ),
 
@@ -1369,13 +1367,12 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 58,
+      participationRate: 61,
+      lessonCompletion: 58,
     ),
   ),
 
-  // Components for A.2.1
   'A.2.1.1': Component(
     componentId: 'A.2.1.1',
     title: 'Complex Chart Pattern Recognition',
@@ -1388,9 +1385,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 52,
+      participationRate: 63,
+      lessonCompletion: 51,
     ),
   ),
 
@@ -1405,9 +1402,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 55,
+      participationRate: 66,
+      lessonCompletion: 34,
     ),
   ),
 
@@ -1423,9 +1420,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 66,
+      participationRate: 51,
+      lessonCompletion: 63,
     ),
   ),
 
@@ -1440,9 +1437,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 64,
+      participationRate: 64,
+      lessonCompletion: 32,
     ),
   ),
 
@@ -1457,9 +1454,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 42,
+      participationRate: 65,
+      lessonCompletion: 83,
     ),
   ),
 
@@ -1475,9 +1472,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 73,
+      participationRate: 63,
+      lessonCompletion: 89,
     ),
   ),
 
@@ -1491,9 +1488,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 90,
+      participationRate: 95,
+      lessonCompletion: 58,
     ),
   ),
 
@@ -1509,13 +1506,12 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 94,
+      participationRate: 65,
+      lessonCompletion: 53,
     ),
   ),
 
-  // Components for A.2.2 - Trading Psychology
   'A.2.2.1': Component(
     componentId: 'A.2.2.1',
     title: 'The Trader\'s Mind',
@@ -1528,9 +1524,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 51,
+      participationRate: 59,
+      lessonCompletion: 52,
     ),
   ),
 
@@ -1545,9 +1541,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 88,
+      participationRate: 54,
+      lessonCompletion: 50,
     ),
   ),
 
@@ -1563,9 +1559,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 51,
+      participationRate: 86,
+      lessonCompletion: 78,
     ),
   ),
 
@@ -1580,9 +1576,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
-      participationRate: 78,
-      lessonCompletion: 54,
+      classAverage: 72,
+      participationRate: 59,
+      lessonCompletion: 82,
     ),
   ),
 
@@ -1598,9 +1594,9 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [],
     performanceTrends: PerformanceTrends(
-      classAverage: 45,
+      classAverage: 85,
       participationRate: 78,
-      lessonCompletion: 54,
+      lessonCompletion: 85,
     ),
   ),
 };

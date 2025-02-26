@@ -121,7 +121,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         ),
                       ),
                       child: Text(
-                        teacherDashboardController.presentLesson.title,
+                        teacherDashboardController.presentLesson.lessonStatus.name,
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.blue.shade300,

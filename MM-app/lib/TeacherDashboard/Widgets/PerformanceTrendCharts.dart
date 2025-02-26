@@ -21,7 +21,8 @@ class PerformanceTrendsChart extends StatefulWidget {
 }
 
 class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
-TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardController>();
+  TeacherDashboardController teacherDashboardController = Get.find<TeacherDashboardController>();
+  
   @override
   Widget build(BuildContext context) {
     final double containerWidth =
@@ -29,9 +30,10 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
     final double containerHeight =
         widget.height ?? MediaQuery.of(context).size.height * 0.5;
 
+    // Calculate width based on number of components to ensure there's enough space
     final double contentWidth = max(
       containerWidth,
-      teacherDashboardController.childComponents.value.length * 100.0,
+      teacherDashboardController.childComponents.value.length * 120.0,
     );
 
     return AnimatedContainer(
@@ -43,24 +45,34 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Spacer(),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildLegendItem('Class Average', Colors.blue),
-                    const SizedBox(width: 12),
-                    _buildLegendItem('Participation Rate', Colors.green),
-                    const SizedBox(width: 12),
-                    _buildLegendItem('Lesson Completion', Colors.purple),
-                  ],
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Performance Trends',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+                const Spacer(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildLegendItem('Class Average', Colors.blue),
+                      const SizedBox(width: 12),
+                      _buildLegendItem('Participation Rate', Colors.green),
+                      const SizedBox(width: 12),
+                      _buildLegendItem('Lesson Completion', Colors.purple),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -115,7 +127,7 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
                           getTitlesWidget: (value, meta) =>
                               bottomTitleWidgets(value, meta, teacherDashboardController.childComponents.value),
                           interval: 1,
-                          reservedSize: 50,
+                          reservedSize: 70, // Increased to accommodate 2 lines
                         ),
                       ),
                       leftTitles: AxisTitles(
@@ -131,7 +143,19 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
                       rightTitles:
                           AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     ),
-                    borderData: FlBorderData(show: false),
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                        left: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                    ),
                     minX: 0,
                     maxX: (teacherDashboardController.childComponents.value.length - 1).toDouble(),
                     minY: 0,
@@ -140,6 +164,19 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
                   ),
                 ),
               ),
+            ),
+          ),
+          // Add a small indicator to show that the chart is scrollable
+          Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(top: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.arrow_left, size: 20, color: Colors.grey),
+                Text('Scroll to see more', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                Icon(Icons.arrow_right, size: 20, color: Colors.grey),
+              ],
             ),
           ),
         ],
@@ -168,66 +205,61 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
     );
   }
 
+  // Method to handle properly mapping multiple components with varying values
   List<LineChartBarData> generateFilteredChart(String filter) {
+    // Safety check to ensure we have data
+    if (teacherDashboardController.childComponents.value.isEmpty) {
+      return [];
+    }
+    
+    // Map each component to its corresponding data point
+    // This creates varying data points based on actual component values
+    List<FlSpot> classAverageSpots = teacherDashboardController.childComponents.value
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(
+              entry.key.toDouble(),
+              entry.value.performanceTrends.classAverage,
+            ))
+        .toList();
+    
+    List<FlSpot> participationRateSpots = teacherDashboardController.childComponents.value
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(
+              entry.key.toDouble(),
+              entry.value.performanceTrends.participationRate,
+            ))
+        .toList();
+    
+    List<FlSpot> lessonCompletionSpots = teacherDashboardController.childComponents.value
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(
+              entry.key.toDouble(),
+              entry.value.performanceTrends.lessonCompletion,
+            ))
+        .toList();
+    
+    // Return the appropriate data based on filter
     if (filter == 'Class Average') {
       return [
-        generateLineData(
-          teacherDashboardController.childComponents.value
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.classAverage))
-              .toList(),
-          Colors.blue,
-        ),
+        generateLineData(classAverageSpots, Colors.blue),
       ];
     } else if (filter == 'Participation Rate') {
       return [
-        generateLineData(
-           teacherDashboardController.childComponents.value
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.participationRate))
-              .toList(),
-          Colors.green,
-        ),
+        generateLineData(participationRateSpots, Colors.green),
       ];
     } else if (filter == 'Lesson Completion') {
       return [
-        generateLineData(
-           teacherDashboardController.childComponents.value
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.lessonCompletion))
-              .toList(),
-          Colors.purple,
-        ),
+        generateLineData(lessonCompletionSpots, Colors.purple),
       ];
     } else {
+      // Show all metrics if "All Statistics" is selected
       return [
-        generateLineData(
-           teacherDashboardController.childComponents.value
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.classAverage))
-              .toList(),
-          Colors.blue,
-        ),
-        generateLineData(
-           teacherDashboardController.childComponents.value
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.participationRate))
-              .toList(),
-          Colors.green,
-        ),
-        generateLineData(
-           teacherDashboardController.childComponents.value
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.performanceTrends.lessonCompletion))
-              .toList(),
-          Colors.purple,
-        ),
+        generateLineData(classAverageSpots, Colors.blue),
+        generateLineData(participationRateSpots, Colors.green),
+        generateLineData(lessonCompletionSpots, Colors.purple),
       ];
     }
   }
@@ -236,6 +268,7 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
     return LineChartBarData(
       spots: spots,
       isCurved: true,
+      curveSmoothness: 0.3, // Smoother curves
       color: color,
       dotData: FlDotData(
         show: true,
@@ -244,7 +277,11 @@ TeacherDashboardController teacherDashboardController=Get.find<TeacherDashboardC
           radius: 5,
         ),
       ),
-      belowBarData: BarAreaData(show: false),
+      //Optional to show bottom Colors too
+      // belowBarData: BarAreaData(
+      //   show: true,
+      //   color: color.withOpacity(0.1),
+      // ),
     );
   }
 }
@@ -254,7 +291,11 @@ Widget leftTitleWidgets(double value, TitleMeta meta) {
     padding: const EdgeInsets.only(right: 4.0),
     child: Text(
       '${value.toInt()}%',
-      style: const TextStyle(fontSize: 12),
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        color: Colors.black87,
+      ),
       textAlign: TextAlign.right,
     ),
   );
@@ -266,9 +307,34 @@ Widget bottomTitleWidgets(
 
   return Padding(
     padding: const EdgeInsets.only(top: 8.0),
-    child: Text(
-      data[value.toInt()].title,
-      style: const TextStyle(fontSize: 12),
+    child: RotatedBox(
+      quarterTurns: 0, // No rotation - change to 1 for 90 degree rotation if needed
+      child: Container(
+        width: 100, // Fixed width for the label
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(4.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 2.0,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Text(
+          data[value.toInt()].title,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+      ),
     ),
   );
 }

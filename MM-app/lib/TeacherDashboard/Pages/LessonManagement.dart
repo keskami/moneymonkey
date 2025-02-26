@@ -352,16 +352,16 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        localAcademicService.getNextLessonId(
-                            teacherDashboardController.presentLesson.lessonId),
+                        localAcademicService.getLesson(localAcademicService.getNextLessonId(
+                            teacherDashboardController.presentLesson.lessonId)).title,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        localAcademicService.getNextLessonDescription(
-                            teacherDashboardController.presentLesson.lessonId),
+                        localAcademicService.getLesson(localAcademicService.getNextLessonId(
+                            teacherDashboardController.presentLesson.lessonId)).description,
                         style: TextStyle(
                           fontSize: 18,
                         ),

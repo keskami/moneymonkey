@@ -179,7 +179,3 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
     return Column();
   }
 }
-
-extension on Color {
-  withValues({required double alpha}) {}
-}

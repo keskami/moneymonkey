@@ -43,8 +43,9 @@ class TeacherDashboardController extends GetxController {
   final String overviewMessage2 =
       "Making informed decisions about earning, saving, spending, and investing ";
 
-  String lessonManagementMessage1 = "";
-  String lessonManagementMessage2 = "";
+  String lessonManagementMessage1 = "Financial Responsibility Over a Lifetime ";
+  String lessonManagementMessage2 =
+      "Making informed decisions about earning, saving, spending, and investing ";
   Map<String, List<Student>> categorizedStudents = {};
   final Map<String, String> actions = {
     "What about those \$150 sneakers?": "Wait for next paycheck",
@@ -61,27 +62,28 @@ class TeacherDashboardController extends GetxController {
 // List<Widget> pages = [...];
 
 // Instead, add a method to get pages dynamically
-Widget getPage(int index) {
-  switch (index) {
-    case 0:
-      return DashboardOverview();
-    case 1:
-      return LessonManagement();
-    case 2:
-      return StudentPerformance();
-    case 3:
-      return ClassroomPreferences();
-    default:
-      return TeacherDashoardPlaceHolderPage();
+  Widget getPage(int index) {
+    switch (index) {
+      case 0:
+        return DashboardOverview();
+      case 1:
+        return LessonManagement();
+      case 2:
+        return StudentPerformance();
+      case 3:
+        return ClassroomPreferences();
+      default:
+        return TeacherDashoardPlaceHolderPage();
+    }
   }
-}
 
 // Update how the current page is set
-void setCurrentPage(int index) {
-  pageIndex.value = index;
-  // Create a fresh instance of the page with the latest data
-  currentPage.value = getPage(index);
-}
+  void setCurrentPage(int index) {
+    pageIndex.value = index;
+    // Create a fresh instance of the page with the latest data
+    currentPage.value = getPage(index);
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -113,10 +115,7 @@ void setCurrentPage(int index) {
       }
 
       if (selectedClassId.isNotEmpty) {
-        print("**************Entered if classId :${selectedClassId}");
-
         // Or, if you're recreating the pages with fresh data:
-        setCurrentPage(pageIndex.value);
         // Get the updated classroom data
         selectedClass = localAcademicService.getClassRoom(selectedClassId);
         presentLesson = localAcademicService.getLesson(selectedClass.lessonId);
@@ -155,6 +154,8 @@ void setCurrentPage(int index) {
           getCategorizedStudents();
         }
       }
+      if (classRoomStudents.value.isNotEmpty &&
+          childComponents.value.isNotEmpty) setCurrentPage(pageIndex.value);
 
       // Debug output
       print('refreshAllData: Data refresh complete');
