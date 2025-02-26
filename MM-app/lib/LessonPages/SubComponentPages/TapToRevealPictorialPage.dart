@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -23,17 +24,26 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
 
   String title = '';
   List<String> items = [];
+  List<String> itemImgs = [];
   List<String> instructions = [];
+  String monkeyImg = "";
   bool loading = false;
   String button = '';
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      title = data['title'];
-      button = data['button'];
-      items = List<String>.from(data["items"].map((item) => item.toString()));
-      instructions = List<String>.from(
-          data["instructions"].map((item) => item.toString()));
+      IntroductionPage introData = data.data as IntroductionPage;
+      title = introData.scenario;
+      button = "Start Managing Your Money";
+      items = List<String>.from(introData.options.map((item) => item.title));
+      itemImgs =
+          List<String>.from(introData.options.map((item) => item.iconUrl));
+      monkeyImg = introData.mintyImage;
+      instructions = [
+        "Click for choice 1...",
+        "Click for choice 2...",
+        "Click for choice 3..."
+      ];
       wait6sec();
       loading = false;
     });
@@ -43,8 +53,8 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
   void initState() {
     super.initState();
     if (scenarioController.pageData.isNotEmpty &&
-        scenarioController.pageData[1] != null) {
-      setData(scenarioController.pageData[1]);
+        scenarioController.pageData[0] != null) {
+      setData(scenarioController.pageData[0]);
     }
   }
 
@@ -94,9 +104,9 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.network(
+                    Image.asset(
+                      monkeyImg,
                       height: screenHeight * 0.2,
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
                     ),
                     Expanded(
                       child: Text(
@@ -132,8 +142,7 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
                       height: screenHeight * 0.17,
                       child: TapToRevealContainer(
                         contents: NewContentContainer(
-                          image:
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fsneakers%201.png?alt=media&token=625bdbab-4e8d-42cd-82b4-8f79a1bedf3f",
+                          image: itemImgs[0],
                           texts: [items[0]],
                           screenWidth: screenWidth,
                           onFlip: () => makeTrue(items[0]),
@@ -159,8 +168,7 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
                       height: screenHeight * 0.17,
                       child: TapToRevealContainer(
                         contents: NewContentContainer(
-                          image:
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fcollege%201.png?alt=media&token=cd5510da-9563-41a8-a2eb-bd13594312a3",
+                          image: itemImgs[1],
                           texts: [items[1]],
                           screenWidth: screenWidth,
                           onFlip: () => makeTrue(items[1]),
@@ -187,8 +195,7 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
                       height: screenHeight * 0.17,
                       child: TapToRevealContainer(
                         contents: NewContentContainer(
-                          image:
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
+                          image: itemImgs[2],
                           texts: [items[2]],
                           screenWidth: screenWidth,
                           onFlip: () => makeTrue(items[2]),

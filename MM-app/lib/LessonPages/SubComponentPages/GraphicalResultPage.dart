@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -18,11 +19,11 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
   String title = '';
   String button = '';
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      title = data['title'];
-      subTitle = data['subTitle'];
-      button = data['button'];
+      title = "Your Financial Summary";
+      subTitle = "Financial Responsibility Score";
+      button = "Finish";
     });
   }
 
@@ -32,13 +33,13 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
     scenarioController = Get.find();
     message = initializeMessage(scenarioController);
     if (scenarioController.pageData.isNotEmpty &&
-        scenarioController.pageData[3] != null) {
-      setData(scenarioController.pageData[3]);
+        scenarioController.pageData[2] != null) {
+      setData(scenarioController.pageData[2]);
     }
   }
 
   String initializeMessage(ScenarioController scenarioController) {
-    double score = scenarioController.responsibilityScore.value;
+    int score = scenarioController.responsibilityScore.value;
     if (score == 100) {
       return "Amazing! You're in an incredible spot for financial growth, continue being financially responsible!";
     } else if (score < 50.0) {

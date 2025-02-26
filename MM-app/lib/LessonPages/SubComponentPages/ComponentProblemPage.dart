@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -22,11 +23,11 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
   String problem = '';
   String instructions = '';
 
-  Future<void> setData(Map<String, dynamic> data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      title = data["title"];
-      problem = data["problem"];
-      instructions = data['instructions'];
+      title = data.data.title;
+      problem = data.data.problem;
+      instructions = data.data.instructions;
 
       isLoading = false;
     });
@@ -35,11 +36,11 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
   @override
   void initState() {
     super.initState();
-    setData(storyController.pageData[3]);
+    setData(storyController.pageData[1]);
 
     if (title == '') {
       if (storyController.pageData[3] != null) {
-        setData(storyController.pageData[3]);
+        setData(storyController.pageData[1]);
       } else {
         debugPrint("Page data for index 1 is null");
       }

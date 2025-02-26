@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/home.dart';
 
 class Page4 extends StatefulWidget {
@@ -30,15 +31,21 @@ class _Page4State extends State<Page4> {
   String maria = '';
   String jason = '';
   String button = '';
+  String feedback1 = '';
+  String feedback2 = '';
+  String feedback3 = '';
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      title = data['title'];
-      subTitle = data['subTitle'];
-      ava = data['ava'];
-      maria = data['maria'];
-      jason = data['jason'];
-      button = data['button'];
+      title = "Reflection";
+      subTitle = data.data.question;
+      ava = data.data.options[0].description;
+      maria = data.data.options[1].description;
+      jason = data.data.options[2].description;
+      button = "Finish Peer Reflection";
+      feedback1 = data.data.feedbackMessages[data.data.options[0].name];
+      feedback2 = data.data.feedbackMessages[data.data.options[1].name];
+      feedback3 = data.data.feedbackMessages[data.data.options[2].name];
 
       loading = false;
     });
@@ -49,10 +56,10 @@ class _Page4State extends State<Page4> {
   void initState() {
     super.initState();
     if (peerReflectionController.pageData.isNotEmpty) {
-      setData(peerReflectionController.pageData[4]);
+      setData(peerReflectionController.pageData[3]);
     }
     if (title == '') {
-      setData(peerReflectionController.pageData[4]);
+      setData(peerReflectionController.pageData[3]);
     }
   }
 
@@ -115,7 +122,7 @@ class _Page4State extends State<Page4> {
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           Future.delayed(Duration(seconds: 1), () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                                CorrectAnswerSnackBar(message: ""));
+                                CorrectAnswerSnackBar(message: feedback1));
                           });
                         }
                       });
@@ -140,7 +147,7 @@ class _Page4State extends State<Page4> {
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           Future.delayed(Duration(seconds: 1), () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                                CorrectAnswerSnackBar(message: ""));
+                                CorrectAnswerSnackBar(message: feedback2));
                           });
                         }
                       });
@@ -165,7 +172,7 @@ class _Page4State extends State<Page4> {
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           Future.delayed(Duration(seconds: 1), () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                                CorrectAnswerSnackBar(message: ""));
+                                CorrectAnswerSnackBar(message: feedback3));
                           });
                         }
                       });

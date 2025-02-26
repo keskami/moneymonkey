@@ -30,7 +30,7 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
   Future<void> setData(Question data) async {
     setState(() {
       before = data.data.tapInstruction ?? '';
-      title = data.data.definition;
+      title = data.data.title;
       bigBottom = data.data.revealInformation[0];
       bigTop = "Definition:";
       little = data.data.revealInformation[1];

@@ -91,7 +91,8 @@ class LoadingPageWrapper extends StatelessWidget {
         break;
       case '3':
         controller =
-            Get.put<StoryController>(StoryController(componentId: componentId));
+            Get.put<StoryController>(
+              StoryController(componentId: componentId));
         break;
       case '4':
         controller = Get.put<ScenarioController>(

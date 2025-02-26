@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 
@@ -25,18 +26,17 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
   List<String> instructions = [];
   String button = '';
 
-  Future<void> setData(Map<String, dynamic> data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      bigTexts =
-          List<String>.from(data['bigTexts'].map((item) => item.toString()));
-      smallTexts =
-          List<String>.from(data['smallTexts'].map((item) => item.toString()));
-      title = data['title'];
-      instructions = List<String>.from(
-          data['instructions'].map((item) => item.toString()));
-
-      button = data['button'];
-
+      bigTexts = [data.data.Card1[0], data.data.Card3[0], data.data.Card3[0]];
+      smallTexts = [data.data.Card1[1], data.data.Card3[1], data.data.Card3[1]];
+      title = data.data.title;
+      instructions = [
+        "Click for solution 1...",
+        "Click for solution 2...",
+        "Click for solution 3..."
+      ];
+      button = "Next";
       isLoading = false;
     });
   }
@@ -44,11 +44,11 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
   @override
   void initState() {
     super.initState();
-    setData(storyController.pageData[4]);
+    setData(storyController.pageData[2]);
 
     if (title == '') {
       if (storyController.pageData[4] != null) {
-        setData(storyController.pageData[4]);
+        setData(storyController.pageData[2]);
       } else {
         debugPrint("Page data for index 1 is null");
       }
@@ -201,32 +201,29 @@ class ContentContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Colors.grey.shade200,
       ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Spacer(),
-            Text(
-              texts[0],
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start, // Left align all content
+        children: [
+          Text(
+            texts[0],
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
             ),
-            const Spacer(),
-            Text(
-              texts[1],
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
+            textAlign: TextAlign.left, // Left align heading
+          ),
+          SizedBox(height: 10), // Add consistent spacing
+          Text(
+            texts[1],
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
-            const Spacer(),
-          ],
-        ),
+            textAlign: TextAlign.left, // Left align body text
+          ),
+        ],
       ),
     );
   }

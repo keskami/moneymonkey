@@ -252,8 +252,7 @@ Map<String, Lesson> advancedLessons = {
     title: 'Market Basics',
     description: 'Understanding financial markets and their structure',
     lessonStatus: Status.Active,
-    components:
-        List.generate(6, (index) => 'A.1.1.${index + 1}'),
+    components: List.generate(6, (index) => 'A.1.1.${index + 1}'),
     progress: 0,
     performanceTrends: PerformanceTrends(
       label: 'Week 1',
@@ -403,6 +402,7 @@ Map<String, Component> advancedComponents = {
       Question(
         type: QuestionType.revealCard,
         data: RevealCard(
+          title: "Definition: Financial Responsibility Over a Lifetime",
           definition:
               "Financial responsibility involves managing your money and other assets in a way that is productive and in your best interest. This includes living within your means, budgeting, saving, investing wisely, and planning for both foreseeable and unforeseen expenses throughout your life.",
           tapInstruction:
@@ -618,6 +618,7 @@ Map<String, Component> advancedComponents = {
       Question(
         type: QuestionType.revealCard,
         data: RevealCard(
+          title: "Definition: Financial Responsibility Over a Lifetime",
           definition:
               "Financial responsibility involves managing your money and other assets in a way that is productive and in your best interest. This includes living within your means, budgeting, saving, investing wisely, and planning for both foreseeable and unforeseen expenses throughout your life.",
           tapInstruction:
@@ -803,16 +804,6 @@ Map<String, Component> advancedComponents = {
         ),
       ),
       Question(
-        type: QuestionType.newlanding,
-        data: newlanding(
-          title: "Financial Responsibility Story",
-          subtitle: "Taking control of your money to build a secure future",
-          meetMinty: "Meet Minty the Money Monkey",
-          mintyUrl:
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
-        ),
-      ),
-      Question(
         type: QuestionType.problem,
         data: ProblemPage(
           title: "Financial Responsibility Story",
@@ -880,17 +871,20 @@ Map<String, Component> advancedComponents = {
           mintyImage: "assets/images/minty.png",
           options: [
             ScenarioOption(
-              title: "Sneakers",
-              iconUrl: "assets/icons/sneakers.png",
-            ),
+                title: "Sneakers",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fsneakers%201.png?alt=media&token=625bdbab-4e8d-42cd-82b4-8f79a1bedf3f",
+                score: 0),
             ScenarioOption(
-              title: "College",
-              iconUrl: "assets/icons/college.png",
-            ),
+                title: "College",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fcollege%201.png?alt=media&token=cd5510da-9563-41a8-a2eb-bd13594312a3",
+                score: 0),
             ScenarioOption(
-              title: "Activities",
-              iconUrl: "assets/icons/activities.png",
-            ),
+                title: "Activities",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
+                score: 0),
           ],
         ),
       ),
@@ -898,54 +892,71 @@ Map<String, Component> advancedComponents = {
         type: QuestionType.scenarioquestion,
         data: [
           ScenarioQuestion(
-            questionText: "How much will you save?",
-            options: [
-              ScenarioOption(
-                  title: "Save \$250 (50%) – Maximum savings for future goals.",
-                  iconUrl: ""),
-              ScenarioOption(
-                  title: "Save \$100 (20%) – Moderate savings approach.",
-                  iconUrl: ""),
-              ScenarioOption(title: "Save \$0 (0%) – No savings.", iconUrl: ""),
-            ],
-            correctAnswer:
-                "Save \$250 (50%) – Maximum savings for future goals.",
-            feedback:
-                "Great choice! Saving a significant portion ensures you’re planning for the future.",
-          ),
+              questionText: "How much will you save?",
+              options: [
+                ScenarioOption(
+                    title: "Save \$250 (50%)",
+                    iconUrl: "Maximum savings for future goals",
+                    score: 20),
+                ScenarioOption(
+                    title: "Save \$100 (20%)",
+                    iconUrl: "Moderate savings approach",
+                    score: 30),
+                ScenarioOption(
+                    title: "Save \$0 (0%)", 
+                    iconUrl: "No savings", 
+                    score: 20)
+              ],
+              feedback: {
+                "Save \$250 (50%)":
+                    "Great choice! Saving a significant portion ensures you’re planning for the future.",
+                "Save \$100 (20%)": "Bad choice!",
+                "Save \$0 (0%)": "Bad Choice!",
+              }),
           ScenarioQuestion(
-            questionText: "What about those \$150 sneakers?",
-            options: [
-              ScenarioOption(
-                  title: "Buy Now (\$150) – Get them immediately.",
-                  iconUrl: ""),
-              ScenarioOption(
-                  title: "Wait for Next Paycheck – Practice patience.",
-                  iconUrl: ""),
-              ScenarioOption(
-                  title: "Buy Cheaper Option (\$75) – Find a balance.",
-                  iconUrl: ""),
-            ],
-            correctAnswer: "Wait for Next Paycheck – Practice patience.",
-            feedback:
-                "Great decision! Delaying gratification helps you stay within your budget.",
-          ),
+              questionText: "What about those \$150 sneakers?",
+              options: [
+                ScenarioOption(
+                    title: "Buy Now (\$150)",
+                    iconUrl: "Get them immediately",
+                    score: 15),
+                ScenarioOption(
+                    title: "Wait for Next Paycheck",
+                    iconUrl: "Practice patience",
+                    score: 10),
+                ScenarioOption(
+                    title: "Buy Cheaper Option (\$75)",
+                    iconUrl: "Find a balance",
+                    score: 20),
+              ],
+              feedback: {
+                "Buy Now (\$150)":
+                    "Great choice! Saving a significant portion ensures you’re planning for the future.",
+                "Wait for Next Paycheck": "Bad choice!",
+                "Buy Cheaper Option (\$75)": "Bad Choice!",
+              }),
           ScenarioQuestion(
-            questionText: "Planning for emergencies",
-            options: [
-              ScenarioOption(
-                  title: "Set aside \$150 – Strong emergency fund.",
-                  iconUrl: ""),
-              ScenarioOption(
-                  title: "Set aside \$50 – Small emergency fund.", iconUrl: ""),
-              ScenarioOption(
-                  title: "Keep Nothing for Emergencies – Spend it all.",
-                  iconUrl: ""),
-            ],
-            correctAnswer: "Set aside \$150 – Strong emergency fund.",
-            feedback:
-                "Excellent! Planning for emergencies helps you avoid debt in tough times.",
-          ),
+              questionText: "Planning for emergencies",
+              options: [
+                ScenarioOption(
+                    title: "Set aside \$150",
+                    iconUrl: "Strong emergency fund",
+                    score: 15),
+                ScenarioOption(
+                    title: "Set aside \$50",
+                    iconUrl: "Small emergency fund",
+                    score: 25),
+                ScenarioOption(
+                    title: "Keep Nothing for Emergencies",
+                    iconUrl: "Spend it all",
+                    score: 30),
+              ],
+              feedback: {
+                "Set aside \$150":
+                    "Great choice! Saving a significant portion ensures you’re planning for the future.",
+                "Set aside \$50": "Bad choice!",
+                "Keep Nothing for Emergencies": "Bad Choice!",
+              }),
         ],
       ),
       Question(
@@ -1151,8 +1162,8 @@ Map<String, Component> advancedComponents = {
         data: TextBasedQuestion(
           question: "What is a key reason to start saving early in life?",
           options: [
-            "To buy expensive luxury items immediately",
             "To build good financial habits over time",
+            "To buy expensive luxury items immediately",
             "To avoid making a budget",
             "To spend without worrying about the future",
           ],

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/home.dart';
 
 class DragNDropQuestionPage extends StatefulWidget {
@@ -35,22 +36,27 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
   String box2 = '';
   String box3 = '';
   String subTitle = '';
+  String correctFeedback = '';
+  String incorrectFeedback = '';
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      question = data["question"];
-      box1 = data["box1"];
-      box2 = data["box2"];
-      box3 = data["box3"];
+      question = data.data.title;
+      box1 = data.data.categories[0].title;
+      box2 = data.data.categories[1].title;
+      box3 = data.data.categories[2].title;
       availableItems =
-          List<String>.from(data["options"].map((item) => item.toString()));
+          List<String>.from(data.data.actions.map((item) => item.toString()));
       correct1 =
-          List<String>.from(data["correct1"].map((item) => item.toString()));
+          List<String>.from(data.data.categories[0].correctActions.map((item) => item.toString()));
       correct2 =
-          List<String>.from(data["correct2"].map((item) => item.toString()));
+          List<String>.from(data.data.categories[1].correctActions.map((item) => item.toString()));
       correct3 =
-          List<String>.from(data["correct3"].map((item) => item.toString()));
-      subTitle = data["subTitle"];
+          List<String>.from(data.data.categories[2].correctActions.map((item) => item.toString()));
+        
+      correctFeedback = data.data.feedbackMessages["correct"];
+      incorrectFeedback = data.data.feedbackMessages["incorrect"];
+      subTitle = "Actions to Categorize:";
 
       loading = false;
     });
@@ -65,7 +71,7 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    setData(peerReflectionController.pageData[3]);
+    setData(peerReflectionController.pageData[2]);
   }
 
   Future<void> noLeak(data) async {
@@ -88,14 +94,14 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
         droppedItems3.every((element) => correct3.contains(element))) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context)
-          .showSnackBar(CorrectAnswerSnackBar(message: ""));
+          .showSnackBar(CorrectAnswerSnackBar(message: correctFeedback));
       await Future.delayed(Duration(seconds: 2));
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       peerReflectionController.pageIndex.value += 1;
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context)
-          .showSnackBar(WrongAnswerSnackBar(message: ""));
+          .showSnackBar(WrongAnswerSnackBar(message: incorrectFeedback));
     }
   }
 

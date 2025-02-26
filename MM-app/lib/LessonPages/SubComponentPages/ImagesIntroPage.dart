@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 
 class ImagesIntroPage extends StatefulWidget {
   @override
@@ -30,17 +31,17 @@ class _ImagesIntroPageState extends State<ImagesIntroPage> {
   String jason2 = '';
   String button = '';
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      title = data['title'];
-      subTitle = data['subTitle'];
-      ava1 = data['ava'];
-      ava2 = data['ava2'];
-      maria1 = data['maria'];
-      maria2 = data['maria2'];
-      jason1 = data['jason'];
-      jason2 = data['jason2'];
-      button = data['button'];
+      title = data.data.title;
+      subTitle = data.data.subTitle;
+      ava1 = data.data.characters[0].name;
+      ava2 = data.data.characters[0].role;
+      maria1 = data.data.characters[1].name;
+      maria2 = data.data.characters[1].role;
+      jason1 = data.data.characters[2].name;
+      jason2 = data.data.characters[2].role;
+      button = "Continue to Peer Stories";
 
       loading = false;
     });
@@ -51,13 +52,13 @@ class _ImagesIntroPageState extends State<ImagesIntroPage> {
   void initState() {
     super.initState();
     if (peerReflectionController.pageData.isNotEmpty) {
-      setData(peerReflectionController.pageData[1]);
+      setData(peerReflectionController.pageData[0]);
     }
     if (title == '') {
       setState(() {
         isLoading = true;
       });
-      setData(peerReflectionController.pageData[1]);
+      setData(peerReflectionController.pageData[0]);
     }
   }
 

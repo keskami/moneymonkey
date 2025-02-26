@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 
 class TapToExpandPage extends StatefulWidget {
   const TapToExpandPage({super.key});
@@ -33,16 +34,16 @@ class _TapToExpandPageState extends State<TapToExpandPage> {
   String jason2 = '';
   String button = '';
 
-  Future<void> setData(data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      title = data['title'];
-      ava1 = data['ava'];
-      ava2 = data['ava2'];
-      maria1 = data['maria'];
-      maria2 = data['maria2'];
-      jason1 = data['jason'];
-      jason2 = data['jason2'];
-      button = data['button'];
+      title = data.data.title;
+      ava1 = data.data.characters[0].name + ": " + data.data.characters[0].role;
+      ava2 = data.data.characters[0].story;
+      maria1 = data.data.characters[1].name + ": " + data.data.characters[1].role;
+      maria2 = data.data.characters[1].story;
+      jason1 = data.data.characters[2].name + ": " + data.data.characters[2].role;
+      jason2 = data.data.characters[2].story;
+      button = "Continue to Activity";
 
       loading = false;
     });
@@ -53,10 +54,10 @@ class _TapToExpandPageState extends State<TapToExpandPage> {
   void initState() {
     super.initState();
     if (peerReflectionController.pageData.isNotEmpty) {
-      setData(peerReflectionController.pageData[2]);
+      setData(peerReflectionController.pageData[1]);
     }
     if (title == '') {
-      setData(peerReflectionController.pageData[2]);
+      setData(peerReflectionController.pageData[1]);
     }
   }
 

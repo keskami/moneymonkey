@@ -19,21 +19,16 @@ class StoryController extends BaseLessonController {
 
   StoryController({required this.componentId});
 
-  final LessonServices lessonServices = Get.find<LessonServices>();
-
   RxInt pageIndex = 0.obs;
   RxBool toSolution = false.obs;
   RxBool toImpact = false.obs;
   RxBool isLoading = true.obs;
 
+  String introText = "";
+  String imageURL = "";
+
   // UI pages
-  final pages = <Widget>[
-    MonkeyLandingPage(),
-    MonkeyIntroPage(),
-    ComponentProblemPage(),
-    ComponentSolutionsPage(),
-    ComponentImapctPage(),
-  ];
+  RxList pages = [].obs;
 
   RxList<Question> pageData = <Question>[].obs;
 
@@ -45,11 +40,20 @@ class StoryController extends BaseLessonController {
 
   Future<void> loadStoryData() async {
     try {
+      print("ComponentID" + componentId);
       final Component data =
           await localAcademicService.getComponent(componentId);
       for (int i = 0; i < data.questionData.length; i++) {
-        pageData[i] = data.questionData[i];
+        pageData.add(data.questionData[i]);
       }
+
+      // add pages
+      pages.add(MonkeyLandingPage(
+          introText: pageData[0].data.mintyText,
+          imageURL: pageData[0].data.imageUrl));
+      pages.add(ComponentProblemPage());
+      pages.add(ComponentSolutionsPage());
+      pages.add(ComponentImapctPage());
     } catch (e) {
       print("Error fetching story data: $e");
     } finally {

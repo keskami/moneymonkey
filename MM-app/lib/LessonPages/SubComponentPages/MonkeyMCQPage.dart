@@ -8,17 +8,17 @@ import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class MonkeyMCQPage extends StatefulWidget {
-   MonkeyMCQPage({
+  MonkeyMCQPage({
     super.key,
     required this.question,
-    required this.correctAns,
     required this.options,
-    required this.correctMessage,
+    required this.correctMessages,
+    required this.scores,
   });
   final String question;
-  final String correctAns;
   final List<List<String>> options;
-  final String correctMessage;
+  final Map<String, String> correctMessages;
+  final Map<String, int> scores;
 
   @override
   State<MonkeyMCQPage> createState() => _MonkeyMCQPageState();
@@ -29,12 +29,12 @@ class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
   String selectedAns = "";
   bool showMessage = false;
   bool hasAnsweredCorrectly = false;
-  double score = 0.0;
+  int score = 0;
   double questionValue = 0.0;
 
   bool wait4 = false;
 
-  Future<void> wait4sec() async{
+  Future<void> wait4sec() async {
     await Future.delayed(Duration(seconds: 6));
     setState(() {
       wait4 = true;
@@ -45,18 +45,12 @@ class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
   void initState() {
     super.initState();
     score = scenarioController.responsibilityScore.value;
-    questionValue = (1 / scenarioController.questions.length) * 100;
   }
 
   void answerQuestion(String ans) {
     setState(() {
-      if (ans == widget.correctAns) {
-        showMessage = true;
-        score = scenarioController.responsibilityScore.value + questionValue;
-      } else {
-        showMessage = false;
-        score = scenarioController.responsibilityScore.value;
-      }
+      showMessage = true;
+      score = score + (widget.scores[ans] ?? 0);
       selectedAns = ans;
       wait4sec();
     });
@@ -177,7 +171,7 @@ class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
                 });
                 scenarioController.pageIndex.value += 1;
               },
-              isEnabled:wait4,
+              isEnabled: wait4,
             ),
             SizedBox(width: screenWidth * 0.01),
           ],
@@ -199,7 +193,7 @@ class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
                 ),
                 child: Center(
                   child: Text(
-                    widget.correctMessage,
+                    widget.correctMessages[selectedAns] ?? "",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,

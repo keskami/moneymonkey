@@ -18,12 +18,13 @@ class MCQPage extends StatefulWidget {
   }
 }
 
+
 class _MCQPageState extends State<MCQPage> {
   ComponentOneTwoController componentOneTwoController = Get.find();
 
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  List<String> correctAnswers = [];
+  String correctAnswer = "";
   List<String> options = [];
   // String correctAnswer = '';
 
@@ -41,7 +42,7 @@ class _MCQPageState extends State<MCQPage> {
       question = data.data.question;
       options =
           List<String>.from(data.data.options.map((item) => item.toString()));
-      correctAnswers.add(data.data.correctAnswers);
+      correctAnswer = data.data.correctAnswers[0];
     });
   }
 
@@ -53,7 +54,7 @@ class _MCQPageState extends State<MCQPage> {
 
   void answerQuestion(String ans) {
     currentAnswers.clear();
-    if (correctAnswers.contains(ans)) {
+    if (correctAnswer == ans) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
           .showSnackBar(CorrectAnswerSnackBar(message: correct));

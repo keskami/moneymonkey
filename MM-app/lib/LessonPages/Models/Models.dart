@@ -105,16 +105,19 @@ class MultipleChoice {
 
 class RevealCard {
   const RevealCard({
+    required this.title,
     required this.definition,
     required this.tapInstruction,
     required this.revealInformation,
   });
+  final String title;
   final String definition;
   final String tapInstruction;
   final List<String> revealInformation;
 
   factory RevealCard.fromMap(Map<String, dynamic> map) {
     return RevealCard(
+      title: map['title'],
       definition: map['definition'],
       tapInstruction: map['tapInstruction'] as String,
       revealInformation: List<String>.from(map['revealInformation']),
@@ -491,23 +494,25 @@ class Impact {
 
 // Scenario Option (e.g., Sneakers, College, Activities)
 class ScenarioOption {
-  const ScenarioOption({required this.title, required this.iconUrl});
+  const ScenarioOption({required this.title, required this.iconUrl, required this.score});
 
   final String title;
   final String iconUrl;
+  final int score;
 
   factory ScenarioOption.fromMap(Map<String, dynamic> map) {
-    if (map['title'] == null || map['iconUrl'] == null) {
+    if (map['title'] == null || map['iconUrl'] == null || map['score'] == null) {
       throw Exception("Missing required fields in ScenarioOption");
     }
     return ScenarioOption(
       title: map['title'],
       iconUrl: map['iconUrl'],
+      score: map['score'],
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {'title': title, 'iconUrl': iconUrl};
+    return {'title': title, 'iconUrl': iconUrl, 'score': score};
   }
 }
 
@@ -548,14 +553,12 @@ class ScenarioQuestion {
   const ScenarioQuestion({
     required this.questionText,
     required this.options,
-    required this.correctAnswer,
     required this.feedback,
   });
 
   final String questionText;
   final List<ScenarioOption> options;
-  final String correctAnswer; // Answer that gives the best financial decision
-  final String feedback; // Response message after selecting an option
+  final Map<String,String> feedback; // Response message after selecting an option
 
   factory ScenarioQuestion.fromMap(Map<String, dynamic> map) {
     return ScenarioQuestion(
@@ -563,8 +566,7 @@ class ScenarioQuestion {
       options: (map['options'] as List<dynamic>)
           .map((option) => ScenarioOption.fromMap(option))
           .toList(),
-      correctAnswer: map['correctAnswer'] ?? "",
-      feedback: map['feedback'] ?? "",
+      feedback: Map<String, String>.from(map['feedback'] ?? {}),
     );
   }
 
@@ -572,7 +574,6 @@ class ScenarioQuestion {
     return {
       'questionText': questionText,
       'options': options.map((o) => o.toMap()).toList(),
-      'correctAnswer': correctAnswer,
       'feedback': feedback,
     };
   }

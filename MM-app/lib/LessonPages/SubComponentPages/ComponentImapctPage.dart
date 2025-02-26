@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 
@@ -26,18 +27,16 @@ class _ComponentImapctPageState extends State<ComponentImapctPage> {
   List<String> instructions = [];
   String button = '';
 
-  Future<void> setData(Map<String, dynamic> data) async {
+  Future<void> setData(Question data) async {
     setState(() {
-      afterText =
-          List<String>.from(data['after'].map((item) => item.toString()));
-      beforeText =
-          List<String>.from(data['before'].map((item) => item.toString()));
-      title = data['title'];
-      instructions = List<String>.from(
-          data['instructions'].map((item) => item.toString()));
-      ba = List<String>.from(
-          data['before/after'].map((item) => item.toString()));
-      button = data['button'];
+      afterText = List<String>.from(
+          data.data.afterContent.map((item) => item.toString()));
+      beforeText = List<String>.from(
+          data.data.beforeContent.map((item) => item.toString()));
+      title = data.data.title;
+      instructions = ["Click for the before...", "Click for the after..."];
+      ba = ["before", "after"];
+      button = "next";
       isLoading = false;
     });
   }
@@ -45,15 +44,7 @@ class _ComponentImapctPageState extends State<ComponentImapctPage> {
   @override
   void initState() {
     super.initState();
-    setData(storyController.pageData[5]);
-
-    if (title == '') {
-      if (storyController.pageData[5] != null) {
-        setData(storyController.pageData[5]);
-      } else {
-        debugPrint("Page data for index 1 is null");
-      }
-    }
+    setData(storyController.pageData[3]);
   }
 
   @override
@@ -203,46 +194,52 @@ class ContentContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Colors.grey.shade200,
       ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Spacer(),
-            Text(
-              isBefore ? "Before" : "After",
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: isBefore ? Colors.red : Colors.green,
-              ),
-              textAlign: TextAlign.start,
+      padding: EdgeInsets.all(12), // Add padding around the content
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            isBefore ? "Before" : "After",
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: isBefore ? Colors.red : Colors.green,
             ),
-            ...texts.map(
-              (text) {
-                return Row(
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(height: 8), // Add space between title and list items
+          ...texts.map(
+            (text) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: 6), // Space between items
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment
+                      .start, // Align to top for multi-line text
                   children: [
                     Image.network(
                       "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FStoryPages%2FDIamond.png?alt=media&token=98ad4d6e-dbda-4112-9e0c-d0429eef9d37",
                       height: 20,
+                      width: 20, // Fixed width for consistency
                     ),
-                    Text(
-                      text,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    SizedBox(width: 4), // Space between icon and text
+                    Expanded(
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        softWrap: true,
+                        overflow: TextOverflow.visible, // Allow text to wrap
                       ),
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
                     ),
                   ],
-                );
-              },
-            ),
-            const Spacer(),
-          ],
-        ).marginSymmetric(horizontal: screenWidth * 0.012),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
