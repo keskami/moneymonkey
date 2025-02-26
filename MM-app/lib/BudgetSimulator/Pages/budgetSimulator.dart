@@ -276,9 +276,29 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       if (!checkPaid("Utilities")) {
         addHint("Utilities");
       }
+    } else if (now.day == 16) {
+      for (Milestone milestone in widget.milestones) {
+        if (milestone.name == "Two Weeks Under Budget") {
+          if (milestone.currentAmount < 7) {
+            addHint("Two Weeks Under Budget");
+          }
+        } else if (milestone.name == "Debt Avalanche Start") {
+          if (milestone.currentAmount / milestone.goalAmount < 0.5 &&
+              now.month == 5) {
+            addHint("Debt Avalanche Start");
+          }
+        }
+      }
     } else if (now.day == 24) {
       if (!checkPaid("CC Debt")) {
         addHint("CC Min");
+      }
+      for (Milestone milestone in widget.milestones) {
+        if (milestone.name == "Two Weeks Under Budget") {
+          if (milestone.currentAmount < 2) {
+            addHint("Two Weeks Under Budget");
+          }
+        }
       }
     } else if ((now.month == 2 && now.day == 27) ||
         (now.month != 2 && now.day == 29)) {
@@ -345,13 +365,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       ));
     } else if (type == "Home Appliance Breakdown") {
       widget.hints.add(Hint(
-        //GOOD
         text:
             "A home appliance may break soon, costing \$100. You can either pay the full cost immediately\nto fix it or skip repairs and adjust your routine. Consider your current cash flow and priorities.",
         good: false,
       ));
     } else if (type == "Class Registration or Certification Fee") {
-      //GOOD
       widget.hints.add(Hint(
         text:
             "An education opportunity with a \$200 fee is approaching. You can enroll immediately to invest in\nyour future, or postpone enrollment to conserve funds. Reflect on your goals and situation.",
@@ -364,7 +382,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         good: false,
       ));
     } else if (type == "Unexpected Windfall") {
-      //Good
       widget.hints.add(Hint(
         text:
             "Good news—a \$150 windfall is coming! You could use it entirely to reduce your debt or spend it on \nentertainment. Consider your current debt load versus your need for a morale boost.",
@@ -372,21 +389,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       ));
     } else if (type == "Wedding Invitation") {
       widget.hints.add(Hint(
-        //GOOD
         text:
             "A wedding invitation is on the horizon, costing about \$150. You can attend fully by covering all expenses\nor decline the invitation altogether. Consider the social benefits versus the financial impact",
         good: false,
       ));
     } else if (type == "Medical Bill") {
       widget.hints.add(Hint(
-        //GOOD
         text:
             "A \$300 medical bill is approaching. You might settle it in full now with your cash or charge it to your\ncredit card to keep cash on hand. Think about how you wish to manage this expense.",
         good: false,
       ));
     } else if (type == "Family Emergency Request") {
       widget.hints.add(Hint(
-        //GOOD
         text:
             "A family member might request a \$200 loan soon. You can choose to lend the full amount to help, or politely\ndecline to protect your funds. Consider your capacity to assist versus your own financial stability.",
         good: false,
@@ -395,6 +409,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       widget.hints.add(Hint(
         text:
             "A \$100 bonus from a side gig is coming. You could use it entirely to lower your debt or spend it on\nleisure.Think about whether reducing your liabilities or boosting your morale is more critical right now.",
+        good: true,
+      ));
+    } else if (type == "Two Weeks Under Budget") {
+      widget.hints.add(Hint(
+        text:
+            "Reminder: Keep your entertainment spending under \$50 this week to meet your budget goals.\nSaving now can help reduce future debt.",
+        good: true,
+      ));
+    } else if (type == "Debt Avalanche Start") {
+      widget.hints.add(Hint(
+        text:
+            "Mid-month check: Are you on track to pay an extra \$300 toward your credit card?\nEarly extra payments reduce interest—review your allocations now!",
         good: true,
       ));
     }
@@ -730,7 +756,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<RandomEvent> allocatedEvents = [];
 
   List<List<int>> dayRanges = [
-    [5, 8],
+    [4, 8],
     [18, 21],
     [25, 28],
     [37, 40],
@@ -771,8 +797,32 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
     for (RandomEvent randomEvent in allocatedEvents) {
       if (isSameDay(normalizedToday, randomEvent.trigerDay)) {
-        print("here");
+        print(randomEvent.name);
+
+        if (context.mounted) {
+          await showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return WillPopScope(
+                onWillPop: () async => false,
+                child: Dialog(
+                  child: Container(
+                    height: 300,
+                    width: 300,
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(randomEvent.name)),
+                  ),
+                ),
+              );
+            },
+          );
+        }
       }
+
       if (isSameDay(normalizedTodayPlusTwo, randomEvent.trigerDay)) {
         addHint(randomEvent.name);
       }
@@ -1276,8 +1326,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                               widget.wellnessScore =
                                                                   wellnessScore;
 
-                                                              checkRandomEvents();
-
                                                               editMilestonesCCD(
                                                                   toCredCardDebt,
                                                                   widget.savingsAccountBalance
@@ -1310,13 +1358,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                               recalculatePercentages();
                                                               mapExpenses();
                                                               nextDay();
+
                                                               updateNextExpense();
                                                               WidgetsBinding
                                                                   .instance
                                                                   .addPostFrameCallback(
                                                                       (_) {
                                                                 getEvents();
-                                                                
+                                                                checkRandomEvents();
                                                               });
                                                             });
                                                           },
