@@ -356,3 +356,11 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
     );
   }
 }
+
+extension on Color {
+  withValues({required double alpha}) {}
+}
+
+extension on MaterialColor {
+  withValues({required double alpha}) {}
+}

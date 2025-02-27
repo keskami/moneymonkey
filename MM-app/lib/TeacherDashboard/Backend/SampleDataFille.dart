@@ -254,7 +254,6 @@ Map<String, Lesson> advancedLessons = {
     lessonStatus: Status.Active,
     components: List.generate(6, (index) => 'A.1.1.${index + 1}'),
     progress: 0,
-
     totalComponents: 8,
   ),
   'A.1.2': Lesson(
@@ -530,6 +529,11 @@ Map<String, Component> advancedComponents = {
         ),
       ),
     ],
+    performanceTrends: PerformanceTrends(
+      classAverage: 45,
+      participationRate: 78,
+      lessonCompletion: 54,
+    ),
   ),
 
   // 'A.1.1.2': Component(
@@ -746,6 +750,11 @@ Map<String, Component> advancedComponents = {
         ),
       ),
     ],
+    performanceTrends: PerformanceTrends(
+      classAverage: 86,
+      participationRate: 54,
+      lessonCompletion: 59,
+    ),
   ),
 
   'A.1.1.3': Component(
@@ -815,7 +824,12 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-    ], performanceTrends: ,
+    ],
+    performanceTrends: PerformanceTrends(
+      classAverage: 74,
+      participationRate: 81,
+      lessonCompletion: 73,
+    ),
   ),
 
   'A.1.1.4': Component(
@@ -859,31 +873,28 @@ Map<String, Component> advancedComponents = {
       Question(
         type: QuestionType.scenarioquestion,
         data: [
-          ScenarioQuestion(
-              questionText: "How much will you save?",
-              options: [
-                ScenarioOption(
-                    title: "Save \$250 (50%)",
-                    iconUrl: "Maximum savings for future goals",
-                    score: 20,
-                    type: ""),
-                ScenarioOption(
-                    title: "Save \$100 (20%)",
-                    iconUrl: "Moderate savings approach",
-                    score: 30,
-                    type: ""),
-                ScenarioOption(
-                    title: "Save \$0 (0%)", 
-                    iconUrl: "No savings", 
-                    score: 20,
-                    type: "")
-              ],
-              feedback: {
-                "Save \$250 (50%)":
-                    "Great choice! Saving a significant portion ensures you’re planning for the future.",
-                "Save \$100 (20%)": "Bad choice!",
-                "Save \$0 (0%)": "Bad Choice!",
-              }),
+          ScenarioQuestion(questionText: "How much will you save?", options: [
+            ScenarioOption(
+                title: "Save \$250 (50%)",
+                iconUrl: "Maximum savings for future goals",
+                score: 20,
+                type: ""),
+            ScenarioOption(
+                title: "Save \$100 (20%)",
+                iconUrl: "Moderate savings approach",
+                score: 30,
+                type: ""),
+            ScenarioOption(
+                title: "Save \$0 (0%)",
+                iconUrl: "No savings",
+                score: 20,
+                type: "")
+          ], feedback: {
+            "Save \$250 (50%)":
+                "Great choice! Saving a significant portion ensures you’re planning for the future.",
+            "Save \$100 (20%)": "Bad choice!",
+            "Save \$0 (0%)": "Bad Choice!",
+          }),
           ScenarioQuestion(
               questionText: "What about those \$150 sneakers?",
               options: [
@@ -909,31 +920,28 @@ Map<String, Component> advancedComponents = {
                 "Wait for Next Paycheck": "Bad choice!",
                 "Buy Cheaper Option (\$75)": "Bad Choice!",
               }),
-          ScenarioQuestion(
-              questionText: "Planning for emergencies",
-              options: [
-                ScenarioOption(
-                    title: "Set aside \$150",
-                    iconUrl: "Strong emergency fund",
-                    score: 15,
-                    type: ""),
-                ScenarioOption(
-                    title: "Set aside \$50",
-                    iconUrl: "Small emergency fund",
-                    score: 25,
-                    type: ""),
-                ScenarioOption(
-                    title: "Keep Nothing for Emergencies",
-                    iconUrl: "Spend it all",
-                    score: 30,
-                    type: ""),
-              ],
-              feedback: {
-                "Set aside \$150":
-                    "Great choice! Saving a significant portion ensures you’re planning for the future.",
-                "Set aside \$50": "Bad choice!",
-                "Keep Nothing for Emergencies": "Bad Choice!",
-              }),
+          ScenarioQuestion(questionText: "Planning for emergencies", options: [
+            ScenarioOption(
+                title: "Set aside \$150",
+                iconUrl: "Strong emergency fund",
+                score: 15,
+                type: ""),
+            ScenarioOption(
+                title: "Set aside \$50",
+                iconUrl: "Small emergency fund",
+                score: 25,
+                type: ""),
+            ScenarioOption(
+                title: "Keep Nothing for Emergencies",
+                iconUrl: "Spend it all",
+                score: 30,
+                type: ""),
+          ], feedback: {
+            "Set aside \$150":
+                "Great choice! Saving a significant portion ensures you’re planning for the future.",
+            "Set aside \$50": "Bad choice!",
+            "Keep Nothing for Emergencies": "Bad Choice!",
+          }),
         ],
       ),
       Question(
@@ -964,6 +972,11 @@ Map<String, Component> advancedComponents = {
         }),
       ),
     ],
+    performanceTrends: PerformanceTrends(
+      classAverage: 57,
+      participationRate: 50,
+      lessonCompletion: 65,
+    ),
   ),
 
   'A.1.1.5': Component(
@@ -1121,6 +1134,11 @@ Map<String, Component> advancedComponents = {
         ),
       ),
     ],
+    performanceTrends: PerformanceTrends(
+      classAverage: 62,
+      participationRate: 63,
+      lessonCompletion: 45,
+    ),
   ),
 
   'A.1.1.6': Component(
@@ -1755,4 +1773,3 @@ Map<String, Component> advancedComponents = {
     ),
   ),
 };
-
