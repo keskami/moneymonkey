@@ -1,105 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class DashboardOverview extends StatefulWidget {
   const DashboardOverview({
     super.key,
-    required this.supportStudents,
-    required this.topPerformers,
-    required this.components,
-    required this.currentLessonId,
   });
-  final List<Student> topPerformers;
-  final List<Student> supportStudents;
-  final List<String> components;
-  final String currentLessonId;
   @override
   State<DashboardOverview> createState() => _DashboardOverviewState();
 }
 
 class _DashboardOverviewState extends State<DashboardOverview> {
-  final LocalAcademicService localAcademicService = LocalAcademicService();
   final TeacherDashboardController teacherDashboardController = Get.find();
-  Map<String, String> componentMap = {}; // ID to Name mapping
-  String selectedComponentId = '';
-  List<String> componentNames = []; // List of component names for dropdown
-  Map<String, List<String>> discussionQuestions =
-      {}; // Store discussion questions
+  LocalAcademicService localAcademicService = LocalAcademicService();
 
   @override
   void initState() {
     super.initState();
-    initializeData();
-    // Listen to class changes
-    ever(teacherDashboardController.classId, (_) {
-      initializeData();
-    });
-  }
-
-  void initializeData() {
-    if (widget.components.isNotEmpty) {
-      // Clear previous data
-      componentMap.clear();
-      componentNames.clear();
-      componentIds.clear();
-
-      setState(() {
-        for (String componentId in widget.components) {
-          try {
-            String componentName =
-                localAcademicService.getComponentName(componentId);
-            componentMap[componentId] = componentName;
-            componentNames.add(componentName);
-          } catch (e) {
-            print('Error getting component name for $componentId: $e');
-          }
-        }
-        // Set initial selected component
-        if (componentMap.isNotEmpty) {
-          selectedComponentId = widget.components.first;
-        }
-        // Fetch new discussion questions for current lesson
-        discussionQuestions = localAcademicService
-            .getComponentDiscussionQuestionsForLesson(widget.currentLessonId);
-        componentIds = widget.components;
-      });
-    }
-  }
-
-  @override
-  void didUpdateWidget(DashboardOverview oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Check if components or lessonId changed
-    if (oldWidget.components != widget.components ||
-        oldWidget.currentLessonId != widget.currentLessonId) {
-      initializeData();
-      print("####################### Components: $componentIds");
-    }
   }
 
   void onDiscussionComponentChanged(String? componentName) {
     if (componentName != null) {
       // Find the component ID for the selected name
-      String? selectedId = componentMap.entries
-          .firstWhere(
-            (entry) => entry.value == componentName,
-            orElse: () => MapEntry('', ''),
-          )
-          .key;
+      String? selectedComponent =
+          teacherDashboardController.childComponents.value
+              .firstWhere(
+                (entry) => entry.title == componentName,
+              )
+              .title;
 
-      if (selectedId.isNotEmpty) {
+      if (selectedComponent.isNotEmpty) {
         setState(() {
-          selectedComponentId = selectedId;
+          teacherDashboardController.selectedComponent =
+              teacherDashboardController.childComponents.value
+                  .firstWhere((comp) => comp.title == componentName);
         });
       }
     }
@@ -131,48 +74,18 @@ class _DashboardOverviewState extends State<DashboardOverview> {
     }
   }
 
-  final String teacherName = "Mrs. Anderson";
-  final String progressStatus = "In-progress";
-  final String message1 = "Financial Responsibility Over a Lifetime ";
-  final String message2 =
-      "Making informed decisions about earning, saving, spending, and investing ";
-  final List<String> classes = [
-    'All Classes',
-    'Batch 1',
-    'Batch 2',
-    'Batch 3',
-    'Batch 4',
-  ];
-  final List<String> quickActionsSuggestions = [
-    "Launch “Jordan’s Journey Scenario”",
-    "Start “Emergency Fun Challenge”",
-    "Begin “Spending Decisions Quiz”",
-  ];
-  List<String> componentIds = [];
-  final List<List<String>> componentsList = [
-    ["Recap", "100"],
-    ["Concept 1", "100"],
-    ["Interactive Activity 1", "100"],
-    ["Concept 2", "80"],
-    ["Interactive Activity 2", "0"],
-    ["Story", "0"],
-    ["Scenario Simulation", "0"],
-    ["Peer Reflection", "0"],
-    ["Toolkit", "0"],
-    ["Quiz", "0"],
-  ];
-
   final List<Color> randomColorList = [
     Color.fromARGB(255, 122, 180, 255),
     Color.fromARGB(255, 189, 122, 255),
     Color.fromARGB(255, 123, 255, 169),
   ];
-  String discussionComponent = "Concept 2";
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    if (teacherDashboardController.selectedClassId.isEmpty)
+      return TeacherDashoardPlaceHolderPage();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -208,7 +121,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         ),
                       ),
                       child: Text(
-                        progressStatus,
+                        teacherDashboardController.presentLesson.lessonStatus.name,
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.blue.shade300,
@@ -224,7 +137,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        message1,
+                        teacherDashboardController.overviewMessage1,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -235,7 +148,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         height: 5,
                       ),
                       Text(
-                        message2,
+                        teacherDashboardController.overviewMessage1,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -245,50 +158,50 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   ),
                 ),
                 //Lessons and respective status
-                ...componentMap.entries.map(
-                  (component) {
-                    print("***************Component Id: $component");
-                    Status currentComponentStatus =
-                        localAcademicService.getComponentStatus(component.key);
-                    return Row(
+                Obx(() => Column(
                       children: [
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.transparent,
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            child: getProgressIndicator(currentComponentStatus),
-                          ),
-                        ),
-                        Text(
-                          component.value,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ).marginOnly(
-                          left: 10,
-                        ),
-                        const Spacer(),
-                        Text(
-                          localAcademicService
-                              .getComponentStatus(component.key)
-                              .name,
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ).marginOnly(
-                          right: 20,
+                        ...teacherDashboardController.childComponents.value.map(
+                          (component) {
+                            return Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: Colors.transparent,
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    child: getProgressIndicator(
+                                        component.componentStatus),
+                                  ),
+                                ),
+                                Text(
+                                  component.title,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ).marginOnly(
+                                  left: 10,
+                                ),
+                                const Spacer(),
+                                Text(
+                                  component.componentStatus.name,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                  ),
+                                ).marginOnly(
+                                  right: 20,
+                                ),
+                              ],
+                            ).marginSymmetric(
+                              vertical: 6,
+                            );
+                          },
                         ),
                       ],
-                    ).marginSymmetric(
-                      vertical: 6,
-                    );
-                  },
-                ),
+                    )),
               ],
             ),
           ),
@@ -310,7 +223,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   "Quick Actions",
                   style: TextStyles.containerTitle,
                 ),
-                ...quickActionsSuggestions.map(
+                ...teacherDashboardController.quickActionsSuggestions.map(
                   (suggestion) => Container(
                     margin: EdgeInsets.symmetric(
                       vertical: screenHeight * 0.01,
@@ -322,16 +235,18 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: randomColorList[
-                              quickActionsSuggestions.indexOf(suggestion)]
+                      color: randomColorList[teacherDashboardController
+                              .quickActionsSuggestions
+                              .indexOf(suggestion)]
                           .withValues(alpha: 0.1),
                     ),
                     child: Text(
                       suggestion,
                       style: TextStyle(
                         fontSize: 16,
-                        color: randomColorList[
-                            quickActionsSuggestions.indexOf(suggestion)],
+                        color: randomColorList[teacherDashboardController
+                            .quickActionsSuggestions
+                            .indexOf(suggestion)],
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -359,15 +274,21 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   style: TextStyles.containerTitle,
                 ),
                 CustomDropDownContainer(
-                  initialSelection: componentMap[selectedComponentId] ?? '',
+                  initialSelection:
+                      teacherDashboardController.selectedComponent.title,
                   width: screenWidth * 0.3,
-                  items: componentNames,
+                  items: teacherDashboardController.componentNames.value,
                   onChanged: onDiscussionComponentChanged,
                 ).marginSymmetric(
                   vertical: screenHeight * 0.01,
                 ),
-                if (discussionQuestions.containsKey(selectedComponentId))
-                  ...discussionQuestions[selectedComponentId]!
+                if (teacherDashboardController
+                            .selectedComponent.discussionQuestions !=
+                        null &&
+                    teacherDashboardController
+                        .selectedComponent.discussionQuestions!.isNotEmpty)
+                  ...teacherDashboardController
+                      .selectedComponent.discussionQuestions!
                       .map((question) => Container(
                             margin: EdgeInsets.symmetric(
                               vertical: screenHeight * 0.01,
@@ -393,7 +314,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
               ],
             ),
           ),
-//Performance Highlights Container
+          //Performance Highlights Container
           ShadowedContainer(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
@@ -432,27 +353,33 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...widget.topPerformers.map(
-                            (student) => Row(
-                              children: [
-                                Text(
-                                  student.profile.fullName,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                          // Using Obx to observe topPerformers List changes
+                          Column(
+                            children: [
+                              ...teacherDashboardController.topPerformers.value
+                                  .map(
+                                (student) => Row(
+                                  children: [
+                                    Text(
+                                      student.profile.fullName,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "${StudentService(student: student).getLessonProgress()}%",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.green,
+                                      ),
+                                    )
+                                  ],
+                                ).marginSymmetric(
+                                  vertical: 5,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  "${StudentService(student: student).getLessonProgress()}%",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.green,
-                                  ),
-                                )
-                              ],
-                            ).marginSymmetric(
-                              vertical: 5,
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -478,27 +405,34 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...widget.supportStudents.map(
-                            (student) => Row(
-                              children: [
-                                Text(
-                                  student.profile.fullName,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                          // Using Obx to observe supportStudents List changes
+                          Column(
+                            children: [
+                              ...teacherDashboardController
+                                  .supportStudents.value
+                                  .map(
+                                (student) => Row(
+                                  children: [
+                                    Text(
+                                      student.profile.fullName,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "${StudentService(student: student).getLessonProgress()}%",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  ],
+                                ).marginSymmetric(
+                                  vertical: 5,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  "${StudentService(student: student).getLessonProgress()}%",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.red,
-                                  ),
-                                )
-                              ],
-                            ).marginSymmetric(
-                              vertical: 5,
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -558,12 +492,4 @@ class _DashboardOverviewState extends State<DashboardOverview> {
       ),
     );
   }
-}
-
-extension on Color {
-  withValues({required double alpha}) {}
-}
-
-extension on MaterialColor {
-  withValues({required double alpha}) {}
 }

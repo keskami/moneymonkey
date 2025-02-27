@@ -31,8 +31,9 @@ class DashboardSubPageSelector extends StatelessWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      _teacherDashboardController.pageIndex.value =
-                          subPages.indexOf(subPage);
+                          _teacherDashboardController.pageIndex.value=subPages.indexOf(subPage);
+                      _teacherDashboardController.currentPage.value =
+                          _teacherDashboardController.pages[_teacherDashboardController.pageIndex.value];
                     },
                     child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),

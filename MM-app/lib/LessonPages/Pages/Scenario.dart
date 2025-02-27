@@ -14,6 +14,7 @@ class Scenario extends StatefulWidget {
 class _ScenarioState extends State<Scenario> {
   final ScenarioController scenarioController = Get.find<ScenarioController>();
 
+  // ignore: unused_element
   Future<void> _preCacheImages() async {
     await precacheImage(
       NetworkImage(

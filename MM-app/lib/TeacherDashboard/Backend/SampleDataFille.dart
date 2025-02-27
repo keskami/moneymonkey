@@ -254,12 +254,7 @@ Map<String, Lesson> advancedLessons = {
     lessonStatus: Status.Active,
     components: List.generate(6, (index) => 'A.1.1.${index + 1}'),
     progress: 0,
-    performanceTrends: PerformanceTrends(
-      label: 'Week 1',
-      classAverage: 81.0,
-      participationRate: 0.85,
-      lessonCompletion: 0.7,
-    ),
+
     totalComponents: 8,
   ),
   'A.1.2': Lesson(
@@ -270,12 +265,7 @@ Map<String, Lesson> advancedLessons = {
     components:
         List.generate(6, (index) => 'A.1.1.${index + 1}'), // 6 components
     progress: 0,
-    performanceTrends: PerformanceTrends(
-      label: 'Week 2',
-      classAverage: 82.0,
-      participationRate: 0.87,
-      lessonCompletion: 0.72,
-    ),
+
     totalComponents: 8,
   ),
   'A.1.3': Lesson(
@@ -286,12 +276,7 @@ Map<String, Lesson> advancedLessons = {
     components:
         List.generate(6, (index) => 'A.1.3.${index + 1}'), // 6 components
     progress: 0,
-    performanceTrends: PerformanceTrends(
-      label: 'Week 3',
-      classAverage: 83.0,
-      participationRate: 0.83,
-      lessonCompletion: 0.75,
-    ),
+
     totalComponents: 6,
   ),
   'A.1.4': Lesson(
@@ -302,12 +287,7 @@ Map<String, Lesson> advancedLessons = {
     components:
         List.generate(7, (index) => 'A.1.4.${index + 1}'), // 7 components
     progress: 0,
-    performanceTrends: PerformanceTrends(
-      label: 'Week 4',
-      classAverage: 84.0,
-      participationRate: 0.81,
-      lessonCompletion: 0.68,
-    ),
+
     totalComponents: 7,
   ),
   'A.1.5': Lesson(
@@ -318,12 +298,7 @@ Map<String, Lesson> advancedLessons = {
     components:
         List.generate(6, (index) => 'A.1.5.${index + 1}'), // 6 components
     progress: 0,
-    performanceTrends: PerformanceTrends(
-      label: 'Week 5',
-      classAverage: 85.0,
-      participationRate: 0.79,
-      lessonCompletion: 0.67,
-    ),
+
     totalComponents: 6,
   ),
   'A.2.1': Lesson(
@@ -334,12 +309,7 @@ Map<String, Lesson> advancedLessons = {
     components:
         List.generate(8, (index) => 'A.2.1.${index + 1}'), // 8 components
     progress: 0,
-    performanceTrends: PerformanceTrends(
-      label: 'Advanced Week 1',
-      classAverage: 86.0,
-      participationRate: 0.88,
-      lessonCompletion: 0.76,
-    ),
+
     totalComponents: 8,
   ),
   'A.2.2': Lesson(
@@ -350,12 +320,7 @@ Map<String, Lesson> advancedLessons = {
     components:
         List.generate(5, (index) => 'A.2.2.${index + 1}'), // 5 components
     progress: 0,
-    performanceTrends: PerformanceTrends(
-      label: 'Advanced Week 2',
-      classAverage: 87.0,
-      participationRate: 0.86,
-      lessonCompletion: 0.74,
-    ),
+
     totalComponents: 5,
   ),
 };
@@ -850,7 +815,7 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-    ],
+    ], performanceTrends: ,
   ),
 
   'A.1.1.4': Component(
@@ -1312,9 +1277,13 @@ Map<String, Component> advancedComponents = {
         ),
       ),
     ],
+    performanceTrends: PerformanceTrends(
+      classAverage: 45,
+      participationRate: 78,
+      lessonCompletion: 54,
+    ),
   ),
 
-  // Components for Lesson A.1.2
   'A.1.2.1': Component(
     componentId: 'A.1.2.1',
     title: 'Core Trading Concepts',
@@ -1326,6 +1295,11 @@ Map<String, Component> advancedComponents = {
       "Why is consistency more important than occasional big wins?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 85,
+      participationRate: 42,
+      lessonCompletion: 42,
+    ),
   ),
 
   'A.1.2.2': Component(
@@ -1338,6 +1312,11 @@ Map<String, Component> advancedComponents = {
       "What metrics should traders track?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 76,
+      participationRate: 40,
+      lessonCompletion: 71,
+    ),
   ),
 
   'A.1.2.3': Component(
@@ -1351,6 +1330,11 @@ Map<String, Component> advancedComponents = {
       "When should position sizes be adjusted?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 50,
+      participationRate: 83,
+      lessonCompletion: 64,
+    ),
   ),
 
   'A.1.2.4': Component(
@@ -1363,6 +1347,11 @@ Map<String, Component> advancedComponents = {
       "How do trading legends handle losing streaks?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 63,
+      participationRate: 65,
+      lessonCompletion: 47,
+    ),
   ),
 
   'A.1.2.5': Component(
@@ -1375,6 +1364,11 @@ Map<String, Component> advancedComponents = {
       "What indicators signal market direction changes?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 88,
+      participationRate: 69,
+      lessonCompletion: 53,
+    ),
   ),
 
   'A.1.2.6': Component(
@@ -1388,6 +1382,11 @@ Map<String, Component> advancedComponents = {
       "What patterns emerge from your trading history?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 50,
+      participationRate: 82,
+      lessonCompletion: 43,
+    ),
   ),
 
   'A.1.2.7': Component(
@@ -1399,6 +1398,11 @@ Map<String, Component> advancedComponents = {
       "What elements make a trading plan effective?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 67,
+      participationRate: 68,
+      lessonCompletion: 88,
+    ),
   ),
 
   'A.1.2.8': Component(
@@ -1412,9 +1416,13 @@ Map<String, Component> advancedComponents = {
       "How well can you evaluate risk/reward ratios?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 80,
+      participationRate: 40,
+      lessonCompletion: 78,
+    ),
   ),
 
-  // Components for Lesson A.1.3
   'A.1.3.1': Component(
     componentId: 'A.1.3.1',
     title: 'Risk Management Fundamentals',
@@ -1426,6 +1434,11 @@ Map<String, Component> advancedComponents = {
       "What role does volatility play in risk assessment?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 51,
+      participationRate: 61,
+      lessonCompletion: 63,
+    ),
   ),
 
   'A.1.3.2': Component(
@@ -1438,6 +1451,11 @@ Map<String, Component> advancedComponents = {
       "When should trailing stops be used?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 58,
+      participationRate: 89,
+      lessonCompletion: 78,
+    ),
   ),
 
   'A.1.3.3': Component(
@@ -1451,6 +1469,11 @@ Map<String, Component> advancedComponents = {
       "When should risk parameters be adjusted?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 94,
+      participationRate: 68,
+      lessonCompletion: 73,
+    ),
   ),
 
   'A.1.3.4': Component(
@@ -1463,6 +1486,11 @@ Map<String, Component> advancedComponents = {
       "What habits separate resilient traders from others?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 59,
+      participationRate: 88,
+      lessonCompletion: 31,
+    ),
   ),
 
   'A.1.3.5': Component(
@@ -1475,6 +1503,11 @@ Map<String, Component> advancedComponents = {
       "What contingency plans should traders develop?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 35,
+      participationRate: 48,
+      lessonCompletion: 79,
+    ),
   ),
 
   'A.1.3.6': Component(
@@ -1488,9 +1521,13 @@ Map<String, Component> advancedComponents = {
       "How well can you design a comprehensive risk management plan?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 58,
+      participationRate: 61,
+      lessonCompletion: 58,
+    ),
   ),
 
-  // Components for A.2.1
   'A.2.1.1': Component(
     componentId: 'A.2.1.1',
     title: 'Complex Chart Pattern Recognition',
@@ -1502,6 +1539,11 @@ Map<String, Component> advancedComponents = {
       "When do pattern failures provide trading opportunities?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 52,
+      participationRate: 63,
+      lessonCompletion: 51,
+    ),
   ),
 
   'A.2.1.2': Component(
@@ -1514,6 +1556,11 @@ Map<String, Component> advancedComponents = {
       "What filters reduce false pattern signals?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 55,
+      participationRate: 66,
+      lessonCompletion: 34,
+    ),
   ),
 
   'A.2.1.3': Component(
@@ -1527,6 +1574,11 @@ Map<String, Component> advancedComponents = {
       "How does fractal theory apply to market patterns?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 66,
+      participationRate: 51,
+      lessonCompletion: 63,
+    ),
   ),
 
   'A.2.1.4': Component(
@@ -1539,6 +1591,11 @@ Map<String, Component> advancedComponents = {
       "How has pattern trading evolved with technology?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 64,
+      participationRate: 64,
+      lessonCompletion: 32,
+    ),
   ),
 
   'A.2.1.5': Component(
@@ -1551,6 +1608,11 @@ Map<String, Component> advancedComponents = {
       "What confirmation indicators strengthen pattern signals?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 42,
+      participationRate: 65,
+      lessonCompletion: 83,
+    ),
   ),
 
   'A.2.1.6': Component(
@@ -1564,6 +1626,11 @@ Map<String, Component> advancedComponents = {
       "What statistical methods help validate pattern effectiveness?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 73,
+      participationRate: 63,
+      lessonCompletion: 89,
+    ),
   ),
 
   'A.2.1.7': Component(
@@ -1575,6 +1642,11 @@ Map<String, Component> advancedComponents = {
       "What tools enhance pattern identification accuracy?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 90,
+      participationRate: 95,
+      lessonCompletion: 58,
+    ),
   ),
 
   'A.2.1.8': Component(
@@ -1588,9 +1660,13 @@ Map<String, Component> advancedComponents = {
       "How well can you integrate patterns with other analysis methods?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 94,
+      participationRate: 65,
+      lessonCompletion: 53,
+    ),
   ),
 
-  // Components for A.2.2 - Trading Psychology
   'A.2.2.1': Component(
     componentId: 'A.2.2.1',
     title: 'The Trader\'s Mind',
@@ -1602,6 +1678,11 @@ Map<String, Component> advancedComponents = {
       "How does stress impact trading performance?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 51,
+      participationRate: 59,
+      lessonCompletion: 52,
+    ),
   ),
 
   'A.2.2.2': Component(
@@ -1614,6 +1695,11 @@ Map<String, Component> advancedComponents = {
       "What techniques help manage trading emotions?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 88,
+      participationRate: 54,
+      lessonCompletion: 50,
+    ),
   ),
 
   'A.2.2.3': Component(
@@ -1627,6 +1713,11 @@ Map<String, Component> advancedComponents = {
       "How does mindfulness improve trading results?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 51,
+      participationRate: 86,
+      lessonCompletion: 78,
+    ),
   ),
 
   'A.2.2.4': Component(
@@ -1639,6 +1730,11 @@ Map<String, Component> advancedComponents = {
       "What mental techniques preserve capital during slumps?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 72,
+      participationRate: 59,
+      lessonCompletion: 82,
+    ),
   ),
 
   'A.2.2.5': Component(
@@ -1652,5 +1748,11 @@ Map<String, Component> advancedComponents = {
       "How well can you implement mental performance techniques?",
     ],
     questionData: [],
+    performanceTrends: PerformanceTrends(
+      classAverage: 85,
+      participationRate: 78,
+      lessonCompletion: 85,
+    ),
   ),
 };
+

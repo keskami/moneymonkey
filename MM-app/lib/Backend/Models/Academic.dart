@@ -1,5 +1,4 @@
 // Enums and Extensions
-import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
 import 'package:money_monkey/LessonPages/Models/Models.dart';
 
 enum Status {
@@ -140,6 +139,7 @@ class Unit {
     }
   }
 }
+
 class Lesson {
   final String lessonId;
   final String title;
@@ -148,7 +148,6 @@ class Lesson {
   final List<String> components; // Changed to List<String>
   final double progress;
   final int totalComponents;
-  final PerformanceTrends performanceTrends;
   final DateTime? startedAt;
   final DateTime? completedAt;
 
@@ -160,7 +159,6 @@ class Lesson {
     required this.components,
     required this.progress,
     required this.totalComponents,
-    required this.performanceTrends,
     this.startedAt,
     this.completedAt,
   });
@@ -173,14 +171,7 @@ class Lesson {
       lessonStatus: statusFromFirestore(data['LessonStatus'] ?? 'inactive'),
       progress: (data['Progress'] is num ? data['Progress'] : 0).toDouble(),
       components: List<String>.from(data['Components'] ?? []), // Updated line
-      performanceTrends: data['PerformanceTrends'] != null
-          ? PerformanceTrends.fromFirestore(data['PerformanceTrends'])
-          : PerformanceTrends(
-              label: '',
-              classAverage: 0,
-              participationRate: 0,
-              lessonCompletion: 0,
-            ),
+
       totalComponents: int.parse(data['totalComponents'].toString()),
       startedAt: data['StartedAt']?.toDate(),
       completedAt: data['CompletedAt']?.toDate(),
@@ -194,7 +185,6 @@ class Lesson {
       'LessonStatus': statusToFirestore(lessonStatus),
       'Progress': progress,
       'Components': components, // Updated line
-      'PerformanceTrends': performanceTrends.toFirestore(),
       'totalComponents': totalComponents,
       'StartedAt': startedAt,
       'CompletedAt': completedAt,
@@ -203,14 +193,12 @@ class Lesson {
 }
 
 class PerformanceTrends {
-  String label;
   double classAverage;
   double participationRate;
   double lessonCompletion;
   DateTime? lastUpdated;
 
   PerformanceTrends({
-    required this.label,
     required this.classAverage,
     required this.participationRate,
     required this.lessonCompletion,
@@ -219,7 +207,6 @@ class PerformanceTrends {
 
   factory PerformanceTrends.fromFirestore(Map<String, dynamic> data) {
     return PerformanceTrends(
-      label: data['Label'] ?? '',
       classAverage:
           (data['ClassAverage'] is num ? data['ClassAverage'] : 0).toDouble(),
       participationRate:
@@ -234,7 +221,6 @@ class PerformanceTrends {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'Label': label,
       'ClassAverage': classAverage,
       'ParticipationRate': participationRate,
       'LessonCompletion': lessonCompletion,
@@ -242,6 +228,7 @@ class PerformanceTrends {
     };
   }
 }
+
 class Component {
   String componentId;
   String title;
@@ -250,6 +237,7 @@ class Component {
   double progress;
   List<String>? discussionQuestions;
   List<Question> questionData;
+  final PerformanceTrends performanceTrends;
 
   Component({
     required this.componentId,
@@ -259,6 +247,7 @@ class Component {
     this.progress = 0.0,
     this.discussionQuestions,
     required this.questionData,
+    required this.performanceTrends,
   });
 
   factory Component.fromFirestore(Map<String, dynamic> data, String id) {
@@ -266,16 +255,24 @@ class Component {
       componentId: id,
       title: data['Title'] ?? '',
       type: ComponentTypeExtension.fromString(data['Type'] ?? ''),
-      componentStatus: statusFromFirestore(data['ComponentStatus'] ?? 'inactive'),
+      componentStatus:
+          statusFromFirestore(data['ComponentStatus'] ?? 'inactive'),
       progress: (data['Progress'] is num ? data['Progress'] : 0).toDouble(),
       discussionQuestions: data['DiscussionQuestions'] != null
           ? List<String>.from(data['DiscussionQuestions'])
           : null,
       questionData: data['QuestionData'] != null
           ? (data['QuestionData'] as List)
-            .map((q) => Question.fromMap(q as Map<String, dynamic>))
+              .map((q) => Question.fromMap(q as Map<String, dynamic>))
               .toList()
           : [],
+      performanceTrends: data['PerformanceTrends'] != null
+          ? PerformanceTrends.fromFirestore(data['PerformanceTrends'])
+          : PerformanceTrends(
+              classAverage: 0,
+              participationRate: 0,
+              lessonCompletion: 0,
+            ),
     );
   }
 
@@ -285,9 +282,10 @@ class Component {
       'Type': type.name,
       'ComponentStatus': statusToFirestore(componentStatus),
       'Progress': progress,
-      if (discussionQuestions != null) 'DiscussionQuestions': discussionQuestions,
+      'PerformanceTrends': performanceTrends.toFirestore(),
+      if (discussionQuestions != null)
+        'DiscussionQuestions': discussionQuestions,
       'QuestionData': questionData.map((q) => q.toMap()).toList(),
     };
   }
 }
-
