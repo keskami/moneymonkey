@@ -255,8 +255,14 @@ Map<String, Lesson> advancedLessons = {
     components:
         List.generate(8, (index) => 'A.1.1.${index + 1}'), // 8 components
     progress: 0,
-
     totalComponents: 8,
+    interactiveActivityLinks: [
+      "https://docs.google.com/document/d/1jAn11k54yQGtFgwcVkktpWzUVBy4k3EraVGr51eFhzc/edit?usp=drive_link",
+      "https://docs.google.com/document/d/1bdBQWNInklniIjBG2FErDaTcE0PlFnE55Oi-74vDRuQ/edit?usp=drive_link",
+    ],
+    studentWorkshopTemplateLinks: "",
+    teachersGuideLink:
+        "https://docs.google.com/document/d/1hir3h6TJVjf3JBfhBxKxOSzgdQhYSeL-rBqth0Zv5X4/edit?usp=sharing",
   ),
   'A.1.2': Lesson(
     lessonId: 'A.1.2',
@@ -268,6 +274,12 @@ Map<String, Lesson> advancedLessons = {
     progress: 0,
 
     totalComponents: 8,
+    interactiveActivityLinks: [
+      "https://docs.google.com/document/d/1p7DXzl7ObknKIkHPqL-De1M6fqTdl08IjdIQ7VOgYXk/edit?usp=drive_link",
+      "https://docs.google.com/document/d/1R6J_QLj7xdfsbqwlSCqXFG2iCnE_BG6YTPi4v0OW72g/edit?usp=drive_link",
+    ],
+    studentWorkshopTemplateLinks: "",
+    teachersGuideLink: "",
   ),
   'A.1.3': Lesson(
     lessonId: 'A.1.3',
@@ -279,6 +291,9 @@ Map<String, Lesson> advancedLessons = {
     progress: 0,
 
     totalComponents: 6,
+    interactiveActivityLinks: [""],
+    studentWorkshopTemplateLinks: "",
+    teachersGuideLink: "",
   ),
   'A.1.4': Lesson(
     lessonId: 'A.1.4',
@@ -290,6 +305,9 @@ Map<String, Lesson> advancedLessons = {
     progress: 0,
 
     totalComponents: 7,
+    interactiveActivityLinks: [""],
+    studentWorkshopTemplateLinks: "",
+    teachersGuideLink: "",
   ),
   'A.1.5': Lesson(
     lessonId: 'A.1.5',
@@ -301,6 +319,9 @@ Map<String, Lesson> advancedLessons = {
     progress: 0,
 
     totalComponents: 6,
+    interactiveActivityLinks: [""],
+    studentWorkshopTemplateLinks: "",
+    teachersGuideLink: "",
   ),
   'A.2.1': Lesson(
     lessonId: 'A.2.1',
@@ -312,6 +333,9 @@ Map<String, Lesson> advancedLessons = {
     progress: 0,
 
     totalComponents: 8,
+    interactiveActivityLinks: [""],
+    studentWorkshopTemplateLinks: "",
+    teachersGuideLink: "",
   ),
   'A.2.2': Lesson(
     lessonId: 'A.2.2',
@@ -323,6 +347,9 @@ Map<String, Lesson> advancedLessons = {
     progress: 0,
 
     totalComponents: 5,
+    interactiveActivityLinks: [""],
+    studentWorkshopTemplateLinks: "",
+    teachersGuideLink: "",
   ),
 };
 

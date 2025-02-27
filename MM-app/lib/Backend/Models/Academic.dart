@@ -145,11 +145,14 @@ class Lesson {
   final String title;
   final String description;
   final Status lessonStatus;
-  final List<String> components; // Changed to List<String>
+  final List<String> components;
   final double progress;
   final int totalComponents;
   final DateTime? startedAt;
   final DateTime? completedAt;
+  final List<String> interactiveActivityLinks;
+  final String teachersGuideLink;
+  final String studentWorkshopTemplateLinks;
 
   Lesson({
     required this.lessonId,
@@ -161,6 +164,9 @@ class Lesson {
     required this.totalComponents,
     this.startedAt,
     this.completedAt,
+    required this.interactiveActivityLinks,
+    required this.teachersGuideLink,
+    required this.studentWorkshopTemplateLinks,
   });
 
   factory Lesson.fromFirestore(Map<String, dynamic> data, String id) {
@@ -170,11 +176,13 @@ class Lesson {
       description: data['Description'] ?? '',
       lessonStatus: statusFromFirestore(data['LessonStatus'] ?? 'inactive'),
       progress: (data['Progress'] is num ? data['Progress'] : 0).toDouble(),
-      components: List<String>.from(data['Components'] ?? []), // Updated line
-
+      components: List<String>.from(data['Components'] ?? []),
       totalComponents: int.parse(data['totalComponents'].toString()),
       startedAt: data['StartedAt']?.toDate(),
       completedAt: data['CompletedAt']?.toDate(),
+      interactiveActivityLinks: List<String>.from(data['interactiveActivityLinks'] ?? []),
+      teachersGuideLink: data['TeachersGuideLink'] ?? '',
+      studentWorkshopTemplateLinks: data['StudentWorkshopTemplateLinks'] ?? '',
     );
   }
 
@@ -184,13 +192,17 @@ class Lesson {
       'Description': description,
       'LessonStatus': statusToFirestore(lessonStatus),
       'Progress': progress,
-      'Components': components, // Updated line
+      'Components': components,
       'totalComponents': totalComponents,
       'StartedAt': startedAt,
       'CompletedAt': completedAt,
+      'interactiveActivityLinks': interactiveActivityLinks,
+      'TeachersGuideLink': teachersGuideLink,
+      'StudentWorkshopTemplateLinks': studentWorkshopTemplateLinks,
     };
   }
 }
+
 
 class PerformanceTrends {
   double classAverage;

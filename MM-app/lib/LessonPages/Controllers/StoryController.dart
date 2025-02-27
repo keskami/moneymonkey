@@ -50,6 +50,7 @@ class StoryController extends GetxController {
           componentType: "Story",
           pageNumber: i,
         );
+        // ignore: unnecessary_type_check
         pageData[i] = (data is Map<String, dynamic>) ? data : {};
       }
     } catch (e) {
