@@ -874,17 +874,20 @@ Map<String, Component> advancedComponents = {
                 title: "Sneakers",
                 iconUrl:
                     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fsneakers%201.png?alt=media&token=625bdbab-4e8d-42cd-82b4-8f79a1bedf3f",
-                score: 0),
+                score: 0,
+                type: ""),
             ScenarioOption(
                 title: "College",
                 iconUrl:
                     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Fcollege%201.png?alt=media&token=cd5510da-9563-41a8-a2eb-bd13594312a3",
-                score: 0),
+                score: 0,
+                type: ""),
             ScenarioOption(
                 title: "Activities",
                 iconUrl:
                     "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FStory1%2Factivities%201.png?alt=media&token=8a2aa7b5-e154-4aa9-ae20-44cfc38e01a7",
-                score: 0),
+                score: 0,
+                type: ""),
           ],
         ),
       ),
@@ -897,15 +900,18 @@ Map<String, Component> advancedComponents = {
                 ScenarioOption(
                     title: "Save \$250 (50%)",
                     iconUrl: "Maximum savings for future goals",
-                    score: 20),
+                    score: 20,
+                    type: ""),
                 ScenarioOption(
                     title: "Save \$100 (20%)",
                     iconUrl: "Moderate savings approach",
-                    score: 30),
+                    score: 30,
+                    type: ""),
                 ScenarioOption(
                     title: "Save \$0 (0%)", 
                     iconUrl: "No savings", 
-                    score: 20)
+                    score: 20,
+                    type: "")
               ],
               feedback: {
                 "Save \$250 (50%)":
@@ -919,15 +925,18 @@ Map<String, Component> advancedComponents = {
                 ScenarioOption(
                     title: "Buy Now (\$150)",
                     iconUrl: "Get them immediately",
-                    score: 15),
+                    score: 15,
+                    type: ""),
                 ScenarioOption(
                     title: "Wait for Next Paycheck",
                     iconUrl: "Practice patience",
-                    score: 10),
+                    score: 10,
+                    type: ""),
                 ScenarioOption(
                     title: "Buy Cheaper Option (\$75)",
                     iconUrl: "Find a balance",
-                    score: 20),
+                    score: 20,
+                    type: ""),
               ],
               feedback: {
                 "Buy Now (\$150)":
@@ -941,15 +950,18 @@ Map<String, Component> advancedComponents = {
                 ScenarioOption(
                     title: "Set aside \$150",
                     iconUrl: "Strong emergency fund",
-                    score: 15),
+                    score: 15,
+                    type: ""),
                 ScenarioOption(
                     title: "Set aside \$50",
                     iconUrl: "Small emergency fund",
-                    score: 25),
+                    score: 25,
+                    type: ""),
                 ScenarioOption(
                     title: "Keep Nothing for Emergencies",
                     iconUrl: "Spend it all",
-                    score: 30),
+                    score: 30,
+                    type: ""),
               ],
               feedback: {
                 "Set aside \$150":

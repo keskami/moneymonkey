@@ -23,14 +23,16 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
 
   bool isLoading = true;
   String title = '';
+  String subtitle = '';
   List<String> instructions = [];
   String button = '';
 
   Future<void> setData(Question data) async {
     setState(() {
-      bigTexts = [data.data.Card1[0], data.data.Card3[0], data.data.Card3[0]];
-      smallTexts = [data.data.Card1[1], data.data.Card3[1], data.data.Card3[1]];
+      bigTexts = [data.data.Card1[0], data.data.Card2[0], data.data.Card3[0]];
+      smallTexts = [data.data.Card1[1], data.data.Card2[1], data.data.Card3[1]];
       title = data.data.title;
+      subtitle = data.data.subtitle;
       instructions = [
         "Click for solution 1...",
         "Click for solution 2...",
@@ -71,6 +73,24 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Added title
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.02),
+            // Added subtitle
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.07),
             Container(
               height: screenHeight * 0.4,
               child: Row(
@@ -93,7 +113,7 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          title,
+                          "The Solution?",
                           softWrap: true,
                           overflow: TextOverflow.visible,
                           style: TextStyle(
@@ -179,7 +199,28 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
   }
 
   Widget mobileDisplay() {
-    return Column();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Add the title and subtitle for mobile display as well
+        Text(
+          "Financial Responsibility Story",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+        SizedBox(height: 10),
+        Text(
+          "Taking control of your money to build a secure future",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        // Add the rest of your mobile layout here
+      ],
+    );
   }
 }
 

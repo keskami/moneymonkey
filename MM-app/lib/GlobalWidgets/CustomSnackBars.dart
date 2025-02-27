@@ -60,3 +60,33 @@ SnackBar CorrectAnswerSnackBar({required String message}) {
     ),
   );
 }
+
+SnackBar FeedbackSnackBar({required String message}) {
+  return SnackBar(
+    backgroundColor: LightTheme().pastelBlue,
+    content: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Spacer(),
+        CircleAvatar(
+          radius: 25,
+          backgroundColor: Colors.white,
+          child: Image.network(
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+          ),
+        ),
+        Expanded(
+          child: Text(
+            message,
+            overflow: TextOverflow.visible,
+            softWrap: true,
+            style: const TextStyle(fontSize: 16, color: Colors.black),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const Spacer(),
+      ],
+    ),
+  );
+}

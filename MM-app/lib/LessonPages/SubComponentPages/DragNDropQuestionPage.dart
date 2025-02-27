@@ -74,15 +74,19 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
     setData(peerReflectionController.pageData[2]);
   }
 
-  Future<void> noLeak(data) async {
-    if (!availableItems.contains(data) &&
-        !droppedItems1.contains(data) &&
-        !droppedItems2.contains(data) &&
-        !droppedItems3.contains(data)) {
-      setState(() {
-        availableItems.add(data);
-      });
-    }
+  // Method to handle moving an item back to available items
+  void moveToAvailable(String item) {
+    setState(() {
+      // Remove from all drop zones
+      droppedItems1.remove(item);
+      droppedItems2.remove(item);
+      droppedItems3.remove(item);
+      
+      // Add to available if not already there
+      if (!availableItems.contains(item)) {
+        availableItems.add(item);
+      }
+    });
   }
 
   Future<void> _checkCompletion() async {
@@ -105,230 +109,105 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
     }
   }
 
-  // ignore: unused_element
-  Future<void> _fetchUserProfile() async {
-    if (userID != null) {
-      try {
-        DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userID)
-            .get();
-
-        if (profileSnapshot.exists) {
-          setState(() {
-            final data = profileSnapshot.data() as Map<String, dynamic>?;
-
-            var portfolioData = data?['Portfolio'] as Map<String, dynamic>?;
-
-            if (portfolioData != null) {
-              balance = portfolioData['Balance'] ?? 0;
-              totalBanans = portfolioData['Total Bananas'] ?? 0;
-            }
-
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidthUnit = screenWidth / 390;
     double screenHeightUnit = screenHeight / 880;
-    double WebscreenWidthUnit = screenWidth / 1920;
-    double WebscreenHeightUnit = screenHeight / 1080;
+    double webScreenWidthUnit = screenWidth / 1920;
+    double webScreenHeightUnit = screenHeight / 1080;
 
     return loading
         ? Center(child: CircularProgressIndicator())
         : Column(
             children: [
               SizedBox(height: screenHeight * .05),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                    padding:
-                        EdgeInsets.fromLTRB(WebscreenWidthUnit * 475, 0, 0, 0),
-                    child: Text(
-                      question,
-                      style: GoogleFonts.baloo2(
-                        fontSize: screenWidthUnit * 6.5,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    )),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(WebscreenWidthUnit * 475,
-                        WebscreenHeightUnit * 26, 0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _buildDropZone(
-                            droppedItems1,
-                            box1,
-                            WebscreenWidthUnit,
-                            WebscreenHeightUnit,
-                            (item) => droppedItems2.remove(item),
-                            (item) => droppedItems3.remove(item),
-                            droppedItems1,
-                            droppedItems2,
-                            droppedItems3,
-                            correct1),
-                        SizedBox(width: WebscreenWidthUnit * 16),
-                        _buildDropZone(
-                            droppedItems2,
-                            box2,
-                            WebscreenWidthUnit,
-                            WebscreenHeightUnit,
-                            (item) => droppedItems1.remove(item),
-                            (item) => droppedItems3.remove(item),
-                            droppedItems1,
-                            droppedItems2,
-                            droppedItems3,
-                            correct2),
-                        SizedBox(width: WebscreenWidthUnit * 16),
-                        _buildDropZone(
-                            droppedItems3,
-                            box3,
-                            WebscreenWidthUnit,
-                            WebscreenHeightUnit,
-                            (item) => droppedItems1.remove(item),
-                            (item) => droppedItems2.remove(item),
-                            droppedItems1,
-                            droppedItems2,
-                            droppedItems3,
-                            correct3),
-                      ],
-                    ),
+              // Centered title
+              Center(
+                child: Text(
+                  question,
+                  style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 6.5,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      WebscreenWidthUnit * 475, WebscreenHeightUnit * 25, 0, 0),
-                  child: Text(
-                    subTitle,
-                    style: GoogleFonts.baloo2(
-                      fontSize: screenWidthUnit * 5,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
+              SizedBox(height: webScreenHeightUnit * 26),
+              // Centered drop zones
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildDropZone(
+                    droppedItems1,
+                    box1,
+                    webScreenWidthUnit,
+                    webScreenHeightUnit,
+                    screenWidthUnit,
+                    1, // Zone identifier for moving items
+                  ),
+                  SizedBox(width: webScreenWidthUnit * 16),
+                  _buildDropZone(
+                    droppedItems2,
+                    box2,
+                    webScreenWidthUnit,
+                    webScreenHeightUnit,
+                    screenWidthUnit,
+                    2, // Zone identifier for moving items
+                  ),
+                  SizedBox(width: webScreenWidthUnit * 16),
+                  _buildDropZone(
+                    droppedItems3,
+                    box3,
+                    webScreenWidthUnit,
+                    webScreenHeightUnit,
+                    screenWidthUnit,
+                    3, // Zone identifier for moving items
+                  ),
+                ],
+              ),
+              SizedBox(height: webScreenHeightUnit * 25),
+              // Centered subtitle
+              Center(
+                child: Text(
+                  subTitle,
+                  style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 5,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              Container(
-                height: screenHeightUnit * 152,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      WebscreenWidthUnit * 475,
-                      0,
-                      0,
-                      0,
+              SizedBox(height: webScreenHeightUnit * 10),
+              // Available items area - also make it a drop target
+              DragTarget<Map<String, dynamic>>(
+                onAccept: (data) {
+                  moveToAvailable(data['item']);
+                },
+                builder: (context, candidateData, rejectedData) {
+                  return Container(
+                    height: screenHeightUnit * 152,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: candidateData.isNotEmpty 
+                          ? Colors.grey.withOpacity(0.3) 
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: List.generate(
-                            (availableItems.length / 4).ceil(), (index) {
-                          int start = index * 4;
-                          int end = (index * 4 + 4) > availableItems.length
-                              ? availableItems.length
-                              : (index * 4 + 4);
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children:
-                                availableItems.sublist(start, end).map((item) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: _buildDraggableItem(item),
-                              );
-                            }).toList(),
-                          );
-                        }),
+                    child: Center(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        alignment: WrapAlignment.center,
+                        children: availableItems.map((item) {
+                          return _buildDraggableItem(item, webScreenWidthUnit, screenWidthUnit);
+                        }).toList(),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
-              /*
-        Padding(
-          padding: EdgeInsets.only(top: WebscreenHeightUnit * 0),
-          child: GestureDetector(
-              onTap: () {
-          if (droppedItems1.contains("Flexible budgeting") &&
-              droppedItems1.contains("Travel savings") &&
-              droppedItems1.contains("Emergency fund") &&
-              droppedItems1.contains("Starting retirement fund") &&
-              droppedItems2.contains("Budgeting for family needs") &&
-              droppedItems2.contains("Kids’ education savings") &&
-              droppedItems3.contains("Personal investments") &&
-              droppedItems3.contains("Planning for grad school")) {
-            print(peerReflectionController.pageIndex.value);
-            peerReflectionController.pageIndex.value += 1;
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-            'Please categorize all the items correctly to continue'),
-              duration: Duration(seconds: 2),
-            ));
-          }
-              },
-              child: Container(
-          height: screenHeightUnit * 58,
-          width: screenWidthUnit * 61,
-          decoration: BoxDecoration(
-            color: (droppedItems1.contains("Flexible budgeting") &&
-              droppedItems1.contains("Travel savings") &&
-              droppedItems1.contains("Emergency fund") &&
-              droppedItems1.contains("Starting retirement fund") &&
-              droppedItems2
-                  .contains("Budgeting for family needs") &&
-              droppedItems2.contains("Kids’ education savings") &&
-              droppedItems3.contains("Personal investments") &&
-              droppedItems3.contains("Planning for grad school"))
-                ? Color.fromRGBO(137, 220, 142, 1)
-                : Color.fromRGBO(224, 227, 231, 1),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 5,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              "Continue to Activity",
-              style: GoogleFonts.baloo2(
-            fontSize: screenWidthUnit * 4.2,
-            color: Colors.white,
-            fontWeight: FontWeight.w700),
-            ),
-          ),
-              )),
-        )
-        */
             ],
           );
   }
@@ -336,71 +215,46 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
   Widget _buildDropZone(
     List<String> droppedItems,
     String label,
-    double WebscreenWidthUnit,
-    double WebscreenHeightUnit,
-    Function(String) onItemDropped,
-    Function(String) onItemDropped2,
-    List<String> droppedItems1,
-    List<String> droppedItems2,
-    List<String> droppedItems3,
-    List<String> correctItems,
+    double webScreenWidthUnit,
+    double webScreenHeightUnit,
+    double screenWidthUnit,
+    int zoneId,
   ) {
-    return DragTarget<String>(
-      onAcceptWithDetails: (data) {
+    return DragTarget<Map<String, dynamic>>(
+      onAccept: (data) {
         setState(() {
-          droppedItems.add(data as String);
-          onItemDropped(data as String);
-          onItemDropped2(data as String);
-          availableItems.remove(data);
-          noLeak(data);
+          String item = data['item'];
+          int sourceZone = data['sourceZone'] ?? 0;
+          
+          // Remove from source if coming from another zone
+          if (sourceZone == 1) droppedItems1.remove(item);
+          if (sourceZone == 2) droppedItems2.remove(item);
+          if (sourceZone == 3) droppedItems3.remove(item);
+          
+          // Remove from available items if coming from there
+          availableItems.remove(item);
+          
+          // Add to this zone if not already there
+          if (!droppedItems.contains(item)) {
+            droppedItems.add(item);
+          }
         });
 
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        // Check if all items are placed
         if (availableItems.isEmpty) {
-          //ScaffoldMessenger.of(context)
-          //.showSnackBar(CorrectAnswerSnackBar(message: ""));
           _checkCompletion();
-        } else {
-          //ScaffoldMessenger.of(context)
-          //.showSnackBar(WrongAnswerSnackBar(message: ''));
         }
       },
-      onWillAcceptWithDetails: (data) => true,
-      onLeave: (data) {
-        setState(() {
-          if (data != null && droppedItems.contains(data)) {
-            droppedItems.remove(data);
-
-            // Add back to available items
-          }
-          if (droppedItems1.contains(data) ||
-              droppedItems2.contains(data) ||
-              droppedItems3.contains(data)) {
-            if (availableItems.contains(data)) {
-              setState(() {
-                availableItems.remove(data);
-                noLeak(data);
-              });
-            } else {
-              setState(() {});
-            }
-          } else {
-            setState(() {
-              if (!availableItems.contains(data)) {
-                availableItems.add(data!);
-                noLeak(data);
-              }
-            });
-          }
-        });
-      },
+      onWillAccept: (data) => true,
       builder: (context, candidateData, rejectedData) {
         return Container(
-          width: WebscreenWidthUnit * 315,
-          height: WebscreenHeightUnit * 428,
+          width: webScreenWidthUnit * 315,
+          height: webScreenHeightUnit * 428,
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+            color: candidateData.isNotEmpty 
+                ? Colors.grey.withOpacity(0.3) 
+                : Colors.grey[200],
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(8),
           ),
@@ -408,11 +262,11 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: WebscreenWidthUnit * 10),
+                padding: EdgeInsets.only(left: webScreenWidthUnit * 10),
                 child: Text(
                   label,
                   style: GoogleFonts.baloo2(
-                    fontSize: WebscreenWidthUnit * 25.5,
+                    fontSize: webScreenWidthUnit * 25.5,
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
@@ -424,14 +278,12 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: droppedItems
-                        .map(
-                          (item) => _buildDraggableDroppedItem(
-                            item,
-                            droppedItems,
-                          ),
-                        )
-                        .toList(),
+                    children: droppedItems.map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: _buildDraggableZoneItem(item, webScreenWidthUnit, screenWidthUnit, zoneId),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
@@ -442,75 +294,71 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
     );
   }
 
-  Widget _buildDraggableDroppedItem(String label, List<String> sourceList) {
-    return Draggable<String>(
-      data: label,
+  Widget _buildDraggableZoneItem(String label, double webScreenWidthUnit, double screenWidthUnit, int zoneId) {
+    return Draggable<Map<String, dynamic>>(
+      // Include both the item and its source zone
+      data: {'item': label, 'sourceZone': zoneId},
       feedback: Material(
         color: Colors.transparent,
-        child: _buildDroppedItem(label),
-      ),
-      childWhenDragging: Opacity(
-        opacity: 0.5,
-        child: _buildDroppedItem(label),
-      ),
-      onDragCompleted: () {
-        setState(() {
-          sourceList.remove(label);
-          noLeak(label);
-        });
-
-        if (droppedItems1.contains(label) ||
-            droppedItems2.contains(label) ||
-            droppedItems3.contains(label)) {
-          if (availableItems.contains(label)) {
-            setState(() {
-              availableItems.remove(label);
-              noLeak(label);
-            });
-          }
-        } else {
-          setState(() {
-            //availableItems.add(label);
-          });
-        }
-      },
-      child: _buildDroppedItem(label),
-    );
-  }
-
-  Widget _buildDraggableItem(String label) {
-    return Draggable<String>(
-      data: label,
-      feedback: Material(
-        color: Colors.transparent,
-        child: _buildDroppedItem(label),
-      ),
-      childWhenDragging: Opacity(
-        opacity: 0.5,
-        child: _buildDroppedItem(label),
-      ),
-      child: _buildDroppedItem(label),
-    );
-  }
-
-  Widget _buildDroppedItem(String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 5,
-              offset: const Offset(0, 4),
-            ),
-          ],
+        elevation: 4.0,
+        child: Container(
+          width: webScreenWidthUnit * 290,
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+          ),
+          child: Text(label, style: TextStyle(fontSize: screenWidthUnit * 3.6)),
         ),
-        child: Text(label, style: TextStyle(fontSize: 14)),
       ),
+      childWhenDragging: Opacity(
+        opacity: 0.3,
+        child: _buildItemContainer(label, screenWidthUnit),
+      ),
+      child: _buildItemContainer(label, screenWidthUnit),
+    );
+  }
+
+  Widget _buildDraggableItem(String label, double webScreenWidthUnit, double screenWidthUnit) {
+    return Draggable<Map<String, dynamic>>(
+      // For items from available section, no source zone
+      data: {'item': label, 'sourceZone': 0},
+      feedback: Material(
+        color: Colors.transparent,
+        elevation: 4.0,
+        child: Container(
+          width: webScreenWidthUnit * 290,
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+          ),
+          child: Text(label, style: TextStyle(fontSize: screenWidthUnit * 3.6)),
+        ),
+      ),
+      childWhenDragging: Opacity(
+        opacity: 0.3,
+        child: _buildItemContainer(label, screenWidthUnit),
+      ),
+      child: _buildItemContainer(label, screenWidthUnit),
+    );
+  }
+
+  Widget _buildItemContainer(String label, double screenWidthUnit) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 5,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Text(label, style: TextStyle(fontSize: screenWidthUnit * 3.6)),
     );
   }
 }

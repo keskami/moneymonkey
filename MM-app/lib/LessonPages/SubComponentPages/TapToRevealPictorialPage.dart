@@ -9,7 +9,6 @@ import 'package:money_monkey/themes/color_themes.dart';
 
 class TapToRevealPictorialPage extends StatefulWidget {
   const TapToRevealPictorialPage({super.key});
-
   @override
   _TapToRevealPictorialPageState createState() =>
       _TapToRevealPictorialPageState();
@@ -21,7 +20,6 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
   bool c = false;
   bool s = false;
   bool a = false;
-
   String title = '';
   List<String> items = [];
   List<String> itemImgs = [];
@@ -91,15 +89,16 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
         ? Center(child: CircularProgressIndicator())
         : Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+            mainAxisAlignment: MainAxisAlignment.center, // Center vertically
             children: [
+              // Scenario container
               Container(
                 width: screenWidth * 0.5,
                 height: screenHeight * 0.3,
                 decoration: BoxDecoration(
                   color: LightTheme().primaryBlue.withAlpha(70),
-                  borderRadius: BorderRadius.circular(
-                    10,
-                  ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -125,119 +124,124 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
                   vertical: screenHeight * 0.05,
                 ),
               ),
+              
+              // Choice containers - FIX: Use Row with center alignment
               Padding(
                 padding: EdgeInsets.fromLTRB(0, screenHeight * .04, 0, 0),
-                child: Row(children: [
-                  SizedBox(
-                    width: screenWidth * .025,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        s = true;
-                      });
-                    },
-                    child: Container(
-                      width: screenWidth * 0.13,
-                      height: screenHeight * 0.17,
-                      child: TapToRevealContainer(
-                        contents: NewContentContainer(
-                          image: itemImgs[0],
-                          texts: [items[0]],
-                          screenWidth: screenWidth,
-                          onFlip: () => makeTrue(items[0]),
-                        ),
-                        instructions: InstructionContainer(
-                          text: instructions[0],
-                          screenWidth: screenWidth,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: screenWidth * .025,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        c = true;
-                      });
-                    },
-                    child: Container(
-                      width: screenWidth * 0.13,
-                      height: screenHeight * 0.17,
-                      child: TapToRevealContainer(
-                        contents: NewContentContainer(
-                          image: itemImgs[1],
-                          texts: [items[1]],
-                          screenWidth: screenWidth,
-                          onFlip: () => makeTrue(items[1]),
-                        ),
-                        instructions: InstructionContainer(
-                          text: instructions[1],
-                          screenWidth: screenWidth,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // Center the choices
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          s = true;
+                        });
+                      },
+                      child: Container(
+                        width: screenWidth * 0.13,
+                        height: screenHeight * 0.17,
+                        child: TapToRevealContainer(
+                          contents: NewContentContainer(
+                            image: itemImgs[0],
+                            texts: [items[0]],
+                            screenWidth: screenWidth,
+                            onFlip: () => makeTrue(items[0]),
+                          ),
+                          instructions: InstructionContainer(
+                            text: instructions[0],
+                            screenWidth: screenWidth,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: screenWidth * .025,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      print("CLikced");
-                      setState(() {
-                        a = true;
-                      });
-                    },
-                    child: Container(
-                      width: screenWidth * 0.13,
-                      height: screenHeight * 0.17,
-                      child: TapToRevealContainer(
-                        contents: NewContentContainer(
-                          image: itemImgs[2],
-                          texts: [items[2]],
-                          screenWidth: screenWidth,
-                          onFlip: () => makeTrue(items[2]),
-                        ),
-                        instructions: InstructionContainer(
-                          text: instructions[2],
-                          screenWidth: screenWidth,
+                    SizedBox(
+                      width: screenWidth * .025,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          c = true;
+                        });
+                      },
+                      child: Container(
+                        width: screenWidth * 0.13,
+                        height: screenHeight * 0.17,
+                        child: TapToRevealContainer(
+                          contents: NewContentContainer(
+                            image: itemImgs[1],
+                            texts: [items[1]],
+                            screenWidth: screenWidth,
+                            onFlip: () => makeTrue(items[1]),
+                          ),
+                          instructions: InstructionContainer(
+                            text: instructions[1],
+                            screenWidth: screenWidth,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ]),
+                    SizedBox(
+                      width: screenWidth * .025,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        print("CLikced");
+                        setState(() {
+                          a = true;
+                        });
+                      },
+                      child: Container(
+                        width: screenWidth * 0.13,
+                        height: screenHeight * 0.17,
+                        child: TapToRevealContainer(
+                          contents: NewContentContainer(
+                            image: itemImgs[2],
+                            texts: [items[2]],
+                            screenWidth: screenWidth,
+                            onFlip: () => makeTrue(items[2]),
+                          ),
+                          instructions: InstructionContainer(
+                            text: instructions[2],
+                            screenWidth: screenWidth,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              
               SizedBox(
                 height: screenHeight * 0.1,
               ),
+              
+              // Button
               GestureDetector(
-                  onTap: (wait6)
-                      ? () {
-                          scenarioController.pageIndex.value += 1;
-                        }
-                      : () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: (wait6)
-                          ? LightTheme().pastelGreen
-                          : Color.fromRGBO(227, 227, 227, 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    width: screenWidth * 0.18,
-                    height: screenHeight * 0.08,
-                    child: Center(
-                      child: Text(
-                        button,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                onTap: (wait6)
+                    ? () {
+                        scenarioController.pageIndex.value += 1;
+                      }
+                    : () {},
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: (wait6)
+                        ? LightTheme().pastelGreen
+                        : Color.fromRGBO(227, 227, 227, 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  width: screenWidth * 0.18,
+                  height: screenHeight * 0.08,
+                  child: Center(
+                    child: Text(
+                      button,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ))
+                  ),
+                ))
             ],
           );
   }
@@ -250,12 +254,10 @@ class NewContentContainer extends StatelessWidget {
       required this.screenWidth,
       required this.image,
       required this.onFlip});
-
   final List<String> texts;
   final String image;
   final double screenWidth;
   final Function onFlip;
-
   @override
   Widget build(BuildContext context) {
     onFlip;
@@ -272,6 +274,7 @@ class NewContentContainer extends StatelessWidget {
           children: [
             Text(
               texts[0],
+              textAlign: TextAlign.center,
               style: GoogleFonts.baloo2(
                 color: Colors.black,
                 fontSize: 20,
@@ -280,20 +283,6 @@ class NewContentContainer extends StatelessWidget {
             ),
             Image.network(
               '$image',
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                  ),
-                );
-              },
               height: screenWidth * 0.05,
             ),
           ],

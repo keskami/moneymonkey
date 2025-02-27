@@ -8,7 +8,8 @@ import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 class MonkeyLandingPage extends StatefulWidget {
   final String introText;
   final String imageURL;
-  const MonkeyLandingPage({super.key, required this.introText, required this.imageURL});
+  final String title;
+  const MonkeyLandingPage({super.key, required this.introText, required this.imageURL, required this.title});
   
   @override
   _MonkeyLandingPageState createState() => _MonkeyLandingPageState();
@@ -30,7 +31,18 @@ class _MonkeyLandingPageState extends State<MonkeyLandingPage> {
       height: screenHeight * 0.7, 
       color: Colors.white,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Added title
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.03),
+          
           // Main content that takes all available space except button height
           Expanded(
             child: SingleChildScrollView(

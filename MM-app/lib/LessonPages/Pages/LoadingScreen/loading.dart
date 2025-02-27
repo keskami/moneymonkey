@@ -125,11 +125,10 @@ class _LoadingPageState extends State<LoadingPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Money Monkey Logo
-            Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMoneyMonkey.png?alt=media&token=8bc3b244-749e-49bf-a663-28664c2b4714",
+            Image.asset(
+              "assets/images/LOGO.png",
               height: screenHeight * 0.5,
             ),
-            SizedBox(height: screenHeight * 0.05),
 
             // Progress Bar Container with overflow allowed
             Container(

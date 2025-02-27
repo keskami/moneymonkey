@@ -50,10 +50,11 @@ class StoryController extends BaseLessonController {
       // add pages
       pages.add(MonkeyLandingPage(
           introText: pageData[0].data.mintyText,
-          imageURL: pageData[0].data.imageUrl));
+          imageURL: pageData[0].data.imageUrl,
+          title: pageData[0].data.title));
       pages.add(ComponentProblemPage());
       pages.add(ComponentSolutionsPage());
-      pages.add(ComponentImapctPage());
+      pages.add(ComponentImpactPage());
     } catch (e) {
       print("Error fetching story data: $e");
     } finally {

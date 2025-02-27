@@ -81,7 +81,7 @@ class _TopBarState extends State<TopBar> {
           children: [
             Row(
               children: [
-                Image.asset('assets/images/img_transparent_logo.png',
+                Image.asset('assets/images/LOGO.png',
                     height: iconSize),
                 const SizedBox(width: 8),
               ],

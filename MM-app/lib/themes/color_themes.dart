@@ -69,6 +69,7 @@ class LightTheme {
   Color primaryGreen = const Color.fromARGB(255, 133, 220, 64);
   Color pastelGreen = Color.fromARGB(255, 137, 220, 143);
   Color pastelRed = Color.fromARGB(255, 255, 105, 105);
+  Color pastelBlue = Color.fromARGB(255, 204, 240, 255);
 }
 
 class DarkTheme {

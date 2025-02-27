@@ -16,75 +16,79 @@ class ScoreboardWidget extends StatelessWidget {
     return Container(
       // Same width you had before (30% of screen)
       width: screenWidth * 0.25,
-      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: 0),
+      margin:
+          EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: 0),
       // Some padding at the top to match your original scoreboard spacing
       child: Column(
         children: [
           SizedBox(
             height: screenHeightUnit * 10,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/monkeyNoText.png',
-                height: screenHeightUnit * 49,
-              ),
-              SizedBox(
-                width: screenWidthUnit * 12,
-              ),
-              Image.asset(
-                'assets/images/img_monkeymoney_50.png',
-                height: screenHeightUnit * 53,
-              ),
-              SizedBox(
-                width: screenWidthUnit * 2,
-              ),
-              Text(
-                "3",
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 9,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/LOGO.png',
+                  height: screenHeightUnit * 80,
                 ),
-              ),
-              SizedBox(
-                width: screenWidthUnit * 8,
-              ),
-              Image.asset(
-                'assets/images/img_monkeymoney_51.png',
-                height: screenHeightUnit * 49,
-              ),
-              SizedBox(
-                width: screenWidthUnit * 2,
-              ),
-              Text(
-                "3",
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 9,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
+                SizedBox(
+                  width: screenWidthUnit * 7,
                 ),
-              ),
-              SizedBox(
-                width: screenWidthUnit * 8,
-              ),
-              Image.asset(
-                'assets/images/img_monkeymoney_52.png',
-                height: screenHeightUnit * 49,
-              ),
-              SizedBox(
-                width: screenWidthUnit * 2,
-              ),
-              Text(
-                "3",
-                style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 9,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
+                Image.asset(
+                  'assets/images/img_monkeymoney_50.png',
+                  height: screenHeightUnit * 53,
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: screenWidthUnit * 2,
+                ),
+                Text(
+                  "3",
+                  style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 9,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  width: screenWidthUnit * 7,
+                ),
+                Image.asset(
+                  'assets/images/img_monkeymoney_51.png',
+                  height: screenHeightUnit * 49,
+                ),
+                SizedBox(
+                  width: screenWidthUnit * 2,
+                ),
+                Text(
+                  "3",
+                  style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 9,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  width: screenWidthUnit * 7,
+                ),
+                Image.asset(
+                  'assets/images/img_monkeymoney_52.png',
+                  height: screenHeightUnit * 49,
+                ),
+                SizedBox(
+                  width: screenWidthUnit * 2,
+                ),
+                Text(
+                  "3",
+                  style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 9,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: screenHeightUnit * 46,

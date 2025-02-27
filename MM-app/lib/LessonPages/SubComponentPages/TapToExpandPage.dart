@@ -77,86 +77,105 @@ class _TapToExpandPageState extends State<TapToExpandPage> {
     double screenHeightUnit = screenHeight / 880;
     double WebscreenWidthUnit = screenWidth / 1920;
     double WebscreenHeightUnit = screenHeight / 1080;
-    return Column(children: [
-      topOfLesson(
-          screenWidthUnit: screenWidthUnit,
-          screenHeightUnit: screenHeightUnit,
-          pageNumber: 2,
-          totalPages: 8,
-          context: context,
-          bananas: totalBanans),
-      SizedBox(height: WebscreenHeightUnit * 95),
-      Padding(
-        padding: EdgeInsets.only(right: WebscreenWidthUnit * 758),
-        child: Text(
-          title,
-          style: GoogleFonts.baloo2(
-              fontSize: screenWidthUnit * 5,
-              color: Colors.black,
-              fontWeight: FontWeight.w700),
+    
+    return Column(
+      mainAxisSize: MainAxisSize.min, // Match parent's mainAxisSize
+      children: [
+        topOfLesson(
+            screenWidthUnit: screenWidthUnit,
+            screenHeightUnit: screenHeightUnit,
+            pageNumber: 2,
+            totalPages: 8,
+            context: context,
+            bananas: totalBanans),
+        SizedBox(height: WebscreenHeightUnit * 50),
+        
+        // Peer Stories Title
+        Padding(
+          padding: EdgeInsets.only(left: WebscreenWidthUnit * 20),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              title,
+              style: GoogleFonts.baloo2(
+                  fontSize: WebscreenWidthUnit * 40,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
         ),
-      ),
-      Padding(
-        padding: EdgeInsets.only(
-            left: WebscreenWidthUnit * 17.5, top: WebscreenHeightUnit * 31),
-        child: Container(
-            height: WebscreenHeightUnit * 550,
-            child: Column(children: [
-              lessonTab(
-                image: "assets/images/newMonkeys/Maria.png",
-                name: maria1,
-                discription: maria2,
-                isClicked: mariaClicked,
-                onClick: () {
-                  setState(() {
-                    mariaClicked = true;
-                  });
-                },
-                context: context,
-                WebscreenHeightUnit: WebscreenHeightUnit,
-                WebscreenWidthUnit: WebscreenWidthUnit,
-              ),
-              SizedBox(height: WebscreenHeightUnit * 29),
-              lessonTab(
-                image: "assets/images/newMonkeys/Jason.png",
-                name: jason1,
-                discription: jason2,
-                isClicked: jasonClicked,
-                onClick: () {
-                  setState(() {
-                    jasonClicked = true;
-                  });
-                },
-                context: context,
-                WebscreenHeightUnit: WebscreenHeightUnit,
-                WebscreenWidthUnit: WebscreenWidthUnit,
-              ),
-              SizedBox(height: WebscreenHeightUnit * 29),
-              lessonTab(
-                image: "assets/images/newMonkeys/Ava.png",
-                name: ava1,
-                discription: ava2,
-                isClicked: avaClicked,
-                onClick: () {
-                  setState(() {
-                    avaClicked = true;
-                  });
-                },
-                context: context,
-                WebscreenHeightUnit: WebscreenHeightUnit,
-                WebscreenWidthUnit: WebscreenWidthUnit,
-              ),
-            ])),
-      ),
-      SizedBox(height: WebscreenHeightUnit * 82),
-      Positioned(
-        bottom: WebscreenHeightUnit * 0,
-        child: GestureDetector(
+        
+        SizedBox(height: WebscreenHeightUnit * 30),
+        
+        // Stories Container with fixed height and scrolling
+        Container(
+          height: screenHeight * 0.5, // Fixed height that fits in the parent
+          width: WebscreenWidthUnit * 950,
+          padding: EdgeInsets.symmetric(horizontal: WebscreenWidthUnit * 20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                lessonTab(
+                  image: "assets/images/newMonkeys/Maria.png",
+                  name: maria1,
+                  discription: maria2,
+                  isClicked: mariaClicked,
+                  onClick: () {
+                    setState(() {
+                      mariaClicked = true;
+                    });
+                  },
+                  context: context,
+                  WebscreenHeightUnit: WebscreenHeightUnit,
+                  WebscreenWidthUnit: WebscreenWidthUnit,
+                ),
+                SizedBox(height: WebscreenHeightUnit * 29),
+                lessonTab(
+                  image: "assets/images/newMonkeys/Jason.png",
+                  name: jason1,
+                  discription: jason2,
+                  isClicked: jasonClicked,
+                  onClick: () {
+                    setState(() {
+                      jasonClicked = true;
+                    });
+                  },
+                  context: context,
+                  WebscreenHeightUnit: WebscreenHeightUnit,
+                  WebscreenWidthUnit: WebscreenWidthUnit,
+                ),
+                SizedBox(height: WebscreenHeightUnit * 29),
+                lessonTab(
+                  image: "assets/images/newMonkeys/Ava.png",
+                  name: ava1,
+                  discription: ava2,
+                  isClicked: avaClicked,
+                  onClick: () {
+                    setState(() {
+                      avaClicked = true;
+                    });
+                  },
+                  context: context,
+                  WebscreenHeightUnit: WebscreenHeightUnit,
+                  WebscreenWidthUnit: WebscreenWidthUnit,
+                ),
+                // Add padding at the bottom of scrollable content
+                SizedBox(height: WebscreenHeightUnit * 20),
+              ]
+            ),
+          ),
+        ),
+        
+        // Continue Button - Outside the scrollable area to remain fixed
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: WebscreenHeightUnit * 30),
+          child: GestureDetector(
             onTap: () {
               if (avaClicked && jasonClicked && mariaClicked && delay) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 peerReflectionController.pageIndex.value += 1;
               } else if (!delay) {
+                // Do nothing
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Please read all the stories to continue'),
@@ -166,7 +185,7 @@ class _TapToExpandPageState extends State<TapToExpandPage> {
             },
             child: Container(
               height: screenHeightUnit * 58,
-              width: screenWidthUnit * 61,
+              width: screenWidthUnit * 250,
               decoration: BoxDecoration(
                 color: (avaClicked && jasonClicked && mariaClicked && delay)
                     ? Color.fromRGBO(137, 220, 142, 1)
@@ -184,14 +203,16 @@ class _TapToExpandPageState extends State<TapToExpandPage> {
                 child: Text(
                   button,
                   style: GoogleFonts.baloo2(
-                      fontSize: screenWidthUnit * 4.2,
+                      fontSize: screenWidthUnit * 4.5,
                       color: Colors.white,
                       fontWeight: FontWeight.w700),
                 ),
               ),
-            )),
-      ),
-    ]);
+            )
+          ),
+        ),
+      ]
+    );
   }
 }
 
@@ -241,17 +262,26 @@ Widget lessonTab({
                 SizedBox(
                   width: WebscreenWidthUnit * 14,
                 ),
-                Text(name,
+                // Expanded to handle text overflow properly
+                Expanded(
+                  child: Text(
+                    name,
                     style: GoogleFonts.baloo2(
-                        fontSize: WebscreenWidthUnit * 25,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500)),
+                      fontSize: WebscreenWidthUnit * 25,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+                SizedBox(width: WebscreenWidthUnit * 25), // Right padding
               ],
             ),
           ),
         )
       : Container(
-          height: WebscreenHeightUnit * 157,
+          // Accommodate text with proper constraints
           width: WebscreenWidthUnit * 907,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -268,37 +298,49 @@ Widget lessonTab({
               ),
             ],
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: WebscreenWidthUnit * 25,
-              ),
-              Image.asset(
-                image,
-                height: WebscreenHeightUnit * 145,
-              ),
-              SizedBox(
-                width: WebscreenWidthUnit * 14,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name,
-                      style: GoogleFonts.baloo2(
+          // Removed fixed height constraint to adapt to content
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: WebscreenHeightUnit * 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(width: WebscreenWidthUnit * 25),
+                Image.asset(
+                  image,
+                  height: WebscreenHeightUnit * 73,
+                ),
+                SizedBox(width: WebscreenWidthUnit * 14),
+                // Text column with proper constraints for wrapping
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: GoogleFonts.baloo2(
                           fontSize: WebscreenWidthUnit * 25,
                           color: Colors.black,
-                          fontWeight: FontWeight.w500)),
-                  SizedBox(height: WebscreenHeightUnit * 5),
-                  Text(discription,
-                      style: GoogleFonts.baloo2(
+                          fontWeight: FontWeight.w600
+                        ),
+                      ),
+                      SizedBox(height: WebscreenHeightUnit * 8),
+                      // Description with proper text wrapping
+                      Text(
+                        discription,
+                        style: GoogleFonts.baloo2(
                           fontSize: WebscreenWidthUnit * 16.67,
                           color: Colors.black,
-                          fontWeight: FontWeight.w600)),
-                ],
-              )
-            ],
+                          fontWeight: FontWeight.w500
+                        ),
+                        softWrap: true,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: WebscreenWidthUnit * 25), // Right padding
+              ],
+            ),
           ),
         );
 }

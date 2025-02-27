@@ -6,7 +6,7 @@ import 'package:money_monkey/home.dart';
 
 class PeerReflection extends StatefulWidget {
   const PeerReflection({super.key});
-
+  
   @override
   State<PeerReflection> createState() => _PeerReflectionState();
 }
@@ -15,24 +15,25 @@ class _PeerReflectionState extends State<PeerReflection> {
   PeerReflectioncontroller peerReflectioncontroller =
       Get.find<PeerReflectioncontroller>();
   final String lessonId = "PeerReflection";
-
+  
   Future<void> _preloadImages() async {
-  precacheImage(AssetImage('assets/images/newMonkeys/Maria.png'), context);
-  precacheImage(AssetImage('assets/images/newMonkeys/Jason.png'), context);
-  precacheImage(AssetImage('assets/images/newMonkeys/Ava.png'), context);
-  precacheImage(AssetImage('assets/images/img_monkeymoney_52.png'), context);
-}
-
+    precacheImage(AssetImage('assets/images/newMonkeys/Maria.png'), context);
+    precacheImage(AssetImage('assets/images/newMonkeys/Jason.png'), context);
+    precacheImage(AssetImage('assets/images/newMonkeys/Ava.png'), context);
+    precacheImage(AssetImage('assets/images/img_monkeymoney_52.png'), context);
+  }
+  
   @override
   void initState() {
     super.initState();
     _preloadImages();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -53,18 +54,20 @@ class _PeerReflectionState extends State<PeerReflection> {
           icon: Icon(
             Icons.arrow_back,
             size: screenHeight * .04,
+            color: Colors.black, // Add color to make the back arrow visible
           ),
         ),
       ),
       body: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start, // Match StoryPage exactly
+        mainAxisSize: MainAxisSize.min, // Match StoryPage exactly
         children: [
           SizedBox(
-            height: screenHeight * 0.00,
+            height: screenHeight * 0.0,
           ),
           Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min, // Match StoryPage exactly
+            mainAxisAlignment: MainAxisAlignment.center, // Match StoryPage exactly
             children: [
               IconButton(
                 onPressed: () {
@@ -81,16 +84,16 @@ class _PeerReflectionState extends State<PeerReflection> {
                 child: CustomProgressBar(
                   pageName: 'PeerReflection',
                   width: screenWidth * 0.44,
-                  key: ValueKey(peerReflectioncontroller
-                      .pageIndex.value), 
+                  key: ValueKey(peerReflectioncontroller.pageIndex.value), 
                 ),
               ),
               const SizedBox(
                 width: 5,
               ),
               Image.network(
-                  width: 30,
-                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FbananasWorth.png?alt=media&token=551b2c7b-08d9-4624-a077-31641e5bd003"),
+                width: 30,
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FbananasWorth.png?alt=media&token=551b2c7b-08d9-4624-a077-31641e5bd003",
+              ),
               Text(
                 "3",
                 style: TextStyle(
@@ -100,12 +103,15 @@ class _PeerReflectionState extends State<PeerReflection> {
               ),
             ],
           ),
+          SizedBox(
+            height: screenHeight * 0.05, // Added this to match StoryPage
+          ),
           Obx(
             () => peerReflectioncontroller
                 .pages[peerReflectioncontroller.pageIndex.value],
           ),
         ],
-      ),
+      ).paddingSymmetric(horizontal: screenWidth * 0.25),
     );
   }
 }

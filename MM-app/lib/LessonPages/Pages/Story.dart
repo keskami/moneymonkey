@@ -105,23 +105,6 @@ class _StoryPageState extends State<StoryPage> {
           SizedBox(
             height: screenHeight * 0.05,
           ),
-          Text(
-            "Financial Responsibility Story",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
-            ),
-          ),
-          SizedBox(
-            height: screenHeight * 0.02,
-          ),
-          Text(
-            "Taking control of your money to build a secure future",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
           Obx(
             () => storyController.pages[storyController.pageIndex.value],
           ),

@@ -56,10 +56,10 @@ class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
     if (componentOneTwoController.pageData.isNotEmpty) {
-      setData(componentOneTwoController.pageData[8]);
+      setData(componentOneTwoController.pageData[5]);
     }
     if (title == '') {
-      setData(componentOneTwoController.pageData[8]);
+      setData(componentOneTwoController.pageData[5]);
     }
   }
 

@@ -19,6 +19,7 @@ class _LessonsHomeState extends State<LessonsHome> {
   List<Lesson> lessons = [];
   String _currentLessonTitle = '';
   String _currentUnitId = "A.1";
+  String unitTitle = "";
 
   // For illustration, assume each "lesson block" is ~400px tall
   final double _lessonBlockHeight = 1000;
@@ -36,6 +37,7 @@ class _LessonsHomeState extends State<LessonsHome> {
 
   void _loadData() {
     final currentUnit = localService.getUnit(_currentUnitId);
+    unitTitle = currentUnit.title;
     final List lessonIds = currentUnit.lessonIds;
     lessons = [];
     for (var i = 0; i < currentUnit.lessonIds.length; i++) {
@@ -230,8 +232,8 @@ class _LessonsHomeState extends State<LessonsHome> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "UNIT HEADING",
+                        Text(
+                          unitTitle,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -269,7 +271,7 @@ class _LessonsHomeState extends State<LessonsHome> {
           // 3) NEW scoreboard pinned top-right
           Positioned(
             top: 0,
-            right: 0,
+            right: 20,
             width: MediaQuery.of(context).size.width * 0.3,
             child: const ScoreboardWidget(),
           ),

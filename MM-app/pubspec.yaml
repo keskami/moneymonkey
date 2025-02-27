@@ -173,6 +173,7 @@ flutter:
     - "assets/lessonFlow/book_flip.png"
     - "assets/lessonFlow/briefcase.png"
     - "assets/lessonFlow/recycle.png"
+    - assets/images/LOGO.png
 
   fonts:
     - family: Baloo 2

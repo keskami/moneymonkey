@@ -18,17 +18,20 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
   double screenWidth = 0.0;
   final StoryController storyController = Get.find();
   bool isEnabled = false; // Tracks whether the NextButton should be enabled.
+  String scenarioText = '';
   String title = '';
+  String subtitle = '';
   bool isLoading = true;
   String problem = '';
   String instructions = '';
 
   Future<void> setData(Question data) async {
     setState(() {
+      scenarioText = data.data.scenarioText;
       title = data.data.title;
+      subtitle = data.data.subtitle;
       problem = data.data.problem;
       instructions = data.data.instructions;
-
       isLoading = false;
     });
   }
@@ -67,14 +70,31 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Story title
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  // Subtitle
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.07), // Increased spacing here
                   Container(
-                    height: screenHeight * 0.4,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          height: screenHeight * 0.6,
+                          height: screenHeight * 0.35, // Adjusted height to prevent overflow
                           width: screenWidth * 0.004,
                           decoration: BoxDecoration(
                             color: Colors.red,
@@ -89,7 +109,7 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                title,
+                                scenarioText,
                                 softWrap: true,
                                 overflow: TextOverflow.visible,
                                 style: TextStyle(
@@ -97,9 +117,10 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
                                   fontSize: 20,
                                 ),
                               ),
-                              const Spacer(),
+                              SizedBox(height: 20), // Fixed spacing instead of Spacer
                               Container(
                                 height: screenHeight * 0.2,
+                                margin: EdgeInsets.only(bottom: 20), // Added margin to prevent overflow
                                 child: TapToRevealContainer(
                                   onTap: () async {
                                     await Future.delayed(Duration(seconds: 6));
@@ -152,8 +173,9 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
                           ),
                         ),
                       ],
-                    ).marginSymmetric(vertical: screenHeight * 0.05),
+                    ),
                   ),
+                  SizedBox(height: 20), // Added space before the Next button
                   Row(
                     children: [
                       Spacer(),
@@ -165,6 +187,7 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 20), // Added padding at the bottom
                 ],
               ),
             ),
@@ -172,10 +195,133 @@ class _ComponentProblemPageState extends State<ComponentProblemPage> {
   }
 
   Widget mobileDisplay() {
-    return Column();
+    return isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Subtitle
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Scenario content
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 200, // Fixed height for mobile
+                        width: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              scenarioText,
+                              softWrap: true,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              height: 150,
+                              child: TapToRevealContainer(
+                                onTap: () async {
+                                  await Future.delayed(Duration(seconds: 6));
+                                  setState(() {
+                                    isEnabled = true;
+                                  });
+                                },
+                                contents: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: LightTheme().pastelRed.withOpacity(0.7),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      problem,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.red,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                instructions: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: LightTheme().pastelRed.withOpacity(0.7),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      instructions,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  // Next button
+                  Row(
+                    children: [
+                      Spacer(),
+                      CustomNextButton(
+                        nextPage: () {
+                          storyController.pageIndex.value += 1;
+                        },
+                        isEnabled: isEnabled,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          );
   }
 }
 
-extension on Color {
-  withValues({required double alpha}) {}
-}
+// Remove the unused extension
+// extension on Color {
+//   withValues({required double alpha}) {}
+// }

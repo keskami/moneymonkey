@@ -6,7 +6,24 @@ import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class ScenarioPage extends StatefulWidget {
-  const ScenarioPage({super.key});
+  String title = '';
+  String subTitle = '';
+  String wrong = '';
+  String correct = '';
+  String containerHeading = '';
+  String containerSubHeading = '';
+  List<String> options = [];
+  String correctAnswer = '';
+  ScenarioPage(
+      {super.key,
+      required this.title,
+      required this.subTitle,
+      required this.wrong,
+      required this.correct,
+      required this.containerHeading,
+      required this.containerSubHeading,
+      required this.options,
+      required this.correctAnswer});
 
   @override
   State<ScenarioPage> createState() => _ScenarioPageState();
@@ -15,34 +32,8 @@ class ScenarioPage extends StatefulWidget {
 class _ScenarioPageState extends State<ScenarioPage> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  List<String> correctAnswers = [];
-  List<String> options = [];
-  String containerHeading = '';
-  String containerSubHeading = '';
 
   ComponentOneTwoController componentOneTwoController = Get.find();
-
-  String title = '';
-  String subTitle = '';
-  String wrong = '';
-  String correct = '';
-  bool loading = true;
-  Future<void> setData(data) async {
-    final MultipleChoice question = data.data.questions[0];
-    setState(() {
-      title = data.data.title;
-      subTitle = data.data.scenarioExplanation;
-      wrong = question.prompts.incorrect;
-      correct = question.prompts.correct;
-      containerHeading = question.questionHeading;
-      containerSubHeading = question.question;
-      options =
-          List<String>.from(question.options.map((item) => item.toString()));
-      correctAnswers.add(data['correctAnswer']);
-
-      loading = false;
-    });
-  }
 
   @override
   void initState() {
@@ -50,20 +41,14 @@ class _ScenarioPageState extends State<ScenarioPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    if (componentOneTwoController.pageData.isNotEmpty) {
-      setData(componentOneTwoController.pageData[3]);
-    }
-    if (title == '') {
-      setData(componentOneTwoController.pageData[3]);
-    }
   }
 
   void answerQuestion(String ans) {
     currentAnswers.clear();
-    if (correctAnswers.contains(ans)) {
+    if (widget.correctAnswer == ans) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
-          .showSnackBar(CorrectAnswerSnackBar(message: correct));
+          .showSnackBar(CorrectAnswerSnackBar(message: widget.correct));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -76,7 +61,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
     } else {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
-          .showSnackBar(WrongAnswerSnackBar(message: wrong));
+          .showSnackBar(WrongAnswerSnackBar(message: widget.wrong));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -101,7 +86,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
           SizedBox(height: screenWidth * 0.02),
           //Heading
           Text(
-            title,
+            widget.title,
             softWrap: true,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -111,7 +96,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
               vertical: screenHeight * 0.025, horizontal: screenWidth * 0.015),
           //SubHeading
           Text(
-            subTitle,
+            widget.subTitle,
             softWrap: true,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -150,7 +135,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
                       height: screenHeight * 0.02,
                     ),
                     Text(
-                      containerHeading,
+                      widget.containerHeading,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 19,
@@ -160,7 +145,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
                       height: screenHeight * 0.01,
                     ),
                     Text(
-                      containerSubHeading,
+                      widget.containerSubHeading,
                       softWrap: true,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -170,7 +155,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
-                    ...options.map((answer) {
+                    ...widget.options.map((answer) {
                       return GestureDetector(
                         onTap: () {
                           answerQuestion(answer);

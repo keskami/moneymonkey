@@ -494,11 +494,12 @@ class Impact {
 
 // Scenario Option (e.g., Sneakers, College, Activities)
 class ScenarioOption {
-  const ScenarioOption({required this.title, required this.iconUrl, required this.score});
+  const ScenarioOption({required this.title, required this.iconUrl, required this.score, required this.type});
 
   final String title;
   final String iconUrl;
   final int score;
+  final String type;
 
   factory ScenarioOption.fromMap(Map<String, dynamic> map) {
     if (map['title'] == null || map['iconUrl'] == null || map['score'] == null) {
@@ -508,11 +509,12 @@ class ScenarioOption {
       title: map['title'],
       iconUrl: map['iconUrl'],
       score: map['score'],
+      type: map['type'],
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {'title': title, 'iconUrl': iconUrl, 'score': score};
+    return {'title': title, 'iconUrl': iconUrl, 'score': score, 'type': type};
   }
 }
 

@@ -34,29 +34,31 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
   double screenWidth = 0.0;
 
   // We used "lessonTypes" to build 6 polygons. Adjust as needed:
-  final List<int> lessonTypes = [0, 1, 2, 3, 4, 5];
+  final List<int> lessonTypes = [0, 1, 2, 3, 4, 5, 6];
 
   // Example "pagesLink" from your snippet:
   List<Widget> getPages(List<String> componentIds) {
     final List<Widget> pagesLink = [];
     for (int i = 0; i < componentIds.length; i++) {
       if (i == 0) {
-        pagesLink.add(LoadingPageWrapper(destinationPage: LessonOne(), componentId: componentIds[i]));
-      }
-      else if (i == 1) {
-        pagesLink.add(LoadingPageWrapper(destinationPage: LessonOne(), componentId: componentIds[i]));
-      }
-      else if (i == 2) {
-        pagesLink.add(LoadingPageWrapper(destinationPage: StoryPage(), componentId: componentIds[i]));
-      }
-      else if (i == 3) {
-        pagesLink.add(LoadingPageWrapper(destinationPage: Scenario(), componentId: componentIds[i]));
-      }
-      else if (i == 4) {
-        pagesLink.add(LoadingPageWrapper(destinationPage: PeerReflection(), componentId: componentIds[i]));
-      }
-      else if (i == 5) {
-        pagesLink.add(LoadingPageWrapper(destinationPage: PeerReflectionQuiz(), componentId: componentIds[i]));
+        pagesLink.add(LoadingPageWrapper(
+            destinationPage: LessonOne(), componentId: componentIds[i]));
+      } else if (i == 1) {
+        pagesLink.add(LoadingPageWrapper(
+            destinationPage: LessonOne(), componentId: componentIds[i]));
+      } else if (i == 2) {
+        pagesLink.add(LoadingPageWrapper(
+            destinationPage: StoryPage(), componentId: componentIds[i]));
+      } else if (i == 3) {
+        pagesLink.add(LoadingPageWrapper(
+            destinationPage: Scenario(), componentId: componentIds[i]));
+      } else if (i == 4) {
+        pagesLink.add(LoadingPageWrapper(
+            destinationPage: PeerReflection(), componentId: componentIds[i]));
+      } else if (i == 5) {
+        pagesLink.add(LoadingPageWrapper(
+            destinationPage: PeerReflectionQuiz(),
+            componentId: componentIds[i]));
       }
     }
     return pagesLink;
@@ -128,7 +130,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
 
   /// Builds one "lesson" section: heading + polygons + lines
   Widget _buildLessonSection(Lesson lesson) {
-    final List<String> componentIds= lesson.components;
+    final List<String> componentIds = lesson.components;
 
     final List<Widget> pagesLink = getPages(componentIds);
     // The chain of lines
@@ -204,9 +206,11 @@ class SlantLinePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 //Bhavya: Changed here to get height-25.
     if (RightToLeft) {
-      canvas.drawLine(Offset(size.width, 0), Offset(0, size.height-25), paint);
+      canvas.drawLine(
+          Offset(size.width, 0), Offset(0, size.height - 25), paint);
     } else {
-      canvas.drawLine(Offset(0, 0), Offset(size.width, size.height-25), paint);
+      canvas.drawLine(
+          Offset(0, 0), Offset(size.width, size.height - 25), paint);
     }
   }
 
@@ -255,10 +259,7 @@ class CustomPolygonRow extends StatelessWidget {
         lessonPolygonStack = leftRow(context);
         break;
       case 6:
-        lessonPolygonStack = middleRow(context);
-        break;
-      case 7:
-        lessonPolygonStack = rightRow(context);
+        lessonPolygonStack = middleRow(context, isTreasure: true);
         break;
       default:
         lessonPolygonStack = middleRow(context);
@@ -534,125 +535,212 @@ class CustomPolygonRow extends StatelessWidget {
     );
   }
 
-  Widget middleRow(BuildContext context) {
+  Widget middleRow(BuildContext context, {bool isTreasure = false}) {
     return Row(
       children: [
         const Spacer(),
-        CustomPopup(
-          content: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: width * 0.1,
-              vertical: width * 0.05,
-            ),
-            width: width * 4,
-            height: width * 2,
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Money and Currencies",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "Lesson ${index + 1} of 7",
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => pagesLink[index],
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Start",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(
-                            10,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: LightTheme().primaryBlue,
+        // If this is the treasure index (index 6), use TreasureWidget instead of the normal LessonPolygon
+        if (isTreasure)
+          CustomPopup(
+            content: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: width * 0.1,
+                vertical: width * 0.05,
+              ),
+              width: width * 4,
+              height: width * 2,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Congratulations!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.amber.shade700,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Rewards:",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Lesson Complete",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const Spacer(),
-                    //Monkey Question Mark
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      radius: width * 0.25,
-                      backgroundImage: NetworkImage(
-                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2Fmonkey_question.png?alt=media&token=248dc316-1996-4305-a98a-ece166e7cb27",
-                      ),
-                    ),
-                    const Spacer(),
-                    //LessonBananaWorth Image
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      radius: width * 0.3,
-                      backgroundImage: NetworkImage(
-                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLessonBananaReward.png?alt=media&token=9ff7a738-ad66-4f7b-a9e2-7a6c451284a6",
-                      ),
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Claim treasure action
+                      },
                       child: Text(
-                        "10",
+                        "Claim Reward",
                         style: TextStyle(
-                          fontSize: 16,
+                          color: Colors.white,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        backgroundColor: Colors.amber.shade700,
+                      ),
                     ),
-                    const Spacer(),
-                  ],
-                )
-              ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Special Reward:",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        radius: width * 0.3,
+                        backgroundImage: NetworkImage(
+                          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLessonBananaReward.png?alt=media&token=9ff7a738-ad66-4f7b-a9e2-7a6c451284a6",
+                        ),
+                        child: Text(
+                          "50",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            child: TreasureWidget(width: width, isActivated: isActivated),
+          )
+        else
+          CustomPopup(
+            content: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: width * 0.1,
+                vertical: width * 0.05,
+              ),
+              width: width * 4,
+              height: width * 2,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Money and Currencies",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "Lesson ${index + 1} of 7",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => pagesLink[index],
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Start",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              10,
+                            ),
+                          ),
+                        ),
+                        backgroundColor: LightTheme().primaryBlue,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Rewards:",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      //Monkey Question Mark
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        radius: width * 0.25,
+                        backgroundImage: NetworkImage(
+                          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2Fmonkey_question.png?alt=media&token=248dc316-1996-4305-a98a-ece166e7cb27",
+                        ),
+                      ),
+                      const Spacer(),
+                      //LessonBananaWorth Image
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        radius: width * 0.3,
+                        backgroundImage: NetworkImage(
+                          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLessonBananaReward.png?alt=media&token=9ff7a738-ad66-4f7b-a9e2-7a6c451284a6",
+                        ),
+                        child: Text(
+                          "10",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            child: LessonPolygon(
+              backgroundColor: Colors.grey.shade400,
+              icon: Icon(
+                Icons.lock,
+              ),
+              isActivated: isActivated,
+              width: width,
+              index: index,
+              imageLinks: imageLinks,
             ),
           ),
-          child: LessonPolygon(
-            backgroundColor: Colors.grey.shade400,
-            icon: Icon(
-              Icons.lock,
-            ),
-            isActivated: isActivated,
-            width: width,
-            index: index,
-            imageLinks: imageLinks,
-          ),
-        ),
-        if (index == 6) SizedBox(width: width * 0.5),
-        if (index == 6) TreaureWidget(width: width, isActivated: isActivated),
-        if (index != 6) const Spacer(),
+        const Spacer(),
       ],
     );
   }
@@ -694,11 +782,7 @@ class CustomPolygonLinesRow extends StatelessWidget {
         lessonPolygonStack = leftRow(context);
         break;
       case 6:
-        lessonPolygonStack = middleRow(context, true);
-        break;
-      case 7:
-        lessonPolygonStack = rightRow(context);
-        break;
+        return Container();
       default:
         lessonPolygonStack = middleRow(context, false);
     }
@@ -805,8 +889,8 @@ class CustomPolygonLinesRow extends StatelessWidget {
   }
 }
 
-class TreaureWidget extends StatelessWidget {
-  const TreaureWidget({
+class TreasureWidget extends StatelessWidget {
+  const TreasureWidget({
     super.key,
     required this.width,
     required this.isActivated,

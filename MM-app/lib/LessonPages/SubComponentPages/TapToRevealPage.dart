@@ -59,7 +59,7 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
     initializeContents(screenWidth, screenHeight);
     if (showContent) {
       Future.delayed(
-        Duration(seconds: 12),
+        Duration(seconds: 6),
         () {
           setState(() {
             enableNext = true;
