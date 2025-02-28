@@ -265,8 +265,8 @@ Map<String, Lesson> advancedLessons = {
   ),
   'A.1.2': Lesson(
     lessonId: 'A.1.2',
-    title: 'Trading Principles',
-    description: 'Core principles of successful trading strategies',
+    title: 'Evaluating Financial Information',
+    description: 'Analyzing and Interpreting the difference between real and fake',
     lessonStatus: Status.Active,
     components:
         List.generate(6, (index) => 'A.1.2.${index + 1}'), // 6 components
@@ -280,14 +280,14 @@ Map<String, Lesson> advancedLessons = {
     studentWorkshopTemplateLinks: "",
     teachersGuideLink: "",
   ),
-  // 'A.1.3': Lesson(
-  //   lessonId: 'A.1.3',
-  //   title: 'Risk Management',
-  //   description: 'Understanding and mitigating trading risks',
-  //   lessonStatus: Status.Active,
-  //   components:
-  //       List.generate(6, (index) => 'A.1.3.${index + 1}'), // 6 components
-  //   progress: 0,
+  'A.1.3': Lesson(
+    lessonId: 'A.1.3',
+    title: 'Risk Management',
+    description: 'Understanding and mitigating trading risks',
+    lessonStatus: Status.Active,
+    components:
+        List.generate(6, (index) => 'A.1.3.${index + 1}'), // 6 components
+    progress: 0,
 
     totalComponents: 6,
     interactiveActivityLinks: [""],
@@ -1175,7 +1175,7 @@ Map<String, Component> advancedComponents = {
           options: [
             QuizOption(
                 text: "Saving for a concert ticket",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fconcert-ticket.svg?alt=media&token=ee234595-08d5-4b83-a3be-d648e3473c3a"),
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fconcert-ticket.png?alt=media&token=1e718b09-e111-4f3f-942f-41c43ffb3741"),
             QuizOption(
                 text: "Planning for college tuition",
                 imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcollegehat.png?alt=media&token=28948378-e9e6-455a-927c-cd1d0b118e69"),

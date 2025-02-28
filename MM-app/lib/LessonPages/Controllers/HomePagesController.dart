@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:money_monkey/BudgetSimulator/Pages/landingPage.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulator.dart';
 import 'package:money_monkey/Friends/comingSoonPage.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
@@ -11,7 +11,7 @@ class HomePagesController extends GetxController {
     LessonsHome(),
     PortfolioScreen(),
     ComingSoonPage(),
-    BudgetSimulatorLanding(),
+    BudgetSimulator(name: 'Crush the Credit Card Debt', checkingAccountBalance: 300, savingsAccountBalance: 300, creditCardDebt: 3000, startingBalance: 600, APY: 3,),
     ProfileScreen(),
   ];
 }
