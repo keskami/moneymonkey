@@ -7,6 +7,7 @@ import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardContro
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LessonManagement extends StatefulWidget {
   const LessonManagement({super.key});
@@ -22,6 +23,15 @@ class _LessonManagementState extends State<LessonManagement> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _launchURL(String driveLink) async {
+    final Uri url = Uri.parse(driveLink);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw "Could not launch $driveLink";
+    }
   }
 
   String getActionForStatus(Status status) {
@@ -95,7 +105,7 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        teacherDashboardController.lessonManagementMessage1,
+                        teacherDashboardController.presentLesson.title,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -106,7 +116,7 @@ class _LessonManagementState extends State<LessonManagement> {
                         height: 5,
                       ),
                       Text(
-                        teacherDashboardController.lessonManagementMessage2,
+                        teacherDashboardController.presentLesson.description,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -202,119 +212,113 @@ class _LessonManagementState extends State<LessonManagement> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
+                      for (String iaLink in teacherDashboardController
+                          .presentLesson.interactiveActivityLinks)
+                        GestureDetector(
+                          onTap: () {
+                            if (iaLink.isNotEmpty) _launchURL(iaLink);
+                          },
+                          child: ColoredPaddedContainer(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: screenHeight * 0.02,
+                            ),
+                            width: screenWidth * 0.2,
+                            height: screenHeight * 0.18,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.transparent,
+                                  child: Image.network(
+                                    AppResources.interactiveAtivityGuide,
+                                  ),
+                                ),
+                                Text(
+                                  "Interactive Activity Guide",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                AppResources.interactiveAtivityGuide,
+                      GestureDetector(
+                        onTap: () {
+                          if (teacherDashboardController
+                              .presentLesson.teachersGuideLink.isNotEmpty)
+                            _launchURL(teacherDashboardController
+                                .presentLesson.teachersGuideLink);
+                        },
+                        child: ColoredPaddedContainer(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: screenHeight * 0.02,
+                          ),
+                          color: Color.fromARGB(255, 239, 246, 255),
+                          width: screenWidth * 0.2,
+                          height: screenHeight * 0.18,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                child: Image.network(
+                                  AppResources.teachersGuide,
+                                ),
                               ),
-                            ),
-                            Text(
-                              "Interactive Activity Guide",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
+                              Text(
+                                "Teacher's Guide",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        color: Color.fromARGB(255, 239, 246, 255),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                AppResources.teachersGuide,
-                              ),
-                            ),
-                            Text(
-                              "Teacher's Guide",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        color: Color.fromARGB(255, 250, 245, 255),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                AppResources.studentWorkshopTemplate,
-                              ),
-                            ),
-                            Text(
-                              "Student Worksheet Template",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        color: Color.fromARGB(255, 255, 236, 213),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FTeacher%20Dashboard%2FLesson%20management%2FIcon4.png?alt=media&token=aabe9c04-773a-4e47-af73-25aedd6a3612",
+                      GestureDetector(
+                        onTap: () {
+                          if (teacherDashboardController.presentLesson
+                              .studentWorkshopTemplateLinks.isNotEmpty)
+                            _launchURL(teacherDashboardController
+                                .presentLesson.studentWorkshopTemplateLinks);
+                        },
+                        child: ColoredPaddedContainer(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: screenHeight * 0.02,
+                          ),
+                          color: Color.fromARGB(255, 250, 245, 255),
+                          width: screenWidth * 0.2,
+                          height: screenHeight * 0.18,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                child: Image.network(
+                                  AppResources.studentWorkshopTemplate,
+                                ),
                               ),
-                            ),
-                            Text(
-                              "Teacher's Guide",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
+                              Text(
+                                "Student Worksheet Template",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.purple,
+                                ),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -352,16 +356,22 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        localAcademicService.getLesson(localAcademicService.getNextLessonId(
-                            teacherDashboardController.presentLesson.lessonId)).title,
+                        localAcademicService
+                            .getLesson(localAcademicService.getNextLessonId(
+                                teacherDashboardController
+                                    .presentLesson.lessonId))
+                            .title,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        localAcademicService.getLesson(localAcademicService.getNextLessonId(
-                            teacherDashboardController.presentLesson.lessonId)).description,
+                        localAcademicService
+                            .getLesson(localAcademicService.getNextLessonId(
+                                teacherDashboardController
+                                    .presentLesson.lessonId))
+                            .description,
                         style: TextStyle(
                           fontSize: 18,
                         ),

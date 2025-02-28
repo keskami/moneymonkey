@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/landingPage.dart';
 import 'package:money_monkey/Friends/comingSoonPage.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
@@ -10,6 +11,7 @@ class HomePagesController extends GetxController {
     LessonsHome(),
     PortfolioScreen(),
     ComingSoonPage(),
+    BudgetSimulatorLanding(),
     ProfileScreen(),
   ];
 }

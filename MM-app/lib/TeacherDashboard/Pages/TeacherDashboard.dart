@@ -35,45 +35,47 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Teacher Dashboard",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: screenHeight * 0.04),
-        Row(
-          children: [
-            CircleAvatar(radius: 25),
-            Text(
-              "Welcome,\n${sampleTeacher.name}",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ).marginOnly(left: screenWidth * 0.01),
-            const Spacer(),
-            CustomDropDownContainer(
-              width: screenWidth * 0.3,
-              items: teacherDashboardController.classes.values.toList(),
-              onChanged: onClassPicked,
-            ),
-          ],
-        ).marginSymmetric(horizontal: screenWidth * 0.05),
-        DashboardSubPageSelector().marginSymmetric(
-          vertical: screenHeight * 0.02,
-          horizontal: screenWidth * 0.05,
-        ),
-        Container(
-          height: screenHeight * 0.65,
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: Obx(() =>teacherDashboardController.currentPage.value),
-        ),
-      ],
-    )
-        .marginSymmetric(
-          horizontal: screenWidth * 0.1,
-        )
-        .marginOnly(
-          top: screenHeight * 0.04,
-        );
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Teacher Dashboard",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: screenHeight * 0.04),
+          Row(
+            children: [
+              CircleAvatar(radius: 25),
+              Text(
+                "Welcome,\n${sampleTeacher.name}",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ).marginOnly(left: screenWidth * 0.01),
+              const Spacer(),
+              CustomDropDownContainer(
+                width: screenWidth * 0.3,
+                items: teacherDashboardController.classes.values.toList(),
+                onChanged: onClassPicked,
+              ),
+            ],
+          ).marginSymmetric(horizontal: screenWidth * 0.05),
+          DashboardSubPageSelector().marginSymmetric(
+            vertical: screenHeight * 0.02,
+            horizontal: screenWidth * 0.05,
+          ),
+          Container(
+            height: screenHeight * 0.65,
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Obx(() =>teacherDashboardController.currentPage.value),
+          ),
+        ],
+      )
+          .marginSymmetric(
+            horizontal: screenWidth * 0.1,
+          )
+          .marginOnly(
+            top: screenHeight * 0.04,
+          ),
+    );
   }
 }
