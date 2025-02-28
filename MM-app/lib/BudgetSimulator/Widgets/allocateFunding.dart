@@ -1158,7 +1158,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       color: Colors.black),
                                 ),
                                 SizedBox(
-                                  width: widget.screenWidthUnit * 30,
+                                  width: widget.screenWidthUnit * 10,
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -1171,8 +1171,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                     }
                                   },
                                   child: Container(
-                                    width: 70 * widget.screenHeightUnit,
-                                    height: 70 * widget.screenHeightUnit,
+                                    width: 60 * widget.screenHeightUnit,
+                                    height: 60 * widget.screenHeightUnit,
                                     decoration: BoxDecoration(
                                       color: Color.fromRGBO(79, 195, 247, 1),
                                       borderRadius: BorderRadius.circular(5),
@@ -1190,7 +1190,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: widget.screenWidthUnit * 40),
                                   child: Container(
-                                      width: widget.screenWidthUnit * 120,
+                                      width: widget.screenWidthUnit * 90,
                                       child: Center(
                                           child: Text(
                                         "+$toCredCardDebt",
@@ -1213,8 +1213,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                     }
                                   },
                                   child: Container(
-                                    width: 70 * widget.screenHeightUnit,
-                                    height: 70 * widget.screenHeightUnit,
+                                    width: 60 * widget.screenHeightUnit,
+                                    height: 60 * widget.screenHeightUnit,
                                     decoration: BoxDecoration(
                                       color: Color.fromRGBO(79, 195, 247, 1),
                                       borderRadius: BorderRadius.circular(5),

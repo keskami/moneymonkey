@@ -9,35 +9,96 @@ class SideBar extends StatelessWidget {
     "Home": "assets/images/globemonkey.png",
     "Portfolio": "assets/images/treasure.png",
     "Characters": "assets/images/bottommonkey.png",
-    "BudgetSimulator":"assets/images/budget_simulator.png",
+    "BudgetSimulator": "assets/images/budget_simulator.png",
     "Profile": "assets/images/bluemonkey.png",
   };
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    return Obx(
-      () => Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(
-          horizontal: 10,
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: screenHeight * 0.05,
-            ),
-            for (var entry in imageLinks.entries)
-              SideBarTile(
-                icon: entry.value,
-                index: imageLinks.keys.toList().indexOf(entry.key),
-                title: entry.key.toUpperCase(),
-                isSelected: homePagesController.pageIndex.value ==
-                    imageLinks.keys.toList().indexOf(entry.key),
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeightUnit = screenHeight / 1406;
+    double screenWidthUnit = screenWidth / 2079;
+
+    return Obx(() {
+      // Check if we're on the Budget Simulator page
+      bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
+
+      if (isBudgetSimulator) {
+        // Collapsed sidebar for Budget Simulator with matching width
+        return SizedBox(
+          height: screenHeight,
+          width: screenWidthUnit * 159, // Width is already set to match the BudgetSimulator sidebar
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: Colors.black,
+                  width: screenWidthUnit * 1.5,
+                ),
               ),
-          ],
-        ),
-      ),
-    );
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: screenHeightUnit * 80,
+                ),
+                // Only show icons in collapsed mode
+                for (var entry in imageLinks.entries)
+                  GestureDetector(
+                    onTap: () {
+                      homePagesController.pageIndex.value = 
+                          imageLinks.keys.toList().indexOf(entry.key);
+                    },
+                    child: Container(
+                      height: screenHeightUnit * 100,
+                      width: screenWidthUnit * 130,
+                      decoration: BoxDecoration(
+                        color: homePagesController.pageIndex.value == 
+                            imageLinks.keys.toList().indexOf(entry.key)
+                            ? Color.fromRGBO(225, 243, 254, 1)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: screenHeightUnit * 60,
+                          width: screenWidthUnit * 60,
+                          child: Image.asset(entry.value),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      } else {
+        // Regular sidebar for other pages
+        return Container(
+          width: screenWidthUnit * 250, // Wider sidebar for regular view
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: screenHeight * 0.05,
+              ),
+              for (var entry in imageLinks.entries)
+                SideBarTile(
+                  icon: entry.value,
+                  index: imageLinks.keys.toList().indexOf(entry.key),
+                  title: entry.key.toUpperCase(),
+                  isSelected: homePagesController.pageIndex.value ==
+                      imageLinks.keys.toList().indexOf(entry.key),
+                ),
+            ],
+          ),
+        );
+      }
+    });
   }
 }
 
@@ -54,7 +115,7 @@ class SideBarTile extends StatelessWidget {
   final String title;
   final bool isSelected;
   final HomePagesController homePagesController = Get.find();
-
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

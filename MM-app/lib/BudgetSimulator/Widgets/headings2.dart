@@ -53,7 +53,7 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 175.8,
+            width: screenWidthUnit * 115.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +242,7 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 175.8,
+            width: screenWidthUnit * 135.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -441,7 +441,7 @@ class Headings2 {
             ),
           ),
           SizedBox(
-            width: screenWidthUnit * 85.8, // Increased by 10%
+            width: screenWidthUnit * 35.8, // Increased by 10%
           ),
           Text(
             "-\$${creditCardDebt}",

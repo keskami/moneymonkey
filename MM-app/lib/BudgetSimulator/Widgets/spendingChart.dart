@@ -88,7 +88,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
             children: [
               Container(
                 height: 240 * widget.screenHeightUnit,
-                width: 350 * widget.screenHeightUnit,
+                width: 200 * widget.screenHeightUnit,
                 child: SfCircularChart(
                   annotations: <CircularChartAnnotation>[
                     CircularChartAnnotation(

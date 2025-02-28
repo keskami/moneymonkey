@@ -34,49 +34,64 @@ class _HomePageState extends State<HomePage> {
         : mobileDisplay(context);
   }
 
-  /// WEB DISPLAY
+// Update this part of the webDisplay method in your HomePage class
   Scaffold webDisplay(BuildContext context, double screenWidth) {
-    return Scaffold(
-      body: Obx(
-        () => Row(
-          children: [
-            // Sidebar (20% width)
-            SizedBox(
-              width: screenWidth * 0.2,
-              child: SideBar(),
-            ),
+    double screenHeightUnit = MediaQuery.of(context).size.height / 1406;
+    double screenWidthUnit = screenWidth / 2079;
 
-            // Main content (80% width)
+    return Scaffold(
+      body: Obx(() {
+        // Determine if we're in Budget Simulator mode
+        bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
+
+        return Row(
+          children: [
+            // Conditionally render the sidebar with appropriate width
+            isBudgetSimulator
+                ? SizedBox(
+                    width: screenWidthUnit * 159,
+                    child: SideBar(),
+                  )
+                : SizedBox(
+                    width: screenWidth * 0.2,
+                    child: SideBar(),
+                  ),
+
+            // Main content with adjusted width
             SizedBox(
-              width: screenWidth * 0.8,
+              width: isBudgetSimulator
+                  ? screenWidth - (screenWidthUnit * 159)
+                  : screenWidth * 0.8,
               child: homePagesController
                   .pages[homePagesController.pageIndex.value],
-            )
-          ],
-        ),
-      ),
-      floatingActionButton: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(
-            LightTheme().primaryBlue,
-          ),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TeacherDashboard(),
             ),
-          );
-        },
-        child: Text(
-          "Teacher Dashboard",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
-        ),
-      ),
+          ],
+        );
+      }),
+      floatingActionButton: Obx(() => homePagesController.pageIndex.value == 3
+          ? Container() // Empty container when on Budget Simulator
+          : ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(
+                  LightTheme().primaryBlue,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TeacherDashboard(),
+                  ),
+                );
+              },
+              child: Text(
+                "Teacher Dashboard",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            )),
     );
   }
 
