@@ -17,21 +17,21 @@ Teacher sampleTeacher = Teacher(
 Map<String, Classroom> sampleClassrooms = {
   'tempClassId1_2025': Classroom(
     classId: 'tempClassId1_2025',
-    name: "Financial Basics 101",
+    name: "Gold Period 1",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S123456", "S789012", "S345678"],
     lessonId: 'A.1.1',
   ),
   'tempClassId2_2025': Classroom(
     classId: 'tempClassId2_2025',
-    name: "Investment Fundamentals",
+    name: "Blue Period 1",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S567890", "S123456"],
     lessonId: 'A.1.2',
   ),
   'tempClassId3_2025': Classroom(
     classId: 'tempClassId3_2025',
-    name: "Advanced Trading",
+    name: "Gold Period 2",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S789012"],
     lessonId: 'A.1.4',
@@ -216,7 +216,7 @@ List<Unit> sampleAdvancedSyllabus = [
 Map<String, Unit> advancedUnits = {
   'A.1': Unit(
     unitId: 'A.1',
-    title: 'Fundamentals of Trading',
+    title: 'Financial Responsibility',
     description: 'Introduction to market structures and trading basics',
     lessonIds: [
       'A.1.1',
@@ -396,7 +396,7 @@ Map<String, Component> advancedComponents = {
         data: RevealCard(
           title: "Definition: Financial Responsibility Over a Lifetime",
           definition:
-              "Financial responsibility involves managing your money and other assets in a way that is productive and in your best interest. This includes living within your means, budgeting, saving, investing wisely, and planning for both foreseeable and unforeseen expenses throughout your life.",
+              " Financial responsibility involves managing your money and other assets in a way that is productive and in your best interest. This includes living within your means, budgeting, saving, investing wisely, and planning for both foreseeable and unforeseen expenses throughout your life.",
           tapInstruction:
               "Click to reveal what it really means to be financially responsible over a lifetime.",
           whyMatter:
@@ -636,12 +636,16 @@ Map<String, Component> advancedComponents = {
         data: IconReveal(
           title: "Definition: How Responsibilities Change Based on Dependents",
           iconLinks: [
-            "assets/icons/flying_solo.png",
-            "assets/icons/supporting_family.png"
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fsolo.png?alt=media&token=9f305842-4c3f-446c-ae5f-763eb36e4f19",
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Ffamily.png?alt=media&token=e939f650-71be-4a9c-b692-009b695a5d17",
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fdual.png?alt=media&token=8f8a8fe8-d6ae-42e7-9370-d62b75dcad6c",
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fold-people.png?alt=media&token=1aec6d3c-6feb-41f3-abd4-aceeb8499cec"
           ],
           contents: [
-            "Flying Solo: More financial flexibility, focusing on personal growth, investing, and building long-term wealth.",
-            "Supporting Others: Requires budgeting for dependents’ needs like food, healthcare, education, and maintaining a strong emergency fund."
+            "Flying Solo: More financial flexibility, focusing on personal growth, investing, and building long-term wealth. Emergency funds and insurance needs are lower.",
+            "Supporting Family: Requires budgeting for dependents’ needs like food, healthcare, education, and maintaining a strong emergency fund. Life insurance becomes critical.",
+            "Dual Income, No Kids: More flexibility with combined income, but also involves balancing shared goals like homeownership, travel, or early retirement.",
+            "Caring for Aging Parents: Budgeting for healthcare, housing, and possible home modifications. This also includes understanding elder care options and estate planning."
           ],
         ),
       ),
@@ -701,7 +705,7 @@ Map<String, Component> advancedComponents = {
           ],
           options2: [
             "They don’t have to budget or plan their expenses.",
-            "They can allocate more income toward personal financial growth, such as investments."
+            "They can allocate more income toward personal financial growth, such as investments.",
             "They don’t need to save money for future emergencies."
           ],
           correctAns1: "Building a family emergency fund and prioritizing essential expenses.",
@@ -873,17 +877,17 @@ Map<String, Component> advancedComponents = {
               options: [
                 ScenarioOption(
                     title: "Save \$250 (50%)",
-                    iconUrl: "assets/images/save_250.png",
+                    iconUrl: "Maximum savings for future goals",
                     score: 40,
                     type: ""),
                 ScenarioOption(
                     title: "Save \$100 (20%)",
-                    iconUrl: "assets/images/save_100.png",
+                    iconUrl: "Moderate savings approach.",
                     score: 20,
                     type: ""),
                 ScenarioOption(
                     title: "Save \$0 (0%)",
-                    iconUrl: "assets/images/save_0.png",
+                    iconUrl: "No savings",
                     score: 0,
                     type: "")
               ],
