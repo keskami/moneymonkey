@@ -204,7 +204,9 @@ class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
                       CustomNextButton(
                         nextPage: () {
                           // componentOneTwoController.pageIndex.value = 0;
-                          componentOneTwoController.dispose();
+                          if (Get.isRegistered<ComponentOneTwoController>()) {
+                            Get.delete<ComponentOneTwoController>();
+                          }
                           Navigator.push(
                               context,
                               MaterialPageRoute(

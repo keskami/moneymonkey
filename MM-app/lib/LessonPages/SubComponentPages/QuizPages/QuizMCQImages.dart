@@ -275,13 +275,17 @@ class _QuizMCQImagesPageState extends State<QuizMCQImagesPage> {
                   // Reset state before moving to next page
                   resetState();
 
+                  if (Get.isRegistered<PeerReflectionQuizcontroller>()) {
+                    Get.delete<PeerReflectionQuizcontroller>();
+                  }
+
                   // Move to next page
                   peerReflectionQuizcontroller.pageIndex.value += 1;
                   peerReflectionQuizcontroller.pageIndex.value ==
                           peerReflectionQuizcontroller.pageData.length
                       ? peerReflectionQuizcontroller.pageIndex.value = 0
                       : peerReflectionQuizcontroller.pageIndex.value;
-                      
+
                   if (peerReflectionQuizcontroller.pageIndex.value == 0) {
                     Navigator.push(
                       context,

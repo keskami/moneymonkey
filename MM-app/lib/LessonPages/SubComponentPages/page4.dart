@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
 import 'package:money_monkey/LessonPages/Models/Models.dart';
+import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/home.dart';
 
 class Page4 extends StatefulWidget {
@@ -23,7 +24,7 @@ class _Page4State extends State<Page4> {
   bool avaClicked = false;
   PeerReflectioncontroller peerReflectionController = Get.find();
   bool delay = false;
-  
+
   // New variables for updated functionality
   bool submitted = false;
   bool finishMode = false;
@@ -73,23 +74,20 @@ class _Page4State extends State<Page4> {
       delay = true;
     });
   }
-  
+
   // Show the appropriate feedback based on the selected option
   void _showFeedback() {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    
+
     if (mariaClicked) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        CorrectAnswerSnackBar(message: feedback1)
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CorrectAnswerSnackBar(message: feedback1));
     } else if (jasonClicked) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        CorrectAnswerSnackBar(message: feedback2)
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CorrectAnswerSnackBar(message: feedback2));
     } else if (avaClicked) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        CorrectAnswerSnackBar(message: feedback3)
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CorrectAnswerSnackBar(message: feedback3));
     }
   }
 
@@ -131,7 +129,7 @@ class _Page4State extends State<Page4> {
           ),
         ),
         SizedBox(height: webScreenHeightUnit * 50),
-        
+
         // Centered option cards
         Container(
           width: cardWidth,
@@ -199,7 +197,7 @@ class _Page4State extends State<Page4> {
             ],
           ),
         ),
-        
+
         // Bottom button with consistent spacing
         Padding(
           padding: EdgeInsets.only(top: webScreenHeightUnit * 60),
@@ -207,18 +205,23 @@ class _Page4State extends State<Page4> {
             onTap: () {
               if (finishMode) {
                 // User already submitted, clicking "Finish" navigates to home
+                if (Get.isRegistered<PeerReflectioncontroller>()) {
+                  Get.delete<PeerReflectioncontroller>();
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomePage()),
                 );
-              } else if ((avaClicked || jasonClicked || mariaClicked) && delay && !submitted) {
+              } else if ((avaClicked || jasonClicked || mariaClicked) &&
+                  delay &&
+                  !submitted) {
                 // First submission - show feedback, lock the selection, change button text
                 setState(() {
                   submitted = true;
                   finishMode = true;
                   button = "Finish";
                 });
-                
+
                 // Show appropriate feedback
                 _showFeedback();
               } else if (!delay) {
@@ -286,9 +289,7 @@ Widget lessonTab({
     child: Container(
       width: cardWidth, // Fixed width to prevent overflow
       decoration: BoxDecoration(
-        color: isClicked
-            ? Color.fromRGBO(137, 220, 142, 1)
-            : Colors.white,
+        color: isClicked ? Color.fromRGBO(137, 220, 142, 1) : Colors.white,
         borderRadius: BorderRadius.circular(5),
         border: Border.all(
           color: const Color.fromRGBO(175, 175, 175, 1),
@@ -317,7 +318,10 @@ Widget lessonTab({
               name,
               style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 3.6,
-                color: isDisabled && !isClicked ? Colors.grey : Colors.black, // Grey out unselected options after submission
+                color: isDisabled && !isClicked
+                    ? Colors.grey
+                    : Colors
+                        .black, // Grey out unselected options after submission
                 fontWeight: FontWeight.w500,
               ),
               overflow: TextOverflow.visible,

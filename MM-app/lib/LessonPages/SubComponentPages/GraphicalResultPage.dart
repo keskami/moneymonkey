@@ -54,85 +54,85 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      Row(
+        children: [
+          const Spacer(),
+          const Spacer(),
+          const Spacer(),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Spacer(),
+          Image.network(
+            width: screenWidth * 0.1,
+            height: screenHeight * 0.2,
+            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+          )
+        ],
+      ),
+      Image.network(
+        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Ftemp.png?alt=media&token=7e4f0270-18cb-4d10-86ba-30bb2ccfb68d",
+        width: screenWidth * 0.3,
+        height: screenHeight * 0.25,
+      ),
+      const SizedBox(height: 40),
+      Container(
+        width: screenWidth * 0.4,
+        height: screenHeight * 0.15,
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.02,
+          vertical: screenHeight * 0.02,
+        ),
+        decoration: BoxDecoration(
+          color: LightTheme().primaryBlue.withAlpha(70),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Spacer(),
-            const Spacer(),
-            const Spacer(),
             Text(
-              title,
+              "$subTitle ${scenarioController.responsibilityScore.value.toStringAsFixed(2)}",
+              textAlign: TextAlign.start,
               style: const TextStyle(
-                fontSize: 30,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const Spacer(),
-            Image.network(
-              width: screenWidth * 0.1,
-              height: screenHeight * 0.2,
-              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
-            )
+            Text(
+              message,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
-        Image.network(
-          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Ftemp.png?alt=media&token=7e4f0270-18cb-4d10-86ba-30bb2ccfb68d",
-          width: screenWidth * 0.3,
-          height: screenHeight * 0.25,
-        ),
-        const SizedBox(height: 40),
-        Container(
-          width: screenWidth * 0.4,
-          height: screenHeight * 0.15,
-          padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.02,
-            vertical: screenHeight * 0.02,
-          ),
-          decoration: BoxDecoration(
-            color: LightTheme().primaryBlue.withAlpha(70),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "$subTitle ${scenarioController.responsibilityScore.value.toStringAsFixed(2)}",
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                message,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomNextButton(
-              nextPage: () {
-                setState(() {
-                  scenarioController.pageIndex.value = 0;
-                  scenarioController.responsibilityScore.value = 0;
-                  scenarioController.dispose();
-                });
-                Navigator.pop(context);
-              },
-              isEnabled: true,
-              text: button,
-            )
-          ],
-        ).marginOnly(top: 45),
-      ]
-    );
+      ),
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CustomNextButton(
+            nextPage: () {
+              if (Get.isRegistered<ScenarioController>()) {
+                Get.delete<ScenarioController>();
+              }
+              setState(() {
+                scenarioController.pageIndex.value = 0;
+                scenarioController.responsibilityScore.value = 0;
+                scenarioController.dispose();
+              });
+              Navigator.pop(context);
+            },
+            isEnabled: true,
+            text: button,
+          )
+        ],
+      ).marginOnly(top: 45),
+    ]);
   }
 }

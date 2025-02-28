@@ -86,7 +86,8 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.07), // Increased spacing here
+                  SizedBox(
+                      height: screenHeight * 0.07), // Increased spacing here
                   // Main content area
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,8 +122,10 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
                             Container(
                               height: 200, // Fixed container height
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center, // Center items vertically
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment
+                                    .center, // Center items vertically
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   // Before container with fixed width
                                   Container(
@@ -150,7 +153,8 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
                                     width: screenWidth * 0.15,
                                     child: TapToRevealContainer(
                                       onTap: () async {
-                                        await Future.delayed(Duration(seconds: 6));
+                                        await Future.delayed(
+                                            Duration(seconds: 6));
                                         setState(() {
                                           isEnabled = true;
                                         });
@@ -186,6 +190,9 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
                           storyController.toImpact.value = false;
                           storyController.toSolution.value = false;
                           Navigator.pop(context);
+                          if (Get.isRegistered<StoryController>()) {
+                            Get.delete<StoryController>();
+                          }
                         },
                         isEnabled: isEnabled,
                         text: 'Finish',
@@ -221,7 +228,9 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
                   SizedBox(height: 10),
                   // Subtitle
                   Text(
-                    subtitle.isEmpty ? "Taking control of your money to build a secure future" : subtitle,
+                    subtitle.isEmpty
+                        ? "Taking control of your money to build a secure future"
+                        : subtitle,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,

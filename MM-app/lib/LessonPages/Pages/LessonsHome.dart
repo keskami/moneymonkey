@@ -22,7 +22,7 @@ class _LessonsHomeState extends State<LessonsHome> {
   String unitTitle = "";
 
   // For illustration, assume each "lesson block" is ~400px tall
-  final double _lessonBlockHeight = 1000;
+  final double _lessonBlockHeight = 700;
 
   @override
   void initState() {
