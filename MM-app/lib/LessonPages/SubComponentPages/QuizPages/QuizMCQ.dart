@@ -271,23 +271,28 @@ class _QuizMCQPageState extends State<QuizMCQPage> {
                 if (correct) {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-                  // Reset state before moving to next page
                   resetState();
 
-                  // Move to next page
-                  peerReflectionQuizcontroller.pageIndex.value += 1;
-                  peerReflectionQuizcontroller.pageIndex.value ==
-                          peerReflectionQuizcontroller.pageData.length
-                      ? peerReflectionQuizcontroller.pageIndex.value = 0
-                      : peerReflectionQuizcontroller.pageIndex.value;
+                  if (peerReflectionQuizcontroller.pageIndex.value <
+                      peerReflectionQuizcontroller.pageData.length - 1) {
+                    // If not at the last page, simply increment and continue
+                    peerReflectionQuizcontroller.pageIndex.value += 1;
+                  } else {
+                    // If we're at the last page, reset index and navigate home
+                    peerReflectionQuizcontroller.pageIndex.value = 0;
 
-                  if (peerReflectionQuizcontroller.pageIndex.value == 0) {
+                    // Navigate to HomePage
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomePage(),
                       ),
                     );
+
+                    // Clean up the controller if it's registered
+                    if (Get.isRegistered<PeerReflectionQuizcontroller>()) {
+                      Get.delete<PeerReflectionQuizcontroller>();
+                    }
                   }
                 } else if (selectedAnswers.isNotEmpty) {
                   if (checkAnswers()) {

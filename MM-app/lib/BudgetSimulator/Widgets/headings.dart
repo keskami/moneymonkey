@@ -364,7 +364,7 @@ class Headings {
             ),
           ),
           SizedBox(
-            width: screenWidthUnit * 85.8, // Increased by 10%
+            width: screenWidthUnit * 65.8, // Increased by 10%
           ),
           Text(
             "\$${netCash}",
