@@ -6,6 +6,8 @@ import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,7 +18,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
-  final HomePagesController homePagesController = Get.put(HomePagesController());
+  final HomePagesController homePagesController =
+      Get.put(HomePagesController());
 
   int currentPage = 0;
 
@@ -46,9 +49,32 @@ class _HomePageState extends State<HomePage> {
             // Main content (80% width)
             SizedBox(
               width: screenWidth * 0.8,
-              child: homePagesController.pages[homePagesController.pageIndex.value],
+              child: homePagesController
+                  .pages[homePagesController.pageIndex.value],
             )
           ],
+        ),
+      ),
+      floatingActionButton: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(
+            LightTheme().primaryBlue,
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TeacherDashboard(),
+            ),
+          );
+        },
+        child: Text(
+          "Teacher Dashboard",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
         ),
       ),
     );

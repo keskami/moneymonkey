@@ -9,6 +9,7 @@ class SideBar extends StatelessWidget {
     "Home": "assets/images/globemonkey.png",
     "Portfolio": "assets/images/treasure.png",
     "Characters": "assets/images/bottommonkey.png",
+    "BudgetSimulator":"assets/images/budget_simulator.png",
     "Profile": "assets/images/bluemonkey.png",
   };
   @override

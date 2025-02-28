@@ -39,13 +39,9 @@ class TeacherDashboardController extends GetxController {
   late Student selectedStudent;
   late Map<String, String> classes;
 
-  final String overviewMessage1 = "Financial Responsibility Over a Lifetime ";
-  final String overviewMessage2 =
-      "Making informed decisions about earning, saving, spending, and investing ";
+  
 
-  String lessonManagementMessage1 = "Financial Responsibility Over a Lifetime ";
-  String lessonManagementMessage2 =
-      "Making informed decisions about earning, saving, spending, and investing ";
+ 
   Map<String, List<Student>> categorizedStudents = {};
   final Map<String, String> actions = {
     "What about those \$150 sneakers?": "Wait for next paycheck",

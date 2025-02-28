@@ -137,7 +137,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        teacherDashboardController.overviewMessage1,
+                        teacherDashboardController.presentLesson.title,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -148,7 +148,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         height: 5,
                       ),
                       Text(
-                        teacherDashboardController.overviewMessage1,
+                        teacherDashboardController.presentLesson.description,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -492,8 +492,4 @@ class _DashboardOverviewState extends State<DashboardOverview> {
       ),
     );
   }
-}
-
-extension on Color {
-  Color? withValues({required double alpha}) {}
 }

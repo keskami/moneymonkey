@@ -105,7 +105,7 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        teacherDashboardController.lessonManagementMessage1,
+                        teacherDashboardController.presentLesson.title,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -116,7 +116,7 @@ class _LessonManagementState extends State<LessonManagement> {
                         height: 5,
                       ),
                       Text(
-                        teacherDashboardController.lessonManagementMessage2,
+                        teacherDashboardController.presentLesson.description,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -216,8 +216,7 @@ class _LessonManagementState extends State<LessonManagement> {
                           .presentLesson.interactiveActivityLinks)
                         GestureDetector(
                           onTap: () {
-                          if (iaLink.isNotEmpty)
-                            launchUrl(Uri.parse(iaLink));
+                            if (iaLink.isNotEmpty) _launchURL(iaLink);
                           },
                           child: ColoredPaddedContainer(
                             margin: EdgeInsets.symmetric(
@@ -248,12 +247,12 @@ class _LessonManagementState extends State<LessonManagement> {
                             ),
                           ),
                         ),
-                      GestureDetector(   
+                      GestureDetector(
                         onTap: () {
-                          if (teacherDashboardController.presentLesson
-                              .teachersGuideLink.isNotEmpty)
-                          launchUrl(Uri.parse(teacherDashboardController
-                              .presentLesson.teachersGuideLink));
+                          if (teacherDashboardController
+                              .presentLesson.teachersGuideLink.isNotEmpty)
+                            _launchURL(teacherDashboardController
+                                .presentLesson.teachersGuideLink);
                         },
                         child: ColoredPaddedContainer(
                           margin: EdgeInsets.symmetric(
@@ -289,8 +288,8 @@ class _LessonManagementState extends State<LessonManagement> {
                         onTap: () {
                           if (teacherDashboardController.presentLesson
                               .studentWorkshopTemplateLinks.isNotEmpty)
-                            launchUrl(Uri.parse(teacherDashboardController
-                                .presentLesson.studentWorkshopTemplateLinks));
+                            _launchURL(teacherDashboardController
+                                .presentLesson.studentWorkshopTemplateLinks);
                         },
                         child: ColoredPaddedContainer(
                           margin: EdgeInsets.symmetric(
