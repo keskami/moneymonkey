@@ -300,7 +300,7 @@ class CustomPolygonRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Money and Currencies",
+                  "Financial Responsibility",
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.grey,
@@ -442,7 +442,7 @@ class CustomPolygonRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Money and Currencies",
+                  "Financial Responsibility",
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.grey,
@@ -651,7 +651,7 @@ class CustomPolygonRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Money and Currencies",
+                    "Financial Responsibility",
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.grey,
