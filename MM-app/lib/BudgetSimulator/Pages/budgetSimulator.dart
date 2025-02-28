@@ -2046,3 +2046,6 @@ class ChartData {
 
   ChartData(this.category, this.percentage, this.color);
 }
+
+
+
