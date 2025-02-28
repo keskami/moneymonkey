@@ -8,7 +8,8 @@ import 'package:money_monkey/LessonPages/Widgets/ShadowedBoxContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class LearningCheckPage extends StatefulWidget {
-  const LearningCheckPage({super.key});
+  final String componentId;
+  const LearningCheckPage({super.key, required this.componentId});
 
   @override
   State<LearningCheckPage> createState() => _LearningCheckPageState();
@@ -37,6 +38,9 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
   String oneCorrect = '';
   String wrong = '';
   bool loading = false;
+
+  ComponentOneTwoController componentOneTwoController =
+      Get.find<ComponentOneTwoController>();
 
   Future<void> setData(Question data) async {
     setState(() {
@@ -74,7 +78,6 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
   }
 
   bool isNextEnabled = false;
-  ComponentOneTwoController componentOneTwoController = Get.find();
   void showMessage() {
     ScaffoldMessenger.of(context).clearSnackBars();
     if (answer1 == correctAns1 && answer2 == correctAns2) {

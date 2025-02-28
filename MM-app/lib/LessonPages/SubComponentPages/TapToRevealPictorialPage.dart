@@ -103,7 +103,7 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset(
+                    Image.network(
                       monkeyImg,
                       height: screenHeight * 0.2,
                     ),

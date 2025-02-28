@@ -8,9 +8,8 @@ import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class MCQPage extends StatefulWidget {
-  const MCQPage({
-    super.key,
-  });
+  final String componentId;
+  const MCQPage({super.key, required this.componentId});
 
   @override
   State<MCQPage> createState() {
@@ -18,9 +17,9 @@ class MCQPage extends StatefulWidget {
   }
 }
 
-
 class _MCQPageState extends State<MCQPage> {
-  ComponentOneTwoController componentOneTwoController = Get.find();
+  ComponentOneTwoController componentOneTwoController =
+      Get.find<ComponentOneTwoController>();
 
   String currentQuestion = "";
   List<String> currentAnswers = [];

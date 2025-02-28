@@ -7,7 +7,8 @@ import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class TapToRevealIconsPage extends StatefulWidget {
-  const TapToRevealIconsPage({super.key});
+  final String componentId;
+  const TapToRevealIconsPage({super.key, required this.componentId});
 
   @override
   State<TapToRevealIconsPage> createState() => _TapToRevealIconsPageState();
@@ -23,7 +24,8 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
   List<String> iconLinks = [];
   List<String> iconContents = [];
   bool isNextEnabled = false;
-  ComponentOneTwoController componentOneTwoController = Get.find();
+  ComponentOneTwoController componentOneTwoController =
+      Get.find<ComponentOneTwoController>();
   String title = '';
   String wrong = '';
   bool loading = true;

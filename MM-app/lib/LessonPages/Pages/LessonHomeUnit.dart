@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
@@ -34,27 +35,40 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
 
   // Example "pagesLink" from your snippet:
   List<Widget> getPages(List<String> componentIds) {
+    final localService = LocalAcademicService();
     final List<Widget> pagesLink = [];
-    for (int i = 0; i < componentIds.length; i++) {
-      if (i == 0) {
-        pagesLink.add(LoadingPageWrapper(
-            destinationPage: LessonOne(), componentId: componentIds[i]));
-      } else if (i == 1) {
-        pagesLink.add(LoadingPageWrapper(
-            destinationPage: LessonOne(), componentId: componentIds[i]));
-      } else if (i == 2) {
-        pagesLink.add(LoadingPageWrapper(
-            destinationPage: StoryPage(), componentId: componentIds[i]));
-      } else if (i == 3) {
-        pagesLink.add(LoadingPageWrapper(
-            destinationPage: Scenario(), componentId: componentIds[i]));
-      } else if (i == 4) {
-        pagesLink.add(LoadingPageWrapper(
-            destinationPage: PeerReflection(), componentId: componentIds[i]));
-      } else if (i == 5) {
-        pagesLink.add(LoadingPageWrapper(
-            destinationPage: PeerReflectionQuiz(),
-            componentId: componentIds[i]));
+
+    for (String componentId in componentIds) {
+      // Get the component data to determine its type
+      final component = localService.getComponent(componentId);
+
+      switch (component.type) {
+        case ComponentType.concept:
+          pagesLink.add(LoadingPageWrapper(
+              destinationPage: LessonOne(),
+              componentId: componentId));
+          break;
+        case ComponentType.story:
+          pagesLink.add(LoadingPageWrapper(
+              destinationPage: StoryPage(componentId: componentId),
+              componentId: componentId));
+          break;
+        case ComponentType.scenarioSimulation:
+          pagesLink.add(LoadingPageWrapper(
+              destinationPage: Scenario(componentId: componentId),
+              componentId: componentId));
+          break;
+        case ComponentType.peerReflection:
+          pagesLink.add(LoadingPageWrapper(
+              destinationPage: PeerReflection(componentId: componentId),
+              componentId: componentId));
+          break;
+        case ComponentType.quiz:
+          pagesLink.add(LoadingPageWrapper(
+              destinationPage: PeerReflectionQuiz(componentId: componentId),
+              componentId: componentId));
+          break;
+        default:
       }
     }
     return pagesLink;

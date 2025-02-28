@@ -5,19 +5,26 @@ import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Repositories/addLesson.dart';
+import 'package:money_monkey/home.dart';
 
 class QuizMCQPage extends StatefulWidget {
   final String question;
   final List<String> answers;
   final Map<String, String> feedback;
-  final String correctAnswer;
+
+  // Changed from single correctAnswer to List of correctAnswers
+  final List<String> correctAnswers;
+
+  // Flag to determine if multiple selections are allowed
+  final bool allowMultipleSelections;
 
   const QuizMCQPage({
     super.key,
     required this.question,
     required this.answers,
     required this.feedback,
-    required this.correctAnswer,
+    required this.correctAnswers,
+    this.allowMultipleSelections = false, // Default to single answer mode
   });
 
   @override
@@ -28,11 +35,17 @@ class QuizMCQPage extends StatefulWidget {
 
 class _QuizMCQPageState extends State<QuizMCQPage> {
   PeerReflectionQuizcontroller peerReflectionQuizcontroller = Get.find();
-  bool option1 = false;
-  bool option2 = false;
-  bool option3 = false;
-  bool option4 = false;
-  String selectedOption = "";
+
+  // Track selected options
+  Map<int, bool> selectedOptions = {
+    0: false,
+    1: false,
+    2: false,
+    3: false,
+  };
+
+  // Track selected answers
+  List<String> selectedAnswers = [];
 
   bool firstTime = true;
   bool correct = false;
@@ -42,248 +55,323 @@ class _QuizMCQPageState extends State<QuizMCQPage> {
     super.initState();
   }
 
+  // Method to reset all state variables
+  void resetState() {
+    if (mounted) {
+      setState(() {
+        selectedOptions = {
+          0: false,
+          1: false,
+          2: false,
+          3: false,
+        };
+        selectedAnswers = [];
+        firstTime = true;
+        correct = false;
+      });
+    }
+  }
+
+  void toggleOption(int index) {
+    setState(() {
+      if (widget.allowMultipleSelections) {
+        // For multiple selection mode, toggle the selected option
+        selectedOptions[index] = !selectedOptions[index]!;
+
+        // Update selectedAnswers list
+        if (selectedOptions[index]!) {
+          selectedAnswers.add(widget.answers[index]);
+        } else {
+          selectedAnswers.remove(widget.answers[index]);
+        }
+      } else {
+        // For single selection mode, clear all other selections
+        for (int i = 0; i < 4; i++) {
+          selectedOptions[i] = i == index;
+        }
+
+        // Update selectedAnswers list
+        selectedAnswers = [widget.answers[index]];
+      }
+    });
+  }
+
+  bool checkAnswers() {
+    if (widget.allowMultipleSelections) {
+      // For multiple answers, check if all selected answers are correct
+      // and all correct answers are selected
+      return selectedAnswers.length == widget.correctAnswers.length &&
+          selectedAnswers
+              .every((answer) => widget.correctAnswers.contains(answer)) &&
+          widget.correctAnswers
+              .every((answer) => selectedAnswers.contains(answer));
+    } else {
+      // For single answer, check if the selected answer is correct
+      return selectedAnswers.length == 1 &&
+          widget.correctAnswers.contains(selectedAnswers[0]);
+    }
+  }
+
+  String getResponseFeedback() {
+    // For multiple selection mode
+    if (widget.allowMultipleSelections) {
+      // Check if all selections match correct answers
+      if (checkAnswers()) {
+        return widget.feedback['correct'] ?? 'Correct!';
+      }
+
+      // If incorrect, try to provide specific feedback for the selection combination
+      String combinedSelections = selectedAnswers.join(',');
+      if (widget.feedback.containsKey(combinedSelections)) {
+        return widget.feedback[combinedSelections]!;
+      }
+
+      // Fall back to generic feedback
+      return widget.feedback['incorrect'] ?? 'Try again.';
+    }
+    // For single selection mode
+    else if (selectedAnswers.isNotEmpty) {
+      return widget.feedback[selectedAnswers[0]] ?? 'Try again.';
+    }
+
+    return '';
+  }
+
+  @override
+  void dispose() {
+    // Clean up any resources or listeners here
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    // Use relative sizing for better adaptability
     double screenWidthUnit = screenWidth / 1920;
     double screenHeightUnit = screenHeight / 980;
+
     return Center(
-        child: Padding(
-      padding: EdgeInsets.fromLTRB(
-          screenWidthUnit * 572, screenHeightUnit * 122, 0, 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.question,
-            style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 27,
-                fontWeight: FontWeight.w700,
-                color: Colors.black),
-          ),
-          SizedBox(
-            height: screenHeightUnit * 51,
-          ),
-          Row(children: [
-            quizOptionWithoutImage(
-                text: widget.answers[0],
-                screenHeightUnit: screenHeightUnit,
-                option: option1,
-                screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/banknote.png',
-                onClick: () {
-                  setState(() {
-                    option1 = !option1;
-                    option2 = false;
-                    option3 = false;
-                    option4 = false;
-
-                    selectedOption = widget.answers[0];
-                  });
-                },
-                context: context),
-            SizedBox(
-              width: screenWidthUnit * 20,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.05,
+          vertical: 0,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: (screenWidthUnit * 377 * 2) + (screenWidthUnit * 20),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.9,
+              ),
+              child: Text(
+                widget.question,
+                style: GoogleFonts.baloo2(
+                  fontSize: screenWidthUnit * 34,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
             ),
-            quizOptionWithoutImage(
-                text: widget.answers[1],
-                screenHeightUnit: screenHeightUnit,
-                option: option2,
-                screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/coin.png',
-                onClick: () {
-                  setState(() {
-                    option2 = !option2;
-                    option1 = false;
-                    option3 = false;
-                    option4 = false;
-                    selectedOption = widget.answers[1];
-                  });
-                },
-                context: context),
-          ]),
-          SizedBox(
-            height: screenHeightUnit * 17,
-          ),
-          Row(children: [
-            quizOptionWithoutImage(
-                text: widget.answers[2],
-                option: option3,
-                screenHeightUnit: screenHeightUnit,
-                screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/creditcard.png',
-                onClick: () {
-                  setState(() {
-                    option3 = !option3;
-                    option2 = false;
-                    option1 = false;
-                    option4 = false;
-                    selectedOption = widget.answers[2];
-                  });
-                },
-                context: context),
+            if (widget.allowMultipleSelections)
+              Container(
+                margin: EdgeInsets.only(top: screenHeightUnit * 10),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidthUnit * 20,
+                  vertical: screenHeightUnit * 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  "Select all correct answers",
+                  style: GoogleFonts.baloo2(
+                    fontSize: screenWidthUnit * 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.blue[800],
+                  ),
+                ),
+              ),
             SizedBox(
-              width: screenWidthUnit * 20,
+              height: screenHeightUnit * 40,
             ),
-            quizOptionWithoutImage(
-                text: widget.answers[3],
-                option: option4,
-                screenHeightUnit: screenHeightUnit,
-                screenWidthUnit: screenWidthUnit,
-                //image: 'assets/images/mobile.png',
-                onClick: () {
+            // First row - two buttons at the top
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                quizOptionWithoutImage(
+                  text: widget.answers[0],
+                  screenHeightUnit: screenHeightUnit,
+                  option: selectedOptions[0]!,
+                  screenWidthUnit: screenWidthUnit,
+                  onClick: () => toggleOption(0),
+                  context: context,
+                ),
+                SizedBox(width: screenWidthUnit * 20),
+                quizOptionWithoutImage(
+                  text: widget.answers[1],
+                  screenHeightUnit: screenHeightUnit,
+                  option: selectedOptions[1]!,
+                  screenWidthUnit: screenWidthUnit,
+                  onClick: () => toggleOption(1),
+                  context: context,
+                ),
+              ],
+            ),
+            SizedBox(height: screenHeightUnit * 17),
+            // Second row - two buttons at the bottom
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                quizOptionWithoutImage(
+                  text: widget.answers[2],
+                  option: selectedOptions[2]!,
+                  screenHeightUnit: screenHeightUnit,
+                  screenWidthUnit: screenWidthUnit,
+                  onClick: () => toggleOption(2),
+                  context: context,
+                ),
+                SizedBox(width: screenWidthUnit * 20),
+                quizOptionWithoutImage(
+                  text: widget.answers[3],
+                  option: selectedOptions[3]!,
+                  screenHeightUnit: screenHeightUnit,
+                  screenWidthUnit: screenWidthUnit,
+                  onClick: () => toggleOption(3),
+                  context: context,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: screenHeightUnit * 60,
+            ),
+            bottomBar(
+              screenHeightUnit: screenHeightUnit,
+              screenWidthUnit: screenWidthUnit,
+              firstTime: firstTime,
+              hasSelection: selectedAnswers.isNotEmpty,
+              correct: correct,
+              onTap: () {
+                if ((!firstTime && !correct)) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
-                    option4 = !option4;
-                    option1 = false;
-                    option3 = false;
-                    option2 = false;
-                    selectedOption = widget.answers[3];
-                  });
-                },
-                context: context),
-          ]),
-          SizedBox(
-            height: screenHeightUnit * 44,
-          ),
-          bottomBar(
-            screenHeightUnit: screenHeightUnit,
-            screenWidthUnit: screenWidthUnit,
-            firstTime: firstTime,
-            option1: option1,
-            option2: option2,
-            option3: option3,
-            option4: option4,
-            correct: correct,
-            onTap: () {
-              if ((!firstTime && !correct)) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                setState(() {
-                  firstTime = true;
-                  option1 = false;
-                  option2 = false;
-                  option3 = false;
-                  option4 = false;
-                  correct = false;
-                  selectedOption = "";
-                });
-              }
-
-              if (correct) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                peerReflectionQuizcontroller.pageIndex.value += 1;
-              } else if (option1 || option2 || option3 || option4) {
-                if (widget.correctAnswer == selectedOption) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      CorrectAnswerSnackBar(
-                          message: widget.feedback[widget.correctAnswer] ?? ''));
-                  setState(() {
-                    correct = true;
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      WrongAnswerSnackBar(
-                          message: widget.feedback[selectedOption] ?? ''));
-                  setState(() {
-                    firstTime = false;
+                    firstTime = true;
+                    selectedOptions.updateAll((key, value) => false);
+                    selectedAnswers.clear();
+                    correct = false;
                   });
                 }
-              } else {}
-            },
-          )
-        ],
+
+                if (correct) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                  // Reset state before moving to next page
+                  resetState();
+
+                  // Move to next page
+                  peerReflectionQuizcontroller.pageIndex.value += 1;
+                  peerReflectionQuizcontroller.pageIndex.value ==
+                          peerReflectionQuizcontroller.pageData.length
+                      ? peerReflectionQuizcontroller.pageIndex.value = 0
+                      : peerReflectionQuizcontroller.pageIndex.value;
+
+                  if (peerReflectionQuizcontroller.pageIndex.value == 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                  }
+                } else if (selectedAnswers.isNotEmpty) {
+                  if (checkAnswers()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      CorrectAnswerSnackBar(
+                        message: getResponseFeedback(),
+                      ),
+                    );
+                    setState(() {
+                      correct = true;
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      WrongAnswerSnackBar(
+                        message: getResponseFeedback(),
+                      ),
+                    );
+                    setState(() {
+                      firstTime = false;
+                    });
+                  }
+                }
+              },
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
 
-Widget quizOptionWithoutImage(
-    {required String text,
-    required double screenHeightUnit,
-    required double screenWidthUnit,
-    required Function onClick,
-    required BuildContext context,
-    required bool option}) {
-  return GestureDetector(
-      onTap: () {
-        onClick();
-      },
-      child: Container(
-        height: screenHeightUnit * 153,
-        width: screenWidthUnit * 377,
-        decoration: BoxDecoration(
-          color: option ? Color.fromRGBO(137, 220, 142, 1) : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ));
-}
+Widget quizOptionWithoutImage({
+  required String text,
+  required double screenHeightUnit,
+  required double screenWidthUnit,
+  required Function onClick,
+  required BuildContext context,
+  required bool option,
+}) {
+  // Adjust width to be more responsive
+  double optionWidth = screenWidthUnit * 377;
+  // Limit width for smaller screens
+  if (optionWidth > MediaQuery.of(context).size.width * 0.8) {
+    optionWidth = MediaQuery.of(context).size.width * 0.8;
+  }
 
-Widget quizOptionWithImage(
-    {required String text,
-    required double screenHeightUnit,
-    required double screenWidthUnit,
-    required String image,
-    required Function onClick,
-    required BuildContext context,
-    required bool option}) {
   return GestureDetector(
-      onTap: () {
-        onClick();
-      },
-      child: Container(
-        height: screenHeightUnit * 153,
-        width: screenWidthUnit * 377,
-        decoration: BoxDecoration(
-          color: option ? Color.fromRGBO(137, 220, 142, 1) : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.network(
-              image,
-              height: screenHeightUnit * 120,
-              width: screenWidthUnit * 120,
-              fit: BoxFit.cover,
+    onTap: () {
+      onClick();
+    },
+    child: Container(
+      height: screenHeightUnit * 153,
+      width: optionWidth,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.8,
+        minWidth: 150, // Set minimum width
+      ),
+      decoration: BoxDecoration(
+        color: option ? Color.fromRGBO(137, 220, 142, 1) : Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.black),
+      ),
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            text,
+            style: GoogleFonts.baloo2(
+              fontSize: screenWidthUnit * 22,
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(width: screenWidthUnit * 10),
-            Text(
-              text,
-              style: GoogleFonts.baloo2(
-                fontSize: screenWidthUnit * 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+            textAlign: TextAlign.center,
+          ),
         ),
-      ));
+      ),
+    ),
+  );
 }
 
 Widget bottomBar({
   required double screenHeightUnit,
   required double screenWidthUnit,
   required bool firstTime,
-  required bool option1,
-  required bool option2,
-  required bool option3,
-  required bool option4,
+  required bool hasSelection,
   required bool correct,
   required Function onTap,
 }) {
@@ -293,18 +381,23 @@ Widget bottomBar({
     },
     child: Container(
       height: screenHeightUnit * 73,
+      // Make width responsive
       width: screenWidthUnit * 744,
+      constraints: BoxConstraints(
+        maxWidth: 744,
+        minWidth: 200,
+      ),
       decoration: BoxDecoration(
         color: (!firstTime && !correct)
             ? Color.fromRGBO(255, 0, 0, .6)
-            : (option1 || option2 || option3 || option4)
+            : (hasSelection)
                 ? Color.fromRGBO(137, 220, 142, 1)
                 : Color.fromRGBO(224, 227, 231, 1),
         borderRadius: BorderRadius.circular(5),
         border: Border.all(
           color: (!firstTime)
               ? Color.fromRGBO(255, 0, 0, .6)
-              : (option1 || option2 || option3 || option4)
+              : (hasSelection)
                   ? Color.fromRGBO(137, 220, 142, 1)
                   : Color.fromRGBO(224, 227, 231, 1),
           width: .1,
@@ -325,9 +418,10 @@ Widget bottomBar({
                   ? "Check"
                   : "Try Again",
           style: GoogleFonts.baloo2(
-              fontSize: screenWidthUnit * 21,
-              fontWeight: FontWeight.w700,
-              color: Colors.white),
+            fontSize: screenWidthUnit * 21,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
         ),
       ),
     ),

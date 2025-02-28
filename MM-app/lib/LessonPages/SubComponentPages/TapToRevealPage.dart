@@ -6,9 +6,8 @@ import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
 class TapToRevealPage extends StatefulWidget {
-  const TapToRevealPage({
-    super.key,
-  });
+  final String componentId;
+  const TapToRevealPage({super.key, required this.componentId});
 
   @override
   State<TapToRevealPage> createState() {
@@ -17,7 +16,8 @@ class TapToRevealPage extends StatefulWidget {
 }
 
 class _TapToRevealPageState extends State<TapToRevealPage> {
-  ComponentOneTwoController componentOneTwoController = Get.find();
+  ComponentOneTwoController componentOneTwoController =
+        Get.find<ComponentOneTwoController>();
   String before = '';
   bool showContent = false;
   bool enableNext = false;
@@ -31,9 +31,9 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
     setState(() {
       before = data.data.tapInstruction ?? '';
       title = data.data.title;
-      bigBottom = data.data.revealInformation[0];
+      bigBottom = data.data.definition;
       bigTop = "Definition:";
-      little = data.data.revealInformation[1];
+      little = data.data.whyMatter;
       loading = false;
     });
   }

@@ -5,20 +5,30 @@ import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizControlle
 import 'package:money_monkey/home.dart';
 
 class PeerReflectionQuiz extends StatefulWidget {
-  const PeerReflectionQuiz({super.key});
+  final String componentId;
+  const PeerReflectionQuiz({super.key, required this.componentId});
 
   @override
   State<PeerReflectionQuiz> createState() => _PeerReflectionQuizState();
 }
 
 class _PeerReflectionQuizState extends State<PeerReflectionQuiz> {
-  PeerReflectionQuizcontroller peerReflectionQuizcontroller =
-      Get.find<PeerReflectionQuizcontroller>();
+  late PeerReflectionQuizcontroller peerReflectionQuizcontroller;
   final String lessonId = "PeerReflectionQuiz";
 
   @override
   void initState() {
     super.initState();
+    peerReflectionQuizcontroller = Get.find<PeerReflectionQuizcontroller>();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed
+    if (Get.isRegistered<PeerReflectionQuizcontroller>()) {
+      Get.delete<PeerReflectionQuizcontroller>();
+    }
+    super.dispose();
   }
 
   @override

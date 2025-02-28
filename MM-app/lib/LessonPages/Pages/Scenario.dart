@@ -5,16 +5,16 @@ import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
 import 'package:money_monkey/home.dart';
 
 class Scenario extends StatefulWidget {
-  const Scenario({super.key});
+  final String componentId;
+  const Scenario({super.key, required this.componentId});
 
   @override
   State<Scenario> createState() => _ScenarioState();
 }
 
 class _ScenarioState extends State<Scenario> {
-  final ScenarioController scenarioController = Get.find<ScenarioController>();
+  late ScenarioController scenarioController;
 
-  // ignore: unused_element
   Future<void> _preCacheImages() async {
     await precacheImage(
       NetworkImage(
@@ -39,14 +39,24 @@ class _ScenarioState extends State<Scenario> {
   @override
   void initState() {
     super.initState();
+    scenarioController = Get.find<ScenarioController>();
     _preCacheImages();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed
+    if (Get.isRegistered<ScenarioController>()) {
+      Get.delete<ScenarioController>();
+    }
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -120,7 +130,8 @@ class _ScenarioState extends State<Scenario> {
           ),
           Expanded(
             child: Obx(
-              () => scenarioController.pageIndex.value < scenarioController.pages.length 
+              () => scenarioController.pageIndex.value <
+                      scenarioController.pages.length
                   ? scenarioController.pages[scenarioController.pageIndex.value]
                   : Container(child: Text("End of content")),
             ),

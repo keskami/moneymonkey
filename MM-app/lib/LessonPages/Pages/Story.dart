@@ -5,16 +5,16 @@ import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
 import 'package:money_monkey/home.dart';
 
 class StoryPage extends StatefulWidget {
-  const StoryPage({super.key});
+  final String componentId;
+  const StoryPage({super.key, required this.componentId});
 
   @override
   State<StoryPage> createState() => _StoryPageState();
 }
 
 class _StoryPageState extends State<StoryPage> {
-  StoryController storyController = Get.find<StoryController>();
+  late StoryController storyController;
   final String lessonId = "Lesson1";
-
 
   Future<void> _preCacheImages() async {
     await precacheImage(
@@ -32,7 +32,17 @@ class _StoryPageState extends State<StoryPage> {
   @override
   void initState() {
     super.initState();
+    storyController = Get.find<StoryController>();
     _preCacheImages();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed
+    if (Get.isRegistered<StoryController>()) {
+      Get.delete<StoryController>();
+    }
+    super.dispose();
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
@@ -79,56 +81,73 @@ class LoadingPageWrapper extends StatelessWidget {
 
   Future<BaseLessonController> _initializeController() async {
     BaseLessonController controller;
-    switch (componentId[6]) {
-      case '1':
+
+    // Get the component from your service
+    final localService = LocalAcademicService();
+    final component = localService.getComponent(componentId);
+
+    // Initialize the appropriate controller based on component type
+    switch (component.type) {
+      case ComponentType.concept:
         controller = Get.put<ComponentOneTwoController>(
           ComponentOneTwoController(componentId: componentId),
         );
         break;
-      case '2':
-        controller = Get.put<ComponentOneTwoController>(
-            ComponentOneTwoController(componentId: componentId));
+      case ComponentType.story:
+        controller = Get.put<StoryController>(
+          StoryController(componentId: componentId),
+        );
         break;
-      case '3':
-        controller =
-            Get.put<StoryController>(
-              StoryController(componentId: componentId));
-        break;
-      case '4':
+      case ComponentType.scenarioSimulation:
         controller = Get.put<ScenarioController>(
-            ScenarioController(componentId: componentId));
+          ScenarioController(componentId: componentId),
+        );
         break;
-      case '5':
+      case ComponentType.peerReflection:
         controller = Get.put<PeerReflectioncontroller>(
-            PeerReflectioncontroller(componentId: componentId));
+          PeerReflectioncontroller(componentId: componentId),
+        );
         break;
-      case '6':
+      case ComponentType.quiz:
         controller = Get.put<PeerReflectionQuizcontroller>(
-            PeerReflectionQuizcontroller(componentId: componentId));
+          PeerReflectionQuizcontroller(componentId: componentId),
+        );
         break;
       default:
-        throw Exception("Unknown component type");
+        throw Exception(
+            "Unknown component type: ${component.type} for component ID: $componentId");
     }
+
     return controller;
   }
 
   Future<void> _preLoadImages(BuildContext context) async {
-    switch (componentId[6]) {
-      case 'concept':
+    final localService = LocalAcademicService();
+    final component = localService.getComponent(componentId);
+
+    switch (component.type) {
+      case ComponentType.concept:
+      case ComponentType.interactiveActivity:
         await _preLoadImagesForLesson(context);
         break;
-      case 'concept2':
-        await _preLoadImagesForLesson(context);
-        break;
-      case 'story':
+      case ComponentType.story:
         await _preLoadImagesForStory(context);
         break;
-      case 'scenario':
+      case ComponentType.scenarioSimulation:
         await _preLoadImagesForScenario(context);
         break;
-      case 'peer_reflection':
+      case ComponentType.peerReflection:
+      case ComponentType.quiz:
         await _preLoadImagesForPeerReflection(context);
         break;
+      case ComponentType.toolkit:
+        await _preLoadImagesForLesson(context);
+        break;
+      default:
+        print(
+            "Warning: No specific preload images for component type: ${component.type}");
+        // Load default images or perform minimal preloading
+        await _preLoadImagesForLesson(context);
     }
   }
 

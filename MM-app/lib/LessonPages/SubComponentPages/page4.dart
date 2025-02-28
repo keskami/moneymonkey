@@ -23,6 +23,10 @@ class _Page4State extends State<Page4> {
   bool avaClicked = false;
   PeerReflectioncontroller peerReflectionController = Get.find();
   bool delay = false;
+  
+  // New variables for updated functionality
+  bool submitted = false;
+  bool finishMode = false;
 
   bool loading = true;
   String title = '';
@@ -42,7 +46,7 @@ class _Page4State extends State<Page4> {
       ava = data.data.options[0].description;
       maria = data.data.options[1].description;
       jason = data.data.options[2].description;
-      button = "Finish Peer Reflection";
+      button = "Submit";
       feedback1 = data.data.feedbackMessages[data.data.options[0].name];
       feedback2 = data.data.feedbackMessages[data.data.options[1].name];
       feedback3 = data.data.feedbackMessages[data.data.options[2].name];
@@ -68,6 +72,25 @@ class _Page4State extends State<Page4> {
     setState(() {
       delay = true;
     });
+  }
+  
+  // Show the appropriate feedback based on the selected option
+  void _showFeedback() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    
+    if (mariaClicked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        CorrectAnswerSnackBar(message: feedback1)
+      );
+    } else if (jasonClicked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        CorrectAnswerSnackBar(message: feedback2)
+      );
+    } else if (avaClicked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        CorrectAnswerSnackBar(message: feedback3)
+      );
+    }
   }
 
   @override
@@ -118,22 +141,15 @@ class _Page4State extends State<Page4> {
                 image: "assets/images/newMonkeys/Maria.png",
                 name: maria,
                 isClicked: mariaClicked,
+                isDisabled: submitted, // Disable after submission
                 onClick: () {
-                  setState(() {
-                    if (mariaClicked) {
-                      mariaClicked = false;
-                    } else {
+                  if (!submitted) {
+                    setState(() {
                       mariaClicked = true;
                       jasonClicked = false;
                       avaClicked = false;
-
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      Future.delayed(Duration(seconds: 1), () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            CorrectAnswerSnackBar(message: feedback1));
-                      });
-                    }
-                  });
+                    });
+                  }
                 },
                 context: context,
                 cardWidth: cardWidth,
@@ -145,21 +161,15 @@ class _Page4State extends State<Page4> {
                 image: "assets/images/newMonkeys/Jason.png",
                 name: jason,
                 isClicked: jasonClicked,
+                isDisabled: submitted, // Disable after submission
                 onClick: () {
-                  setState(() {
-                    if (jasonClicked) {
-                      jasonClicked = false;
-                    } else {
+                  if (!submitted) {
+                    setState(() {
                       jasonClicked = true;
                       avaClicked = false;
                       mariaClicked = false;
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      Future.delayed(Duration(seconds: 1), () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            CorrectAnswerSnackBar(message: feedback2));
-                      });
-                    }
-                  });
+                    });
+                  }
                 },
                 context: context,
                 cardWidth: cardWidth,
@@ -171,21 +181,15 @@ class _Page4State extends State<Page4> {
                 image: "assets/images/newMonkeys/Ava.png",
                 name: ava,
                 isClicked: avaClicked,
+                isDisabled: submitted, // Disable after submission
                 onClick: () {
-                  setState(() {
-                    if (avaClicked) {
-                      avaClicked = false;
-                    } else {
+                  if (!submitted) {
+                    setState(() {
                       avaClicked = true;
                       jasonClicked = false;
                       mariaClicked = false;
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      Future.delayed(Duration(seconds: 1), () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            CorrectAnswerSnackBar(message: feedback3));
-                      });
-                    }
-                  });
+                    });
+                  }
                 },
                 context: context,
                 cardWidth: cardWidth,
@@ -201,15 +205,26 @@ class _Page4State extends State<Page4> {
           padding: EdgeInsets.only(top: webScreenHeightUnit * 60),
           child: GestureDetector(
             onTap: () {
-              if ((avaClicked || jasonClicked || mariaClicked) && delay) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              if (finishMode) {
+                // User already submitted, clicking "Finish" navigates to home
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomePage()),
                 );
+              } else if ((avaClicked || jasonClicked || mariaClicked) && delay && !submitted) {
+                // First submission - show feedback, lock the selection, change button text
+                setState(() {
+                  submitted = true;
+                  finishMode = true;
+                  button = "Finish";
+                });
+                
+                // Show appropriate feedback
+                _showFeedback();
               } else if (!delay) {
-                // Do nothing
+                // Do nothing during initial delay
               } else {
+                // No selection made - show warning
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Please select a peer to continue'),
@@ -255,6 +270,7 @@ Widget lessonTab({
   required String image,
   required String name,
   required bool isClicked,
+  required bool isDisabled, // New parameter to know if cards are disabled
   required Function onClick,
   required BuildContext context,
   required double cardWidth,
@@ -263,7 +279,9 @@ Widget lessonTab({
 }) {
   return GestureDetector(
     onTap: () {
-      onClick();
+      if (!isDisabled) {
+        onClick();
+      }
     },
     child: Container(
       width: cardWidth, // Fixed width to prevent overflow
@@ -299,7 +317,7 @@ Widget lessonTab({
               name,
               style: GoogleFonts.baloo2(
                 fontSize: screenWidthUnit * 3.6,
-                color: Colors.black,
+                color: isDisabled && !isClicked ? Colors.grey : Colors.black, // Grey out unselected options after submission
                 fontWeight: FontWeight.w500,
               ),
               overflow: TextOverflow.visible,

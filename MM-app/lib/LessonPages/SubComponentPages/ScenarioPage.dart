@@ -14,6 +14,7 @@ class ScenarioPage extends StatefulWidget {
   String containerSubHeading = '';
   List<String> options = [];
   String correctAnswer = '';
+  String componentId;
   ScenarioPage(
       {super.key,
       required this.title,
@@ -23,7 +24,8 @@ class ScenarioPage extends StatefulWidget {
       required this.containerHeading,
       required this.containerSubHeading,
       required this.options,
-      required this.correctAnswer});
+      required this.correctAnswer,
+      required this.componentId});
 
   @override
   State<ScenarioPage> createState() => _ScenarioPageState();
@@ -33,7 +35,8 @@ class _ScenarioPageState extends State<ScenarioPage> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
 
-  ComponentOneTwoController componentOneTwoController = Get.find();
+  ComponentOneTwoController componentOneTwoController =
+        Get.find<ComponentOneTwoController>();
 
   @override
   void initState() {

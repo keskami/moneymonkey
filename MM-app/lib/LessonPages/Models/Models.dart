@@ -108,27 +108,28 @@ class RevealCard {
     required this.title,
     required this.definition,
     required this.tapInstruction,
-    required this.revealInformation,
+    required this.whyMatter,
   });
   final String title;
   final String definition;
   final String tapInstruction;
-  final List<String> revealInformation;
+  final String whyMatter;
 
   factory RevealCard.fromMap(Map<String, dynamic> map) {
     return RevealCard(
       title: map['title'],
       definition: map['definition'],
       tapInstruction: map['tapInstruction'] as String,
-      revealInformation: List<String>.from(map['revealInformation']),
+      whyMatter: map['whyMatter']
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'title': title,
       'definition': definition,
       'tapInstruction': tapInstruction,
-      'revealInformation': revealInformation,
+      'whyMatter': whyMatter,
     };
   }
 }
@@ -220,6 +221,9 @@ class LearningCheck {
     required this.options2,
     required this.correctAns1,
     required this.correctAns2,
+    required this.feedbackCorrect,
+    required this.feedbackOneIncorrect,
+    required this.feedbackBothIncorrect,
   });
 
   final String title;
@@ -229,6 +233,9 @@ class LearningCheck {
   final String correctAns2;
   final List<String> options1;
   final List<String> options2;
+  final String feedbackCorrect;
+  final String feedbackOneIncorrect;
+  final String feedbackBothIncorrect;
 
   factory LearningCheck.fromMap(Map<String, dynamic> map) {
     print("Parsing LearningCheck with data: $map"); // Debug log
@@ -239,10 +246,11 @@ class LearningCheck {
       question2: map["question2"] ?? "Missing question",
       options1: List<String>.from(map["options1"] ?? []),
       options2: List<String>.from(map["options2"] ?? []),
-      correctAns1:
-          map["correctAns1"] ?? "", // Note: Fixed typo from "corectAns1"
-      correctAns2:
-          map["correctAns2"] ?? "", // Note: Fixed typo from "corectAns2"
+      correctAns1: map["correctAns1"] ?? "",
+      correctAns2: map["correctAns2"] ?? "",
+      feedbackCorrect: map["feedbackCorrect"] ?? "Great job! You got both correct!",
+      feedbackOneIncorrect: map["feedbackOneIncorrect"] ?? "Almost there! One answer is incorrect.",
+      feedbackBothIncorrect: map["feedbackBothIncorrect"] ?? "Be careful! Both answers are incorrect.",
     );
   }
 
@@ -253,9 +261,26 @@ class LearningCheck {
       'question2': question2,
       'options1': options1,
       'options2': options2,
-      'correctAns1': correctAns1, // Fixed typo
-      'correctAns2': correctAns2, // Fixed typo
+      'correctAns1': correctAns1,
+      'correctAns2': correctAns2,
+      'feedbackCorrect': feedbackCorrect,
+      'feedbackOneIncorrect': feedbackOneIncorrect,
+      'feedbackBothIncorrect': feedbackBothIncorrect,
     };
+  }
+
+  /// **Logic to determine feedback based on user answers**
+  String getFeedback(String userAnswer1, String userAnswer2) {
+    bool isFirstCorrect = userAnswer1 == correctAns1;
+    bool isSecondCorrect = userAnswer2 == correctAns2;
+
+    if (isFirstCorrect && isSecondCorrect) {
+      return feedbackCorrect; 
+    } else if (isFirstCorrect || isSecondCorrect) {
+      return feedbackOneIncorrect;
+    } else {
+      return feedbackBothIncorrect;
+    }
   }
 }
 
@@ -263,15 +288,18 @@ class Takeaway {
   const Takeaway({
     required this.title,
     required this.description,
+    required this.imageUrl, // Added image property
   });
 
   final String title;
   final String description;
+  final String imageUrl; // New field for icon
 
   factory Takeaway.fromMap(Map<String, dynamic> map) {
     return Takeaway(
       title: map['title'],
       description: map['description'],
+      imageUrl: map['imageUrl'], // Fetch image URL from map
     );
   }
 
@@ -279,6 +307,7 @@ class Takeaway {
     return {
       'title': title,
       'description': description,
+      'imageUrl': imageUrl, // Include image URL in map
     };
   }
 }
@@ -365,7 +394,7 @@ class newlanding {
     return newlanding(
       title: map['title'] ?? "Missing title",
       subtitle: map['subtitle'] ?? "",
-      meetMinty: map['meetMinty'] ?? "Hello, I'm Minty!",
+      meetMinty: map['meetMinty'] ?? "Meet Minty the Money Monkey",
       mintyUrl: map['mintyUrl'] ??
           "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
     );
@@ -617,7 +646,7 @@ class ScenarioResult {
     }
   }
 
-  // ✅ **Fix: fromMap constructor added**
+  // Fix: fromMap constructor added
   factory ScenarioResult.fromMap(Map<String, dynamic> map) {
     return ScenarioResult(
       selectedChoices: (map['selectedChoices'] as List<dynamic>?)?.map((choice) => ScenarioChoice.fromMap(choice)).toList() ?? [],
@@ -625,7 +654,7 @@ class ScenarioResult {
     );
   }
 
-  // ✅ **Fix: toMap conversion**
+  // Fix: toMap conversion
   Map<String, dynamic> toMap() {
     return {
       'selectedChoices': selectedChoices.map((choice) => choice.toMap()).toList(),
@@ -647,7 +676,7 @@ class ScenarioChoice {
   final int value;
   final int scoreImpact;
 
-  // ✅ **Fix: fromMap constructor**
+  // Fix: fromMap constructor
   factory ScenarioChoice.fromMap(Map<String, dynamic> map) {
     return ScenarioChoice(
       category: map['category'] ?? "Unknown",
@@ -656,7 +685,7 @@ class ScenarioChoice {
     );
   }
 
-  // ✅ **Fix: toMap conversion**
+  // Fix: toMap conversion
   Map<String, dynamic> toMap() {
     return {
       'category': category,
@@ -1201,5 +1230,3 @@ class Question {
     };
   }
 }
-
-

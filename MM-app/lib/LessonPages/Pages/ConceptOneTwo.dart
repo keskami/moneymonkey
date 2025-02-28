@@ -12,8 +12,25 @@ class LessonOne extends StatefulWidget {
 }
 
 class _LessonOneState extends State<LessonOne> {
-  ComponentOneTwoController componentOneTwoController = Get.find<ComponentOneTwoController>();
   final String lessonId = "Lesson1";
+  late ComponentOneTwoController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<ComponentOneTwoController>();
+  }
+
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed
+    if (Get.isRegistered<ComponentOneTwoController>()) {
+      Get.delete<ComponentOneTwoController>();
+    }
+    super.dispose();
+  }
+
   Future<void> _preLoadImages() async {
     await precacheImage(
         NetworkImage(
@@ -23,17 +40,6 @@ class _LessonOneState extends State<LessonOne> {
         NetworkImage(
             "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FWrong%20X.png?alt=media&token=7502b819-8b30-4120-8222-305534358c8c"),
         context);
-  }
-
-  // Future<void> fetchQuestions() async {
-  //   await componentOneTwoController.fetchQuestions(lessonId);
-  //   print("fetched");
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-   // fetchQuestions();s
   }
 
   @override
@@ -48,13 +54,13 @@ class _LessonOneState extends State<LessonOne> {
         leading: IconButton(
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            if (componentOneTwoController.pageIndex == 0) {
+            if (controller.pageIndex == 0) {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HomePage()),
               );
             } else {
-              componentOneTwoController.pageIndex -= 1;
+              controller.pageIndex -= 1;
             }
           },
           icon: Icon(
@@ -86,7 +92,7 @@ class _LessonOneState extends State<LessonOne> {
                 child: CustomProgressBar(
                   pageName: 'ConceptOne',
                   width: screenWidth * 0.44,
-                  key: ValueKey(componentOneTwoController.pageIndex.value),
+                  key: ValueKey(controller.pageIndex.value),
                 ),
               ),
               const SizedBox(
@@ -105,8 +111,8 @@ class _LessonOneState extends State<LessonOne> {
             ],
           ),
           Obx(
-            () => componentOneTwoController
-                .pages[componentOneTwoController.pageIndex.value],
+            () => controller
+                .pages[controller.pageIndex.value],
           ),
         ],
       ),

@@ -56,17 +56,18 @@ class ComponentOneTwoController extends BaseLessonController {
                 containerHeading: question.questionHeading,
                 containerSubHeading: question.question,
                 options: question.options,
-                correctAnswer: question.correctAnswers[0]));
+                correctAnswer: question.correctAnswers[0],
+                componentId: componentId));
           }
         }
       }
 
-      pages.add(MCQPage());
-      pages.add(TapToRevealPage());
-      pages.add(TapToRevealIconsPage());
+      pages.add(MCQPage(componentId: componentId));
+      pages.add(TapToRevealPage(componentId: componentId));
+      pages.add(TapToRevealIconsPage(componentId: componentId));
       pages.addAll(scenarioPages);
-      pages.add(LearningCheckPage());
-      pages.add(ComponentTakeawaysPage());
+      pages.add(LearningCheckPage(componentId: componentId));
+      pages.add(ComponentTakeawaysPage(componentId: componentId));
 
     } catch (e) {
       print("Error loading concept data: $e");

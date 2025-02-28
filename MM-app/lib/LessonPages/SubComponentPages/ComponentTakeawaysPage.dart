@@ -6,7 +6,8 @@ import 'package:money_monkey/LessonPages/Widgets/ShadowedBoxContainer.dart';
 import 'package:money_monkey/home.dart';
 
 class ComponentTakeawaysPage extends StatefulWidget {
-  const ComponentTakeawaysPage({super.key});
+  final String componentId;
+  const ComponentTakeawaysPage({super.key, required this.componentId});
 
   @override
   State<ComponentTakeawaysPage> createState() => _ComponentTakeawaysPageState();
@@ -21,7 +22,8 @@ class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
   ];
 
   String title = "";
-  ComponentOneTwoController componentOneTwoController = Get.find();
+  ComponentOneTwoController componentOneTwoController =
+      Get.find<ComponentOneTwoController>();
 
   bool loading = true;
   String subTitle = '';

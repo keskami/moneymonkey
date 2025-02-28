@@ -77,12 +77,12 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
             )
           ],
         ),
-        if (scenarioController.responsibilityScore.value == 100.00)
-          Image.network(
-            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2Ftemporary_financial_pieChart.png?alt=media&token=61efde2c-62c6-4889-bec8-3e3cde837463",
-            width: screenWidth * 0.3,
-            height: screenHeight * 0.35,
-          ),
+        Image.network(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Ftemp.png?alt=media&token=7e4f0270-18cb-4d10-86ba-30bb2ccfb68d",
+          width: screenWidth * 0.3,
+          height: screenHeight * 0.25,
+        ),
+        const SizedBox(height: 40),
         Container(
           width: screenWidth * 0.4,
           height: screenHeight * 0.15,
@@ -98,7 +98,7 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "$subTitle ${scenarioController.responsibilityScore.value.toStringAsFixed(2)}%",
+                "$subTitle ${scenarioController.responsibilityScore.value.toStringAsFixed(2)}",
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                   fontSize: 18,
@@ -118,7 +118,6 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Spacer(),
             CustomNextButton(
               nextPage: () {
                 setState(() {
@@ -132,8 +131,8 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
               text: button,
             )
           ],
-        ).marginOnly(top: 10),
-      ],
+        ).marginOnly(top: 45),
+      ]
     );
   }
 }

@@ -27,10 +27,11 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
   String question = "";
   List<String> answers = [];
   Map<String, String> feedback = {};
-  String correctAnswer = "";
+  List<String> correctAnswers = [];
   List<String> answerImages = [];
 
   List<Widget> pages = [];
+  bool allowMultipleSelections = false;
 
   @override
   void onInit() {
@@ -47,13 +48,15 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
         if (pageData[i].type == QuestionType.quiztextmcquestion) {
           question = pageData[i].data.question;
           answers = pageData[i].data.options;
-          correctAnswer = pageData[i].data.correctAnswers[0];
+          correctAnswers = pageData[i].data.correctAnswers;
           feedback = pageData[i].data.feedbackMessages ?? {};
+          allowMultipleSelections = pageData[i].data.isMultiSelect;
           pages.add(QuizMCQPage(
               question: question,
               answers: answers,
               feedback: feedback,
-              correctAnswer: correctAnswer));
+              correctAnswers: correctAnswers,
+              allowMultipleSelections: allowMultipleSelections));
           print("REACHED");
         } else if (pageData[i].type == QuestionType.quizimagemcquestion) {
           try {
@@ -72,15 +75,17 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
                 .map<String>((QuizOption option) => option.imageUrl ?? "")
                 .toList();
 
-            correctAnswer = pageData[i].data.correctAnswers[0];
+            correctAnswers = pageData[i].data.correctAnswers;
             feedback = pageData[i].data.feedbackMessages ?? {};
+            allowMultipleSelections = pageData[i].data.isMultiSelect;
 
             pages.add(QuizMCQImagesPage(
                 question: question,
                 answers: answers,
                 answerImages: answerImages,
                 feedback: feedback,
-                correctAnswer: correctAnswer));
+                correctAnswers: correctAnswers,
+                allowMultipleSelections: allowMultipleSelections));
           } catch (e) {
             print("ERROR in image MCQ processing: $e");
           }

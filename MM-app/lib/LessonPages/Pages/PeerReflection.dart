@@ -5,35 +5,50 @@ import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.da
 import 'package:money_monkey/home.dart';
 
 class PeerReflection extends StatefulWidget {
-  const PeerReflection({super.key});
-  
+  final String componentId;
+  const PeerReflection({super.key, required this.componentId});
+
   @override
   State<PeerReflection> createState() => _PeerReflectionState();
 }
 
 class _PeerReflectionState extends State<PeerReflection> {
-  PeerReflectioncontroller peerReflectioncontroller =
-      Get.find<PeerReflectioncontroller>();
+  late PeerReflectioncontroller peerReflectioncontroller;
   final String lessonId = "PeerReflection";
-  
+
   Future<void> _preloadImages() async {
-    precacheImage(AssetImage('assets/images/newMonkeys/Maria.png'), context);
-    precacheImage(AssetImage('assets/images/newMonkeys/Jason.png'), context);
-    precacheImage(AssetImage('assets/images/newMonkeys/Ava.png'), context);
-    precacheImage(AssetImage('assets/images/img_monkeymoney_52.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/newMonkeys/Maria.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/newMonkeys/Jason.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/newMonkeys/Ava.png'), context);
+    await precacheImage(
+        AssetImage('assets/images/img_monkeymoney_52.png'), context);
   }
-  
+
   @override
   void initState() {
     super.initState();
+    peerReflectioncontroller =
+        Get.find<PeerReflectioncontroller>();
     _preloadImages();
   }
-  
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed
+    if (Get.isRegistered<PeerReflectioncontroller>()) {
+      Get.delete<PeerReflectioncontroller>();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -67,7 +82,8 @@ class _PeerReflectionState extends State<PeerReflection> {
           ),
           Row(
             mainAxisSize: MainAxisSize.min, // Match StoryPage exactly
-            mainAxisAlignment: MainAxisAlignment.center, // Match StoryPage exactly
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Match StoryPage exactly
             children: [
               IconButton(
                 onPressed: () {
@@ -84,7 +100,7 @@ class _PeerReflectionState extends State<PeerReflection> {
                 child: CustomProgressBar(
                   pageName: 'PeerReflection',
                   width: screenWidth * 0.44,
-                  key: ValueKey(peerReflectioncontroller.pageIndex.value), 
+                  key: ValueKey(peerReflectioncontroller.pageIndex.value),
                 ),
               ),
               const SizedBox(
