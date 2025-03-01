@@ -59,6 +59,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
+                    level: "Intermediate",
                     emotionalScore: 300,
                     mentalScore: 300,
                     physicalScore: 300,
@@ -822,6 +823,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
+          level: "Intermediate",
           emotionalScore: 300,
                     mentalScore: 300,
                     physicalScore: 300,

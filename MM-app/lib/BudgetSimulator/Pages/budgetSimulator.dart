@@ -1,33 +1,29 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/headings.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
-
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditScoreBox.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBoxNew.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
 import 'package:money_monkey/home.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class BudgetSimulator extends StatefulWidget {
   BudgetSimulator({
     super.key,
     required this.name,
+    required this.level,
     required this.checkingAccountBalance,
     required this.savingsAccountBalance,
     required this.creditCardDebt,
@@ -49,6 +45,7 @@ class BudgetSimulator extends StatefulWidget {
   int emotionalScore;
   int physicalScore;
   int mentalScore;
+  final String level;
 
   double checkingAccountBalance;
   double savingsAccountBalance;
@@ -58,7 +55,7 @@ class BudgetSimulator extends StatefulWidget {
   final double startingBalance;
   final double savingsAPY;
   final double ccAPY;
-  final List<Milestone> milestones;
+  List<Milestone> milestones;
   double creditScore;
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
@@ -68,7 +65,6 @@ class BudgetSimulator extends StatefulWidget {
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
   late double netCash;
-  final Headings headings = Headings();
   final Headings2 headings2 = Headings2();
   DateTime now = DateTime(2025, 5, 1);
   DateTime _focusedDay = DateTime(2025, 5, 1);
@@ -79,40 +75,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<String> types = [];
   List<double> percentage = [];
   int toSpend = 0;
-
-  void updateNextExpense() {
-    if (widget.expenses.isNotEmpty) {
-      widget.expenses.sort((a, b) => a.dueDay.compareTo(b.dueDay));
-      setState(() {
-        nextExpense = widget.expenses.firstWhere(
-          (expense) => expense.dueDay.isAfter(now) && expense.name != "Pay Day",
-          orElse: () => widget.expenses.firstWhere(
-              (expense) => expense.name != "Pay Day",
-              orElse: () => widget.expenses.first),
-        );
-      });
-      if (nextExpense == null) {
-        nextExpense = Expense(
-          name: '',
-          amount: 0,
-          amountPaid: 0,
-          dueDay: DateTime(2029, 5, 1),
-          penalty: 50,
-          dueDateType: '',
-        );
-      }
-    }
-  }
-
-  Expense nextExpense = Expense(
-    name: '',
-    amount: 0,
-    amountPaid: 0,
-    dueDay: DateTime(2029, 5, 1),
-    penalty: 50,
-    dueDateType: '',
-  );
-
+  BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
+  late Expense nextExpense = functions.nullExpense;
   double totalSpending = 0;
   bool smallBoxes = true;
   double wellnessScore = 600;
@@ -120,17 +84,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   bool eventProccesed = false;
   double checkingTransfer = 0;
   double savingsTransfer = 0;
-
   int monthlyFitness = 0;
   int monthlyEntertainment = 0;
-
   int toLuxaryForWeek = 0;
   int daysUnderLuxary = 0;
   bool daysUnderLuxaryDone = false;
-
   final Map<DateTime, List<Expense>> expensesMapped = {};
-  final List<Expense> expenses = [];
-
+  List<Expense> expenses = [];
   int startingDebt = 1;
   int startingRent = 1;
   int startingCCMin = 1;
@@ -139,52 +99,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingGroceries = 250;
 
   bool noLatePayments = true;
-
-  Future<void> editMilestonesCCD(
-      int toCredCardDebt, int toSavings, int toLuxary) async {
-    for (Milestone milestone in widget.milestones) {
-      if (milestone.name == 'Debt Avalanche Start') {
-        if (monthsOccurd < 1) {
-          setState(() {
-            milestone.currentAmount += toCredCardDebt;
-          });
-        }
-      } else if (milestone.name == 'Build an Emergency Cushion') {
-        if (monthsOccurd < 2) {
-          setState(() {
-            milestone.currentAmount = widget.savingsAccountBalance;
-          });
-        }
-      } else if (milestone.name == 'Two Weeks Under Budget') {
-        if (!daysUnderLuxaryDone) {
-          if (toLuxaryForWeek + toLuxary >= 50) {
-            setState(() {
-              milestone.currentAmount = 0;
-              daysUnderLuxary = 0;
-              toLuxaryForWeek = 0;
-            });
-          } else if (daysUnderLuxary == 13) {
-            setState(() {
-              milestone.currentAmount = 14;
-              daysUnderLuxaryDone = true;
-            });
-          } else if (daysUnderLuxary == 6) {
-            setState(() {
-              milestone.currentAmount += 1;
-              toLuxaryForWeek = 0;
-              daysUnderLuxary += 1;
-            });
-          } else {
-            setState(() {
-              milestone.currentAmount += 1;
-              toLuxaryForWeek += toLuxary;
-              daysUnderLuxary += 1;
-            });
-          }
-        }
-      }
-    }
-  }
 
   int monthsOccurd = 0;
 
@@ -239,19 +153,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     mapExpenses();
   }
 
-  bool checkPaid(String type) {
-    for (Expense expense in widget.expenses) {
-      if (expense.name == type) {
-        if (expense.amountPaid >= expense.amount) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-    return false;
-  }
-
   Future<void> endGame() async {
     // Credit Score
   }
@@ -270,47 +171,68 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
     setState(() {
       now = now.add(Duration(days: 1));
-      _focusedDay = _focusedDay.add(Duration(days: 1));
-      _selectedDay = _selectedDay.add(Duration(days: 1));
+      _focusedDay = now;
+      _selectedDay = now;
       formattedDate = DateFormat('MMM d, y').format(_focusedDay);
       dayNumber += 1;
     });
 
     if (now.day == 2) {
-      if (!checkPaid("Rent")) {
-        addHint("Rent");
+      if (!functions.checkIfPaymentIsPaid("Rent", widget.expenses)) {
+        setState(() {
+          widget.hints = functions.addHint(
+              "Rent", widget.hints, now, widget.level, widget.name);
+        });
       }
     } else if (now.day == 8) {
-      if (!checkPaid("Utilities")) {
-        addHint("Utilities");
+      if (!functions.checkIfPaymentIsPaid("Utilities", widget.expenses)) {
+        setState(() {
+          widget.hints = functions.addHint(
+              "Utilities", widget.hints, now, widget.level, widget.name);
+        });
       }
     } else if (now.day == 16) {
       for (Milestone milestone in widget.milestones) {
         if (milestone.name == "Two Weeks Under Budget") {
           if (milestone.currentAmount < 7) {
-            addHint("Two Weeks Under Budget");
+            setState(() {
+              widget.hints = functions.addHint("Two Weeks Under Budget",
+                  widget.hints, now, widget.level, widget.name);
+            });
           }
         } else if (milestone.name == "Debt Avalanche Start") {
           if (milestone.currentAmount / milestone.goalAmount < 0.5 &&
               now.month == 5) {
-            addHint("Debt Avalanche Start");
+            setState(() {
+              widget.hints = functions.addHint("Debt Avalanche Start",
+                  widget.hints, now, widget.level, widget.name);
+            });
           }
         }
       }
     } else if (now.day == 24) {
-      if (!checkPaid("CC Debt")) {
-        addHint("CC Min");
+      if (!functions.checkIfPaymentIsPaid("CC Debt", widget.expenses)) {
+        setState(() {
+          widget.hints = functions.addHint(
+              "CC Min", widget.hints, now, widget.level, widget.name);
+        });
       }
       for (Milestone milestone in widget.milestones) {
         if (milestone.name == "Two Weeks Under Budget") {
           if (milestone.currentAmount < 2) {
-            addHint("Two Weeks Under Budget");
+            setState(() {
+              widget.hints = functions.addHint("Two Weeks Under Budget",
+                  widget.hints, now, widget.level, widget.name);
+            });
           }
         }
       }
     } else if ((now.month == 2 && now.day == 27) ||
         (now.month != 2 && now.day == 29)) {
-      addHint("End of Month");
+      setState(() {
+        widget.hints = functions.addHint(
+            "End of Month", widget.hints, now, widget.level, widget.name);
+      });
     }
   }
 
@@ -320,127 +242,17 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     }
   }
 
-  void addHint(
-    String type,
-  ) {
-    if (type == "Pay Day") {
-      if (now.day == 1) {
-        setState(() {
-          widget.hints.add(Hint(
-            text:
-                "Today you receive \$1,250. Plan ahead—allocate funds for rent (\$500 due by the 5th),\nutilities, and extra debt payments to kickstart your Debt Avalanche.",
-            good: true,
-          ));
-        });
-      } else {
-        setState(() {
-          widget.hints.add(Hint(
-            text:
-                "New paycheck received! Consider whether to boost your debt repayment or cover\nupcoming expenses. Every decision now affects your future costs.",
-            good: true,
-          ));
-        });
-      }
-    } else if (type == "End of Month") {
-      widget.hints.add(Hint(
-        text:
-            "Month’s end: Review your performance. Have you met your payment milestones\nand avoided excess fees? Use this recap to adjust your strategy for next month.",
-        good: true,
-      ));
-    } else if (type == "Rent") {
-      widget.hints.add(Hint(
-        text:
-            "Heads up: Rent (\$500) is due on the 5th. Ensure you’ve set aside enough funds\nto avoid a \$25 late fee.",
-        good: true,
-      ));
-    } else if (type == "Utilities") {
-      widget.hints.add(Hint(
-        text:
-            "Reminder: Utilities (\$150) are due by the 10th. Reserve funds now to prevent any\nlate fee.",
-        good: true,
-      ));
-    } else if (type == "CC Min") {
-      widget.hints.add(Hint(
-        text:
-            "Tomorrow the credit card minimum is due (\$200). If you can, try to pay\nextra—remember, early extra payments help reduce your",
-        good: true,
-      ));
-    } else if (type == "Car Repair Surprise") {
-      widget.hints.add(Hint(
-        text:
-            "Your car might need urgent repairs soon, costing around \$250. You can pay for it in full to ensure\nsafety, or skip it and switch to public transportation. Weigh your needs and available funds.",
-        good: false,
-      ));
-    } else if (type == "Home Appliance Breakdown") {
-      widget.hints.add(Hint(
-        text:
-            "A home appliance may break soon, costing \$100. You can either pay the full cost immediately\nto fix it or skip repairs and adjust your routine. Consider your current cash flow and priorities.",
-        good: false,
-      ));
-    } else if (type == "Class Registration or Certification Fee") {
-      widget.hints.add(Hint(
-        text:
-            "An education opportunity with a \$200 fee is approaching. You can enroll immediately to invest in\nyour future, or postpone enrollment to conserve funds. Reflect on your goals and situation.",
-        good: false,
-      ));
-    } else if (type == "Impulse Buy") {
-      widget.hints.add(Hint(
-        text:
-            "Watch for an impulse buy opportunity soon—a \$200 gadget or event invite. You can purchase it immediately\nto satisfy the urge or resist and preserve your funds. Reflect on your priorities before deciding.",
-        good: false,
-      ));
-    } else if (type == "Unexpected Windfall") {
-      widget.hints.add(Hint(
-        text:
-            "Good news—a \$150 windfall is coming! You could use it entirely to reduce your debt or spend it on \nentertainment. Consider your current debt load versus your need for a morale boost.",
-        good: true,
-      ));
-    } else if (type == "Wedding Invitation") {
-      widget.hints.add(Hint(
-        text:
-            "A wedding invitation is on the horizon, costing about \$150. You can attend fully by covering all expenses\nor decline the invitation altogether. Consider the social benefits versus the financial impact",
-        good: false,
-      ));
-    } else if (type == "Medical Bill") {
-      widget.hints.add(Hint(
-        text:
-            "A \$300 medical bill is approaching. You might settle it in full now with your cash or charge it to your\ncredit card to keep cash on hand. Think about how you wish to manage this expense.",
-        good: false,
-      ));
-    } else if (type == "Family Emergency Request") {
-      widget.hints.add(Hint(
-        text:
-            "A family member might request a \$200 loan soon. You can choose to lend the full amount to help, or politely\ndecline to protect your funds. Consider your capacity to assist versus your own financial stability.",
-        good: false,
-      ));
-    } else if (type == "Small Bonus / Part-Time Gig") {
-      widget.hints.add(Hint(
-        text:
-            "A \$100 bonus from a side gig is coming. You could use it entirely to lower your debt or spend it on\nleisure.Think about whether reducing your liabilities or boosting your morale is more critical right now.",
-        good: true,
-      ));
-    } else if (type == "Two Weeks Under Budget") {
-      widget.hints.add(Hint(
-        text:
-            "Reminder: Keep your entertainment spending under \$50 this week to meet your budget goals.\nSaving now can help reduce future debt.",
-        good: true,
-      ));
-    } else if (type == "Debt Avalanche Start") {
-      widget.hints.add(Hint(
-        text:
-            "Mid-month check: Are you on track to pay an extra \$300 toward your credit card?\nEarly extra payments reduce interest—review your allocations now!",
-        good: true,
-      ));
-    }
-  }
-
   Future<void> getEvents() async {
     DateTime normalizedToday = normalizeDate(now);
     if (expensesMapped.containsKey(normalizedToday)) {
       List<Expense> todayExpenses = expensesMapped[normalizedToday]!;
       for (Expense expense in todayExpenses) {
         if (expense.name == "Pay Day") {
-          addHint("Pay Day");
+          setState(() {
+            widget.hints = functions.addHint(
+                "Pay Day", widget.hints, now, widget.level, widget.name);
+          });
+
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -659,9 +471,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     }
     setState(() {
       percentage = newPercentage;
+      chartData = functions.getChartData(types, percentage, colors);
     });
-
-    getChartData();
   }
 
   Future<void> getExpenses() async {
@@ -762,8 +573,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   List<RandomEvent> allocatedEvents = [];
-
-
 
   List<List<int>> dayRanges = [
     [4, 8],
@@ -868,7 +677,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       }
 
       if (isSameDay(normalizedTodayPlusTwo, randomEvent.trigerDay)) {
-        addHint(randomEvent.name);
+        setState(() {
+          widget.hints = functions.addHint(
+              randomEvent.name, widget.hints, now, widget.level, widget.name);
+        });
       }
     }
   }
@@ -887,13 +699,19 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       getEvents();
     });
     getStartingExpenses();
-    getChartData();
+    setState(() {
+      chartData = functions.getChartData(types, percentage, colors);
+    });
+
     alocateEvents();
-    updateNextExpense();
+    setState(() {
+      var data = functions.updateNextExpense(widget.expenses, now);
+      expenses = data['expenses'];
+      nextExpense = data['nextExpense'];
+    });
   }
 
-  List<ChartData> chartData = [];
-  int xtotal = 0;
+  List<BudgetSimulatorChartData> chartData = [];
   List<Color> colors = [
     Colors.pink,
     Colors.blue,
@@ -904,26 +722,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     Colors.purple,
   ];
 
-  Future<void> getChartData() async {
-    setState(() {
-      chartData.clear();
-      xtotal = 0;
-
-      for (int i = 0; i < types.length; i++) {
-        chartData
-            .add(ChartData(types[i], percentage[i], colors[i % colors.length]));
-        xtotal += percentage[i].toInt();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeightUnit = screenHeight / 1406;
     double screenWidthUnit = screenWidth / 2079;
-
     return Container(
       height: screenHeight,
       width: screenWidth,
@@ -1370,12 +1174,50 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                               widget.wellnessScore =
                                                                   wellnessScore;
 
-                                                              editMilestonesCCD(
-                                                                  toCredCardDebt,
-                                                                  widget.savingsAccountBalance
-                                                                      as int,
-                                                                  (toFitness +
-                                                                      toEntertainment));
+                                                              var milestoneData =
+                                                                  {};
+
+                                                              if (widget.name ==
+                                                                  "Crush the Credit Card Debt") {
+                                                                milestoneData =
+                                                                    functions
+                                                                        .editMilestones(
+                                                                  milestones: widget
+                                                                      .milestones,
+                                                                  toCredCardDebt:
+                                                                      toCredCardDebt,
+                                                                  toSavings:
+                                                                      toSavings,
+                                                                  toLuxary:
+                                                                      toEntertainment +
+                                                                          toFitness,
+                                                                  level: widget
+                                                                      .level,
+                                                                  monthsOccurd:
+                                                                      monthsOccurd,
+                                                                  daysUnderLuxary:
+                                                                      daysUnderLuxary,
+                                                                  toLuxaryForWeek:
+                                                                      toLuxaryForWeek,
+                                                                  daysUnderLuxaryDone:
+                                                                      daysUnderLuxaryDone,
+                                                                  savingsAccountBalance:
+                                                                      widget
+                                                                          .savingsAccountBalance,
+                                                                );
+                                                                widget.milestones =
+                                                                    milestoneData[
+                                                                        'Milestones'];
+                                                                daysUnderLuxaryDone =
+                                                                    milestoneData[
+                                                                        'daysUnderLuxaryDone'];
+                                                                daysUnderLuxary =
+                                                                    milestoneData[
+                                                                        'daysUnderLuxary'];
+                                                                toLuxaryForWeek =
+                                                                    milestoneData[
+                                                                        'ToLuxaryForWeek'];
+                                                              }
 
                                                               spendOnExpense(
                                                                   rentSpent,
@@ -1403,7 +1245,16 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                               mapExpenses();
                                                               nextDay();
 
-                                                              updateNextExpense();
+                                                              var data = functions
+                                                                  .updateNextExpense(
+                                                                      widget
+                                                                          .expenses,
+                                                                      now);
+                                                              expenses = data[
+                                                                  'expenses'];
+                                                              nextExpense = data[
+                                                                  'nextExpense'];
+
                                                               WidgetsBinding
                                                                   .instance
                                                                   .addPostFrameCallback(
@@ -2031,18 +1882,4 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       ),
     );
   }
-}
-
-class Event {
-  final String title;
-
-  Event(this.title);
-}
-
-class ChartData {
-  final String category;
-  final double percentage;
-  final Color color;
-
-  ChartData(this.category, this.percentage, this.color);
 }
