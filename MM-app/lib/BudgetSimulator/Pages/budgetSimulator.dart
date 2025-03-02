@@ -13,6 +13,8 @@ import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/weekdayRow.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
@@ -70,7 +72,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   DateTime _focusedDay = DateTime(2025, 5, 1);
   DateTime _selectedDay = DateTime(2025, 5, 1);
   String formattedDate = '';
-  CalendarFormat _calendarFormat = CalendarFormat.month;
   int progress = 0;
   List<String> types = [];
   List<double> percentage = [];
@@ -97,6 +98,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingUtilites = 1;
   int startingTransportaion = 100;
   int startingGroceries = 250;
+  List<Expense> trueExpenses = [];
 
   bool noLatePayments = true;
 
@@ -138,6 +140,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           });
         }
       }
+      
     }
     setState(() {
       monthsOccurd += 1;
@@ -236,11 +239,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     }
   }
 
-  Future<void> changeMoney(int amount, String type) async {
-    if (type == "Checking Account") {
-      checkingAccountBalance += amount;
-    }
-  }
 
   Future<void> getEvents() async {
     DateTime normalizedToday = normalizeDate(now);
@@ -442,12 +440,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   Future<void> spendOnExpense(int amount, String type) async {
     for (Expense expense in widget.expenses) {
       if (expense.name == type) {
+
         setState(() {
           expense.amountPaid += amount;
         });
         break;
       }
     }
+    
   }
 
   recalculatePercentages() {
@@ -476,11 +476,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   Future<void> getExpenses() async {
-    for (Expense expense in widget.expenses) {
+    for (Expense expense in trueExpenses) {
       types.add(expense.name);
       totalSpending += expense.amountPaid;
     }
-    for (Expense expense in widget.expenses) {
+    for (Expense expense in trueExpenses) {
       setState(() {
         percentage.add((expense.amountPaid / totalSpending) * 100);
       });
@@ -491,11 +491,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     return DateTime(date.year, date.month, date.day);
   }
 
+
   Future<void> filterPayDays() async {
+    
     var filterdEvents =
         widget.expenses.where((element) => element.name != "Pay Day");
     setState(() {
-      widget.expenses = filterdEvents.toList();
+      trueExpenses = filterdEvents.toList();
     });
   }
 
@@ -685,9 +687,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     }
   }
 
+
   @override
   void initState() {
-    mapExpenses();
     filterPayDays();
     super.initState();
     netCash = widget.startingBalance;
@@ -701,6 +703,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     getStartingExpenses();
     setState(() {
       chartData = functions.getChartData(types, percentage, colors);
+      
     });
 
     alocateEvents();
@@ -1219,9 +1222,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                                         'ToLuxaryForWeek'];
                                                               }
 
+                                                              
+
                                                               spendOnExpense(
                                                                   rentSpent,
                                                                   "Rent");
+                                                                   
                                                               spendOnExpense(
                                                                   groceriesSpent,
                                                                   "Groceries");
@@ -1309,468 +1315,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         )
                                       ],
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: screenHeightUnit * 8,
-                                          bottom: screenHeightUnit * 18),
-                                      child: Center(
-                                        child: Container(
-                                          width: screenWidthUnit * 1290,
-                                          height: screenHeightUnit * 55,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            color:
-                                                Color.fromRGBO(79, 195, 247, 1),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Text(
-                                                "MO",
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              Text(
-                                                "TUES",
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              Text(
-                                                "WED",
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              Text(
-                                                "THURS",
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              Text(
-                                                "FRI",
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              Text(
-                                                "SAT",
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              Text(
-                                                "SUN",
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                    WeekdayRow(
+                                      screenWidthUnit: screenWidthUnit,
+                                      screenHeightUnit: screenHeightUnit,
                                     ),
-                                    Center(
-                                      child: Container(
-                                        height: screenHeightUnit * 830,
-                                        width: screenWidthUnit * 1290,
-                                        child: TableCalendar(
-                                          focusedDay: _focusedDay,
-                                          firstDay: DateTime.utc(2022, 01, 01),
-                                          lastDay: DateTime.utc(2026, 01, 01),
-                                          calendarFormat: CalendarFormat.month,
-                                          daysOfWeekVisible: false,
-                                          selectedDayPredicate: (day) {
-                                            return isSameDay(_selectedDay, day);
-                                          },
-                                          eventLoader: (day) {
-                                            final normalizdDay =
-                                                normalizeDate(day);
-                                            return expensesMapped[
-                                                    normalizdDay] ??
-                                                [];
-                                          },
-                                          onDaySelected:
-                                              (selectedDay, focusedDay) {
-                                            setState(() {
-                                              _selectedDay = selectedDay;
-                                              _focusedDay = focusedDay;
-                                              formattedDate =
-                                                  DateFormat('MMM d, y')
-                                                      .format(_selectedDay);
-                                            });
-                                          },
-                                          headerVisible: false,
-                                          calendarStyle: CalendarStyle(
-                                            outsideDaysVisible: true,
-                                            cellMargin: EdgeInsets.all(2),
-                                            defaultTextStyle:
-                                                TextStyle(color: Colors.black),
-                                            outsideTextStyle:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          rowHeight: smallBoxes
-                                              ? screenHeightUnit * 135
-                                              : screenHeightUnit * 165,
-                                          calendarBuilders: CalendarBuilders(
-                                            outsideBuilder:
-                                                (context, day, focusedDay) {
-                                              return Container(
-                                                decoration: BoxDecoration(
-                                                  color: Color.fromRGBO(
-                                                      192, 192, 192, .5),
-                                                  border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 1,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            defaultBuilder:
-                                                (context, day, focusedDay) {
-                                              final bool isToday =
-                                                  isSameDay(day, now);
-                                              final bool isSelected =
-                                                  _selectedDay != null &&
-                                                      isSameDay(
-                                                          _selectedDay, day);
-                                              final bool isFocused =
-                                                  isSameDay(day, _focusedDay);
-
-                                              // Set fill and border color dynamically
-                                              Color fillColor = Colors.white;
-                                              Color borderColor = Colors.grey;
-
-                                              if (isSelected) {
-                                                borderColor = const Color(
-                                                    0xFF51A4F1); // Blue border for selected
-                                              } else if (isFocused) {
-                                                borderColor = Colors
-                                                    .blueAccent; // Light blue for focused
-                                              }
-
-                                              return isSameDay(day, now)
-                                                  ? Container(
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: Colors.grey,
-                                                            width: 1),
-                                                        color: Colors.white,
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Positioned(
-                                                              top: 5,
-                                                              right: 5,
-                                                              child: Container(
-                                                                  width:
-                                                                      screenHeightUnit *
-                                                                          50,
-                                                                  height:
-                                                                      screenHeightUnit *
-                                                                          50,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    color: isToday
-                                                                        ? Color.fromRGBO(
-                                                                            243,
-                                                                            52,
-                                                                            53,
-                                                                            1)
-                                                                        : Colors
-                                                                            .transparent,
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      '${day.day}',
-                                                                      style: GoogleFonts
-                                                                          .baloo2(
-                                                                        fontSize:
-                                                                            screenWidthUnit *
-                                                                                25,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        color: isToday
-                                                                            ? Color.fromRGBO(
-                                                                                255,
-                                                                                255,
-                                                                                255,
-                                                                                1)
-                                                                            : Color.fromRGBO(
-                                                                                108,
-                                                                                108,
-                                                                                108,
-                                                                                1),
-                                                                      ),
-                                                                    ),
-                                                                  ))),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : Container(
-                                                      decoration: BoxDecoration(
-                                                        color: fillColor,
-                                                        border: Border.all(
-                                                          color: borderColor,
-                                                          width: (isSelected ||
-                                                                  isFocused
-                                                              ? 1
-                                                              : 1),
-                                                        ),
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Positioned(
-                                                            top: 5,
-                                                            right: 5,
-                                                            child: Text(
-                                                              '${day.day}',
-                                                              style: GoogleFonts
-                                                                  .baloo2(
-                                                                fontSize:
-                                                                    screenWidthUnit *
-                                                                        25,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        108,
-                                                                        108,
-                                                                        108,
-                                                                        1),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                            },
-                                            todayBuilder:
-                                                (context, day, focusedDay) {
-                                              final bool isToday =
-                                                  isSameDay(day, now);
-                                              return Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.grey,
-                                                      width: 1),
-                                                  color: Colors.white,
-                                                ),
-                                                child: Stack(
-                                                  children: [
-                                                    Positioned(
-                                                        top: 5,
-                                                        right: 5,
-                                                        child: Container(
-                                                            width:
-                                                                screenHeightUnit *
-                                                                    50,
-                                                            height:
-                                                                screenHeightUnit *
-                                                                    50,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              color: isToday
-                                                                  ? Color
-                                                                      .fromRGBO(
-                                                                          243,
-                                                                          52,
-                                                                          53,
-                                                                          1)
-                                                                  : Colors
-                                                                      .transparent,
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${day.day}',
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .baloo2(
-                                                                  fontSize:
-                                                                      screenWidthUnit *
-                                                                          25,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: isToday
-                                                                      ? Color.fromRGBO(
-                                                                          255,
-                                                                          255,
-                                                                          255,
-                                                                          1)
-                                                                      : Color.fromRGBO(
-                                                                          108,
-                                                                          108,
-                                                                          108,
-                                                                          1),
-                                                                ),
-                                                              ),
-                                                            ))),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                            markerBuilder:
-                                                (context, day, events) {
-                                              if (events.isEmpty) {
-                                                return const SizedBox
-                                                    .shrink(); // No events, no markers
-                                              }
-
-                                              return Positioned(
-                                                bottom: 5,
-                                                left: 5,
-                                                right: 5,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: events.map((e) {
-                                                    final myExpense =
-                                                        e as Expense;
-                                                    return Expenselabel(
-                                                      expense: myExpense,
-                                                      screenHeightUnit:
-                                                          screenHeightUnit,
-                                                      screenWidthUnit:
-                                                          screenWidthUnit,
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                              );
-                                            },
-                                            selectedBuilder:
-                                                (context, day, focusedDay) {
-                                              return day.month != now.month
-                                                  ? Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Color.fromRGBO(
-                                                            192, 192, 192, .5),
-                                                        border: Border.all(
-                                                          color: Colors.grey,
-                                                          width: 1,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : isSameDay(day, now)
-                                                      ? Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                                color: const Color(
-                                                                    0xFF51A4F1),
-                                                                width: 2),
-                                                            color: Colors.white,
-                                                          ),
-                                                          child: Stack(
-                                                            children: [
-                                                              Positioned(
-                                                                  top: 5,
-                                                                  right: 5,
-                                                                  child: Container(
-                                                                      width: screenHeightUnit * 50,
-                                                                      height: screenHeightUnit * 50,
-                                                                      decoration: BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color: Color.fromRGBO(
-                                                                            243,
-                                                                            52,
-                                                                            53,
-                                                                            1),
-                                                                      ),
-                                                                      child: Center(
-                                                                        child:
-                                                                            Text(
-                                                                          '${day.day}',
-                                                                          style:
-                                                                              GoogleFonts.baloo2(
-                                                                            fontSize:
-                                                                                screenWidthUnit * 25,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            color: Color.fromRGBO(
-                                                                                255,
-                                                                                255,
-                                                                                255,
-                                                                                1),
-                                                                          ),
-                                                                        ),
-                                                                      ))),
-                                                            ],
-                                                          ),
-                                                        )
-                                                      : Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                                color: const Color(
-                                                                    0xFF51A4F1),
-                                                                width: 2),
-                                                            color: Colors.white,
-                                                          ),
-                                                          child: Stack(
-                                                            children: [
-                                                              Positioned(
-                                                                top: 5,
-                                                                right: 5,
-                                                                child: Text(
-                                                                  '${day.day}',
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .baloo2(
-                                                                    fontSize:
-                                                                        screenWidthUnit *
-                                                                            25,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            108,
-                                                                            108,
-                                                                            108,
-                                                                            1),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    BudgetSimulatorCalender(screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit, focusedDay: _focusedDay, now: now, selectedDay: _selectedDay, expenses: widget.expenses, formattedDate: formattedDate, smallBoxes: smallBoxes),
                                     Spacer(),
                                     Padding(
                                       padding: EdgeInsets.only(
