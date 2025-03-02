@@ -14,10 +14,10 @@ class Allocatefunding extends StatefulWidget {
   int wellnessScore;
   int checkingAccountBalance;
   int creditCardDebt;
-  int savingsAccountBalance;
+  double savingsAccountBalance;
   List<Expense> expenses;
   Function onConfirm;
-  int savingsTransfer;
+  double savingsTransfer;
   int checkingTransfer;
   int monthlyEntertainment;
   int monthlyFitness;
@@ -105,9 +105,17 @@ class _AllocatefundingState extends State<Allocatefunding> {
   void initState() {
     super.initState();
     widget.getOutOfs();
-    setState(() {
-      toSpend = widget.checkingAccountBalance;
-    });
+  
+
+    if (widget.checkingTransfer < 0) {
+      setState(() {
+        toSpend = widget.checkingAccountBalance + widget.checkingTransfer;
+      });
+    } else {
+      setState(() {
+        toSpend = widget.checkingAccountBalance;
+      });
+    }
   }
 
   List<int> prices = [100, 10, 20, 0, 0, 0];
@@ -197,9 +205,8 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                       SizedBox(
                                           height: widget.screenHeightUnit * 5),
                                       Text(
-                                        widget.toCheckingTransfer >= 0
-                                            ? "\$${widget.checkingAccountBalance}"
-                                            : "\$${widget.checkingAccountBalance + widget.toCheckingTransfer}",
+                                        "\$${toSpend}"
+                                           ,
                                         style: GoogleFonts.baloo2(
                                             fontSize:
                                                 widget.screenHeightUnit * 65,
@@ -720,7 +727,7 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                                           -10,
                                                           widget
                                                               .monthlyEntertainment);
-                                                              widget.monthlyEntertainment -= 10;
+                                              widget.monthlyEntertainment -= 10;
                                             });
                                           }
                                         },
@@ -769,14 +776,14 @@ class _AllocatefundingState extends State<Allocatefunding> {
                                               toEntertainment += 10;
                                               widget.checkingAccountBalance -=
                                                   10;
-                                               widget.wellnessScore =
+                                              widget.wellnessScore =
                                                   budgetSimulatorFunctions
                                                       .calculateWellnessEntertainment(
                                                           widget.wellnessScore,
                                                           10,
                                                           widget
                                                               .monthlyEntertainment);
-                                                              widget.monthlyEntertainment += 10;
+                                              widget.monthlyEntertainment += 10;
                                             });
                                           }
                                         },

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
@@ -42,6 +43,8 @@ class BudgetSimulator extends StatefulWidget {
     required this.physicalScore,
     required this.mentalScore,
   });
+  double savingsTransfer = 0;
+  int checkingTransfer = 0;
 
   final String name;
   int emotionalScore;
@@ -75,7 +78,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int progress = 0;
   List<String> types = [];
   List<double> percentage = [];
-  int toSpend = 0;
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
   late Expense nextExpense = functions.nullExpense;
   double totalSpending = 0;
@@ -140,7 +142,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           });
         }
       }
-      
     }
     setState(() {
       monthsOccurd += 1;
@@ -163,9 +164,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int dayNumber = 1;
 
   Future<void> nextDay() async {
-    setState(() {
-      toSpend = widget.checkingAccountBalance as int;
-    });
+   
 
     if (now.month != now.add(Duration(days: 1)).month) {
       getInterestCCDebt();
@@ -239,7 +238,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     }
   }
 
-
   Future<void> getEvents() async {
     DateTime normalizedToday = normalizeDate(now);
     if (expensesMapped.containsKey(normalizedToday)) {
@@ -261,9 +259,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                     widget.checkingAccountBalance -= expense.amount;
                     eventProccesed = true;
                     Navigator.of(context).pop();
-                    setState(() {
-                      toSpend = checkingAccountBalance;
-                    });
+                   
                   });
                 },
               );
@@ -274,9 +270,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               widget.checkingAccountBalance -= expense.amount as int;
               eventProccesed = true;
             });
-            setState(() {
-              toSpend = checkingAccountBalance;
-            });
+            
           }
         } else if (expense.name == "Rent") {
           await showDialog(
@@ -418,6 +412,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   void mapExpenses() {
+
     expensesMapped.clear();
 
     for (Expense expense in widget.expenses) {
@@ -440,14 +435,12 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   Future<void> spendOnExpense(int amount, String type) async {
     for (Expense expense in widget.expenses) {
       if (expense.name == type) {
-
         setState(() {
           expense.amountPaid += amount;
         });
         break;
       }
     }
-    
   }
 
   recalculatePercentages() {
@@ -491,9 +484,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     return DateTime(date.year, date.month, date.day);
   }
 
-
   Future<void> filterPayDays() async {
-    
     var filterdEvents =
         widget.expenses.where((element) => element.name != "Pay Day");
     setState(() {
@@ -687,9 +678,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     }
   }
 
-
   @override
   void initState() {
+    mapExpenses();
     filterPayDays();
     super.initState();
     netCash = widget.startingBalance;
@@ -703,9 +694,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     getStartingExpenses();
     setState(() {
       chartData = functions.getChartData(types, percentage, colors);
-      
     });
-
     alocateEvents();
     setState(() {
       var data = functions.updateNextExpense(widget.expenses, now);
@@ -1013,8 +1002,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                       screenWidthUnit: screenWidthUnit,
                                       screenHeightUnit: screenHeightUnit * .9,
                                       APY: widget.savingsAPY,
-                                      checkingTransfer: checkingTransfer,
-                                      savingsTransfer: savingsTransfer,
+                                      checkingTransfer: widget.checkingTransfer as double,
+                                      savingsTransfer: widget.savingsTransfer as double,
                                     )
                                   : Container(),
                             )),
@@ -1085,241 +1074,47 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         SizedBox(
                                           width: screenWidthUnit * 810,
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              top: screenHeightUnit * 15),
-                                          child: Container(
-                                            width: screenWidthUnit * 195,
-                                            height: screenHeightUnit * 60,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Color.fromRGBO(
-                                                  79, 195, 247, 1),
-                                            ),
-                                            child: GestureDetector(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return Dialog(
-                                                        backgroundColor: Colors
-                                                            .transparent, // Remove background color
-                                                        child: Allocatefunding(
-                                                          toCheckingTransfer:
-                                                              checkingTransfer
-                                                                  as int,
-                                                          screenHeightUnit:
-                                                              screenHeightUnit,
-                                                          screenWidthUnit:
-                                                              screenWidthUnit,
-                                                          types: types,
-                                                          wellnessScore: widget
-                                                              .wellnessScore,
-                                                          checkingAccountBalance:
-                                                              widget.checkingAccountBalance
-                                                                  as int,
-                                                          creditCardDebt: widget
-                                                                  .creditCardDebt
-                                                              as int,
-                                                          savingsAccountBalance:
-                                                              widget.savingsAccountBalance
-                                                                  as int,
-                                                          checkingTransfer:
-                                                              checkingTransfer
-                                                                  as int,
-                                                          savingsTransfer:
-                                                              savingsTransfer
-                                                                  as int,
-                                                          expenses:
-                                                              widget.expenses,
-                                                          monthlyFitness:
-                                                              monthlyFitness,
-                                                          monthlyEntertainment:
-                                                              monthlyEntertainment,
-                                                          onConfirm: (
-                                                            int toSavings,
-                                                            int toChecking,
-                                                            int newChecking,
-                                                            int rentSpent,
-                                                            int groceriesSpent,
-                                                            int travelSpentNow,
-                                                            int utilitiesSpent,
-                                                            int toFitness,
-                                                            int toEntertainment,
-                                                            int toCredCardDebt,
-                                                            int monthlyEntertainment,
-                                                            int monthlyFitness,
-                                                            int wellnessScore,
-                                                          ) {
-                                                            getInterestSavings();
-                                                            setState(() {
-                                                              toSpend -= min(0,
-                                                                  toChecking);
+                                        AllocateFundsButton(
+                                          now : now,
+                                          spendOnExpense: spendOnExpense,
+                                          screenWidthUnit: screenWidthUnit,
+                                          screenHeightUnit: screenHeightUnit,
+                                          checkingTransfer:
+                                              checkingTransfer as int,
+                                          getInterestSavings:
+                                              getInterestSavings,
+                                          setStateCallback: setState,
+                                          widget: widget,
+                                          functions: functions,
+                                          expenses: expenses,
+                                          nextExpense: nextExpense,
+                                          getEvents: getEvents,
+                                          checkRandomEvents: checkRandomEvents,
+                                          savingsTransfer: savingsTransfer,
+                                          monthlyEntertainment: monthlyEntertainment,
+                                          monthlyFitness: monthlyFitness,
+                                          monthsOccurd: monthsOccurd,
+                                          daysUnderLuxary: daysUnderLuxary,
+                                          daysUnderLuxaryDone: daysUnderLuxaryDone, toLuxaryForWeek: toLuxaryForWeek, recalculatePercentages: recalculatePercentages, nextDay: nextDay, mapExpenses: mapExpenses
 
-                                                              widget.checkingAccountBalance +=
-                                                                  checkingTransfer;
-                                                              checkingTransfer =
-                                                                  toChecking
-                                                                      as double;
-                                                              widget.savingsAccountBalance +=
-                                                                  savingsTransfer;
-                                                              savingsTransfer =
-                                                                  toSavings
-                                                                      as double;
-                                                              widget.creditCardDebt -=
-                                                                  toCredCardDebt; // easier to do double here than fix past
-                                                              monthlyEntertainment =
-                                                                  monthlyEntertainment;
-                                                              monthlyFitness =
-                                                                  monthlyFitness;
-                                                              widget.wellnessScore =
-                                                                  wellnessScore;
-
-                                                              var milestoneData =
-                                                                  {};
-
-                                                              if (widget.name ==
-                                                                  "Crush the Credit Card Debt") {
-                                                                milestoneData =
-                                                                    functions
-                                                                        .editMilestones(
-                                                                  milestones: widget
-                                                                      .milestones,
-                                                                  toCredCardDebt:
-                                                                      toCredCardDebt,
-                                                                  toSavings:
-                                                                      toSavings,
-                                                                  toLuxary:
-                                                                      toEntertainment +
-                                                                          toFitness,
-                                                                  level: widget
-                                                                      .level,
-                                                                  monthsOccurd:
-                                                                      monthsOccurd,
-                                                                  daysUnderLuxary:
-                                                                      daysUnderLuxary,
-                                                                  toLuxaryForWeek:
-                                                                      toLuxaryForWeek,
-                                                                  daysUnderLuxaryDone:
-                                                                      daysUnderLuxaryDone,
-                                                                  savingsAccountBalance:
-                                                                      widget
-                                                                          .savingsAccountBalance,
-                                                                );
-                                                                widget.milestones =
-                                                                    milestoneData[
-                                                                        'Milestones'];
-                                                                daysUnderLuxaryDone =
-                                                                    milestoneData[
-                                                                        'daysUnderLuxaryDone'];
-                                                                daysUnderLuxary =
-                                                                    milestoneData[
-                                                                        'daysUnderLuxary'];
-                                                                toLuxaryForWeek =
-                                                                    milestoneData[
-                                                                        'ToLuxaryForWeek'];
-                                                              }
-
-                                                              
-
-                                                              spendOnExpense(
-                                                                  rentSpent,
-                                                                  "Rent");
-                                                                   
-                                                              spendOnExpense(
-                                                                  groceriesSpent,
-                                                                  "Groceries");
-                                                              spendOnExpense(
-                                                                  travelSpentNow,
-                                                                  "Transportation");
-                                                              spendOnExpense(
-                                                                  utilitiesSpent,
-                                                                  "Utilities");
-                                                              spendOnExpense(
-                                                                  toFitness,
-                                                                  "Fitness");
-                                                              spendOnExpense(
-                                                                  toEntertainment,
-                                                                  "Entertainment");
-                                                              spendOnExpense(
-                                                                  toCredCardDebt,
-                                                                  "CC Debt");
-
-                                                              recalculatePercentages();
-                                                              mapExpenses();
-                                                              nextDay();
-
-                                                              var data = functions
-                                                                  .updateNextExpense(
-                                                                      widget
-                                                                          .expenses,
-                                                                      now);
-                                                              expenses = data[
-                                                                  'expenses'];
-                                                              nextExpense = data[
-                                                                  'nextExpense'];
-
-                                                              WidgetsBinding
-                                                                  .instance
-                                                                  .addPostFrameCallback(
-                                                                      (_) {
-                                                                getEvents();
-                                                                checkRandomEvents();
-                                                              });
-                                                            });
-                                                          },
-                                                        ),
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: Center(
-                                                    child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Allocate Funds",
-                                                      style: GoogleFonts.baloo2(
-                                                        fontSize:
-                                                            screenWidthUnit *
-                                                                18,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width:
-                                                          screenWidthUnit * 3,
-                                                    ),
-                                                    Icon(
-                                                      Icons.arrow_forward_ios,
-                                                      size:
-                                                          screenWidthUnit * 15,
-                                                      color: Colors.white,
-                                                    ),
-                                                    Icon(
-                                                      Icons.arrow_forward_ios,
-                                                      size:
-                                                          screenWidthUnit * 15,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ],
-                                                ))),
-                                          ),
-                                        )
+                                          
+                                          
+                                        ),
                                       ],
                                     ),
                                     WeekdayRow(
                                       screenWidthUnit: screenWidthUnit,
                                       screenHeightUnit: screenHeightUnit,
                                     ),
-                                    BudgetSimulatorCalender(screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit, focusedDay: _focusedDay, now: now, selectedDay: _selectedDay, expenses: widget.expenses, formattedDate: formattedDate, smallBoxes: smallBoxes),
+                                    BudgetSimulatorCalender(
+                                        screenWidthUnit: screenWidthUnit,
+                                        screenHeightUnit: screenHeightUnit,
+                                        focusedDay: _focusedDay,
+                                        now: now,
+                                        selectedDay: _selectedDay,
+                                        expenses: widget.expenses,
+                                        formattedDate: formattedDate,
+                                        smallBoxes: smallBoxes),
                                     Spacer(),
                                     Padding(
                                       padding: EdgeInsets.only(
@@ -1343,12 +1138,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     ),
                                   ]),
                             ),
-                            // Container(
-                            //   width: screenWidthUnit * 1,
-                            //   height: screenHeightUnit * 1122,
-                            //   color: Colors.black,
-                            // ),
-
                             SingleChildScrollView(
                                 child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,

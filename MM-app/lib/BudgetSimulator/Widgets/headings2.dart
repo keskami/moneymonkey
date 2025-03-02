@@ -266,7 +266,7 @@ class Headings2 {
                           width: 1,
                         ),
                         Text(
-                          "\$${savingsAccountBalance}",
+                          "\$${double.parse((savingsAccountBalance + savingsLeftOver).toStringAsFixed(2))}",
                           style: GoogleFonts.baloo2(
                             fontSize: screenHeightUnit * 34,
                             color: Colors.black,

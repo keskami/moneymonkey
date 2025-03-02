@@ -26,6 +26,16 @@ class BudgetSimulatorFunctions {
     dueDateType: '',
   );
 
+
+  List<String> getTypes(expenes) {
+    List<String> types = [];
+    for (Expense expense in expenes) {
+      types.add(expense.name);
+    }
+    return types;
+    
+  }
+
   Map<String, dynamic> editMilestones({
     required List<Milestone> milestones,
     int toCredCardDebt = 0,
