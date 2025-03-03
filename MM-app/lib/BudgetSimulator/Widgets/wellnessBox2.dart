@@ -132,8 +132,7 @@ class _WellnessBox2State extends State<WellnessBox2> {
                   height: widget.screenHeightUnit * 115,
                   width: widget.screenWidthUnit * 220,
                   child: SfRadialGauge(
-                    animationDuration: 1000,
-                    enableLoadingAnimation: true,
+                    enableLoadingAnimation: false,
                     axes: <RadialAxis>[
                       RadialAxis(
                         showLabels: false,

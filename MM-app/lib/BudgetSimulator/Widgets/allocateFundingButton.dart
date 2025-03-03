@@ -17,7 +17,8 @@ class AllocateFundsButton extends StatefulWidget {
   final Function getEvents;
   final Function checkRandomEvents;
   double savingsTransfer;
-  int monthlyFitness; int monthlyEntertainment;
+  int monthlyFitness;
+  int monthlyEntertainment;
   int monthsOccurd;
   int daysUnderLuxary;
   int toLuxaryForWeek;
@@ -60,14 +61,17 @@ class AllocateFundsButton extends StatefulWidget {
 }
 
 class _AllocateFundsButtonState extends State<AllocateFundsButton> {
-  List<String> types = [];
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
 
   @override
+  void initState() {
+    
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    setState(() {
-      types = functions.getTypes(widget.widget.expenses);
-    });
     return Padding(
       padding: EdgeInsets.only(top: widget.screenHeightUnit * 15),
       child: Container(
@@ -88,12 +92,11 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                     toCheckingTransfer: widget.checkingTransfer,
                     screenHeightUnit: widget.screenHeightUnit,
                     screenWidthUnit: widget.screenWidthUnit,
-                    types: types,
                     wellnessScore: widget.widget.wellnessScore,
-                    checkingAccountBalance: widget.widget.checkingAccountBalance as int,
+                    checkingAccountBalance:
+                        widget.widget.checkingAccountBalance as int,
                     creditCardDebt: widget.widget.creditCardDebt as int,
                     savingsAccountBalance: widget.widget.savingsAccountBalance,
-
                     checkingTransfer: widget.widget.checkingTransfer,
                     savingsTransfer: widget.savingsTransfer,
                     expenses: widget.widget.expenses,
@@ -116,10 +119,13 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                     ) {
                       widget.getInterestSavings();
                       widget.setStateCallback(() {
-                      
-                        widget.widget.checkingAccountBalance += widget.widget.checkingTransfer;
+                        widget.widget.checkingAccountBalance = newChecking;
 
-                        widget.widget.savingsAccountBalance += widget.widget.savingsTransfer;
+                        widget.widget.checkingAccountBalance +=
+                            widget.widget.checkingTransfer;
+
+                        widget.widget.savingsAccountBalance +=
+                            widget.widget.savingsTransfer;
                         widget.widget.savingsTransfer = toSavings;
                         widget.widget.checkingTransfer = toChecking;
 
@@ -128,7 +134,8 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
 
                         var milestoneData = {};
 
-                        if (widget.widget.name == "Crush the Credit Card Debt") {
+                        if (widget.widget.name ==
+                            "Crush the Credit Card Debt") {
                           milestoneData = widget.functions.editMilestones(
                             milestones: widget.widget.milestones,
                             toCredCardDebt: toCredCardDebt,
@@ -139,12 +146,14 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                             daysUnderLuxary: widget.daysUnderLuxary,
                             toLuxaryForWeek: widget.toLuxaryForWeek,
                             daysUnderLuxaryDone: widget.daysUnderLuxaryDone,
-                            savingsAccountBalance: widget.widget.savingsAccountBalance,
+                            savingsAccountBalance:
+                                widget.widget.savingsAccountBalance,
                           );
-                          widget.widget.milestones = milestoneData['Milestones'];
+                          widget.widget.milestones =
+                              milestoneData['Milestones'];
                         }
 
-                      widget.spendOnExpense(rentSpent, "Rent");
+                        widget.spendOnExpense(rentSpent, "Rent");
                         widget.spendOnExpense(groceriesSpent, "Groceries");
                         widget.spendOnExpense(travelSpentNow, "Transportation");
                         widget.spendOnExpense(utilitiesSpent, "Utilities");
@@ -156,7 +165,8 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                         widget.mapExpenses();
                         widget.nextDay();
 
-                        var data = widget.functions.updateNextExpense(widget.widget.expenses, widget.now);
+                        var data = widget.functions.updateNextExpense(
+                            widget.widget.expenses, widget.now);
                         widget.expenses = data['expenses'];
                         widget.nextExpense = data['nextExpense'];
 
@@ -185,8 +195,10 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                   ),
                 ),
                 SizedBox(width: widget.screenWidthUnit * 3),
-                Icon(Icons.arrow_forward_ios, size: widget.screenWidthUnit * 15, color: Colors.white),
-                Icon(Icons.arrow_forward_ios, size: widget.screenWidthUnit * 15, color: Colors.white),
+                Icon(Icons.arrow_forward_ios,
+                    size: widget.screenWidthUnit * 15, color: Colors.white),
+                Icon(Icons.arrow_forward_ios,
+                    size: widget.screenWidthUnit * 15, color: Colors.white),
               ],
             ),
           ),
