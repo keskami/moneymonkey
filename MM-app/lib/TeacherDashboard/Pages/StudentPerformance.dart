@@ -424,11 +424,6 @@ class _StudentPerformanceState extends State<StudentPerformance> {
   }
 }
 
-extension on Color {
-  Color withValues({required double alpha}) {
-    return withOpacity(alpha);
-  }
-}
 class FilterStudentsButton extends StatelessWidget {
   const FilterStudentsButton({
     super.key,

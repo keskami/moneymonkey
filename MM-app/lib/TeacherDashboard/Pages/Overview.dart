@@ -121,7 +121,8 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         ),
                       ),
                       child: Text(
-                        teacherDashboardController.presentLesson.lessonStatus.name,
+                        teacherDashboardController
+                            .presentLesson.lessonStatus.name,
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.blue.shade300,
@@ -158,50 +159,52 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   ),
                 ),
                 //Lessons and respective status
-                Obx(() => Column(
-                      children: [
-                        ...teacherDashboardController.childComponents.value.map(
-                          (component) {
-                            return Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 12,
-                                  backgroundColor: Colors.transparent,
-                                  child: Container(
-                                    width: 20,
-                                    height: 20,
-                                    child: getProgressIndicator(
-                                        component.componentStatus),
-                                  ),
+                Obx(
+                  () => Column(
+                    children: [
+                      ...teacherDashboardController.childComponents.value.map(
+                        (component) {
+                          return Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 12,
+                                backgroundColor: Colors.transparent,
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: getProgressIndicator(
+                                      component.componentStatus),
                                 ),
-                                Text(
-                                  component.title,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ).marginOnly(
-                                  left: 10,
+                              ),
+                              Text(
+                                component.title,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  component.componentStatus.name,
-                                  style: TextStyle(
-                                    color: Colors.grey.shade500,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                  ),
-                                ).marginOnly(
-                                  right: 20,
+                              ).marginOnly(
+                                left: 10,
+                              ),
+                              const Spacer(),
+                              Text(
+                                component.componentStatus.name,
+                                style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
                                 ),
-                              ],
-                            ).marginSymmetric(
-                              vertical: 6,
-                            );
-                          },
-                        ),
-                      ],
-                    )),
+                              ).marginOnly(
+                                right: 20,
+                              ),
+                            ],
+                          ).marginSymmetric(
+                            vertical: screenHeight*0.03,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -492,12 +495,4 @@ class _DashboardOverviewState extends State<DashboardOverview> {
       ),
     );
   }
-}
-
-extension on Color {
-  withValues({required double alpha}) {}
-}
-
-extension on MaterialColor {
-  withValues({required double alpha}) {}
 }

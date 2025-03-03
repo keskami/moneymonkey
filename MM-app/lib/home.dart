@@ -6,8 +6,6 @@ import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
-import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
-import 'package:money_monkey/themes/color_themes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,8 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
-  final HomePagesController homePagesController =
-      Get.put(HomePagesController());
+  final HomePagesController homePagesController = Get.put(HomePagesController());
 
   int currentPage = 0;
 
@@ -34,64 +31,26 @@ class _HomePageState extends State<HomePage> {
         : mobileDisplay(context);
   }
 
-// Update this part of the webDisplay method in your HomePage class
+  /// WEB DISPLAY
   Scaffold webDisplay(BuildContext context, double screenWidth) {
-    double screenHeightUnit = MediaQuery.of(context).size.height / 1406;
-    double screenWidthUnit = screenWidth / 2079;
-
     return Scaffold(
-      body: Obx(() {
-        // Determine if we're in Budget Simulator mode
-        bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
-
-        return Row(
+      body: Obx(
+        () => Row(
           children: [
-            // Conditionally render the sidebar with appropriate width
-            isBudgetSimulator
-                ? SizedBox(
-                    width: screenWidthUnit * 159,
-                    child: SideBar(),
-                  )
-                : SizedBox(
-                    width: screenWidth * 0.2,
-                    child: SideBar(),
-                  ),
-
-            // Main content with adjusted width
+            // Sidebar (20% width)
             SizedBox(
-              width: isBudgetSimulator
-                  ? screenWidth - (screenWidthUnit * 159)
-                  : screenWidth * 0.8,
-              child: homePagesController
-                  .pages[homePagesController.pageIndex.value],
+              width: screenWidth * 0.2,
+              child: SideBar(),
             ),
+
+            // Main content (80% width)
+            SizedBox(
+              width: screenWidth * 0.8,
+              child: homePagesController.pages[homePagesController.pageIndex.value],
+            )
           ],
-        );
-      }),
-      floatingActionButton: Obx(() => homePagesController.pageIndex.value == 3
-          ? Container() // Empty container when on Budget Simulator
-          : ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(
-                  LightTheme().primaryBlue,
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TeacherDashboard(),
-                  ),
-                );
-              },
-              child: Text(
-                "Teacher Dashboard",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            )),
+        ),
+      ),
     );
   }
 
