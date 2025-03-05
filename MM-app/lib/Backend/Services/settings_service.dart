@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Models/settings.dart';
+import '../Models/Settings.dart';
 
 class SettingsService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

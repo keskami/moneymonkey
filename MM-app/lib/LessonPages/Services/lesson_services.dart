@@ -1,7 +1,7 @@
 // lesson_services.dart
 
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Models/lesson_model.dart';
+import 'package:money_monkey/Backend/Models/LessonModel.dart';
 import 'package:money_monkey/LessonPages/Repositories/lesson_repository.dart';
 
 class LessonServices extends GetxService {

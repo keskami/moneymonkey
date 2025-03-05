@@ -1,7 +1,7 @@
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Models/Teacher.dart';
-import 'package:money_monkey/Backend/Models/settings.dart';
+import 'package:money_monkey/Backend/Models/Settings.dart';
 import 'package:money_monkey/LessonPages/Models/Models.dart';
 
 Teacher sampleTeacher = Teacher(
@@ -12,6 +12,7 @@ Teacher sampleTeacher = Teacher(
     'tempClassId3_2025',
     'tempClassId4_2025',
   ],
+  profilePictureLink: "",
 );
 
 Map<String, Classroom> sampleClassrooms = {

@@ -1,7 +1,7 @@
 // lesson_repositories.dart
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:money_monkey/Backend/Models/lesson_model.dart';
+import 'package:money_monkey/Backend/Models/LessonModel.dart';
 
 class LessonRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

@@ -35,16 +35,27 @@ String statusToFirestore(Status status) {
 }
 
 Status statusFromFirestore(String status) {
-  switch (status) {
+  switch (status.toLowerCase()) {
     case 'inactive':
       return Status.Inactive;
-    case 'inProgress':
+    case 'inprogress':
       return Status.InProgress;
     case 'active':
       return Status.Active;
+    case 'completed':
+      return Status.Completed;
     default:
       throw ArgumentError('Invalid status: $status');
   }
+}
+
+// Utility for handling null DateTime values
+DateTime? parseDateTime(dynamic value) {
+  if (value == null) return null;
+  if (value is DateTime) return value;
+  if (value is String) return DateTime.parse(value);
+  if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+  return null;
 }
 
 class Classroom {
@@ -79,6 +90,27 @@ class Classroom {
       'StudentIds': studentIds,
       'LessonId': lessonId,
     };
+  }
+  
+  // Additional methods for JSON serialization/deserialization
+  Map<String, dynamic> toJson() {
+    return {
+      'classId': classId,
+      'name': name,
+      'teacherId': teacherId,
+      'studentIds': studentIds,
+      'lessonId': lessonId,
+    };
+  }
+  
+  factory Classroom.fromJson(Map<String, dynamic> json) {
+    return Classroom(
+      classId: json['classId'] ?? json['id'] ?? '',
+      name: json['name'] ?? json['Name'] ?? '',
+      teacherId: json['teacherId'] ?? json['TeacherId'] ?? '',
+      studentIds: List<String>.from(json['studentIds'] ?? json['StudentIds'] ?? []),
+      lessonId: json['lessonId'] ?? json['LessonId'] ?? '',
+    );
   }
 }
 
@@ -138,6 +170,33 @@ class Unit {
         return "Beginner";
     }
   }
+  
+  // Additional methods for JSON serialization/deserialization
+  Map<String, dynamic> toJson() {
+    return {
+      'unitId': unitId,
+      'title': title,
+      'description': description,
+      'lessonIds': lessonIds,
+      'unitStatus': statusToFirestore(unitStatus),
+      'totalLessons': totalLessons,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+    };
+  }
+  
+  factory Unit.fromJson(Map<String, dynamic> json) {
+    return Unit(
+      unitId: json['unitId'] ?? json['id'] ?? '',
+      title: json['title'] ?? json['Title'] ?? '',
+      description: json['description'] ?? json['Description'] ?? '',
+      lessonIds: List<String>.from(json['lessonIds'] ?? json['LessonIds'] ?? []),
+      unitStatus: statusFromFirestore(json['unitStatus'] ?? json['UnitStatus'] ?? 'inactive'),
+      totalLessons: json['totalLessons'] ?? json['totalComponents'] ?? 0,
+      createdAt: parseDateTime(json['createdAt'] ?? json['CreatedAt']),
+      updatedAt: parseDateTime(json['updatedAt'] ?? json['UpdatedAt']),
+    );
+  }
 }
 
 class Lesson {
@@ -177,7 +236,7 @@ class Lesson {
       lessonStatus: statusFromFirestore(data['LessonStatus'] ?? 'inactive'),
       progress: (data['Progress'] is num ? data['Progress'] : 0).toDouble(),
       components: List<String>.from(data['Components'] ?? []),
-      totalComponents: int.parse(data['totalComponents'].toString()),
+      totalComponents: int.parse((data['totalComponents'] ?? '0').toString()),
       startedAt: data['StartedAt']?.toDate(),
       completedAt: data['CompletedAt']?.toDate(),
       interactiveActivityLinks: List<String>.from(data['interactiveActivityLinks'] ?? []),
@@ -201,8 +260,42 @@ class Lesson {
       'StudentWorkshopTemplateLinks': studentWorkshopTemplateLinks,
     };
   }
+  
+  // Additional methods for JSON serialization/deserialization
+  Map<String, dynamic> toJson() {
+    return {
+      'lessonId': lessonId,
+      'title': title,
+      'description': description,
+      'lessonStatus': statusToFirestore(lessonStatus),
+      'components': components,
+      'progress': progress,
+      'totalComponents': totalComponents,
+      'startedAt': startedAt?.toIso8601String(),
+      'completedAt': completedAt?.toIso8601String(),
+      'interactiveActivityLinks': interactiveActivityLinks,
+      'teachersGuideLink': teachersGuideLink,
+      'studentWorkshopTemplateLinks': studentWorkshopTemplateLinks,
+    };
+  }
+  
+  factory Lesson.fromJson(Map<String, dynamic> json) {
+    return Lesson(
+      lessonId: json['lessonId'] ?? json['id'] ?? '',
+      title: json['title'] ?? json['Title'] ?? '',
+      description: json['description'] ?? json['Description'] ?? '',
+      lessonStatus: statusFromFirestore(json['lessonStatus'] ?? json['LessonStatus'] ?? 'inactive'),
+      progress: (json['progress'] is num ? json['progress'] : (json['Progress'] is num ? json['Progress'] : 0)).toDouble(),
+      components: List<String>.from(json['components'] ?? json['Components'] ?? []),
+      totalComponents: int.parse((json['totalComponents'] ?? '0').toString()),
+      startedAt: parseDateTime(json['startedAt'] ?? json['StartedAt']),
+      completedAt: parseDateTime(json['completedAt'] ?? json['CompletedAt']),
+      interactiveActivityLinks: List<String>.from(json['interactiveActivityLinks'] ?? []),
+      teachersGuideLink: json['teachersGuideLink'] ?? json['TeachersGuideLink'] ?? '',
+      studentWorkshopTemplateLinks: json['studentWorkshopTemplateLinks'] ?? json['StudentWorkshopTemplateLinks'] ?? '',
+    );
+  }
 }
-
 
 class PerformanceTrends {
   double classAverage;
@@ -238,6 +331,28 @@ class PerformanceTrends {
       'LessonCompletion': lessonCompletion,
       'LastUpdated': DateTime.now(),
     };
+  }
+  
+  // Additional methods for JSON serialization/deserialization
+  Map<String, dynamic> toJson() {
+    return {
+      'classAverage': classAverage,
+      'participationRate': participationRate,
+      'lessonCompletion': lessonCompletion,
+      'lastUpdated': lastUpdated?.toIso8601String(),
+    };
+  }
+  
+  factory PerformanceTrends.fromJson(Map<String, dynamic> json) {
+    return PerformanceTrends(
+      classAverage: (json['classAverage'] is num ? json['classAverage'] : 
+                    (json['ClassAverage'] is num ? json['ClassAverage'] : 0)).toDouble(),
+      participationRate: (json['participationRate'] is num ? json['participationRate'] : 
+                         (json['ParticipationRate'] is num ? json['ParticipationRate'] : 0)).toDouble(),
+      lessonCompletion: (json['lessonCompletion'] is num ? json['lessonCompletion'] : 
+                        (json['LessonCompletion'] is num ? json['LessonCompletion'] : 0)).toDouble(),
+      lastUpdated: parseDateTime(json['lastUpdated'] ?? json['LastUpdated']),
+    );
   }
 }
 
@@ -299,5 +414,52 @@ class Component {
         'DiscussionQuestions': discussionQuestions,
       'QuestionData': questionData.map((q) => q.toMap()).toList(),
     };
+  }
+  
+  // Additional methods for JSON serialization/deserialization
+  Map<String, dynamic> toJson() {
+    return {
+      'componentId': componentId,
+      'title': title,
+      'type': type.name,
+      'componentStatus': statusToFirestore(componentStatus),
+      'progress': progress,
+      'discussionQuestions': discussionQuestions,
+      'questionData': questionData.map((q) => q.toMap()).toList(),
+      'performanceTrends': performanceTrends.toJson(),
+    };
+  }
+  
+  factory Component.fromJson(Map<String, dynamic> json) {
+    return Component(
+      componentId: json['componentId'] ?? json['id'] ?? '',
+      title: json['title'] ?? json['Title'] ?? '',
+      type: ComponentTypeExtension.fromString(json['type'] ?? json['Type'] ?? ''),
+      componentStatus: statusFromFirestore(json['componentStatus'] ?? json['ComponentStatus'] ?? 'inactive'),
+      progress: (json['progress'] is num ? json['progress'] : (json['Progress'] is num ? json['Progress'] : 0)).toDouble(),
+      discussionQuestions: json['discussionQuestions'] != null 
+          ? List<String>.from(json['discussionQuestions'])
+          : (json['DiscussionQuestions'] != null 
+              ? List<String>.from(json['DiscussionQuestions']) 
+              : null),
+      questionData: json['questionData'] != null
+          ? (json['questionData'] as List)
+              .map((q) => Question.fromMap(q as Map<String, dynamic>))
+              .toList()
+          : (json['QuestionData'] != null
+              ? (json['QuestionData'] as List)
+                  .map((q) => Question.fromMap(q as Map<String, dynamic>))
+                  .toList()
+              : []),
+      performanceTrends: json['performanceTrends'] != null
+          ? PerformanceTrends.fromJson(json['performanceTrends'])
+          : (json['PerformanceTrends'] != null
+              ? PerformanceTrends.fromJson(json['PerformanceTrends'])
+              : PerformanceTrends(
+                  classAverage: 0,
+                  participationRate: 0,
+                  lessonCompletion: 0,
+                )),
+    );
   }
 }

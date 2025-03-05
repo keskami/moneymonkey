@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Backend/Models/settings.dart';
+import 'package:money_monkey/Backend/Models/Settings.dart';
 
 import '../../../Backend/Services/settings_service.dart';
 import '../../Widgets/custom_row_tile_button.dart';

@@ -1,4 +1,4 @@
-import 'package:money_monkey/Backend/Models/settings.dart';
+import 'package:money_monkey/Backend/Models/Settings.dart';
 
 enum StudentStatus {
   Behind,
@@ -49,7 +49,7 @@ class Student {
       classRooms: data['ClassRooms'] != null
           ? List<String>.from(data['ClassRooms'])
           : [],
-      progress: data['progress'],
+      progress: data['progress'] ?? '',
       profile: ProfileData.fromFirestore(data['Profile'] ?? {}),
       settings: SettingsData.fromFirestore(data['Settings'] ?? {}),
     );
@@ -68,6 +68,42 @@ class Student {
       'progress': progress,
       'Profile': profile.toFirestore(),
       'Settings': settings.toFirestore(),
+    };
+  }
+  
+  /// Factory constructor to create a Student from JSON (for cache purposes)
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
+      studentId: json['studentId'] ?? '',
+      email: json['email'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? '',
+      age: json['age'] ?? 0,
+      knowledgeLevel: json['knowledgeLevel'] ?? 0,
+      learningGoalPerDay: json['learningGoalPerDay'] ?? 0,
+      startingLevel: json['startingLevel'] ?? 0,
+      classRooms: json['classRooms'] != null 
+          ? List<String>.from(json['classRooms']) 
+          : [],
+      progress: json['progress'] ?? '',
+      profile: ProfileData.fromJson(json['profile'] ?? {}),
+      settings: SettingsData.fromJson(json['settings'] ?? {}),
+    );
+  }
+  
+  /// Convert a Student to JSON (for cache purposes)
+  Map<String, dynamic> toJson() {
+    return {
+      'studentId': studentId,
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'age': age,
+      'knowledgeLevel': knowledgeLevel,
+      'learningGoalPerDay': learningGoalPerDay,
+      'startingLevel': startingLevel,
+      'classRooms': classRooms,
+      'progress': progress,
+      'profile': profile.toJson(),
+      'settings': settings.toJson(),
     };
   }
 }
@@ -131,6 +167,36 @@ class ProfileData {
       'Total Profit': totalProfit,
       'Portfolio Score': portfolioScore,
       'Average Monthly Growth': averageMonthlyGrowth,
+    };
+  }
+  
+  /// Factory constructor to create ProfileData from JSON (for cache purposes)
+  factory ProfileData.fromJson(Map<String, dynamic> json) {
+    return ProfileData(
+      fullName: json['fullName'] ?? '',
+      username: json['username'] ?? 'Your Name Here',
+      numberOfFollowers: json['numberOfFollowers'] ?? 0,
+      following: json['following'] ?? 0,
+      topAchievements: json['topAchievements'] ?? 0,
+      streak: json['streak'] ?? 0,
+      totalProfit: (json['totalProfit'] is num ? json['totalProfit'] : 0).toDouble(),
+      portfolioScore: (json['portfolioScore'] is num ? json['portfolioScore'] : 0).toDouble(),
+      averageMonthlyGrowth: (json['averageMonthlyGrowth'] is num ? json['averageMonthlyGrowth'] : 0).toDouble(),
+    );
+  }
+  
+  /// Convert ProfileData to JSON (for cache purposes)
+  Map<String, dynamic> toJson() {
+    return {
+      'fullName': fullName,
+      'username': username,
+      'numberOfFollowers': numberOfFollowers,
+      'following': following,
+      'topAchievements': topAchievements,
+      'streak': streak,
+      'totalProfit': totalProfit,
+      'portfolioScore': portfolioScore,
+      'averageMonthlyGrowth': averageMonthlyGrowth,
     };
   }
 }

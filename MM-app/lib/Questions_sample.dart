@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monkey/Backend/Models/QuestionsModel.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 
 // Assuming your model classes and extensions are already imported
 

@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../Backend/Models/stock_data.dart';
+import '../../Backend/Models/StockData.dart';
 import '../../themes/color_themes.dart';
 
 class LineChartWidget extends StatefulWidget {
