@@ -1,16 +1,11 @@
-// story_controller.dart
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
-import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentProblemPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentSolutionsPage.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyIntroPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyLandingPage.dart';
 
 class StoryController extends BaseLessonController {
@@ -30,7 +25,7 @@ class StoryController extends BaseLessonController {
   // UI pages
   RxList pages = [].obs;
 
-  RxList<Question> pageData = <Question>[].obs;
+  RxList<SubComponent> pageData = <SubComponent>[].obs;
 
   @override
   void onInit() {

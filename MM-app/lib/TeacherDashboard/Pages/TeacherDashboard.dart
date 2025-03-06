@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Services/CacheServices.dart';
+import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/SubPageSelectorRow.dart';
@@ -39,6 +41,8 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         isLoading = true;
       });
       
+      //Initialize cache file
+      await TeacherCacheBuilder().buildTeacherCache(sampleTeacher.id);
       // Initialize the controller with cached data
       await teacherDashboardController.initializeFromCache();
       

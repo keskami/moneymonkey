@@ -1,8 +1,9 @@
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Models/Teacher.dart';
 import 'package:money_monkey/Backend/Models/Settings.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 
 Teacher sampleTeacher = Teacher(
   name: "Mrs. Anderson",
@@ -368,8 +369,8 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // A sample multiple choice question
-      Question(
-        type: QuestionType.multipleChoice,
+     SubComponent(
+        type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
           question:
@@ -392,8 +393,8 @@ Map<String, Component> advancedComponents = {
           ),
         ),
       ),
-      Question(
-        type: QuestionType.revealCard,
+     SubComponent(
+        type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Financial Responsibility Over a Lifetime",
           definition:
@@ -404,8 +405,8 @@ Map<String, Component> advancedComponents = {
             "Why does it matter? Because small habits formed early—like setting aside a little money or comparing prices—can grow into long-term financial stability.",
         ),
       ),
-      Question(
-        type: QuestionType.iconReveal,
+     SubComponent(
+        type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Definition: Financial Responsibility Over a Lifetime",
           iconLinks: [
@@ -422,8 +423,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.scenario,
+     SubComponent(
+        type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Jordan: A Life of Financial Decisions",
           scenarioExplanation:
@@ -504,8 +505,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.learningCheck,
+     SubComponent(
+        type: SubComponentType.learningCheck,
         data: LearningCheck(
           title: "Quick Check: Lifelong Financial Responsibility",
           question1:
@@ -528,8 +529,8 @@ Map<String, Component> advancedComponents = {
           feedbackBothIncorrect: "Be careful! Managing money wisely means saving, budgeting, and making informed choices. Review the lesson and try again!"
         ),
       ),
-      Question(
-        type: QuestionType.keyTakeaways,
+     SubComponent(
+        type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Lifelong Financial Responsibility",
           hint: "What’s one new financial habit you’ll adopt this month?",
@@ -598,8 +599,8 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // Multiple Choice Question
-      Question(
-        type: QuestionType.multipleChoice,
+     SubComponent(
+        type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
           question: "How does financial responsibility typically change when someone has dependents?",
@@ -621,8 +622,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Reveal Card: Definition of Financial Responsibility
-      Question(
-        type: QuestionType.revealCard,
+     SubComponent(
+        type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Flying Solo vs. Supporting Others",
           definition: "Financial responsibility differs significantly based on whether a person is supporting just themselves or others (e.g., children or family members).",
@@ -632,8 +633,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Icon Reveal: Financial Priorities Based on Life Situation
-      Question(
-        type: QuestionType.iconReveal,
+     SubComponent(
+        type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Definition: How Responsibilities Change Based on Dependents",
           iconLinks: [
@@ -652,8 +653,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Scenario-Based Learning: Meet Alex
-      Question(
-        type: QuestionType.scenario,
+     SubComponent(
+        type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Alex: Navigating Financial Responsibility",
           scenarioExplanation: "Alex is a 28-year-old living in the city, navigating financial decisions in two different life situations. Let’s help them make wise choices!",
@@ -693,8 +694,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Learning Check: Quick Check on Financial Responsibility for Different Situations
-      Question(
-        type: QuestionType.learningCheck,
+     SubComponent(
+        type: SubComponentType.learningCheck,
         data: LearningCheck(
           title: "Quick Check: Flying Solo vs. Supporting Others",
           question1: "Which of the following is the best financial strategy for someone with dependents?",
@@ -718,8 +719,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Key Takeaways: Summary of Lesson
-      Question(
-        type: QuestionType.keyTakeaways,
+     SubComponent(
+        type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Flying Solo vs. Supporting Others",
           hint: "How do financial responsibilities change when supporting dependents?",
@@ -769,8 +770,8 @@ Map<String, Component> advancedComponents = {
       "What challenges might someone face when trying to manage money responsibly?",
     ],
     questionData: [
-      Question(
-        type: QuestionType.intro,
+     SubComponent(
+        type: SubComponentType.intro,
         data: IntroPage(
           title: "Financial Responsibility Story",
           mintyText:
@@ -779,8 +780,8 @@ Map<String, Component> advancedComponents = {
               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
         ),
       ),
-      Question(
-        type: QuestionType.problem,
+     SubComponent(
+        type: SubComponentType.problem,
         data: ProblemPage(
           title: "Financial Responsibility Story",
           subtitle: "Taking control of your money to build a secure future",
@@ -790,8 +791,8 @@ Map<String, Component> advancedComponents = {
           problem: "Problem: No control over spending and no savings plan.",
         ),
       ),
-      Question(
-        type: QuestionType.solution,
+     SubComponent(
+        type: SubComponentType.solution,
         data: SolutionPage(
           title: "Financial Responsibility Story",
           subtitle: "Taking control of your money to build a secure future",
@@ -809,8 +810,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.impact,
+     SubComponent(
+        type: SubComponentType.impact,
         data: Impact(
           title: "Financial Responsibility Story",
           subtitle: "Taking control of your money to build a secure future",
@@ -845,8 +846,8 @@ Map<String, Component> advancedComponents = {
       "What are the risks of not having an emergency fund?",
     ],
     questionData: [
-      Question(
-        type: QuestionType.scenariointro,
+     SubComponent(
+        type: SubComponentType.scenariointro,
         data: IntroductionPage(
           scenario:
               "Congratulations! You’ve just started your first part-time job and earned your first paycheck of \$500. You have several things you want to do with the money: buy new sneakers, save for college, and plan for weekend activities. Let’s see how financially responsible you can be!",
@@ -870,8 +871,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.scenarioquestion,
+     SubComponent(
+        type: SubComponentType.scenarioquestion,
         data: [
           ScenarioQuestion(
               questionText: "How much will you save?",
@@ -945,8 +946,8 @@ Map<String, Component> advancedComponents = {
           }),
         ],
       ),
-      Question(
-        type: QuestionType.scenarioresults,
+     SubComponent(
+        type: SubComponentType.scenarioresults,
         data: ScenarioResult.fromMap({
           "selectedChoices": [
             {
@@ -987,8 +988,8 @@ Map<String, Component> advancedComponents = {
       "What financial lessons can we learn from peers with different responsibilities and goals?",
     ],
     questionData: [
-      Question(
-        type: QuestionType.peerintro,
+     SubComponent(
+        type: SubComponentType.peerintro,
         data: PeerReflectionIntro(
           title: "Taking Responsibility for Personal Financial Decisions",
           subTitle:
@@ -1018,8 +1019,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.peerstories,
+     SubComponent(
+        type: SubComponentType.peerstories,
         data: PeerStories(
           title: "Peer Stories",
           characters: [
@@ -1047,8 +1048,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.peermatch,
+     SubComponent(
+        type: SubComponentType.peermatch,
         data: PeerMatch(
           title: "Match Actions to Categories",
           categories: [
@@ -1094,8 +1095,8 @@ Map<String, Component> advancedComponents = {
           },
         ),
       ),
-      Question(
-        type: QuestionType.peerreflectionend,
+     SubComponent(
+        type: SubComponentType.peerreflectionend,
         data: PeerReflectionEnd(
           question:
               "Which peer’s financial situation do you relate to most? Why?",
@@ -1147,8 +1148,8 @@ Map<String, Component> advancedComponents = {
       "What did you think about the quiz, were you well prepared?"
     ],
     questionData: [
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "What is a key reason to start saving early in life?",
           options: [
@@ -1172,8 +1173,8 @@ Map<String, Component> advancedComponents = {
           buttonText: "Check Answer",
         ),
       ),
-      Question(
-        type: QuestionType.quizimagemcquestion,
+     SubComponent(
+        type: SubComponentType.quizimagemcquestion,
         data: QuizMultipleChoice(
           question:
               "Which of the following is an example of a long-term financial goal?",
@@ -1205,8 +1206,8 @@ Map<String, Component> advancedComponents = {
           buttonText: "Check Answer",
         ),
       ),
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question:
               "Which of the following are good strategies for financial responsibility? (Select all that apply)",
@@ -1234,8 +1235,8 @@ Map<String, Component> advancedComponents = {
           buttonText: "Submit",
         ),
       ),
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "Why is it important to have an emergency fund?",
           options: [
@@ -1259,8 +1260,8 @@ Map<String, Component> advancedComponents = {
           buttonText: "Check Answer",
         ),
       ),
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question:
               "Which actions demonstrate financial responsibility? (Select all that apply)",
@@ -1308,8 +1309,8 @@ Map<String, Component> advancedComponents = {
       "Why is it important to verify financial claims with multiple credible sources?",
     ],
     questionData: [
-      Question(
-        type: QuestionType.multipleChoice,
+     SubComponent(
+        type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
           question: "What is the most important factor in determining if a financial source is reliable?",
@@ -1330,8 +1331,8 @@ Map<String, Component> advancedComponents = {
         ),
       ),
 
-      Question(
-        type: QuestionType.revealCard,
+     SubComponent(
+        type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Reliable Financial Information",
           definition: "Reliable financial information is accurate, objective, relevant, and up-to-date. It is based on facts and data, not opinions or emotions. Trustworthy sources present balanced perspectives and cite credible references to support their claims.",
@@ -1341,8 +1342,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Icon Reveal: Four Factors of Reliable Financial Information
-      Question(
-        type: QuestionType.iconReveal,
+     SubComponent(
+        type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Four Factors of Reliable Financial Information",
           iconLinks: [
@@ -1361,8 +1362,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Scenario-Based Learning: Meet Taylor
-      Question(
-        type: QuestionType.scenario,
+     SubComponent(
+        type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Taylor: Evaluating Financial Information",
           scenarioExplanation: "Taylor encounters various financial information sources throughout her life. Let’s help her make informed decisions by evaluating the credibility of the information she receives!",
@@ -1401,8 +1402,8 @@ Map<String, Component> advancedComponents = {
         ),
       ),
 
-      Question(
-        type: QuestionType.learningCheck,
+     SubComponent(
+        type: SubComponentType.learningCheck,
         data: LearningCheck(
           title: "Quick Check: Evaluating Financial Information",
           question1: "Which of the following is a key characteristic of reliable financial information?",
@@ -1426,8 +1427,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Key Takeaways: Summary of Lesson
-      Question(
-        type: QuestionType.keyTakeaways,
+     SubComponent(
+        type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Evaluating Financial Information",
           hint: "What steps will you take to verify financial information before acting on it?",
@@ -1478,8 +1479,8 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // Multiple Choice Question: Introduction to Consumer Fraud
-      Question(
-        type: QuestionType.multipleChoice,
+     SubComponent(
+        type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
           question: "What is a common tactic used by online scammers to deceive consumers?",
@@ -1501,8 +1502,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Reveal Card: Definition of Consumer Fraud
-      Question(
-        type: QuestionType.revealCard,
+     SubComponent(
+        type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Consumer Fraud & Online Scams",
           definition: "Consumer fraud occurs when individuals or businesses use deceptive, unfair, or false practices to gain financially at the expense of others.",
@@ -1512,8 +1513,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Icon Reveal: Types of Consumer Fraud
-      Question(
-        type: QuestionType.iconReveal,
+     SubComponent(
+        type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Common Types of Consumer Fraud",
           iconLinks: [
@@ -1532,8 +1533,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Scenario-Based Learning: Meet Jordan
-      Question(
-        type: QuestionType.scenario,
+     SubComponent(
+        type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Jordan: Avoiding Consumer Fraud",
           scenarioExplanation: "Jordan is navigating the online financial world and encounters different potential scams. Let’s help them make safe financial decisions!",
@@ -1573,8 +1574,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Learning Check: Quick Check on Consumer Fraud & Scams
-      Question(
-        type: QuestionType.learningCheck,
+     SubComponent(
+        type: SubComponentType.learningCheck,
         data: LearningCheck(
           title: "Quick Check: Consumer Fraud & Online Scams",
           question1: "What is a major warning sign of a financial scam?",
@@ -1598,8 +1599,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Key Takeaways: Summary of Lesson
-      Question(
-        type: QuestionType.keyTakeaways,
+     SubComponent(
+        type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Consumer Fraud & Online Scams",
           hint: "What’s one action you can take to protect yourself from financial fraud?",
@@ -1650,8 +1651,8 @@ Map<String, Component> advancedComponents = {
       "Why do scammers use urgency and emotional pressure in their tactics?",
     ],
     questionData: [
-      Question(
-        type: QuestionType.intro,
+     SubComponent(
+        type: SubComponentType.intro,
         data: IntroPage(
           title: "Spotting Financial Scams",
           mintyText:
@@ -1660,8 +1661,8 @@ Map<String, Component> advancedComponents = {
               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
         ),
       ),
-      // Question( 
-      //   type: QuestionType.newlanding,
+      //SubComponent( 
+      //   type: SubComponentType.newlanding,
       //   data: newlanding(
       //     title: "Spotting Financial Scams", 
       //     subtitle: "Learning how to separate real financial opportunities from scams", 
@@ -1669,8 +1670,8 @@ Map<String, Component> advancedComponents = {
       //     mintyUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793"
       //   ),
       // ),
-      Question(
-        type: QuestionType.problem,
+     SubComponent(
+        type: SubComponentType.problem,
         data: ProblemPage(
           title: "Spotting Financial Scams",
           subtitle: "Learning how to separate real financial opportunities from scams",
@@ -1680,8 +1681,8 @@ Map<String, Component> advancedComponents = {
           problem: "Problem: Struggling to differentiate between real financial opportunities and scams.",
         ),
       ),
-      Question(
-        type: QuestionType.solution,
+     SubComponent(
+        type: SubComponentType.solution,
         data: SolutionPage(
           title: "Spotting Financial Scams",
           subtitle: "How to protect yourself from financial fraud",
@@ -1699,8 +1700,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.impact,
+     SubComponent(
+        type: SubComponentType.impact,
         data: Impact(
           title: "Spotting Financial Scams",
           subtitle: "How smart financial choices protect your future",
@@ -1735,8 +1736,8 @@ Map<String, Component> advancedComponents = {
       "Why might even well-designed websites and professional-looking emails be deceptive?",
     ],
     questionData: [
-      Question(
-        type: QuestionType.scenariointro,
+     SubComponent(
+        type: SubComponentType.scenariointro,
         data: IntroductionPage(
           scenario:
               "You come across a forum post claiming that traders have made thousands overnight in a ‘low-risk, high-reward’ crypto scheme. At the same time, you receive an email from your bank stating that there has been ‘suspicious activity’ on your account, asking you to confirm your details. What do you do?",
@@ -1760,8 +1761,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.scenarioquestion,
+     SubComponent(
+        type: SubComponentType.scenarioquestion,
         data: [
           ScenarioQuestion(
             questionText: "A financial influencer on TikTok claims they turned \$500 into \$25,000 in two months and offers a ‘limited-time’ course for \$50. What do you do?",
@@ -1840,8 +1841,8 @@ Map<String, Component> advancedComponents = {
           ),
         ],
       ),
-      Question(
-        type: QuestionType.scenarioresults,
+     SubComponent(
+        type: SubComponentType.scenarioresults,
         data: ScenarioResult.fromMap({
           "selectedChoices": [
             {
@@ -1886,8 +1887,8 @@ Map<String, Component> advancedComponents = {
       "Why do some misleading financial claims continue to spread, even when proven false?",
     ],
     questionData: [
-      Question(
-        type: QuestionType.peerintro,
+     SubComponent(
+        type: SubComponentType.peerintro,
         data: PeerReflectionIntro(
           title: "Recognizing Reliable vs. Misleading Financial Information",
           subTitle:
@@ -1917,8 +1918,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.peerstories,
+     SubComponent(
+        type: SubComponentType.peerstories,
         data: PeerStories(
           title: "Peer Stories: Evaluating Financial Claims",
           characters: [
@@ -1946,8 +1947,8 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-      Question(
-        type: QuestionType.peermatch,
+     SubComponent(
+        type: SubComponentType.peermatch,
         data: PeerMatch(
           title: "Match Actions to Categories: Financial Information Evaluation",
           categories: [
@@ -1993,8 +1994,8 @@ Map<String, Component> advancedComponents = {
           },
         ),
       ),
-      Question(
-        type: QuestionType.peerreflectionend,
+     SubComponent(
+        type: SubComponentType.peerreflectionend,
         data: PeerReflectionEnd(
           question:
               "Which peer’s approach to financial decision-making do you relate to most? Why?",
@@ -2047,8 +2048,8 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // Question 1: Identifying Reliable Financial Information
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "Which of the following is a key trait of reliable financial information?",
           options: [
@@ -2074,8 +2075,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Question 2: Recognizing Financial Fraud
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "Which of the following is a common sign of a financial scam?",
           options: [
@@ -2101,8 +2102,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Question 3: Multi-Select – Avoiding Financial Misinformation
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "Which of the following are good strategies to avoid financial misinformation? (Select all that apply)",
           options: [
@@ -2132,8 +2133,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Question 4: Image-Based Question on Financial Scams
-      Question(
-        type: QuestionType.quizimagemcquestion,
+      SubComponent(
+        type: SubComponentType.quizimagemcquestion,
         data: QuizMultipleChoice(
           question: "Which image represents a clear sign of a financial scam?",
           options: [
@@ -2167,8 +2168,8 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Question 5: Ethical Financial Decisions
-      Question(
-        type: QuestionType.quiztextmcquestion,
+     SubComponent(
+        type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "A friend tells you about a 'once-in-a-lifetime' investment opportunity. What should you do?",
           options: [

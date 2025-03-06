@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -19,7 +20,7 @@ class _GraphicalResultPageState extends State<GraphicalResultPage> {
   String title = '';
   String button = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       title = "Your Financial Summary";
       subTitle = "Financial Responsibility Score";

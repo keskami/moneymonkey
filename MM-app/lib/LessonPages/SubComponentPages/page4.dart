@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
 import 'package:money_monkey/home.dart';
 
@@ -40,7 +41,7 @@ class _Page4State extends State<Page4> {
   String feedback2 = '';
   String feedback3 = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       title = "Reflection";
       subTitle = data.data.question;

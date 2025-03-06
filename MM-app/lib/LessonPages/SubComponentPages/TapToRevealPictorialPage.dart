@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -28,7 +29,7 @@ class _TapToRevealPictorialPageState extends State<TapToRevealPictorialPage> {
   bool loading = false;
   String button = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       IntroductionPage introData = data.data as IntroductionPage;
       title = introData.scenario;

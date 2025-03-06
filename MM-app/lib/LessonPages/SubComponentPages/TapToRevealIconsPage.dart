@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -30,7 +31,7 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
   String wrong = '';
   bool loading = true;
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       wrong = "Please click all the icons before moving on";
       title = data.data.title;

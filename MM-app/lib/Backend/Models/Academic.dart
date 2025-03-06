@@ -1,5 +1,5 @@
 // Enums and Extensions
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 
 enum Status {
   Inactive,
@@ -355,7 +355,6 @@ class PerformanceTrends {
     );
   }
 }
-
 class Component {
   String componentId;
   String title;
@@ -363,7 +362,7 @@ class Component {
   Status componentStatus;
   double progress;
   List<String>? discussionQuestions;
-  List<Question> questionData;
+  List<SubComponent> questionData;
   final PerformanceTrends performanceTrends;
 
   Component({
@@ -390,7 +389,7 @@ class Component {
           : null,
       questionData: data['QuestionData'] != null
           ? (data['QuestionData'] as List)
-              .map((q) => Question.fromMap(q as Map<String, dynamic>))
+              .map((q) => SubComponent.fromMap(q as Map<String, dynamic>))
               .toList()
           : [],
       performanceTrends: data['PerformanceTrends'] != null
@@ -444,11 +443,11 @@ class Component {
               : null),
       questionData: json['questionData'] != null
           ? (json['questionData'] as List)
-              .map((q) => Question.fromMap(q as Map<String, dynamic>))
+              .map((q) => SubComponent.fromMap(q as Map<String, dynamic>))
               .toList()
           : (json['QuestionData'] != null
               ? (json['QuestionData'] as List)
-                  .map((q) => Question.fromMap(q as Map<String, dynamic>))
+                  .map((q) => SubComponent.fromMap(q as Map<String, dynamic>))
                   .toList()
               : []),
       performanceTrends: json['performanceTrends'] != null

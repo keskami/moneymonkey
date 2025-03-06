@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class MCQPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MCQPageState extends State<MCQPage> {
   String title = '';
   String question = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       correct = data.data.prompts.correct;
       wrong = data.data.prompts.incorrect;

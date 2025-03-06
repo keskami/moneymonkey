@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Models/Teacher.dart';
 import 'package:money_monkey/Backend/Models/Settings.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 
 /// A utility class to convert sample data to JSON and back
@@ -357,7 +357,7 @@ class SampleDataConverter {
             ? List<String>.from(value['discussionQuestions'])
             : null,
         questionData: (value['questionData'] as List)
-            .map((q) => Question.fromMap(q))
+            .map((q) => SubComponent.fromMap(q))
             .toList(),
         performanceTrends: PerformanceTrends(
           classAverage: value['performanceTrends']['classAverage'],

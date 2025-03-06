@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 
@@ -28,7 +28,7 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
   List<String> instructions = [];
   String button = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       afterText = List<String>.from(
           data.data.afterContent.map((item) => item.toString()));

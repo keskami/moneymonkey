@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 
 class ImagesIntroPage extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _ImagesIntroPageState extends State<ImagesIntroPage> {
   String jason2 = '';
   String button = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       title = data.data.title;
       subTitle = data.data.subTitle;

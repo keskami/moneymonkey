@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 import 'package:money_monkey/home.dart';
 
 class DragNDropQuestionPage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
   String correctFeedback = '';
   String incorrectFeedback = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       question = data.data.title;
       box1 = data.data.categories[0].title;

@@ -2,12 +2,11 @@
 
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/DragNDropQuestionPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/page4.dart';
-import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ImagesIntroPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/TapToExpandPage.dart';
 
@@ -20,7 +19,7 @@ class PeerReflectioncontroller extends BaseLessonController {
   RxInt pageIndex = 0.obs;
   RxBool isLoading = true.obs;
 
-  RxList<Question> pageData = <Question>[].obs;
+  RxList<SubComponent> pageData = <SubComponent>[].obs;
 
   // UI pages
   final pages = [

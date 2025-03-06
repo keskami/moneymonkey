@@ -3,9 +3,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/GraphicalResultPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/MonkeyMCQPage.dart';
@@ -21,7 +21,7 @@ class ScenarioController extends BaseLessonController {
   RxInt responsibilityScore = 0.obs;
   RxBool isLoading = true.obs;
 
-  RxList<Question> pageData = <Question>[].obs;
+  RxList<SubComponent> pageData = <SubComponent>[].obs;
   var controllerData = <int, dynamic>{}.obs;
 
   // Data needed for question logic
@@ -47,7 +47,7 @@ class ScenarioController extends BaseLessonController {
       for (int i = 0; i < data.questionData.length; i++) {
         pageData.add(data.questionData[i]);
 
-        if (pageData[i].type == QuestionType.scenarioquestion) {
+        if (pageData[i].type == SubComponentType.scenarioquestion) {
           for (int k = 0; k < pageData[i].data.length; k++) {
             ScenarioQuestion data = pageData[i].data[k];
             question = data.questionText;

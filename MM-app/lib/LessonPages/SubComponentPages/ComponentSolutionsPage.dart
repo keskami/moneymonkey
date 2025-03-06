@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
+ 
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 
@@ -27,7 +28,7 @@ class _ComponentSolutionsPageState extends State<ComponentSolutionsPage> {
   List<String> instructions = [];
   String button = '';
 
-  Future<void> setData(Question data) async {
+  Future<void> setData(SubComponent data) async {
     setState(() {
       bigTexts = [data.data.Card1[0], data.data.Card2[0], data.data.Card3[0]];
       smallTexts = [data.data.Card1[1], data.data.Card2[1], data.data.Card3[1]];

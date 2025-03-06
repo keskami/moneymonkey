@@ -3,15 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
-import 'package:money_monkey/LessonPages/Services/lesson_services.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/QuizPages/QuizMCQ.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/QuizPages/QuizMCQImages.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/QuizPages/page3.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/QuizPages/page4.dart';
-import 'package:money_monkey/LessonPages/SubComponentPages/QuizPages/page5.dart';
 
 class PeerReflectionQuizcontroller extends BaseLessonController {
   final LocalAcademicService localAcademicService = LocalAcademicService();
@@ -22,7 +18,7 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
   RxInt pageIndex = 0.obs;
   RxBool isLoading = true.obs;
 
-  RxList<Question> pageData = <Question>[].obs;
+  RxList<SubComponent> pageData = <SubComponent>[].obs;
 
   String question = "";
   List<String> answers = [];
@@ -45,7 +41,7 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
           await localAcademicService.getComponent(componentId);
       for (int i = 0; i < data.questionData.length; i++) {
         pageData.add(data.questionData[i]);
-        if (pageData[i].type == QuestionType.quiztextmcquestion) {
+        if (pageData[i].type == SubComponentType.quiztextmcquestion) {
           question = pageData[i].data.question;
           answers = pageData[i].data.options;
           correctAnswers = pageData[i].data.correctAnswers;
@@ -58,7 +54,7 @@ class PeerReflectionQuizcontroller extends BaseLessonController {
               correctAnswers: correctAnswers,
               allowMultipleSelections: allowMultipleSelections));
           print("REACHED");
-        } else if (pageData[i].type == QuestionType.quizimagemcquestion) {
+        } else if (pageData[i].type == SubComponentType.quizimagemcquestion) {
           try {
             question = pageData[i].data.question;
 

@@ -1,37 +1,36 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
+import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Models/Teacher.dart';
-import 'package:money_monkey/LessonPages/Models/Models.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'firebase_options.dart';
 
 // Main function to initialize Firebase and upload data
-Future<void> UploadScript() async {
+Future<void> uploadDataToFirebase() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  print("Starting data upload with hybrid structure...");
+  print("Starting data upload with improved structure...");
   
   try {
     // Get Firestore instance
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     
-    // Upload top-level collections first
+    // Upload top-level collections first (Teachers, Students, Classrooms)
     await uploadTopLevelCollections(firestore);
     
-    // Upload nested academic structure
-    await uploadNestedAcademicStructure(firestore);
+    // Upload academic structure (Levels > Units > Lessons > Components > SubComponents)
+    await uploadAcademicStructure(firestore);
     
-    // Create indexes for direct access
-    await createDirectAccessIndexes(firestore);
+    // Create direct access references between entities
+    await createCrossReferences(firestore);
     
-    print("All data uploaded successfully with hybrid structure!");
+    print("All data uploaded successfully with improved structure!");
   } catch (e) {
     print("Error during data upload: $e");
   }
@@ -160,13 +159,26 @@ Future<void> uploadStudents(FirebaseFirestore firestore, List<Student> students)
   }
 }
 
-// Upload nested academic structure (Levels > Units > Lessons > Components)
-Future<void> uploadNestedAcademicStructure(FirebaseFirestore firestore) async {
-  print("\nUploading nested academic structure...");
+// Upload academic structure 
+Future<void> uploadAcademicStructure(FirebaseFirestore firestore) async {
+  print("\nUploading academic structure...");
   
   try {
-    // Create levels collection with Advanced document
-    DocumentReference advancedRef = firestore.collection('Levels').doc('Advanced');
+    // Create "Curriculum" collection as the root for all academic content
+    DocumentReference curriculumRef = firestore.collection('Curriculum').doc('v1');
+    await curriculumRef.set({
+      'version': '1.0',
+      'lastUpdated': Timestamp.now(),
+      'description': 'Financial education curriculum materials',
+    });
+    
+    print("Created Curriculum document");
+    
+    // Create levels collection under Curriculum
+    CollectionReference levelsCollection = curriculumRef.collection('Levels');
+    
+    // Create Advanced level document
+    DocumentReference advancedRef = levelsCollection.doc('Advanced');
     await advancedRef.set({
       'name': 'Advanced',
       'description': 'Advanced level financial education curriculum',
@@ -242,222 +254,36 @@ Future<void> uploadNestedAcademicStructure(FirebaseFirestore firestore) async {
                 'PerformanceTrends': performanceTrendsData,
               });
               
-              // Upload questions as a separate subcollection instead of embedding in document
-              CollectionReference questionsCollection = componentRef.collection('Questions');
-              
-              int questionIndex = 0;
-              for (var question in component.questionData) {
+              // Upload SubComponents directly under each component
+              // Rather than as a separate Questions collection
+              int subComponentIndex = 0;
+              for (var subComponent in component.questionData) {
                 try {
-                  // Create a document for each question in the Questions subcollection
-                  DocumentReference questionRef = questionsCollection.doc('q${questionIndex++}');
+                  // Generate the ID for the subcomponent (e.g., "A.1.2.3.1")
+                  String subComponentId = '${componentId}.${subComponentIndex + 1}';
+                  DocumentReference subComponentRef = componentRef.collection('SubComponents').doc(subComponentId);
                   
-                  Map<String, dynamic> questionData = {
-                    'type': question.type.toString().split('.').last,
-                    'index': questionIndex - 1
+                  // Base data that all SubComponents have
+                  Map<String, dynamic> subComponentData = {
+                    'subComponentId': subComponentId,
+                    'type': subComponent.type.name,
+                    'index': subComponentIndex,
                   };
                   
-                  // Store the type and question index
-                  await questionRef.set(questionData);
+                  // Store the base data
+                  await subComponentRef.set(subComponentData);
                   
-                  // Then add the specific question data based on type
-                  switch (question.type) {
-                    case QuestionType.multipleChoice:
-                      final data = question.data as MultipleChoice;
-                      await questionRef.update({
-                        'questionHeading': data.questionHeading,
-                        'question': data.question,
-                        'questionExplanation': data.questionExplanation,
-                        'options': data.options,
-                        'correctAnswers': data.correctAnswers,
-                        'prompts': {
-                          'correct': data.prompts.correct,
-                          'incorrect': data.prompts.incorrect,
-                        },
-                      });
-                      break;
-                      
-                    case QuestionType.revealCard:
-                      final data = question.data as RevealCard;
-                      await questionRef.update({
-                        'title': data.title,
-                        'definition': data.definition,
-                        'tapInstruction': data.tapInstruction,
-                        'whyMatter': data.whyMatter,
-                      });
-                      break;
-                      
-                    case QuestionType.iconReveal:
-                      final data = question.data as IconReveal;
-                      await questionRef.update({
-                        'title': data.title,
-                        'iconLinks': data.iconLinks,
-                        'contents': data.contents,
-                      });
-                      break;
-                      
-                    case QuestionType.scenario:
-                      final data = question.data as Scenario;
-                      List<Map<String, dynamic>> questionsList = [];
-                      
-                      for (var q in data.questions) {
-                        questionsList.add({
-                          'questionHeading': q.questionHeading,
-                          'question': q.question,
-                          'questionExplanation': q.questionExplanation,
-                          'options': q.options,
-                          'correctAnswers': q.correctAnswers,
-                          'prompts': {
-                            'correct': q.prompts.correct,
-                            'incorrect': q.prompts.incorrect,
-                          },
-                        });
-                      }
-                      
-                      await questionRef.update({
-                        'title': data.title,
-                        'scenarioExplanation': data.scenarioExplanation,
-                        'questions': questionsList,
-                      });
-                      break;
-                      
-                    case QuestionType.learningCheck:
-                      final data = question.data as LearningCheck;
-                      await questionRef.update({
-                        'title': data.title,
-                        'question1': data.question1,
-                        'question2': data.question2,
-                        'options1': data.options1,
-                        'options2': data.options2,
-                        'correctAns1': data.correctAns1,
-                        'correctAns2': data.correctAns2,
-                        'feedbackCorrect': data.feedbackCorrect,
-                        'feedbackOneIncorrect': data.feedbackOneIncorrect,
-                        'feedbackBothIncorrect': data.feedbackBothIncorrect,
-                      });
-                      break;
-                      
-                    case QuestionType.keyTakeaways:
-                      final data = question.data as KeyTakeaways;
-                      List<Map<String, dynamic>> takeawaysList = [];
-                      
-                      for (var takeaway in data.takeaways) {
-                        takeawaysList.add({
-                          'title': takeaway.title,
-                          'description': takeaway.description,
-                          'imageUrl': takeaway.imageUrl,
-                        });
-                      }
-                      
-                      await questionRef.update({
-                        'title': data.title,
-                        'hint': data.hint,
-                        'takeaways': takeawaysList,
-                      });
-                      break;
-                      
-                    // Handle other question types with separate case statements...
-                    case QuestionType.intro:
-                      final data = question.data as IntroPage;
-                      await questionRef.update({
-                        'title': data.title,
-                        'mintyText': data.mintyText,
-                        'imageUrl': data.imageUrl,
-                      });
-                      break;
-                      
-                    case QuestionType.problem:
-                      final data = question.data as ProblemPage;
-                      await questionRef.update({
-                        'title': data.title,
-                        'subtitle': data.subtitle,
-                        'scenarioText': data.scenarioText,
-                        'instructions': data.instructions,
-                        'problem': data.problem,
-                      });
-                      break;
-                      
-                    case QuestionType.solution:
-                      final data = question.data as SolutionPage;
-                      await questionRef.update({
-                        'title': data.title,
-                        'subtitle': data.subtitle,
-                        'Card1': data.Card1,
-                        'Card2': data.Card2,
-                        'Card3': data.Card3,
-                      });
-                      break;
-                      
-                    case QuestionType.impact:
-                      final data = question.data as Impact;
-                      await questionRef.update({
-                        'title': data.title,
-                        'subtitle': data.subtitle,
-                        'beforeContent': data.beforeContent,
-                        'afterContent': data.afterContent,
-                      });
-                      break;
-                      
-                    case QuestionType.scenariointro:
-                      final data = question.data as IntroductionPage;
-                      List<Map<String, dynamic>> optionsList = [];
-                      
-                      for (var option in data.options) {
-                        optionsList.add({
-                          'title': option.title,
-                          'iconUrl': option.iconUrl,
-                          'score': option.score,
-                          'type': option.type,
-                        });
-                      }
-                      
-                      await questionRef.update({
-                        'scenario': data.scenario,
-                        'mintyImage': data.mintyImage,
-                        'options': optionsList,
-                      });
-                      break;
-                      
-                    case QuestionType.scenarioquestion:
-                      final data = question.data as List<ScenarioQuestion>;
-                      List<Map<String, dynamic>> questionsList = [];
-                      
-                      for (var sq in data) {
-                        List<Map<String, dynamic>> optionsList = [];
-                        
-                        for (var option in sq.options) {
-                          optionsList.add({
-                            'title': option.title,
-                            'iconUrl': option.iconUrl,
-                            'score': option.score,
-                            'type': option.type,
-                          });
-                        }
-                        
-                        questionsList.add({
-                          'questionText': sq.questionText,
-                          'options': optionsList,
-                          'feedback': sq.feedback,
-                        });
-                      }
-                      
-                      await questionRef.update({
-                        'questions': questionsList,
-                      });
-                      break;
-                      
-                    // Add other question types here...
-                    
-                    default:
-                      print("Skipping unsupported question type: ${question.type}");
-                      break;
-                  }
+                  // Then add the specific data based on type
+                  Map<String, dynamic> typeSpecificData = convertSubComponentDataToFirestore(subComponent);
+                  await subComponentRef.update(typeSpecificData);
                   
+                  subComponentIndex++;
                 } catch (e) {
-                  print("Error uploading question ${questionIndex-1} in component ${component.componentId}: $e");
+                  print("Error uploading SubComponent ${subComponentIndex} in component ${component.componentId}: $e");
                 }
               }
               
-              print("Uploaded ${questionIndex} questions for component ${component.title}");
+              print("Uploaded ${subComponentIndex} SubComponents for component ${component.title}");
               
               componentsUploaded++;
             }
@@ -468,107 +294,125 @@ Future<void> uploadNestedAcademicStructure(FirebaseFirestore firestore) async {
       }
     }
     
-    print("Nested academic structure uploaded successfully!");
+    print("Academic structure uploaded successfully!");
   } catch (e) {
-    print("Error uploading nested academic structure: $e");
+    print("Error uploading academic structure: $e");
     rethrow;
   }
 }
 
-// Create indexes for direct access to lessons and components
-Future<void> createDirectAccessIndexes(FirebaseFirestore firestore) async {
-  print("\nCreating direct access indexes...");
+// Create cross-references between entities for easier access
+Future<void> createCrossReferences(FirebaseFirestore firestore) async {
+  print("\nCreating cross-references for efficient access...");
   
   try {
-    // Create lessons index for direct access
-    WriteBatch lessonsBatch = firestore.batch();
-    int lessonsCount = 0;
+    // Create mapping between Classrooms and current Lessons
+    for (var entry in sampleClassrooms.entries) {
+      String classroomId = entry.key;
+      Classroom classroom = entry.value;
+      
+      if (classroom.lessonId.isNotEmpty) {
+        // Create a "CurrentLessons" collection that maps classrooms to their current lessons
+        DocumentReference classLessonRef = firestore.collection('CurrentLessons').doc(classroomId);
+        
+        // Find the lesson details
+        Lesson? lesson = advancedLessons[classroom.lessonId];
+        if (lesson != null) {
+          String unitId = classroom.lessonId.split('.').take(2).join('.');
+          
+          await classLessonRef.set({
+            'classroomId': classroomId,
+            'lessonId': classroom.lessonId,
+            'lessonTitle': lesson.title,
+            'unitId': unitId,
+            'path': 'Curriculum/v1/Levels/Advanced/Units/$unitId/Lessons/${classroom.lessonId}',
+            'lastAccessed': Timestamp.now(),
+          });
+        }
+      }
+    }
+    
+    print("Created classroom to lesson mappings");
+    
+    // Create a ContentIndex for quick content search and retrieval
+    // This replaces the separate LessonsIndex and ComponentsIndex collections
+    
+    // Index Lessons
+    WriteBatch lessonBatch = firestore.batch();
+    int itemCount = 0;
     
     for (var entry in advancedLessons.entries) {
       Lesson lesson = entry.value;
       String unitId = lesson.lessonId.split('.').take(2).join('.');
       
-      DocumentReference lessonIndexRef = firestore.collection('LessonsIndex').doc(lesson.lessonId);
-      lessonsBatch.set(lessonIndexRef, {
-        'lessonId': lesson.lessonId,
+      DocumentReference indexRef = firestore.collection('ContentIndex').doc(lesson.lessonId);
+      lessonBatch.set(indexRef, {
+        'id': lesson.lessonId,
         'title': lesson.title,
-        'description': lesson.description,
+        'type': 'lesson',
         'unitId': unitId,
         'status': statusToFirestore(lesson.lessonStatus),
-        'path': 'Levels/Advanced/Units/$unitId/Lessons/${lesson.lessonId}',
-        'totalComponents': lesson.totalComponents,
+        'path': 'Curriculum/v1/Levels/Advanced/Units/$unitId/Lessons/${lesson.lessonId}',
+        'tags': ['lesson', unitId, 'level:Advanced'],
+        'componentCount': lesson.components.length,
       });
       
-      lessonsCount++;
-      
-      // Commit batch every 500 documents (Firestore batch limit)
-      if (lessonsCount % 500 == 0) {
-        await lessonsBatch.commit();
-        lessonsBatch = firestore.batch();
+      itemCount++;
+      if (itemCount % 500 == 0) {
+        // Commit in batches of 500 to avoid hitting limits
+        await lessonBatch.commit();
+        lessonBatch = firestore.batch();
       }
     }
     
-    // Commit any remaining lessons
-    if (lessonsCount % 500 != 0) {
-      await lessonsBatch.commit();
-    }
-    
-    print("Created index for $lessonsCount lessons");
-    
-    // Create components index for direct access
-    WriteBatch componentsBatch = firestore.batch();
-    int componentsCount = 0;
-    
+    // Index Components
     for (var entry in advancedComponents.entries) {
       Component component = entry.value;
       String lessonId = component.componentId.split('.').take(3).join('.');
       String unitId = component.componentId.split('.').take(2).join('.');
       
-      DocumentReference componentIndexRef = firestore.collection('ComponentsIndex').doc(component.componentId);
-      componentsBatch.set(componentIndexRef, {
-        'componentId': component.componentId,
+      DocumentReference indexRef = firestore.collection('ContentIndex').doc(component.componentId);
+      lessonBatch.set(indexRef, {
+        'id': component.componentId,
         'title': component.title,
-        'type': component.type.name,
-        'status': statusToFirestore(component.componentStatus),
+        'type': 'component',
         'lessonId': lessonId,
         'unitId': unitId,
-        'path': 'Levels/Advanced/Units/$unitId/Lessons/$lessonId/Components/${component.componentId}',
+        'componentType': component.type.name,
+        'status': statusToFirestore(component.componentStatus),
+        'path': 'Curriculum/v1/Levels/Advanced/Units/$unitId/Lessons/$lessonId/Components/${component.componentId}',
+        'tags': ['component', component.type.name, lessonId, unitId],
+        'subComponentCount': component.questionData.length,
       });
       
-      componentsCount++;
-      
-      // Commit batch every 500 documents
-      if (componentsCount % 500 == 0) {
-        await componentsBatch.commit();
-        componentsBatch = firestore.batch();
+      itemCount++;
+      if (itemCount % 500 == 0) {
+        // Commit in batches of 500 to avoid hitting limits
+        await lessonBatch.commit();
+        lessonBatch = firestore.batch();
       }
     }
     
-    // Commit any remaining components
-    if (componentsCount % 500 != 0) {
-      await componentsBatch.commit();
+    // Commit any remaining items
+    if (itemCount % 500 != 0) {
+      await lessonBatch.commit();
     }
     
-    print("Created index for $componentsCount components");
+    print("Created ContentIndex with $itemCount total items");
     
   } catch (e) {
-    print("Error creating direct access indexes: $e");
+    print("Error creating cross-references: $e");
     rethrow;
   }
 }
 
-// Convert Question to Firestore data
-Map<String, dynamic> convertQuestionToFirestore(Question question) {
-  Map<String, dynamic> result = {
-    'type': question.type.toString().split('.').last,
-  };
-  
+// Convert SubComponent data to Firestore format based on type
+Map<String, dynamic> convertSubComponentDataToFirestore(SubComponent subComponent) {
   try {
-    // Handle different question types
-    switch (question.type) {
-      case QuestionType.multipleChoice:
-        final data = question.data as MultipleChoice;
-        result['data'] = {
+    switch (subComponent.type) {
+      case SubComponentType.multipleChoice:
+        final data = subComponent.data as MultipleChoice;
+        return {
           'questionHeading': data.questionHeading,
           'question': data.question,
           'questionExplanation': data.questionExplanation,
@@ -579,29 +423,26 @@ Map<String, dynamic> convertQuestionToFirestore(Question question) {
             'incorrect': data.prompts.incorrect,
           },
         };
-        break;
         
-      case QuestionType.revealCard:
-        final data = question.data as RevealCard;
-        result['data'] = {
+      case SubComponentType.revealCard:
+        final data = subComponent.data as RevealCard;
+        return {
           'title': data.title,
           'definition': data.definition,
           'tapInstruction': data.tapInstruction,
           'whyMatter': data.whyMatter,
         };
-        break;
         
-      case QuestionType.iconReveal:
-        final data = question.data as IconReveal;
-        result['data'] = {
+      case SubComponentType.iconReveal:
+        final data = subComponent.data as IconReveal;
+        return {
           'title': data.title,
           'iconLinks': data.iconLinks,
           'contents': data.contents,
         };
-        break;
         
-      case QuestionType.scenario:
-        final data = question.data as Scenario;
+      case SubComponentType.scenario:
+        final data = subComponent.data as Scenario;
         List<Map<String, dynamic>> questionsList = [];
         
         for (var q in data.questions) {
@@ -618,16 +459,15 @@ Map<String, dynamic> convertQuestionToFirestore(Question question) {
           });
         }
         
-        result['data'] = {
+        return {
           'title': data.title,
           'scenarioExplanation': data.scenarioExplanation,
           'questions': questionsList,
         };
-        break;
         
-      case QuestionType.learningCheck:
-        final data = question.data as LearningCheck;
-        result['data'] = {
+      case SubComponentType.learningCheck:
+        final data = subComponent.data as LearningCheck;
+        return {
           'title': data.title,
           'question1': data.question1,
           'question2': data.question2,
@@ -639,80 +479,242 @@ Map<String, dynamic> convertQuestionToFirestore(Question question) {
           'feedbackOneIncorrect': data.feedbackOneIncorrect,
           'feedbackBothIncorrect': data.feedbackBothIncorrect,
         };
-        break;
         
-      // Add other question types handling here...
+      case SubComponentType.keyTakeaways:
+        final data = subComponent.data as KeyTakeaways;
+        List<Map<String, dynamic>> takeawaysList = [];
+        
+        for (var takeaway in data.takeaways) {
+          takeawaysList.add({
+            'title': takeaway.title,
+            'description': takeaway.description,
+            'imageUrl': takeaway.imageUrl,
+          });
+        }
+        
+        return {
+          'title': data.title,
+          'hint': data.hint,
+          'takeaways': takeawaysList,
+        };
+        
+      case SubComponentType.intro:
+        final data = subComponent.data as IntroPage;
+        return {
+          'title': data.title,
+          'mintyText': data.mintyText,
+          'imageUrl': data.imageUrl,
+        };
+        
+      case SubComponentType.problem:
+        final data = subComponent.data as ProblemPage;
+        return {
+          'title': data.title,
+          'subtitle': data.subtitle,
+          'scenarioText': data.scenarioText,
+          'instructions': data.instructions,
+          'problem': data.problem,
+        };
+        
+      case SubComponentType.solution:
+        final data = subComponent.data as SolutionPage;
+        return {
+          'title': data.title,
+          'subtitle': data.subtitle,
+          'Card1': data.Card1,
+          'Card2': data.Card2,
+          'Card3': data.Card3,
+        };
+        
+      case SubComponentType.impact:
+        final data = subComponent.data as Impact;
+        return {
+          'title': data.title,
+          'subtitle': data.subtitle,
+          'beforeContent': data.beforeContent,
+          'afterContent': data.afterContent,
+        };
+        
+      case SubComponentType.scenariointro:
+        final data = subComponent.data as IntroductionPage;
+        List<Map<String, dynamic>> optionsList = [];
+        
+        for (var option in data.options) {
+          optionsList.add({
+            'title': option.title,
+            'iconUrl': option.iconUrl,
+            'score': option.score,
+            'type': option.type,
+          });
+        }
+        
+        return {
+          'scenario': data.scenario,
+          'mintyImage': data.mintyImage,
+          'options': optionsList,
+        };
+        
+      case SubComponentType.scenarioquestion:
+        final data = subComponent.data as ScenarioQuestion;
+        List<Map<String, dynamic>> optionsList = [];
+        
+        for (var option in data.options) {
+          optionsList.add({
+            'title': option.title,
+            'iconUrl': option.iconUrl,
+            'score': option.score,
+            'type': option.type,
+          });
+        }
+        
+        return {
+          'questionText': data.questionText,
+          'options': optionsList,
+          'feedback': data.feedback,
+        };
+        
+      case SubComponentType.scenariochoice:
+        final data = subComponent.data as ScenarioChoice;
+        return {
+          'category': data.category,
+          'value': data.value,
+          'scoreImpact': data.scoreImpact,
+        };
+        
+      case SubComponentType.scenarioresults:
+        final data = subComponent.data as ScenarioResult;
+        List<Map<String, dynamic>> selectedChoicesList = [];
+        
+        for (var choice in data.selectedChoices) {
+          selectedChoicesList.add({
+            'category': choice.category,
+            'value': choice.value,
+            'scoreImpact': choice.scoreImpact,
+          });
+        }
+        
+        return {
+          'selectedChoices': selectedChoicesList,
+          'finalScore': data.finalScore,
+          'categories': data.categories,
+          'feedback': data.feedback,
+        };
+        
+      case SubComponentType.peerintro:
+        final data = subComponent.data as PeerReflectionIntro;
+        List<Map<String, dynamic>> charactersList = [];
+        
+        for (var character in data.characters) {
+          charactersList.add({
+            'name': character.name,
+            'role': character.role,
+            'story': character.story,
+            'imageUrl': character.imageUrl,
+          });
+        }
+        
+        return {
+          'title': data.title,
+          'subTitle': data.subTitle,
+          'characters': charactersList,
+        };
+        
+      case SubComponentType.peerstories:
+        final data = subComponent.data as PeerStories;
+        List<Map<String, dynamic>> charactersList = [];
+        
+        for (var character in data.characters) {
+          charactersList.add({
+            'name': character.name,
+            'role': character.role,
+            'story': character.story,
+            'imageUrl': character.imageUrl,
+          });
+        }
+        
+        return {
+          'title': data.title,
+          'characters': charactersList,
+        };
+        
+      case SubComponentType.peermatch:
+        final data = subComponent.data as PeerMatch;
+        List<Map<String, dynamic>> categoriesList = [];
+        
+        for (var category in data.categories) {
+          categoriesList.add({
+            'title': category.title,
+            'correctActions': category.correctActions,
+          });
+        }
+        
+        return {
+          'title': data.title,
+          'categories': categoriesList,
+          'actions': data.actions,
+          'feedbackMessages': data.feedbackMessages,
+        };
+        
+      case SubComponentType.peerreflectionend:
+        final data = subComponent.data as PeerReflectionEnd;
+        List<Map<String, dynamic>> optionsList = [];
+        
+        for (var option in data.options) {
+          optionsList.add({
+            'name': option.name,
+            'description': option.description,
+            'imageUrl': option.imageUrl,
+          });
+        }
+        
+        return {
+          'question': data.question,
+          'options': optionsList,
+          'feedbackMessages': data.feedbackMessages,
+          'buttonText': data.buttonText,
+        };
+        
+      case SubComponentType.quizimagemcquestion:
+        final data = subComponent.data as QuizMultipleChoice;
+        List<Map<String, dynamic>> optionsList = [];
+        
+        for (var option in data.options) {
+          optionsList.add({
+            'text': option.text,
+            'imageUrl': option.imageUrl,
+          });
+        }
+        
+        return {
+          'question': data.question,
+          'options': optionsList,
+          'correctAnswers': data.correctAnswers,
+          'feedbackMessages': data.feedbackMessages,
+          'isMultiSelect': data.isMultiSelect,
+          'buttonText': data.buttonText,
+          'imageUrl': data.imageUrl,
+        };
+        
+      case SubComponentType.quiztextmcquestion:
+        final data = subComponent.data as TextBasedQuestion;
+        return {
+          'question': data.question,
+          'options': data.options,
+          'correctAnswers': data.correctAnswers,
+          'feedbackMessages': data.feedbackMessages,
+          'isMultiSelect': data.isMultiSelect,
+          'buttonText': data.buttonText,
+        };
         
       default:
-        // For other types, try to convert generically
-        result['data'] = convertDynamicToFirestore(question.data);
-        break;
+        print("Unknown SubComponent type: ${subComponent.type.name}");
+        return {'error': 'Unknown SubComponent type'};
     }
   } catch (e) {
-    print("Error converting question type ${question.type}: $e");
-    // If conversion fails, store as generic object
-    result['data'] = {
+    print("Error converting SubComponent of type ${subComponent.type.name}: $e");
+    return {
       'error': 'Failed to convert data: $e',
-      'rawData': question.data.toString(),
+      'rawData': subComponent.data.toString(),
     };
   }
-  
-  return result;
-}
-
-// Generic converter for dynamic types
-dynamic convertDynamicToFirestore(dynamic data) {
-  if (data == null) return null;
-  
-  if (data is Map) {
-    Map<String, dynamic> result = {};
-    data.forEach((key, value) {
-      if (value != null) {
-        if (key is String) {
-          result[key] = convertDynamicToFirestore(value);
-        } else {
-          result[key.toString()] = convertDynamicToFirestore(value);
-        }
-      }
-    });
-    return result;
-  } 
-  else if (data is List) {
-    return data.map((item) => convertDynamicToFirestore(item)).toList();
-  } 
-  else if (data is DateTime) {
-    return Timestamp.fromDate(data);
-  } 
-  else {
-    return data;
-  }
-}
-
-// Helper function for advanced queries
-// Example: "Find all active components across all lessons in a specific unit"
-Future<List<Map<String, dynamic>>> findComponentsByUnitAndStatus(FirebaseFirestore firestore, String unitId, String status) async {
-  // Using the ComponentsIndex for efficient querying
-  QuerySnapshot snapshot = await firestore.collection('ComponentsIndex')
-    .where('unitId', isEqualTo: unitId)
-    .where('status', isEqualTo: status)
-    .get();
-    
-  List<Map<String, dynamic>> results = [];
-  
-  for (var doc in snapshot.docs) {
-    // Get the component path from the index
-    String path = doc.get('path');
-    
-    // Fetch the actual component using the path
-    DocumentSnapshot componentDoc = await firestore.doc(path).get();
-    
-    if (componentDoc.exists) {
-      // Add component data to results
-      Map<String, dynamic> data = componentDoc.data() as Map<String, dynamic>;
-      data['id'] = componentDoc.id;
-      results.add(data);
-    }
-  }
-  
-  return results;
 }
