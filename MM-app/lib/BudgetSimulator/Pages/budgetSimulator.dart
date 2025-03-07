@@ -5,6 +5,8 @@ import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/baseTopOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
@@ -65,10 +67,12 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
 
+
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
+    List<Color> colors = [];
   late double netCash;
   final Headings2 headings2 = Headings2();
   DateTime now = DateTime(2025, 5, 1);
@@ -693,6 +697,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     });
     getStartingExpenses();
     setState(() {
+      colors = functions.colors;
       chartData = functions.getChartData(types, percentage, colors);
     });
     alocateEvents();
@@ -704,16 +709,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   List<BudgetSimulatorChartData> chartData = [];
-  List<Color> colors = [
-    Colors.pink,
-    Colors.blue,
-    Colors.teal,
-    Colors.orange,
-    Colors.yellow,
-    Colors.black,
-    Colors.purple,
-  ];
-
+  
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -727,245 +723,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: screenHeight,
-            width: screenWidthUnit * 159,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  right: BorderSide(
-                    color: Colors.black,
-                    width: screenWidthUnit * 1.5,
-                  ),
-                ),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: screenHeightUnit * 80,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
-                    child: Container(
-                      height: screenHeightUnit * 100,
-                      width: screenWidthUnit * 130,
-                      child: Center(
-                        child: Container(
-                          height: screenHeightUnit * 60,
-                          width: screenWidthUnit * 60,
-                          child: Image.network(
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FLesson%20Page.png?alt=media&token=1e20b2e4-ee49-49cc-bc01-dcf08b21104b"),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PortfolioScreen()),
-                      );
-                    },
-                    child: Container(
-                      height: screenHeightUnit * 100,
-                      width: screenWidthUnit * 130,
-                      child: Center(
-                        child: Container(
-                          height: screenHeightUnit * 60,
-                          width: screenWidthUnit * 60,
-                          child: Image.network(
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FPortfolio.png?alt=media&token=d2012e7d-19fb-4766-9777-ce09231e4021"),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
-                    child: Container(
-                      height: screenHeightUnit * 100,
-                      width: screenWidthUnit * 130,
-                      child: Center(
-                        child: Container(
-                          height: screenHeightUnit * 60,
-                          width: screenWidthUnit * 60,
-                          child: Image.network(
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FTrading.png?alt=media&token=2037e6b1-6fb6-48af-aecf-5f288c2159b0"),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: screenHeightUnit * 100,
-                      width: screenWidthUnit * 100,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(225, 243, 254, 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Container(
-                          height: screenHeightUnit * 60,
-                          width: screenWidthUnit * 60,
-                          child: Image.network(
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FbudgetingSimulator.png?alt=media&token=27735960-da68-4e24-ae22-4a977b929264"),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfileScreen()),
-                      );
-                    },
-                    child: Container(
-                      height: screenHeightUnit * 100,
-                      width: screenWidthUnit * 130,
-                      child: Center(
-                        child: Container(
-                          height: screenHeightUnit * 60,
-                          width: screenWidthUnit * 60,
-                          child: Image.network(
-                              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FBottom%20Navigation%20Bar%20Icons%2FProfile.png?alt=media&token=80ec6904-46b7-4f76-85e1-dc21531e7a7c"),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+
+          BaseSideOfScreen(screenHeight: screenHeight, screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: screenHeightUnit * 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(screenWidthUnit * 15,
-                            screenHeightUnit * 16, 0, screenWidthUnit * 8),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          size: screenWidthUnit * 24,
-                          color: Colors.black,
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(top: screenWidthUnit * 4),
-                        child: Text(
-                          'Quit ${widget.name}',
-                          style: GoogleFonts.baloo2(
-                              fontSize: screenWidthUnit * 22,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        )),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(screenWidthUnit * 999,
-                          screenHeightUnit * 6, screenWidthUnit * 31, 0),
-                      child: Container(
-                        height: screenHeightUnit * 70,
-                        width: screenWidthUnit * 76,
-                        child: Image.network(
-                            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLogo2%20(1)%202.png?alt=media&token=a572c91c-6624-4e57-87d0-c1362cc6dd8e",
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          } else {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        (loadingProgress.expectedTotalBytes ??
-                                            1)
-                                    : null,
-                              ),
-                            );
-                          }
-                        }),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.fromLTRB(0, screenHeightUnit * 6, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'assets/images/img_monkeymoney_50.png',
-                            height: screenHeightUnit * 50,
-                          ),
-                          SizedBox(
-                            width: screenWidthUnit * 5,
-                          ),
-                          Text(
-                            "3",
-                            style: GoogleFonts.baloo2(
-                              fontSize: screenWidthUnit * 27,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(
-                            width: screenWidthUnit * 39,
-                          ),
-                          Image.asset(
-                            'assets/images/img_monkeymoney_51.png',
-                            height: screenHeightUnit * 50,
-                          ),
-                          SizedBox(
-                            width: screenWidthUnit * 5,
-                          ),
-                          Text(
-                            "3",
-                            style: GoogleFonts.baloo2(
-                              fontSize: screenWidthUnit * 27,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(
-                            width: screenWidthUnit * 39,
-                          ),
-                          Image.asset(
-                            'assets/images/img_monkeymoney_52.png',
-                            height: screenHeightUnit * 50,
-                          ),
-                          SizedBox(
-                            width: screenWidthUnit * 5,
-                          ),
-                          Text(
-                            "3",
-                            style: GoogleFonts.baloo2(
-                              fontSize: screenWidthUnit * 27,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              BaseTopOfScreen(screenHeight: screenHeight, screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit, name: widget.name),
+
               FittedBox(
                 child: Container(
                   width: screenWidthUnit * 1919,

@@ -1,9 +1,60 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 
 class BudgetSimulatorFunctions {
+
+void nextMonth({
+  required List<Expense> expenses,
+  required int monthsOccurd,
+  required bool noLatePayments,
+  required void Function() mapExpenses,
+  required Function(int) updateCreditScore,
+  required double startingTransportation,
+  required double startingGroceries,
+  required double startingRent,
+  required double startingCCMin,
+}) {
+  if (monthsOccurd < 2) {
+    for (Expense expense in expenses) {
+      if (expense.name == "Pay Day") {
+        expense.dueDay = DateTime(expense.dueDay.year, expense.dueDay.month + 1, expense.dueDay.day);
+      } else if (expense.name == "Transportation") {
+        expense.amount += startingTransportation;
+      } else if (expense.name == "Groceries") {
+        expense.amount += startingGroceries;
+      } else if (expense.name == "Rent") {
+        expense.amount += startingRent;
+        expense.dueDay = DateTime(expense.dueDay.year, expense.dueDay.month + 1, expense.dueDay.day);
+      } else if (expense.name == "CC Debt" || expense.name == "Utilities") {
+        expense.amount += startingCCMin;
+        expense.dueDay = DateTime(expense.dueDay.year, expense.dueDay.month + 1, expense.dueDay.day);
+      }
+    }
+  }
+
+  monthsOccurd += 1;
+
+  if (noLatePayments) {
+    updateCreditScore(10); 
+  }
+
+  mapExpenses(); 
+}
+
+
+  List<Color> colors = [
+    Colors.pink,
+    Colors.blue,
+    Colors.teal,
+    Colors.orange,
+    Colors.yellow,
+    Colors.black,
+    Colors.purple,
+  ];
+
   List<BudgetSimulatorChartData> getChartData(
       List<String> types, List<double> percentage, List<Color> colors) {
     List<BudgetSimulatorChartData> chartData = [];
