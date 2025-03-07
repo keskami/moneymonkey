@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
                     return BudgetSimulatorOnboarding();
                   }
                 } else {
-                  return TeacherDashboard();
+                  return BudgetSimulatorOnboarding();
                 }
               },
             ),

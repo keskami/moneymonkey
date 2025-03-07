@@ -401,3 +401,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
     );
   }
 }
+
+extension on Color {
+  withValues({required double alpha}) {}
+}
