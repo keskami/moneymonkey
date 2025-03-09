@@ -63,6 +63,7 @@ class Classroom {
   String name;
   String teacherId;
   List<String> studentIds;
+  List<String> studentRequests;
   String lessonId;
 
   Classroom({
@@ -70,6 +71,7 @@ class Classroom {
     required this.name,
     required this.teacherId,
     required this.studentIds,
+    required this.studentRequests,
     required this.lessonId,
   });
 
@@ -79,6 +81,7 @@ class Classroom {
       name: data['Name'] ?? '',
       teacherId: data['TeacherId'] ?? '',
       studentIds: List<String>.from(data['StudentIds'] ?? []),
+      studentRequests: List<String>.from(data['StudentRequests'] ?? []),
       lessonId: data['LessonId'] ?? '',
     );
   }
@@ -88,6 +91,7 @@ class Classroom {
       'Name': name,
       'TeacherId': teacherId,
       'StudentIds': studentIds,
+      'StudentRequests': studentRequests,
       'LessonId': lessonId,
     };
   }
@@ -99,6 +103,7 @@ class Classroom {
       'name': name,
       'teacherId': teacherId,
       'studentIds': studentIds,
+      'studentRequests': studentRequests,
       'lessonId': lessonId,
     };
   }
@@ -109,6 +114,7 @@ class Classroom {
       name: json['name'] ?? json['Name'] ?? '',
       teacherId: json['teacherId'] ?? json['TeacherId'] ?? '',
       studentIds: List<String>.from(json['studentIds'] ?? json['StudentIds'] ?? []),
+      studentRequests: List<String>.from(json['studentRequests'] ?? json['studentRequests'] ?? []),
       lessonId: json['lessonId'] ?? json['LessonId'] ?? '',
     );
   }

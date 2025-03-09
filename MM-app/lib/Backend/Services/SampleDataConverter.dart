@@ -239,6 +239,7 @@ class SampleDataConverter {
         name: value['name'],
         teacherId: value['teacherId'],
         studentIds: List<String>.from(value['studentIds']),
+        studentRequests: List<String>.from(value['studentRequests']),
         lessonId: value['lessonId'],
       );
     });

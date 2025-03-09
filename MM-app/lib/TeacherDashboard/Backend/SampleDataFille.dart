@@ -3,7 +3,6 @@ import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Models/Teacher.dart';
 import 'package:money_monkey/Backend/Models/Settings.dart';
- 
 
 Teacher sampleTeacher = Teacher(
   name: "Mrs. Anderson",
@@ -22,6 +21,7 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Gold Period 1",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S123456", "S789012", "S345678"],
+    studentRequests: [],
     lessonId: 'A.1.1',
   ),
   'tempClassId2_2025': Classroom(
@@ -29,6 +29,7 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Blue Period 1",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S567890", "S123456"],
+    studentRequests: [],
     lessonId: 'A.1.2',
   ),
   'tempClassId3_2025': Classroom(
@@ -36,6 +37,7 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Gold Period 2",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S789012"],
+    studentRequests: [],
     lessonId: 'A.1.4',
   ),
   'tempClassId4_2025': Classroom(
@@ -43,6 +45,7 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Personal Finance",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S567890", "S345678"],
+    studentRequests: [],
     lessonId: 'A.1.3',
   ),
 };
@@ -268,7 +271,8 @@ Map<String, Lesson> advancedLessons = {
   'A.1.2': Lesson(
     lessonId: 'A.1.2',
     title: 'Evaluating Financial Information',
-    description: 'Analyzing and Interpreting the difference between real and fake',
+    description:
+        'Analyzing and Interpreting the difference between real and fake',
     lessonStatus: Status.Active,
     components:
         List.generate(6, (index) => 'A.1.2.${index + 1}'), // 6 components
@@ -369,7 +373,7 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // A sample multiple choice question
-     SubComponent(
+      SubComponent(
         type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
@@ -393,7 +397,7 @@ Map<String, Component> advancedComponents = {
           ),
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Financial Responsibility Over a Lifetime",
@@ -402,10 +406,10 @@ Map<String, Component> advancedComponents = {
           tapInstruction:
               "Click to reveal what it really means to be financially responsible over a lifetime.",
           whyMatter:
-            "Why does it matter? Because small habits formed early—like setting aside a little money or comparing prices—can grow into long-term financial stability.",
+              "Why does it matter? Because small habits formed early—like setting aside a little money or comparing prices—can grow into long-term financial stability.",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Definition: Financial Responsibility Over a Lifetime",
@@ -423,7 +427,7 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Jordan: A Life of Financial Decisions",
@@ -505,31 +509,34 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.learningCheck,
         data: LearningCheck(
-          title: "Quick Check: Lifelong Financial Responsibility",
-          question1:
-              "Which of the following best describes a responsible way to handle your income?",
-          question2: "What is a key benefit of creating a budget?",
-          options1: [
-            "Spend most of it on things you enjoy, since you earned it.",
-            "Save some for emergencies and future goals.",
-            "Only worry about saving when you start making a lot of money."
-          ],
-          options2: [
-            "It helps you plan your expenses and save for future goals.",
-            "It lets you avoid worrying about how much you spend.",
-            "It guarantees you’ll never run out of money."
-          ],
-          correctAns1: "Save some for emergencies and future goals.",
-          correctAns2: "It helps you plan your expenses and save for future goals.",
-          feedbackCorrect: "Great job! Responsible financial habits help you build stability and plan for the future. Keep it up!",
-          feedbackOneIncorrect: "Almost there! Remember, good financial habits involve planning ahead and making informed decisions. Try again!",
-          feedbackBothIncorrect: "Be careful! Managing money wisely means saving, budgeting, and making informed choices. Review the lesson and try again!"
-        ),
+            title: "Quick Check: Lifelong Financial Responsibility",
+            question1:
+                "Which of the following best describes a responsible way to handle your income?",
+            question2: "What is a key benefit of creating a budget?",
+            options1: [
+              "Spend most of it on things you enjoy, since you earned it.",
+              "Save some for emergencies and future goals.",
+              "Only worry about saving when you start making a lot of money."
+            ],
+            options2: [
+              "It helps you plan your expenses and save for future goals.",
+              "It lets you avoid worrying about how much you spend.",
+              "It guarantees you’ll never run out of money."
+            ],
+            correctAns1: "Save some for emergencies and future goals.",
+            correctAns2:
+                "It helps you plan your expenses and save for future goals.",
+            feedbackCorrect:
+                "Great job! Responsible financial habits help you build stability and plan for the future. Keep it up!",
+            feedbackOneIncorrect:
+                "Almost there! Remember, good financial habits involve planning ahead and making informed decisions. Try again!",
+            feedbackBothIncorrect:
+                "Be careful! Managing money wisely means saving, budgeting, and making informed choices. Review the lesson and try again!"),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Lifelong Financial Responsibility",
@@ -539,29 +546,29 @@ Map<String, Component> advancedComponents = {
               title: "Start Small, Think Big",
               description:
                   "Even saving small amounts early helps build a strong financial foundation over time.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Budget for Every Stage",
               description:
                   "Whether it’s your first paycheck or retirement income, budgeting ensures you stay in control of your finances.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Be Prepared for the Unexpected",
               description:
                   "Life changes like job transitions or starting a family can bring unexpected expenses—an emergency fund is key.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
-            ),    
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+            ),
             Takeaway(
               title: "It’s Never Too Late to Improve",
               description:
                   "No matter your age, you can always adjust your financial habits to improve your future stability.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",    
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
           ],
         ),
@@ -599,11 +606,12 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // Multiple Choice Question
-     SubComponent(
+      SubComponent(
         type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
-          question: "How does financial responsibility typically change when someone has dependents?",
+          question:
+              "How does financial responsibility typically change when someone has dependents?",
           questionExplanation: "Before we dive in, let’s see what you think!",
           options: [
             "They can focus entirely on personal goals, like travel and entertainment.",
@@ -615,25 +623,30 @@ Map<String, Component> advancedComponents = {
             "They need to prioritize the needs of their dependents, like food, healthcare, and education."
           ],
           prompts: Prompt(
-            correct: "That’s right! When someone has dependents, their financial priorities shift toward providing for others, which may include housing, healthcare, and education.",
-            incorrect: "Not quite! Individuals with dependents must balance personal goals with the responsibility of supporting others, which often involves saving, budgeting, and planning for family needs.",
+            correct:
+                "That’s right! When someone has dependents, their financial priorities shift toward providing for others, which may include housing, healthcare, and education.",
+            incorrect:
+                "Not quite! Individuals with dependents must balance personal goals with the responsibility of supporting others, which often involves saving, budgeting, and planning for family needs.",
           ),
         ),
       ),
 
       // Reveal Card: Definition of Financial Responsibility
-     SubComponent(
+      SubComponent(
         type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Flying Solo vs. Supporting Others",
-          definition: "Financial responsibility differs significantly based on whether a person is supporting just themselves or others (e.g., children or family members).",
-          tapInstruction: "Click to reveal how financial priorities change based on dependents.",
-          whyMatter: "Financial priorities change when supporting others, requiring careful budgeting for essentials like housing, healthcare, and education.",
+          definition:
+              "Financial responsibility differs significantly based on whether a person is supporting just themselves or others (e.g., children or family members).",
+          tapInstruction:
+              "Click to reveal how financial priorities change based on dependents.",
+          whyMatter:
+              "Financial priorities change when supporting others, requiring careful budgeting for essentials like housing, healthcare, and education.",
         ),
       ),
 
       // Icon Reveal: Financial Priorities Based on Life Situation
-     SubComponent(
+      SubComponent(
         type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Definition: How Responsibilities Change Based on Dependents",
@@ -653,16 +666,18 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Scenario-Based Learning: Meet Alex
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Alex: Navigating Financial Responsibility",
-          scenarioExplanation: "Alex is a 28-year-old living in the city, navigating financial decisions in two different life situations. Let’s help them make wise choices!",
+          scenarioExplanation:
+              "Alex is a 28-year-old living in the city, navigating financial decisions in two different life situations. Let’s help them make wise choices!",
           questions: [
             MultipleChoice(
               questionHeading: "Flying Solo",
               question: "Alex just got a raise. Should he:",
-              questionExplanation: "Alex is currently responsible for only himself. What’s the best financial move?",
+              questionExplanation:
+                  "Alex is currently responsible for only himself. What’s the best financial move?",
               options: [
                 "Increase his spending on leisure activities.",
                 "Increase his savings rate.",
@@ -670,14 +685,18 @@ Map<String, Component> advancedComponents = {
               ],
               correctAnswers: ["Increase his savings rate."],
               prompts: Prompt(
-                correct: "Good choice! Increasing savings helps Alex prepare for future goals like buying a home or investing.",
-                incorrect: "Not quite! While spending on leisure is fine in moderation, prioritizing savings builds long-term financial security.",
+                correct:
+                    "Good choice! Increasing savings helps Alex prepare for future goals like buying a home or investing.",
+                incorrect:
+                    "Not quite! While spending on leisure is fine in moderation, prioritizing savings builds long-term financial security.",
               ),
             ),
             MultipleChoice(
               questionHeading: "Supporting a Family",
-              question: "Alex now supports a family and has an unexpected car repair. Should he:",
-              questionExplanation: "With dependents relying on him, how should Alex handle an unexpected expense?",
+              question:
+                  "Alex now supports a family and has an unexpected car repair. Should he:",
+              questionExplanation:
+                  "With dependents relying on him, how should Alex handle an unexpected expense?",
               options: [
                 "Use their emergency fund.",
                 "Put it on a high-interest credit card.",
@@ -685,8 +704,10 @@ Map<String, Component> advancedComponents = {
               ],
               correctAnswers: ["Use their emergency fund."],
               prompts: Prompt(
-                correct: "Great job! An emergency fund is designed to handle unexpected expenses without disrupting the family’s financial stability.",
-                incorrect: "Not quite! Putting it on a high-interest credit card or delaying the repair could lead to bigger financial problems later.",
+                correct:
+                    "Great job! An emergency fund is designed to handle unexpected expenses without disrupting the family’s financial stability.",
+                incorrect:
+                    "Not quite! Putting it on a high-interest credit card or delaying the repair could lead to bigger financial problems later.",
               ),
             ),
           ],
@@ -694,12 +715,14 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Learning Check: Quick Check on Financial Responsibility for Different Situations
-     SubComponent(
+      SubComponent(
         type: SubComponentType.learningCheck,
         data: LearningCheck(
           title: "Quick Check: Flying Solo vs. Supporting Others",
-          question1: "Which of the following is the best financial strategy for someone with dependents?",
-          question2: "Why might someone without dependents have a greater ability to take financial risks?",
+          question1:
+              "Which of the following is the best financial strategy for someone with dependents?",
+          question2:
+              "Why might someone without dependents have a greater ability to take financial risks?",
           options1: [
             "Focusing solely on paying off debt, even if it means cutting necessary expenses.",
             "Investing all available income in high-risk opportunities to grow wealth quickly.",
@@ -710,44 +733,54 @@ Map<String, Component> advancedComponents = {
             "They can allocate more income toward personal financial growth, such as investments.",
             "They don’t need to save money for future emergencies."
           ],
-          correctAns1: "Building a family emergency fund and prioritizing essential expenses.",
-          correctAns2: "They can allocate more income toward personal financial growth, such as investments.",
-          feedbackCorrect: "Great job! Financial responsibilities shift when supporting others, and those without dependents often have more flexibility in taking financial risks.",
-          feedbackOneIncorrect: "Almost there! Remember, having dependents requires balancing essential expenses, while financial flexibility depends on individual circumstances.",
-          feedbackBothIncorrect: "Be careful! Managing finances wisely depends on life circumstances—supporting dependents requires budgeting, while financial freedom comes with careful planning.",
+          correctAns1:
+              "Building a family emergency fund and prioritizing essential expenses.",
+          correctAns2:
+              "They can allocate more income toward personal financial growth, such as investments.",
+          feedbackCorrect:
+              "Great job! Financial responsibilities shift when supporting others, and those without dependents often have more flexibility in taking financial risks.",
+          feedbackOneIncorrect:
+              "Almost there! Remember, having dependents requires balancing essential expenses, while financial flexibility depends on individual circumstances.",
+          feedbackBothIncorrect:
+              "Be careful! Managing finances wisely depends on life circumstances—supporting dependents requires budgeting, while financial freedom comes with careful planning.",
         ),
       ),
 
       // Key Takeaways: Summary of Lesson
-     SubComponent(
+      SubComponent(
         type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Flying Solo vs. Supporting Others",
-          hint: "How do financial responsibilities change when supporting dependents?",
+          hint:
+              "How do financial responsibilities change when supporting dependents?",
           takeaways: [
             Takeaway(
               title: "Financial Priorities Change",
-              description: "Supporting dependents shifts financial goals toward providing for others and ensuring family stability.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Supporting dependents shifts financial goals toward providing for others and ensuring family stability.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Emergency Funds Are Crucial",
-              description: "Families face more unexpected expenses, making an emergency fund even more critical.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Families face more unexpected expenses, making an emergency fund even more critical.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Flexibility for Individuals Without Dependents",
-              description: "Without dependents, there’s more room for personal financial growth, such as investing or pursuing personal interests.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Without dependents, there’s more room for personal financial growth, such as investing or pursuing personal interests.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Planning is Key",
-              description: "Whether supporting others or flying solo, long-term planning ensures financial security.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Whether supporting others or flying solo, long-term planning ensures financial security.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
           ],
         ),
@@ -770,7 +803,7 @@ Map<String, Component> advancedComponents = {
       "What challenges might someone face when trying to manage money responsibly?",
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.intro,
         data: IntroPage(
           title: "Financial Responsibility Story",
@@ -780,7 +813,7 @@ Map<String, Component> advancedComponents = {
               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.problem,
         data: ProblemPage(
           title: "Financial Responsibility Story",
@@ -791,7 +824,7 @@ Map<String, Component> advancedComponents = {
           problem: "Problem: No control over spending and no savings plan.",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.solution,
         data: SolutionPage(
           title: "Financial Responsibility Story",
@@ -810,7 +843,7 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.impact,
         data: Impact(
           title: "Financial Responsibility Story",
@@ -846,58 +879,62 @@ Map<String, Component> advancedComponents = {
       "What are the risks of not having an emergency fund?",
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenariointro,
         data: IntroductionPage(
           scenario:
               "Congratulations! You’ve just started your first part-time job and earned your first paycheck of \$500. You have several things you want to do with the money: buy new sneakers, save for college, and plan for weekend activities. Let’s see how financially responsible you can be!",
-          mintyImage: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2FMinty.png?alt=media&token=f08ea8f6-fe3c-4a9d-8be2-a40a28f0c51c",
-           options: [
+          mintyImage:
+              "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2FMinty.png?alt=media&token=f08ea8f6-fe3c-4a9d-8be2-a40a28f0c51c",
+          options: [
             ScenarioOption(
                 title: "Sneakers",
-                iconUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fsneakers%201.png?alt=media&token=2202c42d-edba-4200-b501-b04a13af03d4",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fsneakers%201.png?alt=media&token=2202c42d-edba-4200-b501-b04a13af03d4",
                 score: 0,
                 type: ""),
             ScenarioOption(
                 title: "College",
-                iconUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcollegehat.png?alt=media&token=28948378-e9e6-455a-927c-cd1d0b118e69",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcollegehat.png?alt=media&token=28948378-e9e6-455a-927c-cd1d0b118e69",
                 score: 0,
                 type: ""),
             ScenarioOption(
                 title: "Activities",
-                iconUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Factivities%201.png?alt=media&token=272d0e9f-12f2-4508-89f4-3e682e1b307b",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Factivities%201.png?alt=media&token=272d0e9f-12f2-4508-89f4-3e682e1b307b",
                 score: 0,
                 type: ""),
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenarioquestion,
         data: [
-          ScenarioQuestion(
-              questionText: "How much will you save?",
-              options: [
-                ScenarioOption(
-                    title: "Save \$250 (50%)",
-                    iconUrl: "Maximum savings for future goals",
-                    score: 40,
-                    type: ""),
-                ScenarioOption(
-                    title: "Save \$100 (20%)",
-                    iconUrl: "Moderate savings approach.",
-                    score: 20,
-                    type: ""),
-                ScenarioOption(
-                    title: "Save \$0 (0%)",
-                    iconUrl: "No savings",
-                    score: 0,
-                    type: "")
-              ],
-              feedback: {
-                "Save \$250 (50%)": "Great choice! Saving a significant portion ensures you’re planning for the future.",
-                "Save \$100 (20%)": "Good decision! Saving part of your income builds a safety net while leaving room for spending.",
-                "Save \$0 (0%)": "Not the best decision. Without savings, you may face difficulties when unexpected expenses arise.",
-              }),
+          ScenarioQuestion(questionText: "How much will you save?", options: [
+            ScenarioOption(
+                title: "Save \$250 (50%)",
+                iconUrl: "Maximum savings for future goals",
+                score: 40,
+                type: ""),
+            ScenarioOption(
+                title: "Save \$100 (20%)",
+                iconUrl: "Moderate savings approach.",
+                score: 20,
+                type: ""),
+            ScenarioOption(
+                title: "Save \$0 (0%)",
+                iconUrl: "No savings",
+                score: 0,
+                type: "")
+          ], feedback: {
+            "Save \$250 (50%)":
+                "Great choice! Saving a significant portion ensures you’re planning for the future.",
+            "Save \$100 (20%)":
+                "Good decision! Saving part of your income builds a safety net while leaving room for spending.",
+            "Save \$0 (0%)":
+                "Not the best decision. Without savings, you may face difficulties when unexpected expenses arise.",
+          }),
           ScenarioQuestion(
               questionText: "What about those \$150 sneakers?",
               options: [
@@ -918,9 +955,12 @@ Map<String, Component> advancedComponents = {
                     type: ""),
               ],
               feedback: {
-                "Buy Now (\$150)": "Spending on wants is okay occasionally, but it’s important to prioritize savings and needs first.",
-                "Wait for Next Paycheck": "Great decision! Delaying gratification helps you stay within your budget.",
-                "Buy Cheaper Option (\$75)": "Good compromise! You get what you want while keeping more money for other priorities.",
+                "Buy Now (\$150)":
+                    "Spending on wants is okay occasionally, but it’s important to prioritize savings and needs first.",
+                "Wait for Next Paycheck":
+                    "Great decision! Delaying gratification helps you stay within your budget.",
+                "Buy Cheaper Option (\$75)":
+                    "Good compromise! You get what you want while keeping more money for other priorities.",
               }),
           ScenarioQuestion(questionText: "Planning for emergencies", options: [
             ScenarioOption(
@@ -946,7 +986,7 @@ Map<String, Component> advancedComponents = {
           }),
         ],
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenarioresults,
         data: ScenarioResult.fromMap({
           "selectedChoices": [
@@ -976,7 +1016,6 @@ Map<String, Component> advancedComponents = {
     ),
   ),
 
-
   'A.1.1.5': Component(
     componentId: 'A.1.1.5',
     title: 'Peer Reflection: Financial Responsibility',
@@ -988,7 +1027,7 @@ Map<String, Component> advancedComponents = {
       "What financial lessons can we learn from peers with different responsibilities and goals?",
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peerintro,
         data: PeerReflectionIntro(
           title: "Taking Responsibility for Personal Financial Decisions",
@@ -1000,26 +1039,29 @@ Map<String, Component> advancedComponents = {
               role: "The Goal Setter",
               story:
                   "Liam started saving money from a part-time job in high school. Now in his mid-20s, he’s working toward buying his first home while continuing to invest in his retirement fund.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
             ),
             PeerCharacter(
               name: "Sophia",
               role: "The Family Caregiver",
               story:
                   "Sophia, a mother of three, manages her family’s expenses, ensuring her kids have what they need for school and extracurricular activities. She also focuses on building an emergency fund to protect her family from unexpected events.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
             ),
             PeerCharacter(
               name: "Ethan",
               role: "The Independent Investor",
               story:
                   "Ethan is in his early 30s and has chosen to focus on personal development and financial growth. He regularly invests in stocks and mutual funds, aiming to grow his wealth over time while planning for big future goals like starting his own business.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
             ),
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peerstories,
         data: PeerStories(
           title: "Peer Stories",
@@ -1029,26 +1071,29 @@ Map<String, Component> advancedComponents = {
               role: "The Goal Setter",
               story:
                   "Liam started saving money from a part-time job in high school. Now in his mid-20s, he’s working toward buying his first home while continuing to invest in his retirement fund.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
             ),
             PeerCharacter(
               name: "Sophia",
               role: "The Family Caregiver",
               story:
                   "Sophia, a mother of three, manages her family’s expenses, ensuring her kids have what they need for school and extracurricular activities. She also focuses on building an emergency fund to protect her family from unexpected events.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
             ),
             PeerCharacter(
               name: "Ethan",
               role: "The Independent Investor",
               story:
                   "Ethan is in his early 30s and has chosen to focus on personal development and financial growth. He regularly invests in stocks and mutual funds, aiming to grow his wealth over time while planning for big future goals like starting his own business.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
             ),
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peermatch,
         data: PeerMatch(
           title: "Match Actions to Categories",
@@ -1095,7 +1140,7 @@ Map<String, Component> advancedComponents = {
           },
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peerreflectionend,
         data: PeerReflectionEnd(
           question:
@@ -1105,19 +1150,22 @@ Map<String, Component> advancedComponents = {
               name: "Liam",
               description:
                   "Liam, because I’m focused on achieving long-term goals like buying a home.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
             ),
             ReflectionOption(
               name: "Sophia",
               description:
                   "Sophia, because I have to balance family needs with future savings.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
             ),
             ReflectionOption(
               name: "Ethan",
               description:
                   "Ethan, because I’m working on growing my personal wealth and investments.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
             ),
           ],
           feedbackMessages: {
@@ -1148,7 +1196,7 @@ Map<String, Component> advancedComponents = {
       "What did you think about the quiz, were you well prepared?"
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "What is a key reason to start saving early in life?",
@@ -1173,7 +1221,7 @@ Map<String, Component> advancedComponents = {
           buttonText: "Check Answer",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quizimagemcquestion,
         data: QuizMultipleChoice(
           question:
@@ -1181,16 +1229,20 @@ Map<String, Component> advancedComponents = {
           options: [
             QuizOption(
                 text: "Saving for a concert ticket",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fconcert-ticket.png?alt=media&token=1e718b09-e111-4f3f-942f-41c43ffb3741"),
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fconcert-ticket.png?alt=media&token=1e718b09-e111-4f3f-942f-41c43ffb3741"),
             QuizOption(
                 text: "Planning for college tuition",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcollegehat.png?alt=media&token=28948378-e9e6-455a-927c-cd1d0b118e69"),
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcollegehat.png?alt=media&token=28948378-e9e6-455a-927c-cd1d0b118e69"),
             QuizOption(
                 text: "Saving for retirement",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fretirement.png?alt=media&token=42647cf7-324e-4f5c-928f-56ece52b08d1"),
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fretirement.png?alt=media&token=42647cf7-324e-4f5c-928f-56ece52b08d1"),
             QuizOption(
                 text: "Buying a new phone",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fphone.png?alt=media&token=f57a75e8-4f0c-474c-80d9-c6b23521a47c"),
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fphone.png?alt=media&token=f57a75e8-4f0c-474c-80d9-c6b23521a47c"),
           ],
           correctAnswers: ["Saving for retirement"],
           feedbackMessages: {
@@ -1206,7 +1258,7 @@ Map<String, Component> advancedComponents = {
           buttonText: "Check Answer",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question:
@@ -1235,7 +1287,7 @@ Map<String, Component> advancedComponents = {
           buttonText: "Submit",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question: "Why is it important to have an emergency fund?",
@@ -1260,7 +1312,7 @@ Map<String, Component> advancedComponents = {
           buttonText: "Check Answer",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
           question:
@@ -1309,11 +1361,12 @@ Map<String, Component> advancedComponents = {
       "Why is it important to verify financial claims with multiple credible sources?",
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
-          question: "What is the most important factor in determining if a financial source is reliable?",
+          question:
+              "What is the most important factor in determining if a financial source is reliable?",
           questionExplanation: "Before we dive in, let’s see what you think!",
           options: [
             "If it was shared by a friend on social media.",
@@ -1325,24 +1378,29 @@ Map<String, Component> advancedComponents = {
             "If it presents multiple perspectives and cites sources."
           ],
           prompts: Prompt(
-            correct: "That’s right! Reliable financial sources provide multiple perspectives, cite evidence, and avoid sensationalist claims.",
-            incorrect: "Not quite! Just because something is shared online or seems urgent doesn’t mean it’s reliable. Always verify financial sources using trusted references.",
+            correct:
+                "That’s right! Reliable financial sources provide multiple perspectives, cite evidence, and avoid sensationalist claims.",
+            incorrect:
+                "Not quite! Just because something is shared online or seems urgent doesn’t mean it’s reliable. Always verify financial sources using trusted references.",
           ),
         ),
       ),
 
-     SubComponent(
+      SubComponent(
         type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Reliable Financial Information",
-          definition: "Reliable financial information is accurate, objective, relevant, and up-to-date. It is based on facts and data, not opinions or emotions. Trustworthy sources present balanced perspectives and cite credible references to support their claims.",
-          tapInstruction: "Click to reveal what it really means for financial information to be reliable.",
-          whyMatter: "Why does it matter? Because financial decisions affect long-term stability. Basing choices on misleading or outdated information can lead to financial losses, scams, or poor investments.",
+          definition:
+              "Reliable financial information is accurate, objective, relevant, and up-to-date. It is based on facts and data, not opinions or emotions. Trustworthy sources present balanced perspectives and cite credible references to support their claims.",
+          tapInstruction:
+              "Click to reveal what it really means for financial information to be reliable.",
+          whyMatter:
+              "Why does it matter? Because financial decisions affect long-term stability. Basing choices on misleading or outdated information can lead to financial losses, scams, or poor investments.",
         ),
       ),
 
       // Icon Reveal: Four Factors of Reliable Financial Information
-     SubComponent(
+      SubComponent(
         type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Four Factors of Reliable Financial Information",
@@ -1362,52 +1420,67 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Scenario-Based Learning: Meet Taylor
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Taylor: Evaluating Financial Information",
-          scenarioExplanation: "Taylor encounters various financial information sources throughout her life. Let’s help her make informed decisions by evaluating the credibility of the information she receives!",
+          scenarioExplanation:
+              "Taylor encounters various financial information sources throughout her life. Let’s help her make informed decisions by evaluating the credibility of the information she receives!",
           questions: [
             MultipleChoice(
               questionHeading: "Text Message",
-              question: "Taylor receives a text claiming, 'You've been selected for a 5,000 dollar grant! No application needed—just provide your bank details.' What should Taylor do?",
-              questionExplanation: "Financial scams often use urgency and promises of free money to trick people.",
+              question:
+                  "Taylor receives a text claiming, 'You've been selected for a 5,000 dollar grant! No application needed—just provide your bank details.' What should Taylor do?",
+              questionExplanation:
+                  "Financial scams often use urgency and promises of free money to trick people.",
               options: [
                 "Ignore the message and check official financial aid sources.",
                 "Provide their bank details quickly to secure the grant.",
                 "Reply to the message asking for more details."
               ],
-              correctAnswers: ["Ignore the message and check official financial aid sources."],
+              correctAnswers: [
+                "Ignore the message and check official financial aid sources."
+              ],
               prompts: Prompt(
-                correct: "Smart move! Official grants never ask for banking details via text. Always verify opportunities through legitimate organizations.",
-                incorrect: "Be careful! Scammers use urgency and fake offers to trick people. Always verify financial opportunities before acting.",
+                correct:
+                    "Smart move! Official grants never ask for banking details via text. Always verify opportunities through legitimate organizations.",
+                incorrect:
+                    "Be careful! Scammers use urgency and fake offers to trick people. Always verify financial opportunities before acting.",
               ),
             ),
             MultipleChoice(
               questionHeading: "Breaking Financial News on Social Media",
-              question: "Taylor sees a post claiming, 'Major bank collapse happening NOW! Withdraw your money before it’s too late!' There are thousands of repostsWhat should Taylor do?",
-              questionExplanation: "Social media spreads misinformation quickly—verify before acting.",
+              question:
+                  "Taylor sees a post claiming, 'Major bank collapse happening NOW! Withdraw your money before it’s too late!' There are thousands of repostsWhat should Taylor do?",
+              questionExplanation:
+                  "Social media spreads misinformation quickly—verify before acting.",
               options: [
                 "Immediately withdraw all their money in case the tweet is true.",
                 "Check official news sources and the bank’s website before making any financial decisions.",
                 "Share the tweet with friends and family to warn them."
               ],
-              correctAnswers: ["Check official news sources and the bank’s website before making any financial decisions."],
+              correctAnswers: [
+                "Check official news sources and the bank’s website before making any financial decisions."
+              ],
               prompts: Prompt(
-                correct: "Smart decision! Verify financial news with trusted sources before reacting. Banks provide official statements if issues arise.",
-                incorrect: "Be careful! Reacting without verification can cause unnecessary panic. Always check reliable sources first.",
+                correct:
+                    "Smart decision! Verify financial news with trusted sources before reacting. Banks provide official statements if issues arise.",
+                incorrect:
+                    "Be careful! Reacting without verification can cause unnecessary panic. Always check reliable sources first.",
               ),
             ),
           ],
         ),
       ),
 
-     SubComponent(
+      SubComponent(
         type: SubComponentType.learningCheck,
         data: LearningCheck(
           title: "Quick Check: Evaluating Financial Information",
-          question1: "Which of the following is a key characteristic of reliable financial information?",
-          question2: "Which of these is a red flag that a financial source may be unreliable?",
+          question1:
+              "Which of the following is a key characteristic of reliable financial information?",
+          question2:
+              "Which of these is a red flag that a financial source may be unreliable?",
           options1: [
             "It presents multiple perspectives and cites sources.",
             "It uses urgency and emotional language to persuade readers.",
@@ -1420,42 +1493,50 @@ Map<String, Component> advancedComponents = {
           ],
           correctAns1: "It presents multiple perspectives and cites sources.",
           correctAns2: "It pressures you to act immediately or miss out.",
-          feedbackCorrect: "Great job! Reliable sources use facts and citations, while misleading ones rely on pressure, hype, and manipulation.",
-          feedbackOneIncorrect: "Almost there! Trusted sources use evidence, not urgency or big promises. Always verify information with reputable sources.",
-          feedbackBothIncorrect: "Be careful! Reliable sources avoid emotional tactics and urgency. Always check if a source is well-researched and properly cited.",
+          feedbackCorrect:
+              "Great job! Reliable sources use facts and citations, while misleading ones rely on pressure, hype, and manipulation.",
+          feedbackOneIncorrect:
+              "Almost there! Trusted sources use evidence, not urgency or big promises. Always verify information with reputable sources.",
+          feedbackBothIncorrect:
+              "Be careful! Reliable sources avoid emotional tactics and urgency. Always check if a source is well-researched and properly cited.",
         ),
       ),
 
       // Key Takeaways: Summary of Lesson
-     SubComponent(
+      SubComponent(
         type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Evaluating Financial Information",
-          hint: "What steps will you take to verify financial information before acting on it?",
+          hint:
+              "What steps will you take to verify financial information before acting on it?",
           takeaways: [
             Takeaway(
               title: "Reliable Sources Use Facts, Not Hype",
-              description: "Trustworthy financial information is objective, well-cited, and free from emotional manipulation or urgency.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Trustworthy financial information is objective, well-cited, and free from emotional manipulation or urgency.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Misinformation Spreads Quickly",
-              description: "Social media and unreliable sources can spread false financial claims—always verify with reputable institutions.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Social media and unreliable sources can spread false financial claims—always verify with reputable institutions.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Look for Multiple Perspectives",
-              description: "Reliable sources present balanced viewpoints and cite evidence rather than making bold, unsupported claims.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Reliable sources present balanced viewpoints and cite evidence rather than making bold, unsupported claims.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Outdated or Biased Information Can Be Harmful",
-              description: "Financial advice should be current, accurate, and relevant to your situation—outdated or biased sources can lead to poor decisions.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Financial advice should be current, accurate, and relevant to your situation—outdated or biased sources can lead to poor decisions.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
           ],
         ),
@@ -1479,11 +1560,12 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // Multiple Choice Question: Introduction to Consumer Fraud
-     SubComponent(
+      SubComponent(
         type: SubComponentType.multipleChoice,
         data: MultipleChoice(
           questionHeading: "",
-          question: "What is a common tactic used by online scammers to deceive consumers?",
+          question:
+              "What is a common tactic used by online scammers to deceive consumers?",
           questionExplanation: "Before we dive in, let’s see what you think!",
           options: [
             "They use urgency and pressure to force quick decisions.",
@@ -1495,25 +1577,30 @@ Map<String, Component> advancedComponents = {
             "They use urgency and pressure to force quick decisions."
           ],
           prompts: Prompt(
-            correct: "That’s right! Scammers often create a false sense of urgency to pressure victims into acting without thinking critically.",
-            incorrect: "Not quite! Scammers frequently use emotional pressure and time-sensitive offers to manipulate victims. Be cautious of urgency tactics.",
+            correct:
+                "That’s right! Scammers often create a false sense of urgency to pressure victims into acting without thinking critically.",
+            incorrect:
+                "Not quite! Scammers frequently use emotional pressure and time-sensitive offers to manipulate victims. Be cautious of urgency tactics.",
           ),
         ),
       ),
 
       // Reveal Card: Definition of Consumer Fraud
-     SubComponent(
+      SubComponent(
         type: SubComponentType.revealCard,
         data: RevealCard(
           title: "Definition: Consumer Fraud & Online Scams",
-          definition: "Consumer fraud occurs when individuals or businesses use deceptive, unfair, or false practices to gain financially at the expense of others.",
-          tapInstruction: "Click to reveal why understanding consumer fraud is important.",
-          whyMatter: "Being aware of common scams can help you avoid financial loss, identity theft, and legal trouble.",
+          definition:
+              "Consumer fraud occurs when individuals or businesses use deceptive, unfair, or false practices to gain financially at the expense of others.",
+          tapInstruction:
+              "Click to reveal why understanding consumer fraud is important.",
+          whyMatter:
+              "Being aware of common scams can help you avoid financial loss, identity theft, and legal trouble.",
         ),
       ),
 
       // Icon Reveal: Types of Consumer Fraud
-     SubComponent(
+      SubComponent(
         type: SubComponentType.iconReveal,
         data: IconReveal(
           title: "Common Types of Consumer Fraud",
@@ -1533,16 +1620,19 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Scenario-Based Learning: Meet Jordan
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenario,
         data: Scenario(
           title: "Meet Jordan: Avoiding Consumer Fraud",
-          scenarioExplanation: "Jordan is navigating the online financial world and encounters different potential scams. Let’s help them make safe financial decisions!",
+          scenarioExplanation:
+              "Jordan is navigating the online financial world and encounters different potential scams. Let’s help them make safe financial decisions!",
           questions: [
             MultipleChoice(
               questionHeading: "Suspicious Email",
-              question: "Jordan receives an email saying he won a lottery he never entered and must pay a small fee to claim his prize. What should Jordan do?",
-              questionExplanation: "Scammers use fake lottery winnings to steal money and personal details.",
+              question:
+                  "Jordan receives an email saying he won a lottery he never entered and must pay a small fee to claim his prize. What should Jordan do?",
+              questionExplanation:
+                  "Scammers use fake lottery winnings to steal money and personal details.",
               options: [
                 "Ignore the email and delete it immediately.",
                 "Reply with personal details to confirm the prize.",
@@ -1550,23 +1640,31 @@ Map<String, Component> advancedComponents = {
               ],
               correctAnswers: ["Ignore the email and delete it immediately."],
               prompts: Prompt(
-                correct: "Great job! Legitimate lotteries never ask for upfront payments. Always ignore and delete suspicious emails.",
-                incorrect: "Be careful! Scammers use fake winnings to lure victims into revealing personal information or paying fraudulent fees.",
+                correct:
+                    "Great job! Legitimate lotteries never ask for upfront payments. Always ignore and delete suspicious emails.",
+                incorrect:
+                    "Be careful! Scammers use fake winnings to lure victims into revealing personal information or paying fraudulent fees.",
               ),
             ),
             MultipleChoice(
               questionHeading: "Social Media Investment Offer",
-              question: "Jordan sees a social media ad promising ‘100% risk-free returns’ for a new investment. The company has flashy testimonials but no official business registration. What should Jordan do?",
-              questionExplanation: "Legitimate investments always disclose risks. High-return, no-risk opportunities are a red flag.",
+              question:
+                  "Jordan sees a social media ad promising ‘100% risk-free returns’ for a new investment. The company has flashy testimonials but no official business registration. What should Jordan do?",
+              questionExplanation:
+                  "Legitimate investments always disclose risks. High-return, no-risk opportunities are a red flag.",
               options: [
                 "Research the company on government financial websites before investing.",
                 "Invest quickly before the opportunity disappears.",
                 "Trust the testimonials and invest a small amount."
               ],
-              correctAnswers: ["Research the company on government financial websites before investing."],
+              correctAnswers: [
+                "Research the company on government financial websites before investing."
+              ],
               prompts: Prompt(
-                correct: "Smart move! Always verify investment opportunities through official sources before committing money.",
-                incorrect: "Be cautious! Scammers use urgency and fake testimonials to trick investors. Always check government databases for legitimacy.",
+                correct:
+                    "Smart move! Always verify investment opportunities through official sources before committing money.",
+                incorrect:
+                    "Be cautious! Scammers use urgency and fake testimonials to trick investors. Always check government databases for legitimacy.",
               ),
             ),
           ],
@@ -1574,12 +1672,13 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Learning Check: Quick Check on Consumer Fraud & Scams
-     SubComponent(
+      SubComponent(
         type: SubComponentType.learningCheck,
         data: LearningCheck(
           title: "Quick Check: Consumer Fraud & Online Scams",
           question1: "What is a major warning sign of a financial scam?",
-          question2: "Why should you be cautious about unsolicited financial offers?",
+          question2:
+              "Why should you be cautious about unsolicited financial offers?",
           options1: [
             "Guaranteed high returns with no risk.",
             "A financial expert explains the risks before investing.",
@@ -1591,43 +1690,52 @@ Map<String, Component> advancedComponents = {
             "Companies must contact you first to offer a good deal."
           ],
           correctAns1: "Guaranteed high returns with no risk.",
-          correctAns2: "Scammers use them to target people with limited financial knowledge.",
-          feedbackCorrect: "Great job! Scams often promise unrealistic guarantees and target uninformed consumers.",
-          feedbackOneIncorrect: "Almost there! Scammers use high-pressure tactics and too-good-to-be-true offers. Stay cautious!",
-          feedbackBothIncorrect: "Be careful! Fraudsters manipulate emotions and urgency to trick victims. Always verify financial claims before acting.",
+          correctAns2:
+              "Scammers use them to target people with limited financial knowledge.",
+          feedbackCorrect:
+              "Great job! Scams often promise unrealistic guarantees and target uninformed consumers.",
+          feedbackOneIncorrect:
+              "Almost there! Scammers use high-pressure tactics and too-good-to-be-true offers. Stay cautious!",
+          feedbackBothIncorrect:
+              "Be careful! Fraudsters manipulate emotions and urgency to trick victims. Always verify financial claims before acting.",
         ),
       ),
 
       // Key Takeaways: Summary of Lesson
-     SubComponent(
+      SubComponent(
         type: SubComponentType.keyTakeaways,
         data: KeyTakeaways(
           title: "Key Takeaways: Consumer Fraud & Online Scams",
-          hint: "What’s one action you can take to protect yourself from financial fraud?",
+          hint:
+              "What’s one action you can take to protect yourself from financial fraud?",
           takeaways: [
             Takeaway(
               title: "Scammers Use Urgency & Emotion",
-              description: "Fraudsters pressure victims into acting quickly before they can think critically.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Fraudsters pressure victims into acting quickly before they can think critically.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Verify Before You Act",
-              description: "Always research financial opportunities through official sources before making decisions.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Always research financial opportunities through official sources before making decisions.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "If It Sounds Too Good to Be True, It Probably Is",
-              description: "Guaranteed profits and no-risk opportunities are common scam tactics.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Guaranteed profits and no-risk opportunities are common scam tactics.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
             Takeaway(
               title: "Protect Personal Information",
-              description: "Never share sensitive details with unverified sources, especially online or over the phone.",
-              imageUrl: 
-                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
+              description:
+                  "Never share sensitive details with unverified sources, especially online or over the phone.",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fcheck.png?alt=media&token=8bca0178-2264-4919-828d-4492cd6680e7",
             ),
           ],
         ),
@@ -1651,7 +1759,7 @@ Map<String, Component> advancedComponents = {
       "Why do scammers use urgency and emotional pressure in their tactics?",
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.intro,
         data: IntroPage(
           title: "Spotting Financial Scams",
@@ -1661,27 +1769,29 @@ Map<String, Component> advancedComponents = {
               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
         ),
       ),
-      //SubComponent( 
+      //SubComponent(
       //   type: SubComponentType.newlanding,
       //   data: newlanding(
-      //     title: "Spotting Financial Scams", 
-      //     subtitle: "Learning how to separate real financial opportunities from scams", 
-      //     meetMinty: "Meet Minty the Money Monkey", 
+      //     title: "Spotting Financial Scams",
+      //     subtitle: "Learning how to separate real financial opportunities from scams",
+      //     meetMinty: "Meet Minty the Money Monkey",
       //     mintyUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793"
       //   ),
       // ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.problem,
         data: ProblemPage(
           title: "Spotting Financial Scams",
-          subtitle: "Learning how to separate real financial opportunities from scams",
+          subtitle:
+              "Learning how to separate real financial opportunities from scams",
           scenarioText:
               "Jordan just got their first job and is excited about managing their own finances. One day, they receive an email stating they’ve won a 1,000 dollar prize in a contest they don’t remember entering. Another day, they see a social media ad promoting an investment that promises to triple their money overnight. Let’s help Jordan decide what’s real and what’s a scam!",
           instructions: "Think and then reveal the problem…",
-          problem: "Problem: Struggling to differentiate between real financial opportunities and scams.",
+          problem:
+              "Problem: Struggling to differentiate between real financial opportunities and scams.",
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.solution,
         data: SolutionPage(
           title: "Spotting Financial Scams",
@@ -1700,7 +1810,7 @@ Map<String, Component> advancedComponents = {
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.impact,
         data: Impact(
           title: "Spotting Financial Scams",
@@ -1736,7 +1846,7 @@ Map<String, Component> advancedComponents = {
       "Why might even well-designed websites and professional-looking emails be deceptive?",
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenariointro,
         data: IntroductionPage(
           scenario:
@@ -1744,104 +1854,85 @@ Map<String, Component> advancedComponents = {
           mintyImage: "assets/images/minty.png",
           options: [
             ScenarioOption(
-                title: "Ignore", 
-                iconUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fignore.png?alt=media&token=a93138a9-bc32-46bb-b261-06d56770dd0a", 
+                title: "Ignore",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fignore.png?alt=media&token=a93138a9-bc32-46bb-b261-06d56770dd0a",
                 score: 40,
                 type: ""),
             ScenarioOption(
-                title: "Verify", 
-                iconUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fverify.png?alt=media&token=bc73f84f-5e85-4c8e-9b0c-6836f6734224", 
+                title: "Verify",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fverify.png?alt=media&token=bc73f84f-5e85-4c8e-9b0c-6836f6734224",
                 score: 30,
                 type: ""),
             ScenarioOption(
-                title: "Click", 
-                iconUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fclick.png?alt=media&token=a307268c-5b03-4495-9034-2d3e9784cdaf", 
+                title: "Click",
+                iconUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fclick.png?alt=media&token=a307268c-5b03-4495-9034-2d3e9784cdaf",
                 score: -50,
                 type: ""),
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenarioquestion,
         data: [
           ScenarioQuestion(
-            questionText: "A financial influencer on TikTok claims they turned \$500 into \$25,000 in two months and offers a ‘limited-time’ course for \$50. What do you do?",
-            options: [
-              ScenarioOption(
-                  title: "Research", 
-                  iconUrl: "", 
-                  score: 40,
-                  type: ""),
-              ScenarioOption(
-                  title: "Buy", 
-                  iconUrl: "", 
-                  score: -50,
-                  type: ""),
-              ScenarioOption(
-                  title: "Ask", 
-                  iconUrl: "", 
-                  score: 20,
-                  type: ""),
-            ],
-            feedback: {
-              "Research": "Great move! Always verify influencers’ claims before acting.",
-              "Buy": "Be careful! Scammers often create urgency to pressure buyers.",
-              "Ask": "Good step, but scammers can fake results. Always check independent sources.",
-            }
-          ),
+              questionText:
+                  "A financial influencer on TikTok claims they turned \$500 into \$25,000 in two months and offers a ‘limited-time’ course for \$50. What do you do?",
+              options: [
+                ScenarioOption(
+                    title: "Research", iconUrl: "", score: 40, type: ""),
+                ScenarioOption(title: "Buy", iconUrl: "", score: -50, type: ""),
+                ScenarioOption(title: "Ask", iconUrl: "", score: 20, type: ""),
+              ],
+              feedback: {
+                "Research":
+                    "Great move! Always verify influencers’ claims before acting.",
+                "Buy":
+                    "Be careful! Scammers often create urgency to pressure buyers.",
+                "Ask":
+                    "Good step, but scammers can fake results. Always check independent sources.",
+              }),
           ScenarioQuestion(
-            questionText: "You receive a call from someone claiming to be from the IRS, stating you owe money and must pay immediately via gift card or cryptocurrency. What should you do?",
-            options: [
-              ScenarioOption(
-                  title: "Report", 
-                  iconUrl: "", 
-                  score: 40,
-                  type: ""),
-              ScenarioOption(
-                  title: "Pay", 
-                  iconUrl: "", 
-                  score: -50,
-                  type: ""),
-              ScenarioOption(
-                  title: "Ask", 
-                  iconUrl: "", 
-                  score: 30,
-                  type: ""),
-            ],
-            feedback: {
-              "Report": "Correct! The IRS never demands immediate payments via gift cards or crypto.",
-              "Pay": "Scammers rely on fear tactics. The IRS never makes threats over the phone.",
-              "Ask": "Good thinking, but scammers can fake ID numbers. Always verify with official sources.",
-            }
-          ),
+              questionText:
+                  "You receive a call from someone claiming to be from the IRS, stating you owe money and must pay immediately via gift card or cryptocurrency. What should you do?",
+              options: [
+                ScenarioOption(
+                    title: "Report", iconUrl: "", score: 40, type: ""),
+                ScenarioOption(title: "Pay", iconUrl: "", score: -50, type: ""),
+                ScenarioOption(title: "Ask", iconUrl: "", score: 30, type: ""),
+              ],
+              feedback: {
+                "Report":
+                    "Correct! The IRS never demands immediate payments via gift cards or crypto.",
+                "Pay":
+                    "Scammers rely on fear tactics. The IRS never makes threats over the phone.",
+                "Ask":
+                    "Good thinking, but scammers can fake ID numbers. Always verify with official sources.",
+              }),
           ScenarioQuestion(
-            questionText: "A well-designed website claims you can ‘triple your money’ by joining their investment platform. What should you do?",
-            options: [
-              ScenarioOption(
-                  title: "Verify", 
-                  iconUrl: "", 
-                  score: 40,
-                  type: ""),
-              ScenarioOption(
-                  title: "Join", 
-                  iconUrl: "", 
-                  score: -50,
-                  type: ""),
-              ScenarioOption(
-                  title: "Check", 
-                  iconUrl: "", 
-                  score: 10,
-                  type: ""),
-            ],
-            feedback: {
-              "Verify": "Great choice! Legitimate investments follow regulations and provide transparency.",
-              "Join": "Be cautious! Scammers often use fake testimonials and promises of high returns.",
-              "Check": "A good first step, but always confirm regulatory oversight before investing.",
-            }
-          ),
+              questionText:
+                  "A well-designed website claims you can ‘triple your money’ by joining their investment platform. What should you do?",
+              options: [
+                ScenarioOption(
+                    title: "Verify", iconUrl: "", score: 40, type: ""),
+                ScenarioOption(
+                    title: "Join", iconUrl: "", score: -50, type: ""),
+                ScenarioOption(
+                    title: "Check", iconUrl: "", score: 10, type: ""),
+              ],
+              feedback: {
+                "Verify":
+                    "Great choice! Legitimate investments follow regulations and provide transparency.",
+                "Join":
+                    "Be cautious! Scammers often use fake testimonials and promises of high returns.",
+                "Check":
+                    "A good first step, but always confirm regulatory oversight before investing.",
+              }),
         ],
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.scenarioresults,
         data: ScenarioResult.fromMap({
           "selectedChoices": [
@@ -1887,7 +1978,7 @@ Map<String, Component> advancedComponents = {
       "Why do some misleading financial claims continue to spread, even when proven false?",
     ],
     questionData: [
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peerintro,
         data: PeerReflectionIntro(
           title: "Recognizing Reliable vs. Misleading Financial Information",
@@ -1899,26 +1990,29 @@ Map<String, Component> advancedComponents = {
               role: "The Skeptical Researcher",
               story:
                   "Jordan double-checks every financial claim before believing it. They’ve avoided multiple scams by researching sources and questioning credibility before making decisions.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
             ),
             PeerCharacter(
               name: "Taylor",
               role: "The Cautious Investor",
               story:
                   "Taylor invests carefully but almost fell for an online trading scheme. After checking the company’s credentials, they discovered it was unregulated and avoided a financial disaster.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
             ),
             PeerCharacter(
               name: "Chris",
               role: "The Trend Follower",
               story:
                   "Chris gets financial advice from social media influencers and has made both great and terrible financial choices. They’re learning to fact-check before acting on financial trends.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
             ),
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peerstories,
         data: PeerStories(
           title: "Peer Stories: Evaluating Financial Claims",
@@ -1928,29 +2022,33 @@ Map<String, Component> advancedComponents = {
               role: "The Skeptical Researcher",
               story:
                   "Jordan double-checks every financial claim before believing it. They’ve avoided multiple scams by researching sources and questioning credibility before making decisions.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
             ),
             PeerCharacter(
               name: "Taylor",
               role: "The Cautious Investor",
               story:
                   "Taylor invests carefully but almost fell for an online trading scheme. After checking the company’s credentials, they discovered it was unregulated and avoided a financial disaster.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
             ),
             PeerCharacter(
               name: "Chris",
               role: "The Trend Follower",
               story:
                   "Chris gets financial advice from social media influencers and has made both great and terrible financial choices. They’re learning to fact-check before acting on financial trends.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
             ),
           ],
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peermatch,
         data: PeerMatch(
-          title: "Match Actions to Categories: Financial Information Evaluation",
+          title:
+              "Match Actions to Categories: Financial Information Evaluation",
           categories: [
             MatchCategory(
               title: "Verifying Financial Information",
@@ -1994,7 +2092,7 @@ Map<String, Component> advancedComponents = {
           },
         ),
       ),
-     SubComponent(
+      SubComponent(
         type: SubComponentType.peerreflectionend,
         data: PeerReflectionEnd(
           question:
@@ -2004,19 +2102,22 @@ Map<String, Component> advancedComponents = {
               name: "Jordan",
               description:
                   "Jordan, because I prefer to research before making financial decisions.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fboymonkey1.png?alt=media&token=46fcb8e0-3644-473c-b09d-8997c28a4686",
             ),
             ReflectionOption(
               name: "Taylor",
               description:
                   "Taylor, because I’m careful with investments but learning to identify financial traps.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Fgirlmonkey1.png?alt=media&token=2ba73e9c-30db-4426-a2f6-6e87e77858de",
             ),
             ReflectionOption(
               name: "Chris",
               description:
                   "Chris, because I’ve acted on financial trends before but am working on fact-checking.",
-              imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
+              imageUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%201%2Funisexmonkey1.png?alt=media&token=208794d7-ab62-46f0-b49c-cc7fc5bb436f",
             ),
           ],
           feedbackMessages: {
@@ -2048,17 +2149,20 @@ Map<String, Component> advancedComponents = {
     ],
     questionData: [
       // Question 1: Identifying Reliable Financial Information
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
-          question: "Which of the following is a key trait of reliable financial information?",
+          question:
+              "Which of the following is a key trait of reliable financial information?",
           options: [
             "It is based on verifiable sources and presents multiple perspectives.",
             "It uses emotional language to convince readers.",
             "It guarantees a high return on investments.",
             "It pressures you to act quickly before missing an opportunity.",
           ],
-          correctAnswers: ["It is based on verifiable sources and presents multiple perspectives."],
+          correctAnswers: [
+            "It is based on verifiable sources and presents multiple perspectives."
+          ],
           feedbackMessages: {
             "It is based on verifiable sources and presents multiple perspectives.":
                 "Correct! Reliable financial information is backed by credible sources and presents balanced perspectives.",
@@ -2075,10 +2179,11 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Question 2: Recognizing Financial Fraud
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
-          question: "Which of the following is a common sign of a financial scam?",
+          question:
+              "Which of the following is a common sign of a financial scam?",
           options: [
             "It promises high returns with no risk.",
             "It provides transparent documentation and regulatory approval.",
@@ -2102,10 +2207,11 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Question 3: Multi-Select – Avoiding Financial Misinformation
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
-          question: "Which of the following are good strategies to avoid financial misinformation? (Select all that apply)",
+          question:
+              "Which of the following are good strategies to avoid financial misinformation? (Select all that apply)",
           options: [
             "Verify information through official sources like government websites or financial institutions.",
             "Fact-check viral social media financial advice before acting on it.",
@@ -2139,19 +2245,29 @@ Map<String, Component> advancedComponents = {
           question: "Which image represents a clear sign of a financial scam?",
           options: [
             QuizOption(
-                text: "A government website detailing federal student loan repayment options.",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fgovernment.png?alt=media&token=f4ccbd68-a8f8-4618-9499-4c6c38b1d459"),
+                text:
+                    "A government website detailing federal student loan repayment options.",
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fgovernment.png?alt=media&token=f4ccbd68-a8f8-4618-9499-4c6c38b1d459"),
             QuizOption(
-                text: "A news article analyzing the stock market with expert citations.",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fnews.png?alt=media&token=5e81562e-7454-4ab5-9866-14450e61da9a"),
+                text:
+                    "A news article analyzing the stock market with expert citations.",
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fnews.png?alt=media&token=5e81562e-7454-4ab5-9866-14450e61da9a"),
             QuizOption(
-                text: "An investment ad promising 'guaranteed 200% returns in a week!'",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fadvertisement.png?alt=media&token=bf8f11e9-b016-4ec3-8db6-2c7e08553479"),
+                text:
+                    "An investment ad promising 'guaranteed 200% returns in a week!'",
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Fadvertisement.png?alt=media&token=bf8f11e9-b016-4ec3-8db6-2c7e08553479"),
             QuizOption(
-                text: "A financial planner’s report explaining different risk levels of investments.",
-                imageUrl: "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Ffinancial.png?alt=media&token=389288e9-1300-4a25-8b11-3ab54f215968"),
+                text:
+                    "A financial planner’s report explaining different risk levels of investments.",
+                imageUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FLesson%202%2Ffinancial.png?alt=media&token=389288e9-1300-4a25-8b11-3ab54f215968"),
           ],
-          correctAnswers: ["An investment ad promising 'guaranteed 200% returns in a week!'"],
+          correctAnswers: [
+            "An investment ad promising 'guaranteed 200% returns in a week!'"
+          ],
           feedbackMessages: {
             "An investment ad promising 'guaranteed 200% returns in a week!'":
                 "Correct! Any promise of guaranteed profits in a short period is a major red flag for fraud.",
@@ -2168,17 +2284,20 @@ Map<String, Component> advancedComponents = {
       ),
 
       // Question 5: Ethical Financial Decisions
-     SubComponent(
+      SubComponent(
         type: SubComponentType.quiztextmcquestion,
         data: TextBasedQuestion(
-          question: "A friend tells you about a 'once-in-a-lifetime' investment opportunity. What should you do?",
+          question:
+              "A friend tells you about a 'once-in-a-lifetime' investment opportunity. What should you do?",
           options: [
             "Invest immediately before the opportunity disappears.",
             "Ignore any financial advice that comes from people you know.",
             "Research the company and verify its legitimacy before making any decision.",
             "Trust the friend’s recommendation without doing independent research.",
           ],
-          correctAnswers: ["Research the company and verify its legitimacy before making any decision."],
+          correctAnswers: [
+            "Research the company and verify its legitimacy before making any decision."
+          ],
           feedbackMessages: {
             "Invest immediately before the opportunity disappears.":
                 "Incorrect! Urgency is often a tactic used in scams to pressure victims.",
