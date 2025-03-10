@@ -9,18 +9,24 @@ class WeekdayRow extends StatelessWidget {
       required this.screenWidthUnit,
       required this.screenHeightUnit});
 
+      Color dayColor = Color.fromRGBO(0, 127, 255, 1);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          top: screenHeightUnit * 8, bottom: screenHeightUnit * 18),
+          top: screenHeightUnit * 6, bottom: screenHeightUnit * 14),
       child: Center(
         child: Container(
           width: screenWidthUnit * 1290,
-          height: screenHeightUnit * 55,
+          height: screenHeightUnit * 61,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Color.fromRGBO(79, 195, 247, 1),
+            borderRadius: BorderRadius.circular(10),
+            color: Color.fromRGBO(243, 249, 255, 1),
+            border: Border.all(
+              color: dayColor,
+              width: 1,
+            )
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -30,7 +36,7 @@ class WeekdayRow extends StatelessWidget {
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: dayColor
                 ),
               ),
               Text(
@@ -38,7 +44,7 @@ class WeekdayRow extends StatelessWidget {
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: dayColor
                 ),
               ),
               Text(
@@ -46,7 +52,7 @@ class WeekdayRow extends StatelessWidget {
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: dayColor
                 ),
               ),
               Text(
@@ -54,7 +60,7 @@ class WeekdayRow extends StatelessWidget {
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: dayColor
                 ),
               ),
               Text(
@@ -62,7 +68,7 @@ class WeekdayRow extends StatelessWidget {
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: dayColor
                 ),
               ),
               Text(
@@ -70,7 +76,7 @@ class WeekdayRow extends StatelessWidget {
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: dayColor
                 ),
               ),
               Text(
@@ -78,7 +84,7 @@ class WeekdayRow extends StatelessWidget {
                 style: GoogleFonts.baloo2(
                   fontSize: screenWidthUnit * 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: dayColor
                 ),
               ),
             ],

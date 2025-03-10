@@ -13,7 +13,7 @@ class AllocateFundsButton extends StatefulWidget {
   final dynamic widget;
   final dynamic functions;
   dynamic expenses;
-  dynamic nextExpense;
+  Expense? nextExpense;
   final Function getEvents;
   final Function checkRandomEvents;
   double savingsTransfer;
@@ -65,8 +65,6 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
 
   @override
   void initState() {
-    
-
     super.initState();
   }
 
@@ -79,7 +77,7 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
         height: widget.screenHeightUnit * 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: const Color.fromRGBO(79, 195, 247, 1),
+          color: const Color.fromRGBO(0, 127, 255, 1),
         ),
         child: GestureDetector(
           onTap: () {
@@ -164,15 +162,14 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                         widget.recalculatePercentages();
                         widget.mapExpenses();
                         widget.nextDay();
-
-                        var data = widget.functions.updateNextExpense(
+                        var data = functions.updateNextExpense(
                             widget.widget.expenses, widget.now);
                         widget.expenses = data['expenses'];
-                        widget.nextExpense = data['nextExpense'];
-
+                        widget.widget.nextExpense = data['nextExpense'];
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           widget.getEvents();
                           widget.checkRandomEvents();
+                        
                         });
                       });
                     },

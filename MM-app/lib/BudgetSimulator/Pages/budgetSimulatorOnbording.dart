@@ -965,6 +965,13 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ],
             expenses: [
               Expense(
+                  name: "Rent",
+                  amount: 500,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 5, 5),
+                  amountPaid: 20,
+                  penalty: 30),
+              Expense(
                   name: "Pay Day",
                   amount: -1250,
                   dueDateType: "Fixed",
@@ -978,13 +985,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   dueDay: DateTime(2025, 5, 15),
                   amountPaid: 0,
                   penalty: 0),
-              Expense(
-                  name: "Rent",
-                  amount: 500,
-                  dueDateType: "Fixed",
-                  dueDay: DateTime(2025, 5, 5),
-                  amountPaid: 20,
-                  penalty: 30),
+              
               Expense(
                   name: "Utilities",
                   amount: 150,

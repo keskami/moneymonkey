@@ -66,12 +66,320 @@ class BudgetSimulator extends StatefulWidget {
   double creditScore;
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
+  late Expense nextExpense = expenses[0];
+
 
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
+
+
+  @override
+  void initState() {
+    mapExpenses();
+    filterPayDays();
+    super.initState();
+    netCash = widget.startingBalance;
+    formattedDate = DateFormat('MMM d, y').format(_focusedDay);
+    getProgress();
+    getExpenses();
+    getUniqueWeekCountForMonth(_focusedDay.year, _focusedDay.month);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getEvents();
+    });
+    getStartingExpenses();
+    setState(() {
+      colors = functions.colors;
+      chartData = functions.getChartData(types, percentage, colors);
+    });
+    alocateEvents();
+    setState(() {
+      var data = functions.updateNextExpense(widget.expenses, now);
+      expenses = data['expenses'];
+      widget.nextExpense = data['nextExpense'];
+    });
+  }
+
+  List<BudgetSimulatorChartData> chartData = [];
+  
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeightUnit = screenHeight / 1406;
+    double screenWidthUnit = screenWidth / 2079;
+    return Container(
+      height: screenHeight,
+      width: screenWidth,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          BaseSideOfScreen(screenHeight: screenHeight, screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BaseTopOfScreen(screenHeight: screenHeight, screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit, name: widget.name),
+
+              FittedBox(
+                child: Container(
+                  width: screenWidthUnit * 1919,
+                  height: screenHeight - (screenHeightUnit * 70),
+                  color: Color.fromRGBO(135, 206, 235, 1),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: screenHeightUnit * 25,
+                      ),
+                      Center(
+                        child: Container(
+                            width: screenWidthUnit * 1871,
+                            height: screenHeightUnit * 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(3),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1,
+                              ),
+                            ),
+                            child: Center(
+                              child: widget.name == "Crush the Credit Card Debt"
+                                  ? headings2.crushTheCreditCardDebtHeading(
+                                      savingsLeftOver: savingsLeftOver,
+                                      checkingAccountBalance:
+                                          widget.checkingAccountBalance,
+                                      savingsAccountBalance:
+                                          widget.savingsAccountBalance,
+                                      creditCardDebt: widget.creditCardDebt,
+                                      netCash: widget.checkingAccountBalance +
+                                          widget.savingsAccountBalance,
+                                      screenWidthUnit: screenWidthUnit,
+                                      screenHeightUnit: screenHeightUnit * .9,
+                                      APY: widget.savingsAPY,
+                                      checkingTransfer: widget.checkingTransfer as double,
+                                      savingsTransfer: widget.savingsTransfer as double,
+                                    )
+                                  : Container(),
+                            )),
+                      ),
+                      SizedBox(
+                        height: screenHeightUnit * 19,
+                      ),
+                      Center(
+                          child: Container(
+                        width: screenWidthUnit * 1871,
+                        height: screenHeightUnit * 1170,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(3),
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: screenHeightUnit * 1170,
+                              width: screenWidthUnit * 1360,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: screenHeightUnit * 25,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: screenWidthUnit * 67,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Budget Simulator",
+                                              style: GoogleFonts.baloo2(
+                                                fontSize: screenWidthUnit * 28,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: screenHeightUnit * 10,
+                                            ),
+                                            Text(formattedDate,
+                                                style: GoogleFonts.baloo2(
+                                                  fontSize:
+                                                      screenWidthUnit * 18,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color.fromRGBO(
+                                                      108, 108, 108, 1),
+                                                ))
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: screenWidthUnit * 810,
+                                        ),
+                                        AllocateFundsButton(
+                                          now : now,
+                                          spendOnExpense: spendOnExpense,
+                                          screenWidthUnit: screenWidthUnit,
+                                          screenHeightUnit: screenHeightUnit,
+                                          checkingTransfer:
+                                              checkingTransfer as int,
+                                          getInterestSavings:
+                                              getInterestSavings,
+                                          setStateCallback: setState,
+                                          widget: widget,
+                                          functions: functions,
+                                          expenses: expenses,
+                                          nextExpense: widget.nextExpense,
+                                          getEvents: getEvents,
+                                          checkRandomEvents: checkRandomEvents,
+                                          savingsTransfer: savingsTransfer,
+                                          monthlyEntertainment: monthlyEntertainment,
+                                          monthlyFitness: monthlyFitness,
+                                          monthsOccurd: monthsOccurd,
+                                          daysUnderLuxary: daysUnderLuxary,
+                                          daysUnderLuxaryDone: daysUnderLuxaryDone, toLuxaryForWeek: toLuxaryForWeek, recalculatePercentages: recalculatePercentages, nextDay: nextDay, mapExpenses: mapExpenses
+
+                                          
+                                          
+                                        ),
+                                      ],
+                                    ),
+                                    WeekdayRow(
+                                      screenWidthUnit: screenWidthUnit,
+                                      screenHeightUnit: screenHeightUnit,
+                                    ),
+                                    BudgetSimulatorCalender(
+                                        screenWidthUnit: screenWidthUnit,
+                                        screenHeightUnit: screenHeightUnit,
+                                        focusedDay: _focusedDay,
+                                        now: now,
+                                        selectedDay: _selectedDay,
+                                        expenses: widget.expenses,
+                                        formattedDate: formattedDate,
+                                        smallBoxes: smallBoxes),
+                                    Spacer(),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: screenHeightUnit * 15),
+                                      child: Center(
+                                        child: Bottomwarning(
+                                          screenHeightUnit:
+                                              screenHeightUnit * 1.1,
+                                          screenWidthUnit: screenWidthUnit,
+                                          hints: widget.hints,
+                                          nextExpense: widget.nextExpense,
+                                          dayNumber: dayNumber,
+                                          baseDate: now,
+                                          close: () {
+                                            setState(() {
+                                              widget.hints.removeAt(0);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                            SingleChildScrollView(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                MilestoneProgress(
+                                  milestones: widget.milestones,
+                                  screenWidthUnit: screenWidthUnit,
+                                  screenHeightUnit: screenHeightUnit,
+                                  startingDebt: startingDebt,
+                                  currentDebt: widget.creditCardDebt as int,
+                                ),
+                                SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
+                                // WellnessBoxNew(
+                                //     screenHeightUnit: screenHeightUnit,
+                                //     screenWidthUnit: screenWidthUnit,
+                                //     score: widget.physicalScore,
+                                //     type: "Physical"),
+                                //      SizedBox(
+                                //   height: screenHeightUnit * 20,
+                                // ),
+                                // WellnessBoxNew(
+                                //     screenHeightUnit: screenHeightUnit,
+                                //     screenWidthUnit: screenWidthUnit,
+                                //     score: widget.emotionalScore,
+                                //     type: "Emotional"),
+                                //      SizedBox(
+                                //   height: screenHeightUnit * 20,
+                                // ),
+                                // WellnessBoxNew(
+                                //     screenHeightUnit: screenHeightUnit,
+                                //     screenWidthUnit: screenWidthUnit,
+                                //     score: widget.mentalScore,
+                                //     type: "Mental"),
+
+                                // SizedBox(
+                                //   height: screenHeightUnit * 20,
+                                // ),
+                                MeterBox(
+                                  screenHeightUnit: screenHeightUnit,
+                                  screenWidthUnit: screenWidthUnit,
+                                  creditScore: widget.creditScore as int,
+                                ),
+                                SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
+                                WellnessBox(
+                                  screenHeightUnit: screenHeightUnit,
+                                  screenWidthUnit: screenWidthUnit,
+                                  wellnessScore: widget.wellnessScore,
+                                ),
+                                SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
+                                SpendingDonutChart(
+                                  screenWidthUnit: screenWidthUnit,
+                                  screenHeightUnit: screenHeightUnit,
+                                  types: types,
+                                  percentage: percentage,
+                                  total: totalSpending,
+                                  chartData: chartData,
+                                ),
+                                SizedBox(
+                                  height: screenHeightUnit * 20,
+                                ),
+                              ],
+                            ))
+                          ],
+                        ),
+                      ))
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
     List<Color> colors = [];
   late double netCash;
   final Headings2 headings2 = Headings2();
@@ -83,7 +391,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<String> types = [];
   List<double> percentage = [];
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
-  late Expense nextExpense = functions.nullExpense;
   double totalSpending = 0;
   bool smallBoxes = true;
   double wellnessScore = 600;
@@ -680,309 +987,5 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         });
       }
     }
-  }
-
-  @override
-  void initState() {
-    mapExpenses();
-    filterPayDays();
-    super.initState();
-    netCash = widget.startingBalance;
-    formattedDate = DateFormat('MMM d, y').format(_focusedDay);
-    getProgress();
-    getExpenses();
-    getUniqueWeekCountForMonth(_focusedDay.year, _focusedDay.month);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getEvents();
-    });
-    getStartingExpenses();
-    setState(() {
-      colors = functions.colors;
-      chartData = functions.getChartData(types, percentage, colors);
-    });
-    alocateEvents();
-    setState(() {
-      var data = functions.updateNextExpense(widget.expenses, now);
-      expenses = data['expenses'];
-      nextExpense = data['nextExpense'];
-    });
-  }
-
-  List<BudgetSimulatorChartData> chartData = [];
-  
-  @override
-  Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeightUnit = screenHeight / 1406;
-    double screenWidthUnit = screenWidth / 2079;
-    return Container(
-      height: screenHeight,
-      width: screenWidth,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          BaseSideOfScreen(screenHeight: screenHeight, screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BaseTopOfScreen(screenHeight: screenHeight, screenWidthUnit: screenWidthUnit, screenHeightUnit: screenHeightUnit, name: widget.name),
-
-              FittedBox(
-                child: Container(
-                  width: screenWidthUnit * 1919,
-                  height: screenHeight - (screenHeightUnit * 70),
-                  color: Color.fromRGBO(135, 206, 235, 1),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: screenHeightUnit * 25,
-                      ),
-                      Center(
-                        child: Container(
-                            width: screenWidthUnit * 1871,
-                            height: screenHeightUnit * 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: Center(
-                              child: widget.name == "Crush the Credit Card Debt"
-                                  ? headings2.crushTheCreditCardDebtHeading(
-                                      savingsLeftOver: savingsLeftOver,
-                                      checkingAccountBalance:
-                                          widget.checkingAccountBalance,
-                                      savingsAccountBalance:
-                                          widget.savingsAccountBalance,
-                                      creditCardDebt: widget.creditCardDebt,
-                                      netCash: widget.checkingAccountBalance +
-                                          widget.savingsAccountBalance,
-                                      screenWidthUnit: screenWidthUnit,
-                                      screenHeightUnit: screenHeightUnit * .9,
-                                      APY: widget.savingsAPY,
-                                      checkingTransfer: widget.checkingTransfer as double,
-                                      savingsTransfer: widget.savingsTransfer as double,
-                                    )
-                                  : Container(),
-                            )),
-                      ),
-                      SizedBox(
-                        height: screenHeightUnit * 19,
-                      ),
-                      Center(
-                          child: Container(
-                        width: screenWidthUnit * 1871,
-                        height: screenHeightUnit * 1170,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(3),
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: screenHeightUnit * 1170,
-                              width: screenWidthUnit * 1360,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: screenHeightUnit * 25,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: screenWidthUnit * 67,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Budget Simulator",
-                                              style: GoogleFonts.baloo2(
-                                                fontSize: screenWidthUnit * 28,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: screenHeightUnit * 10,
-                                            ),
-                                            Text(formattedDate,
-                                                style: GoogleFonts.baloo2(
-                                                  fontSize:
-                                                      screenWidthUnit * 18,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color.fromRGBO(
-                                                      108, 108, 108, 1),
-                                                ))
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: screenWidthUnit * 810,
-                                        ),
-                                        AllocateFundsButton(
-                                          now : now,
-                                          spendOnExpense: spendOnExpense,
-                                          screenWidthUnit: screenWidthUnit,
-                                          screenHeightUnit: screenHeightUnit,
-                                          checkingTransfer:
-                                              checkingTransfer as int,
-                                          getInterestSavings:
-                                              getInterestSavings,
-                                          setStateCallback: setState,
-                                          widget: widget,
-                                          functions: functions,
-                                          expenses: expenses,
-                                          nextExpense: nextExpense,
-                                          getEvents: getEvents,
-                                          checkRandomEvents: checkRandomEvents,
-                                          savingsTransfer: savingsTransfer,
-                                          monthlyEntertainment: monthlyEntertainment,
-                                          monthlyFitness: monthlyFitness,
-                                          monthsOccurd: monthsOccurd,
-                                          daysUnderLuxary: daysUnderLuxary,
-                                          daysUnderLuxaryDone: daysUnderLuxaryDone, toLuxaryForWeek: toLuxaryForWeek, recalculatePercentages: recalculatePercentages, nextDay: nextDay, mapExpenses: mapExpenses
-
-                                          
-                                          
-                                        ),
-                                      ],
-                                    ),
-                                    WeekdayRow(
-                                      screenWidthUnit: screenWidthUnit,
-                                      screenHeightUnit: screenHeightUnit,
-                                    ),
-                                    BudgetSimulatorCalender(
-                                        screenWidthUnit: screenWidthUnit,
-                                        screenHeightUnit: screenHeightUnit,
-                                        focusedDay: _focusedDay,
-                                        now: now,
-                                        selectedDay: _selectedDay,
-                                        expenses: widget.expenses,
-                                        formattedDate: formattedDate,
-                                        smallBoxes: smallBoxes),
-                                    Spacer(),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: screenHeightUnit * 15),
-                                      child: Center(
-                                        child: Bottomwarning(
-                                          screenHeightUnit:
-                                              screenHeightUnit * 1.1,
-                                          screenWidthUnit: screenWidthUnit,
-                                          hints: widget.hints,
-                                          nextExpense: nextExpense,
-                                          dayNumber: dayNumber,
-                                          baseDate: now,
-                                          close: () {
-                                            setState(() {
-                                              widget.hints.removeAt(0);
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ]),
-                            ),
-                            SingleChildScrollView(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MilestoneProgress(
-                                  milestones: widget.milestones,
-                                  screenWidthUnit: screenWidthUnit,
-                                  screenHeightUnit: screenHeightUnit,
-                                  startingDebt: startingDebt,
-                                  currentDebt: widget.creditCardDebt as int,
-                                ),
-                                SizedBox(
-                                  height: screenHeightUnit * 20,
-                                ),
-                                // WellnessBoxNew(
-                                //     screenHeightUnit: screenHeightUnit,
-                                //     screenWidthUnit: screenWidthUnit,
-                                //     score: widget.physicalScore,
-                                //     type: "Physical"),
-                                //      SizedBox(
-                                //   height: screenHeightUnit * 20,
-                                // ),
-                                // WellnessBoxNew(
-                                //     screenHeightUnit: screenHeightUnit,
-                                //     screenWidthUnit: screenWidthUnit,
-                                //     score: widget.emotionalScore,
-                                //     type: "Emotional"),
-                                //      SizedBox(
-                                //   height: screenHeightUnit * 20,
-                                // ),
-                                // WellnessBoxNew(
-                                //     screenHeightUnit: screenHeightUnit,
-                                //     screenWidthUnit: screenWidthUnit,
-                                //     score: widget.mentalScore,
-                                //     type: "Mental"),
-
-                                // SizedBox(
-                                //   height: screenHeightUnit * 20,
-                                // ),
-                                MeterBox(
-                                  screenHeightUnit: screenHeightUnit,
-                                  screenWidthUnit: screenWidthUnit,
-                                  creditScore: widget.creditScore as int,
-                                ),
-                                SizedBox(
-                                  height: screenHeightUnit * 20,
-                                ),
-                                WellnessBox(
-                                  screenHeightUnit: screenHeightUnit,
-                                  screenWidthUnit: screenWidthUnit,
-                                  wellnessScore: widget.wellnessScore,
-                                ),
-                                SizedBox(
-                                  height: screenHeightUnit * 20,
-                                ),
-                                SpendingDonutChart(
-                                  screenWidthUnit: screenWidthUnit,
-                                  screenHeightUnit: screenHeightUnit,
-                                  types: types,
-                                  percentage: percentage,
-                                  total: totalSpending,
-                                  chartData: chartData,
-                                ),
-                                SizedBox(
-                                  height: screenHeightUnit * 20,
-                                ),
-                              ],
-                            ))
-                          ],
-                        ),
-                      ))
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -26,25 +26,25 @@ class BaseTopOfScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Padding(
+          //     padding: EdgeInsets.fromLTRB(screenWidthUnit * 15,
+          //         screenHeightUnit * 16, 0, screenWidthUnit * 8),
+          //     child: Icon(
+          //       Icons.arrow_back_ios,
+          //       size: screenWidthUnit * 24,
+          //       color: Colors.black,
+          //     )),
           Padding(
-              padding: EdgeInsets.fromLTRB(screenWidthUnit * 15,
-                  screenHeightUnit * 16, 0, screenWidthUnit * 8),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: screenWidthUnit * 24,
-                color: Colors.black,
-              )),
-          Padding(
-              padding: EdgeInsets.only(top: screenWidthUnit * 4),
+              padding: EdgeInsets.only(left: screenWidthUnit * 40, top: screenWidthUnit * 4),
               child: Text(
-                'Quit ${name}',
+                '${name}',
                 style: GoogleFonts.baloo2(
                     fontSize: screenWidthUnit * 22,
                     fontWeight: FontWeight.w600,
                     color: Colors.black),
               )),
           Padding(
-            padding: EdgeInsets.fromLTRB(screenWidthUnit * 999,
+            padding: EdgeInsets.fromLTRB(screenWidthUnit * 1149,
                 screenHeightUnit * 6, screenWidthUnit * 31, 0),
             child: Container(
               height: screenHeightUnit * 70,
