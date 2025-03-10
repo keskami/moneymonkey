@@ -7,6 +7,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseTopOfScreen.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/crushTheCreditCardDebtPages.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
@@ -48,6 +49,7 @@ class BudgetSimulator extends StatefulWidget {
   });
   double savingsTransfer = 0;
   int checkingTransfer = 0;
+  int dayNumber = 1;
 
   final String name;
   int cognativeScore;
@@ -67,6 +69,10 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
   late Expense nextExpense = expenses[0];
+  String currentOption = "Calendar";
+  DateTime now = DateTime(2025, 5, 1);
+  DateTime focusedDay = DateTime(2025, 5, 1);
+  DateTime selectedDay = DateTime(2025, 5, 1);
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
@@ -78,10 +84,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     filterPayDays();
     super.initState();
     netCash = widget.startingBalance;
-    formattedDate = DateFormat('MMM d, y').format(_focusedDay);
+    formattedDate = DateFormat('MMM d, y').format(widget.focusedDay);
     getProgress();
     getExpenses();
-    getUniqueWeekCountForMonth(_focusedDay.year, _focusedDay.month);
+    getUniqueWeekCountForMonth(widget.focusedDay.year, widget.focusedDay.month);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getEvents();
     });
@@ -92,7 +98,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     });
     alocateEvents();
     setState(() {
-      var data = functions.updateNextExpense(widget.expenses, now);
+      var data = functions.updateNextExpense(widget.expenses, widget.now);
       expenses = data['expenses'];
       widget.nextExpense = data['nextExpense'];
     });
@@ -197,7 +203,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(
-                                      height: screenHeightUnit * 25,
+                                      height: screenHeightUnit * 15,
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -221,7 +227,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: screenHeightUnit * 10,
+                                              height: screenHeightUnit * 7,
                                             ),
                                             Text(formattedDate,
                                                 style: GoogleFonts.baloo2(
@@ -236,74 +242,123 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         SizedBox(
                                           width: screenWidthUnit * 810,
                                         ),
-                                        AllocateFundsButton(
-                                            now: now,
-                                            spendOnExpense: spendOnExpense,
-                                            screenWidthUnit: screenWidthUnit,
-                                            screenHeightUnit: screenHeightUnit,
-                                            checkingTransfer:
-                                                checkingTransfer as int,
-                                            getInterestSavings:
-                                                getInterestSavings,
-                                            setStateCallback: setState,
-                                            widget: widget,
-                                            functions: functions,
-                                            expenses: expenses,
-                                            nextExpense: widget.nextExpense,
-                                            getEvents: getEvents,
-                                            checkRandomEvents:
-                                                checkRandomEvents,
-                                            savingsTransfer: savingsTransfer,
-                                            monthlyEntertainment:
-                                                monthlyEntertainment,
-                                            monthlyFitness: monthlyFitness,
-                                            monthsOccurd: monthsOccurd,
-                                            daysUnderLuxary: daysUnderLuxary,
-                                            daysUnderLuxaryDone:
-                                                daysUnderLuxaryDone,
-                                            toLuxaryForWeek: toLuxaryForWeek,
-                                            recalculatePercentages:
-                                                recalculatePercentages,
-                                            nextDay: nextDay,
-                                            mapExpenses: mapExpenses),
+                                        widget.currentOption == "Calendar"
+                                            ? AllocateFundsButton(
+                                                now: widget.now,
+                                                spendOnExpense: spendOnExpense,
+                                                screenWidthUnit:
+                                                    screenWidthUnit,
+                                                screenHeightUnit:
+                                                    screenHeightUnit,
+                                                checkingTransfer:
+                                                    checkingTransfer as int,
+                                                getInterestSavings:
+                                                    getInterestSavings,
+                                                setStateCallback: setState,
+                                                widget: widget,
+                                                functions: functions,
+                                                expenses: expenses,
+                                                nextExpense: widget.nextExpense,
+                                                getEvents: getEvents,
+                                                checkRandomEvents:
+                                                    checkRandomEvents,
+                                                savingsTransfer:
+                                                    savingsTransfer,
+                                                monthlyEntertainment:
+                                                    monthlyEntertainment,
+                                                monthlyFitness: monthlyFitness,
+                                                monthsOccurd: monthsOccurd,
+                                                daysUnderLuxary:
+                                                    daysUnderLuxary,
+                                                daysUnderLuxaryDone:
+                                                    daysUnderLuxaryDone,
+                                                toLuxaryForWeek:
+                                                    toLuxaryForWeek,
+                                                recalculatePercentages:
+                                                    recalculatePercentages,
+                                                nextDay: nextDay,
+                                                mapExpenses: mapExpenses)
+                                            : Container(),
                                       ],
                                     ),
-                                    WeekdayRow(
-                                      screenWidthUnit: screenWidthUnit,
-                                      screenHeightUnit: screenHeightUnit,
-                                    ),
-                                    BudgetSimulatorCalender(
+                                    CrushTheCreditCardDebtPages(
                                         screenWidthUnit: screenWidthUnit,
                                         screenHeightUnit: screenHeightUnit,
-                                        focusedDay: _focusedDay,
-                                        now: now,
-                                        selectedDay: _selectedDay,
-                                        expenses: widget.expenses,
+                                        currentChoice: widget.currentOption,
+                                        onOptionSelected: (String option) {
+                                          setState(() {
+                                            widget.currentOption = option;
+                                          });
+                                        },
+                                        widget: widget,
                                         formattedDate: formattedDate,
                                         smallBoxes: smallBoxes),
-                                    Spacer(),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: screenHeightUnit * 15),
-                                      child: Center(
-                                        child: Bottomwarning(
-                                          screenHeightUnit:
-                                              screenHeightUnit * 1.1,
-                                          screenWidthUnit: screenWidthUnit,
-                                          hints: widget.hints,
-                                          nextExpense: widget.nextExpense,
-                                          dayNumber: dayNumber,
-                                          baseDate: now,
-                                          close: () {
-                                            setState(() {
-                                              widget.hints.removeAt(0);
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                    widget.currentOption == "Calendar"
+                                        ? Container(
+                                            child: Column(
+                                              children: [
+                                                WeekdayRow(
+                                                  screenWidthUnit:
+                                                      screenWidthUnit,
+                                                  screenHeightUnit:
+                                                      screenHeightUnit,
+                                                ),
+                                                BudgetSimulatorCalender(
+                                                    screenWidthUnit:
+                                                        screenWidthUnit,
+                                                    screenHeightUnit:
+                                                        screenHeightUnit * .93,
+                                                    focusedDay:
+                                                        widget.focusedDay,
+                                                    now: widget.now,
+                                                    selectedDay:
+                                                        widget.selectedDay,
+                                                    expenses: widget.expenses,
+                                                    formattedDate:
+                                                        formattedDate,
+                                                    smallBoxes: smallBoxes),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom:
+                                                          screenHeightUnit * 15,
+                                                      top: screenHeightUnit *
+                                                          15),
+                                                  child: Center(
+                                                    child: Bottomwarning(
+                                                      screenHeightUnit:
+                                                          screenHeightUnit * 1,
+                                                      screenWidthUnit:
+                                                          screenWidthUnit,
+                                                      hints: widget.hints,
+                                                      nextExpense:
+                                                          widget.nextExpense,
+                                                      dayNumber:
+                                                          widget.dayNumber,
+                                                      baseDate: widget.now,
+                                                      close: () {
+                                                        setState(() {
+                                                          widget.hints
+                                                              .removeAt(0);
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
                                   ]),
                             ),
+                           Container(
+                              width: screenHeightUnit * 1,
+                              height: screenHeightUnit * 1170,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: screenWidthUnit * 20,
+                            ),
+                            
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -386,9 +441,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   List<Color> colors = [];
   late double netCash;
   final Headings2 headings2 = Headings2();
-  DateTime now = DateTime(2025, 5, 1);
-  DateTime _focusedDay = DateTime(2025, 5, 1);
-  DateTime _selectedDay = DateTime(2025, 5, 1);
+
   String formattedDate = '';
   int progress = 0;
   List<String> types = [];
@@ -411,7 +464,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingDebt = 1;
   int startingRent = 1;
   int startingCCMin = 1;
-  int startingUtilites = 1;  
+  int startingUtilites = 1;
   int startingTransportaion = 100;
   int startingGroceries = 250;
   List<Expense> trueExpenses = [];
@@ -479,60 +532,58 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     // Credit Score
   }
 
-  int dayNumber = 1;
-
   Future<void> nextDay() async {
-    if (now.month != now.add(Duration(days: 1)).month) {
+    if (widget.now.month != widget.now.add(Duration(days: 1)).month) {
       getInterestCCDebt();
       nextMonth();
     }
 
     setState(() {
-      now = now.add(Duration(days: 1));
-      _focusedDay = now;
-      _selectedDay = now;
-      formattedDate = DateFormat('MMM d, y').format(_focusedDay);
-      dayNumber += 1;
+      widget.now = widget.now.add(Duration(days: 1));
+      widget.focusedDay = widget.now;
+      widget.selectedDay = widget.now;
+      formattedDate = DateFormat('MMM d, y').format(widget.focusedDay);
+      widget.dayNumber += 1;
     });
 
-    if (now.day == 2) {
+    if (widget.now.day == 2) {
       if (!functions.checkIfPaymentIsPaid("Rent", widget.expenses)) {
         setState(() {
           widget.hints = functions.addHint(
-              "Rent", widget.hints, now, widget.level, widget.name);
+              "Rent", widget.hints, widget.now, widget.level, widget.name);
         });
       }
-    } else if (now.day == 8) {
+    } else if (widget.now.day == 8) {
       if (!functions.checkIfPaymentIsPaid("Utilities", widget.expenses)) {
         setState(() {
           widget.hints = functions.addHint(
-              "Utilities", widget.hints, now, widget.level, widget.name);
+              "Utilities", widget.hints, widget.now, widget.level, widget.name);
         });
       }
-    } else if (now.day == 16) {
+    } else if (widget.now.day == 16) {
       for (Milestone milestone in widget.milestones) {
         if (milestone.name == "Two Weeks Under Budget") {
           if (milestone.currentAmount < 7) {
             setState(() {
               widget.hints = functions.addHint("Two Weeks Under Budget",
-                  widget.hints, now, widget.level, widget.name);
+                  widget.hints, widget.now, widget.level, widget.name);
             });
           }
         } else if (milestone.name == "Debt Avalanche Start") {
           if (milestone.currentAmount / milestone.goalAmount < 0.5 &&
-              now.month == 5) {
+              widget.now.month == 5) {
             setState(() {
               widget.hints = functions.addHint("Debt Avalanche Start",
-                  widget.hints, now, widget.level, widget.name);
+                  widget.hints, widget.now, widget.level, widget.name);
             });
           }
         }
       }
-    } else if (now.day == 24) {
+    } else if (widget.now.day == 24) {
       if (!functions.checkIfPaymentIsPaid("CC Debt", widget.expenses)) {
         setState(() {
           widget.hints = functions.addHint(
-              "CC Min", widget.hints, now, widget.level, widget.name);
+              "CC Min", widget.hints, widget.now, widget.level, widget.name);
         });
       }
       for (Milestone milestone in widget.milestones) {
@@ -540,29 +591,29 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           if (milestone.currentAmount < 2) {
             setState(() {
               widget.hints = functions.addHint("Two Weeks Under Budget",
-                  widget.hints, now, widget.level, widget.name);
+                  widget.hints, widget.now, widget.level, widget.name);
             });
           }
         }
       }
-    } else if ((now.month == 2 && now.day == 27) ||
-        (now.month != 2 && now.day == 29)) {
+    } else if ((widget.now.month == 2 && widget.now.day == 27) ||
+        (widget.now.month != 2 && widget.now.day == 29)) {
       setState(() {
-        widget.hints = functions.addHint(
-            "End of Month", widget.hints, now, widget.level, widget.name);
+        widget.hints = functions.addHint("End of Month", widget.hints,
+            widget.now, widget.level, widget.name);
       });
     }
   }
 
   Future<void> getEvents() async {
-    DateTime normalizedToday = normalizeDate(now);
+    DateTime normalizedToday = normalizeDate(widget.now);
     if (expensesMapped.containsKey(normalizedToday)) {
       List<Expense> todayExpenses = expensesMapped[normalizedToday]!;
       for (Expense expense in todayExpenses) {
         if (expense.name == "Pay Day") {
           setState(() {
             widget.hints = functions.addHint(
-                "Pay Day", widget.hints, now, widget.level, widget.name);
+                "Pay Day", widget.hints, widget.now, widget.level, widget.name);
           });
 
           await showDialog(
@@ -658,7 +709,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               eventProccesed = true;
             });
           }
-        } else if (expense.name == "Utilities" || expense.name == "Transportation" || expense.name == "Groceries") {
+        } else if (expense.name == "Utilities" ||
+            expense.name == "Transportation" ||
+            expense.name == "Groceries") {
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -694,7 +747,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             });
           }
         } else {
-
           print(expense.name);
         }
       }
@@ -741,8 +793,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
-      _selectedDay = selectedDay;
-      _focusedDay = focusedDay;
+      widget.selectedDay = selectedDay;
+      widget.focusedDay = focusedDay;
     });
   }
 
@@ -899,7 +951,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               (DateTime.now().millisecondsSinceEpoch % 100) ~/
               100;
 
-      DateTime eventDay = now.add(Duration(days: randomDay));
+      DateTime eventDay = widget.now.add(Duration(days: randomDay));
       int randomIndex =
           (DateTime.now().millisecondsSinceEpoch % widget.randomEvents.length);
       RandomEvent? event = widget.randomEvents.isNotEmpty
@@ -917,7 +969,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   Future<void> checkRandomEvents() async {
-    DateTime normalizedToday = normalizeDate(now);
+    DateTime normalizedToday = normalizeDate(widget.now);
     DateTime normalizedTodayPlusTwo = normalizedToday.add(Duration(days: 2));
 
     for (RandomEvent randomEvent in allocatedEvents) {
@@ -1012,8 +1064,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
       if (isSameDay(normalizedTodayPlusTwo, randomEvent.trigerDay)) {
         setState(() {
-          widget.hints = functions.addHint(
-              randomEvent.name, widget.hints, now, widget.level, widget.name);
+          widget.hints = functions.addHint(randomEvent.name, widget.hints,
+              widget.now, widget.level, widget.name);
         });
       }
     }

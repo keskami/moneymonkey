@@ -214,13 +214,13 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
               }
 
               return Positioned(
-                bottom: 5,
+                bottom: 2,
                 left: 5,
                 right: 5,
                 child: SizedBox(
                     height: widget.smallBoxes
                         ? widget.screenHeightUnit *
-                            70 // Adjust height based on your need
+                            70 
                         : widget.screenHeightUnit * 85,
                     child: Align(
                       alignment: Alignment.bottomCenter,
