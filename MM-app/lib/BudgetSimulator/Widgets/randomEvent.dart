@@ -73,7 +73,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         Cost21Name = 'Credit Score';
         cost21Cost = 1;
-        Cost22Name = 'Cognitive Health';
+        Cost22Name = 'Emotional Health';
         cost22Cost = 15;
         option2Source = "Cash";
 
@@ -100,7 +100,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         Cost21Name = 'Credit Score';
         cost21Cost = -4;
-        Cost22Name = 'Cognitive Health';
+        Cost22Name = 'Emotional Health';
         cost22Cost = 10;
         
         option2Cost = 0;
@@ -114,7 +114,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         Cost11Name = 'Credit Score';
         cost11Cost = -2;
 
-        Cost12Name = 'Cogntive Health';
+        Cost12Name = 'Emotional Health';
         cost12Cost = 25;
 
         option1Cost = -200;
@@ -150,7 +150,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         Cost21Name = 'Credit Score';
         cost21Cost = 3;
-        Cost22Name = 'Cognitive Health';
+        Cost22Name = 'Emotional Health';
         cost22Cost = 10;
         
         option2Cost = 0;
@@ -165,7 +165,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         Cost11Name = 'Credit Score';
         cost11Cost = 5;
 
-        Cost12Name = 'Cognative Health';
+        Cost12Name = 'Emotional Health';
         cost12Cost = 5;
 
         option1Cost = 150;
@@ -201,7 +201,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         Cost21Name = 'Credit Score';
         cost21Cost = 2;
-        Cost22Name = 'Cognitive Health';
+        Cost22Name = 'Emotional Health';
         cost22Cost = -15;
         
         option2Cost = 0;
@@ -268,7 +268,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         Cost11Name = 'Credit Score';
         cost11Cost = 3;
 
-        Cost12Name = 'Cognitive Health';
+        Cost12Name = 'Emotional Health';
         cost12Cost = 5;
 
         option1Cost = 100;
@@ -279,7 +279,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         Cost21Name = 'Physical Health';
         cost21Cost = 10;
-        Cost22Name = 'Cognitive Health';
+        Cost22Name = 'Emotional Health';
         cost22Cost = 10;
         
         option2Cost = 0;
@@ -441,7 +441,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                 } else {
                   finalSource = option2Source;
                   finalCost = option2Cost;
-                   effect1 = Cost21Name;
+                  effect1 = Cost21Name;
                   effect1Amount = cost21Cost;
                   effect2 = Cost22Name;
                   effect2Amount = cost22Cost;
