@@ -8,27 +8,32 @@ import 'package:intl/intl.dart';
 class BudgetSimulatorCalender extends StatefulWidget {
   final double screenWidthUnit;
   final double screenHeightUnit;
-    DateTime focusedDay;
-   DateTime now;
-   DateTime selectedDay;
-   List<Expense> expenses;
-   String formattedDate;
-   bool smallBoxes;
+  DateTime focusedDay;
+  DateTime now;
+  DateTime selectedDay;
+  List<Expense> expenses;
+  String formattedDate;
+  bool smallBoxes;
 
   BudgetSimulatorCalender(
       {super.key,
       required this.screenWidthUnit,
-      required this.screenHeightUnit, required this.focusedDay, required this.now, required this.selectedDay, required this.expenses, required this.formattedDate, required this.smallBoxes});
+      required this.screenHeightUnit,
+      required this.focusedDay,
+      required this.now,
+      required this.selectedDay,
+      required this.expenses,
+      required this.formattedDate,
+      required this.smallBoxes});
 
   @override
-  _BudgetSimulatorCalenderState createState() => _BudgetSimulatorCalenderState();
-
+  _BudgetSimulatorCalenderState createState() =>
+      _BudgetSimulatorCalenderState();
 }
 
 class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
-
-    Map<DateTime, List<Expense>> expensesMapped = {};
-     void mapExpenses() {
+  Map<DateTime, List<Expense>> expensesMapped = {};
+  void mapExpenses() {
     expensesMapped.clear();
 
     for (Expense expense in widget.expenses) {
@@ -40,15 +45,6 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
       }
     }
   }
-
-
-
-
-
-  
- 
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +70,8 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
             setState(() {
               widget.selectedDay = selectedDay;
               widget.focusedDay = focusedDay;
-              widget.formattedDate = DateFormat('MMM d, y').format(widget.selectedDay);
+              widget.formattedDate =
+                  DateFormat('MMM d, y').format(widget.selectedDay);
             });
           },
           headerVisible: false,
@@ -130,7 +127,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: isToday
-                                        ? Color.fromRGBO(243, 52, 53, 1)
+                                        ? Color.fromRGBO(0, 127, 255, 1)
                                         : Colors.transparent,
                                   ),
                                   child: Center(
@@ -192,7 +189,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: isToday
-                                  ? Color.fromRGBO(243, 52, 53, 1)
+                                  ? Color.fromRGBO(0, 127, 255, 1)
                                   : Colors.transparent,
                             ),
                             child: Center(
@@ -220,17 +217,32 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                 bottom: 5,
                 left: 5,
                 right: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: events.map((e) {
-                    final myExpense = e as Expense;
-                    return Expenselabel(
-                      expense: myExpense,
-                      screenHeightUnit: widget.screenHeightUnit,
-                      screenWidthUnit: widget.screenWidthUnit,
-                    );
-                  }).toList(),
-                ),
+                child: SizedBox(
+                    height: widget.smallBoxes
+                        ? widget.screenHeightUnit *
+                            70 // Adjust height based on your need
+                        : widget.screenHeightUnit * 85,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: events.map((e) {
+                            final myExpense = e as Expense;
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      widget.screenHeightUnit * 5),
+                              child: Expenselabel(
+                                expense: myExpense,
+                                screenHeightUnit: widget.screenHeightUnit,
+                                screenWidthUnit: widget.screenWidthUnit,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    )),
               );
             },
             selectedBuilder: (context, day, focusedDay) {
@@ -261,7 +273,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                                       height: widget.screenHeightUnit * 50,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Color.fromRGBO(243, 52, 53, 1),
+                                        color: Color.fromRGBO(0, 127, 255, 1),
                                       ),
                                       child: Center(
                                         child: Text(

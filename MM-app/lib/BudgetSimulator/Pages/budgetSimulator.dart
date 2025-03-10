@@ -130,7 +130,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 child: Container(
                   width: screenWidthUnit * 1919,
                   height: screenHeight - (screenHeightUnit * 70),
-                  color: Color.fromRGBO(135, 206, 235, 1),
+                  color: Color.fromRGBO(243, 249, 255, 1),
                   child: Column(
                     children: [
                       SizedBox(
@@ -411,7 +411,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingDebt = 1;
   int startingRent = 1;
   int startingCCMin = 1;
-  int startingUtilites = 1;
+  int startingUtilites = 1;  
   int startingTransportaion = 100;
   int startingGroceries = 250;
   List<Expense> trueExpenses = [];
@@ -431,10 +431,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         } else if (expense.name == "Transportation") {
           setState(() {
             expense.amount += startingTransportaion;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
           });
         } else if (expense.name == "Groceries") {
           setState(() {
             expense.amount += startingGroceries;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
           });
         } else if (expense.name == "Rent") {
           setState(() {
@@ -654,7 +658,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               eventProccesed = true;
             });
           }
-        } else if (expense.name == "Utilities") {
+        } else if (expense.name == "Utilities" || expense.name == "Transportation" || expense.name == "Groceries") {
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -690,6 +694,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             });
           }
         } else {
+
           print(expense.name);
         }
       }
