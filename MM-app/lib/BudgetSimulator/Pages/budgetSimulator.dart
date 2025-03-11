@@ -78,6 +78,10 @@ class BudgetSimulator extends StatefulWidget {
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
 
+  List<int> paid = [0, 0, 0];
+  List<int> due = [200, 400, 600];
+  List<bool> done = [false, false, false];
+
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
 }
 
@@ -105,6 +109,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       var data = functions.updateNextExpense(widget.expenses, widget.now);
       expenses = data['expenses'];
       widget.nextExpense = data['nextExpense'];
+    });
+    getStartingExpenses();
+    setState(() {
+      widget.due = [startingCCMin, startingCCMin * 2, startingCCMin * 3];
     });
   }
 
@@ -369,6 +377,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     widget.totalPaymentsSeen,
                                                 totalPaymentsPaid:
                                                     widget.totalPaymentsPaid,
+                                                due: widget.due,
+                                                paid: widget.paid,
+                                                done: widget.done,
+                                                monthsOccurd: monthsOccurd,
                                               )
                                             : Container(),
                                   ]),
@@ -701,7 +713,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             });
           }
         } else if (expense.name == "CC Debt") {
-          widget.totalPaymentsSeen += 1;
+          setState(() {
+            widget.totalPaymentsSeen += 1;
+            widget.done[monthsOccurd] = true;
+          });
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -715,6 +730,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           Navigator.of(context).pop();
                         })
                       : setState(() {
+                          for (int i = monthsOccurd + 1; i <= 3; i++) {
+                            widget.due[i] += expense.penalty as int;
+                          }
                           expense.amount += expense.penalty;
                           widget.creditCardDebt += expense.penalty;
                           widget.creditScore -= 10;
@@ -729,6 +747,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           if (!eventProccesed) {
             if (expense.amountPaid < expense.amount) {
               setState(() {
+                for (int i = monthsOccurd + 1; i <= 3; i++) {
+                  widget.due[i] += expense.penalty as int;
+                }
                 expense.amount += expense.penalty;
                 widget.creditCardDebt += expense.penalty;
                 widget.creditScore -= 10;
@@ -841,6 +862,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   Future<void> spendOnExpense(int amount, String type) async {
     for (Expense expense in widget.expenses) {
       if (expense.name == type) {
+        if (type == "CC Debt") {
+          setState(() {
+            for (int i = monthsOccurd; i <= 2; i++) {
+            widget.paid[i] += amount;
+          }
+            
+          });
+          
+        }
         setState(() {
           expense.amountPaid += amount;
         });

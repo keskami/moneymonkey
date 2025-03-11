@@ -5,57 +5,219 @@ import 'package:flutter/material.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 
 class BudgetSimulatorFunctions {
+  // widget.creditScore > 670
+  //                                     ? Text(
+  //                                         "Great",
+  //                                         style: GoogleFonts.baloo2(
+  //                                           fontWeight: FontWeight.w600,
+  //                                           color: colors[4],
+  //                                           fontSize:
+  //                                               widget.screenHeightUnit * 35,
+  //                                         ),
+  //                                       )
+  //                                     : widget.creditScore > 640
+  //                                         ? Text(
+  //                                             "Good",
+  //                                             style: GoogleFonts.baloo2(
+  //                                               fontWeight: FontWeight.w600,
+  //                                               color: colors[3],
+  //                                               fontSize:
+  //                                                   widget.screenHeightUnit *
+  //                                                       35,
+  //                                             ),
+  //                                           )
+  //                                         : widget.creditScore > 610
+  //                                             ? Text(
+  //                                                 "Fair",
+  //                                                 style: GoogleFonts.baloo2(
+  //                                                   fontWeight: FontWeight.w600,
+  //                                                   color: colors[2],
+  //                                                   fontSize: widget
+  //                                                           .screenHeightUnit *
+  //                                                       35,
+  //                                                 ),
+  //                                               )
+  //                                             : widget.creditScore > 580
+  //                                                 ? Text(
+  //                                                     "Poor",
+  //                                                     style: GoogleFonts.baloo2(
+  //                                                       fontWeight:
+  //                                                           FontWeight.w600,
+  //                                                       color: colors[1],
+  //                                                       fontSize: widget
+  //                                                               .screenHeightUnit *
+  //                                                           35,
+  //                                                     ),
+  //                                                   )
+  //                                                 : Text(
+  //                                                     "Bad",
+  //                                                     style: GoogleFonts.baloo2(
+  //                                                       fontWeight:
+  //                                                           FontWeight.w600,
+  //                                                       color: colors[0],
+  //                                                       fontSize: widget
+  //                                                               .screenHeightUnit *
+  //                                                           35,
+  //                                                     ),
+  //                                                   ),
 
+  String getCreditnWord(
+    int score,
+  ) {
+    if (score > 670) {
+      return "Great";
+    } else if (score > 640) {
+      return "Good";
+    } else if (score > 610) {
+      return "Fair";
+    } else if (score > 580) {
+      return "Poor";
+    } else {
+      return "Bad";
+    }
+  }
 
-  Expense getCCDebt(List<Expense> expenes){
-    for(Expense expense in expenes){
-      if (expense.name == "CC Debt"){
+  Color getCreditTextColor(int score) {
+    if (score > 670) {
+      return Colors.green;
+    } else if (score > 640) {
+      return Colors.lightGreen;
+    } else if (score > 610) {
+      return Colors.yellow;
+    } else if (score > 580) {
+      return Color.fromRGBO(251, 176, 59, 1);
+    } else {
+      return Colors.red;
+    }
+  }
+
+  String getUtilizationWord(double debt, double limit) {
+    if (debt / limit < .25) {
+      return "Excellent";
+    } else if (debt / limit < .5) {
+      return "Good";
+    } else if (debt / limit < .75) {
+      return "Fair";
+    } else {
+      return "Bad";
+    }
+  }
+
+  Color getUtilizationBackgroudColor(double debt, double limit) {
+    if (debt / limit < .25) {
+      return Color.fromRGBO(243, 255, 250, 1);
+    } else if (debt / limit < .5) {
+      return Color.fromRGBO(243, 255, 250, 1);
+    } else if (debt / limit < .75) {
+      return Color.fromRGBO(255, 247, 233, 1);
+    } else {
+      return Color.fromRGBO(255, 243, 243, 1);
+    }
+  }
+
+  Color getUtilizationTextColor(double debt, double limit) {
+    if (debt / limit < .25) {
+      return Colors.green;
+    } else if (debt / limit < .5) {
+      return Colors.green;
+    } else if (debt / limit < .75) {
+      return Color.fromRGBO(255, 176, 0, 1);
+    } else {
+      return Colors.red;
+    }
+  }
+
+  String getPaymentHistoryWord(double percentage, int amount) {
+    if (amount == 0) {
+      return "No";
+    }
+    if (percentage == 100) {
+      return "Perfect";
+    } else if (percentage != 0) {
+      return "Fair";
+    } else {
+      return "Bad";
+    }
+  }
+
+  Color getPaymentHistoryBackgroudColor(double percentage, int amount) {
+    if (amount == 0) {
+      return Color.fromRGBO(255, 247, 233, 1);
+    } else {
+      if (percentage == 100) {
+        return Color.fromRGBO(243, 255, 250, 1);
+      } else if (percentage != 0) {
+        return Color.fromRGBO(255, 247, 233, 1);
+      } else {
+        return Color.fromRGBO(255, 243, 243, 1);
+      }
+    }
+  }
+
+  Color getPaymentHistoryTextColor(double percentage, int amount) {
+    if (amount == 0) {
+      return Color.fromRGBO(255, 176, 0, 1);
+    } else {
+      if (percentage == 100) {
+        Colors.green;
+      } else if (percentage != 0) {
+        return Color.fromRGBO(255, 176, 0, 1);
+      } else {
+        return Colors.red;
+      }
+    }
+    return Color.fromRGBO(255, 176, 0, 1);
+  }
+
+  Expense getCCDebt(List<Expense> expenes) {
+    for (Expense expense in expenes) {
+      if (expense.name == "CC Debt") {
         return expense;
-    }
-
-      }
-      return expenes[0];
-      
-  }
-
-void nextMonth({
-  required List<Expense> expenses,
-  required int monthsOccurd,
-  required bool noLatePayments,
-  required void Function() mapExpenses,
-  required Function(int) updateCreditScore,
-  required double startingTransportation,
-  required double startingGroceries,
-  required double startingRent,
-  required double startingCCMin,
-}) {
-  if (monthsOccurd < 2) {
-    for (Expense expense in expenses) {
-      if (expense.name == "Pay Day") {
-        expense.dueDay = DateTime(expense.dueDay.year, expense.dueDay.month + 1, expense.dueDay.day);
-      } else if (expense.name == "Transportation") {
-        expense.amount += startingTransportation;
-      } else if (expense.name == "Groceries") {
-        expense.amount += startingGroceries;
-      } else if (expense.name == "Rent") {
-        expense.amount += startingRent;
-        expense.dueDay = DateTime(expense.dueDay.year, expense.dueDay.month + 1, expense.dueDay.day);
-      } else if (expense.name == "CC Debt" || expense.name == "Utilities") {
-        expense.amount += startingCCMin;
-        expense.dueDay = DateTime(expense.dueDay.year, expense.dueDay.month + 1, expense.dueDay.day);
       }
     }
+    return expenes[0];
   }
 
-  monthsOccurd += 1;
+  void nextMonth({
+    required List<Expense> expenses,
+    required int monthsOccurd,
+    required bool noLatePayments,
+    required void Function() mapExpenses,
+    required Function(int) updateCreditScore,
+    required double startingTransportation,
+    required double startingGroceries,
+    required double startingRent,
+    required double startingCCMin,
+  }) {
+    if (monthsOccurd < 2) {
+      for (Expense expense in expenses) {
+        if (expense.name == "Pay Day") {
+          expense.dueDay = DateTime(expense.dueDay.year,
+              expense.dueDay.month + 1, expense.dueDay.day);
+        } else if (expense.name == "Transportation") {
+          expense.amount += startingTransportation;
+        } else if (expense.name == "Groceries") {
+          expense.amount += startingGroceries;
+        } else if (expense.name == "Rent") {
+          expense.amount += startingRent;
+          expense.dueDay = DateTime(expense.dueDay.year,
+              expense.dueDay.month + 1, expense.dueDay.day);
+        } else if (expense.name == "CC Debt" || expense.name == "Utilities") {
+          expense.amount += startingCCMin;
+          expense.dueDay = DateTime(expense.dueDay.year,
+              expense.dueDay.month + 1, expense.dueDay.day);
+        }
+      }
+    }
 
-  if (noLatePayments) {
-    updateCreditScore(10); 
+    monthsOccurd += 1;
+
+    if (noLatePayments) {
+      updateCreditScore(10);
+    }
+
+    mapExpenses();
   }
-
-  mapExpenses(); 
-}
-
 
   List<Color> colors = [
     Colors.pink,
@@ -89,14 +251,12 @@ void nextMonth({
     dueDateType: '',
   );
 
-
   List<String> getTypes(expenes) {
     List<String> types = [];
     for (Expense expense in expenes) {
       types.add(expense.name);
     }
     return types;
-    
   }
 
   Map<String, dynamic> editMilestones({

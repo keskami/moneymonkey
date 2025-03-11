@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/circlePainter.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/creditCardManagmentPaymentTracker.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditUtilizationManagmentPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/undsertandingPayment.dart';
 
@@ -16,6 +18,10 @@ class CreditCardManagementScreen extends StatefulWidget {
   final int creditLimit;
   final int totalPayemntsSeen;
   final int totalPaymentsPaid;
+  final List<int> due;
+  final List<int> paid;
+  final List<bool> done;
+  final int monthsOccurd;
 
   CreditCardManagementScreen({
     required this.screenWidthUnit,
@@ -28,6 +34,10 @@ class CreditCardManagementScreen extends StatefulWidget {
     this.creditLimit = 0,
     required this.totalPayemntsSeen,
     required this.totalPaymentsPaid,
+    required this.due,
+    required this.paid,
+    required this.done,
+    required this.monthsOccurd,
   });
 
   @override
@@ -38,36 +48,50 @@ class CreditCardManagementScreen extends StatefulWidget {
 class _CreditCardManagementScreenState
     extends State<CreditCardManagementScreen> {
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
-  final List<Color> colors = [
-    Colors.red,
-    Color.fromRGBO(251, 176, 59, 1),
-    Colors.yellow,
-    Colors.lightGreen,
-    Colors.green,
-  ];
-
   late Expense ccDebt;
   late int creditUtilization;
   late String paymentPercentage;
   late int paymentPercentageNum;
+  late String paymentHistoryWord;
+  late Color paymentHistoryColor;
+  late Color paymentHistoryBackgroud;
+  late String utilizationWord;
+  late Color utilizationColor;
+  late Color utilizationBackgroud;
+
+  late String creditWord;
+  late Color creditColor;
+
   @override
   void initState() {
     super.initState();
-
     ccDebt = functions.getCCDebt(widget.expenses);
-
     creditUtilization = widget.creditLimit > 0
         ? ((widget.credidCardDebt / widget.creditLimit) * 100).toInt()
         : 0;
-
     paymentPercentage = widget.totalPayemntsSeen > 0
         ? ((widget.totalPaymentsPaid / widget.totalPayemntsSeen) * 100)
             .toStringAsFixed(0)
         : "NA";
-
     paymentPercentageNum = widget.totalPayemntsSeen > 0
         ? ((widget.totalPaymentsPaid / widget.totalPayemntsSeen) * 100).toInt()
         : 0;
+    setState(() {
+      paymentHistoryWord = functions.getPaymentHistoryWord(
+          paymentPercentageNum as double, widget.totalPayemntsSeen);
+      paymentHistoryColor = functions.getPaymentHistoryTextColor(
+          paymentPercentageNum as double, widget.totalPayemntsSeen);
+      paymentHistoryBackgroud = functions.getPaymentHistoryBackgroudColor(
+          paymentPercentageNum as double, widget.totalPayemntsSeen);
+      utilizationWord = functions.getUtilizationWord(
+          widget.credidCardDebt, widget.creditLimit as double);
+      utilizationColor = functions.getUtilizationTextColor(
+          widget.credidCardDebt, widget.creditLimit as double);
+      utilizationBackgroud = functions.getUtilizationBackgroudColor(
+          widget.credidCardDebt, widget.creditLimit as double);
+      creditColor = functions.getCreditTextColor(widget.creditScore as int);
+      creditWord = functions.getCreditnWord(widget.creditScore as int);
+    });
   }
 
   @override
@@ -143,11 +167,11 @@ class _CreditCardManagementScreenState
                     ],
                   ),
                   SizedBox(
-                    height: widget.screenHeightUnit * 20,
+                    height: widget.screenHeightUnit * 10,
                   ),
                   Center(
                       child: Container(
-                    height: widget.screenHeightUnit * 830,
+                    height: widget.screenHeightUnit * 840,
                     width: widget.screenWidthUnit * 1100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -165,7 +189,7 @@ class _CreditCardManagementScreenState
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: widget.screenHeightUnit * 15,
+                          height: widget.screenHeightUnit * 10,
                         ),
                         Center(
                             child: Container(
@@ -198,61 +222,14 @@ class _CreditCardManagementScreenState
                                   SizedBox(
                                     height: widget.screenHeightUnit * 2,
                                   ),
-                                  widget.creditScore > 670
-                                      ? Text(
-                                          "Great",
-                                          style: GoogleFonts.baloo2(
-                                            fontWeight: FontWeight.w600,
-                                            color: colors[4],
-                                            fontSize:
-                                                widget.screenHeightUnit * 35,
-                                          ),
-                                        )
-                                      : widget.creditScore > 640
-                                          ? Text(
-                                              "Good",
-                                              style: GoogleFonts.baloo2(
-                                                fontWeight: FontWeight.w600,
-                                                color: colors[3],
-                                                fontSize:
-                                                    widget.screenHeightUnit *
-                                                        35,
-                                              ),
-                                            )
-                                          : widget.creditScore > 610
-                                              ? Text(
-                                                  "Fair",
-                                                  style: GoogleFonts.baloo2(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: colors[2],
-                                                    fontSize: widget
-                                                            .screenHeightUnit *
-                                                        35,
-                                                  ),
-                                                )
-                                              : widget.creditScore > 580
-                                                  ? Text(
-                                                      "Poor",
-                                                      style: GoogleFonts.baloo2(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: colors[1],
-                                                        fontSize: widget
-                                                                .screenHeightUnit *
-                                                            35,
-                                                      ),
-                                                    )
-                                                  : Text(
-                                                      "Bad",
-                                                      style: GoogleFonts.baloo2(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: colors[0],
-                                                        fontSize: widget
-                                                                .screenHeightUnit *
-                                                            35,
-                                                      ),
-                                                    ),
+                                  Text(
+                                    creditWord,
+                                    style: GoogleFonts.baloo2(
+                                      fontWeight: FontWeight.w600,
+                                      color: creditColor,
+                                      fontSize: widget.screenHeightUnit * 35,
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -276,7 +253,7 @@ class _CreditCardManagementScreenState
                               )),
                         ),
                         SizedBox(
-                          height: widget.screenHeightUnit * 5,
+                          height: widget.screenHeightUnit * 3,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -297,7 +274,7 @@ class _CreditCardManagementScreenState
                               },
                               child: Container(
                                   width: widget.screenWidthUnit * 475,
-                                  height: widget.screenHeightUnit * 125,
+                                  height: widget.screenHeightUnit * 105,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
@@ -307,8 +284,8 @@ class _CreditCardManagementScreenState
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                        top: widget.screenHeightUnit * 10,
-                                        bottom: widget.screenHeightUnit * 10,
+                                        top: widget.screenHeightUnit * 5,
+                                        bottom: widget.screenHeightUnit * 5,
                                         left: widget.screenWidthUnit * 30),
                                     child: Column(
                                       mainAxisAlignment:
@@ -340,7 +317,7 @@ class _CreditCardManagementScreenState
                                             ),
                                             Container(
                                               height:
-                                                  widget.screenHeightUnit * 50,
+                                                  widget.screenHeightUnit * 40,
                                               width:
                                                   widget.screenWidthUnit * 155,
                                               decoration: BoxDecoration(
@@ -362,7 +339,7 @@ class _CreditCardManagementScreenState
                                                         0, 127, 255, 1),
                                                     fontSize: widget
                                                             .screenHeightUnit *
-                                                        25,
+                                                        20,
                                                   ),
                                                 ),
                                               ),
@@ -371,58 +348,36 @@ class _CreditCardManagementScreenState
                                         ),
                                         Row(
                                           children: [
-                                            paymentPercentageNum == 100
-                                                ? Text(
-                                                    "${paymentPercentage}%",
-                                                    style: GoogleFonts.baloo2(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: colors[4],
-                                                      fontSize: widget
-                                                              .screenHeightUnit *
-                                                          35,
-                                                    ),
-                                                  )
-                                                : paymentPercentageNum > 75
-                                                    ? Text(
-                                                        "${paymentPercentage}%",
-                                                        style:
-                                                            GoogleFonts.baloo2(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: colors[2],
-                                                          fontSize: widget
-                                                                  .screenHeightUnit *
-                                                              35,
-                                                        ),
-                                                      )
-                                                    : Text(
-                                                        "${paymentPercentage}%",
-                                                        style:
-                                                            GoogleFonts.baloo2(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: colors[0],
-                                                          fontSize: widget
-                                                                  .screenHeightUnit *
-                                                              35,
-                                                        ),
-                                                      ),
+                                            Text(
+                                              "${paymentPercentage}%",
+                                              style: GoogleFonts.baloo2(
+                                                fontWeight: FontWeight.w600,
+                                                color: paymentHistoryColor,
+                                                fontSize:
+                                                    widget.screenHeightUnit *
+                                                        30,
+                                              ),
+                                            ),
                                             SizedBox(
                                               width:
                                                   widget.screenWidthUnit * 10,
                                             ),
-                                            Text(
-                                              "Percentage of payments you’ve made on time",
-                                              style: GoogleFonts.baloo2(
-                                                fontWeight: FontWeight.w600,
-                                                color: Color.fromRGBO(
-                                                    106, 114, 128, 1),
-                                                fontSize:
-                                                    widget.screenHeightUnit *
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: widget
+                                                            .screenHeightUnit *
+                                                        2),
+                                                child: Text(
+                                                  "Percentage of payments you’ve made on time",
+                                                  style: GoogleFonts.baloo2(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Color.fromRGBO(
+                                                        106, 114, 128, 1),
+                                                    fontSize: widget
+                                                            .screenHeightUnit *
                                                         22,
-                                              ),
-                                            )
+                                                  ),
+                                                )),
                                           ],
                                         ),
                                       ],
@@ -431,7 +386,7 @@ class _CreditCardManagementScreenState
                             ),
                             Container(
                                 width: widget.screenWidthUnit * 475,
-                                height: widget.screenHeightUnit * 125,
+                                height: widget.screenHeightUnit * 105,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -441,8 +396,8 @@ class _CreditCardManagementScreenState
                                 ),
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                      top: widget.screenHeightUnit * 10,
-                                      bottom: widget.screenHeightUnit * 10,
+                                      top: widget.screenHeightUnit * 5,
+                                      bottom: widget.screenHeightUnit * 5,
                                       left: widget.screenWidthUnit * 30),
                                   child: Column(
                                     mainAxisAlignment:
@@ -483,8 +438,7 @@ class _CreditCardManagementScreenState
                                                             BorderRadius
                                                                 .circular(10),
                                                       ),
-                                                      child:
-                                                          UtilizationPopUp(),
+                                                      child: UtilizationPopUp(),
                                                     );
                                                   },
                                                 );
@@ -492,7 +446,7 @@ class _CreditCardManagementScreenState
                                               child: Container(
                                                 height:
                                                     widget.screenHeightUnit *
-                                                        50,
+                                                        40,
                                                 width: widget.screenWidthUnit *
                                                     155,
                                                 decoration: BoxDecoration(
@@ -516,7 +470,7 @@ class _CreditCardManagementScreenState
                                                           0, 127, 255, 1),
                                                       fontSize: widget
                                                               .screenHeightUnit *
-                                                          25,
+                                                          20,
                                                     ),
                                                   ),
                                                 ),
@@ -525,65 +479,32 @@ class _CreditCardManagementScreenState
                                       ),
                                       Row(
                                         children: [
-                                          creditUtilization < 25
-                                              ? Text(
-                                                  "${creditUtilization}%",
-                                                  style: GoogleFonts.baloo2(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: colors[4],
-                                                    fontSize: widget
-                                                            .screenHeightUnit *
-                                                        35,
-                                                  ),
-                                                )
-                                              : creditUtilization < 50
-                                                  ? Text(
-                                                      "${creditUtilization}%",
-                                                      style: GoogleFonts.baloo2(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: colors[3],
-                                                        fontSize: widget
-                                                                .screenHeightUnit *
-                                                            35,
-                                                      ),
-                                                    )
-                                                  : creditUtilization < 75
-                                                      ? Text(
-                                                          "${creditUtilization}%",
-                                                          style: GoogleFonts
-                                                              .baloo2(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: colors[1],
-                                                            fontSize: widget
-                                                                    .screenHeightUnit *
-                                                                35,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          "${creditUtilization}%",
-                                                          style: GoogleFonts
-                                                              .baloo2(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: colors[0],
-                                                            fontSize: widget
-                                                                    .screenHeightUnit *
-                                                                35,
-                                                          ),
-                                                        ),
+                                          Text(
+                                            "${creditUtilization}%",
+                                            style: GoogleFonts.baloo2(
+                                              fontWeight: FontWeight.w600,
+                                              color: utilizationColor,
+                                              fontSize:
+                                                  widget.screenHeightUnit * 30,
+                                            ),
+                                          ),
                                           SizedBox(
                                             width: widget.screenWidthUnit * 10,
                                           ),
-                                          Text(
-                                            "Credit you’re using compared to total limit",
-                                            style: GoogleFonts.baloo2(
-                                              fontWeight: FontWeight.w600,
-                                              color: Color.fromRGBO(
-                                                  106, 114, 128, 1),
-                                              fontSize:
-                                                  widget.screenHeightUnit * 22,
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                top: widget.screenHeightUnit *
+                                                    2),
+                                            child: Text(
+                                              "Credit you’re using compared to total limit",
+                                              style: GoogleFonts.baloo2(
+                                                fontWeight: FontWeight.w600,
+                                                color: Color.fromRGBO(
+                                                    106, 114, 128, 1),
+                                                fontSize:
+                                                    widget.screenHeightUnit *
+                                                        22,
+                                              ),
                                             ),
                                           )
                                         ],
@@ -594,23 +515,227 @@ class _CreditCardManagementScreenState
                           ],
                         ),
                         SizedBox(
-                          height: widget.screenHeightUnit * 20,
+                          height: widget.screenHeightUnit * 15,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
                               width: widget.screenWidthUnit * 475,
-                              height: widget.screenHeightUnit * 368,
-                              color: Colors.green,
+                              height: widget.screenHeightUnit * 400,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Color.fromRGBO(0, 127, 255, 1))),
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: widget.screenWidthUnit * 30,
+                                    top: widget.screenHeightUnit * 18),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: widget.screenHeightUnit * 65,
+                                      width: widget.screenWidthUnit * 260,
+                                      decoration: BoxDecoration(
+                                          color: paymentHistoryBackgroud,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                            color: paymentHistoryColor,
+                                            width: 1,
+                                          )),
+                                      child: Center(
+                                        child: Text(
+                                          "$paymentHistoryWord Payment History",
+                                          style: GoogleFonts.baloo2(
+                                            fontWeight: FontWeight.w600,
+                                            color: paymentHistoryColor,
+                                            fontSize:
+                                                widget.screenHeightUnit * 30,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: widget.screenHeightUnit * 5,
+                                    ),
+                                    CreditCardManagementPaymentTracker(
+                                      screenHeightUnit: widget.screenHeightUnit,
+                                      screenWidthUnit: widget.screenWidthUnit,
+                                      due: widget.due,
+                                      paid: widget.paid,
+                                      done: widget.done,
+                                      monthsOccurd: widget.monthsOccurd,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                             Container(
                               width: widget.screenWidthUnit * 475,
-                              height: widget.screenHeightUnit * 368,
-                              color: Colors.green,
+                              height: widget.screenHeightUnit * 420,
+                              child: Column(
+                                children: [
+                                  Container(
+                                      width: widget.screenWidthUnit * 475,
+                                      height: widget.screenHeightUnit * 340,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: Color.fromRGBO(
+                                                  0, 127, 255, 1))),
+                                      child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: widget.screenWidthUnit * 30,
+                                              top:
+                                                  widget.screenHeightUnit * 18),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height:
+                                                    widget.screenHeightUnit *
+                                                        65,
+                                                width: widget.screenWidthUnit *
+                                                    200,
+                                                decoration: BoxDecoration(
+                                                    color: utilizationBackgroud,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    border: Border.all(
+                                                      color: utilizationColor,
+                                                      width: 1,
+                                                    )),
+                                                child: Center(
+                                                  child: Text(
+                                                    "$utilizationWord Utilization",
+                                                    style: GoogleFonts.baloo2(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: utilizationColor,
+                                                      fontSize: widget
+                                                              .screenHeightUnit *
+                                                          30,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    widget.screenHeightUnit *
+                                                        45,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: widget
+                                                                .screenWidthUnit *
+                                                            160,
+                                                        height: widget
+                                                                .screenHeightUnit *
+                                                            160,
+                                                        child: CustomPaint(
+                                                          painter: CirclePainter(
+                                                              creditUtilization /
+                                                                  100,
+                                                              utilizationColor,
+                                                              utilizationBackgroud),
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            "${(creditUtilization).toInt()}%",
+                                                            style: TextStyle(
+                                                                fontSize: widget
+                                                                        .screenHeightUnit *
+                                                                    35,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                              "\$${widget.credidCardDebt} out of\n\$${widget.creditLimit}",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      widget.screenHeightUnit *
+                                                                          22)),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    "Check in regularly\nto keep your balances\nlow!",
+                                                    style: GoogleFonts.baloo2(
+                                                        fontSize: widget
+                                                                .screenHeightUnit *
+                                                            28,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Color.fromRGBO(
+                                                            106, 114, 128, 1)),
+                                                    textAlign: TextAlign.left,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ))),
+                                  SizedBox(
+                                    height: widget.screenHeightUnit * 20,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        height: widget.screenHeightUnit * 60,
+                                        width: widget.screenWidthUnit * 240,
+                                        decoration: BoxDecoration(
+                                          color: Color.fromRGBO(0, 127, 255, 1),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          "Simulate Payments",
+                                          style: GoogleFonts.baloo2(
+                                            fontSize:
+                                                widget.screenWidthUnit * 20,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white,
+                                          ),
+                                        )),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             )
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ))
