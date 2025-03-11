@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UnderstandingPayment extends StatelessWidget {
-  const UnderstandingPayment({Key? key}) : super(key: key);
+class UtilizationPopUp extends StatelessWidget {
+  const UtilizationPopUp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class UnderstandingPayment extends StatelessWidget {
     return Stack(
       children: [
         Container(
-            height: screenHeightUnit * 1000,
+            height: screenHeightUnit * 1100,
             width: screenWidthUnit * 700,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -63,7 +63,7 @@ class UnderstandingPayment extends StatelessWidget {
                                 ),
                                 TextSpan(
                                   text:
-                                      "Payment history tracks whether you've\npaid your bills on time. It's the single most important factor in your\ncredit score.",
+                                      "Credit utilization is the percentage of your\navailable credit that you're currently using.",
                                   style: GoogleFonts.baloo2(
                                     fontSize: screenHeightUnit * 50,
                                     fontWeight: FontWeight.w500,
@@ -74,10 +74,10 @@ class UnderstandingPayment extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: screenHeightUnit * 18),
+                        SizedBox(height: screenHeightUnit * 30),
                         Center(
                             child: Container(
-                          height: screenHeightUnit * 150,
+                          height: screenHeightUnit * 350,
                           width: screenWidthUnit * 600,
                           decoration: BoxDecoration(
                               color: Color.fromRGBO(233, 244, 255, 1),
@@ -86,28 +86,62 @@ class UnderstandingPayment extends StatelessWidget {
                                 color: Color.fromRGBO(0, 127, 255, 1),
                                 width: 1,
                               )),
-                          child: Center(
-                            child: Text(
-                              "Payment History = 35% of your Credit Score",
-                              style: GoogleFonts.baloo2(
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromRGBO(0, 127, 255, 1),
-                                fontSize: screenHeightUnit * 65,
-                              ),
-                            ),
-                          ),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                
+                                Text(
+                                  "Payment History = 35% of your Credit Score",
+                                  style: GoogleFonts.baloo2(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color.fromRGBO(0, 127, 255, 1),
+                                    fontSize: screenHeightUnit * 65,
+                                  ),
+                                ),
+                                Text(
+                                  "Utilization = (Current Balance ÷ Credit Limit) × 100%\nExample: \$3,000 balance on a \$5,000 limit = 60% utilization",
+                                  style: GoogleFonts.baloo2(
+                                    fontSize: screenHeightUnit * 50,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromRGBO(106, 114, 128, 1)
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  
+                                ),
+
+                              ]),
                         )),
-                        SizedBox(height: screenHeightUnit * 45),
+                        SizedBox(height: screenHeightUnit * 65),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            PaymentInfoBox(textColor: Color.fromRGBO(0, 199, 129, 1), title: 'Perfect Payment\nHistory', backColor: Color.fromRGBO(242, 255, 245, .7), effect: '+10',),
-                            PaymentInfoBox(textColor: Color.fromRGBO(255, 176, 0, 1), title: 'Missed One\nPayment', backColor: Color.fromRGBO(255, 247, 233, .7), effect: '-10',),
-                            PaymentInfoBox(textColor: Color.fromRGBO(255, 0, 0, 1), title: 'Missed All\nPayments', backColor: Color.fromRGBO(255, 243, 243, .7), effect: '-50',)
-
+                            UtilizationInfoBox(
+                              textColor: Color.fromRGBO(0, 199, 129, 1),
+                              title: 'Excellent:\nUnder 25%',
+                              backColor: Color.fromRGBO(242, 255, 245, .7),
+                              effect: '+15',
+                            ),
+                            UtilizationInfoBox(
+                              textColor: Color.fromRGBO(0, 199, 129, 1),
+                              title: 'Good:\n25%-49%',
+                              backColor: Color.fromRGBO(242, 255, 245, .7),
+                              effect: '+10',
+                            ),
+                            UtilizationInfoBox(
+                              textColor: Color.fromRGBO(255, 176, 0, 1),
+                              title: 'Fair:\n50%-75%',
+                              backColor: Color.fromRGBO(255, 247, 233, .7),
+                              effect: '-10',
+                            ),
+                            UtilizationInfoBox(
+                              textColor: Color.fromRGBO(255, 0, 0, 1),
+                              title: 'Poor:\nAbove 75%',
+                              backColor: Color.fromRGBO(255, 243, 243, .7),
+                              effect: '-50',
+                            )
                           ],
                         )
-
                       ],
                     ),
                   ),
@@ -131,13 +165,13 @@ class UnderstandingPayment extends StatelessWidget {
   }
 }
 
-class PaymentInfoBox extends StatelessWidget {
+class UtilizationInfoBox extends StatelessWidget {
   final Color textColor;
   final Color backColor;
   final String title;
   final String effect;
 
-  const PaymentInfoBox({
+  const UtilizationInfoBox({
     Key? key,
     required this.textColor,
     required this.title,
@@ -151,8 +185,8 @@ class PaymentInfoBox extends StatelessWidget {
     double screenWidthUnit = MediaQuery.of(context).size.width / 1607;
 
     return Container(
-        height: screenHeightUnit * 264,
-        width: screenWidthUnit * 180,
+        height: screenHeightUnit * 220,
+        width: screenWidthUnit * 140,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -167,17 +201,17 @@ class PaymentInfoBox extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.baloo2(
-                    fontSize: screenHeightUnit * 40,
+                    fontSize: screenHeightUnit * 34,
                     fontWeight: FontWeight.w600,
                     color: textColor),
                 textAlign: TextAlign.left,
               ),
               SizedBox(
-                height: screenHeightUnit * 25,
+                height: screenHeightUnit * 15,
               ),
               Container(
-                height: screenHeightUnit * 75,
-                width: screenWidthUnit * 140,
+                height: screenHeightUnit * 70,
+                width: screenWidthUnit * 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
@@ -187,35 +221,32 @@ class PaymentInfoBox extends StatelessWidget {
                   color: backColor,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      right: screenWidthUnit * 30, top: screenHeightUnit * 0),
-                  child: Center(
-                    child:  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Credit Score: ",
-                          style: GoogleFonts.baloo2(
-                            fontSize: screenHeightUnit * 30,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
+                    padding: EdgeInsets.only(
+                        right: screenWidthUnit * 10, top: screenHeightUnit * 0),
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "Credit Score: ",
+                              style: GoogleFonts.baloo2(
+                                fontSize: screenHeightUnit * 30,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: effect,
+                              style: GoogleFonts.baloo2(
+                                fontSize: screenHeightUnit * 30,
+                                fontWeight: FontWeight.w500,
+                                color: textColor,
+                              ),
+                            ),
+                          ],
                         ),
-                        TextSpan(
-                          text: effect,
-                          style: GoogleFonts.baloo2(
-                            fontSize: screenHeightUnit * 30,
-                            fontWeight: FontWeight.w500,
-                            color: textColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  )
-                  
-                 
-                ),
+                      ),
+                    )),
               )
             ],
           ),

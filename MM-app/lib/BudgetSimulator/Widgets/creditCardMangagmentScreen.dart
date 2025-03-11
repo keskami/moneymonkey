@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/creditUtilizationManagmentPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/undsertandingPayment.dart';
 
 class CreditCardManagementScreen extends StatefulWidget {
@@ -469,34 +470,57 @@ class _CreditCardManagementScreenState
                                           SizedBox(
                                             width: widget.screenWidthUnit * 125,
                                           ),
-                                          Container(
-                                            height:
-                                                widget.screenHeightUnit * 50,
-                                            width: widget.screenWidthUnit * 155,
-                                            decoration: BoxDecoration(
-                                                color: Color.fromRGBO(
-                                                    233, 244, 255, 1),
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                border: Border.all(
-                                                  color: Color.fromRGBO(
-                                                      0, 127, 255, 1),
-                                                  width: 1,
-                                                )),
-                                            child: Center(
-                                              child: Text(
-                                                "High impact",
-                                                style: GoogleFonts.baloo2(
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color.fromRGBO(
-                                                      0, 127, 255, 1),
-                                                  fontSize:
-                                                      widget.screenHeightUnit *
+                                          GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Dialog(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child:
+                                                          UtilizationPopUp(),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                height:
+                                                    widget.screenHeightUnit *
+                                                        50,
+                                                width: widget.screenWidthUnit *
+                                                    155,
+                                                decoration: BoxDecoration(
+                                                    color: Color.fromRGBO(
+                                                        233, 244, 255, 1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    border: Border.all(
+                                                      color: Color.fromRGBO(
+                                                          0, 127, 255, 1),
+                                                      width: 1,
+                                                    )),
+                                                child: Center(
+                                                  child: Text(
+                                                    "High impact",
+                                                    style: GoogleFonts.baloo2(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Color.fromRGBO(
+                                                          0, 127, 255, 1),
+                                                      fontSize: widget
+                                                              .screenHeightUnit *
                                                           25,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                          )
+                                              ))
                                         ],
                                       ),
                                       Row(
