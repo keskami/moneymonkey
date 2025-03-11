@@ -4,6 +4,7 @@ import 'package:money_monkey/Backend/Services/CacheServices.dart';
 import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/SubPageSelectorRow.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -136,7 +137,8 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           Container(
             height: screenHeight * 0.65,
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-            child: Obx(() => teacherDashboardController.currentPage.value),
+            child: 
+             Obx(() => teacherDashboardController.currentPage.value,),
           ),
         ],
       )

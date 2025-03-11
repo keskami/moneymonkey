@@ -7,6 +7,7 @@ import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dar
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/PerformanceTrendCharts.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PopUps.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -145,34 +146,50 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: ColoredPaddedContainer(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Top Performers",
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 18,
-                                  color: LightTheme().pastelGreen,
+                        child:  GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                backgroundColor:
+                                    Colors.transparent,
+                                child: PopUpContainer(
+                                  title: 'Top Performers',
+                                  students: teacherDashboardController
+                                      .supportStudents.value,
                                 ),
                               ),
-                              Text(
-                                teacherDashboardController
-                                    .topPerformers.value.length
-                                    .toString(),
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 30,
-                                  color: LightTheme().pastelGreen,
+                            );
+                          },
+                          child: ColoredPaddedContainer(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Top Performers",
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 18,
+                                    color: LightTheme().pastelGreen,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "Above 85%",
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 18,
-                                  color: LightTheme().pastelGreen,
+                                Text(
+                                  teacherDashboardController
+                                      .topPerformers.value.length
+                                      .toString(),
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 30,
+                                    color: LightTheme().pastelGreen,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  "Above 85%",
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 18,
+                                    color: LightTheme().pastelGreen,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -181,39 +198,55 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: ColoredPaddedContainer(
-                          color: Colors.blue.withValues(alpha: 0.2),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Average",
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 18,
-                                  color: Colors.blue,
+                        child:  GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                backgroundColor:
+                                    Colors.transparent,
+                                child: PopUpContainer(
+                                  title: 'Average',
+                                  students: teacherDashboardController
+                                      .classRoomStudents.value,
                                 ),
                               ),
-                              Text(
-                                (teacherDashboardController
-                                            .classRoomStudents.value.length -
-                                        (teacherDashboardController
-                                                .topPerformers.value.length +
-                                            teacherDashboardController
-                                                .supportStudents.value.length))
-                                    .toString(),
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 30,
-                                  color: Colors.blue,
+                            );
+                          },
+                          child: ColoredPaddedContainer(
+                            color: Colors.blue.withValues(alpha: 0.2),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Average",
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 18,
+                                    color: Colors.blue,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "70 - 85%",
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 18,
-                                  color: Colors.blue,
+                                Text(
+                                  (teacherDashboardController
+                                              .classRoomStudents.value.length -
+                                          (teacherDashboardController
+                                                  .topPerformers.value.length +
+                                              teacherDashboardController
+                                                  .supportStudents.value.length))
+                                      .toString(),
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 30,
+                                    color: Colors.blue,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  "70 - 85%",
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 18,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -222,35 +255,51 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: ColoredPaddedContainer(
-                          color: Colors.orange.withValues(alpha: 0.2),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Needs Support",
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 18,
-                                  color: Colors.orange,
+                        child: GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                backgroundColor:
+                                    Colors.transparent,
+                                child: PopUpContainer(
+                                  title: 'Needs Support',
+                                  students: teacherDashboardController
+                                      .supportStudents.value,
                                 ),
                               ),
-                              Text(
-                                teacherDashboardController
-                                    .supportStudents.value.length
-                                    .toString(),
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 30,
-                                  color: Colors.orange,
+                            );
+                          },
+                          child: ColoredPaddedContainer(
+                            color: Colors.orange.withValues(alpha: 0.2),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Needs Support",
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 18,
+                                    color: Colors.orange,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "Below 70%",
-                                style: TextStyles.containerTitle.copyWith(
-                                  fontSize: 18,
-                                  color: Colors.orange,
+                                Text(
+                                  teacherDashboardController
+                                      .supportStudents.value.length
+                                      .toString(),
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 30,
+                                    color: Colors.orange,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  "Below 70%",
+                                  style: TextStyles.containerTitle.copyWith(
+                                    fontSize: 18,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

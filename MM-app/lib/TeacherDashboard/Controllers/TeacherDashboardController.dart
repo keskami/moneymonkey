@@ -72,9 +72,9 @@ class TeacherDashboardController extends GetxController {
       getClasses();
       
       // If we have classes, select the first one by default
-      if (teacher.value.classRooms.isNotEmpty && selectedClassId.isEmpty) {
-        selectedClassId = teacher.value.classRooms.first;
-      }
+      // if (teacher.value.classRooms.isNotEmpty && selectedClassId.isEmpty) {
+      //   selectedClassId = teacher.value.classRooms.first;
+      // }
       
       // Refresh all data with the cache
       if (selectedClassId.isNotEmpty) {

@@ -35,11 +35,11 @@ class _StudentPerformanceState extends State<StudentPerformance> {
   void initializeStudents() {
     studentList = teacherDashboardController.classRoomStudents.value;
   }
-
-  void setSelectedStudent(int index) {
+void setSelectedStudent(int index) {
     if (index >= 0 &&
         index < teacherDashboardController.classRoomStudents.value.length) {
       setState(() {
+        selectedStudentIndex = index; // Update the selected index
         teacherDashboardController.selectedStudent =
             teacherDashboardController.classRoomStudents.value[index];
       });
