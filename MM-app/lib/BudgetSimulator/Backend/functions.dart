@@ -6,6 +6,18 @@ import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 
 class BudgetSimulatorFunctions {
 
+
+  Expense getCCDebt(List<Expense> expenes){
+    for(Expense expense in expenes){
+      if (expense.name == "CC Debt"){
+        return expense;
+    }
+
+      }
+      return expenes[0];
+      
+  }
+
 void nextMonth({
   required List<Expense> expenses,
   required int monthsOccurd,

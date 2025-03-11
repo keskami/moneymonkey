@@ -7,6 +7,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseTopOfScreen.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/creditCardMangagmentScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/crushTheCreditCardDebtPages.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
@@ -69,7 +70,7 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
   late Expense nextExpense = expenses[0];
-  String currentOption = "Calendar";
+  String currentOption = "Credit Management";
   DateTime now = DateTime(2025, 5, 1);
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
@@ -347,10 +348,24 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                               ],
                                             ),
                                           )
-                                        : Container(),
+                                        : widget.currentOption ==
+                                                "Credit Management"
+                                            ? CreditCardManagementScreen(
+                                                screenWidthUnit:
+                                                    screenWidthUnit,
+                                                screenHeightUnit:
+                                                    screenHeightUnit,
+                                                name: widget.name,
+                                                level: widget.level,
+                                                expenses: widget.expenses,
+                                                credidCardDebt:
+                                                    widget.creditCardDebt,
+                                                creditScore: widget.creditScore,
+                                              )
+                                            : Container(),
                                   ]),
                             ),
-                           Container(
+                            Container(
                               width: screenHeightUnit * 1,
                               height: screenHeightUnit * 1170,
                               color: Colors.black,
@@ -358,7 +373,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                             SizedBox(
                               width: screenWidthUnit * 20,
                             ),
-                            
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,

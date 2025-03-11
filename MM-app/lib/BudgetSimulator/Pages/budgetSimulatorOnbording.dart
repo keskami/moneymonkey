@@ -1007,7 +1007,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   dueDateType: "Fixed",
                   dueDay: DateTime(2025, 5, 25),
                   amountPaid: 0,
-                  penalty: 100),
+                  penalty: 100, originalTotal: 3000),
               Expense(
                   name: "Groceries",
                   amount: 250,

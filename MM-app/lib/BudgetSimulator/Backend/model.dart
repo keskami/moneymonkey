@@ -99,6 +99,7 @@ class Expense {
   DateTime dueDay; // For fixed expenses (e.g., Day 5)
   double amountPaid;
   final double penalty;
+  double originalTotal;
 
   Expense(
       {required this.name,
@@ -106,7 +107,10 @@ class Expense {
       required this.dueDateType,
       required this.dueDay,
       required this.amountPaid,
-      required this.penalty});
+      required this.penalty,
+      this.originalTotal = 0,
+      
+      });
 }
 
 class Hint {
