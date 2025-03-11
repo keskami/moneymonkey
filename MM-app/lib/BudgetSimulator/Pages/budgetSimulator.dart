@@ -53,7 +53,8 @@ class BudgetSimulator extends StatefulWidget {
   int checkingTransfer = 0;
   int dayNumber = 1;
   int creditLimit;
-
+  int totalPaymentsSeen = 0;
+  int totalPaymentsPaid = 0;
   final String name;
   int cognativeScore;
   int physicalScore;
@@ -364,6 +365,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     widget.creditCardDebt,
                                                 creditScore: widget.creditScore,
                                                 creditLimit: widget.creditLimit,
+                                                totalPayemntsSeen:
+                                                    widget.totalPaymentsSeen,
+                                                totalPaymentsPaid:
+                                                    widget.totalPaymentsPaid,
                                               )
                                             : Container(),
                                   ]),
@@ -655,6 +660,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             });
           }
         } else if (expense.name == "Rent") {
+          setState(() {
+            widget.totalPaymentsSeen += 1;
+          });
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -663,6 +671,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 onTouch: () {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
+                          widget.totalPaymentsPaid += 1;
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -684,12 +693,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 widget.creditScore -= 10;
                 noLatePayments = false;
               });
+            } else {
+              widget.totalPaymentsPaid += 1;
             }
             setState(() {
               eventProccesed = true;
             });
           }
         } else if (expense.name == "CC Debt") {
+          widget.totalPaymentsSeen += 1;
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -698,6 +710,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 onTouch: () {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
+                          widget.totalPaymentsPaid += 1;
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -721,6 +734,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 widget.creditScore -= 10;
                 noLatePayments = false;
               });
+            } else {
+              setState(() {
+                widget.totalPaymentsPaid += 1;
+              });
             }
             setState(() {
               eventProccesed = true;
@@ -729,6 +746,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         } else if (expense.name == "Utilities" ||
             expense.name == "Transportation" ||
             expense.name == "Groceries") {
+          widget.totalPaymentsSeen += 1;
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -737,6 +755,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 onTouch: () {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
+                          widget.totalPaymentsPaid += 1;
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -757,6 +776,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 expense.amount += expense.penalty;
                 widget.creditScore -= 10;
                 noLatePayments = false;
+              });
+            } else {
+              setState(() {
+                widget.totalPaymentsPaid += 1;
               });
             }
             setState(() {
