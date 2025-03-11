@@ -47,10 +47,12 @@ class BudgetSimulator extends StatefulWidget {
     required this.cognativeScore,
     required this.physicalScore,
     required this.mentalScore,
+    required this.creditLimit,
   });
   double savingsTransfer = 0;
   int checkingTransfer = 0;
   int dayNumber = 1;
+  int creditLimit;
 
   final String name;
   int cognativeScore;
@@ -361,6 +363,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 credidCardDebt:
                                                     widget.creditCardDebt,
                                                 creditScore: widget.creditScore,
+                                                creditLimit: widget.creditLimit,
                                               )
                                             : Container(),
                                   ]),
