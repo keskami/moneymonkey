@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
 class AccountsBudgetSimulatorPage extends StatefulWidget {
-  final String title;
-  final double initialBudget;
+  final double screenHeightUnit;
+  final double screenWidthUnit;
 
   const AccountsBudgetSimulatorPage({
     Key? key,
-    required this.title,
-    required this.initialBudget,
+    required this.screenHeightUnit,
+    required this.screenWidthUnit,
   }) : super(key: key);
 
   @override
-  _AccountsBudgetSimulatorPageState createState() => _AccountsBudgetSimulatorPageState();
+  _AccountsBudgetSimulatorPageState createState() =>
+      _AccountsBudgetSimulatorPageState();
 }
 
-class _AccountsBudgetSimulatorPageState extends State<AccountsBudgetSimulatorPage> {
+class _AccountsBudgetSimulatorPageState
+    extends State<AccountsBudgetSimulatorPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Text('Initial Budget: \$${widget.initialBudget.toStringAsFixed(2)}'),
-      ),
+    return Container(
+      height: widget.screenHeightUnit * 980,
+      width: widget.screenWidthUnit * 1490,
+      
     );
   }
 }

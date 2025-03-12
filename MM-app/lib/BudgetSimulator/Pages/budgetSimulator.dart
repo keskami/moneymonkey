@@ -20,6 +20,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/transferMoneyButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/weekdayRow.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBoxNew.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
@@ -292,7 +293,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     recalculatePercentages,
                                                 nextDay: nextDay,
                                                 mapExpenses: mapExpenses)
-                                            : Container(),
+                                            :  widget.currentOption == "Accounts" ? TransferMoneyButton(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit, widget: widget, checkingAccountBalance: widget.checkingAccountBalance as int, setStateCallback: setState,):
+                                            
+                                            Container(),
                                       ],
                                     ),
                                     CrushTheCreditCardDebtPages(
@@ -385,7 +388,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 monthsOccurd: monthsOccurd,
                                               )
                                             :  widget.currentOption ==
-                                                "Accounts" ? AccountsBudgetSimulatorPage(title: '', initialBudget: 0,) :Container(),
+                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,) :Container(),
                                   ]),
                             ),
                             Container(
