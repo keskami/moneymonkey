@@ -139,6 +139,31 @@ class RandomEvent {
   });
 }
 
+class RandomEventTaken {
+  final String name;
+  final String choiceTaken;
+  final String discription;
+  final int moneyEffect;
+  final DateTime trigerDay;
+  final String effect1;
+  final int effect1Amount;
+  final String effect2;
+  final int effect2Amount;
+ 
+
+  RandomEventTaken({
+    required this.name,
+    required this.choiceTaken,
+    required this.discription,
+    required this.trigerDay,
+    required this.moneyEffect,
+    required this.effect1,
+    required this.effect1Amount,
+    required this.effect2,
+    required this.effect2Amount,
+  });
+}
+
 class Milestone {
   final String name;
   final String description;

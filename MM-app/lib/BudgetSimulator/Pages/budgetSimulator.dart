@@ -86,6 +86,7 @@ class BudgetSimulator extends StatefulWidget {
   List<bool> done = [false, false, false];
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
+  List<RandomEventTaken> takenEvents = [];
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
@@ -388,7 +389,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 monthsOccurd: monthsOccurd,
                                               )
                                             :  widget.currentOption ==
-                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,) :Container(),
+                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,widget: widget,) :Container(),
                                   ]),
                             ),
                             Container(
@@ -1090,7 +1091,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           setState(() {
                             widget.cognativeScore += effect1Amount;
                           });
-                        } else if (effect1 == "Phyiscal Health") {
+                        } else if (effect1 == "Physical Health") {
                           setState(() {
                             widget.physicalScore += effect1Amount;
                             widget.physicalScore =

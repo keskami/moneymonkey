@@ -438,6 +438,10 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   effect1Amount = cost11Cost;
                   effect2 = Cost12Name;
                   effect2Amount = cost12Cost;
+
+                  RandomEventTaken x = RandomEventTaken(name: widget.event.name, choiceTaken: widget.event.options[0], discription: widget.event.description, trigerDay: widget.event.trigerDay, moneyEffect: finalCost, effect1: effect1, effect1Amount: effect1Amount, effect2: effect2, effect2Amount: effect2Amount);
+
+
                 } else {
                   finalSource = option2Source;
                   finalCost = option2Cost;
@@ -445,6 +449,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   effect1Amount = cost21Cost;
                   effect2 = Cost22Name;
                   effect2Amount = cost22Cost;
+                  RandomEventTaken x = RandomEventTaken(name: widget.event.name, choiceTaken: widget.event.options[1], discription: widget.event.description, trigerDay: widget.event.trigerDay, moneyEffect: finalCost, effect1: effect1, effect1Amount: effect1Amount, effect2: effect2, effect2Amount: effect2Amount);
+
                 }
                 widget.onConfirm(finalSource, finalCost, effect1, effect1Amount, effect2, effect2Amount);
               }
