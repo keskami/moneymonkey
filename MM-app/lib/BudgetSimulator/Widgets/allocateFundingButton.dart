@@ -117,6 +117,44 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                     ) {
                       widget.getInterestSavings();
                       widget.setStateCallback(() {
+                        if (widget.widget.savingsTransfer != 0) {
+                          Transaction savingsTransaction;
+                          Transaction checkingTransaction;
+                          if (widget.widget.savingsTransfer > 0) {
+                            savingsTransaction = Transaction(
+                                name: "Transfer From Checking",
+                                day: widget.widget.now,
+                                amount: widget.widget.savingsTransfer,
+                                toOrFrom: "Transfer in",
+                                account: "Savings");
+                                checkingTransaction = Transaction(
+                                name: "Transfer To Savings",
+                                day: widget.widget.now,
+                                amount: -widget.widget.savingsTransfer,
+                                toOrFrom: "Transfer out",
+                                account: "Checking");
+                          } else {
+                            savingsTransaction = Transaction(
+                                name: "Transfer To Checking",
+                                day: widget.widget.now,
+                                amount: widget.widget.savingsTransfer,
+                                toOrFrom: "Transfer out",
+                                account: "Savings");
+
+                                checkingTransaction = Transaction(
+                                name: "Transfer From Savings",
+                                day: widget.widget.now,
+                                amount: -widget.widget.savingsTransfer,
+                                toOrFrom: "Transfer in",
+                                account: "Checking");
+                          }
+                          widget.widget.Transactions
+                              .add(savingsTransaction);
+                            widget.widget.Transactions
+                              .add(checkingTransaction);
+                            
+                        }
+
                         widget.widget.checkingAccountBalance = newChecking;
 
                         widget.widget.checkingAccountBalance +=
@@ -124,6 +162,7 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
 
                         widget.widget.savingsAccountBalance +=
                             widget.widget.savingsTransfer;
+
                         widget.widget.savingsTransfer = toSavings;
                         widget.widget.checkingTransfer = toChecking;
 
@@ -169,7 +208,6 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           widget.getEvents();
                           widget.checkRandomEvents();
-                        
                         });
                       });
                     },

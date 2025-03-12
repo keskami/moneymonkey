@@ -87,6 +87,8 @@ class BudgetSimulator extends StatefulWidget {
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
   List<RandomEventTaken> takenEvents = [];
+  List<Transaction> Transactions = [];
+
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
@@ -389,7 +391,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 monthsOccurd: monthsOccurd,
                                               )
                                             :  widget.currentOption ==
-                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,widget: widget, randomEventsTaken: widget.takenEvents,) :Container(),
+                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,widget: widget, randomEventsTaken: widget.takenEvents, Transactions: widget.Transactions, ) :Container(),
                                   ]),
                             ),
                             Container(
@@ -574,6 +576,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   Future<void> nextDay() async {
+    print(widget.Transactions);
     if (widget.now.month != widget.now.add(Duration(days: 1)).month) {
       getInterestCCDebt();
       nextMonth();

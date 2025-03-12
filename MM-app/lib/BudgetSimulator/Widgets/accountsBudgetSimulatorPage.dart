@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsPageAccountSummary.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventHistory.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/transactionHistory.dart';
 
 class AccountsBudgetSimulatorPage extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
   final dynamic widget;
   final List<RandomEventTaken> randomEventsTaken;
+  final List<Transaction> Transactions;
 
   const AccountsBudgetSimulatorPage({
     Key? key,
@@ -15,6 +17,7 @@ class AccountsBudgetSimulatorPage extends StatefulWidget {
     required this.screenWidthUnit,
     required this.widget,
     required this.randomEventsTaken,
+    required this.Transactions,
   }) : super(key: key);
 
   @override
@@ -66,10 +69,10 @@ class _AccountsBudgetSimulatorPageState
                 screenHeightUnit: widget.screenHeightUnit,
                 screenWidthUnit: widget.screenWidthUnit,
               ),
-              EventHistory(
-                eventsTaken: widget.randomEventsTaken,
+              TransactionHistory(
                 screenHeightUnit: widget.screenHeightUnit,
                 screenWidthUnit: widget.screenWidthUnit,
+                Transactions: widget.Transactions,
               )
             ],
           ),

@@ -101,16 +101,15 @@ class Expense {
   final double penalty;
   double originalTotal;
 
-  Expense(
-      {required this.name,
-      required this.amount,
-      required this.dueDateType,
-      required this.dueDay,
-      required this.amountPaid,
-      required this.penalty,
-      this.originalTotal = 0,
-      
-      });
+  Expense({
+    required this.name,
+    required this.amount,
+    required this.dueDateType,
+    required this.dueDay,
+    required this.amountPaid,
+    required this.penalty,
+    this.originalTotal = 0,
+  });
 }
 
 class Hint {
@@ -139,6 +138,22 @@ class RandomEvent {
   });
 }
 
+class Transaction {
+  final DateTime day;
+  final String name;
+  final int amount;
+  final String toOrFrom;
+  final String account;
+
+  Transaction({
+    required this.name,
+    required this.day,
+    required this.amount,
+    required this.toOrFrom,
+    required this.account
+  });
+}
+
 class RandomEventTaken {
   final String name;
   final String choiceTaken;
@@ -149,7 +164,6 @@ class RandomEventTaken {
   final int effect1Amount;
   final String effect2;
   final int effect2Amount;
- 
 
   RandomEventTaken({
     required this.name,
