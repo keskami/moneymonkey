@@ -49,9 +49,6 @@ class _RandomEventPopState extends State<RandomEventPop> {
   String effect2 = '';
   int effect2Amount = 0;
 
-
-
-
   void getInfo(RandomEvent event) async {
     String type = event.name;
     if (type == "Car Repair Surprise") {
@@ -69,7 +66,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Source = "CC";
 
         option2Title = 'Take Public Transportation';
-        option2SubTitle = 'You skip the repair and instead take public transit.';
+        option2SubTitle =
+            'You skip the repair and instead take public transit.';
 
         Cost21Name = 'Credit Score';
         cost21Cost = 1;
@@ -78,13 +76,12 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option2Source = "Cash";
 
         option2Cost = 0;
-
-
       });
     } else if (type == "Home Appliance Breakdown") {
       setState(() {
         option1Title = 'Pay in Full Immediately';
-        option1SubTitle = 'You settle the entire repair cost using available funds.';
+        option1SubTitle =
+            'You settle the entire repair cost using available funds.';
 
         Cost11Name = 'Credit Score';
         cost11Cost = 2;
@@ -102,7 +99,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         cost21Cost = -4;
         Cost22Name = 'Emotional Health';
         cost22Cost = 10;
-        
+
         option2Cost = 0;
         option2Source = "Cash";
       });
@@ -127,7 +124,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         cost21Cost = 2;
         Cost22Name = 'Emotional Health';
         cost22Cost = -15;
-        
+
         option2Cost = 0;
         option2Source = "Cash";
       });
@@ -146,21 +143,22 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Source = "CC";
 
         option2Title = 'Resist the Temptation';
-        option2SubTitle = 'You decide against the purchase to keep your funds intact.';
+        option2SubTitle =
+            'You decide against the purchase to keep your funds intact.';
 
         Cost21Name = 'Credit Score';
         cost21Cost = 3;
         Cost22Name = 'Emotional Health';
         cost22Cost = 10;
-        
+
         option2Cost = 0;
         option2Source = "Cash";
       });
-
     } else if (type == "Unexpected Windfall") {
       setState(() {
         option1Title = 'Apply Entirely to Debt Reduction';
-        option1SubTitle = 'You use the bonus to reduce your credit card balance immediately.';
+        option1SubTitle =
+            'You use the bonus to reduce your credit card balance immediately.';
 
         Cost11Name = 'Credit Score';
         cost11Cost = 5;
@@ -172,20 +170,22 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Source = "CC";
 
         option2Title = 'Spend on Entertainment';
-        option2SubTitle = 'You allocate the bonus fully toward leisure and fun activities.';
+        option2SubTitle =
+            'You allocate the bonus fully toward leisure and fun activities.';
 
         Cost21Name = 'Credit Score';
         cost21Cost = 0;
         Cost22Name = 'Emotional Health';
         cost22Cost = 50;
-        
+
         option2Cost = 0;
         option2Source = "CC";
       });
     } else if (type == "Wedding Invitation") {
       setState(() {
         option1Title = 'Attend Fully';
-        option1SubTitle = 'You commit to covering all associated costs to attend the wedding as planned.';
+        option1SubTitle =
+            'You commit to covering all associated costs to attend the wedding as planned.';
 
         Cost11Name = 'Credit Score';
         cost11Cost = -2;
@@ -197,20 +197,22 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Source = "CC";
 
         option2Title = 'Decline the Invitation';
-        option2SubTitle = 'You choose not to attend the wedding, avoiding any related expenses.';
+        option2SubTitle =
+            'You choose not to attend the wedding, avoiding any related expenses.';
 
         Cost21Name = 'Credit Score';
         cost21Cost = 2;
         Cost22Name = 'Emotional Health';
         cost22Cost = -15;
-        
+
         option2Cost = 0;
         option2Source = "CC";
       });
     } else if (type == "Medical Bill") {
       setState(() {
         option1Title = 'Pay in Full Immediately';
-        option1SubTitle = 'You use your available cash to settle the bill right away.';
+        option1SubTitle =
+            'You use your available cash to settle the bill right away.';
 
         Cost11Name = 'Credit Score';
         cost11Cost = 2;
@@ -222,20 +224,22 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Source = "Cash";
 
         option2Title = 'Charge to Your Credit Card';
-        option2SubTitle = 'You add the expense to your credit card balance to preserve cash.';
+        option2SubTitle =
+            'You add the expense to your credit card balance to preserve cash.';
 
         Cost21Name = 'Credit Score';
         cost21Cost = -3;
         Cost22Name = 'Emotional Health';
         cost22Cost = 10;
-        
+
         option2Cost = -300;
         option2Source = "CC";
       });
     } else if (type == "Family Emergency Request") {
       setState(() {
         option1Title = 'Lend the Full \$200';
-        option1SubTitle = 'You provide the full amount to support your family member.';
+        option1SubTitle =
+            'You provide the full amount to support your family member.';
 
         Cost11Name = 'Credit Score';
         cost11Cost = -2;
@@ -246,24 +250,25 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Cost = -200;
         option1Source = "CC";
 
-
         option2Title = 'Politely Decline';
-        option2SubTitle = 'You choose not to lend any money, preserving your current funds.';
+        option2SubTitle =
+            'You choose not to lend any money, preserving your current funds.';
 
         Cost21Name = 'Credit Score';
         cost21Cost = 2;
         Cost22Name = 'Emotional Health';
         cost22Cost = -15;
-        
+
         option2Cost = 0;
         option2Source = "CC";
       });
-    } 
+    }
     //WORKS
     else if (type == "Small Bonus / Part-Time Gig") {
       setState(() {
         option1Title = 'Apply Entirely to Debt Reduction';
-        option1SubTitle = 'You use the bonus to lower your outstanding debt immediately.';
+        option1SubTitle =
+            'You use the bonus to lower your outstanding debt immediately.';
 
         Cost11Name = 'Credit Score';
         cost11Cost = 3;
@@ -281,7 +286,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         cost21Cost = 10;
         Cost22Name = 'Emotional Health';
         cost22Cost = 10;
-        
+
         option2Cost = 0;
         option2Source = "CC";
       });
@@ -357,28 +362,30 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   ),
                 ),
                 child: RandomOption(
-                    onTap: () {
-                      if (oneSelcted) {
-                        setState(() {
-                          oneSelcted = false;
-                        });
-                      } else {
-                        setState(() {
-                          oneSelcted = true;
-                          twoSelected = false;
-                        });
-                      }
-                    },
-                    screenHeightUnit: screenHeightUnit,
-                    screenWidthUnit: screenWidthUnit,
-                    title: option1Title,
-                    subtitle: option1SubTitle,
-                    cost: option1Cost,
-                    effect1Name: Cost11Name,
-                    effect2Name: Cost12Name,
-                    effect1Cost: cost11Cost,
-                    effect2Cost: cost12Cost,
-                    selected: oneSelcted, Source: option1Source,),
+                  onTap: () {
+                    if (oneSelcted) {
+                      setState(() {
+                        oneSelcted = false;
+                      });
+                    } else {
+                      setState(() {
+                        oneSelcted = true;
+                        twoSelected = false;
+                      });
+                    }
+                  },
+                  screenHeightUnit: screenHeightUnit,
+                  screenWidthUnit: screenWidthUnit,
+                  title: option1Title,
+                  subtitle: option1SubTitle,
+                  cost: option1Cost,
+                  effect1Name: Cost11Name,
+                  effect2Name: Cost12Name,
+                  effect1Cost: cost11Cost,
+                  effect2Cost: cost12Cost,
+                  selected: oneSelcted,
+                  Source: option1Source,
+                ),
               ),
               SizedBox(
                 width: screenWidthUnit * 20,
@@ -417,10 +424,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                     effect1Cost: cost21Cost,
                     effect2Cost: cost22Cost,
                     selected: twoSelected,
-                    Source: option2Source
-                    
-                    
-                    ),
+                    Source: option2Source),
               )
             ],
           ),
@@ -431,7 +435,6 @@ class _RandomEventPopState extends State<RandomEventPop> {
             onTap: () {
               if (oneSelcted || twoSelected) {
                 if (oneSelcted) {
-                  
                   finalSource = option1Source;
                   finalCost = option1Cost;
                   effect1 = Cost11Name;
@@ -439,9 +442,18 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   effect2 = Cost12Name;
                   effect2Amount = cost12Cost;
 
-                  RandomEventTaken x = RandomEventTaken(name: widget.event.name, choiceTaken: widget.event.options[0], discription: widget.event.description, trigerDay: widget.event.trigerDay, moneyEffect: finalCost, effect1: effect1, effect1Amount: effect1Amount, effect2: effect2, effect2Amount: effect2Amount);
-
-
+                  RandomEventTaken randomEventTaken = RandomEventTaken(
+                      name: "Place Holder Name",
+                      choiceTaken: "Place Holder Choice",
+                      discription: "Place Holder Discription",
+                      trigerDay: widget.event.trigerDay,
+                      moneyEffect: finalCost,
+                      effect1: effect1,
+                      effect1Amount: effect1Amount,
+                      effect2: effect2,
+                      effect2Amount: effect2Amount);
+                  widget.onConfirm(randomEventTaken, finalSource, finalCost,
+                      effect1, effect1Amount, effect2, effect2Amount);
                 } else {
                   finalSource = option2Source;
                   finalCost = option2Cost;
@@ -449,10 +461,19 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   effect1Amount = cost21Cost;
                   effect2 = Cost22Name;
                   effect2Amount = cost22Cost;
-                  RandomEventTaken x = RandomEventTaken(name: widget.event.name, choiceTaken: widget.event.options[1], discription: widget.event.description, trigerDay: widget.event.trigerDay, moneyEffect: finalCost, effect1: effect1, effect1Amount: effect1Amount, effect2: effect2, effect2Amount: effect2Amount);
-
+                  RandomEventTaken randomEventTaken = RandomEventTaken(
+                      name: "Place Holder Name",
+                      choiceTaken: "Place Holder Choice",
+                      discription: "Place Holder Discription",
+                      trigerDay: widget.event.trigerDay,
+                      moneyEffect: finalCost,
+                      effect1: effect1,
+                      effect1Amount: effect1Amount,
+                      effect2: effect2,
+                      effect2Amount: effect2Amount);
+                  widget.onConfirm(randomEventTaken, finalSource, finalCost,
+                      effect1, effect1Amount, effect2, effect2Amount);
                 }
-                widget.onConfirm(finalSource, finalCost, effect1, effect1Amount, effect2, effect2Amount);
               }
             },
             child: Container(
@@ -496,7 +517,6 @@ class RandomOption extends StatefulWidget {
   final int effect2Cost;
   bool selected;
   String Source;
- 
 
   RandomOption({
     required this.onTap,
@@ -511,7 +531,6 @@ class RandomOption extends StatefulWidget {
     required this.effect2Cost,
     required this.selected,
     required this.Source,
- 
   });
 
   @override

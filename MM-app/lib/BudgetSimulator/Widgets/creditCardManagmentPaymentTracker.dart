@@ -19,7 +19,7 @@ class CreditCardManagementPaymentTracker extends StatelessWidget {
     required this.monthsOccurd,
   }) : super(key: key);
 
-  List<String> Months = ["May:", "June:", "July"];
+  List<String> Months = ["May:", "June:", "July:"];
 
   @override
   Widget build(BuildContext context) {

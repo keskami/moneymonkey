@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsPageAccountSummary.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/eventHistory.dart';
 
 class AccountsBudgetSimulatorPage extends StatefulWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
   final dynamic widget;
+  final List<RandomEventTaken> randomEventsTaken;
 
   const AccountsBudgetSimulatorPage({
     Key? key,
     required this.screenHeightUnit,
     required this.screenWidthUnit,
     required this.widget,
+    required this.randomEventsTaken,
   }) : super(key: key);
 
   @override
@@ -29,19 +33,48 @@ class _AccountsBudgetSimulatorPageState
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: widget.screenHeightUnit * 40,),
+          SizedBox(
+            height: widget.screenHeightUnit * 40,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              AccountsPageAccountSummary(screenHeightUnit: widget.screenHeightUnit, screenWidthUnit: widget.screenHeightUnit, account: 'Checking', APY: 0, balance: widget.widget.checkingAccountBalance,),
-              AccountsPageAccountSummary(screenHeightUnit: widget.screenHeightUnit, screenWidthUnit: widget.screenHeightUnit, account: 'Savings', APY: widget.widget.savingsAPY,balance: widget.widget.savingsAccountBalance,)
+              AccountsPageAccountSummary(
+                screenHeightUnit: widget.screenHeightUnit,
+                screenWidthUnit: widget.screenWidthUnit,
+                account: 'Checking',
+                APY: 0,
+                balance: widget.widget.checkingAccountBalance,
+              ),
+              AccountsPageAccountSummary(
+                screenHeightUnit: widget.screenHeightUnit,
+                screenWidthUnit: widget.screenWidthUnit,
+                account: 'Savings',
+                APY: widget.widget.savingsAPY,
+                balance: widget.widget.savingsAccountBalance,
+              )
             ],
-
-          )
-
+          ),
+          SizedBox(
+            height: widget.screenHeightUnit * 30,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              EventHistory(
+                eventsTaken: widget.randomEventsTaken,
+                screenHeightUnit: widget.screenHeightUnit,
+                screenWidthUnit: widget.screenWidthUnit,
+              ),
+              EventHistory(
+                eventsTaken: widget.randomEventsTaken,
+                screenHeightUnit: widget.screenHeightUnit,
+                screenWidthUnit: widget.screenWidthUnit,
+              )
+            ],
+          ),
         ],
       ),
-      
     );
   }
 }

@@ -389,7 +389,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 monthsOccurd: monthsOccurd,
                                               )
                                             :  widget.currentOption ==
-                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,widget: widget,) :Container(),
+                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,widget: widget, randomEventsTaken: widget.takenEvents,) :Container(),
                                   ]),
                             ),
                             Container(
@@ -1065,6 +1065,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                     child: RandomEventPop(
                       event: randomEvent,
                       onConfirm: (
+                        RandomEventTaken randomEventTaken,
                         String Source,
                         int amount,
                         String effect1,
@@ -1072,6 +1073,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                         String effect2,
                         int effect2Amount,
                       ) {
+                        setState(() {
+                          widget.takenEvents.add(randomEventTaken);
+                        });
                         Navigator.of(context).pop();
                         if (Source == "Cash") {
                           setState(() {
