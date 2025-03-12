@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
-import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/TapToRevealContainer.dart';
 
 class ComponentImpactPage extends StatefulWidget {
-  ComponentImpactPage({super.key});
+  // 1) Declare all the data your page needs
+  final List<String> beforeText;
+  final List<String> afterText;
+  final String title;
+  final String subtitle;
+  final List<String> instructions;
+  final List<String> ba;      // [ "before", "after" ], if desired
+  final String button;        // "next", if desired
+
+  const ComponentImpactPage({
+    super.key,
+    required this.beforeText,
+    required this.afterText,
+    required this.title,
+    required this.subtitle,
+    required this.instructions,
+    required this.ba,
+    required this.button,
+  });
 
   @override
   State<ComponentImpactPage> createState() => _ComponentImpactPageState();
@@ -15,329 +32,305 @@ class ComponentImpactPage extends StatefulWidget {
 class _ComponentImpactPageState extends State<ComponentImpactPage> {
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-  List<String> beforeText = [];
-  List<String> afterText = [];
-  List<String> ba = [];
-  final StoryController storyController = Get.find();
-  bool isEnabled = false;
 
-  bool isLoading = true;
-  String problem = '';
-  String title = '';
-  String subtitle = '';
-  List<String> instructions = [];
-  String button = '';
-
-  Future<void> setData(SubComponent data) async {
-    setState(() {
-      afterText = List<String>.from(
-          data.data.afterContent.map((item) => item.toString()));
-      beforeText = List<String>.from(
-          data.data.beforeContent.map((item) => item.toString()));
-      title = data.data.title;
-      subtitle = data.data.subtitle;
-      instructions = ["Click for the before...", "Click for the after..."];
-      ba = ["before", "after"];
-      button = "next";
-      isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setData(storyController.pageData[3]);
-  }
+  final BaseLessonController baseLessonController = Get.find();
+  bool isEnabled = false; // For enabling the 'Finish' button after tapping
 
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
-    return screenWidth > screenHeight ? webDisplay() : mobileDisplay();
+    
+    return screenWidth > screenHeight 
+        ? webDisplay() 
+        : mobileDisplay();
   }
 
   Widget webDisplay() {
-    return isLoading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : Container(
-            width: screenWidth * 0.5,
-            height: screenHeight * 0.65,
-            child: SingleChildScrollView(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenWidth * 0.02),
+        
+        // Title
+        Text(
+          widget.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+          ),
+        ),
+        
+        SizedBox(height: screenHeight * 0.02),
+        
+        // Subtitle
+        Text(
+          widget.subtitle,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        
+        SizedBox(height: screenHeight * 0.07),
+        
+        // Main content
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Left orange bar
+            Container(
+              width: screenWidth * 0.004,
+              height: 300,
+              decoration: BoxDecoration(
+                color: Colors.orange.shade300,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            
+            SizedBox(width: screenWidth * 0.02),
+            
+            // Main content
+            Expanded(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Added title
                   Text(
-                    title,
+                    "The Impact",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  // Added subtitle
-                  Text(
-                    subtitle,
-                    style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(
-                      height: screenHeight * 0.07), // Increased spacing here
-                  // Main content area
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Orange bar on the left - using a Container with constraints
-                      Container(
-                        width: screenWidth * 0.004,
-                        height: 300, // Fixed reasonable height
-                        decoration: BoxDecoration(
-                          color: Colors.orange.shade300,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      SizedBox(width: screenWidth * 0.02),
-                      // Main content
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "The Impact",
-                              softWrap: true,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(height: 30),
-                            // Before/After containers with centered arrow
-                            Container(
-                              height: 200, // Fixed container height
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment
-                                    .center, // Center items vertically
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // Before container with fixed width
-                                  Container(
-                                    width: screenWidth * 0.15,
-                                    child: TapToRevealContainer(
-                                      contents: ContentContainer(
-                                        isBefore: true,
-                                        texts: beforeText,
-                                        screenWidth: screenWidth,
-                                        ba: ba,
-                                      ),
-                                      instructions: InstructionContainer(
-                                        text: instructions[0],
-                                        screenWidth: screenWidth,
-                                      ),
-                                    ),
-                                  ),
-                                  // Arrow - now centered vertically
-                                  Icon(
-                                    Icons.arrow_forward,
-                                    size: screenWidth * 0.05,
-                                  ),
-                                  // After container with fixed width
-                                  Container(
-                                    width: screenWidth * 0.15,
-                                    child: TapToRevealContainer(
-                                      onTap: () async {
-                                        await Future.delayed(
-                                            Duration(seconds: 6));
-                                        setState(() {
-                                          isEnabled = true;
-                                        });
-                                      },
-                                      contents: ContentContainer(
-                                        isBefore: false,
-                                        texts: afterText,
-                                        screenWidth: screenWidth,
-                                        ba: ba,
-                                      ),
-                                      instructions: InstructionContainer(
-                                        text: instructions[1],
-                                        screenWidth: screenWidth,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  
                   SizedBox(height: 30),
-                  // Finish button
-                  Row(
-                    children: [
-                      Spacer(),
-                      CustomNextButton(
-                        nextPage: () {
-                          storyController.pageIndex.value = 0;
-                          storyController.toImpact.value = false;
-                          storyController.toSolution.value = false;
-                          Navigator.pop(context);
-                          if (Get.isRegistered<StoryController>()) {
-                            Get.delete<StoryController>();
-                          }
-                        },
-                        isEnabled: isEnabled,
-                        text: 'Finish',
-                      ),
-                    ],
+                  
+                  // Before/After containers
+                  Container(
+                    height: 200, // Fixed container height
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Before
+                        Container(
+                          width: screenWidth * 0.15,
+                          child: TapToRevealContainer(
+                            contents: ContentContainer(
+                              isBefore: true,
+                              texts: widget.beforeText,
+                              screenWidth: screenWidth,
+                              ba: widget.ba,
+                            ),
+                            instructions: InstructionContainer(
+                              text: widget.instructions[0],
+                              screenWidth: screenWidth,
+                            ),
+                          ),
+                        ),
+                        
+                        // Arrow
+                        Icon(
+                          Icons.arrow_forward,
+                          size: screenWidth * 0.05,
+                        ),
+                        
+                        // After
+                        Container(
+                          width: screenWidth * 0.15,
+                          child: TapToRevealContainer(
+                            onTap: () async {
+                              // Let user see 'after' for 6 seconds
+                              await Future.delayed(Duration(seconds: 6));
+                              setState(() {
+                                isEnabled = true;
+                              });
+                            },
+                            contents: ContentContainer(
+                              isBefore: false,
+                              texts: widget.afterText,
+                              screenWidth: screenWidth,
+                              ba: widget.ba,
+                            ),
+                            instructions: InstructionContainer(
+                              text: widget.instructions[1],
+                              screenWidth: screenWidth,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 10),
                 ],
               ),
             ),
-          );
+          ],
+        ),
+        
+        SizedBox(height: 30),
+        
+        // "Finish" or Next button
+        Row(
+          children: [
+            Spacer(),
+            CustomNextButton(
+              nextPage: () {
+                // or whichever final logic you want
+                baseLessonController.pageIndex.value = 0;
+                Navigator.pop(context);
+
+                // If removing from memory
+                if (Get.isRegistered<BaseLessonController>()) {
+                  Get.delete<BaseLessonController>();
+                }
+              },
+              isEnabled: isEnabled,
+              text: 'Finish',
+            ),
+          ],
+        ),
+        
+        SizedBox(height: 10),
+      ],
+    ).paddingSymmetric(horizontal: screenWidth * 0.25); // Key for proper alignment
   }
 
   Widget mobileDisplay() {
-    return isLoading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title
-                  Text(
-                    title.isEmpty ? "Financial Responsibility Story" : title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  // Subtitle
-                  Text(
-                    subtitle.isEmpty
-                        ? "Taking control of your money to build a secure future"
-                        : subtitle,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 30), // Increased spacing here
-                  // Impact section
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Orange bar with fixed height
-                      Container(
-                        width: 4,
-                        height: 400, // Fixed height for mobile
-                        decoration: BoxDecoration(
-                          color: Colors.orange.shade300,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "The Impact",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(height: 25), // Increased spacing
-                            // Before container with constraints
-                            Container(
-                              height: 180, // Fixed height
-                              child: TapToRevealContainer(
-                                contents: ContentContainer(
-                                  isBefore: true,
-                                  texts: beforeText,
-                                  screenWidth: screenWidth,
-                                  ba: ba,
-                                ),
-                                instructions: InstructionContainer(
-                                  text: instructions[0],
-                                  screenWidth: screenWidth,
-                                ),
-                              ),
-                            ),
-                            // Center arrow between boxes
-                            Container(
-                              height: 60,
-                              child: Center(
-                                child: Icon(
-                                  Icons.arrow_downward,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                            // After container with constraints
-                            Container(
-                              height: 180, // Fixed height
-                              child: TapToRevealContainer(
-                                onTap: () async {
-                                  await Future.delayed(Duration(seconds: 6));
-                                  setState(() {
-                                    isEnabled = true;
-                                  });
-                                },
-                                contents: ContentContainer(
-                                  isBefore: false,
-                                  texts: afterText,
-                                  screenWidth: screenWidth,
-                                  ba: ba,
-                                ),
-                                instructions: InstructionContainer(
-                                  text: instructions[1],
-                                  screenWidth: screenWidth,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
-                  // Finish button
-                  Center(
-                    child: CustomNextButton(
-                      nextPage: () {
-                        storyController.pageIndex.value = 0;
-                        storyController.toImpact.value = false;
-                        storyController.toSolution.value = false;
-                        Navigator.pop(context);
-                      },
-                      isEnabled: isEnabled,
-                      text: 'Finish',
-                    ),
-                  ),
-                ],
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title
+          Text(
+            widget.title.isEmpty ? "Financial Responsibility Story" : widget.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
             ),
-          );
+          ),
+          
+          SizedBox(height: 10),
+          
+          // Subtitle
+          Text(
+            widget.subtitle.isEmpty
+                ? "Taking control of your money to build a secure future"
+                : widget.subtitle,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          
+          SizedBox(height: 30),
+          
+          // Impact row
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Orange bar
+              Container(
+                width: 4,
+                height: 400,
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade300,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              
+              SizedBox(width: 12),
+              
+              // Main content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "The Impact",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    
+                    SizedBox(height: 25),
+                    
+                    // "Before" container
+                    Container(
+                      height: 180,
+                      child: TapToRevealContainer(
+                        contents: ContentContainer(
+                          isBefore: true,
+                          texts: widget.beforeText,
+                          screenWidth: screenWidth,
+                          ba: widget.ba,
+                        ),
+                        instructions: InstructionContainer(
+                          text: widget.instructions[0],
+                          screenWidth: screenWidth,
+                        ),
+                      ),
+                    ),
+                    
+                    // Arrow in between
+                    Container(
+                      height: 60,
+                      child: Center(
+                        child: Icon(
+                          Icons.arrow_downward,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+                    
+                    // "After" container
+                    Container(
+                      height: 180,
+                      child: TapToRevealContainer(
+                        onTap: () async {
+                          await Future.delayed(Duration(seconds: 6));
+                          setState(() {
+                            isEnabled = true;
+                          });
+                        },
+                        contents: ContentContainer(
+                          isBefore: false,
+                          texts: widget.afterText,
+                          screenWidth: screenWidth,
+                          ba: widget.ba,
+                        ),
+                        instructions: InstructionContainer(
+                          text: widget.instructions[1],
+                          screenWidth: screenWidth,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          
+          SizedBox(height: 25),
+          
+          Center(
+            child: CustomNextButton(
+              nextPage: () {
+                baseLessonController.pageIndex.value = 0;
+                Navigator.pop(context);
+              },
+              isEnabled: isEnabled,
+              text: 'Finish',
+            ),
+          ),
+        ],
+      ).paddingSymmetric(horizontal: 16), // Mobile padding
+    );
   }
 }
 
+/// The container for showing the "before" or "after" text.
 class ContentContainer extends StatelessWidget {
   const ContentContainer({
     super.key,
@@ -354,7 +347,6 @@ class ContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Create a more compact layout without excess space
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -362,7 +354,7 @@ class ContentContainer extends StatelessWidget {
       ),
       padding: EdgeInsets.all(12),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Important - use minimum space needed
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -372,47 +364,39 @@ class ContentContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: isBefore ? Colors.red : Colors.green,
             ),
-            textAlign: TextAlign.start,
           ),
           SizedBox(height: 8),
-          // Limited height for the content
           ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: 120, // Limit the height of content
-            ),
+            constraints: BoxConstraints(maxHeight: 120),
             child: ListView(
-              shrinkWrap: true, // Important for proper sizing
-              padding: EdgeInsets.zero, // Remove padding
-              physics: NeverScrollableScrollPhysics(), // Disable scrolling
-              children: texts.map(
-                (text) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Keep the exact diamond image
-                        Image.network(
-                          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FStoryPages%2FDIamond.png?alt=media&token=98ad4d6e-dbda-4112-9e0c-d0429eef9d37",
-                          height: 20,
-                          width: 20,
-                        ),
-                        SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            text,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            softWrap: true,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              children: texts.map((text) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Example diamond image
+                      Image.network(
+                        "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FStoryPages%2FDIamond.png?alt=media&token=98ad4d6e-dbda-4112-9e0c-d0429eef9d37",
+                        height: 20,
+                        width: 20,
+                      ),
+                      SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          text,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ).toList(),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
             ),
           ),
         ],
@@ -421,6 +405,7 @@ class ContentContainer extends StatelessWidget {
   }
 }
 
+/// The instructions container for each TapToReveal.
 class InstructionContainer extends StatelessWidget {
   const InstructionContainer({
     super.key,
@@ -434,11 +419,12 @@ class InstructionContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: screenWidth * 0.3,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.grey.shade200,
       ),
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: EdgeInsets.all(12),
       child: Center(
         child: Text(
           text,

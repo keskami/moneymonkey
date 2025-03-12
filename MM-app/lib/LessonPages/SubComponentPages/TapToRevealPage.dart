@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
- 
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
+
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
 class TapToRevealPage extends StatefulWidget {
-  final String componentId;
-  const TapToRevealPage({super.key, required this.componentId});
+  final String title;
+  final String bigTop;
+  final String bigBottom;
+  final String little;
+  final String before;
+  const TapToRevealPage(
+      {super.key,
+      required this.title,
+      required this.bigTop,
+      required this.bigBottom,
+      required this.little,
+      required this.before});
 
   @override
   State<TapToRevealPage> createState() {
@@ -17,27 +26,10 @@ class TapToRevealPage extends StatefulWidget {
 }
 
 class _TapToRevealPageState extends State<TapToRevealPage> {
-  ComponentOneTwoController componentOneTwoController =
-        Get.find<ComponentOneTwoController>();
-  String before = '';
+  BaseLessonController baseLessonController = Get.find<BaseLessonController>();
   bool showContent = false;
   bool enableNext = false;
-  bool loading = true;
-  String title = '';
-  String bigTop = '';
-  String bigBottom = '';
-  String little = '';
   late Column contents;
-  Future<void> setData(SubComponent data) async {
-    setState(() {
-      before = data.data.tapInstruction ?? '';
-      title = data.data.title;
-      bigBottom = data.data.definition;
-      bigTop = "Definition:";
-      little = data.data.whyMatter;
-      loading = false;
-    });
-  }
 
   @override
   void initState() {
@@ -45,12 +37,6 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
-    if (componentOneTwoController.pageData.isNotEmpty) {
-      setData(componentOneTwoController.pageData[1]);
-    }
-    if (title == '') {
-      setData(componentOneTwoController.pageData[1]);
-    }
   }
 
   @override
@@ -74,61 +60,59 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
   }
 
   Widget webDisplay(double screenWidth, double screenHeight) {
-    return loading
-        ? Center(child: CircularProgressIndicator())
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: screenWidth * 0.02),
-              Text(
-                title,
-                softWrap: true,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 27,
-                ),
-              ).marginSymmetric(
-                vertical: screenHeight * 0.025,
-                horizontal: screenWidth * 0.015,
-              ),
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-                child: Container(
-                  key: ValueKey<bool>(
-                      showContent), // Important for AnimatedSwitcher to detect changes
-                  width: double.infinity,
-                  height: screenHeight * 0.55,
-                  child: showContent ? contents : TapToShowContainer(),
-                ),
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenWidth * 0.02),
+        Text(
+          widget.title,
+          softWrap: true,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 27,
+          ),
+        ).marginSymmetric(
+          vertical: screenHeight * 0.025,
+          horizontal: screenWidth * 0.015,
+        ),
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 300),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          child: Container(
+            key: ValueKey<bool>(
+                showContent), // Important for AnimatedSwitcher to detect changes
+            width: double.infinity,
+            height: screenHeight * 0.55,
+            child: showContent ? contents : TapToShowContainer(),
+          ),
+        ),
 
-              SizedBox(
-                height: screenHeight * 0.05,
-              ),
-              //Next Button Row
-              Row(
-                children: [
-                  const Spacer(),
-                  CustomNextButton(
-                    nextPage: () {
-                      componentOneTwoController.pageIndex.value += 1;
-                    },
-                    isEnabled: enableNext,
-                  ),
-                  SizedBox(
-                    width: screenWidth * 0.02,
-                  ),
-                ],
-              )
-            ],
-          ).paddingSymmetric(horizontal: screenWidth * 0.25);
+        SizedBox(
+          height: screenHeight * 0.05,
+        ),
+        //Next Button Row
+        Row(
+          children: [
+            const Spacer(),
+            CustomNextButton(
+              nextPage: () {
+                baseLessonController.pageIndex.value += 1;
+              },
+              isEnabled: enableNext,
+            ),
+            SizedBox(
+              width: screenWidth * 0.02,
+            ),
+          ],
+        )
+      ],
+    ).paddingSymmetric(horizontal: screenWidth * 0.25);
   }
 
   Scaffold mobileDisplay() {
@@ -193,14 +177,14 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
             child: Center(
               child: RichText(
                 text: TextSpan(
-                  text: bigTop,
+                  text: widget.bigTop,
                   style: GoogleFonts.baloo2(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                   children: [
                     TextSpan(
-                      text: bigBottom,
+                      text: widget.bigBottom,
                       style: GoogleFonts.baloo2(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -225,7 +209,7 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
               color: Colors.grey.shade200,
             ),
             child: Text(
-              little,
+              widget.little,
               style: GoogleFonts.baloo2(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -259,7 +243,7 @@ class _TapToRevealPageState extends State<TapToRevealPage> {
         ),
         child: Center(
           child: Text(
-            before,
+            widget.before,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,

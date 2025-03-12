@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/home.dart';
 
 class QuizMCQPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class QuizMCQPage extends StatefulWidget {
 }
 
 class _QuizMCQPageState extends State<QuizMCQPage> {
-  PeerReflectionQuizcontroller peerReflectionQuizcontroller = Get.find();
+  BaseLessonController baseLessonController = Get.find();
 
   // Track selected options
   Map<int, bool> selectedOptions = {
@@ -154,7 +154,7 @@ class _QuizMCQPageState extends State<QuizMCQPage> {
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.05,
-          vertical: 0,
+          vertical: screenHeight * 0.15,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -271,13 +271,13 @@ class _QuizMCQPageState extends State<QuizMCQPage> {
 
                   resetState();
 
-                  if (peerReflectionQuizcontroller.pageIndex.value <
-                      peerReflectionQuizcontroller.pageData.length - 1) {
+                  if (baseLessonController.pageIndex.value <
+                      baseLessonController.pages.length - 1) {
                     // If not at the last page, simply increment and continue
-                    peerReflectionQuizcontroller.pageIndex.value += 1;
+                    baseLessonController.pageIndex.value += 1;
                   } else {
                     // If we're at the last page, reset index and navigate home
-                    peerReflectionQuizcontroller.pageIndex.value = 0;
+                    baseLessonController.pageIndex.value = 0;
 
                     // Navigate to HomePage
                     Navigator.push(
@@ -288,8 +288,8 @@ class _QuizMCQPageState extends State<QuizMCQPage> {
                     );
 
                     // Clean up the controller if it's registered
-                    if (Get.isRegistered<PeerReflectionQuizcontroller>()) {
-                      Get.delete<PeerReflectionQuizcontroller>();
+                    if (Get.isRegistered<BaseLessonController>()) {
+                      Get.delete<BaseLessonController>();
                     }
                   }
                 } else if (selectedAnswers.isNotEmpty) {

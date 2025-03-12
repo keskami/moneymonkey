@@ -4,19 +4,14 @@ import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
-import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
-import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading.dart';
 
 class LoadingPageWrapper extends StatelessWidget {
-  final Widget destinationPage;
+  final ComponentType type;
   final String componentId;
 
   const LoadingPageWrapper(
-      {Key? key, required this.destinationPage, required this.componentId})
+      {Key? key, required this.type, required this.componentId})
       : super(key: key);
 
   Future<void> _preLoadImagesForPeerReflection(BuildContext context) async {
@@ -82,41 +77,9 @@ class LoadingPageWrapper extends StatelessWidget {
   Future<BaseLessonController> _initializeController() async {
     BaseLessonController controller;
 
-    // Get the component from your service
-    final localService = LocalAcademicService();
-    final component = localService.getComponent(componentId);
-
-    // Initialize the appropriate controller based on component type
-    switch (component.type) {
-      case ComponentType.concept:
-        controller = Get.put<ComponentOneTwoController>(
-          ComponentOneTwoController(componentId: componentId),
-        );
-        break;
-      case ComponentType.story:
-        controller = Get.put<StoryController>(
-          StoryController(componentId: componentId),
-        );
-        break;
-      case ComponentType.scenarioSimulation:
-        controller = Get.put<ScenarioController>(
-          ScenarioController(componentId: componentId),
-        );
-        break;
-      case ComponentType.peerReflection:
-        controller = Get.put<PeerReflectioncontroller>(
-          PeerReflectioncontroller(componentId: componentId),
-        );
-        break;
-      case ComponentType.quiz:
-        controller = Get.put<PeerReflectionQuizcontroller>(
-          PeerReflectionQuizcontroller(componentId: componentId),
-        );
-        break;
-      default:
-        throw Exception(
-            "Unknown component type: ${component.type} for component ID: $componentId");
-    }
+    controller = Get.put<BaseLessonController>(
+      BaseLessonController(componentId: componentId, type: type),
+    );
 
     return controller;
   }
@@ -154,10 +117,9 @@ class LoadingPageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LoadingPage(
-      destinationPage: destinationPage,
       preLoadImages: () => _preLoadImages(context),
       requiresController: true,
-      pageType: componentId[6],
+      pageType: type,
       initializeController: _initializeController,
     );
   }

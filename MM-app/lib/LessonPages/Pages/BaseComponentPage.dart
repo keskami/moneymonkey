@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/home.dart';
 
-class LessonOne extends StatefulWidget {
-  const LessonOne({super.key});
+class BaseComponentPage extends StatefulWidget {
+  final ComponentType pageType;
+  const BaseComponentPage({super.key, required this.pageType});
 
   @override
-  State<LessonOne> createState() => _LessonOneState();
+  State<BaseComponentPage> createState() => _BaseComponentPage();
 }
 
-class _LessonOneState extends State<LessonOne> {
+class _BaseComponentPage extends State<BaseComponentPage> {
   final String lessonId = "Lesson1";
-  late ComponentOneTwoController controller;
+  late BaseLessonController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = Get.find<ComponentOneTwoController>();
+    controller = Get.find<BaseLessonController>();
   }
 
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed
-    if (Get.isRegistered<ComponentOneTwoController>()) {
-      Get.delete<ComponentOneTwoController>();
+    if (Get.isRegistered<BaseLessonController>()) {
+      Get.delete<BaseLessonController>();
     }
     super.dispose();
   }
@@ -72,6 +74,7 @@ class _LessonOneState extends State<LessonOne> {
       backgroundColor: Colors.white,
       body: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             height: screenHeight * 0.0,
@@ -90,7 +93,7 @@ class _LessonOneState extends State<LessonOne> {
               Container(
                 width: screenWidth * 0.44,
                 child: CustomProgressBar(
-                  pageName: 'ConceptOne',
+                  pageType: widget.pageType,
                   width: screenWidth * 0.44,
                   key: ValueKey(controller.pageIndex.value),
                 ),

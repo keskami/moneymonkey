@@ -4,12 +4,7 @@ import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
-import 'package:money_monkey/LessonPages/Pages/ConceptOneTwo.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflection.dart';
-import 'package:money_monkey/LessonPages/Pages/PeerReflectionQuiz.dart';
-import 'package:money_monkey/LessonPages/Pages/Scenario.dart';
-import 'package:money_monkey/LessonPages/Pages/Story.dart';
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -42,34 +37,8 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
       // Get the component data to determine its type
       final component = localService.getComponent(componentId);
 
-      switch (component.type) {
-        case ComponentType.concept:
-          pagesLink.add(LoadingPageWrapper(
-              destinationPage: LessonOne(),
-              componentId: componentId));
-          break;
-        case ComponentType.story:
-          pagesLink.add(LoadingPageWrapper(
-              destinationPage: StoryPage(componentId: componentId),
-              componentId: componentId));
-          break;
-        case ComponentType.scenarioSimulation:
-          pagesLink.add(LoadingPageWrapper(
-              destinationPage: Scenario(componentId: componentId),
-              componentId: componentId));
-          break;
-        case ComponentType.peerReflection:
-          pagesLink.add(LoadingPageWrapper(
-              destinationPage: PeerReflection(componentId: componentId),
-              componentId: componentId));
-          break;
-        case ComponentType.quiz:
-          pagesLink.add(LoadingPageWrapper(
-              destinationPage: PeerReflectionQuiz(componentId: componentId),
-              componentId: componentId));
-          break;
-        default:
-      }
+      pagesLink.add(
+          LoadingPageWrapper(type: component.type, componentId: componentId));
     }
     return pagesLink;
   }

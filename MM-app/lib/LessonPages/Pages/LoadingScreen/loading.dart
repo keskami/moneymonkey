@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
+import 'package:money_monkey/LessonPages/Pages/BaseComponentPage.dart';
 
 class LoadingPage extends StatefulWidget {
-  final Widget destinationPage;
   final Future<void> Function()? preLoadImages;
   final bool requiresController;
-  final String pageType;
+  final ComponentType pageType;
   final Function initializeController;
 
   const LoadingPage({
     Key? key,
-    required this.destinationPage,
     this.preLoadImages,
     this.requiresController = false,
     required this.pageType,
@@ -87,7 +87,7 @@ class _LoadingPageState extends State<LoadingPage>
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => widget.destinationPage,
+            builder: (context) => BaseComponentPage(pageType: widget.pageType),
           ),
         );
       }
@@ -193,7 +193,7 @@ class _LoadingPageState extends State<LoadingPage>
 
             SizedBox(height: screenHeight * 0.03),
             Text(
-              widget.pageType == 'story'
+              widget.pageType == ComponentType.story
                   ? 'Loading story...'
                   : 'Loading lesson...',
               style: TextStyle(

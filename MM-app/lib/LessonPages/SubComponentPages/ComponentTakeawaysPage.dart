@@ -1,229 +1,295 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/LessonPages/Widgets/ShadowedBoxContainer.dart';
 import 'package:money_monkey/home.dart';
 
 class ComponentTakeawaysPage extends StatefulWidget {
-  final String componentId;
-  const ComponentTakeawaysPage({super.key, required this.componentId});
+  final String title;
+  final String subTitle;
+  final String hint;
+  final String image;
+  final List<List<String>> takeAways;
+
+  const ComponentTakeawaysPage({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.hint,
+    required this.image,
+    required this.takeAways,
+  });
 
   @override
   State<ComponentTakeawaysPage> createState() => _ComponentTakeawaysPageState();
 }
 
 class _ComponentTakeawaysPageState extends State<ComponentTakeawaysPage> {
-  List<List<String>> takeAways = [
-    [],
-    [],
-    [],
-    [],
-  ];
 
-  String title = "";
-  ComponentOneTwoController componentOneTwoController =
-      Get.find<ComponentOneTwoController>();
+  // We keep a controller for the reflection text
+  TextEditingController personalReflectionController =
+      TextEditingController();
 
-  bool loading = true;
-  String subTitle = '';
-  String hint = '';
-  String image = '';
-  List<String> takeawayList = [];
-
-  Future<void> setData(data) async {
-    setState(() {
-      title = data.data.title;
-      subTitle = "Personal Reflection";
-      hint = data.data.hint;
-      image =
-          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2Ftakeaway_check.png?alt=media&token=9a389932-5562-4c38-a970-9ecd6bf8adcb";
-      takeAways[0].add(data.data.takeaways[0].title);
-      takeAways[0].add(data.data.takeaways[0].description);
-      takeAways[1].add(data.data.takeaways[1].title);
-      takeAways[1].add(data.data.takeaways[1].description);
-      takeAways[2].add(data.data.takeaways[2].title);
-      takeAways[2].add(data.data.takeaways[2].description);
-      takeAways[3].add(data.data.takeaways[3].title);
-      takeAways[3].add(data.data.takeaways[3].description);
-
-      loading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-    });
-    if (componentOneTwoController.pageData.isNotEmpty) {
-      setData(componentOneTwoController.pageData[5]);
-    }
-    if (title == '') {
-      setData(componentOneTwoController.pageData[5]);
-    }
-  }
-
+  // We remove loading logic since data is injected via constructor
   double screenHeight = 0.0;
   double screenWidth = 0.0;
-  TextEditingController personalReflectionController =
-      new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
+    // If you want a different mobile layout, adapt similarly
     return screenWidth > screenHeight
         ? webDisplay(screenWidth, screenHeight)
         : mobileDisplay();
   }
 
-  webDisplay(double screenWidth, double screenHeight) {
-    return loading
-        ? Center(child: CircularProgressIndicator())
-        : Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenWidth * 0.02),
-                  //Heading
-                  Text(
-                    title,
-                    softWrap: true,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 27,
-                    ),
-                  ).marginSymmetric(
-                      vertical: screenHeight * 0.025,
-                      horizontal: screenWidth * 0.015),
-
-                  SizedBox(
-                    height: screenHeight * 0.03,
-                  ),
-                  //Backgroud Shadowed Container
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...takeAways.map((takeaway) {
-                        return ShadowedBoxContainer(
-                            child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+  Widget webDisplay(double screenWidth, double screenHeight) {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: screenWidth * 0.02),
+            // Heading
+            Text(
+              widget.title,
+              softWrap: true,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 27,
+              ),
+            ).marginSymmetric(
+              vertical: screenHeight * 0.025,
+              horizontal: screenWidth * 0.015,
+            ),
+            SizedBox(height: screenHeight * 0.03),
+            // The column with takeaways + reflection
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Generate each "takeaway" box
+                ...widget.takeAways.map((takeaway) {
+                  return ShadowedBoxContainer(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  radius: 25,
-                                  child: Image.network(image),
-                                ),
-                                Text(
-                                  "  ${takeaway[0]}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: screenHeight * 0.02,
+                            CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              radius: 25,
+                              child: Image.network(widget.image),
                             ),
                             Text(
-                              takeaway[1],
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ));
-                      }).toList(),
-                      //Reflection
-                      ShadowedBoxContainer(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              subTitle,
-                              softWrap: true,
+                              "  ${takeaway[0]}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                              ),
-                            ).marginOnly(
-                              bottom: screenHeight * 0.03,
-                            ),
-                            TextField(
-                              maxLines: 4,
-                              autocorrect: true,
-                              controller: personalReflectionController,
-                              onTapOutside: (event) {
-                                setState(() {});
-                              },
-                              decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade400,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    10,
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade400,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    10,
-                                  ),
-                                ),
-                                hintText: hint,
-                                hintStyle: TextStyle(
-                                  color: Colors.grey.shade400,
-                                ),
+                                fontSize: 20,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.02,
-                  ),
-                  Row(
+                        SizedBox(height: screenHeight * 0.02),
+                        Text(
+                          takeaway[1],
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                // Reflection
+                ShadowedBoxContainer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Spacer(),
-                      CustomNextButton(
-                        nextPage: () {
-                          // componentOneTwoController.pageIndex.value = 0;
-                          if (Get.isRegistered<ComponentOneTwoController>()) {
-                            Get.delete<ComponentOneTwoController>();
-                          }
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                      Text(
+                        widget.subTitle,
+                        softWrap: true,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ).marginOnly(bottom: screenHeight * 0.03),
+                      TextField(
+                        maxLines: 4,
+                        autocorrect: true,
+                        controller: personalReflectionController,
+                        onTapOutside: (event) {
+                          setState(() {});
                         },
-                        isEnabled: personalReflectionController.text.isNotEmpty,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade400,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade400,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          hintText: widget.hint,
+                          hintStyle: TextStyle(color: Colors.grey.shade400),
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: screenHeight * 0.1,
-                  ),
-                ],
-              ).paddingSymmetric(horizontal: screenWidth * 0.25),
+                ),
+              ],
             ),
-          );
+            SizedBox(height: screenHeight * 0.02),
+            // Next Button row
+            Row(
+              children: [
+                const Spacer(),
+                CustomNextButton(
+                  nextPage: () {
+                    // Example: reset page index and go to home
+                    if (Get.isRegistered<BaseLessonController>()) {
+                      Get.delete<BaseLessonController>();
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
+                  isEnabled: personalReflectionController.text.isNotEmpty,
+                ),
+              ],
+            ),
+            SizedBox(height: screenHeight * 0.1),
+          ],
+        ).paddingSymmetric(horizontal: screenWidth * 0.25),
+      ),
+    );
   }
 
-  mobileDisplay() {}
+  Widget mobileDisplay() {
+    // Minimal example; adapt as needed for smaller screens
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          SizedBox(height: 20),
+          // ... The same approach to listing the takeAways ...
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...widget.takeAways.map((takeaway) {
+                return ShadowedBoxContainer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 25,
+                            child: Image.network(widget.image),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            takeaway[0],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        takeaway[1],
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              // Reflection
+              ShadowedBoxContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.subTitle,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      maxLines: 4,
+                      autocorrect: true,
+                      controller: personalReflectionController,
+                      onTapOutside: (event) {
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade400,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade400,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        hintText: widget.hint,
+                        hintStyle: TextStyle(color: Colors.grey.shade400),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          // Next button
+          Row(
+            children: [
+              Spacer(),
+              CustomNextButton(
+                nextPage: () {
+                  if (Get.isRegistered<BaseLessonController>()) {
+                    Get.delete<BaseLessonController>();
+                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+                isEnabled: personalReflectionController.text.isNotEmpty,
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
 }

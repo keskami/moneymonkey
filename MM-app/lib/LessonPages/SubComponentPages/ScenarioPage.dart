@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
  
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
@@ -35,8 +35,8 @@ class _ScenarioPageState extends State<ScenarioPage> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
 
-  ComponentOneTwoController componentOneTwoController =
-        Get.find<ComponentOneTwoController>();
+  BaseLessonController baseLessonController =
+        Get.find<BaseLessonController>();
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
       Future.delayed(
         Duration(seconds: 2),
         () {
-          componentOneTwoController.pageIndex.value += 1;
+          baseLessonController.pageIndex.value += 1;
         },
       );
     } else {

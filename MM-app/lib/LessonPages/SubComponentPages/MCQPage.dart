@@ -4,13 +4,25 @@ import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
- 
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
+
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class MCQPage extends StatefulWidget {
-  final String componentId;
-  const MCQPage({super.key, required this.componentId});
+  final String wrong;
+  final String correct;
+  final String title;
+  final String question;
+  final String correctAnswer;
+  final List<String> options;
+  const MCQPage(
+      {super.key,
+      required this.wrong,
+      required this.correct,
+      required this.title,
+      required this.question,
+      required this.correctAnswer,
+      required this.options});
 
   @override
   State<MCQPage> createState() {
@@ -19,58 +31,35 @@ class MCQPage extends StatefulWidget {
 }
 
 class _MCQPageState extends State<MCQPage> {
-  ComponentOneTwoController componentOneTwoController =
-      Get.find<ComponentOneTwoController>();
+  BaseLessonController baseLessonController = Get.find<BaseLessonController>();
 
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  String correctAnswer = "";
-  List<String> options = [];
-  // String correctAnswer = '';
-
-  // List<String> options = [];
-  String wrong = '';
-  String correct = '';
-  String title = '';
-  String question = '';
-
-  Future<void> setData(SubComponent data) async {
-    setState(() {
-      correct = data.data.prompts.correct;
-      wrong = data.data.prompts.incorrect;
-      title = data.data.questionExplanation;
-      question = data.data.question;
-      options =
-          List<String>.from(data.data.options.map((item) => item.toString()));
-      correctAnswer = data.data.correctAnswers[0];
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    setData(componentOneTwoController.pageData[0]);
   }
 
   void answerQuestion(String ans) {
     currentAnswers.clear();
-    if (correctAnswer == ans) {
+    if (widget.correctAnswer == ans) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
-          .showSnackBar(CorrectAnswerSnackBar(message: correct));
+          .showSnackBar(CorrectAnswerSnackBar(message: widget.correct));
       setState(() {
         currentAnswers.add(ans);
       });
       Future.delayed(
         Duration(seconds: 2),
         () {
-          componentOneTwoController.pageIndex.value += 1;
+          baseLessonController.pageIndex.value += 1;
         },
       );
     } else {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
-          .showSnackBar(WrongAnswerSnackBar(message: wrong));
+          .showSnackBar(WrongAnswerSnackBar(message: widget.wrong));
       setState(() {
         currentAnswers.add(ans);
       });
@@ -81,16 +70,15 @@ class _MCQPageState extends State<MCQPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Obx(() {
-      if (componentOneTwoController.pageData.isEmpty) {
-        return Center(child: Text("No data available"));
-      }
-      // At this point, if the question is still empty, setData() should be called.
-      // (Our ever() listener above should handle this.)
-      return screenWidth > screenHeight
-          ? webDisplay(screenWidth, screenHeight)
-          : mobileDisplay();
-    });
+
+    if (baseLessonController.pages.isEmpty) {
+      return Center(child: Text("No data available"));
+    }
+    // At this point, if the question is still empty, setData() should be called.
+    // (Our ever() listener above should handle this.)
+    return screenWidth > screenHeight
+        ? webDisplay(screenWidth, screenHeight)
+        : mobileDisplay();
   }
 
   Widget webDisplay(double screenWidth, double screenHeight) {
@@ -100,7 +88,7 @@ class _MCQPageState extends State<MCQPage> {
       children: [
         SizedBox(height: screenWidth * 0.02),
         Text(
-          question,
+          widget.question,
           softWrap: true,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -111,7 +99,7 @@ class _MCQPageState extends State<MCQPage> {
           horizontal: screenWidth * 0.015,
         ),
         Text(
-          title,
+          widget.title,
           softWrap: true,
           style: TextStyle(
             fontWeight: FontWeight.w600,
@@ -129,7 +117,7 @@ class _MCQPageState extends State<MCQPage> {
           child: Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: options.map((answer) {
+                children: widget.options.map((answer) {
                   return GestureDetector(
                     onTap: () {
                       answerQuestion(answer);
@@ -197,7 +185,7 @@ class _MCQPageState extends State<MCQPage> {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: options.map((answer) {
+                  children: widget.options.map((answer) {
                     return GestureDetector(
                       onTap: () {},
                       child: CustomOptionTile(

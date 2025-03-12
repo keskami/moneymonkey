@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'firebase_options.dart';
 
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
                     return LoginScreen();
                   }
                 } else {
-                  return TeacherDashboard();
+                  return HomePage();
                 }
               },
             ),

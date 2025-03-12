@@ -3,9 +3,7 @@ import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
-import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
-import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class MonkeyMCQPage extends StatefulWidget {
@@ -26,7 +24,7 @@ class MonkeyMCQPage extends StatefulWidget {
 }
 
 class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
-  final ScenarioController scenarioController = Get.find();
+  final BaseLessonController baseLessonController = Get.find();
   String selectedAns = "";
   bool feedbackShown = false;
   bool optionsDisabled = false;
@@ -36,7 +34,7 @@ class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
   @override
   void initState() {
     super.initState();
-    score = scenarioController.responsibilityScore.value;
+    score = baseLessonController.responsibilityScore.value;
   }
 
   void answerQuestion(String ans) {
@@ -68,13 +66,13 @@ class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     
     // Update the controller's score before moving to next question
-    scenarioController.responsibilityScore.value = score;
+    baseLessonController.responsibilityScore.value = score;
     setState(() {
       selectedAns = "";
       feedbackShown = false;
       optionsDisabled = false;
     });
-    scenarioController.pageIndex.value += 1;
+    baseLessonController.pageIndex.value += 1;
   }
 
   @override
@@ -82,113 +80,234 @@ class _MonkeyMCQPageState extends State<MonkeyMCQPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Financial Responsibility Score
-            Align(
-              alignment: Alignment.centerRight,
-              child: RichText(
-                text: TextSpan(
-                  text: "Financial Responsibility Score: ",
+    return screenWidth > screenHeight
+        ? webDisplay(screenWidth, screenHeight)
+        : mobileDisplay(screenWidth, screenHeight);
+  }
+
+  Widget webDisplay(double screenWidth, double screenHeight) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenWidth * 0.02),
+        
+        // Financial Responsibility Score
+        Align(
+          alignment: Alignment.centerRight,
+          child: RichText(
+            text: TextSpan(
+              text: "Financial Responsibility Score: ",
+              style: GoogleFonts.baloo2().copyWith(
+                fontSize: 18,
+              ),
+              children: [
+                TextSpan(
+                  text: "${score.toStringAsFixed(2)}",
                   style: GoogleFonts.baloo2().copyWith(
                     fontSize: 18,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: "${score.toStringAsFixed(2)}",
-                      style: GoogleFonts.baloo2().copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "%",
-                      style: GoogleFonts.baloo2().copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            
-            SizedBox(height: screenHeight * 0.02),
-            
-            // Monkey and Chat Bubble
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Monkey image with key for measurement
-                Container(
-                  key: monkeyImageKey,
-                  child: Image.network(
-                    height: screenHeight * 0.2,
-                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(
-                  child: ChatBubble(
-                    clipper: ChatBubbleClipper1(type: BubbleType.receiverBubble),
-                    backGroundColor: Colors.grey.shade200,
-                    margin: EdgeInsets.only(top: 20),
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: constraints.maxWidth * 0.7,
-                      ),
-                      child: Text(
-                        widget.question,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                        ),
-                      ).marginSymmetric(
-                        horizontal: screenWidth * 0.01,
-                        vertical: screenHeight * 0.01,
-                      ),
-                    ),
+                TextSpan(
+                  text: "%",
+                  style: GoogleFonts.baloo2().copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-            
-            SizedBox(height: screenHeight * 0.03),
-            
-            // Full width options
-            ...widget.options.map(
-              (option) => Padding(
-                padding: EdgeInsets.only(bottom: screenHeight * 0.01),
-                child: GestureDetector(
-                  onTap: () => answerQuestion(option[0]),
-                  child: CustomOptionTile(
-                    isSelected: selectedAns == option[0],
-                    isDisabled: optionsDisabled,
-                    title: option[0],
-                    subtitle: option[1],
+          ),
+        ),
+        
+        SizedBox(height: screenHeight * 0.02),
+        
+        // Monkey and Chat Bubble
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Monkey image with key for measurement
+            Container(
+              key: monkeyImageKey,
+              child: Image.network(
+                height: screenHeight * 0.2,
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+              ),
+            ),
+            Expanded(
+              child: ChatBubble(
+                clipper: ChatBubbleClipper1(type: BubbleType.receiverBubble),
+                backGroundColor: Colors.grey.shade200,
+                margin: EdgeInsets.only(top: 20),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: screenWidth * 0.35,
+                  ),
+                  child: Text(
+                    widget.question,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                    ),
+                  ).marginSymmetric(
+                    horizontal: screenWidth * 0.01,
+                    vertical: screenHeight * 0.01,
                   ),
                 ),
               ),
-            ).toList(),
-            
-            SizedBox(height: screenHeight * 0.03),
-            
-            // Continue Button - Right aligned
-            Align(
-              alignment: Alignment.centerRight,
-              child: CustomButton(
-                onPressed: feedbackShown ? moveToNextPage : showFeedback,
-                text: feedbackShown ? "Continue" : "Next",
-                isEnabled: selectedAns.isNotEmpty,
+            ),
+          ],
+        ),
+        
+        SizedBox(height: screenHeight * 0.03),
+        
+        // Options container
+        Container(
+          width: double.infinity,
+          child: Column(
+            children: [
+              // Options
+              ...widget.options.map(
+                (option) => Padding(
+                  padding: EdgeInsets.only(bottom: screenHeight * 0.01),
+                  child: GestureDetector(
+                    onTap: () => answerQuestion(option[0]),
+                    child: CustomOptionTile(
+                      isSelected: selectedAns == option[0],
+                      isDisabled: optionsDisabled,
+                      title: option[0],
+                      subtitle: option[1],
+                    ),
+                  ),
+                ),
+              ).toList(),
+            ],
+          ),
+        ),
+        
+        SizedBox(height: screenHeight * 0.03),
+        
+        // Continue Button - Right aligned
+        Align(
+          alignment: Alignment.centerRight,
+          child: CustomButton(
+            onPressed: feedbackShown ? moveToNextPage : showFeedback,
+            text: feedbackShown ? "Continue" : "Next",
+            isEnabled: selectedAns.isNotEmpty,
+          ),
+        ),
+      ],
+    ).paddingSymmetric(horizontal: screenWidth * 0.25); // Key for proper alignment
+  }
+
+  Widget mobileDisplay(double screenWidth, double screenHeight) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Financial Responsibility Score
+        Align(
+          alignment: Alignment.centerRight,
+          child: RichText(
+            text: TextSpan(
+              text: "Financial Responsibility Score: ",
+              style: GoogleFonts.baloo2().copyWith(
+                fontSize: 16,
+              ),
+              children: [
+                TextSpan(
+                  text: "${score.toStringAsFixed(2)}",
+                  style: GoogleFonts.baloo2().copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextSpan(
+                  text: "%",
+                  style: GoogleFonts.baloo2().copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        
+        SizedBox(height: screenHeight * 0.02),
+        
+        // Monkey and Chat Bubble - more compact for mobile
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Monkey image with key for measurement
+            Container(
+              key: monkeyImageKey,
+              child: Image.network(
+                height: screenHeight * 0.15, // Smaller for mobile
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMonkeys%2FMinty.png?alt=media&token=50e15d9a-3fc7-4fdb-9beb-ef2857b68793",
+              ),
+            ),
+            Expanded(
+              child: ChatBubble(
+                clipper: ChatBubbleClipper1(type: BubbleType.receiverBubble),
+                backGroundColor: Colors.grey.shade200,
+                margin: EdgeInsets.only(top: 10),
+                child: Container(
+                  child: Text(
+                    widget.question,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ).marginSymmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
+                ),
               ),
             ),
           ],
-        );
-      },
-    );
+        ),
+        
+        SizedBox(height: screenHeight * 0.02),
+        
+        // Options
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: widget.options.map(
+                (option) => Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: GestureDetector(
+                    onTap: () => answerQuestion(option[0]),
+                    child: CustomOptionTile(
+                      isSelected: selectedAns == option[0],
+                      isDisabled: optionsDisabled,
+                      title: option[0],
+                      subtitle: option[1],
+                    ),
+                  ),
+                ),
+              ).toList(),
+            ),
+          ),
+        ),
+        
+        SizedBox(height: 16),
+        
+        // Continue Button - Right aligned
+        Align(
+          alignment: Alignment.centerRight,
+          child: CustomButton(
+            onPressed: feedbackShown ? moveToNextPage : showFeedback,
+            text: feedbackShown ? "Continue" : "Next",
+            isEnabled: selectedAns.isNotEmpty,
+          ),
+        ),
+      ],
+    ).paddingSymmetric(horizontal: 16); // Mobile padding
   }
   
   // Custom option tile that spans full width

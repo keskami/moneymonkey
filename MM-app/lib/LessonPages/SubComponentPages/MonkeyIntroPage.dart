@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 
 class MonkeyIntroPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _MonkeyIntroPageState extends State<MonkeyIntroPage> {
 
   }
   
-  final StoryController storyController = Get.find();
+  final BaseLessonController baseLessonController = Get.find();
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -72,7 +72,7 @@ class _MonkeyIntroPageState extends State<MonkeyIntroPage> {
                 CustomNextButton(
                   nextPage: () {
                    
-                    storyController.pageIndex.value += 1;
+                    baseLessonController.pageIndex.value += 1;
                   },
                   isEnabled: wait6,
                 ),

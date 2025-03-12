@@ -1,86 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
- 
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class TapToRevealIconsPage extends StatefulWidget {
-  final String componentId;
-  const TapToRevealIconsPage({super.key, required this.componentId});
+  final String title;
+  final String wrongMessage;
+  final List<String> iconLinks;
+  final List<String> iconContents;
+
+  const TapToRevealIconsPage({
+    super.key,
+    required this.title,
+    required this.wrongMessage,
+    required this.iconLinks,
+    required this.iconContents,
+  });
 
   @override
   State<TapToRevealIconsPage> createState() => _TapToRevealIconsPageState();
 }
 
 class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
-  List<bool> showIcon = [
-    false,
-    false,
-    false,
-    false,
-  ];
-  List<String> iconLinks = [];
-  List<String> iconContents = [];
+  // Local states
+  List<bool> showIcon = [false, false, false, false];
   bool isNextEnabled = false;
-  ComponentOneTwoController componentOneTwoController =
-      Get.find<ComponentOneTwoController>();
-  String title = '';
-  String wrong = '';
-  bool loading = true;
 
-  Future<void> setData(SubComponent data) async {
-    setState(() {
-      wrong = "Please click all the icons before moving on";
-      title = data.data.title;
-      iconContents =
-          List<String>.from(data.data.contents.map((item) => item.toString()));
-      iconLinks =
-          List<String>.from(data.data.iconLinks.map((item) => item.toString()));
-      loading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-    });
-    if (componentOneTwoController.pageData.isNotEmpty) {
-      setData(componentOneTwoController.pageData[2]);
-    }
-    if (title == '') {
-      setData(componentOneTwoController.pageData[2]);
-    }
-  }
-
-  void makeIconVisible(String iconLink) {
-    int index = iconLinks.indexOf(iconLink);
-    if (index == 0) {
-      setState(() {
-        showIcon[index] = true;
-      });
-    }
-    for (int i = 0; i < index; i++) {
-      if (showIcon[i] == false) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          WrongAnswerSnackBar(message: wrong),
-        );
-        return;
-      }
-    }
-    setState(() {
-      showIcon[index] = true;
-    });
-  }
+  // If you still need the controller for pageIndex navigation, keep it
+  final BaseLessonController baseLessonController =
+      Get.find<BaseLessonController>();
 
   @override
   Widget build(BuildContext context) {
-    //For enabling the Next Button
+    // For enabling the Next Button
+    // (If the last icon is visible, schedule enabling the button in 8s)
     if (showIcon[3]) {
       Future.delayed(
         Duration(seconds: 8),
@@ -91,11 +46,31 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
         },
       );
     }
+
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return screenWidth > screenHeight
         ? webDisplay(screenWidth, screenHeight)
-        : mobileDisplay();
+        : mobileDisplay(screenWidth, screenHeight);
+  }
+
+  /// Called when user taps an icon
+  void makeIconVisible(String iconLink) {
+    int index = widget.iconLinks.indexOf(iconLink);
+    // Check if the user has tapped all previous icons
+    for (int i = 0; i < index; i++) {
+      if (!showIcon[i]) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          WrongAnswerSnackBar(message: widget.wrongMessage),
+        );
+        return;
+      }
+    }
+    // Make current icon visible
+    setState(() {
+      showIcon[index] = true;
+    });
   }
 
   Widget webDisplay(double screenWidth, double screenHeight) {
@@ -107,7 +82,7 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
         Padding(
           padding: EdgeInsets.only(left: screenWidth * 0.043),
           child: Text(
-            title,
+            widget.title,
             softWrap: true,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -118,85 +93,78 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
             horizontal: screenWidth * 0.015,
           ),
         ),
-
-        //Icon Row
+        // Icon Row
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...iconLinks
-                .map(
-                  (e) {
-                    return TapToViewCircleAvatar(e, screenWidth);
-                  },
-                )
-                .expand((widget) => [
-                      widget,
+            ...widget.iconLinks
+                .map((iconLink) {
+                  return TapToViewCircleAvatar(iconLink, screenWidth);
+                })
+                .expand((iconWidget) => [
+                      iconWidget,
                       SizedBox(
                         width: screenWidth * 0.11,
                         height: 3,
-                        child: Container(
-                          color: Colors.grey.shade400,
-                        ),
+                        child: Container(color: Colors.grey.shade400),
                       )
                     ])
                 .toList()
-              ..removeLast()
+              ..removeLast() // remove the trailing space after last icon
           ],
         ),
-        SizedBox(
-          height: screenHeight * 0.05,
-        ),
+        SizedBox(height: screenHeight * 0.05),
+        // Info containers below each icon
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ...iconContents
-                .map(
-                  (e) => CustomInfoContainer(screenWidth, screenHeight, e,
-                      showIcon[iconContents.indexOf(e)]),
-                )
-                .expand((widget) => [
-                      widget,
+            ...widget.iconContents
+                .asMap()
+                .entries
+                .map((entry) => CustomInfoContainer(
+                      screenWidth,
+                      screenHeight,
+                      entry.value,            // the actual content text
+                      showIcon[entry.key],    // visibility depends on tapped icon
+                    ))
+                .expand((infoWidget) => [
+                      infoWidget,
                       const Spacer(),
                     ])
                 .toList()
-              ..removeLast()
+              ..removeLast() // remove trailing spacer
           ],
         ),
-        SizedBox(
-          height: screenHeight * 0.05,
-        ),
-        //Next Button Row
+        SizedBox(height: screenHeight * 0.05),
+        // Next Button Row
         Row(
           children: [
             const Spacer(),
             CustomNextButton(
               nextPage: () {
-                componentOneTwoController.pageIndex.value += 1;
+                baseLessonController.pageIndex.value += 1;
               },
               isEnabled: isNextEnabled,
             ),
-            SizedBox(
-              width: screenWidth * 0.02,
-            ),
+            SizedBox(width: screenWidth * 0.02),
           ],
         )
       ],
     ).paddingSymmetric(horizontal: screenWidth * 0.2);
   }
 
-  GestureDetector TapToViewCircleAvatar(String e, double screenWidth) {
+  Widget TapToViewCircleAvatar(String iconLink, double screenWidth) {
+    int index = widget.iconLinks.indexOf(iconLink);
     return GestureDetector(
       onTap: () {
-        makeIconVisible(e);
+        makeIconVisible(iconLink);
       },
       child: CircleAvatar(
         radius: screenWidth * 0.02,
-        backgroundColor: showIcon[iconLinks.indexOf(e)]
-            ? LightTheme().primaryBlue
-            : Colors.grey,
+        backgroundColor: showIcon[index] ? LightTheme().primaryBlue : Colors.grey,
         child: Image.network(
-          e,
+          iconLink,
           width: screenWidth * 0.025,
         ),
       ),
@@ -204,7 +172,11 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
   }
 
   Container CustomInfoContainer(
-      double screenWidth, double screenHeight, String e, bool isVisible) {
+    double screenWidth,
+    double screenHeight,
+    String content,
+    bool isVisible,
+  ) {
     return Container(
       width: screenWidth * 0.12,
       height: screenHeight * 0.4,
@@ -227,7 +199,7 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
       ),
       child: isVisible
           ? Text(
-              e,
+              content,
               softWrap: true,
               overflow: TextOverflow.visible,
               style: TextStyle(
@@ -240,5 +212,40 @@ class _TapToRevealIconsPageState extends State<TapToRevealIconsPage> {
     );
   }
 
-  mobileDisplay() {}
+  /// Stub for the mobile layout
+  Widget mobileDisplay(double screenWidth, double screenHeight) {
+    // You can adapt the same logic in webDisplay for mobile,
+    // or create a separate arrangement.
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // Title
+            Text(
+              widget.title,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            // icons row, content below, etc. ...
+            // Then Next button
+            Row(
+              children: [
+                Spacer(),
+                CustomNextButton(
+                  nextPage: () {
+                    baseLessonController.pageIndex.value += 1;
+                  },
+                  isEnabled: isNextEnabled,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

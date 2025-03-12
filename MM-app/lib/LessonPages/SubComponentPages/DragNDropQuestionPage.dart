@@ -1,16 +1,39 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
  
-import 'package:money_monkey/home.dart';
-
 class DragNDropQuestionPage extends StatefulWidget {
+  final String question;
+  final String box1;
+  final String box2;
+  final String box3;
+  final List<String> availableItems;
+  final List<String> correct1;
+  final List<String> correct2;
+  final List<String> correct3;
+  final String correctFeedback;
+  final String incorrectFeedback;
+  final String subTitle;
+
+  const DragNDropQuestionPage({
+    super.key,
+    required this.question,
+    required this.box1,
+    required this.box2,
+    required this.box3,
+    required this.availableItems,
+    required this.correct1,
+    required this.correct2,
+    required this.correct3,
+    required this.correctFeedback,
+    required this.incorrectFeedback,
+    required this.subTitle,
+  });
+
   @override
   _DragNDropQuestionPageState createState() => _DragNDropQuestionPageState();
 }
@@ -18,50 +41,13 @@ class DragNDropQuestionPage extends StatefulWidget {
 class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
-  bool isLoading = true;
-  int? balance;
-  int totalBanans = 0;
-  PeerReflectioncontroller peerReflectionController = Get.find();
+  final BaseLessonController baseLessonController = Get.find();
 
-  List<String> availableItems = [];
-
-  List<String> correct1 = [];
-  List<String> correct2 = [];
-  List<String> correct3 = [];
+  // Local data
   List<String> droppedItems1 = [];
   List<String> droppedItems2 = [];
   List<String> droppedItems3 = [];
-  bool loading = false;
-  String question = '';
-  String box1 = '';
-  String box2 = '';
-  String box3 = '';
-  String subTitle = '';
-  String correctFeedback = '';
-  String incorrectFeedback = '';
-
-  Future<void> setData(SubComponent data) async {
-    setState(() {
-      question = data.data.title;
-      box1 = data.data.categories[0].title;
-      box2 = data.data.categories[1].title;
-      box3 = data.data.categories[2].title;
-      availableItems =
-          List<String>.from(data.data.actions.map((item) => item.toString()));
-      correct1 =
-          List<String>.from(data.data.categories[0].correctActions.map((item) => item.toString()));
-      correct2 =
-          List<String>.from(data.data.categories[1].correctActions.map((item) => item.toString()));
-      correct3 =
-          List<String>.from(data.data.categories[2].correctActions.map((item) => item.toString()));
-        
-      correctFeedback = data.data.feedbackMessages["correct"];
-      incorrectFeedback = data.data.feedbackMessages["incorrect"];
-      subTitle = "Actions to Categorize:";
-
-      loading = false;
-    });
-  }
+  late List<String> availableItems; // We'll copy from widget in initState
 
   @override
   void initState() {
@@ -72,41 +58,43 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    setData(peerReflectionController.pageData[2]);
+    // Initialize the available items from the widget
+    availableItems = List<String>.from(widget.availableItems);
   }
 
-  // Method to handle moving an item back to available items
+  /// Move an item back to the "available" list
   void moveToAvailable(String item) {
     setState(() {
-      // Remove from all drop zones
       droppedItems1.remove(item);
       droppedItems2.remove(item);
       droppedItems3.remove(item);
-      
-      // Add to available if not already there
       if (!availableItems.contains(item)) {
         availableItems.add(item);
       }
     });
   }
 
+  /// Check if all items are placed correctly
   Future<void> _checkCompletion() async {
-    if (droppedItems1.length == correct1.length &&
-        droppedItems1.every((element) => correct1.contains(element)) &&
-        droppedItems2.length == correct2.length &&
-        droppedItems2.every((element) => correct2.contains(element)) &&
-        droppedItems3.length == correct3.length &&
-        droppedItems3.every((element) => correct3.contains(element))) {
+    // Must match exactly in length and membership
+    if (droppedItems1.length == widget.correct1.length &&
+        droppedItems1.every(widget.correct1.contains) &&
+        droppedItems2.length == widget.correct2.length &&
+        droppedItems2.every(widget.correct2.contains) &&
+        droppedItems3.length == widget.correct3.length &&
+        droppedItems3.every(widget.correct3.contains)) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(CorrectAnswerSnackBar(message: correctFeedback));
+      ScaffoldMessenger.of(context).showSnackBar(
+        CorrectAnswerSnackBar(message: widget.correctFeedback),
+      );
       await Future.delayed(Duration(seconds: 2));
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      peerReflectionController.pageIndex.value += 1;
+      baseLessonController.pageIndex.value += 1;
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(WrongAnswerSnackBar(message: incorrectFeedback));
+      ScaffoldMessenger.of(context).showSnackBar(
+        WrongAnswerSnackBar(message: widget.incorrectFeedback),
+      );
     }
   }
 
@@ -116,107 +104,139 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidthUnit = screenWidth / 390;
     double screenHeightUnit = screenHeight / 880;
-    
-    // Important: Consider the parent widget's padding (50% of total screen width)
-    // The available width is approximately 50% of the screen width
-    double availableWidth = screenWidth * 0.5;
-    
-    // Calculate container width to fit three containers with spacing
-    double containerWidth = (availableWidth / 3) - 16;  // Width divided by 3 minus spacing
 
-    return loading
-        ? Center(child: CircularProgressIndicator())
-        : Column(
-            children: [
-              // Centered title
-              Center(
-                child: Text(
-                  question,
-                  style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 6.5,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
+    double availableWidth = screenWidth * 0.5;
+    double containerWidth = (availableWidth / 3) - 16;
+
+    return Column(
+      children: [
+        Center(
+          child: Text(
+            widget.question,
+            style: GoogleFonts.baloo2(
+              fontSize: screenWidthUnit * 6.5,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SizedBox(height: screenHeightUnit * 26),
+        // LayoutBuilder for row/column logic
+        LayoutBuilder(
+          builder: (context, constraints) {
+            bool useColumn = constraints.maxWidth < 600;
+            if (useColumn) {
+              // Column layout
+              return Column(
+                children: [
+                  _buildDropZone(
+                    droppedItems1,
+                    widget.box1,
+                    screenWidthUnit,
+                    screenHeightUnit,
+                    1,
+                    constraints.maxWidth * 0.9,
                   ),
-                  textAlign: TextAlign.center,
+                  SizedBox(height: screenHeightUnit * 16),
+                  _buildDropZone(
+                    droppedItems2,
+                    widget.box2,
+                    screenWidthUnit,
+                    screenHeightUnit,
+                    2,
+                    constraints.maxWidth * 0.9,
+                  ),
+                  SizedBox(height: screenHeightUnit * 16),
+                  _buildDropZone(
+                    droppedItems3,
+                    widget.box3,
+                    screenWidthUnit,
+                    screenHeightUnit,
+                    3,
+                    constraints.maxWidth * 0.9,
+                  ),
+                ],
+              );
+            } else {
+              // Row layout
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildDropZone(
+                    droppedItems1,
+                    widget.box1,
+                    screenWidthUnit,
+                    screenHeightUnit,
+                    1,
+                    containerWidth,
+                  ),
+                  SizedBox(width: 8),
+                  _buildDropZone(
+                    droppedItems2,
+                    widget.box2,
+                    screenWidthUnit,
+                    screenHeightUnit,
+                    2,
+                    containerWidth,
+                  ),
+                  SizedBox(width: 8),
+                  _buildDropZone(
+                    droppedItems3,
+                    widget.box3,
+                    screenWidthUnit,
+                    screenHeightUnit,
+                    3,
+                    containerWidth,
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+        SizedBox(height: screenHeightUnit * 25),
+        Center(
+          child: Text(
+            widget.subTitle,
+            style: GoogleFonts.baloo2(
+              fontSize: screenWidthUnit * 5,
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        SizedBox(height: screenHeightUnit * 10),
+        // DragTarget for the "available items" area
+        DragTarget<Map<String, dynamic>>(
+          onAccept: (data) {
+            moveToAvailable(data['item']);
+          },
+          builder: (context, candidateData, rejectedData) {
+            return Container(
+              height: screenHeightUnit * 152,
+              width: availableWidth,
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: candidateData.isNotEmpty
+                    ? Colors.grey.withOpacity(0.3)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: availableItems.map((item) {
+                    return _buildDraggableItem(item, screenWidthUnit);
+                  }).toList(),
                 ),
               ),
-              SizedBox(height: screenHeightUnit * 26),
-              // Using a Column instead of Row for smaller screens
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  // Check if we should use a column layout instead of row
-                  bool useColumn = constraints.maxWidth < 600;
-                  
-                  if (useColumn) {
-                    // Column layout for smaller screens
-                    return Column(
-                      children: [
-                        _buildDropZone(droppedItems1, box1, screenWidthUnit, screenHeightUnit, 1, constraints.maxWidth * 0.9),
-                        SizedBox(height: screenHeightUnit * 16),
-                        _buildDropZone(droppedItems2, box2, screenWidthUnit, screenHeightUnit, 2, constraints.maxWidth * 0.9),
-                        SizedBox(height: screenHeightUnit * 16),
-                        _buildDropZone(droppedItems3, box3, screenWidthUnit, screenHeightUnit, 3, constraints.maxWidth * 0.9),
-                      ],
-                    );
-                  } else {
-                    // Row layout with smaller containers for larger screens
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildDropZone(droppedItems1, box1, screenWidthUnit, screenHeightUnit, 1, containerWidth),
-                        SizedBox(width: 8),
-                        _buildDropZone(droppedItems2, box2, screenWidthUnit, screenHeightUnit, 2, containerWidth),
-                        SizedBox(width: 8),
-                        _buildDropZone(droppedItems3, box3, screenWidthUnit, screenHeightUnit, 3, containerWidth),
-                      ],
-                    );
-                  }
-                }
-              ),
-              SizedBox(height: screenHeightUnit * 25),
-              // Centered subtitle
-              Center(
-                child: Text(
-                  subTitle,
-                  style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 5,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              SizedBox(height: screenHeightUnit * 10),
-              // Available items area - also make it a drop target
-              DragTarget<Map<String, dynamic>>(
-                onAccept: (data) {
-                  moveToAvailable(data['item']);
-                },
-                builder: (context, candidateData, rejectedData) {
-                  return Container(
-                    height: screenHeightUnit * 152,
-                    width: availableWidth,
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: candidateData.isNotEmpty 
-                          ? Colors.grey.withOpacity(0.3) 
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        alignment: WrapAlignment.center,
-                        children: availableItems.map((item) {
-                          return _buildDraggableItem(item, screenWidthUnit);
-                        }).toList(),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
+            );
+          },
+        ),
+      ],
+    );
   }
 
   Widget _buildDropZone(
@@ -232,22 +252,15 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
         setState(() {
           String item = data['item'];
           int sourceZone = data['sourceZone'] ?? 0;
-          
-          // Remove from source if coming from another zone
           if (sourceZone == 1) droppedItems1.remove(item);
           if (sourceZone == 2) droppedItems2.remove(item);
           if (sourceZone == 3) droppedItems3.remove(item);
-          
-          // Remove from available items if coming from there
           availableItems.remove(item);
-          
-          // Add to this zone if not already there
           if (!droppedItems.contains(item)) {
             droppedItems.add(item);
           }
         });
-
-        // Check if all items are placed
+        // If no more items left, check correctness
         if (availableItems.isEmpty) {
           _checkCompletion();
         }
@@ -259,8 +272,8 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
           height: screenHeightUnit * 428,
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: candidateData.isNotEmpty 
-                ? Colors.grey.withOpacity(0.3) 
+            color: candidateData.isNotEmpty
+                ? Colors.grey.withOpacity(0.3)
                 : Colors.grey[200],
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(8),
@@ -273,11 +286,10 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
                 child: Text(
                   label,
                   style: GoogleFonts.baloo2(
-                    fontSize: screenWidthUnit * 4.5, // Smaller font size
+                    fontSize: screenWidthUnit * 4.5,
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
-                  textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -290,7 +302,9 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
                     children: droppedItems.map((item) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: _buildDraggableZoneItem(item, screenWidthUnit, zoneId, containerWidth),
+                        child: _buildDraggableZoneItem(
+                          item, screenWidthUnit, zoneId, containerWidth,
+                        ),
                       );
                     }).toList(),
                   ),
@@ -303,9 +317,9 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
     );
   }
 
-  Widget _buildDraggableZoneItem(String label, double screenWidthUnit, int zoneId, double containerWidth) {
+  Widget _buildDraggableZoneItem(
+      String label, double screenWidthUnit, int zoneId, double containerWidth) {
     return Draggable<Map<String, dynamic>>(
-      // Include both the item and its source zone
       data: {'item': label, 'sourceZone': zoneId},
       feedback: Material(
         color: Colors.transparent,
@@ -318,7 +332,7 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
             color: Colors.white,
           ),
           child: Text(
-            label, 
+            label,
             style: TextStyle(fontSize: screenWidthUnit * 3.6),
             overflow: TextOverflow.ellipsis,
           ),
@@ -334,7 +348,6 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
 
   Widget _buildDraggableItem(String label, double screenWidthUnit) {
     return Draggable<Map<String, dynamic>>(
-      // For items from available section, no source zone
       data: {'item': label, 'sourceZone': 0},
       feedback: Material(
         color: Colors.transparent,
@@ -346,7 +359,7 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
             color: Colors.white,
           ),
           child: Text(
-            label, 
+            label,
             style: TextStyle(fontSize: screenWidthUnit * 3.6),
           ),
         ),
@@ -359,11 +372,12 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
     );
   }
 
-  Widget _buildItemContainer(String label, double screenWidthUnit, [double? maxWidth]) {
+  Widget _buildItemContainer(String label, double screenWidthUnit,
+      [double? maxWidth]) {
     return Container(
       padding: EdgeInsets.all(8),
-      constraints: maxWidth != null 
-          ? BoxConstraints(maxWidth: maxWidth - 16) 
+      constraints: maxWidth != null
+          ? BoxConstraints(maxWidth: maxWidth - 16)
           : null,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -377,7 +391,7 @@ class _DragNDropQuestionPageState extends State<DragNDropQuestionPage> {
         ],
       ),
       child: Text(
-        label, 
+        label,
         style: TextStyle(fontSize: screenWidthUnit * 3.6),
         overflow: TextOverflow.ellipsis,
       ),
