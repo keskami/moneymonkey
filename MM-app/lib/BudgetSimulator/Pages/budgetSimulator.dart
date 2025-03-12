@@ -975,15 +975,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     if (widget.savingsAccountBalance > 0) {
       double dailyRate = pow(1 + (widget.savingsAPY / 100), 1 / 365) - 1;
       double interest = widget.savingsAccountBalance * dailyRate;
-      if (interest > 0) {
+      if ((interest) > 0.01) {
         setState(() {
           Transaction savingsTransaction = Transaction(
-              name: "Interest",
-              day: widget.now,
-                amount: (interest * 100).roundToDouble() / 100,
-              toOrFrom: "Interest in",
-              account: "Savings",
-              currentAmount: widget.savingsAccountBalance + ((interest * 100).roundToDouble() / 100) + savingsLeftOver);
+          name: "Interest",
+          day: widget.now,
+          amount: (interest * 100).floorToDouble() / 100,
+          toOrFrom: "Interest in",
+          account: "Savings",
+          currentAmount: widget.savingsAccountBalance + ((interest * 100).floorToDouble() / 100) + savingsLeftOver);
           widget.Transactions.add(savingsTransaction);
         });
       }

@@ -141,31 +141,34 @@ class BudgetSimulatorFunctions {
   }
 
   Color getPaymentHistoryBackgroudColor(double percentage, int amount) {
-    if (amount == 0) {
-      return Color.fromRGBO(255, 247, 233, 1);
-    } else {
+     
       if (percentage == 100) {
         return Color.fromRGBO(243, 255, 250, 1);
       } else if (percentage != 0) {
         return Color.fromRGBO(255, 247, 233, 1);
       } else {
+        if (amount == 0) {
+      return Color.fromRGBO(255, 247, 233, 1);
+    } 
         return Color.fromRGBO(255, 243, 243, 1);
       }
-    }
+    
   }
 
   Color getPaymentHistoryTextColor(double percentage, int amount) {
-    if (amount == 0) {
-      return Color.fromRGBO(255, 176, 0, 1);
-    } else {
+    
+    
       if (percentage == 100) {
-        Colors.green;
+        return Colors.green;
       } else if (percentage != 0) {
         return Color.fromRGBO(255, 176, 0, 1);
       } else {
+        if (amount == 0) {
+      return Color.fromRGBO(255, 176, 0, 1);
+    }
         return Colors.red;
       }
-    }
+    
     return Color.fromRGBO(255, 176, 0, 1);
   }
 
