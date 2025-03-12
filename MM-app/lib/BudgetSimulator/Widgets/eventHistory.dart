@@ -138,9 +138,6 @@ class _RandomEventHistoryDropdownState
                     size: widget.screenHeightUnit * 50,
                   ),
                 ),
-                SizedBox(
-                  width: widget.screenWidthUnit * 36,
-                )
               ],
             ),
             clicked
@@ -216,10 +213,9 @@ class _RandomEventHistoryDropdownState
                                 fontWeight: FontWeight.w500,
                                 color: Color.fromRGBO(108, 108, 108, 1)),
                           ),
-                            SizedBox(
-                                height: widget.screenHeightUnit * 10,
-                              ),
-
+                          SizedBox(
+                            height: widget.screenHeightUnit * 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,11 +225,19 @@ class _RandomEventHistoryDropdownState
                                 child: IntrinsicWidth(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: widget.eventTaken.effect1Amount > 0
-                                          ? Color.fromRGBO(199, 244, 191, 1)
-                                          : Color.fromRGBO(255, 213, 213, 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                        color: widget.eventTaken.effect1Amount >
+                                                0
+                                            ? Color.fromRGBO(242, 255, 245, .7)
+                                            : Color.fromRGBO(255, 243, 243, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: widget.eventTaken
+                                                      .effect1Amount >
+                                                  0
+                                              ? Color.fromRGBO(0, 199, 129, 1)
+                                              : Color.fromRGBO(255, 0, 0, 1),
+                                        )),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
@@ -247,7 +251,7 @@ class _RandomEventHistoryDropdownState
                                           '${widget.eventTaken.effect1}: ',
                                           style: GoogleFonts.baloo2(
                                             fontSize:
-                                                widget.screenHeightUnit * 18,
+                                                widget.screenHeightUnit * 22,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.black,
                                           ),
@@ -256,14 +260,13 @@ class _RandomEventHistoryDropdownState
                                           '${widget.eventTaken.effect1Amount}',
                                           style: GoogleFonts.baloo2(
                                             fontSize:
-                                                widget.screenHeightUnit * 18,
+                                                widget.screenHeightUnit * 22,
                                             fontWeight: FontWeight.w500,
                                             color: widget.eventTaken
                                                         .effect1Amount >
                                                     0
-                                                ? Color.fromRGBO(30, 213, 58, 1)
-                                                : Color.fromRGBO(
-                                                    243, 52, 52, 1),
+                                                ? Color.fromRGBO(0, 199, 129, 1)
+                                                : Color.fromRGBO(255, 0, 0, 1),
                                           ),
                                         ),
                                         SizedBox(
@@ -276,18 +279,24 @@ class _RandomEventHistoryDropdownState
                               SizedBox(
                                 width: widget.screenWidthUnit * 11,
                               ),
-                            
-
                               SizedBox(
                                 height: widget.screenHeightUnit * 40,
                                 child: IntrinsicWidth(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: widget.eventTaken.effect2Amount > 0
-                                          ? Color.fromRGBO(199, 244, 191, 1)
-                                          : Color.fromRGBO(255, 213, 213, 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                        color: widget.eventTaken.effect2Amount >
+                                                0
+                                            ? Color.fromRGBO(242, 255, 245, .7)
+                                            : Color.fromRGBO(255, 243, 243, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: widget.eventTaken
+                                                      .effect2Amount >
+                                                  0
+                                              ? Color.fromRGBO(30, 213, 58, 1)
+                                              : Color.fromRGBO(243, 52, 52, 1),
+                                        )),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
@@ -301,7 +310,7 @@ class _RandomEventHistoryDropdownState
                                           '${widget.eventTaken.effect2}: ',
                                           style: GoogleFonts.baloo2(
                                             fontSize:
-                                                widget.screenHeightUnit * 18,
+                                                widget.screenHeightUnit * 22,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.black,
                                           ),
@@ -310,7 +319,7 @@ class _RandomEventHistoryDropdownState
                                           '${widget.eventTaken.effect2Amount}',
                                           style: GoogleFonts.baloo2(
                                             fontSize:
-                                                widget.screenHeightUnit * 18,
+                                                widget.screenHeightUnit * 22,
                                             fontWeight: FontWeight.w500,
                                             color: widget.eventTaken
                                                         .effect2Amount >

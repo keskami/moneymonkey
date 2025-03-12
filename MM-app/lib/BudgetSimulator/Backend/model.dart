@@ -141,16 +141,18 @@ class RandomEvent {
 class Transaction {
   final DateTime day;
   final String name;
-  final int amount;
+  final double amount;
   final String toOrFrom;
   final String account;
+  final double currentAmount;
 
   Transaction({
     required this.name,
     required this.day,
     required this.amount,
     required this.toOrFrom,
-    required this.account
+    required this.account,
+    required this.currentAmount,
   });
 }
 

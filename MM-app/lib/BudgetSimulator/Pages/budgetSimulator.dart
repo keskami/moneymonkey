@@ -75,7 +75,7 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
   late Expense nextExpense = expenses[0];
-  String currentOption = "Accounts";
+  String currentOption = "Calendar";
   DateTime now = DateTime(2025, 5, 1);
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
@@ -88,7 +88,6 @@ class BudgetSimulator extends StatefulWidget {
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
   List<RandomEventTaken> takenEvents = [];
   List<Transaction> Transactions = [];
-
 }
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
@@ -296,9 +295,19 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     recalculatePercentages,
                                                 nextDay: nextDay,
                                                 mapExpenses: mapExpenses)
-                                            :  widget.currentOption == "Accounts" ? TransferMoneyButton(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit, widget: widget, checkingAccountBalance: widget.checkingAccountBalance as int, setStateCallback: setState,):
-                                            
-                                            Container(),
+                                            : widget.currentOption == "Accounts"
+                                                ? TransferMoneyButton(
+                                                    screenHeightUnit:
+                                                        screenHeightUnit,
+                                                    screenWidthUnit:
+                                                        screenWidthUnit,
+                                                    widget: widget,
+                                                    checkingAccountBalance:
+                                                        widget.checkingAccountBalance
+                                                            as int,
+                                                    setStateCallback: setState,
+                                                  )
+                                                : Container(),
                                       ],
                                     ),
                                     CrushTheCreditCardDebtPages(
@@ -390,8 +399,19 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 done: widget.done,
                                                 monthsOccurd: monthsOccurd,
                                               )
-                                            :  widget.currentOption ==
-                                                "Accounts" ? AccountsBudgetSimulatorPage(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,widget: widget, randomEventsTaken: widget.takenEvents, Transactions: widget.Transactions, ) :Container(),
+                                            : widget.currentOption == "Accounts"
+                                                ? AccountsBudgetSimulatorPage(
+                                                    screenHeightUnit:
+                                                        screenHeightUnit,
+                                                    screenWidthUnit:
+                                                        screenWidthUnit,
+                                                    widget: widget,
+                                                    randomEventsTaken:
+                                                        widget.takenEvents,
+                                                    Transactions:
+                                                        widget.Transactions,
+                                                  )
+                                                : Container(),
                                   ]),
                             ),
                             Container(
@@ -576,7 +596,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   }
 
   Future<void> nextDay() async {
-    print(widget.Transactions);
     if (widget.now.month != widget.now.add(Duration(days: 1)).month) {
       getInterestCCDebt();
       nextMonth();
@@ -658,6 +677,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           setState(() {
             widget.hints = functions.addHint(
                 "Pay Day", widget.hints, widget.now, widget.level, widget.name);
+                Transaction payDay = Transaction(name: "Pay Day", day: widget.now, amount: -expense.amount, toOrFrom: "Transfer in", account: "Checking", currentAmount: widget.checkingAccountBalance - expense.amount);
+                widget.Transactions.add(payDay);
           });
 
           await showDialog(
@@ -725,7 +746,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         } else if (expense.name == "CC Debt") {
           setState(() {
             widget.totalPaymentsSeen += 1;
-            widget.creditPaymentsSeen +=1;
+            widget.creditPaymentsSeen += 1;
             widget.done[widget.creditPaymentsSeen - 1] = true;
           });
           await showDialog(
@@ -876,11 +897,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         if (type == "CC Debt") {
           setState(() {
             for (int i = widget.creditPaymentsSeen; i <= 2; i++) {
-            widget.paid[i] += amount;
-          }
-            
+              widget.paid[i] += amount;
+            }
           });
-          
         }
         setState(() {
           expense.amountPaid += amount;
@@ -956,6 +975,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     if (widget.savingsAccountBalance > 0) {
       double dailyRate = pow(1 + (widget.savingsAPY / 100), 1 / 365) - 1;
       double interest = widget.savingsAccountBalance * dailyRate;
+      if (interest > 0) {
+        setState(() {
+          Transaction savingsTransaction = Transaction(
+              name: "Interest",
+              day: widget.now,
+                amount: (interest * 100).roundToDouble() / 100,
+              toOrFrom: "Interest in",
+              account: "Savings",
+              currentAmount: widget.savingsAccountBalance + ((interest * 100).roundToDouble() / 100) + savingsLeftOver);
+          widget.Transactions.add(savingsTransaction);
+        });
+      }
       setState(() {
         savingsLeftOver += interest;
       });

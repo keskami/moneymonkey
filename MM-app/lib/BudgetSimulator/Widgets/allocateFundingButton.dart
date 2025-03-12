@@ -101,58 +101,166 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                     monthlyFitness: widget.monthlyFitness,
                     monthlyEntertainment: widget.monthlyEntertainment,
                     onConfirm: (
-                      int toSavings,
-                      int toChecking,
-                      int newChecking,
-                      int rentSpent,
-                      int groceriesSpent,
-                      int travelSpentNow,
-                      int utilitiesSpent,
-                      int toFitness,
-                      int toEntertainment,
-                      int toCredCardDebt,
+                      double toSavings,
+                      double toChecking,
+                      double newChecking,
+                      double rentSpent,
+                      double groceriesSpent,
+                      double travelSpentNow,
+                      double utilitiesSpent,
+                      double toFitness,
+                      double toEntertainment,
+                      double toCredCardDebt,
                       int monthlyEntertainment,
                       int monthlyFitness,
                       int wellnessScore,
                     ) {
+                      double totalOff = 0;
                       widget.getInterestSavings();
                       widget.setStateCallback(() {
+                        if (rentSpent > 0) {
+                          Transaction rentTransaction = Transaction(
+                              name: "Paid Rent",
+                              day: widget.widget.now,
+                              amount: -rentSpent,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      rentSpent);
+                          widget.widget.Transactions.add(rentTransaction);
+                          totalOff += rentSpent;
+                        }
+                        if (groceriesSpent > 0) {
+                          Transaction groceriesTransaction = Transaction(
+                              name: "Paid Groceries",
+                              day: widget.widget.now,
+                              amount: -groceriesSpent,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      groceriesSpent - totalOff);
+                          widget.widget.Transactions.add(groceriesTransaction);
+                          totalOff += groceriesSpent;
+                        }
+                        if (travelSpentNow > 0) {
+                          Transaction travelTransaction = Transaction(
+                              name: "Paid Transportation",
+                              day: widget.widget.now,
+                              amount: -travelSpentNow,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      travelSpentNow - totalOff);
+                                      totalOff += travelSpentNow;
+                          widget.widget.Transactions.add(travelTransaction);
+                        }
+                        if (utilitiesSpent > 0) {
+                          Transaction utilitiesTransaction = Transaction(
+                              name: "Paid Utilities",
+                              day: widget.widget.now,
+                              amount: -utilitiesSpent,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      utilitiesSpent - totalOff);
+                          widget.widget.Transactions.add(utilitiesTransaction);
+                          totalOff += utilitiesSpent;
+                        }
+                        if (toFitness > 0) {
+                          Transaction fitnessTransaction = Transaction(
+                              name: "Paid Fitness",
+                              day: widget.widget.now,
+                              amount: -toFitness,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      toFitness - totalOff);
+                          widget.widget.Transactions.add(fitnessTransaction);
+                          totalOff += toFitness;
+                        }
+                        if (toEntertainment > 0) {
+                          Transaction entertainmentTransaction = Transaction(
+                              name: "Paid Entertainment",
+                              day: widget.widget.now,
+                              amount: -toEntertainment,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      toEntertainment - totalOff);
+                          widget.widget.Transactions
+                              .add(entertainmentTransaction);
+                              totalOff += toEntertainment;
+                        }
+                        if (toCredCardDebt > 0) {
+                          Transaction creditCardTransaction = Transaction(
+                              name: "Paid Credit Card Debt",
+                              day: widget.widget.now,
+                              amount: -toCredCardDebt,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      toCredCardDebt - totalOff);
+                          widget.widget.Transactions.add(creditCardTransaction);
+                          totalOff += toCredCardDebt;
+                        }
+
                         if (widget.widget.savingsTransfer != 0) {
                           Transaction savingsTransaction;
                           Transaction checkingTransaction;
+
                           if (widget.widget.savingsTransfer > 0) {
                             savingsTransaction = Transaction(
-                                name: "Transfer From Checking",
-                                day: widget.widget.now,
-                                amount: widget.widget.savingsTransfer,
-                                toOrFrom: "Transfer in",
-                                account: "Savings");
-                                checkingTransaction = Transaction(
-                                name: "Transfer To Savings",
-                                day: widget.widget.now,
-                                amount: -widget.widget.savingsTransfer,
-                                toOrFrom: "Transfer out",
-                                account: "Checking");
+                              name: "Transfer From Checking",
+                              day: widget.widget.now,
+                              amount: widget.widget.savingsTransfer,
+                              toOrFrom: "Transfer in",
+                              account: "Savings",
+                              currentAmount:
+                                  widget.widget.savingsAccountBalance +
+                                      widget.widget.savingsTransfer,
+                            );
+                            checkingTransaction = Transaction(
+                              name: "Transfer To Savings",
+                              day: widget.widget.now,
+                              amount: -widget.widget.savingsTransfer,
+                              toOrFrom: "Transfer out",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      widget.widget.savingsTransfer - totalOff,
+                            );
                           } else {
                             savingsTransaction = Transaction(
-                                name: "Transfer To Checking",
-                                day: widget.widget.now,
-                                amount: widget.widget.savingsTransfer,
-                                toOrFrom: "Transfer out",
-                                account: "Savings");
+                              name: "Transfer To Checking",
+                              day: widget.widget.now,
+                              amount: widget.widget.savingsTransfer,
+                              toOrFrom: "Transfer out",
+                              account: "Savings",
+                              currentAmount:
+                                  widget.widget.savingsAccountBalance +
+                                      widget.widget.savingsTransfer,
+                            );
 
-                                checkingTransaction = Transaction(
-                                name: "Transfer From Savings",
-                                day: widget.widget.now,
-                                amount: -widget.widget.savingsTransfer,
-                                toOrFrom: "Transfer in",
-                                account: "Checking");
+                            checkingTransaction = Transaction(
+                              name: "Transfer From Savings",
+                              day: widget.widget.now,
+                              amount: -widget.widget.savingsTransfer,
+                              toOrFrom: "Transfer in",
+                              account: "Checking",
+                              currentAmount:
+                                  widget.widget.checkingAccountBalance -
+                                      widget.widget.savingsTransfer - totalOff,
+                            );
                           }
-                          widget.widget.Transactions
-                              .add(savingsTransaction);
-                            widget.widget.Transactions
-                              .add(checkingTransaction);
-                            
+                          widget.widget.Transactions.add(savingsTransaction);
+                          widget.widget.Transactions.add(checkingTransaction);
                         }
 
                         widget.widget.checkingAccountBalance = newChecking;
