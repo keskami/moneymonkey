@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
@@ -85,7 +87,7 @@ class _ExpenselabelState extends State<Expenselabel> {
                           Container(
                             height: widget.screenHeightUnit * 28,
                             child: Text(
-                              "\$${widget.expense.amount - widget.expense.amountPaid}",
+                              "\$${max(widget.expense.amount - widget.expense.amountPaid,0)}",
                               style: GoogleFonts.baloo2(
                                   color: _getTextColor(),
                                   fontWeight: FontWeight.w600,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/accountsBudgetSimulatorPage.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
@@ -73,10 +74,11 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
   late Expense nextExpense = expenses[0];
-  String currentOption = "Credit Management";
+  String currentOption = "Accounts";
   DateTime now = DateTime(2025, 5, 1);
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
+  int creditPaymentsSeen = 0;
 
   List<int> paid = [0, 0, 0];
   List<int> due = [200, 400, 600];
@@ -382,7 +384,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 done: widget.done,
                                                 monthsOccurd: monthsOccurd,
                                               )
-                                            : Container(),
+                                            :  widget.currentOption ==
+                                                "Accounts" ? AccountsBudgetSimulatorPage(title: '', initialBudget: 0,) :Container(),
                                   ]),
                             ),
                             Container(
@@ -715,7 +718,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         } else if (expense.name == "CC Debt") {
           setState(() {
             widget.totalPaymentsSeen += 1;
-            widget.done[monthsOccurd] = true;
+            widget.creditPaymentsSeen +=1;
+            widget.done[widget.creditPaymentsSeen - 1] = true;
           });
           await showDialog(
             context: context,
@@ -730,7 +734,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           Navigator.of(context).pop();
                         })
                       : setState(() {
-                          for (int i = monthsOccurd + 1; i <= 3; i++) {
+                          for (int i = widget.creditPaymentsSeen; i < 3; i++) {
                             widget.due[i] += expense.penalty as int;
                           }
                           expense.amount += expense.penalty;
@@ -747,7 +751,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           if (!eventProccesed) {
             if (expense.amountPaid < expense.amount) {
               setState(() {
-                for (int i = monthsOccurd + 1; i <= 3; i++) {
+                for (int i = widget.creditPaymentsSeen; i <= 3; i++) {
                   widget.due[i] += expense.penalty as int;
                 }
                 expense.amount += expense.penalty;
@@ -864,7 +868,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       if (expense.name == type) {
         if (type == "CC Debt") {
           setState(() {
-            for (int i = monthsOccurd; i <= 2; i++) {
+            for (int i = widget.creditPaymentsSeen; i <= 2; i++) {
             widget.paid[i] += amount;
           }
             
