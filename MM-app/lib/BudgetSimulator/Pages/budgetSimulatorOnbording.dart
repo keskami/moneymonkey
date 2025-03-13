@@ -59,7 +59,9 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
-                    emotionalScore: 300,
+                    creditLimit: 5000,
+                    level: "Intermediate",
+                    cognativeScore: 300,
                     mentalScore: 300,
                     physicalScore: 300,
 
@@ -822,7 +824,9 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
-          emotionalScore: 300,
+          creditLimit: 5000,
+          level: "Intermediate",
+          cognativeScore: 300,
                     mentalScore: 300,
                     physicalScore: 300,
             wellnessScore: 300,
@@ -963,6 +967,13 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ],
             expenses: [
               Expense(
+                  name: "Rent",
+                  amount: 500,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 5, 5),
+                  amountPaid: 20,
+                  penalty: 30),
+              Expense(
                   name: "Pay Day",
                   amount: -1250,
                   dueDateType: "Fixed",
@@ -976,13 +987,8 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   dueDay: DateTime(2025, 5, 15),
                   amountPaid: 0,
                   penalty: 0),
-              Expense(
-                  name: "Rent",
-                  amount: 500,
-                  dueDateType: "Fixed",
-                  dueDay: DateTime(2025, 5, 5),
-                  amountPaid: 20,
-                  penalty: 30),
+               
+              
               Expense(
                   name: "Utilities",
                   amount: 150,
@@ -994,23 +1000,23 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   name: "Transportation",
                   amount: 100,
                   dueDateType: "Fixed",
-                  dueDay: DateTime(2026, 5, 28),
+                  dueDay: DateTime(2025, 5, 18),
                   amountPaid: 10,
-                  penalty: 0),
+                  penalty: 10),
               Expense(
                   name: "CC Debt",
                   amount: 200,
                   dueDateType: "Fixed",
                   dueDay: DateTime(2025, 5, 25),
                   amountPaid: 0,
-                  penalty: 100),
+                  penalty: 100, originalTotal: 3000),
               Expense(
                   name: "Groceries",
                   amount: 250,
                   dueDateType: "Fixed",
-                  dueDay: DateTime(2028, 5, 25),
+                  dueDay: DateTime(2025, 5, 28),
                   amountPaid: 0,
-                  penalty: 0),
+                  penalty: 25),
               Expense(
                   name: "Fitness",
                   amount: 0,

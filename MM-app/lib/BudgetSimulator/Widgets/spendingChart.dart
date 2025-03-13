@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -10,7 +11,7 @@ class SpendingDonutChart extends StatefulWidget {
   List<String> types;
   List<double> percentage;
   double total = 0;
-  List<ChartData> chartData = [];
+  List<BudgetSimulatorChartData> chartData = [];
   
 
   SpendingDonutChart({
@@ -101,12 +102,12 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
                       ),
                     )
                   ],
-                  series: <CircularSeries<ChartData, String>>[
-                    DoughnutSeries<ChartData, String>(
+                  series: <CircularSeries<BudgetSimulatorChartData, String>>[
+                    DoughnutSeries<BudgetSimulatorChartData, String>(
                       dataSource: widget.chartData,
-                      xValueMapper: (ChartData data, _) => data.category,
-                      yValueMapper: (ChartData data, _) => data.percentage,
-                      pointColorMapper: (ChartData data, _) => data.color,
+                      xValueMapper: (BudgetSimulatorChartData data, _) => data.category,
+                      yValueMapper: (BudgetSimulatorChartData data, _) => data.percentage,
+                      pointColorMapper: (BudgetSimulatorChartData data, _) => data.color,
                       innerRadius: '60%',
                     )
                   ],

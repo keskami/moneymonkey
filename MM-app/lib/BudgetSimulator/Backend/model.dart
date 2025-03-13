@@ -99,14 +99,17 @@ class Expense {
   DateTime dueDay; // For fixed expenses (e.g., Day 5)
   double amountPaid;
   final double penalty;
+  double originalTotal;
 
-  Expense(
-      {required this.name,
-      required this.amount,
-      required this.dueDateType,
-      required this.dueDay,
-      required this.amountPaid,
-      required this.penalty});
+  Expense({
+    required this.name,
+    required this.amount,
+    required this.dueDateType,
+    required this.dueDay,
+    required this.amountPaid,
+    required this.penalty,
+    this.originalTotal = 0,
+  });
 }
 
 class Hint {
@@ -132,6 +135,48 @@ class RandomEvent {
     required this.options,
     required this.trigerDay,
     required this.cost,
+  });
+}
+
+class Transaction {
+  final DateTime day;
+  final String name;
+  final double amount;
+  final String toOrFrom;
+  final String account;
+  final double currentAmount;
+
+  Transaction({
+    required this.name,
+    required this.day,
+    required this.amount,
+    required this.toOrFrom,
+    required this.account,
+    required this.currentAmount,
+  });
+}
+
+class RandomEventTaken {
+  final String name;
+  final String choiceTaken;
+  final String discription;
+  final int moneyEffect;
+  final DateTime trigerDay;
+  final String effect1;
+  final int effect1Amount;
+  final String effect2;
+  final int effect2Amount;
+
+  RandomEventTaken({
+    required this.name,
+    required this.choiceTaken,
+    required this.discription,
+    required this.trigerDay,
+    required this.moneyEffect,
+    required this.effect1,
+    required this.effect1Amount,
+    required this.effect2,
+    required this.effect2Amount,
   });
 }
 
