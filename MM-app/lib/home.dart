@@ -6,6 +6,8 @@ import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,9 +17,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
-  final HomePagesController homePagesController = Get.put(HomePagesController());
+  final HomePagesController homePagesController =
+      Get.put(HomePagesController());
   int currentPage = 0;
-  
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -27,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         ? webDisplay(context, screenWidth)
         : mobileDisplay(context);
   }
-  
+
   /// WEB DISPLAY
   Scaffold webDisplay(BuildContext context, double screenWidth) {
     return Scaffold(
@@ -35,11 +38,12 @@ class _HomePageState extends State<HomePage> {
         () {
           // Check if current page is Budget Simulator
           bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
-          
+
           // Calculate widths based on the current page
-          double sidebarWidth = isBudgetSimulator ? screenWidth * 0.05 : screenWidth * 0.2;
+          double sidebarWidth =
+              isBudgetSimulator ? screenWidth * 0.05 : screenWidth * 0.2;
           double contentWidth = screenWidth - sidebarWidth;
-          
+
           return Row(
             children: [
               // Sidebar (adjusted width based on page)
@@ -50,15 +54,38 @@ class _HomePageState extends State<HomePage> {
               // Main content (adjusted width based on sidebar)
               SizedBox(
                 width: contentWidth,
-                child: homePagesController.pages[homePagesController.pageIndex.value],
+                child: homePagesController
+                    .pages[homePagesController.pageIndex.value],
               )
             ],
           );
         },
       ),
+      floatingActionButton: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(
+            LightTheme().primaryBlue,
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TeacherDashboard(),
+            ),
+          );
+        },
+        child: Text(
+          "Teacher Dashboard",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+        ),
+      ),
     );
   }
-  
+
   /// MOBILE DISPLAY
   Scaffold mobileDisplay(BuildContext context) {
     return Scaffold(
@@ -79,7 +106,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: _buildMobileBottomBar(context),
     );
   }
-  
+
   /// BUILD MOBILE NAVIGATION BAR
   Widget _buildMobileBottomBar(BuildContext context) {
     return BottomNavigationBar(
@@ -105,7 +132,7 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-  
+
   /// HELPER TO BUILD BOTTOM NAVIGATION BUTTON
   BottomNavigationBarItem _buildMobileNavItem(String iconPath, int index) {
     final screenSize = MediaQuery.of(context).size;

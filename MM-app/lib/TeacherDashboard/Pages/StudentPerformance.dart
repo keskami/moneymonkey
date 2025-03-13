@@ -424,8 +424,10 @@ void setSelectedStudent(int index) {
   }
 }
 
-extension on Color {
-  withValues({required double alpha}) {}
+extension ColorExtension on Color {
+  Color withValues({required double alpha}) {
+    return this.withOpacity(alpha);
+  }
 }
 
 class FilterStudentsButton extends StatelessWidget {
