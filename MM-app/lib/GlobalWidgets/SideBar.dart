@@ -23,60 +23,49 @@ class SideBar extends StatelessWidget {
     return Obx(() {
       // Check if we're on the Budget Simulator page
       bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
-
+      
       if (isBudgetSimulator) {
-        // Collapsed sidebar for Budget Simulator with matching width
-        return SizedBox(
-          height: screenHeight,
-          width: screenWidthUnit * 159, // Width is already set to match the BudgetSimulator sidebar
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: Colors.black,
-                  width: screenWidthUnit * 1.5,
-                ),
-              ),
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: screenHeightUnit * 80,
-                ),
-                // Only show icons in collapsed mode
-                for (var entry in imageLinks.entries)
-                  GestureDetector(
-                    onTap: () {
-                      homePagesController.pageIndex.value = 
-                          imageLinks.keys.toList().indexOf(entry.key);
-                    },
-                    child: Container(
-                      height: screenHeightUnit * 100,
-                      width: screenWidthUnit * 130,
-                      decoration: BoxDecoration(
-                        color: homePagesController.pageIndex.value == 
-                            imageLinks.keys.toList().indexOf(entry.key)
-                            ? Color.fromRGBO(225, 243, 254, 1)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Container(
-                          height: screenHeightUnit * 60,
-                          width: screenWidthUnit * 60,
-                          child: Image.asset(entry.value),
-                        ),
+        // For Budget Simulator, show a minimal sidebar with just navigation icons
+        return Container(
+          width: screenWidthUnit * 70, // Narrower width for collapsed sidebar
+          color: Colors.white,
+          child: Column(
+            children: [
+              SizedBox(height: screenHeightUnit * 80),
+              // Only show icons in collapsed mode
+              for (var entry in imageLinks.entries)
+                GestureDetector(
+                  onTap: () {
+                    // Allow navigation to other pages
+                    homePagesController.pageIndex.value = 
+                        imageLinks.keys.toList().indexOf(entry.key);
+                  },
+                  child: Container(
+                    height: screenHeightUnit * 100,
+                    width: screenWidthUnit * 60,
+                    decoration: BoxDecoration(
+                      color: homePagesController.pageIndex.value == 
+                          imageLinks.keys.toList().indexOf(entry.key)
+                          ? Color.fromRGBO(225, 243, 254, 1)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Container(
+                        height: screenHeightUnit * 50,
+                        width: screenWidthUnit * 50,
+                        child: Image.asset(entry.value),
                       ),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         );
       } else {
         // Regular sidebar for other pages
         return Container(
-          width: screenWidthUnit * 250, // Wider sidebar for regular view
+          width: screenWidthUnit * 250,
           color: Colors.white,
           padding: EdgeInsets.symmetric(
             horizontal: 10,

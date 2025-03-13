@@ -4,18 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsBudgetSimulatorPage.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseTopOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditCardMangagmentScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/crushTheCreditCardDebtPages.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditScoreBox.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
@@ -23,10 +19,6 @@ import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/transferMoneyButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/weekdayRow.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBoxNew.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
-import 'package:money_monkey/Profile/profile_page.dart';
-import 'package:money_monkey/home.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class BudgetSimulator extends StatefulWidget {
@@ -136,10 +128,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BaseSideOfScreen(
-              screenHeight: screenHeight,
-              screenWidthUnit: screenWidthUnit,
-              screenHeightUnit: screenHeightUnit),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
