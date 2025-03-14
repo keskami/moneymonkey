@@ -21,7 +21,10 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Gold Period 1",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S123456", "S789012", "S345678"],
-    studentRequests: [],
+    studentRequests: {
+      "S123456": "John Doe",
+      "S789012": "Jane Smith",
+    },
     lessonId: 'A.1.1',
   ),
   'tempClassId2_2025': Classroom(
@@ -29,7 +32,7 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Blue Period 1",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S567890", "S123456"],
-    studentRequests: [],
+    studentRequests: {},
     lessonId: 'A.1.2',
   ),
   'tempClassId3_2025': Classroom(
@@ -37,7 +40,7 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Gold Period 2",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S901234", "S789012"],
-    studentRequests: [],
+    studentRequests: {},
     lessonId: 'A.1.4',
   ),
   'tempClassId4_2025': Classroom(
@@ -45,10 +48,11 @@ Map<String, Classroom> sampleClassrooms = {
     name: "Personal Finance",
     teacherId: 'temporaryTeacherId2025',
     studentIds: ["S567890", "S345678"],
-    studentRequests: [],
+    studentRequests: {},
     lessonId: 'A.1.3',
   ),
 };
+
 
 List<Student> sampleStudents = [
   Student(

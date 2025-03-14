@@ -39,7 +39,3 @@ class ColoredPaddedContainer extends Container {
     );
   }
 }
-
-extension on Color {
-  withValues({required double alpha}) {}
-}

@@ -7,6 +7,7 @@ import 'package:money_monkey/Backend/Services/CacheServices.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
 import 'package:money_monkey/Backend/Services/TeacherServices.dart';
 import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/TeacherDashboard/Backend/SampleDataFille.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/ClassroomPreferences.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/LessonManagement.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/Overview.dart';
@@ -31,22 +32,23 @@ class TeacherDashboardController extends GetxController {
   Rx<List<Student>> supportStudents = Rx<List<Student>>([]);
   Rx<List<Component>> childComponents = Rx<List<Component>>([]);
   Rx<List<String>> componentNames = Rx<List<String>>([]);
-  Rx<Teacher> teacher = Rx<Teacher>(Teacher(name: "", id: "", classRooms: [], profilePictureLink: ""));
-  
+  Rx<Teacher> teacher = Rx<Teacher>(
+      Teacher(name: "", id: "", classRooms: [], profilePictureLink: ""));
+
   // Services
   late TeacherService teacherService;
   LocalAcademicService localAcademicService = LocalAcademicService();
   late StudentService studentService;
-  
+
   // Current selection state
-  String selectedClassId = "";
+  RxString selectedClassId = "".obs;
   late Classroom selectedClass;
   late Lesson presentLesson;
   late Component selectedComponent;
   late Student selectedStudent;
   Map<String, String> classes = {};
 
-  // Other dashboard data  
+  // Other dashboard data
   Map<String, List<Student>> categorizedStudents = {};
   final Map<String, String> actions = {
     "What about those \$150 sneakers?": "Wait for next paycheck",
@@ -64,23 +66,23 @@ class TeacherDashboardController extends GetxController {
     try {
       // Initialize the cache
       await _cache.initialize();
-      
+
       // Set the teacher data
       teacher.value = _cache.teacher;
-      
+
       // Get available classes
       getClasses();
-      
+
       // If we have classes, select the first one by default
       // if (teacher.value.classRooms.isNotEmpty && selectedClassId.isEmpty) {
       //   selectedClassId = teacher.value.classRooms.first;
       // }
-      
+
       // Refresh all data with the cache
       if (selectedClassId.isNotEmpty) {
         await refreshAllData();
       }
-      
+
       print('TeacherDashboardController initialized with cache data');
     } catch (e) {
       print('Error initializing TeacherDashboardController from cache: $e');
@@ -91,6 +93,33 @@ class TeacherDashboardController extends GetxController {
       } else {
         getClasses();
       }
+    }
+  }
+
+  /// Initializes dashboard data from a local sample file
+  /// This is useful for testing or when backend services are unavailable
+  Future<void> initializeFromLocalFile() async {
+    try {
+      print('Initializing from local sample data file');
+      classRoomStudents.value = [];
+      childComponents.value = [];
+      topPerformers.value = [];
+      supportStudents.value = [];
+
+      // Load teacher data
+      teacher.value = sampleTeacher;
+
+      // Load classroom data
+      classes = Map.fromEntries(sampleClassrooms.entries.map(
+        (entry) => MapEntry(
+          entry.key,
+          entry.value.name,
+        ),
+      ));
+    } catch (e) {
+      print('Error initializing from local sample data: $e');
+      // Fallback to cache if local data fails
+      await initializeFromCache();
     }
   }
 
@@ -136,39 +165,43 @@ class TeacherDashboardController extends GetxController {
       supportStudents.value = [];
 
       if (selectedClassId.isEmpty && teacher.value.classRooms.isNotEmpty) {
-        selectedClassId = teacher.value.classRooms.first;
+        selectedClassId.value = teacher.value.classRooms.first;
       }
 
       if (selectedClassId.isNotEmpty) {
         // Try to get data from cache first
         try {
           // Get classroom from cache
-          selectedClass = _cache.getClassroom(selectedClassId) ?? 
-                         localAcademicService.getClassRoom(selectedClassId);
-          
+          selectedClass = _cache.getClassroom(selectedClassId.value) ??
+              localAcademicService.getClassRoom(selectedClassId.value);
+
           // Get lesson from cache
           presentLesson = _cache.getLesson(selectedClass.lessonId) ??
-                         localAcademicService.getLesson(selectedClass.lessonId);
-          
+              localAcademicService.getLesson(selectedClass.lessonId);
+
           lessonId.value = selectedClass.lessonId;
 
           // Get students from cache
-          List<Student> students = _cache.getStudentsInClassroom(selectedClassId);
+          List<Student> students =
+              _cache.getStudentsInClassroom(selectedClassId.value);
           if (students.isEmpty) {
             // Fallback to service
-            students = teacherService.getClassStudents(teacher.value.id, selectedClassId);
+            students = teacherService.getClassStudents(
+                teacher.value.id, selectedClassId.value);
           }
-          
+
           if (students.isNotEmpty) {
             selectedStudent = students[0];
             studentService = StudentService(student: selectedStudent);
           }
 
           // Get components
-          List<Component> components = _cache.getComponentsForLesson(selectedClass.lessonId);
+          List<Component> components =
+              _cache.getComponentsForLesson(selectedClass.lessonId);
           if (components.isEmpty) {
             // Fallback to service
-            final List<String> componentIds = localAcademicService.getLessonComponents(selectedClass.lessonId);
+            final List<String> componentIds = localAcademicService
+                .getLessonComponents(selectedClass.lessonId);
             for (var id in componentIds) {
               Component component = localAcademicService.getComponent(id);
               components.add(component);
@@ -176,7 +209,8 @@ class TeacherDashboardController extends GetxController {
           }
 
           // Prepare component names
-          List<String> compNames = components.map((comp) => comp.title).toList();
+          List<String> compNames =
+              components.map((comp) => comp.title).toList();
           if (components.isNotEmpty) {
             selectedComponent = components.first;
           }
@@ -192,14 +226,15 @@ class TeacherDashboardController extends GetxController {
           }
         } catch (e) {
           print('Error getting data from cache, falling back to services: $e');
-          
+
           // Fallback to services
-          selectedClass = localAcademicService.getClassRoom(selectedClassId);
-          presentLesson = localAcademicService.getLesson(selectedClass.lessonId);
+          selectedClass = localAcademicService.getClassRoom(selectedClassId.value);
+          presentLesson =
+              localAcademicService.getLesson(selectedClass.lessonId);
           lessonId.value = selectedClass.lessonId;
 
           final List<Student> students = teacherService.getClassStudents(
-              teacher.value.id, selectedClassId);
+              teacher.value.id, selectedClassId.value);
           selectedStudent = students[0];
           studentService = StudentService(student: selectedStudent);
 
@@ -226,7 +261,7 @@ class TeacherDashboardController extends GetxController {
           }
         }
       }
-      
+
       if (classRoomStudents.value.isNotEmpty &&
           childComponents.value.isNotEmpty) setCurrentPage(pageIndex.value);
 
@@ -256,14 +291,15 @@ class TeacherDashboardController extends GetxController {
       final cachedClassrooms = _cache.getTeacherClassrooms();
       if (cachedClassrooms.isNotEmpty) {
         classes = Map.fromEntries(
-          cachedClassrooms.map((classroom) => MapEntry(classroom.classId, classroom.name)),
+          cachedClassrooms
+              .map((classroom) => MapEntry(classroom.classId, classroom.name)),
         );
         return;
       }
     } catch (e) {
       print('Error getting classes from cache: $e');
     }
-    
+
     // Fallback to direct access
     classes = Map.fromEntries(
       _cache.classrooms.entries

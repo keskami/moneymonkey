@@ -63,7 +63,7 @@ class Classroom {
   String name;
   String teacherId;
   List<String> studentIds;
-  List<String> studentRequests;
+  Map<String, String> studentRequests; // Corrected this to a Map
   String lessonId;
 
   Classroom({
@@ -81,7 +81,7 @@ class Classroom {
       name: data['Name'] ?? '',
       teacherId: data['TeacherId'] ?? '',
       studentIds: List<String>.from(data['StudentIds'] ?? []),
-      studentRequests: List<String>.from(data['StudentRequests'] ?? []),
+      studentRequests: Map<String, String>.from(data['StudentRequests'] ?? {}),
       lessonId: data['LessonId'] ?? '',
     );
   }
@@ -95,7 +95,7 @@ class Classroom {
       'LessonId': lessonId,
     };
   }
-  
+
   // Additional methods for JSON serialization/deserialization
   Map<String, dynamic> toJson() {
     return {
@@ -107,18 +107,19 @@ class Classroom {
       'lessonId': lessonId,
     };
   }
-  
+
   factory Classroom.fromJson(Map<String, dynamic> json) {
     return Classroom(
       classId: json['classId'] ?? json['id'] ?? '',
       name: json['name'] ?? json['Name'] ?? '',
       teacherId: json['teacherId'] ?? json['TeacherId'] ?? '',
       studentIds: List<String>.from(json['studentIds'] ?? json['StudentIds'] ?? []),
-      studentRequests: List<String>.from(json['studentRequests'] ?? json['studentRequests'] ?? []),
+      studentRequests: Map<String, String>.from(json['studentRequests'] ?? json['StudentRequests'] ?? {}),
       lessonId: json['lessonId'] ?? json['LessonId'] ?? '',
     );
   }
 }
+
 
 class Unit {
   String unitId; //"A.1"

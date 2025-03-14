@@ -230,21 +230,39 @@ class SampleDataConverter {
       profilePictureLink: data['profilePictureLink'],
     );
   }
+static Map<String, Classroom> _parseClassrooms(Map<String, dynamic> data) {
+  final result = <String, Classroom>{};
+  data.forEach((key, value) {
+    // Convert studentRequests from a potential list or map to a Map<String, String>
+    final Map<String, String> studentRequestsMap = {};
+    
+    // Handle the case where studentRequests might be a list of IDs
+    if (value['studentRequests'] is List) {
+      final requestsList = List<String>.from(value['studentRequests']);
+      // Convert list to a map where key=id and value=id (since names aren't available)
+      for (final id in requestsList) {
+        studentRequestsMap[id] = id; // Using ID as placeholder for name
+      }
+    } 
+    // Handle the case where studentRequests is already a map
+    else if (value['studentRequests'] is Map) {
+      final requestsData = value['studentRequests'] as Map;
+      requestsData.forEach((studentId, studentName) {
+        studentRequestsMap[studentId.toString()] = studentName.toString();
+      });
+    }
 
-  static Map<String, Classroom> _parseClassrooms(Map<String, dynamic> data) {
-    final result = <String, Classroom>{};
-    data.forEach((key, value) {
-      result[key] = Classroom(
-        classId: value['classId'],
-        name: value['name'],
-        teacherId: value['teacherId'],
-        studentIds: List<String>.from(value['studentIds']),
-        studentRequests: List<String>.from(value['studentRequests']),
-        lessonId: value['lessonId'],
-      );
-    });
-    return result;
-  }
+    result[key] = Classroom(
+      classId: value['classId'],
+      name: value['name'],
+      teacherId: value['teacherId'],
+      studentIds: List<String>.from(value['studentIds']),
+      studentRequests: studentRequestsMap, // Now passing a Map<String, String>
+      lessonId: value['lessonId'],
+    );
+  });
+  return result;
+}
 
   static List<Student> _parseStudents(List<dynamic> data) {
     return data.map<Student>((item) {
