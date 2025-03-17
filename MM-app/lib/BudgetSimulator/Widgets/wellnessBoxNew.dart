@@ -125,7 +125,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
                 ],
               ),
               SizedBox(
-                width: widget.screenWidthUnit * 50,
+                width: widget.screenWidthUnit * 40,
               ),
               Padding(
                 padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),

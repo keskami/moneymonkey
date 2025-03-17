@@ -5,6 +5,7 @@ import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsBudgetSimulatorPage.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseTopOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditCardMangagmentScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/crushTheCreditCardDebtPages.dart';
@@ -128,6 +129,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          BaseSideOfScreen(
+              screenHeight: screenHeight,
+              screenWidthUnit: screenWidthUnit,
+              screenHeightUnit: screenHeightUnit),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +250,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           ],
                                         ),
                                         SizedBox(
-                                          width: screenWidthUnit * 810,
+                                          width: widget.currentOption == "Calendar" ? screenWidthUnit * 835 : screenWidthUnit * 795,
                                         ),
                                         widget.currentOption == "Calendar"
                                             ? AllocateFundsButton(
@@ -665,8 +670,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           setState(() {
             widget.hints = functions.addHint(
                 "Pay Day", widget.hints, widget.now, widget.level, widget.name);
-                Transaction payDay = Transaction(name: "Pay Day", day: widget.now, amount: -expense.amount, toOrFrom: "Transfer in", account: "Checking", currentAmount: widget.checkingAccountBalance - expense.amount);
-                widget.Transactions.add(payDay);
+            Transaction payDay = Transaction(
+                name: "Pay Day",
+                day: widget.now,
+                amount: -expense.amount,
+                toOrFrom: "Transfer in",
+                account: "Checking",
+                currentAmount: widget.checkingAccountBalance - expense.amount);
+            widget.Transactions.add(payDay);
           });
 
           await showDialog(
@@ -966,12 +977,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       if ((interest) > 0.01) {
         setState(() {
           Transaction savingsTransaction = Transaction(
-          name: "Interest",
-          day: widget.now,
-          amount: (interest * 100).floorToDouble() / 100,
-          toOrFrom: "Interest in",
-          account: "Savings",
-          currentAmount: widget.savingsAccountBalance + ((interest * 100).floorToDouble() / 100) + savingsLeftOver);
+              name: "Interest",
+              day: widget.now,
+              amount: (interest * 100).floorToDouble() / 100,
+              toOrFrom: "Interest in",
+              account: "Savings",
+              currentAmount: widget.savingsAccountBalance +
+                  ((interest * 100).floorToDouble() / 100) +
+                  savingsLeftOver);
           widget.Transactions.add(savingsTransaction);
         });
       }

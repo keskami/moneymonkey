@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulator.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
 import 'package:money_monkey/home.dart';
@@ -43,12 +45,12 @@ class MyApp extends StatelessWidget {
                   User? user = FirebaseAuth.instance.currentUser;
                   String userId = user?.uid ?? '';
                   if (userId.isEmpty) {
-                    return LoginScreen();
+                    return BudgetSimulatorOnboarding();
                   } else {
-                    return LoginScreen();
+                    return BudgetSimulatorOnboarding();
                   }
                 } else {
-                  return HomePage();
+                  return BudgetSimulatorOnboarding();
                 }
               },
             ),
