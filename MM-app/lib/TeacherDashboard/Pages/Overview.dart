@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/AcademicServices.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
@@ -21,7 +22,7 @@ class DashboardOverview extends StatefulWidget {
 
 class _DashboardOverviewState extends State<DashboardOverview> {
   final TeacherDashboardController teacherDashboardController = Get.find();
-  LocalAcademicService localAcademicService = LocalAcademicService();
+  DirectFirebaseService localAcademicService = DirectFirebaseService();
 
   @override
   void initState() {
@@ -54,7 +55,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
         return Image.network(
           "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
         );
-      case Status.InProgress:
+      case Status.Active:
         return CircularProgressIndicator(
           value: double.parse("24") / 100,
           strokeWidth: 2,

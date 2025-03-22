@@ -2,7 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/AcademicServices.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading.dart';
 
@@ -85,10 +86,10 @@ class LoadingPageWrapper extends StatelessWidget {
   }
 
   Future<void> _preLoadImages(BuildContext context) async {
-    final localService = LocalAcademicService();
-    final component = localService.getComponent(componentId);
+    final localService = DirectFirebaseService();
+    final component = await localService.getComponent(componentId);
 
-    switch (component.type) {
+    switch (component.componentType) {
       case ComponentType.concept:
       case ComponentType.interactiveActivity:
         await _preLoadImagesForLesson(context);

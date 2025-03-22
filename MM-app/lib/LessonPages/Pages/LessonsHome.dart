@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/AcademicServices.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonHomeUnit.dart';
 import 'package:money_monkey/GlobalWidgets/Scoreboard.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -13,7 +14,7 @@ class LessonsHome extends StatefulWidget {
 }
 
 class _LessonsHomeState extends State<LessonsHome> {
-  final localService = LocalAcademicService();
+  final localService = DirectFirebaseService();
   final ScrollController _scrollController = ScrollController();
 
   List<Lesson> lessons = [];
@@ -37,12 +38,12 @@ class _LessonsHomeState extends State<LessonsHome> {
 
   void _loadData() {
     final currentUnit = localService.getUnit(_currentUnitId);
-    unitTitle = currentUnit.title;
-    final List lessonIds = currentUnit.lessonIds;
-    lessons = [];
-    for (var i = 0; i < currentUnit.lessonIds.length; i++) {
-      lessons.add(localService.getLesson(lessonIds[i]));
-    }
+    // unitTitle = currentUnit.title;
+    // final List lessonIds = currentUnit.lessonIds;
+    // lessons = [];
+    // for (var i = 0; i < currentUnit.lessonIds.length; i++) {
+    //   // lessons.add(localService.getLesson(lessonIds[i]));
+    // }
   }
 
   void _onScroll() {

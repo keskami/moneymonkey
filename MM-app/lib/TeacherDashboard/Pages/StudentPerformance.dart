@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/StudentServices.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart'; // Updated import
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
@@ -18,13 +18,20 @@ class StudentPerformance extends StatefulWidget {
 
 class _StudentPerformanceState extends State<StudentPerformance> {
   // State variables
-
   String currentFilter = 'allStudents';
   int selectedStudentIndex = 0;
   List<Student> studentList = [];
-  final LocalAcademicService localAcademicService = LocalAcademicService();
-  TeacherDashboardController teacherDashboardController =
-      Get.find<TeacherDashboardController>();
+  final DirectFirebaseService _firebaseService = DirectFirebaseService(); // Updated service
+  TeacherDashboardController teacherDashboardController = Get.find<TeacherDashboardController>();
+  
+  // Add loading indicators for asynchronous operations
+  bool isLoadingStatus = false;
+  bool isLoadingProgress = false;
+  
+  // Cache for student statuses and progress to avoid repeated Firebase calls
+  Map<String, StudentStatus> studentStatusCache = {};
+  Map<String, double> lessonProgressCache = {};
+  Map<String, double> overallProgressCache = {};
 
   @override
   void initState() {
@@ -34,15 +41,43 @@ class _StudentPerformanceState extends State<StudentPerformance> {
 
   void initializeStudents() {
     studentList = teacherDashboardController.classRoomStudents.value;
+    // Preload progress and status for visible students
+    if (studentList.isNotEmpty) {
+      _preloadStudentData();
+    }
   }
-void setSelectedStudent(int index) {
-    if (index >= 0 &&
-        index < teacherDashboardController.classRoomStudents.value.length) {
+  
+  // Preload data for visible students to improve UI responsiveness
+  Future<void> _preloadStudentData() async {
+    setState(() {
+      isLoadingProgress = true;
+    });
+    
+    try {
+      for (final student in studentList.take(10)) { // Only preload first 10 for performance
+        await _getStudentStatus(student);
+        await _getLessonProgress(student);
+      }
+    } catch (e) {
+      print('Error preloading student data: $e');
+    } finally {
+      setState(() {
+        isLoadingProgress = false;
+      });
+    }
+  }
+
+  void setSelectedStudent(int index) {
+    if (index >= 0 && index < teacherDashboardController.classRoomStudents.value.length) {
       setState(() {
         selectedStudentIndex = index; // Update the selected index
-        teacherDashboardController.selectedStudent =
-            teacherDashboardController.classRoomStudents.value[index];
+        teacherDashboardController.selectedStudent = teacherDashboardController.classRoomStudents.value[index];
       });
+      
+      // Preload data for the selected student
+      _getStudentStatus(teacherDashboardController.selectedStudent);
+      _getLessonProgress(teacherDashboardController.selectedStudent);
+      _getOverallProgress(teacherDashboardController.selectedStudent);
     }
   }
 
@@ -94,62 +129,157 @@ void setSelectedStudent(int index) {
     }
   }
 
-  StudentStatus getStudentStatus(double progress) {
-    if (progress > 1) {
-      return StudentStatus.Ahead;
-    } else if (progress > 0.6) {
-      return StudentStatus.On_Track;
-    } else {
-      return StudentStatus.Behind;
+  // Get student status with caching to avoid repeated Firebase calls
+  Future<StudentStatus> _getStudentStatus(Student student) async {
+    if (studentStatusCache.containsKey(student.studentId)) {
+      return studentStatusCache[student.studentId]!;
+    }
+    
+    setState(() {
+      isLoadingStatus = true;
+    });
+    
+    try {
+      final studentService = StudentService(student: student);
+      final status = await studentService.getStatusFromProgress();
+      
+      // Cache the result
+      studentStatusCache[student.studentId] = status;
+      return status;
+    } catch (e) {
+      print('Error getting student status: $e');
+      return StudentStatus.On_Track; // Default fallback
+    } finally {
+      setState(() {
+        isLoadingStatus = false;
+      });
+    }
+  }
+  
+  // Get lesson progress with caching
+  Future<double> _getLessonProgress(Student student) async {
+    if (lessonProgressCache.containsKey(student.studentId)) {
+      return lessonProgressCache[student.studentId]!;
+    }
+    
+    try {
+      final studentService = StudentService(student: student);
+      final progress = await studentService.getLessonProgress();
+      
+      // Cache the result
+      lessonProgressCache[student.studentId] = progress;
+      return progress;
+    } catch (e) {
+      print('Error getting lesson progress: $e');
+      return 0.0; // Default fallback
+    }
+  }
+  
+  // Get overall progress with caching
+  Future<double> _getOverallProgress(Student student) async {
+    if (overallProgressCache.containsKey(student.studentId)) {
+      return overallProgressCache[student.studentId]!;
+    }
+    
+    try {
+      final studentService = StudentService(student: student);
+      final progress = await studentService.getOverallProgress();
+      
+      // Cache the result
+      overallProgressCache[student.studentId] = progress;
+      return progress;
+    } catch (e) {
+      print('Error getting overall progress: $e');
+      return 0.0; // Default fallback
     }
   }
 
-  Widget _buildProgressSection(String title, String subtitle, double progress) {
-    Color progressColor =
-        progress > 0.6 ? LightTheme().pastelGreen : LightTheme().pastelRed;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyles.containerTitle.copyWith(
-            fontSize: 20,
-          ),
-        ),
-        Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey.shade400,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Stack(
-          children: [
-            LinearProgressIndicator(
-              backgroundColor: Colors.grey.shade300,
-              color: progressColor,
-              minHeight: 10,
-              borderRadius: BorderRadius.circular(10),
-              value: progress.clamp(0.0, 1.0),
-            ),
-            Positioned(
-              right: 8,
-              top: -4,
-              child: Text(
-                '${(progress * 100).toStringAsFixed(0)}%',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: progressColor,
+  Widget _buildProgressSection(String title, String subtitle, Future<double> progressFuture) {
+    return FutureBuilder<double>(
+      future: progressFuture,
+      builder: (context, snapshot) {
+        // Show loading indicator while waiting
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyles.containerTitle.copyWith(
+                  fontSize: 20,
                 ),
               ),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.shade400,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ],
+          );
+        }
+        
+        // Get progress value or default to 0
+        final progress = snapshot.data ?? 0.0;
+        
+        // Determine color based on progress
+        Color progressColor = progress > 0.6
+            ? LightTheme().pastelGreen
+            : LightTheme().pastelRed;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyles.containerTitle.copyWith(
+                fontSize: 20,
+              ),
+            ),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade400,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Stack(
+              children: [
+                LinearProgressIndicator(
+                  backgroundColor: Colors.grey.shade300,
+                  color: progressColor,
+                  minHeight: 10,
+                  borderRadius: BorderRadius.circular(10),
+                  value: progress.clamp(0.0, 1.0),
+                ),
+                Positioned(
+                  right: 8,
+                  top: -4,
+                  child: Text(
+                    '${(progress * 100).toStringAsFixed(0)}%',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: progressColor,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -208,25 +338,21 @@ void setSelectedStudent(int index) {
                 const SizedBox(height: 8),
                 // Scrollable Student List
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: isLoadingProgress 
+                  ? Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: studentList.isEmpty
                           ? [const Text("No students in Class")]
                           : List.generate(studentList.length, (index) {
                               final student = studentList[index];
-                              final studentService =
-                                  StudentService(student: student);
-                              final lessonProgress =
-                                  studentService.getLessonProgress();
-                              final status = getStudentStatus(lessonProgress);
-                              final statusColor = getStatusColor(status);
-
+                              
+                              // Use FutureBuilder for status badge since it depends on async operation
                               return GestureDetector(
                                 onTap: () => setSelectedStudent(index),
                                 child: ColoredPaddedContainer(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
+                                  margin: const EdgeInsets.symmetric(vertical: 5),
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 12, horizontal: 10),
                                   color: selectedStudentIndex == index
@@ -247,24 +373,41 @@ void setSelectedStudent(int index) {
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      ColoredPaddedContainer(
-                                        width: screenWidth * 0.06,
-                                        margin: EdgeInsets.zero,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 10,
-                                        ),
-                                        color:
-                                            statusColor.withValues(alpha: 0.3),
-                                        child: Text(
-                                          status.name.replaceAll('_', ' '),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: statusColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                      FutureBuilder<StudentStatus>(
+                                        future: _getStudentStatus(student),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return SizedBox(
+                                              width: 24,
+                                              height: 24,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            );
+                                          }
+                                          
+                                          final status = snapshot.data ?? StudentStatus.On_Track;
+                                          final statusColor = getStatusColor(status);
+                                          
+                                          return ColoredPaddedContainer(
+                                            width: screenWidth * 0.06,
+                                            margin: EdgeInsets.zero,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 10,
+                                            ),
+                                            color: statusColor.withValues(alpha: 0.3),
+                                            child: Text(
+                                              status.name.replaceAll('_', ' '),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                color: statusColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
@@ -306,43 +449,60 @@ void setSelectedStudent(int index) {
                                     style: TextStyles.containerTitle,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text(
-                                    "Current Lesson: ${localAcademicService.getLessonName(teacherDashboardController.selectedStudent.progress.substring(0, 5))}",
-                                    style: TextStyle(
-                                      color: Colors.grey.shade400,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  FutureBuilder<String>(
+                                    future: _getLessonName(teacherDashboardController
+                                        .selectedStudent.progress.substring(0, 5)),
+                                    builder: (context, snapshot) {
+                                      final lessonName = snapshot.data ?? "Loading...";
+                                      return Text(
+                                        "Current Lesson: $lessonName",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade400,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
                                   ),
                                 ],
                               ),
                             ),
                             const SizedBox(width: 16),
-                            ColoredPaddedContainer(
-                              width: screenWidth * 0.08,
-                              margin: EdgeInsets.zero,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 16,
-                              ),
-                              color: getStatusColor(teacherDashboardController
-                                      .studentService
-                                      .getStatusFromProgress())
-                                  .withValues(alpha: 0.3),
-                              child: Text(
-                                teacherDashboardController.studentService
-                                    .getStatusFromProgress()
-                                    .name
-                                    .replaceAll('_', ' '),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: getStatusColor(
-                                      teacherDashboardController.studentService
-                                          .getStatusFromProgress()),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            FutureBuilder<StudentStatus>(
+                              future: _getStudentStatus(teacherDashboardController.selectedStudent),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  );
+                                }
+                                
+                                final status = snapshot.data ?? StudentStatus.On_Track;
+                                final statusColor = getStatusColor(status);
+                                
+                                return ColoredPaddedContainer(
+                                  width: screenWidth * 0.08,
+                                  margin: EdgeInsets.zero,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 16,
+                                  ),
+                                  color: statusColor.withValues(alpha: 0.3),
+                                  child: Text(
+                                    status.name.replaceAll('_', ' '),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: statusColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              }
                             ),
                           ],
                         ),
@@ -354,8 +514,7 @@ void setSelectedStudent(int index) {
                               child: _buildProgressSection(
                                 "Lesson Progress",
                                 "Current Lesson",
-                                teacherDashboardController.studentService
-                                    .getLessonProgress(),
+                                _getLessonProgress(teacherDashboardController.selectedStudent),
                               ),
                             ),
                             const SizedBox(width: 50),
@@ -363,8 +522,7 @@ void setSelectedStudent(int index) {
                               child: _buildProgressSection(
                                 "Overall Progress",
                                 "Course Completion",
-                                teacherDashboardController.studentService
-                                    .getOverallProgress(),
+                                _getOverallProgress(teacherDashboardController.selectedStudent),
                               ),
                             ),
                           ],
@@ -421,6 +579,17 @@ void setSelectedStudent(int index) {
         ),
       ],
     );
+  }
+  
+  // Helper method to get lesson name using DirectFirebaseService
+  Future<String> _getLessonName(String lessonId) async {
+    try {
+      final lesson = await _firebaseService.getLesson(lessonId);
+      return lesson.title;
+    } catch (e) {
+      print('Error getting lesson name: $e');
+      return "Unknown Lesson";
+    }
   }
 }
 

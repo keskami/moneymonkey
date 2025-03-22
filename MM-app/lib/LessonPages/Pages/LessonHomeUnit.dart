@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/AcademicServices.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
 import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -30,7 +31,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
 
   // Example "pagesLink" from your snippet:
   List<Widget> getPages(List<String> componentIds) {
-    final localService = LocalAcademicService();
+    final localService = DirectFirebaseService();
     final List<Widget> pagesLink = [];
 
     for (String componentId in componentIds) {
@@ -38,7 +39,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
       final component = localService.getComponent(componentId);
 
       pagesLink.add(
-          LoadingPageWrapper(type: component.type, componentId: componentId));
+          LoadingPageWrapper(type: component.componentType, componentId: componentId));
     }
     return pagesLink;
   }
@@ -159,6 +160,10 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
       ),
     );
   }
+}
+
+extension on Future<Component> {
+  get componentType => null;
 }
 
 // --------------------------------------------------------------------

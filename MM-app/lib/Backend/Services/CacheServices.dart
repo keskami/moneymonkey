@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
@@ -17,7 +18,8 @@ class TeacherCacheBuilder {
     try {
       // Validate teacherId first
       if (teacherId.isEmpty) {
-        throw Exception('Teacher ID cannot be empty. Please provide a valid teacher ID.');
+        throw Exception(
+            'Teacher ID cannot be empty. Please provide a valid teacher ID.');
       }
 
       // Initialize the cache structure
@@ -44,7 +46,8 @@ class TeacherCacheBuilder {
 
       // 2. Fetch classrooms
       print('Fetching ${teacher.classRooms.length} classrooms...');
-      final Map<String, Classroom> classrooms = await _fetchClassrooms(teacher.classRooms);
+      final Map<String, Classroom> classrooms =
+          await _fetchClassrooms(teacher.classRooms);
       cache['classrooms'] = _mapToJson(classrooms);
       print('Fetched ${classrooms.length} classrooms successfully.');
 
@@ -76,7 +79,8 @@ class TeacherCacheBuilder {
       print('Extracting component IDs from lessons...');
       final Set<String> componentIds = _extractComponentIds(lessons);
       print('Fetching ${componentIds.length} components...');
-      final Map<String, Component> components = await _fetchComponents(componentIds);
+      final Map<String, Component> components =
+          await _fetchComponents(componentIds);
       cache['components'] = _mapToJson(components);
       print('Fetched ${components.length} components successfully.');
 
@@ -98,7 +102,7 @@ class TeacherCacheBuilder {
       throw Exception('Failed to build teacher cache: $e');
     }
   }
-  
+
   // Fetch teacher data
   Future<Teacher> _fetchTeacher(String teacherId) async {
     try {
@@ -106,8 +110,9 @@ class TeacherCacheBuilder {
       if (teacherId.isEmpty) {
         throw Exception('Teacher ID cannot be empty');
       }
-      
-      final DocumentSnapshot doc = await _firestore.collection('Teachers').doc(teacherId).get();
+
+      final DocumentSnapshot doc =
+          await _firestore.collection('Teachers').doc(teacherId).get();
 
       if (!doc.exists) {
         throw Exception('Teacher not found with ID: $teacherId');
@@ -128,7 +133,8 @@ class TeacherCacheBuilder {
   }
 
   // Fetch classrooms
-  Future<Map<String, Classroom>> _fetchClassrooms(List<String> classroomIds) async {
+  Future<Map<String, Classroom>> _fetchClassrooms(
+      List<String> classroomIds) async {
     try {
       Map<String, Classroom> classrooms = {};
 
@@ -138,10 +144,12 @@ class TeacherCacheBuilder {
           continue;
         }
 
-        final DocumentSnapshot doc = await _firestore.collection('Classrooms').doc(id).get();
+        final DocumentSnapshot doc =
+            await _firestore.collection('Classrooms').doc(id).get();
 
         if (doc.exists) {
-          classrooms[id] = Classroom.fromFirestore(doc.data() as Map<String, dynamic>, doc.id);
+          classrooms[id] = Classroom.fromFirestore(
+              doc.data() as Map<String, dynamic>, doc.id);
         } else {
           print('Classroom with ID $id not found');
         }
@@ -176,10 +184,12 @@ class TeacherCacheBuilder {
           continue;
         }
 
-        final DocumentSnapshot doc = await _firestore.collection('Students').doc(id).get();
+        final DocumentSnapshot doc =
+            await _firestore.collection('Students').doc(id).get();
 
         if (doc.exists) {
-          students.add(Student.fromFirestore(doc.data() as Map<String, dynamic>, doc.id));
+          students.add(Student.fromFirestore(
+              doc.data() as Map<String, dynamic>, doc.id));
         } else {
           print('Student with ID $id not found');
         }
@@ -218,7 +228,8 @@ class TeacherCacheBuilder {
 
         // First try the LessonsIndex for the path
         try {
-          final DocumentSnapshot indexDoc = await _firestore.collection('LessonsIndex').doc(id).get();
+          final DocumentSnapshot indexDoc =
+              await _firestore.collection('LessonsIndex').doc(id).get();
 
           if (indexDoc.exists) {
             final indexData = indexDoc.data() as Map<String, dynamic>;
@@ -226,10 +237,12 @@ class TeacherCacheBuilder {
 
             if (path.isNotEmpty) {
               // Use the path to get the full lesson document
-              final DocumentSnapshot lessonDoc = await _firestore.doc(path).get();
+              final DocumentSnapshot lessonDoc =
+                  await _firestore.doc(path).get();
 
               if (lessonDoc.exists) {
-                lessons[id] = Lesson.fromFirestore(lessonDoc.data() as Map<String, dynamic>, id);
+                lessons[id] = Lesson.fromFirestore(
+                    lessonDoc.data() as Map<String, dynamic>, id);
                 continue;
               }
             }
@@ -248,7 +261,8 @@ class TeacherCacheBuilder {
             final DocumentSnapshot lessonDoc = await _firestore.doc(path).get();
 
             if (lessonDoc.exists) {
-              lessons[id] = Lesson.fromFirestore(lessonDoc.data() as Map<String, dynamic>, id);
+              lessons[id] = Lesson.fromFirestore(
+                  lessonDoc.data() as Map<String, dynamic>, id);
               continue; // Successfully fetched, move to next
             }
           } catch (e) {
@@ -257,10 +271,12 @@ class TeacherCacheBuilder {
 
           // Try one more approach - direct collection
           try {
-            final DocumentSnapshot directDoc = await _firestore.collection('Lessons').doc(id).get();
+            final DocumentSnapshot directDoc =
+                await _firestore.collection('Lessons').doc(id).get();
 
             if (directDoc.exists) {
-              lessons[id] = Lesson.fromFirestore(directDoc.data() as Map<String, dynamic>, id);
+              lessons[id] = Lesson.fromFirestore(
+                  directDoc.data() as Map<String, dynamic>, id);
             } else {
               print('Lesson with ID $id not found in any location');
             }
@@ -315,8 +331,10 @@ class TeacherCacheBuilder {
             final unitData = doc.data() as Map<String, dynamic>;
 
             // Fetch lesson IDs from the Lessons subcollection
-            final QuerySnapshot lessonsSnapshot = await _firestore.collection('$path/Lessons').get();
-            final List<String> lessonIds = lessonsSnapshot.docs.map((doc) => doc.id).toList();
+            final QuerySnapshot lessonsSnapshot =
+                await _firestore.collection('$path/Lessons').get();
+            final List<String> lessonIds =
+                lessonsSnapshot.docs.map((doc) => doc.id).toList();
 
             // Create the unit with the lesson IDs
             units[id] = Unit(
@@ -324,7 +342,8 @@ class TeacherCacheBuilder {
               title: unitData['title'] ?? '',
               description: unitData['description'] ?? '',
               lessonIds: lessonIds,
-              unitStatus: statusFromFirestore(unitData['unitStatus'] ?? 'inactive'),
+              unitStatus:
+                  statusFromFirestore(unitData['unitStatus'] ?? 'inactive'),
               totalLessons: unitData['totalLessons'] ?? 0,
               createdAt: unitData['createdAt']?.toDate(),
               updatedAt: unitData['updatedAt']?.toDate(),
@@ -337,10 +356,12 @@ class TeacherCacheBuilder {
 
         // Fallback to top-level collection
         try {
-          final DocumentSnapshot doc = await _firestore.collection('Units').doc(id).get();
+          final DocumentSnapshot doc =
+              await _firestore.collection('Units').doc(id).get();
 
           if (doc.exists) {
-            units[id] = Unit.fromFirestore(doc.data() as Map<String, dynamic>, id);
+            units[id] =
+                Unit.fromFirestore(doc.data() as Map<String, dynamic>, id);
           } else {
             print('Unit with ID $id not found in any location');
           }
@@ -368,7 +389,8 @@ class TeacherCacheBuilder {
   }
 
   // Fetch components using the ComponentsIndex collection for direct access
-  Future<Map<String, Component>> _fetchComponents(Set<String> componentIds) async {
+  Future<Map<String, Component>> _fetchComponents(
+      Set<String> componentIds) async {
     try {
       Map<String, Component> components = {};
 
@@ -380,7 +402,8 @@ class TeacherCacheBuilder {
 
         // First try the ComponentsIndex for the path
         try {
-          final DocumentSnapshot indexDoc = await _firestore.collection('ComponentsIndex').doc(id).get();
+          final DocumentSnapshot indexDoc =
+              await _firestore.collection('ComponentsIndex').doc(id).get();
 
           if (indexDoc.exists) {
             final indexData = indexDoc.data() as Map<String, dynamic>;
@@ -388,10 +411,12 @@ class TeacherCacheBuilder {
 
             if (path.isNotEmpty) {
               // Use the path to get the full component document
-              final DocumentSnapshot componentDoc = await _firestore.doc(path).get();
+              final DocumentSnapshot componentDoc =
+                  await _firestore.doc(path).get();
 
               if (componentDoc.exists) {
-                Component component = Component.fromFirestore(componentDoc.data() as Map<String, dynamic>, id);
+                Component component = Component.fromFirestore(
+                    componentDoc.data() as Map<String, dynamic>, id);
 
                 // Fetch associated questions from the Questions subcollection
                 try {
@@ -405,10 +430,12 @@ class TeacherCacheBuilder {
                     List<SubComponent> questionsList = [];
 
                     for (final questionDoc in questionsSnapshot.docs) {
-                      final questionData = questionDoc.data() as Map<String, dynamic>;
+                      final questionData =
+                          questionDoc.data() as Map<String, dynamic>;
                       try {
                         final String typeString = questionData['type'] ?? '';
-                        final SubComponentType type = SubComponentTypeExtension.fromString(typeString);
+                        final SubComponentType type =
+                            SubComponentTypeExtension.fromString(typeString);
 
                         // Create the appropriate data object based on the component type
                         dynamic parsedData;
@@ -448,10 +475,12 @@ class TeacherCacheBuilder {
                               parsedData = Impact.fromMap(questionData);
                               break;
                             case SubComponentType.scenariointro:
-                              parsedData = IntroductionPage.fromMap(questionData);
+                              parsedData =
+                                  IntroductionPage.fromMap(questionData);
                               break;
                             case SubComponentType.scenarioquestion:
-                              parsedData = ScenarioQuestion.fromMap(questionData);
+                              parsedData =
+                                  ScenarioQuestion.fromMap(questionData);
                               break;
                             case SubComponentType.scenariochoice:
                               parsedData = ScenarioChoice.fromMap(questionData);
@@ -460,7 +489,8 @@ class TeacherCacheBuilder {
                               parsedData = ScenarioResult.fromMap(questionData);
                               break;
                             case SubComponentType.peerintro:
-                              parsedData = PeerReflectionIntro.fromMap(questionData);
+                              parsedData =
+                                  PeerReflectionIntro.fromMap(questionData);
                               break;
                             case SubComponentType.peerstories:
                               parsedData = PeerStories.fromMap(questionData);
@@ -469,24 +499,30 @@ class TeacherCacheBuilder {
                               parsedData = PeerMatch.fromMap(questionData);
                               break;
                             case SubComponentType.peerreflectionend:
-                              parsedData = PeerReflectionEnd.fromMap(questionData);
+                              parsedData =
+                                  PeerReflectionEnd.fromMap(questionData);
                               break;
                             case SubComponentType.quizimagemcquestion:
-                              parsedData = QuizMultipleChoice.fromMap(questionData);
+                              parsedData =
+                                  QuizMultipleChoice.fromMap(questionData);
                               break;
                             case SubComponentType.quiztextmcquestion:
-                              parsedData = TextBasedQuestion.fromMap(questionData);
+                              parsedData =
+                                  TextBasedQuestion.fromMap(questionData);
                               break;
                             default:
-                              print("Unknown component type: $type, using raw data");
+                              print(
+                                  "Unknown component type: $type, using raw data");
                               parsedData = questionData;
                               break;
                           }
-                          questionsList.add(SubComponent(type: type, data: parsedData));
+                          questionsList
+                              .add(SubComponent(type: type, data: parsedData));
                         } catch (e) {
                           print("Error parsing component of type $type: $e");
                           // Add with raw data as fallback
-                          questionsList.add(SubComponent(type: type, data: questionData));
+                          questionsList.add(
+                              SubComponent(type: type, data: questionData));
                         }
                       } catch (e) {
                         print('Error parsing question in component $id: $e');
@@ -523,13 +559,16 @@ class TeacherCacheBuilder {
         if (parts.length >= 4) {
           final String unitId = '${parts[0]}.${parts[1]}';
           final String lessonId = '${parts[0]}.${parts[1]}.${parts[2]}';
-          final String path = 'Levels/Advanced/Units/$unitId/Lessons/$lessonId/Components/$id';
+          final String path =
+              'Levels/Advanced/Units/$unitId/Lessons/$lessonId/Components/$id';
 
           try {
-            final DocumentSnapshot componentDoc = await _firestore.doc(path).get();
+            final DocumentSnapshot componentDoc =
+                await _firestore.doc(path).get();
 
             if (componentDoc.exists) {
-              Component component = Component.fromFirestore(componentDoc.data() as Map<String, dynamic>, id);
+              Component component = Component.fromFirestore(
+                  componentDoc.data() as Map<String, dynamic>, id);
 
               // Fetch associated questions
               try {
@@ -543,10 +582,12 @@ class TeacherCacheBuilder {
                   List<SubComponent> questionsList = [];
 
                   for (final questionDoc in questionsSnapshot.docs) {
-                    final questionData = questionDoc.data() as Map<String, dynamic>;
+                    final questionData =
+                        questionDoc.data() as Map<String, dynamic>;
                     try {
                       final String typeString = questionData['type'] ?? '';
-                      final SubComponentType type = SubComponentTypeExtension.fromString(typeString);
+                      final SubComponentType type =
+                          SubComponentTypeExtension.fromString(typeString);
 
                       // Create the appropriate data object based on the component type
                       dynamic parsedData;
@@ -598,7 +639,8 @@ class TeacherCacheBuilder {
                             parsedData = ScenarioResult.fromMap(questionData);
                             break;
                           case SubComponentType.peerintro:
-                            parsedData = PeerReflectionIntro.fromMap(questionData);
+                            parsedData =
+                                PeerReflectionIntro.fromMap(questionData);
                             break;
                           case SubComponentType.peerstories:
                             parsedData = PeerStories.fromMap(questionData);
@@ -607,24 +649,30 @@ class TeacherCacheBuilder {
                             parsedData = PeerMatch.fromMap(questionData);
                             break;
                           case SubComponentType.peerreflectionend:
-                            parsedData = PeerReflectionEnd.fromMap(questionData);
+                            parsedData =
+                                PeerReflectionEnd.fromMap(questionData);
                             break;
                           case SubComponentType.quizimagemcquestion:
-                            parsedData = QuizMultipleChoice.fromMap(questionData);
+                            parsedData =
+                                QuizMultipleChoice.fromMap(questionData);
                             break;
                           case SubComponentType.quiztextmcquestion:
-                            parsedData = TextBasedQuestion.fromMap(questionData);
+                            parsedData =
+                                TextBasedQuestion.fromMap(questionData);
                             break;
                           default:
-                            print("Unknown component type: $type, using raw data");
+                            print(
+                                "Unknown component type: $type, using raw data");
                             parsedData = questionData;
                             break;
                         }
-                        questionsList.add(SubComponent(type: type, data: parsedData));
+                        questionsList
+                            .add(SubComponent(type: type, data: parsedData));
                       } catch (e) {
                         print("Error parsing component of type $type: $e");
                         // Add with raw data as fallback
-                        questionsList.add(SubComponent(type: type, data: questionData));
+                        questionsList
+                            .add(SubComponent(type: type, data: questionData));
                       }
                     } catch (e) {
                       print('Error parsing question in component $id: $e');
@@ -656,15 +704,18 @@ class TeacherCacheBuilder {
 
           // Final fallback - direct collection
           try {
-            final DocumentSnapshot directDoc = await _firestore.collection('Components').doc(id).get();
+            final DocumentSnapshot directDoc =
+                await _firestore.collection('Components').doc(id).get();
 
             if (directDoc.exists) {
-              components[id] = Component.fromFirestore(directDoc.data() as Map<String, dynamic>, id);
+              components[id] = Component.fromFirestore(
+                  directDoc.data() as Map<String, dynamic>, id);
             } else {
               print('Component with ID $id not found in any location');
             }
           } catch (innerE) {
-            print('Error fetching component $id from direct collection: $innerE');
+            print(
+                'Error fetching component $id from direct collection: $innerE');
           }
         } else {
           print('Component ID $id has invalid format');
@@ -681,7 +732,7 @@ class TeacherCacheBuilder {
   // Convert a map to JSON-serializable format
   Map<String, dynamic> _mapToJson(Map<String, dynamic> map) {
     Map<String, dynamic> result = {};
-    
+
     map.forEach((key, value) {
       if (value is Map) {
         result[key] = value;
@@ -690,7 +741,7 @@ class TeacherCacheBuilder {
         result[key] = value.toJson();
       }
     });
-    
+
     return result;
   }
 
@@ -701,7 +752,8 @@ class TeacherCacheBuilder {
   }
 
   // Helper method to schedule regular cache updates
-  void scheduleRegularUpdates(String teacherId, {Duration interval = const Duration(hours: 24)}) {
+  void scheduleRegularUpdates(String teacherId,
+      {Duration interval = const Duration(hours: 24)}) {
     print('Scheduling regular cache updates every ${interval.inHours} hours');
 
     // Set up a timer for regular updates
@@ -720,7 +772,8 @@ class TeacherCacheBuilder {
   }
 
   // Helper method to fetch and update only specific lessons
-  Future<void> updateSpecificLessons(String teacherId, List<String> lessonIds) async {
+  Future<void> updateSpecificLessons(
+      String teacherId, List<String> lessonIds) async {
     try {
       print('Updating specific lessons: $lessonIds');
 
@@ -748,7 +801,8 @@ class TeacherCacheBuilder {
       };
 
       // Fetch updated lessons
-      final Map<String, Lesson> updatedLessons = await _fetchLessons(Set.from(lessonIds));
+      final Map<String, Lesson> updatedLessons =
+          await _fetchLessons(Set.from(lessonIds));
 
       // Extract any new component IDs
       final Set<String> newComponentIds = {};
@@ -761,39 +815,45 @@ class TeacherCacheBuilder {
       }
 
       // Fetch new components
-      final Map<String, Component> newComponents = await _fetchComponents(newComponentIds);
+      final Map<String, Component> newComponents =
+          await _fetchComponents(newComponentIds);
 
       // Update lessons in cache
-      final Map<String, dynamic> lessonsMap = cacheMap['lessons'] as Map<String, dynamic>;
+      final Map<String, dynamic> lessonsMap =
+          cacheMap['lessons'] as Map<String, dynamic>;
       updatedLessons.forEach((id, lesson) {
         lessonsMap[id] = lesson.toJson();
       });
 
       // Update components in cache
-      final Map<String, dynamic> componentsMap = cacheMap['components'] as Map<String, dynamic>;
+      final Map<String, dynamic> componentsMap =
+          cacheMap['components'] as Map<String, dynamic>;
       newComponents.forEach((id, component) {
         componentsMap[id] = component.toJson();
       });
 
       // Update metadata
-      final Map<String, String> metadataMap = Map<String, String>.from(cacheMap['metadata']);
+      final Map<String, String> metadataMap =
+          Map<String, String>.from(cacheMap['metadata']);
       metadataMap['updatedAt'] = DateTime.now().toIso8601String();
       cacheMap['metadata'] = metadataMap;
 
       // Store updated cache in SharedPreferences
       await TeacherDashboardCache.storeCache(cacheMap);
 
-      print('Successfully updated ${updatedLessons.length} lessons and ${newComponents.length} new components.');
+      print(
+          'Successfully updated ${updatedLessons.length} lessons and ${newComponents.length} new components.');
     } catch (e) {
       print('Error updating specific lessons: $e');
       throw Exception('Failed to update specific lessons: $e');
     }
   }
 }
-class TeacherDashboardCache {
 
+class TeacherDashboardCache {
   // Singleton instance
-  static final TeacherDashboardCache _instance = TeacherDashboardCache._internal();
+  static final TeacherDashboardCache _instance =
+      TeacherDashboardCache._internal();
 
   factory TeacherDashboardCache() {
     return _instance;
@@ -811,7 +871,7 @@ class TeacherDashboardCache {
   Map<String, String> metadata = {};
 
   bool _isInitialized = false;
-  
+
   // Cache key for web storage
   static const String _cacheKey = 'teacher_dashboard_cache';
 
@@ -821,34 +881,36 @@ class TeacherDashboardCache {
 
     try {
       String? jsonString;
-      
+
       // Try to load from shared preferences first (works for web)
       if (kIsWeb) {
         final prefs = await SharedPreferences.getInstance();
         jsonString = prefs.getString(_cacheKey);
-        
+
         // If not found in shared preferences, try to build it
         if (jsonString == null) {
-          print('Cache not found in SharedPreferences. Either build a new cache or use default data.');
+          print(
+              'Cache not found in SharedPreferences. Either build a new cache or use default data.');
           throw Exception('Cache not found in web storage');
         }
       } else {
         // For mobile/desktop, try to load from assets
         try {
-          jsonString = await rootBundle.loadString("assets/lib/Resources/TeacherCache.json");
+          jsonString = await rootBundle
+              .loadString("assets/lib/Resources/TeacherCache.json");
         } catch (e) {
           print('Failed to load from assets: $e');
-          
+
           // Try shared preferences as fallback for mobile
           final prefs = await SharedPreferences.getInstance();
           jsonString = prefs.getString(_cacheKey);
-          
+
           if (jsonString == null) {
             throw Exception('Cache not found in assets or shared preferences');
           }
         }
       }
-      
+
       // Parse the cache data
       final jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
 
@@ -866,7 +928,8 @@ class TeacherDashboardCache {
 
       // Parse units
       final unitsData = jsonData['units'] as Map<String, dynamic>;
-      units = unitsData.map((key, value) => MapEntry(key, Unit.fromJson(value)));
+      units =
+          unitsData.map((key, value) => MapEntry(key, Unit.fromJson(value)));
 
       // Parse lessons
       final lessonsData = jsonData['lessons'] as Map<String, dynamic>;
@@ -880,7 +943,8 @@ class TeacherDashboardCache {
 
       // Parse metadata
       final metadataData = jsonData['metadata'] as Map<String, dynamic>;
-      metadata = metadataData.map((key, value) => MapEntry(key, value.toString()));
+      metadata =
+          metadataData.map((key, value) => MapEntry(key, value.toString()));
 
       _isInitialized = true;
       print('Teacher dashboard cache initialized successfully');
@@ -917,7 +981,7 @@ class TeacherDashboardCache {
   }
 
   // Rest of your methods remain the same
-  
+
   // Get a classroom by ID
   Classroom? getClassroom(String classroomId) {
     _ensureInitialized();
@@ -991,226 +1055,190 @@ class TeacherDashboardCache {
           'TeacherDashboardCache not initialized. Call initialize() first.');
     }
   }
+
+  /// Update component status and sync with both cache and Firestore
+  Future<void> updateComponentStatus(
+      String componentId, Status newStatus) async {
+    try {
+      // Check if component exists in cache
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      if (!components.containsKey(componentId)) {
+        throw Exception('Component not found in cache: $componentId');
+      }
+
+      // Get the current component
+      final component = components[componentId];
+
+      // Check for network connectivity
+      bool isOnline = false;
+      try {
+        final connectivityResult = await Connectivity().checkConnectivity();
+        isOnline = connectivityResult != ConnectivityResult.none;
+      } catch (e) {
+        print('Error checking connectivity: $e');
+      }
+
+      // Update in Firebase if online
+      if (isOnline) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('components')
+              .doc(componentId)
+              .update({'ComponentStatus': statusToFirestore(newStatus)});
+          print(
+              'Component status updated in Firebase: $componentId -> ${statusToFirestore(newStatus)}');
+        } catch (e) {
+          print('Error updating component in Firebase: $e');
+          // Continue with local update even if Firebase fails
+        }
+      }
+
+      // Update the local cache
+      final updatedComponent = Component(
+        componentId: component!.componentId,
+        title: component.title,
+        type: component.type,
+        componentStatus: newStatus,
+        progress: component.progress,
+        discussionQuestions: component.discussionQuestions,
+        questionData: component.questionData,
+        performanceTrends: component.performanceTrends,
+      );
+
+      // Update in memory cache
+      components[componentId] = updatedComponent;
+
+      // Save updated cache
+      await _saveCache();
+
+      print(
+          'Component status updated in cache: $componentId -> ${statusToFirestore(newStatus)}');
+    } catch (e) {
+      print('Error updating component status: $e');
+      throw Exception('Failed to update component status: $e');
+    }
+  }
+
+  /// Update multiple component statuses at once
+  Future<void> updateMultipleComponentStatuses(
+      Map<String, Status> updates) async {
+    try {
+      // Check if initialized
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      // Check for network connectivity
+      bool isOnline = false;
+      try {
+        final connectivityResult = await Connectivity().checkConnectivity();
+        isOnline = connectivityResult != ConnectivityResult.none;
+      } catch (e) {
+        print('Error checking connectivity: $e');
+      }
+
+      // Update in Firebase if online
+      if (isOnline) {
+        try {
+          final batch = FirebaseFirestore.instance.batch();
+
+          for (final entry in updates.entries) {
+            final componentId = entry.key;
+            final newStatus = entry.value;
+
+            final docRef = FirebaseFirestore.instance
+                .collection('components')
+                .doc(componentId);
+
+            batch.update(
+                docRef, {'ComponentStatus': statusToFirestore(newStatus)});
+          }
+
+          await batch.commit();
+          print('Updated ${updates.length} component statuses in Firebase');
+        } catch (e) {
+          print('Error batch updating components in Firebase: $e');
+          // Continue with local update even if Firebase fails
+        }
+      }
+
+      // Update local cache components
+      for (final entry in updates.entries) {
+        final componentId = entry.key;
+        final newStatus = entry.value;
+
+        if (components.containsKey(componentId)) {
+          final component = components[componentId];
+
+          final updatedComponent = Component(
+            componentId: component!.componentId,
+            title: component.title,
+            type: component.type,
+            componentStatus: newStatus,
+            progress: component.progress,
+            discussionQuestions: component.discussionQuestions,
+            questionData: component.questionData,
+            performanceTrends: component.performanceTrends,
+          );
+
+          components[componentId] = updatedComponent;
+        }
+      }
+
+      // Save updated cache
+      await _saveCache();
+
+      print('Updated ${updates.length} component statuses in cache');
+    } catch (e) {
+      print('Error updating multiple component statuses: $e');
+      throw Exception('Failed to update multiple component statuses: $e');
+    }
+  }
+
+// Add this helper method to TeacherDashboardCache
+  Future<void> _saveCache() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // Convert the cached data to a format that can be stored
+      final cacheMap = {
+        'teacher': teacher.toJson(),
+        'classrooms': _mapToJson(classrooms),
+        'students': students.map((s) => s.toJson()).toList(),
+        'units': _mapToJson(units),
+        'lessons': _mapToJson(lessons),
+        'components': _mapToJson(components),
+        'metadata': {
+          'version': metadata['version'] ?? '1.0.0',
+          'generatedAt':
+              metadata['generatedAt'] ?? DateTime.now().toIso8601String(),
+          'updatedAt': DateTime.now().toIso8601String(),
+        },
+      };
+
+      final jsonString = jsonEncode(cacheMap);
+      await prefs.setString(_cacheKey, jsonString);
+      print('Cache saved successfully');
+    } catch (e) {
+      print('Error saving cache: $e');
+    }
+  }
+
+  Map<String, dynamic> _mapToJson(Map<String, dynamic> map) {
+    Map<String, dynamic> result = {};
+
+    map.forEach((key, value) {
+      if (value is Map) {
+        result[key] = value;
+      } else {
+        // Using toJson method of the object
+        result[key] = value.toJson();
+      }
+    });
+
+    return result;
+  }
 }
-
-
-
-
-
-// class TeacherCacheBuilder {
-//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-//   // Main function to build the cache
-//   Future<void> buildTeacherCache(String teacherId) async {
-//     try {
-//       // Validate teacherId first
-//       if (teacherId.isEmpty) {
-//         throw Exception('Teacher ID cannot be empty. Please provide a valid teacher ID.');
-//       }
-
-//       // Initialize the cache structure
-//       final Map<String, dynamic> cache = {
-//         'teacher': {},
-//         'classrooms': {},
-//         'students': [],
-//         'units': {},
-//         'lessons': {},
-//         'components': {},
-//         'metadata': {
-//           'version': '1.0.0',
-//           'generatedAt': DateTime.now().toIso8601String(),
-//         }
-//       };
-
-//       print('Starting cache build for teacher: $teacherId');
-
-//       // 1. Fetch teacher data
-//       print('Fetching teacher data...');
-//       final Teacher teacher = await _fetchTeacher(teacherId);
-//       cache['teacher'] = teacher.toJson();
-//       print('Teacher data fetched successfully.');
-
-//       // 2. Fetch classrooms
-//       print('Fetching ${teacher.classRooms.length} classrooms...');
-//       final Map<String, Classroom> classrooms = await _fetchClassrooms(teacher.classRooms);
-//       cache['classrooms'] = _mapToJson(classrooms);
-//       print('Fetched ${classrooms.length} classrooms successfully.');
-
-//       // 3. Fetch students from all classrooms
-//       print('Extracting student IDs from classrooms...');
-//       final Set<String> studentIds = _extractStudentIds(classrooms);
-//       print('Fetching ${studentIds.length} students...');
-//       final List<Student> students = await _fetchStudents(studentIds);
-//       cache['students'] = students.map((student) => student.toJson()).toList();
-//       print('Fetched ${students.length} students successfully.');
-
-//       // 4. Fetch lessons from classrooms
-//       print('Extracting lesson IDs from classrooms...');
-//       final Set<String> lessonIds = _extractLessonIds(classrooms);
-//       print('Fetching ${lessonIds.length} lessons...');
-//       final Map<String, Lesson> lessons = await _fetchLessons(lessonIds);
-//       cache['lessons'] = _mapToJson(lessons);
-//       print('Fetched ${lessons.length} lessons successfully.');
-
-//       // 5. Extract unit IDs from lessons and fetch units
-//       print('Extracting unit IDs from lessons...');
-//       final Set<String> unitIds = _extractUnitIds(lessons);
-//       print('Fetching ${unitIds.length} units...');
-//       final Map<String, Unit> units = await _fetchUnits(unitIds);
-//       cache['units'] = _mapToJson(units);
-//       print('Fetched ${units.length} units successfully.');
-
-//       // 6. Extract component IDs from lessons and fetch components
-//       print('Extracting component IDs from lessons...');
-//       final Set<String> componentIds = _extractComponentIds(lessons);
-//       print('Fetching ${componentIds.length} components...');
-//       final Map<String, Component> components = await _fetchComponents(componentIds);
-//       cache['components'] = _mapToJson(components);
-//       print('Fetched ${components.length} components successfully.');
-
-//       // Store to SharedPreferences instead of file (for web compatibility)
-//       print('Storing cache in web-compatible storage...');
-//       await TeacherDashboardCache.storeCache(cache);
-
-//       print('Teacher cache successfully built!');
-//       print('Cache details:');
-//       print('- Teacher: ${teacher.name} (${teacher.id})');
-//       print('- Classrooms: ${classrooms.length}');
-//       print('- Students: ${students.length}');
-//       print('- Units: ${units.length}');
-//       print('- Lessons: ${lessons.length}');
-//       print('- Components: ${components.length}');
-//       print('- Generated at: ${cache["metadata"]["generatedAt"]}');
-//     } catch (e) {
-//       print('Error building teacher cache: $e');
-//       throw Exception('Failed to build teacher cache: $e');
-//     }
-//   }
-
-//   // The rest of your methods remain the same as before...
-  
-//   // (Include all the fetch methods from your original TeacherCacheBuilder)
-  
-//   // Helper method to update the cache
-//   Future<void> updateTeacherCache(String teacherId) async {
-//     print('Updating teacher cache...');
-//     await buildTeacherCache(teacherId);
-//   }
-  
-//   // Helper method to update only specific lessons
-//   Future<void> updateSpecificLessons(String teacherId, List<String> lessonIds) async {
-//     try {
-//       print('Updating specific lessons: $lessonIds');
-      
-//       // In web, we need to get the current cache from SharedPreferences
-//       // Attempt to initialize the cache first
-//       final currentCache = TeacherDashboardCache();
-//       try {
-//         await currentCache.initialize();
-//       } catch (e) {
-//         // If we can't initialize, build a complete new cache
-//         print('Existing cache not found, building complete cache instead');
-//         await buildTeacherCache(teacherId);
-//         return;
-//       }
-      
-//       // Convert the existing cache to a modifiable map
-//       final Map<String, dynamic> cacheMap = {
-//         'teacher': currentCache.teacher.toJson(),
-//         'classrooms': _mapToJson(currentCache.classrooms),
-//         'students': currentCache.students.map((s) => s.toJson()).toList(),
-//         'units': _mapToJson(currentCache.units),
-//         'lessons': _mapToJson(currentCache.lessons),
-//         'components': _mapToJson(currentCache.components),
-//         'metadata': currentCache.metadata,
-//       };
-      
-//       // Fetch updated lessons
-//       final Map<String, Lesson> updatedLessons = await _fetchLessons(Set.from(lessonIds));
-      
-//       // Extract any new component IDs
-//       final Set<String> newComponentIds = {};
-//       for (final lesson in updatedLessons.values) {
-//         for (final componentId in lesson.components) {
-//           if (!currentCache.components.containsKey(componentId)) {
-//             newComponentIds.add(componentId);
-//           }
-//         }
-//       }
-      
-//       // Fetch new components
-//       final Map<String, Component> newComponents = await _fetchComponents(newComponentIds);
-      
-//       // Update lessons in cache
-//       final Map<String, dynamic> lessonsMap = cacheMap['lessons'] as Map<String, dynamic>;
-//       updatedLessons.forEach((id, lesson) {
-//         lessonsMap[id] = lesson.toJson();
-//       });
-      
-//       // Update components in cache
-//       final Map<String, dynamic> componentsMap = cacheMap['components'] as Map<String, dynamic>;
-//       newComponents.forEach((id, component) {
-//         componentsMap[id] = component.toJson();
-//       });
-      
-//       // Update metadata
-//       final Map<String, String> metadataMap = Map<String, String>.from(cacheMap['metadata']);
-//       metadataMap['updatedAt'] = DateTime.now().toIso8601String();
-//       cacheMap['metadata'] = metadataMap;
-      
-//       // Store updated cache in SharedPreferences
-//       await TeacherDashboardCache.storeCache(cacheMap);
-      
-//       print('Successfully updated ${updatedLessons.length} lessons and ${newComponents.length} new components.');
-//     } catch (e) {
-//       print('Error updating specific lessons: $e');
-//       throw Exception('Failed to update specific lessons: $e');
-//     }
-//   }
-  
-//   // Convert a map to JSON-serializable format
-//   Map<String, dynamic> _mapToJson(Map<String, dynamic> map) {
-//     Map<String, dynamic> result = {};
-    
-//     map.forEach((key, value) {
-//       if (value is Map) {
-//         result[key] = value;
-//       } else {
-//         // Using toJson method of the object
-//         result[key] = value.toJson();
-//       }
-//     });
-    
-//     return result;
-//   }
-
-//   // Fetch teacher data
-//   Future<Teacher> _fetchTeacher(String teacherId) async {
-//     try {
-//       // Double-check the teacherId before sending to Firestore
-//       if (teacherId.isEmpty) {
-//         throw Exception('Teacher ID cannot be empty');
-//       }
-      
-//       final DocumentSnapshot doc = await _firestore.collection('Teachers').doc(teacherId).get();
-
-//       if (!doc.exists) {
-//         throw Exception('Teacher not found with ID: $teacherId');
-//       }
-
-//       // The upload script uses a slightly different naming convention
-//       final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-//       return Teacher(
-//         name: data['Name'] ?? '',
-//         id: doc.id,
-//         classRooms: List<String>.from(data['ClassRooms'] ?? []),
-//         profilePictureLink: data['ProfilePictureLink'] ?? '',
-//       );
-//     } catch (e) {
-//       print('Error fetching teacher: $e');
-//       rethrow;
-//     }
-//   }
-  
-//   // Include the other fetch methods here...
-// }

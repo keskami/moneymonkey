@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/AcademicServices.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
@@ -17,7 +18,7 @@ class LessonManagement extends StatefulWidget {
 }
 
 class _LessonManagementState extends State<LessonManagement> {
-  final LocalAcademicService localAcademicService = LocalAcademicService();
+  final DirectFirebaseService localAcademicService = DirectFirebaseService();
   final TeacherDashboardController teacherDashboardController = Get.find();
 
   @override
@@ -38,12 +39,10 @@ class _LessonManagementState extends State<LessonManagement> {
     switch (status) {
       case Status.Completed:
         return "Review";
-      case Status.InProgress:
-        return "Continue";
       case Status.Active:
-        return "In Progress";
+        return "Review";
       case Status.Inactive:
-        return "Preview";
+        return "Begin";
       default:
         return "View";
     }
@@ -55,14 +54,9 @@ class _LessonManagementState extends State<LessonManagement> {
         return Image.network(
           "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
         );
-      case Status.InProgress:
-        return CircularProgressIndicator(
-          value: 0.5, // Use a fixed value or calculate based on actual progress
-          strokeWidth: 2,
-        );
       case Status.Active:
         return CircularProgressIndicator(
-          value: 0.1,
+          value: 0.5, // Use a fixed value or calculate based on actual progress
           strokeWidth: 2,
         );
       case Status.Inactive:
@@ -72,6 +66,244 @@ class _LessonManagementState extends State<LessonManagement> {
           strokeWidth: 2,
           color: Colors.grey,
         );
+    }
+  }
+
+  // Helper function to handle component status updates
+  Future<void> handleComponentStatusUpdate(Component component, int currentIndex) async {
+    // Check if the component can be activated
+    bool canActivate = false;
+    if (currentIndex == 0) {
+      // First component can always be activated
+      canActivate = true;
+    } else if (currentIndex > 0) {
+      // Check if the previous component is active
+      Component prevComponent = teacherDashboardController.childComponents.value[currentIndex - 1];
+      if (prevComponent.componentStatus == Status.Active || 
+          prevComponent.componentStatus == Status.Completed) {
+        canActivate = true;
+      }
+    }
+
+    try {
+      // Handle different status transitions
+      if (component.componentStatus == Status.Inactive && canActivate) {
+        // Inactive -> Active (only if previous component is active or it's the first component)
+        await localAcademicService.updateComponentStatus(
+            component.componentId, Status.Active);
+
+        // Update local state
+        setState(() {
+          Component updatedComponent = Component(
+            componentId: component.componentId,
+            title: component.title,
+            type: component.type,
+            componentStatus: Status.Active,
+            questionData: component.questionData,
+            performanceTrends: component.performanceTrends,
+            discussionQuestions: component.discussionQuestions,
+            progress: component.progress,
+          );
+          
+          List<Component> updatedComponents = List.from(
+              teacherDashboardController.childComponents.value);
+          updatedComponents[currentIndex] = updatedComponent;
+          teacherDashboardController.childComponents.value = updatedComponents;
+        });
+
+        Get.snackbar('Component Activated',
+            'The component "${component.title}" has been activated.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white);
+      } 
+      else if (component.componentStatus == Status.Inactive && !canActivate) {
+        // Cannot activate - previous component must be active first
+        Get.snackbar('Cannot Activate',
+            'Please activate the previous component first.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.orange,
+            colorText: Colors.white);
+      } 
+      else if (component.componentStatus == Status.Active) {
+        // Active -> Show review dialog
+        Get.snackbar('Reviewing Component', 
+            'Reviewing "${component.title}"',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.blue,
+            colorText: Colors.white);
+            
+        // Option to complete the component after review
+        Get.dialog(
+          AlertDialog(
+            title: Text('Review Component'),
+            content: Text('Would you like to mark "${component.title}" as completed?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back(); // Close dialog
+                },
+                child: Text('Not Yet'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Get.back(); // Close dialog
+                  
+                  // Mark as completed
+                  await localAcademicService.updateComponentStatus(
+                      component.componentId, Status.Completed);
+
+                  // Update local state
+                  setState(() {
+                    Component updatedComponent = Component(
+                      componentId: component.componentId,
+                      title: component.title,
+                      type: component.type,
+                      componentStatus: Status.Completed,
+                      questionData: component.questionData,
+                      performanceTrends: component.performanceTrends,
+                      discussionQuestions: component.discussionQuestions,
+                      progress: component.progress,
+                    );
+                    
+                    List<Component> updatedComponents = List.from(
+                        teacherDashboardController.childComponents.value);
+                    updatedComponents[currentIndex] = updatedComponent;
+                    teacherDashboardController.childComponents.value = updatedComponents;
+                  });
+                  
+                  Get.snackbar('Component Completed',
+                      'The component "${component.title}" has been marked as completed.',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.green,
+                      colorText: Colors.white);
+                },
+                child: Text('Mark as Completed'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Get.back(); // Close dialog
+                  
+                  // Reset to inactive
+                  Map<String, Status> updates = {};
+                  
+                  // Set current and all following components to Inactive
+                  for (int i = currentIndex; 
+                      i < teacherDashboardController.childComponents.value.length; 
+                      i++) {
+                    Component componentToReset = teacherDashboardController.childComponents.value[i];
+                    updates[componentToReset.componentId] = Status.Inactive;
+                  }
+                  
+                  // Update all statuses in Firebase
+                  await localAcademicService.updateMultipleComponentStatuses(updates);
+                  
+                  // Update local state
+                  setState(() {
+                    List<Component> updatedComponents = List.from(
+                        teacherDashboardController.childComponents.value);
+                        
+                    // Update current and all following components to Inactive
+                    for (int i = currentIndex; i < updatedComponents.length; i++) {
+                      Component componentToReset = updatedComponents[i];
+                      updatedComponents[i] = Component(
+                        componentId: componentToReset.componentId,
+                        title: componentToReset.title,
+                        type: componentToReset.type,
+                        componentStatus: Status.Inactive,
+                        questionData: componentToReset.questionData,
+                        performanceTrends: componentToReset.performanceTrends,
+                        discussionQuestions: componentToReset.discussionQuestions,
+                        progress: componentToReset.progress,
+                      );
+                    }
+                    
+                    teacherDashboardController.childComponents.value = updatedComponents;
+                  });
+                  
+                  Get.snackbar('Components Reset',
+                      'The component "${component.title}" and following components have been reset.',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.orange,
+                      colorText: Colors.white);
+                },
+                child: Text('Reset Component'),
+              ),
+            ],
+          ),
+        );
+      } 
+      else if (component.componentStatus == Status.Completed) {
+        // Completed -> Show review dialog with option to reset
+        Get.dialog(
+          AlertDialog(
+            title: Text('Completed Component'),
+            content: Text('This component "${component.title}" is already completed.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back(); // Close dialog
+                },
+                child: Text('OK'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Get.back(); // Close dialog
+                  
+                  // Reset to inactive
+                  Map<String, Status> updates = {};
+                  
+                  // Set current and all following components to Inactive
+                  for (int i = currentIndex; 
+                      i < teacherDashboardController.childComponents.value.length; 
+                      i++) {
+                    Component componentToReset = teacherDashboardController.childComponents.value[i];
+                    updates[componentToReset.componentId] = Status.Inactive;
+                  }
+                  
+                  // Update all statuses in Firebase
+                  await localAcademicService.updateMultipleComponentStatuses(updates);
+                  
+                  // Update local state
+                  setState(() {
+                    List<Component> updatedComponents = List.from(
+                        teacherDashboardController.childComponents.value);
+                        
+                    // Update current and all following components to Inactive
+                    for (int i = currentIndex; i < updatedComponents.length; i++) {
+                      Component componentToReset = updatedComponents[i];
+                      updatedComponents[i] = Component(
+                        componentId: componentToReset.componentId,
+                        title: componentToReset.title,
+                        type: componentToReset.type,
+                        componentStatus: Status.Inactive,
+                        questionData: componentToReset.questionData,
+                        performanceTrends: componentToReset.performanceTrends,
+                        discussionQuestions: componentToReset.discussionQuestions,
+                        progress: componentToReset.progress,
+                      );
+                    }
+                    
+                    teacherDashboardController.childComponents.value = updatedComponents;
+                  });
+                  
+                  Get.snackbar('Components Reset',
+                      'The component "${component.title}" and following components have been reset.',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.orange,
+                      colorText: Colors.white);
+                },
+                child: Text('Reset Component'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update component status: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
     }
   }
 
@@ -161,6 +393,15 @@ class _LessonManagementState extends State<LessonManagement> {
                         const Spacer(),
                         //Action Button
                         GestureDetector(
+                          onTap: () async {
+                            // Get the index of the current component
+                            int currentIndex = teacherDashboardController
+                                .childComponents.value
+                                .indexOf(component);
+                            
+                            // Handle the component status update
+                            await handleComponentStatusUpdate(component, currentIndex);
+                          },
                           child: Container(
                             width: screenWidth * 0.1,
                             height: screenHeight * 0.05,
@@ -182,7 +423,7 @@ class _LessonManagementState extends State<LessonManagement> {
                               ),
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ).marginSymmetric(
                       vertical: 6,
@@ -193,8 +434,7 @@ class _LessonManagementState extends State<LessonManagement> {
             ),
           ),
 
-          // Rest of your code remains the same
-          //Resources Row
+          // Lesson Resources Row
           ShadowedContainer(
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.02,
@@ -330,7 +570,7 @@ class _LessonManagementState extends State<LessonManagement> {
           const SizedBox(
             height: 20,
           ),
-          //Upcoming Lesson Row
+          // Upcoming Lesson Row
           ShadowedContainer(
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.02,
@@ -343,43 +583,84 @@ class _LessonManagementState extends State<LessonManagement> {
                   "Upcoming Lesson",
                   style: TextStyles.containerTitle,
                 ),
-                ColoredPaddedContainer(
-                  margin: EdgeInsets.symmetric(vertical: screenWidth * 0.01),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey.shade100,
-                    border: Border.all(
-                      color: Colors.grey.shade300,
+               ColoredPaddedContainer(
+  margin: EdgeInsets.symmetric(vertical: screenWidth * 0.01),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    color: Colors.grey.shade100,
+    border: Border.all(
+      color: Colors.grey.shade300,
+    ),
+  ),
+  child: FutureBuilder<String>(
+    future: localAcademicService.getNextLessonId(
+      teacherDashboardController.presentLesson.lessonId
+    ),
+    builder: (context, nextLessonIdSnapshot) {
+      if (nextLessonIdSnapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (nextLessonIdSnapshot.hasError) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text('Error loading next lesson: ${nextLessonIdSnapshot.error}'),
+        );
+      } else if (nextLessonIdSnapshot.hasData) {
+        final nextLessonId = nextLessonIdSnapshot.data!;
+        
+        // Now that we have the next lesson ID, we can fetch the actual lesson
+        return FutureBuilder<Lesson>(
+          future: localAcademicService.getLesson(nextLessonId),
+          builder: (context, lessonSnapshot) {
+            if (lessonSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (lessonSnapshot.hasError) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Error loading lesson details: ${lessonSnapshot.error}'),
+              );
+            } else if (lessonSnapshot.hasData) {
+              final nextLesson = lessonSnapshot.data!;
+              
+              // Now we can safely access the lesson properties
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      nextLesson.title,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        localAcademicService
-                            .getLesson(localAcademicService.getNextLessonId(
-                                teacherDashboardController
-                                    .presentLesson.lessonId))
-                            .title,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    SizedBox(height: 8),
+                    Text(
+                      nextLesson.description,
+                      style: TextStyle(
+                        fontSize: 18,
                       ),
-                      Text(
-                        localAcademicService
-                            .getLesson(localAcademicService.getNextLessonId(
-                                teacherDashboardController
-                                    .presentLesson.lessonId))
-                            .description,
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('No lesson data available'),
+              );
+            }
+          },
+        );
+      } else {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text('No next lesson found'),
+        );
+      }
+    },
+  ),
+)],
             ),
           ),
         ],

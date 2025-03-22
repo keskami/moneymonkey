@@ -3,7 +3,6 @@ import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 
 enum Status {
   Inactive,
-  InProgress,
   Active,
   Completed,
 }
@@ -39,7 +38,7 @@ Status statusFromFirestore(String status) {
     case 'inactive':
       return Status.Inactive;
     case 'inprogress':
-      return Status.InProgress;
+      return Status.Active;
     case 'active':
       return Status.Active;
     case 'completed':
@@ -468,4 +467,6 @@ class Component {
                 )),
     );
   }
+
+  get componentType => null;
 }

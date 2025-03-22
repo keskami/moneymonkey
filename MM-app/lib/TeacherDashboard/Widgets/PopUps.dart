@@ -138,7 +138,7 @@ class PopUpContainer extends StatelessWidget {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              '${StudentService(student: student).getOverallProgress()*100}%',
+                              '${StudentService(student: student).getOverallProgress()}%',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,

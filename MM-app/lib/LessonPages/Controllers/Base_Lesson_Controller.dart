@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/AcademicServices.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentImapctPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentProblemPage.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ComponentSolutionsPage.dart';
@@ -28,7 +29,7 @@ class BaseLessonController extends GetxController {
   RxBool isLoading = true.obs;
   RxInt pageIndex = 0.obs;
 
-  final LocalAcademicService localAcademicService = LocalAcademicService();
+  final DirectFirebaseService localAcademicService = DirectFirebaseService();
   final String componentId;
   final ComponentType type;
 

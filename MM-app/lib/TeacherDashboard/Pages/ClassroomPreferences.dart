@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/Backend/Services/academics_service.dart';
+import 'package:money_monkey/Backend/Services/AcademicServices.dart';
+import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
@@ -26,7 +27,7 @@ final List<String> filters = [
 ];
 
 class _ClassroomPreferencesState extends State<ClassroomPreferences> {
-  LocalAcademicService localAcademicService = LocalAcademicService();
+  DirectFirebaseService localAcademicService = DirectFirebaseService();
   TeacherDashboardController teacherDashboardController =
       Get.find<TeacherDashboardController>();
   @override
