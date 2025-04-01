@@ -61,11 +61,9 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   child: BudgetSimulator(
                     creditLimit: 5000,
                     level: "Intermediate",
-                    cognativeScore: 300,
-                    mentalScore: 300,
-                    physicalScore: 300,
-
-                    randomEvents: [],
+                    mindScore: 30,
+                    socialScore: 30,
+                    bodyScore: 30,                   randomEvents: [],
                     wellnessScore: 300,
                     name: 'Crush the Credit Card Debt',
                     checkingAccountBalance: 300,
@@ -826,9 +824,9 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
         : BudgetSimulator(
           creditLimit: 5000,
           level: "Intermediate",
-          cognativeScore: 300,
-                    mentalScore: 300,
-                    physicalScore: 300,
+          socialScore: 30,
+                    mindScore: 30,
+                    bodyScore: 30,
             wellnessScore: 300,
             name: 'Crush the Credit Card Debt',
             checkingAccountBalance: 300,

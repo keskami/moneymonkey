@@ -15,9 +15,9 @@ class HomePagesController extends GetxController {
     BudgetSimulator(
       creditLimit: 5000,
       level: "Intermediate",
-      cognativeScore: 300,
-      mentalScore: 300,
-      physicalScore: 300,
+      bodyScore: 30,
+      socialScore: 30,
+      mindScore: 30,
       wellnessScore: 300,
       name: 'Crush the Credit Card Debt',
       checkingAccountBalance: 300,
