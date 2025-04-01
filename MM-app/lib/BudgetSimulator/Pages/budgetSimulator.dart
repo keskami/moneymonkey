@@ -13,6 +13,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditScoreBox.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/overallScoreScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/simulatorTitle.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
@@ -69,7 +70,7 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
   late Expense nextExpense = expenses[0];
-  String currentOption = "Calendar";
+  String currentOption = "";
   DateTime now = DateTime(2025, 5, 1);
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
@@ -405,7 +406,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     Transactions:
                                                         widget.Transactions,
                                                   )
-                                                : Container(),
+                                                : OverallScoreScreen( screenHeightUnit:
+                                                        screenHeightUnit,
+                                                    screenWidthUnit:
+                                                        screenWidthUnit,),
                                   ]),
                             ),
                             Container(
