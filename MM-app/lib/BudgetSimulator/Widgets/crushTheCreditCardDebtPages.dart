@@ -111,6 +111,40 @@ class _CrushTheCreditCardDebtPagesState
                   ],
                 ),
               ),
+               Container(
+                width: widget.screenHeightUnit * 85,
+                height: widget.screenHeightUnit * 1,
+                color: Colors.black,
+              ),
+              GestureDetector(
+                onTap: () {
+                  widget.onOptionSelected("Student Loans");
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "Student Loans",
+                      style: GoogleFonts.baloo2(
+                        fontSize: widget.screenWidthUnit * 20,
+                        fontWeight: FontWeight.w600,
+                        color: widget.currentChoice == "Student Loans"
+                            ? const Color.fromRGBO(0, 127, 255, 1)
+                            : Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: widget.screenHeightUnit * 6),
+                    Container(
+                      width: widget.screenHeightUnit * 240,
+                      height: widget.screenHeightUnit * 1,
+                      color: widget.currentChoice == "Student Loans"
+                          ? const Color.fromRGBO(0, 127, 255, 1)
+                          : Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+             
               Container(
                 width: widget.screenHeightUnit * 85,
                 height: widget.screenHeightUnit * 1,

@@ -49,7 +49,7 @@ class BudgetSimulator extends StatefulWidget {
   });
   double savingsTransfer = 0;
   final List<String> scoreCategories;
-  int checkingTransfer = 0;
+  double checkingTransfer = 0;
   int dayNumber = 1;
   int creditLimit;
   int totalPaymentsSeen = 0;
@@ -73,7 +73,7 @@ class BudgetSimulator extends StatefulWidget {
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
   late Expense nextExpense = expenses[0];
-  String currentOption = "";
+  String currentOption = "Calendar";
   DateTime now = DateTime(2025, 5, 1);
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
@@ -187,6 +187,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           widget.checkingTransfer as double,
                                       savingsTransfer:
                                           widget.savingsTransfer as double,
+                                          stageOfLife: "New College Grad"
                                     )
                                   : Container(),
                             )),
@@ -307,6 +308,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                         widget.checkingAccountBalance
                                                             as int,
                                                     setStateCallback: setState,
+                                                    nextDay: nextDay,
                                                   )
                                                 : Container(),
                                       ],
