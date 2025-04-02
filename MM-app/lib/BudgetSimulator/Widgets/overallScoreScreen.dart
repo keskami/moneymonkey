@@ -28,10 +28,26 @@ class OverallScoreScreen extends StatefulWidget {
 
 class _OverallScoreScreenState extends State<OverallScoreScreen> {
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
+  int score = 0;
+  Color textColor = Color.fromRGBO(0, 0, 0, 0);
+  String grade = '';
+  String description = '';
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      score += functions
+          .s1P2SavingsScore(widget.widget.widget.savingsAccountBalance);
+      score += functions.s1P2CreditScoreScore(widget.widget.widget.creditScore);
+      score += widget.widget.widget.onTimePaymentScore as int;
+      score += functions.s1P2CCDebtScore(widget.widget.widget.creditCardDebt);
+      score += functions.s1P2WellnessScore(widget.widget.widget.bodyScore,
+          widget.widget.widget.mindScore, widget.widget.widget.socialScore);
+      textColor = functions.s1P2ScoreTextColor(score);
+      grade = functions.s1P2ScoreGrade(score);
+      description = functions.s1P2ScoreTextWord(score);
+    });
   }
 
   @override
@@ -58,7 +74,7 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
             ),
             child: Center(
               child: Text(
-                'Overall Score: ',
+                'Overall Score: ${grade}',
                 style: GoogleFonts.baloo2(
                   fontSize: widget.screenHeightUnit * 30,
                   fontWeight: FontWeight.w600,
@@ -109,11 +125,11 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      '745',
+                      '$score',
                       style: GoogleFonts.baloo2(
                         fontSize: widget.screenHeightUnit * 120,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                        color: textColor,
                       ),
                     ),
                     SizedBox(width: widget.screenWidthUnit * 10),
@@ -126,11 +142,11 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
                           style: GoogleFonts.baloo2(
                             fontSize: widget.screenHeightUnit * 47,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black,
+                            color: textColor,
                           ),
                         ),
                         Text(
-                          '745 / 1000 points',
+                          '$score / 1000 points',
                           style: GoogleFonts.baloo2(
                             fontSize: widget.screenHeightUnit * 29,
                             fontWeight: FontWeight.w400,

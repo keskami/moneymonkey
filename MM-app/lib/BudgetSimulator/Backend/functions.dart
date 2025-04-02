@@ -8,6 +8,51 @@ class BudgetSimulatorFunctions
 
 {
 
+  String s1P2ScoreGrade(score){
+     if (score >= 900) {
+      return "A";
+    } else if (score >= 800) {
+      return "B";
+    } else if (score >= 700) {
+      return "C";
+    } else if (score >= 600) {
+      return "D";
+    } else {
+      return "F";
+    }
+
+  }
+
+  String s1P2ScoreTextWord(score){
+     if (score >= 900) {
+      return "Great";
+    } else if (score >= 800) {
+      return "Good";
+    } else if (score >= 700) {
+      return "Fair";
+    } else if (score >= 600) {
+      return "Poor";
+    } else {
+      return "Bad";
+    }
+
+  }
+
+  Color s1P2ScoreTextColor(score){
+     if (score >= 900) {
+      return Colors.green;
+    } else if (score >= 800) {
+      return Colors.lightGreen;
+    } else if (score >= 700) {
+      return Colors.yellow;
+    } else if (score >= 600) {
+      return Color.fromRGBO(251, 176, 59, 1);
+    } else {
+      return Colors.red;
+    }
+
+  }
+
   int s1P2WellnessScore(double body,double mind, double social) {
     var score = (body + mind + social)/3 as int;
     return score;
