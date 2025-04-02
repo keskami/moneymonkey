@@ -44,7 +44,7 @@ class _MeterBoxState extends State<MeterBox> {
     });
 
     return Container(
-      height: widget.screenHeightUnit * 225,
+      height: widget.screenHeightUnit * 195,
       width: widget.screenWidthUnit * 470,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -59,11 +59,11 @@ class _MeterBoxState extends State<MeterBox> {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(widget.screenWidthUnit * 16,
-                widget.screenHeightUnit * 8, 0, widget.screenHeightUnit * 8),
+                widget.screenHeightUnit * 6, 0, widget.screenHeightUnit * 6),
             child: Text(
               "Credit Score",
               style: GoogleFonts.baloo2(
-                  fontSize: widget.screenHeightUnit * 36,
+                  fontSize: widget.screenHeightUnit * 32,
                   fontWeight: FontWeight.w600,
                   color: Colors.black),
             ),
@@ -123,12 +123,12 @@ class _MeterBoxState extends State<MeterBox> {
                 ],
               ),
               SizedBox(
-                width: widget.screenWidthUnit * 50,
+                width: widget.screenWidthUnit * 52,
               ),
               Padding(
-                padding: EdgeInsets.only(top: widget.screenHeightUnit * 50),
+                padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),
                 child: Container(
-                  height: widget.screenHeightUnit * 100,
+                  height: widget.screenHeightUnit * 90,
                   width: widget.screenWidthUnit * 220,
                   child: SfRadialGauge(
                     animationDuration: 1000,

@@ -1,11 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LessonData {
-
   Map<String, dynamic> pageData = {};
 
   //Added her for now
@@ -16,8 +11,13 @@ class LessonData {
       required int LessonNumber,
       required String TypeOfLesson,
       required int PageNumber}) async {
+    print("FETCH: Starting with parameters:");
+    print("FETCH: Level: $levelName");
+    print("FETCH: Unit: $UnitNumber");
+    print("FETCH: Lesson: $LessonNumber");
+    print("FETCH: Type: $TypeOfLesson");
+    print("FETCH: Page: $PageNumber");
     try {
-     
       final firestore = FirebaseFirestore.instance;
       DocumentReference levelDoc =
           firestore.collection('Levels').doc(levelName);
@@ -54,18 +54,17 @@ class LessonData {
                 pageData =
                     lessonTypeData["Page$PageNumber"] as Map<String, dynamic>;
                 return pageData;
-
               } else {
                 print('No page found.');
-                 return pageData;
+                return pageData;
               }
             } else {
               print('No lesson type document found.');
-               return pageData;
+              return pageData;
             }
           } else {
             print('No lesson type found.');
-             return pageData;
+            return pageData;
           }
         } else {
           print('No page found.');
@@ -80,11 +79,6 @@ class LessonData {
       return pageData;
     }
   }
-
-
-
-
-
 
   // Future<void> _fetchUserProfile() async {
   //   if (userID != null) {
@@ -119,6 +113,4 @@ class LessonData {
   //     }
   //   }
   // }
-
-  
 }

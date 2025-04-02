@@ -37,6 +37,8 @@ class CustomDropDownContainer extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                   ),
+                  overflow: TextOverflow.clip,
+                  softWrap: true,
                 ),
               ),
             )

@@ -59,11 +59,18 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
+                    scoreCategories: [
+                      'Debt\nReduction',
+                      'Payment\nTimeliness & Penalties',
+                      'Credit Score\nImprovement',
+                      'Wellness\nImprovement',
+                      'Milestones\nAchieved'
+                    ],
+                    creditLimit: 5000,
                     level: "Intermediate",
-                    emotionalScore: 300,
-                    mentalScore: 300,
-                    physicalScore: 300,
-
+                    mindScore: 30,
+                    socialScore: 30,
+                    bodyScore: 30,
                     randomEvents: [],
                     wellnessScore: 300,
                     name: 'Crush the Credit Card Debt',
@@ -823,10 +830,18 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
-          level: "Intermediate",
-          emotionalScore: 300,
-                    mentalScore: 300,
-                    physicalScore: 300,
+            scoreCategories: [
+              'Savings',
+              'Credit Score\nImprovement',
+              'On-Time\nPayments',
+                  'Debt\nRepayment',
+              'Wellness'
+            ],
+            creditLimit: 5000,
+            level: "Intermediate",
+            socialScore: 30,
+            mindScore: 30,
+            bodyScore: 30,
             wellnessScore: 300,
             name: 'Crush the Credit Card Debt',
             checkingAccountBalance: 300,
@@ -929,7 +944,12 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ],
             savingsAPY: 3,
             ccAPY: 19.99,
-            hints: [Hint(text: "Welcome! You start with a \$3,000 balance at 19.99% APR, two biweekly paychecks,\nand fixed bills. Use these hints from the bottom panel to help manage your cash flow\nand meet your milestones", good: true)],
+            hints: [
+              Hint(
+                  text:
+                      "Welcome! You start with a \$3,000 balance at 19.99% APR, two biweekly paychecks,\nand fixed bills. Use these hints from the bottom panel to help manage your cash flow\nand meet your milestones",
+                  good: true)
+            ],
             milestones: [
               Milestone(
                   name: 'Debt Avalanche Start',
@@ -965,6 +985,13 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ],
             expenses: [
               Expense(
+                  name: "Rent",
+                  amount: 500,
+                  dueDateType: "Fixed",
+                  dueDay: DateTime(2025, 5, 5),
+                  amountPaid: 20,
+                  penalty: 30),
+              Expense(
                   name: "Pay Day",
                   amount: -1250,
                   dueDateType: "Fixed",
@@ -979,13 +1006,6 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   amountPaid: 0,
                   penalty: 0),
               Expense(
-                  name: "Rent",
-                  amount: 500,
-                  dueDateType: "Fixed",
-                  dueDay: DateTime(2025, 5, 5),
-                  amountPaid: 20,
-                  penalty: 30),
-              Expense(
                   name: "Utilities",
                   amount: 150,
                   dueDateType: "Fixed",
@@ -996,23 +1016,24 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   name: "Transportation",
                   amount: 100,
                   dueDateType: "Fixed",
-                  dueDay: DateTime(2026, 5, 28),
+                  dueDay: DateTime(2025, 5, 18),
                   amountPaid: 10,
-                  penalty: 0),
+                  penalty: 10),
               Expense(
                   name: "CC Debt",
                   amount: 200,
                   dueDateType: "Fixed",
                   dueDay: DateTime(2025, 5, 25),
                   amountPaid: 0,
-                  penalty: 100),
+                  penalty: 100,
+                  originalTotal: 3000),
               Expense(
                   name: "Groceries",
                   amount: 250,
                   dueDateType: "Fixed",
-                  dueDay: DateTime(2028, 5, 25),
+                  dueDay: DateTime(2025, 5, 28),
                   amountPaid: 0,
-                  penalty: 0),
+                  penalty: 25),
               Expense(
                   name: "Fitness",
                   amount: 0,

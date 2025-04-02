@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Backend/Models/user_data.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/Friends/Widgets/add_friends_button_friends.dart';
 import 'package:money_monkey/Friends/Widgets/custom_stat_friends.dart';
@@ -25,7 +25,7 @@ class _friendProfileState extends State<friendProfile> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  UserData? userData;
+  Student? userData;
   bool isLoading = true;
   late bool isFollowing = false;
   final FirestoreService firestoreService = FirestoreService();

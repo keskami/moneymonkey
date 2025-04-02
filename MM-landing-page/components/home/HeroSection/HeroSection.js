@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 const HeroSection = () => {
-  const primaryBlue = '#3E8AE0';
+  const primaryBlue = '#38A4D8';
   const primaryGreen = '#89DC8E';
   const [isVisible, setIsVisible] = useState(false);
 
@@ -13,7 +13,8 @@ const HeroSection = () => {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
 
         @keyframes fadeSlideUp {
           from {
@@ -119,7 +120,8 @@ const HeroSection = () => {
         .highlight {
           display: inline-block;
           position: relative;
-          font-style: italic;
+          font-family: 'Handlee';
+          font-weight: 500;
         }
 
         .squiggle {
@@ -500,7 +502,7 @@ const HeroSection = () => {
           }
 
           .content {
-            padding-top: 6rem;
+            padding-top: 5rem;
           }
 
           .title {

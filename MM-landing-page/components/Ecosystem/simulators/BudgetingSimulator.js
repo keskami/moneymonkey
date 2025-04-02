@@ -15,7 +15,7 @@ const CountdownTimer = () => {
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const launchDate = new Date('2025-01-01T00:00:00');
+      const launchDate = new Date('2025-03-01T00:00:00');
       const now = new Date();
       const difference = launchDate - now;
 
@@ -74,7 +74,7 @@ const BudgetingSimulator = () => {
           {/* Launch Date */}
           <div className={styles.launchDate}>
             <Clock className={styles.clockIcon} />
-            <span>Launching January 2025</span>
+            <span>Launching March 2025</span>
           </div>
         </div>
       </div>

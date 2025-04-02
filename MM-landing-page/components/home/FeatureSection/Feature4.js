@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import styles from './Feature.module.css';
+import styles from './Feature2.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 

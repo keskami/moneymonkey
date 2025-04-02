@@ -9,7 +9,7 @@ import 'package:money_monkey/Invest/Widgets/title_row.dart';
 import 'package:money_monkey/Invest/Widgets/trade_button.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../../../Backend/Models/stock_data.dart';
+import '../../Backend/Models/StockData.dart';
 
 class InvestmentDetailsScreen extends StatefulWidget {
   final String investmentType;

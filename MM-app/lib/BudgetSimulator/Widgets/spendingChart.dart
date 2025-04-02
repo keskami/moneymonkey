@@ -89,14 +89,14 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
             children: [
               Container(
                 height: 240 * widget.screenHeightUnit,
-                width: 350 * widget.screenHeightUnit,
+                width: 200 * widget.screenWidthUnit,
                 child: SfCircularChart(
                   annotations: <CircularChartAnnotation>[
                     CircularChartAnnotation(
                       widget: Text(
                         '${widget.total}\$',
                         style: TextStyle(
-                          fontSize: widget.screenWidthUnit * 16,
+                          fontSize: widget.screenWidthUnit * 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -113,6 +113,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
                   ],
                 ),
               ),
+              
               Container(
                 height: 225 * widget.screenHeightUnit,
                 width: 300 * widget.screenHeightUnit,

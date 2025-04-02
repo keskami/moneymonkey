@@ -1,4 +1,4 @@
-import 'package:money_monkey/Backend/Models/settings.dart';
+import 'package:money_monkey/Backend/Models/Settings.dart';
 
 class UserData {
   String userId;

@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-import '../../../Backend/Models/settings.dart';
+import '../../../Backend/Models/Settings.dart';
 import '../../../Backend/Services/settings_service.dart';
 import '../../Widgets/custom_row_tile_button.dart';
 

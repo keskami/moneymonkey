@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:money_monkey/home.dart';
 
 class BudgetSimulatorLanding extends StatefulWidget {
   @override

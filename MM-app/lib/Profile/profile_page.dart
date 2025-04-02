@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
-import 'package:money_monkey/Backend/Models/user_data.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
@@ -26,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  UserData? userData; // Make userData nullable
+  Student? userData; // Make userData nullable
   bool isLoading = true; // Track loading state
   final FirestoreService firestoreService = FirestoreService();
 

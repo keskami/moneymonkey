@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Invest/Widgets/list_row_item.dart';
 
-import '../../Backend/Models/stock_data.dart';
+import '../../Backend/Models/StockData.dart';
 import '../../themes/color_themes.dart';
 
 class InvestmentOptionsList extends StatefulWidget {

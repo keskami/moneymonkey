@@ -1,9 +1,9 @@
-import ComingSoon from "../../components/common/CommingSoon";
+import LaunchSoon from "../../components/common/LaunchingSoon";
 
-export default function loginPage() {
+export default function registerPage() {
     return (
       <>
-        <ComingSoon />
+        <LaunchSoon />
       </>
     );
   }
