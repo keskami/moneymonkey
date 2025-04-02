@@ -49,7 +49,7 @@ class BudgetSimulator extends StatefulWidget {
   });
   double savingsTransfer = 0;
   final List<String> scoreCategories;
-  int checkingTransfer = 0;
+  double checkingTransfer = 0;
   int dayNumber = 1;
   int creditLimit;
   int totalPaymentsSeen = 0;
@@ -308,6 +308,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                         widget.checkingAccountBalance
                                                             as int,
                                                     setStateCallback: setState,
+                                                    nextDay: nextDay,
                                                   )
                                                 : Container(),
                                       ],

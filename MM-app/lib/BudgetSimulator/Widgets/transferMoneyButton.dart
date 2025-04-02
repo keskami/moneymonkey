@@ -8,6 +8,7 @@ class TransferMoneyButton extends StatefulWidget {
   final dynamic widget;
   final int checkingAccountBalance;
   final Function setStateCallback;
+  final Function nextDay;
 
 
   const TransferMoneyButton({
@@ -16,7 +17,8 @@ class TransferMoneyButton extends StatefulWidget {
     required this.screenWidthUnit,
     required this.widget,
     required this.checkingAccountBalance,
-    required this.setStateCallback
+    required this.setStateCallback,
+    required this.nextDay,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _TransferMoneyButtonState extends State<TransferMoneyButton> {
           builder: (BuildContext context) {
             
             return Dialog(
-              child: TransferMoneyPopUp(screenHeightUnit: widget.screenHeightUnit, screenWidthUnit: widget.screenWidthUnit, widget: widget.widget, setStateCallback: widget.setStateCallback,)
+              child: TransferMoneyPopUp(screenHeightUnit: widget.screenHeightUnit, screenWidthUnit: widget.screenWidthUnit, widget: widget.widget, setStateCallback: widget.setStateCallback, nextDay: widget.nextDay,)
             );
           },
         );
