@@ -74,7 +74,7 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
             ),
             child: Center(
               child: Text(
-                'Overall Score: ${grade}',
+                'Overall Score: ${score}',
                 style: GoogleFonts.baloo2(
                   fontSize: widget.screenHeightUnit * 30,
                   fontWeight: FontWeight.w600,
@@ -138,7 +138,7 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Poor',
+                          'GRADE $grade',
                           style: GoogleFonts.baloo2(
                             fontSize: widget.screenHeightUnit * 47,
                             fontWeight: FontWeight.w400,
