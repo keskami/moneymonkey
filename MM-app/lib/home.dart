@@ -6,25 +6,25 @@ import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonsHome.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/profile_page.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
-  final HomePagesController homePagesController = Get.put(HomePagesController());
-
+  final HomePagesController homePagesController =
+      Get.put(HomePagesController());
   int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-
     // Decide whether to show web or mobile layout
     return screenWidth > screenHeight
         ? webDisplay(context, screenWidth)
@@ -35,20 +35,52 @@ class _HomePageState extends State<HomePage> {
   Scaffold webDisplay(BuildContext context, double screenWidth) {
     return Scaffold(
       body: Obx(
-        () => Row(
-          children: [
-            // Sidebar (20% width)
-            SizedBox(
-              width: screenWidth * 0.2,
-              child: SideBar(),
-            ),
+        () {
+          // Check if current page is Budget Simulator
+          bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
 
-            // Main content (80% width)
-            SizedBox(
-              width: screenWidth * 0.8,
-              child: homePagesController.pages[homePagesController.pageIndex.value],
-            )
-          ],
+          // Calculate widths based on the current page
+          double sidebarWidth =
+              isBudgetSimulator ? screenWidth * 0.05 : screenWidth * 0.2;
+          double contentWidth = screenWidth - sidebarWidth;
+
+          return Row(
+            children: [
+              // Sidebar (adjusted width based on page)
+              SizedBox(
+                width: sidebarWidth,
+                child: SideBar(),
+              ),
+              // Main content (adjusted width based on sidebar)
+              SizedBox(
+                width: contentWidth,
+                child: homePagesController
+                    .pages[homePagesController.pageIndex.value],
+              )
+            ],
+          );
+        },
+      ),
+      floatingActionButton: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(
+            LightTheme().primaryBlue,
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TeacherDashboard(),
+            ),
+          );
+        },
+        child: Text(
+          "Teacher Dashboard",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
         ),
       ),
     );
@@ -105,7 +137,6 @@ class _HomePageState extends State<HomePage> {
   BottomNavigationBarItem _buildMobileNavItem(String iconPath, int index) {
     final screenSize = MediaQuery.of(context).size;
     double iconSize = screenSize.width * 0.13;
-
     return BottomNavigationBarItem(
       icon: Container(
         width: iconSize,

@@ -12,7 +12,8 @@ class Headings2 {
       required double APY,
       required double savingsTransfer,
       required double checkingTransfer,
-      required double savingsLeftOver
+      required double savingsLeftOver,
+      required String stageOfLife
       
       }) {
     return Container(
@@ -32,7 +33,7 @@ class Headings2 {
             color: Colors.black,
           ),
           SizedBox(
-            width: screenWidthUnit * 30.8,
+            width: screenWidthUnit * 20.8,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +54,7 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 175.8,
+            width: screenWidthUnit * 185.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +243,7 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 175.8,
+            width: screenWidthUnit * 185.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -425,32 +426,63 @@ class Headings2 {
             width: screenWidthUnit * 44, // Increased by 10%
           ),
           Icon(
-            Icons.credit_card,
+            Icons.person_2_outlined,
             size: screenHeightUnit * 58,
             color: Colors.black,
           ),
+          // Icon(
+          //   Icons.credit_card,
+          //   size: screenHeightUnit * 58,
+          //   color: Colors.black,
+          // ),
           SizedBox(
-            width: screenWidthUnit * 24.2, // Increased by 10%
+            width: screenWidthUnit * 34.2, // Increased by 10%
           ),
-          Text(
-            "Credit Card Debt ",
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+            "${stageOfLife}",
             style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 36,
+              fontSize: screenHeightUnit * 40,
+              color: Color.fromRGBO(0, 127, 255, 1),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+         
+          Text(
+            "Stage of Life",
+            style: GoogleFonts.baloo2(
+              fontSize: screenHeightUnit * 33,
               color: Colors.black,
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(
-            width: screenWidthUnit * 85.8, // Increased by 10%
-          ),
-          Text(
-            "-\$${creditCardDebt}",
-            style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 34,
-              color: Color.fromRGBO(243, 52, 52, 1),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+
+            ],
+
+          )
+
+          // Text(
+          //   "Credit Card Debt ",
+          //   style: GoogleFonts.baloo2(
+          //     fontSize: screenHeightUnit * 36,
+          //     color: Colors.black,
+          //     fontWeight: FontWeight.w600,
+          //   ),
+          // ),
+          // SizedBox(
+          //   width: screenWidthUnit * 35.8, // Increased by 10%
+          // ),
+          // Text(
+          //   "-\$${creditCardDebt}",
+          //   style: GoogleFonts.baloo2(
+          //     fontSize: screenHeightUnit * 34,
+          //     color: Color.fromRGBO(243, 52, 52, 1),
+          //     fontWeight: FontWeight.w600,
+          //   ),
+          // ),
         ],
       ),
     );

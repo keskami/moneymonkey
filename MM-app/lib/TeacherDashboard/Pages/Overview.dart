@@ -1,141 +1,91 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/StudentServices.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/CustomDropDownMenu.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class DashboardOverview extends StatefulWidget {
-  const DashboardOverview({super.key});
-
+  const DashboardOverview({
+    super.key,
+  });
   @override
   State<DashboardOverview> createState() => _DashboardOverviewState();
 }
 
 class _DashboardOverviewState extends State<DashboardOverview> {
-  final String teacherName = "Mrs. Anderson";
-  final String progressStatus = "In-progress";
-  final String message1 = "Financial Responsibility Over a Lifetime ";
-  final String message2 =
-      "Making informed decisions about earning, saving, spending, and investing ";
-  final List<String> classes = [
-    'All Classes',
-    'Batch 1',
-    'Batch 2',
-    'Batch 3',
-    'Batch 4',
-  ];
-  final List<String> quickActionsSuggestions = [
-    "Launch “Jordan’s Journey Scenario”",
-    "Start “Emergency Fun Challenge”",
-    "Begin “Spending Decisions Quiz”",
-  ];
-  final List<List<String>> lessonList = [
-    ["Recap", "100"],
-    ["Concept 1", "100"],
-    ["Interactive Activity 1", "100"],
-    ["Concept 2", "80"],
-    ["Interactive Activity 2", "0"],
-    ["Story", "0"],
-    ["Scenario Simulation", "0"],
-    ["Peer Reflection", "0"],
-    ["Toolkit", "0"],
-    ["Quiz", "0"],
-  ];
-  final List<List<String>> topPerformerStudents = [
-    [
-      "Kid 1",
-      "98",
-    ],
-    [
-      "Kid 2",
-      "98",
-    ],
-  ];
-  final List<List<String>> supportStudents = [
-    [
-      "Kid 1",
-      "34",
-    ],
-    [
-      "Kid 2",
-      "12",
-    ],
-  ];
   final TeacherDashboardController teacherDashboardController = Get.find();
+  LocalAcademicService localAcademicService = LocalAcademicService();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void onDiscussionComponentChanged(String? componentName) {
+    if (componentName != null) {
+      // Find the component ID for the selected name
+      String? selectedComponent =
+          teacherDashboardController.childComponents.value
+              .firstWhere(
+                (entry) => entry.title == componentName,
+              )
+              .title;
+
+      if (selectedComponent.isNotEmpty) {
+        setState(() {
+          teacherDashboardController.selectedComponent =
+              teacherDashboardController.childComponents.value
+                  .firstWhere((comp) => comp.title == componentName);
+        });
+      }
+    }
+  }
+
+  Widget getProgressIndicator(Status status) {
+    switch (status) {
+      case Status.Completed:
+        return Image.network(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+        );
+      case Status.InProgress:
+        return CircularProgressIndicator(
+          value: double.parse("24") / 100,
+          strokeWidth: 2,
+        );
+      case Status.Active:
+        return CircularProgressIndicator(
+          value: 0.1,
+          strokeWidth: 2,
+        );
+      case Status.Inactive:
+      default:
+        return CircularProgressIndicator(
+          value: 1,
+          strokeWidth: 2,
+          color: Colors.grey,
+        );
+    }
+  }
+
   final List<Color> randomColorList = [
     Color.fromARGB(255, 122, 180, 255),
     Color.fromARGB(255, 189, 122, 255),
     Color.fromARGB(255, 123, 255, 169),
   ];
-  final Map<String, List<String>> discussionQuestions = {
-    "Recap": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Concept 1": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Interactive Activity 1": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Concept 2": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Interactive Activity 2": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Story": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Scenario Simulation": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Peer Reflection": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Toolkit": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-    "Quiz": [
-      "When should financial responsibility begin?",
-      "How do financial decisions impact our future?",
-      "What role do emergency funds play?",
-    ],
-  };
-  String discussionComponent = "Concept 2";
-  //handles Change in selecting another Lesson Component to get discussion questions for
-  void onDiscussionComponentChanged(String? lesson) {
-    if (lesson != null) {
-      setState(() {
-        discussionComponent = lesson;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    if (teacherDashboardController.selectedClassId.isEmpty)
+      return TeacherDashoardPlaceHolderPage();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -171,7 +121,8 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         ),
                       ),
                       child: Text(
-                        progressStatus,
+                        teacherDashboardController
+                            .presentLesson.lessonStatus.name,
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.blue.shade300,
@@ -187,7 +138,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        message1,
+                        teacherDashboardController.presentLesson.title,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -198,7 +149,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                         height: 5,
                       ),
                       Text(
-                        message2,
+                        teacherDashboardController.presentLesson.description,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -208,58 +159,50 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   ),
                 ),
                 //Lessons and respective status
-                ...lessonList.map(
-                  (lesson) => Row(
+                Obx(
+                  () => Column(
                     children: [
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Colors.transparent,
-                        child: teacherDashboardController
-                                    .getProgress(lesson[1]) ==
-                                'Completed'
-                            ? Image.network(
-                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
-                              )
-                            : Container(
-                                width: 20,
-                                height: 20,
-                                child: teacherDashboardController
-                                            .getProgress(lesson[1]) ==
-                                        'In Progress'
-                                    ? CircularProgressIndicator(
-                                        value: double.parse(lesson[1]) / 100,
-                                        strokeWidth: 2,
-                                      )
-                                    : CircularProgressIndicator(
-                                        value: 1,
-                                        strokeWidth: 2,
-                                        color: Colors.grey,
-                                      ),
+                      ...teacherDashboardController.childComponents.value.map(
+                        (component) {
+                          return Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 12,
+                                backgroundColor: Colors.transparent,
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: getProgressIndicator(
+                                      component.componentStatus),
+                                ),
                               ),
-                      ),
-                      Text(
-                        lesson[0],
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ).marginOnly(
-                        left: 10,
-                      ),
-                      const Spacer(),
-                      Text(
-                        teacherDashboardController.getProgress(lesson[1]),
-                        style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      ).marginOnly(
-                        right: 20,
+                              Text(
+                                component.title,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ).marginOnly(
+                                left: 10,
+                              ),
+                              const Spacer(),
+                              Text(
+                                component.componentStatus.name,
+                                style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                ),
+                              ).marginOnly(
+                                right: 20,
+                              ),
+                            ],
+                          ).marginSymmetric(
+                            vertical: screenHeight*0.03,
+                          );
+                        },
                       ),
                     ],
-                  ).marginSymmetric(
-                    vertical: 6,
                   ),
                 ),
               ],
@@ -283,7 +226,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   "Quick Actions",
                   style: TextStyles.containerTitle,
                 ),
-                ...quickActionsSuggestions.map(
+                ...teacherDashboardController.quickActionsSuggestions.map(
                   (suggestion) => Container(
                     margin: EdgeInsets.symmetric(
                       vertical: screenHeight * 0.01,
@@ -295,16 +238,18 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: randomColorList[
-                              quickActionsSuggestions.indexOf(suggestion)]
+                      color: randomColorList[teacherDashboardController
+                              .quickActionsSuggestions
+                              .indexOf(suggestion)]
                           .withValues(alpha: 0.1),
                     ),
                     child: Text(
                       suggestion,
                       style: TextStyle(
                         fontSize: 16,
-                        color: randomColorList[
-                            quickActionsSuggestions.indexOf(suggestion)],
+                        color: randomColorList[teacherDashboardController
+                            .quickActionsSuggestions
+                            .indexOf(suggestion)],
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -315,6 +260,8 @@ class _DashboardOverviewState extends State<DashboardOverview> {
           ),
           //Discussion Container
           ShadowedContainer(
+            width: double.infinity,
+            height: screenHeight * 0.3,
             margin: EdgeInsets.symmetric(
               vertical: screenHeight * 0.02,
             ),
@@ -330,44 +277,46 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                   style: TextStyles.containerTitle,
                 ),
                 CustomDropDownContainer(
-                  initialSelection: discussionComponent,
-                  width: screenWidth * 0.15,
-                  items: lessonList
-                      .map(
-                        (e) => e[0],
-                      )
-                      .toList(),
+                  initialSelection:
+                      teacherDashboardController.selectedComponent.title,
+                  width: screenWidth * 0.3,
+                  items: teacherDashboardController.componentNames.value,
                   onChanged: onDiscussionComponentChanged,
                 ).marginSymmetric(
                   vertical: screenHeight * 0.01,
                 ),
-                ...discussionQuestions[discussionComponent]!
-                    .map((question) => Container(
-                          margin: EdgeInsets.symmetric(
-                            vertical: screenHeight * 0.01,
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: screenHeight * 0.015,
-                            horizontal: screenWidth * 0.02,
-                          ),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.blue.withValues(alpha: 0.1),
-                          ),
-                          child: Text(
-                            question,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue.shade700,
+                if (teacherDashboardController
+                            .selectedComponent.discussionQuestions !=
+                        null &&
+                    teacherDashboardController
+                        .selectedComponent.discussionQuestions!.isNotEmpty)
+                  ...teacherDashboardController
+                      .selectedComponent.discussionQuestions!
+                      .map((question) => Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: screenHeight * 0.01,
                             ),
-                          ),
-                        ))
-                    .toList(),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.01,
+                              vertical: screenHeight * 0.02,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.blue.withValues(alpha: 0.1),
+                            ),
+                            child: Text(
+                              question,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                          ))
+                      .toList(),
               ],
             ),
           ),
-
           //Performance Highlights Container
           ShadowedContainer(
             width: double.infinity,
@@ -376,7 +325,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
               horizontal: screenWidth * 0.01,
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -388,12 +337,12 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 ),
                 Flex(
                   direction: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //Top Performers Container
                     Container(
                       width: screenWidth * 0.2,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
@@ -407,27 +356,33 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...topPerformerStudents.map(
-                            (student) => Row(
-                              children: [
-                                Text(
-                                  student[0],
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                          // Using Obx to observe topPerformers List changes
+                          Column(
+                            children: [
+                              ...teacherDashboardController.topPerformers.value
+                                  .map(
+                                (student) => Row(
+                                  children: [
+                                    Text(
+                                      student.profile.fullName,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "${StudentService(student: student).getLessonProgress()}%",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.green,
+                                      ),
+                                    )
+                                  ],
+                                ).marginSymmetric(
+                                  vertical: 5,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  "${student[1]}%",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.green,
-                                  ),
-                                )
-                              ],
-                            ).marginSymmetric(
-                              vertical: 5,
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -453,27 +408,34 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           const SizedBox(
                             height: 10,
                           ),
-                          ...supportStudents.map(
-                            (student) => Row(
-                              children: [
-                                Text(
-                                  student[0],
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                          // Using Obx to observe supportStudents List changes
+                          Column(
+                            children: [
+                              ...teacherDashboardController
+                                  .supportStudents.value
+                                  .map(
+                                (student) => Row(
+                                  children: [
+                                    Text(
+                                      student.profile.fullName,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "${StudentService(student: student).getLessonProgress()}%",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  ],
+                                ).marginSymmetric(
+                                  vertical: 5,
                                 ),
-                                const Spacer(),
-                                Text(
-                                  "${student[1]}%",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.red,
-                                  ),
-                                )
-                              ],
-                            ).marginSymmetric(
-                              vertical: 5,
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -536,5 +498,5 @@ class _DashboardOverviewState extends State<DashboardOverview> {
 }
 
 extension on Color {
-  withValues({required double alpha}) {}
+  Color? withValues({required double alpha}) {}
 }

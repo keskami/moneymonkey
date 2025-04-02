@@ -289,87 +289,81 @@ class ProgressController extends GetxController {
     var currentUser = FirebaseAuth.instance.currentUser;
     String? userId = currentUser?.uid;
 
-    if (userId != null) {
-      final progressionRef = FirebaseFirestore.instance
-          .collection('Users')
-          .doc(userId)
-          .collection('Progression')
-          .doc('progression1'); // or other document related to progress
+    final progressionRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Progression')
+        .doc('progression1'); // or other document related to progress
 
-      final docSnapshot = await progressionRef.get();
+    final docSnapshot = await progressionRef.get();
 
-      if (docSnapshot.exists) {
-        // Assume you store progress as a percentage (0.0 to 1.0)
-        progress.value = docSnapshot.data()?['progress'] ?? 0.0;
-      }
+    if (docSnapshot.exists) {
+      // Assume you store progress as a percentage (0.0 to 1.0)
+      progress.value = docSnapshot.data()?['progress'] ?? 0.0;
     }
-  }
+    }
 
   Future<void> awardBananas() async {
     var currentUser = FirebaseAuth.instance.currentUser;
     String? userId = currentUser?.uid;
     print("User ID: $userId");
 
-    if (userId != null) {
-      try {
-        // Reference to the user's Progression and Portfolio fields
-        final userDocRef =
-            FirebaseFirestore.instance.collection('Users').doc(userId);
-        final progressionRef =
-            userDocRef.collection('Progression').doc('Progression');
+    try {
+      // Reference to the user's Progression and Portfolio fields
+      final userDocRef =
+          FirebaseFirestore.instance.collection('Users').doc(userId);
+      final progressionRef =
+          userDocRef.collection('Progression').doc('Progression');
 
-        // Fetch current values
-        final docSnapshot = await progressionRef.get();
-        final userSnapshot = await userDocRef.get();
+      // Fetch current values
+      final docSnapshot = await progressionRef.get();
+      final userSnapshot = await userDocRef.get();
 
-        if (!userSnapshot.exists) {
-          // Create the User document with default Portfolio data
-          await userDocRef.set({
-            'Portfolio': {
-              'Total Bananas': 0,
-            },
-          });
-          print("User document created with initial Portfolio.");
-        }
-
-        if (!docSnapshot.exists) {
-          // Create the Progression document with initial Earnings data
-          await progressionRef.set({
-            'Earnings from Lesson': {
-              'Bananas': 0,
-            },
-          });
-          print("Progression document created with initial Earnings.");
-        }
-
-        // Retrieve the updated values after creation
-        final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
-        final portfolio = userSnapshot.data()?['Portfolio'] ?? {};
-
-        final currentLessonBananas = earnings['Bananas'] ?? 0;
-        final currentTotalBananas = portfolio['Total Bananas'] ?? 0;
-
-        print("Current Lesson Bananas: $currentLessonBananas");
-        print("Current Total Bananas: $currentTotalBananas");
-
-        // Update 'Earnings from Lesson.Bananas'
-        await progressionRef.update({
-          'Earnings from Lesson.Bananas': currentLessonBananas + 10,
+      if (!userSnapshot.exists) {
+        // Create the User document with default Portfolio data
+        await userDocRef.set({
+          'Portfolio': {
+            'Total Bananas': 0,
+          },
         });
-
-        // Update 'Portfolio.Total Bananas'
-        await userDocRef.update({
-          'Portfolio.Total Bananas': currentTotalBananas + 10,
-        });
-
-        // Update progress bar or notify UI
-        progress.value = 1.0;
-        print("Bananas awarded successfully!");
-      } catch (e) {
-        print('Error awarding bananas: $e');
+        print("User document created with initial Portfolio.");
       }
-    } else {
-      print("User is not signed in.");
+
+      if (!docSnapshot.exists) {
+        // Create the Progression document with initial Earnings data
+        await progressionRef.set({
+          'Earnings from Lesson': {
+            'Bananas': 0,
+          },
+        });
+        print("Progression document created with initial Earnings.");
+      }
+
+      // Retrieve the updated values after creation
+      final earnings = docSnapshot.data()?['Earnings from Lesson'] ?? {};
+      final portfolio = userSnapshot.data()?['Portfolio'] ?? {};
+
+      final currentLessonBananas = earnings['Bananas'] ?? 0;
+      final currentTotalBananas = portfolio['Total Bananas'] ?? 0;
+
+      print("Current Lesson Bananas: $currentLessonBananas");
+      print("Current Total Bananas: $currentTotalBananas");
+
+      // Update 'Earnings from Lesson.Bananas'
+      await progressionRef.update({
+        'Earnings from Lesson.Bananas': currentLessonBananas + 10,
+      });
+
+      // Update 'Portfolio.Total Bananas'
+      await userDocRef.update({
+        'Portfolio.Total Bananas': currentTotalBananas + 10,
+      });
+
+      // Update progress bar or notify UI
+      progress.value = 1.0;
+      print("Bananas awarded successfully!");
+    } catch (e) {
+      print('Error awarding bananas: $e');
     }
-  }
+    }
 }

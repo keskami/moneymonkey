@@ -51,7 +51,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                   top: widget.screenHeightUnit * 24,
                   left: widget.screenWidthUnit * 32),
               child: Container(
-                width: widget.screenWidthUnit * 460,
+                width: widget.screenWidthUnit * 420,
                 height: widget.screenHeightUnit * 400,
                 child: SingleChildScrollView(
                   child: Column(

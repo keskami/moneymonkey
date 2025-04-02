@@ -4,29 +4,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsBudgetSimulatorPage.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/allocateFunding.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseTopOfScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditCardMangagmentScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/crushTheCreditCardDebtPages.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/eventPopUp.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/expenseLabel.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/headings2.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditScoreBox.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/milestoneProgress.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/overallScoreScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/simulatorTitle.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/transferMoneyButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/weekdayRow.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBoxNew.dart';
-import 'package:money_monkey/BudgetSimulator/Widgets/welnessBox.dart';
-import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
-import 'package:money_monkey/Profile/profile_page.dart';
-import 'package:money_monkey/home.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class BudgetSimulator extends StatefulWidget {
@@ -46,21 +41,24 @@ class BudgetSimulator extends StatefulWidget {
     required this.wellnessScore,
     required this.randomEvents,
     required this.hints,
-    required this.cognativeScore,
-    required this.physicalScore,
-    required this.mentalScore,
+    required this.mindScore,
+    required this.bodyScore,
+    required this.socialScore,
     required this.creditLimit,
+    required this.scoreCategories,
   });
   double savingsTransfer = 0;
+  final List<String> scoreCategories;
   int checkingTransfer = 0;
   int dayNumber = 1;
   int creditLimit;
   int totalPaymentsSeen = 0;
   int totalPaymentsPaid = 0;
+  double onTimePaymentScore = 0;
   final String name;
-  int cognativeScore;
-  int physicalScore;
-  int mentalScore;
+  int mindScore;
+  int bodyScore;
+  int socialScore;
   final String level;
   double checkingAccountBalance;
   double savingsAccountBalance;
@@ -189,6 +187,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           widget.checkingTransfer as double,
                                       savingsTransfer:
                                           widget.savingsTransfer as double,
+                                          stageOfLife: "New College Grad"
                                     )
                                   : Container(),
                             )),
@@ -257,7 +256,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           ],
                                         ),
                                         SizedBox(
-                                          width: screenWidthUnit * 810,
+                                          width:
+                                              widget.currentOption == "Calendar"
+                                                  ? screenWidthUnit * 835
+                                                  : screenWidthUnit * 795,
                                         ),
                                         widget.currentOption == "Calendar"
                                             ? AllocateFundsButton(
@@ -411,7 +413,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     Transactions:
                                                         widget.Transactions,
                                                   )
-                                                : Container(),
+                                                : OverallScoreScreen(
+                                                    screenHeightUnit:
+                                                        screenHeightUnit,
+                                                    screenWidthUnit:
+                                                        screenWidthUnit,
+                                                    scoreCategories:
+                                                        widget.scoreCategories,
+                                                    widget: this,
+                                                  ),
                                   ]),
                             ),
                             Container(
@@ -436,27 +446,35 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 SizedBox(
                                   height: screenHeightUnit * 10,
                                 ),
-                                WellnessBoxNew(
-                                    screenHeightUnit: screenHeightUnit,
-                                    screenWidthUnit: screenWidthUnit,
-                                    score: widget.physicalScore,
-                                    type: "Physical"),
+                                SimulatorTitle(
+                                  screenHeightUnit: screenHeightUnit,
+                                  screenWidthUnit: screenWidthUnit,
+                                ),
                                 SizedBox(
                                   height: screenHeightUnit * 10,
                                 ),
                                 WellnessBoxNew(
                                     screenHeightUnit: screenHeightUnit,
                                     screenWidthUnit: screenWidthUnit,
-                                    score: widget.cognativeScore,
-                                    type: "Emotional"),
+                                    score: widget.bodyScore,
+                                    type: "Body"),
                                 SizedBox(
                                   height: screenHeightUnit * 10,
                                 ),
                                 WellnessBoxNew(
                                     screenHeightUnit: screenHeightUnit,
                                     screenWidthUnit: screenWidthUnit,
-                                    score: widget.mentalScore,
-                                    type: "Mental"),
+                                    score: widget.mindScore,
+                                    type: "Mind"),
+                                SizedBox(
+                                  height: screenHeightUnit * 10,
+                                ),
+
+                                WellnessBoxNew(
+                                    screenHeightUnit: screenHeightUnit,
+                                    screenWidthUnit: screenWidthUnit,
+                                    score: widget.socialScore,
+                                    type: "Social"),
 
                                 SizedBox(
                                   height: screenHeightUnit * 10,
@@ -479,7 +497,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 ),
                                 SpendingDonutChart(
                                   screenWidthUnit: screenWidthUnit,
-                                  screenHeightUnit: screenHeightUnit,
+                                  screenHeightUnit: screenHeightUnit * .95,
                                   types: types,
                                   percentage: percentage,
                                   total: totalSpending,
@@ -677,8 +695,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           setState(() {
             widget.hints = functions.addHint(
                 "Pay Day", widget.hints, widget.now, widget.level, widget.name);
-                Transaction payDay = Transaction(name: "Pay Day", day: widget.now, amount: -expense.amount, toOrFrom: "Transfer in", account: "Checking", currentAmount: widget.checkingAccountBalance - expense.amount);
-                widget.Transactions.add(payDay);
+            Transaction payDay = Transaction(
+                name: "Pay Day",
+                day: widget.now,
+                amount: -expense.amount,
+                toOrFrom: "Transfer in",
+                account: "Checking",
+                currentAmount: widget.checkingAccountBalance - expense.amount);
+            widget.Transactions.add(payDay);
           });
 
           await showDialog(
@@ -715,6 +739,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
                           widget.totalPaymentsPaid += 1;
+                          widget.onTimePaymentScore += 20;
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -738,6 +763,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               });
             } else {
               widget.totalPaymentsPaid += 1;
+              widget.onTimePaymentScore += 20;
             }
             setState(() {
               eventProccesed = true;
@@ -758,6 +784,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
                           widget.totalPaymentsPaid += 1;
+                          widget.onTimePaymentScore += 16.7;
+
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -790,6 +818,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             } else {
               setState(() {
                 widget.totalPaymentsPaid += 1;
+                widget.onTimePaymentScore += 16.7;
               });
             }
             setState(() {
@@ -809,6 +838,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
                           widget.totalPaymentsPaid += 1;
+                          if (expense.name == "Utilities") {
+                            widget.onTimePaymentScore += 15;
+                          }
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -833,6 +865,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             } else {
               setState(() {
                 widget.totalPaymentsPaid += 1;
+                if (expense.name == "Utilities") {
+                  widget.onTimePaymentScore += 15;
+                }
               });
             }
             setState(() {
@@ -975,18 +1010,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     if (widget.savingsAccountBalance > 0) {
       double dailyRate = pow(1 + (widget.savingsAPY / 100), 1 / 365) - 1;
       double interest = widget.savingsAccountBalance * dailyRate;
-      if ((interest) > 0.01) {
-        setState(() {
-          Transaction savingsTransaction = Transaction(
-          name: "Interest",
-          day: widget.now,
-          amount: (interest * 100).floorToDouble() / 100,
-          toOrFrom: "Interest in",
-          account: "Savings",
-          currentAmount: widget.savingsAccountBalance + ((interest * 100).floorToDouble() / 100) + savingsLeftOver);
-          widget.Transactions.add(savingsTransaction);
-        });
-      }
+
       setState(() {
         savingsLeftOver += interest;
       });
@@ -1127,20 +1151,19 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           });
                         } else if (effect1 == "Emotional Health") {
                           setState(() {
-                            widget.cognativeScore += effect1Amount;
+                            widget.mindScore += effect1Amount;
                           });
                         } else if (effect1 == "Physical Health") {
                           setState(() {
-                            widget.physicalScore += effect1Amount;
-                            widget.physicalScore =
-                                min(widget.physicalScore, 1000);
-                            widget.physicalScore = max(0, widget.physicalScore);
+                            widget.bodyScore += effect1Amount;
+                            widget.bodyScore = min(widget.bodyScore, 1000);
+                            widget.bodyScore = max(0, widget.bodyScore);
                           });
                         } else if (effect1 == "Mental Health") {
                           setState(() {
-                            widget.mentalScore += effect1Amount;
-                            widget.mentalScore = min(widget.mentalScore, 1000);
-                            widget.mentalScore = max(0, widget.mentalScore);
+                            widget.socialScore += effect1Amount;
+                            widget.socialScore = min(widget.socialScore, 1000);
+                            widget.socialScore = max(0, widget.socialScore);
                           });
                         } else {
                           print(effect1);
@@ -1152,20 +1175,19 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           });
                         } else if (effect2 == "Emotional Health") {
                           setState(() {
-                            widget.cognativeScore += effect2Amount;
+                            widget.mindScore += effect2Amount;
                           });
                         } else if (effect2 == "Physical Health") {
                           setState(() {
-                            widget.physicalScore += effect2Amount;
-                            widget.physicalScore =
-                                min(widget.physicalScore, 1000);
-                            widget.physicalScore = max(0, widget.physicalScore);
+                            widget.bodyScore += effect2Amount;
+                            widget.bodyScore = min(widget.bodyScore, 1000);
+                            widget.bodyScore = max(0, widget.bodyScore);
                           });
                         } else if (effect2 == "Mental Health") {
                           setState(() {
-                            widget.mentalScore += effect2Amount;
-                            widget.mentalScore = min(widget.mentalScore, 1000);
-                            widget.mentalScore = max(0, widget.mentalScore);
+                            widget.socialScore += effect2Amount;
+                            widget.socialScore = min(widget.socialScore, 1000);
+                            widget.socialScore = max(0, widget.socialScore);
                           });
                         } else {
                           print(effect2);

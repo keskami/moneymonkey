@@ -1,54 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_monkey/LessonPages/Controllers/Component1_2Controller.dart';
-import 'package:money_monkey/LessonPages/Controllers/ScenarioController.dart';
-import 'package:money_monkey/LessonPages/Controllers/StoryController.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionController.dart';
-import 'package:money_monkey/LessonPages/Controllers/PeerReflectionQuizController.dart';
-import 'package:money_monkey/LessonPages/Controllers/ToolkitController.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomProgressBar extends StatelessWidget {
   CustomProgressBar({
     super.key,
-    required this.pageName,
+    required this.pageType,
     this.width,
     this.pageNum = 0,
   });
-  final String pageName;
+  final ComponentType pageType;
   final double? width;
   final double pageNum;
   double getProgress() {
     double progress = 0;
-    switch (pageName) {
-      case 'ConceptOne':
-        final ComponentOneTwoController educationPagesController = Get.find();
-        progress = educationPagesController.pageIndex.value / 8;
+    final BaseLessonController controller = Get.find();
+    switch (pageType) {
+      case ComponentType.concept:
+        progress = controller.pageIndex.value / 8;
         break;
-      case 'PeerReflection':
-        final PeerReflectioncontroller peerReflectionController = Get.find();
-        progress = peerReflectionController.pageIndex.value / 4;
+      case ComponentType.peerReflection:
+        progress = controller.pageIndex.value / 4;
         break;
-      case 'PeerReflectionQuiz':
-        final PeerReflectionQuizcontroller peerReflectionQuizcontroller =
-            Get.find();
-        progress = peerReflectionQuizcontroller.pageIndex.value / 5;
+      case ComponentType.quiz:
+        progress = controller.pageIndex.value / 4;
         break;
-      case 'StoryPage':
-        final StoryController storyController = Get.find();
-        progress = storyController.pageIndex.value / 6;
+      case ComponentType.story:
+        progress = controller.pageIndex.value / 6;
         break;
-      case 'ScenarioPage':
-        final ScenarioController scenarioController = Get.find();
-        progress = scenarioController.pageIndex.value / 4;
-        break;
-      case 'Toolkit':
-        final Toolkitcontroller toolkitcontroller = Get.find();
-        progress = toolkitcontroller.pageIndex / 4;
-        break;
-      case 'Toolkit':
-        final Toolkitcontroller toolkitcontroller = Get.find();
-        progress = toolkitcontroller.pageIndex/4;
+      case ComponentType.scenarioSimulation:
+        progress = controller.pageIndex.value / 4;
         break;
       default:
         progress = pageNum / 8;

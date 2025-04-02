@@ -172,7 +172,7 @@ class _CreditCardManagementScreenState
                   Center(
                       child: Container(
                     height: widget.screenHeightUnit * 840,
-                    width: widget.screenWidthUnit * 1100,
+                    width: widget.screenWidthUnit * 1300,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white,

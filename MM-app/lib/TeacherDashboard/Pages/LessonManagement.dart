@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/academics_service.dart';
 import 'package:money_monkey/Resources/Resources.dart';
 import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ColoredPaddedContainer.dart';
+import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 import 'package:money_monkey/TeacherDashboard/Widgets/ShadowedContainer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LessonManagement extends StatefulWidget {
   const LessonManagement({super.key});
@@ -13,29 +17,70 @@ class LessonManagement extends StatefulWidget {
 }
 
 class _LessonManagementState extends State<LessonManagement> {
-  final String message1 = "Financial Responsibility Over a Lifetime ";
-  final String message2 =
-      "Making informed decisions about earning, saving, spending, and investing ";
-  final List<List<String>> lessonList = [
-    ["Recap", "100"],
-    ["Concept 1", "100"],
-    ["Interactive Activity 1", "100"],
-    ["Concept 2", "80"],
-    ["Interactive Activity 2", "0"],
-    ["Story", "0"],
-    ["Scenario Simulation", "0"],
-    ["Peer Reflection", "0"],
-    ["Toolkit", "0"],
-    ["Quiz", "0"],
-  ];
+  final LocalAcademicService localAcademicService = LocalAcademicService();
   final TeacherDashboardController teacherDashboardController = Get.find();
-  final String nextLessonTitle = "Smart Spending Decisions";
-  final String nextLessonDescription =
-      "Learning to make informed purchase decisions and understanding the val,ue  of money  through practical exercises and real-world scenarios.";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _launchURL(String driveLink) async {
+    final Uri url = Uri.parse(driveLink);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw "Could not launch $driveLink";
+    }
+  }
+
+  String getActionForStatus(Status status) {
+    switch (status) {
+      case Status.Completed:
+        return "Review";
+      case Status.InProgress:
+        return "Continue";
+      case Status.Active:
+        return "In Progress";
+      case Status.Inactive:
+        return "Preview";
+      default:
+        return "View";
+    }
+  }
+
+  Widget getProgressIndicator(Status status) {
+    switch (status) {
+      case Status.Completed:
+        return Image.network(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
+        );
+      case Status.InProgress:
+        return CircularProgressIndicator(
+          value: 0.5, // Use a fixed value or calculate based on actual progress
+          strokeWidth: 2,
+        );
+      case Status.Active:
+        return CircularProgressIndicator(
+          value: 0.1,
+          strokeWidth: 2,
+        );
+      case Status.Inactive:
+      default:
+        return CircularProgressIndicator(
+          value: 1,
+          strokeWidth: 2,
+          color: Colors.grey,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    if (teacherDashboardController.selectedClassId.isEmpty)
+      return TeacherDashoardPlaceHolderPage();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -60,7 +105,7 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        message1,
+                        teacherDashboardController.presentLesson.title,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -71,7 +116,7 @@ class _LessonManagementState extends State<LessonManagement> {
                         height: 5,
                       ),
                       Text(
-                        message2,
+                        teacherDashboardController.presentLesson.description,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.green,
@@ -80,8 +125,8 @@ class _LessonManagementState extends State<LessonManagement> {
                     ],
                   ),
                 ),
-                ...lessonList.map(
-                  (lesson) => ColoredPaddedContainer(
+                ...teacherDashboardController.childComponents.value.map(
+                  (component) => ColoredPaddedContainer(
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.01,
                       vertical: screenHeight * 0.01,
@@ -96,31 +141,16 @@ class _LessonManagementState extends State<LessonManagement> {
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: teacherDashboardController
-                                      .getProgress(lesson[1]) ==
-                                  'Completed'
-                              ? Image.network(
-                                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FLessonPages%2FCheck%20circle.png?alt=media&token=52726418-7a0a-4b6c-9207-1efa735199af",
-                                )
-                              : Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: teacherDashboardController
-                                              .getProgress(lesson[1]) ==
-                                          'In Progress'
-                                      ? CircularProgressIndicator(
-                                          value: double.parse(lesson[1]) / 100,
-                                          strokeWidth: 2,
-                                        )
-                                      : CircularProgressIndicator(
-                                          value: 1,
-                                          strokeWidth: 2,
-                                          color: Colors.grey,
-                                        )),
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child:
+                                getProgressIndicator(component.componentStatus),
+                          ),
                         ),
                         //Component Name
                         Text(
-                          lesson[0],
+                          component.title,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -143,9 +173,7 @@ class _LessonManagementState extends State<LessonManagement> {
                             ),
                             child: Center(
                               child: Text(
-                                teacherDashboardController.getLessonAction(
-                                  lesson[1],
-                                ),
+                                getActionForStatus(component.componentStatus),
                                 style: TextStyle(
                                   color: Colors.grey.shade700,
                                   fontWeight: FontWeight.w600,
@@ -164,6 +192,8 @@ class _LessonManagementState extends State<LessonManagement> {
               ],
             ),
           ),
+
+          // Rest of your code remains the same
           //Resources Row
           ShadowedContainer(
             padding: EdgeInsets.symmetric(
@@ -182,119 +212,113 @@ class _LessonManagementState extends State<LessonManagement> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
+                      for (String iaLink in teacherDashboardController
+                          .presentLesson.interactiveActivityLinks)
+                        GestureDetector(
+                          onTap: () {
+                            if (iaLink.isNotEmpty) _launchURL(iaLink);
+                          },
+                          child: ColoredPaddedContainer(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: screenHeight * 0.02,
+                            ),
+                            width: screenWidth * 0.2,
+                            height: screenHeight * 0.18,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.transparent,
+                                  child: Image.network(
+                                    AppResources.interactiveAtivityGuide,
+                                  ),
+                                ),
+                                Text(
+                                  "Interactive Activity Guide",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                AppResources.interactiveAtivityGuide,
+                      GestureDetector(
+                        onTap: () {
+                          if (teacherDashboardController
+                              .presentLesson.teachersGuideLink.isNotEmpty)
+                            _launchURL(teacherDashboardController
+                                .presentLesson.teachersGuideLink);
+                        },
+                        child: ColoredPaddedContainer(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: screenHeight * 0.02,
+                          ),
+                          color: Color.fromARGB(255, 239, 246, 255),
+                          width: screenWidth * 0.2,
+                          height: screenHeight * 0.18,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                child: Image.network(
+                                  AppResources.teachersGuide,
+                                ),
                               ),
-                            ),
-                            Text(
-                              "Interactive Activity Guide",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
+                              Text(
+                                "Teacher's Guide",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        color: Color.fromARGB(255, 239, 246, 255),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                AppResources.teachersGuide,
-                              ),
-                            ),
-                            Text(
-                              "Teacher’s Guide",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        color: Color.fromARGB(255, 250, 245, 255),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                AppResources.studentWorkshopTemplate,
-                              ),
-                            ),
-                            Text(
-                              "Student Worksheet Template",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                      ColoredPaddedContainer(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        color: Color.fromARGB(255, 255, 236, 213),
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.18,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FTeacher%20Dashboard%2FLesson%20management%2FIcon4.png?alt=media&token=aabe9c04-773a-4e47-af73-25aedd6a3612",
+                      GestureDetector(
+                        onTap: () {
+                          if (teacherDashboardController.presentLesson
+                              .studentWorkshopTemplateLinks.isNotEmpty)
+                            _launchURL(teacherDashboardController
+                                .presentLesson.studentWorkshopTemplateLinks);
+                        },
+                        child: ColoredPaddedContainer(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: screenHeight * 0.02,
+                          ),
+                          color: Color.fromARGB(255, 250, 245, 255),
+                          width: screenWidth * 0.2,
+                          height: screenHeight * 0.18,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                child: Image.network(
+                                  AppResources.studentWorkshopTemplate,
+                                ),
                               ),
-                            ),
-                            Text(
-                              "Teacher’s Guide",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
+                              Text(
+                                "Student Worksheet Template",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.purple,
+                                ),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -332,14 +356,22 @@ class _LessonManagementState extends State<LessonManagement> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        nextLessonTitle,
+                        localAcademicService
+                            .getLesson(localAcademicService.getNextLessonId(
+                                teacherDashboardController
+                                    .presentLesson.lessonId))
+                            .title,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        nextLessonDescription,
+                        localAcademicService
+                            .getLesson(localAcademicService.getNextLessonId(
+                                teacherDashboardController
+                                    .presentLesson.lessonId))
+                            .description,
                         style: TextStyle(
                           fontSize: 18,
                         ),

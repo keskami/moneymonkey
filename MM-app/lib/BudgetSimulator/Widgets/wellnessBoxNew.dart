@@ -30,7 +30,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
   @override
   Widget build(BuildContext context) {
     final double min = 0;
-    final double max = 1000;
+    final double max = 100;
     final int numberOfSections = 5;
     final double sectionSize = (max - min) / numberOfSections;
     final List<GaugeRange> ranges = List.generate(numberOfSections, (index) {
@@ -46,7 +46,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
     });
 
     return Container(
-      height: widget.screenHeightUnit * 195,
+      height: widget.screenHeightUnit * 150,
       width: widget.screenWidthUnit * 470,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -55,80 +55,100 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
           width: widget.screenWidthUnit,
         ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(widget.screenWidthUnit * 16,
-                widget.screenHeightUnit * 6, 0, widget.screenHeightUnit * 6),
-            child: Text(
-              "${widget.type} Health Score",
-              style: GoogleFonts.baloo2(
-                  fontSize: widget.screenHeightUnit * 32,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black),
-            ),
-          ),
-          Container(
-            width: widget.screenWidthUnit * 470,
-            height: widget.screenHeightUnit * 1,
-            color: Colors.black,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          widget.screenWidthUnit * 25, widget.screenHeightUnit * 10, 0, 0),
-                      child: Row(
+                    padding: EdgeInsets.fromLTRB(
+                        widget.screenWidthUnit * 16,
+                        widget.screenHeightUnit * 4,
+                        0,
+                        widget.screenHeightUnit * 4),
+                    child: Text(
+                      "${widget.type}",
+                      style: GoogleFonts.baloo2(
+                          fontSize: widget.screenHeightUnit * 35,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                  ),
+                  Container(
+                    width: widget.screenWidthUnit * 200,
+                    height: widget.screenHeightUnit * 1,
+                    color: Colors.black,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${widget.score}',
-                              style: GoogleFonts.baloo2(
-                                fontSize: widget.screenWidthUnit * 52,
-                                fontWeight: FontWeight.w600,
-                                color: widget.score >
-                                        800
-                                    ? sectionColors[4]
-                                    : widget.score >
-                                            600
-                                        ? sectionColors[3]
-                                        : widget.score >
-                                                400
-                                            ? sectionColors[2]
-                                            : widget.score >
-                                                    200
-                                                ? sectionColors[1]
-                                                : sectionColors[0],
-                              ),
-                              textAlign: TextAlign.start),
                           Padding(
-                            padding: EdgeInsets.only(
-                              top: widget.screenHeightUnit * 36,
-                            ),
-                            child: Text(
-                              '/1000',
-                              style: GoogleFonts.baloo2(
-                                fontSize: widget.screenWidthUnit * 30,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
+                              padding: EdgeInsets.fromLTRB(
+                                  widget.screenWidthUnit * 25,
+                                  widget.screenHeightUnit * 0,
+                                  0,
+                                  0),
+                              child: Row(
+                                children: [
+                                  Text('${widget.score}',
+                                      style: GoogleFonts.baloo2(
+                                        fontSize: widget.screenHeightUnit * 56,
+                                        fontWeight: FontWeight.w600,
+                                        color: widget.score > 80
+                                            ? sectionColors[4]
+                                            : widget.score > 60
+                                                ? sectionColors[3]
+                                                : widget.score > 40
+                                                    ? sectionColors[2]
+                                                    : widget.score > 20
+                                                        ? sectionColors[1]
+                                                        : sectionColors[0],
+                                      ),
+                                      textAlign: TextAlign.start),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: widget.screenHeightUnit * 24,
+                                    ),
+                                    child: Text(
+                                      '/100',
+                                      style: GoogleFonts.baloo2(
+                                        fontSize: widget.screenHeightUnit * 35,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                           
+
                         ],
-                      ))
+                      ),
+                          
+                    ],
+                  ),
+                  
                 ],
               ),
-              SizedBox(
-                width: widget.screenWidthUnit * 40,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),
+            ),
+            Container(
+              width: widget.screenWidthUnit * 1,
+              height: widget.screenHeightUnit * 150,
+              color: Colors.black,
+            ),
+           
+            Container(
+              child: Padding(
+                padding: EdgeInsets.only(top: widget.screenHeightUnit * 60, left: widget.screenWidthUnit * 30),
                 child: Container(
                   height: widget.screenHeightUnit * 90,
                   width: widget.screenWidthUnit * 220,
@@ -165,10 +185,8 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
                   ),
                 ),
               ),
-            ],
-          )
-        ],
-      ),
+            )
+          ]),
     );
   }
 }

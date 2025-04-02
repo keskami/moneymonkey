@@ -1,16 +1,16 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:money_monkey/TeacherDashboard/Backend/Model.dart';
+import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/TeacherDashboard/Controllers/TeacherDashboardController.dart';
 
 class PerformanceTrendsChart extends StatefulWidget {
-  final List<PerformanceData> data;
   final double? width;
   final double? height;
   final String filter;
   const PerformanceTrendsChart({
     Key? key,
-    required this.data,
     required this.filter,
     this.width,
     this.height,
@@ -21,6 +21,8 @@ class PerformanceTrendsChart extends StatefulWidget {
 }
 
 class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
+  TeacherDashboardController teacherDashboardController = Get.find<TeacherDashboardController>();
+  
   @override
   Widget build(BuildContext context) {
     final double containerWidth =
@@ -28,9 +30,10 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     final double containerHeight =
         widget.height ?? MediaQuery.of(context).size.height * 0.5;
 
+    // Calculate width based on number of components to ensure there's enough space
     final double contentWidth = max(
       containerWidth,
-      widget.data.length * 100.0,
+      teacherDashboardController.childComponents.value.length * 120.0,
     );
 
     return AnimatedContainer(
@@ -42,24 +45,34 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Spacer(),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildLegendItem('Class Average', Colors.blue),
-                    const SizedBox(width: 12),
-                    _buildLegendItem('Participation Rate', Colors.green),
-                    const SizedBox(width: 12),
-                    _buildLegendItem('Lesson Completion', Colors.purple),
-                  ],
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Performance Trends',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+                const Spacer(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildLegendItem('Class Average', Colors.blue),
+                      const SizedBox(width: 12),
+                      _buildLegendItem('Participation Rate', Colors.green),
+                      const SizedBox(width: 12),
+                      _buildLegendItem('Lesson Completion', Colors.purple),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -112,9 +125,9 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
                         sideTitles: SideTitles(
                           showTitles: true,
                           getTitlesWidget: (value, meta) =>
-                              bottomTitleWidgets(value, meta, widget.data),
+                              bottomTitleWidgets(value, meta, teacherDashboardController.childComponents.value),
                           interval: 1,
-                          reservedSize: 50,
+                          reservedSize: 70, // Increased to accommodate 2 lines
                         ),
                       ),
                       leftTitles: AxisTitles(
@@ -130,15 +143,40 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
                       rightTitles:
                           AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     ),
-                    borderData: FlBorderData(show: false),
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                        left: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                    ),
                     minX: 0,
-                    maxX: (widget.data.length - 1).toDouble(),
+                    maxX: (teacherDashboardController.childComponents.value.length - 1).toDouble(),
                     minY: 0,
                     maxY: 100,
                     lineBarsData: generateFilteredChart(widget.filter),
                   ),
                 ),
               ),
+            ),
+          ),
+          // Add a small indicator to show that the chart is scrollable
+          Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(top: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.arrow_left, size: 20, color: Colors.grey),
+                Text('Scroll to see more', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                Icon(Icons.arrow_right, size: 20, color: Colors.grey),
+              ],
             ),
           ),
         ],
@@ -167,66 +205,61 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     );
   }
 
+  // Method to handle properly mapping multiple components with varying values
   List<LineChartBarData> generateFilteredChart(String filter) {
+    // Safety check to ensure we have data
+    if (teacherDashboardController.childComponents.value.isEmpty) {
+      return [];
+    }
+    
+    // Map each component to its corresponding data point
+    // This creates varying data points based on actual component values
+    List<FlSpot> classAverageSpots = teacherDashboardController.childComponents.value
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(
+              entry.key.toDouble(),
+              entry.value.performanceTrends.classAverage,
+            ))
+        .toList();
+    
+    List<FlSpot> participationRateSpots = teacherDashboardController.childComponents.value
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(
+              entry.key.toDouble(),
+              entry.value.performanceTrends.participationRate,
+            ))
+        .toList();
+    
+    List<FlSpot> lessonCompletionSpots = teacherDashboardController.childComponents.value
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(
+              entry.key.toDouble(),
+              entry.value.performanceTrends.lessonCompletion,
+            ))
+        .toList();
+    
+    // Return the appropriate data based on filter
     if (filter == 'Class Average') {
       return [
-        generateLineData(
-          widget.data
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.classAverage))
-              .toList(),
-          Colors.blue,
-        ),
+        generateLineData(classAverageSpots, Colors.blue),
       ];
     } else if (filter == 'Participation Rate') {
       return [
-        generateLineData(
-          widget.data
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.participationRate))
-              .toList(),
-          Colors.green,
-        ),
+        generateLineData(participationRateSpots, Colors.green),
       ];
     } else if (filter == 'Lesson Completion') {
       return [
-        generateLineData(
-          widget.data
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.lessonCompletion))
-              .toList(),
-          Colors.purple,
-        ),
+        generateLineData(lessonCompletionSpots, Colors.purple),
       ];
     } else {
+      // Show all metrics if "All Statistics" is selected
       return [
-        generateLineData(
-          widget.data
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.classAverage))
-              .toList(),
-          Colors.blue,
-        ),
-        generateLineData(
-          widget.data
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.participationRate))
-              .toList(),
-          Colors.green,
-        ),
-        generateLineData(
-          widget.data
-              .asMap()
-              .entries
-              .map((e) => FlSpot(e.key.toDouble(), e.value.lessonCompletion))
-              .toList(),
-          Colors.purple,
-        ),
+        generateLineData(classAverageSpots, Colors.blue),
+        generateLineData(participationRateSpots, Colors.green),
+        generateLineData(lessonCompletionSpots, Colors.purple),
       ];
     }
   }
@@ -235,6 +268,7 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
     return LineChartBarData(
       spots: spots,
       isCurved: true,
+      curveSmoothness: 0.3, // Smoother curves
       color: color,
       dotData: FlDotData(
         show: true,
@@ -243,7 +277,11 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
           radius: 5,
         ),
       ),
-      belowBarData: BarAreaData(show: false),
+      //Optional to show bottom Colors too
+      // belowBarData: BarAreaData(
+      //   show: true,
+      //   color: color.withOpacity(0.1),
+      // ),
     );
   }
 }
@@ -253,21 +291,50 @@ Widget leftTitleWidgets(double value, TitleMeta meta) {
     padding: const EdgeInsets.only(right: 4.0),
     child: Text(
       '${value.toInt()}%',
-      style: const TextStyle(fontSize: 12),
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        color: Colors.black87,
+      ),
       textAlign: TextAlign.right,
     ),
   );
 }
 
 Widget bottomTitleWidgets(
-    double value, TitleMeta meta, List<PerformanceData> data) {
+    double value, TitleMeta meta, List<Component> data) {
   if (value.toInt() >= data.length) return const SizedBox.shrink();
 
   return Padding(
     padding: const EdgeInsets.only(top: 8.0),
-    child: Text(
-      data[value.toInt()].label,
-      style: const TextStyle(fontSize: 12),
+    child: RotatedBox(
+      quarterTurns: 0, // No rotation - change to 1 for 90 degree rotation if needed
+      child: Container(
+        width: 100, // Fixed width for the label
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(4.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 2.0,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Text(
+          data[value.toInt()].title,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+      ),
     ),
   );
 }

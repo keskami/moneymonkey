@@ -123,7 +123,7 @@ class _MeterBoxState extends State<MeterBox> {
                 ],
               ),
               SizedBox(
-                width: widget.screenWidthUnit * 60,
+                width: widget.screenWidthUnit * 52,
               ),
               Padding(
                 padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),

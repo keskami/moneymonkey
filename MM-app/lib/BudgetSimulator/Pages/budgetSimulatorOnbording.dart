@@ -59,12 +59,18 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
+                    scoreCategories: [
+                      'Debt\nReduction',
+                      'Payment\nTimeliness & Penalties',
+                      'Credit Score\nImprovement',
+                      'Wellness\nImprovement',
+                      'Milestones\nAchieved'
+                    ],
                     creditLimit: 5000,
                     level: "Intermediate",
-                    cognativeScore: 300,
-                    mentalScore: 300,
-                    physicalScore: 300,
-
+                    mindScore: 30,
+                    socialScore: 30,
+                    bodyScore: 30,
                     randomEvents: [],
                     wellnessScore: 300,
                     name: 'Crush the Credit Card Debt',
@@ -824,11 +830,18 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
-          creditLimit: 5000,
-          level: "Intermediate",
-          cognativeScore: 300,
-                    mentalScore: 300,
-                    physicalScore: 300,
+            scoreCategories: [
+              'Savings',
+              'Credit Score\nImprovement',
+              'On-Time\nPayments',
+                  'Debt\nRepayment',
+              'Wellness'
+            ],
+            creditLimit: 5000,
+            level: "Intermediate",
+            socialScore: 30,
+            mindScore: 30,
+            bodyScore: 30,
             wellnessScore: 300,
             name: 'Crush the Credit Card Debt',
             checkingAccountBalance: 300,
@@ -931,7 +944,12 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ],
             savingsAPY: 3,
             ccAPY: 19.99,
-            hints: [Hint(text: "Welcome! You start with a \$3,000 balance at 19.99% APR, two biweekly paychecks,\nand fixed bills. Use these hints from the bottom panel to help manage your cash flow\nand meet your milestones", good: true)],
+            hints: [
+              Hint(
+                  text:
+                      "Welcome! You start with a \$3,000 balance at 19.99% APR, two biweekly paychecks,\nand fixed bills. Use these hints from the bottom panel to help manage your cash flow\nand meet your milestones",
+                  good: true)
+            ],
             milestones: [
               Milestone(
                   name: 'Debt Avalanche Start',
@@ -987,8 +1005,6 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   dueDay: DateTime(2025, 5, 15),
                   amountPaid: 0,
                   penalty: 0),
-               
-              
               Expense(
                   name: "Utilities",
                   amount: 150,
@@ -1009,7 +1025,8 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                   dueDateType: "Fixed",
                   dueDay: DateTime(2025, 5, 25),
                   amountPaid: 0,
-                  penalty: 100, originalTotal: 3000),
+                  penalty: 100,
+                  originalTotal: 3000),
               Expense(
                   name: "Groceries",
                   amount: 250,

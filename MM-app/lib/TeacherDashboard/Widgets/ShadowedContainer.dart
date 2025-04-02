@@ -9,6 +9,7 @@ class ShadowedContainer extends Container {
     super.decoration,
     super.margin,
     super.padding,
+    super.constraints,
   });
 
   @override

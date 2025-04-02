@@ -45,25 +45,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
       var currentUser = FirebaseAuth.instance.currentUser;
       String? userId = currentUser?.uid;
 
-      if (userId != null) {
-        final progressionRef = FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId)
-            .collection('Progression')
-            .doc('progression1'); // Adjust the path if necessary
+      final progressionRef = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Progression')
+          .doc('progression1'); // Adjust the path if necessary
 
-        final docSnapshot = await progressionRef.get();
+      final docSnapshot = await progressionRef.get();
 
-        if (docSnapshot.exists) {
-          final earnings = docSnapshot['Earnings from Lesson'];
-          setState(() {
-            bananas = earnings['Bananas'] ?? 0; // Update banana count
-          });
-        }
-      } else {
-        print("Error: User is not logged in.");
+      if (docSnapshot.exists) {
+        final earnings = docSnapshot['Earnings from Lesson'];
+        setState(() {
+          bananas = earnings['Bananas'] ?? 0; // Update banana count
+        });
       }
-    } catch (e) {
+        } catch (e) {
       print("Error fetching earnings: $e");
     }
   }
