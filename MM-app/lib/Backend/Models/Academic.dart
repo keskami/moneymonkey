@@ -1,4 +1,5 @@
 // Enums and Extensions
+import 'package:money_monkey/Backend/Models/Homework.dart';
 import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 
 enum Status {
@@ -64,6 +65,7 @@ class Classroom {
   List<String> studentIds;
   Map<String, String> studentRequests; // Corrected this to a Map
   String lessonId;
+  Homework? homework;
 
   Classroom({
     required this.classId,
@@ -72,6 +74,7 @@ class Classroom {
     required this.studentIds,
     required this.studentRequests,
     required this.lessonId,
+    this.homework,
   });
 
   factory Classroom.fromFirestore(Map<String, dynamic> data, String id) {
@@ -82,22 +85,30 @@ class Classroom {
       studentIds: List<String>.from(data['StudentIds'] ?? []),
       studentRequests: Map<String, String>.from(data['StudentRequests'] ?? {}),
       lessonId: data['LessonId'] ?? '',
+      homework: data['Homework'] != null
+          ? Homework.fromFirestore(data['Homework'])
+          : null,
     );
   }
 
   Map<String, dynamic> toFirestore() {
-    return {
+    final result = {
       'Name': name,
       'TeacherId': teacherId,
       'StudentIds': studentIds,
       'StudentRequests': studentRequests,
       'LessonId': lessonId,
     };
+    
+    if (homework != null) {
+      result['Homework'] = homework!.toFirestore();
+    }
+    
+    return result;
   }
 
-  // Additional methods for JSON serialization/deserialization
   Map<String, dynamic> toJson() {
-    return {
+    final result = {
       'classId': classId,
       'name': name,
       'teacherId': teacherId,
@@ -105,6 +116,12 @@ class Classroom {
       'studentRequests': studentRequests,
       'lessonId': lessonId,
     };
+    
+    if (homework != null) {
+      result['homework'] = homework!.toJson();
+    }
+    
+    return result;
   }
 
   factory Classroom.fromJson(Map<String, dynamic> json) {
@@ -112,14 +129,19 @@ class Classroom {
       classId: json['classId'] ?? json['id'] ?? '',
       name: json['name'] ?? json['Name'] ?? '',
       teacherId: json['teacherId'] ?? json['TeacherId'] ?? '',
-      studentIds: List<String>.from(json['studentIds'] ?? json['StudentIds'] ?? []),
-      studentRequests: Map<String, String>.from(json['studentRequests'] ?? json['StudentRequests'] ?? {}),
+      studentIds:
+          List<String>.from(json['studentIds'] ?? json['StudentIds'] ?? []),
+      studentRequests: Map<String, String>.from(
+          json['studentRequests'] ?? json['StudentRequests'] ?? {}),
       lessonId: json['lessonId'] ?? json['LessonId'] ?? '',
+      homework: json['homework'] != null 
+          ? Homework.fromJson(json['homework']) 
+          : (json['Homework'] != null 
+              ? Homework.fromJson(json['Homework']) 
+              : null),
     );
   }
 }
-
-
 class Unit {
   String unitId; //"A.1"
   String title;
@@ -176,7 +198,7 @@ class Unit {
         return "Beginner";
     }
   }
-  
+
   // Additional methods for JSON serialization/deserialization
   Map<String, dynamic> toJson() {
     return {
@@ -190,14 +212,16 @@ class Unit {
       'updatedAt': updatedAt?.toIso8601String(),
     };
   }
-  
+
   factory Unit.fromJson(Map<String, dynamic> json) {
     return Unit(
       unitId: json['unitId'] ?? json['id'] ?? '',
       title: json['title'] ?? json['Title'] ?? '',
       description: json['description'] ?? json['Description'] ?? '',
-      lessonIds: List<String>.from(json['lessonIds'] ?? json['LessonIds'] ?? []),
-      unitStatus: statusFromFirestore(json['unitStatus'] ?? json['UnitStatus'] ?? 'inactive'),
+      lessonIds:
+          List<String>.from(json['lessonIds'] ?? json['LessonIds'] ?? []),
+      unitStatus: statusFromFirestore(
+          json['unitStatus'] ?? json['UnitStatus'] ?? 'inactive'),
       totalLessons: json['totalLessons'] ?? json['totalComponents'] ?? 0,
       createdAt: parseDateTime(json['createdAt'] ?? json['CreatedAt']),
       updatedAt: parseDateTime(json['updatedAt'] ?? json['UpdatedAt']),
@@ -245,7 +269,8 @@ class Lesson {
       totalComponents: int.parse((data['totalComponents'] ?? '0').toString()),
       startedAt: data['StartedAt']?.toDate(),
       completedAt: data['CompletedAt']?.toDate(),
-      interactiveActivityLinks: List<String>.from(data['interactiveActivityLinks'] ?? []),
+      interactiveActivityLinks:
+          List<String>.from(data['interactiveActivityLinks'] ?? []),
       teachersGuideLink: data['TeachersGuideLink'] ?? '',
       studentWorkshopTemplateLinks: data['StudentWorkshopTemplateLinks'] ?? '',
     );
@@ -266,7 +291,7 @@ class Lesson {
       'StudentWorkshopTemplateLinks': studentWorkshopTemplateLinks,
     };
   }
-  
+
   // Additional methods for JSON serialization/deserialization
   Map<String, dynamic> toJson() {
     return {
@@ -284,21 +309,30 @@ class Lesson {
       'studentWorkshopTemplateLinks': studentWorkshopTemplateLinks,
     };
   }
-  
+
   factory Lesson.fromJson(Map<String, dynamic> json) {
     return Lesson(
       lessonId: json['lessonId'] ?? json['id'] ?? '',
       title: json['title'] ?? json['Title'] ?? '',
       description: json['description'] ?? json['Description'] ?? '',
-      lessonStatus: statusFromFirestore(json['lessonStatus'] ?? json['LessonStatus'] ?? 'inactive'),
-      progress: (json['progress'] is num ? json['progress'] : (json['Progress'] is num ? json['Progress'] : 0)).toDouble(),
-      components: List<String>.from(json['components'] ?? json['Components'] ?? []),
+      lessonStatus: statusFromFirestore(
+          json['lessonStatus'] ?? json['LessonStatus'] ?? 'inactive'),
+      progress: (json['progress'] is num
+              ? json['progress']
+              : (json['Progress'] is num ? json['Progress'] : 0))
+          .toDouble(),
+      components:
+          List<String>.from(json['components'] ?? json['Components'] ?? []),
       totalComponents: int.parse((json['totalComponents'] ?? '0').toString()),
       startedAt: parseDateTime(json['startedAt'] ?? json['StartedAt']),
       completedAt: parseDateTime(json['completedAt'] ?? json['CompletedAt']),
-      interactiveActivityLinks: List<String>.from(json['interactiveActivityLinks'] ?? []),
-      teachersGuideLink: json['teachersGuideLink'] ?? json['TeachersGuideLink'] ?? '',
-      studentWorkshopTemplateLinks: json['studentWorkshopTemplateLinks'] ?? json['StudentWorkshopTemplateLinks'] ?? '',
+      interactiveActivityLinks:
+          List<String>.from(json['interactiveActivityLinks'] ?? []),
+      teachersGuideLink:
+          json['teachersGuideLink'] ?? json['TeachersGuideLink'] ?? '',
+      studentWorkshopTemplateLinks: json['studentWorkshopTemplateLinks'] ??
+          json['StudentWorkshopTemplateLinks'] ??
+          '',
     );
   }
 }
@@ -338,7 +372,7 @@ class PerformanceTrends {
       'LastUpdated': DateTime.now(),
     };
   }
-  
+
   // Additional methods for JSON serialization/deserialization
   Map<String, dynamic> toJson() {
     return {
@@ -348,19 +382,30 @@ class PerformanceTrends {
       'lastUpdated': lastUpdated?.toIso8601String(),
     };
   }
-  
+
   factory PerformanceTrends.fromJson(Map<String, dynamic> json) {
     return PerformanceTrends(
-      classAverage: (json['classAverage'] is num ? json['classAverage'] : 
-                    (json['ClassAverage'] is num ? json['ClassAverage'] : 0)).toDouble(),
-      participationRate: (json['participationRate'] is num ? json['participationRate'] : 
-                         (json['ParticipationRate'] is num ? json['ParticipationRate'] : 0)).toDouble(),
-      lessonCompletion: (json['lessonCompletion'] is num ? json['lessonCompletion'] : 
-                        (json['LessonCompletion'] is num ? json['LessonCompletion'] : 0)).toDouble(),
+      classAverage: (json['classAverage'] is num
+              ? json['classAverage']
+              : (json['ClassAverage'] is num ? json['ClassAverage'] : 0))
+          .toDouble(),
+      participationRate: (json['participationRate'] is num
+              ? json['participationRate']
+              : (json['ParticipationRate'] is num
+                  ? json['ParticipationRate']
+                  : 0))
+          .toDouble(),
+      lessonCompletion: (json['lessonCompletion'] is num
+              ? json['lessonCompletion']
+              : (json['LessonCompletion'] is num
+                  ? json['LessonCompletion']
+                  : 0))
+          .toDouble(),
       lastUpdated: parseDateTime(json['lastUpdated'] ?? json['LastUpdated']),
     );
   }
 }
+
 class Component {
   String componentId;
   String title;
@@ -420,7 +465,7 @@ class Component {
       'QuestionData': questionData.map((q) => q.toMap()).toList(),
     };
   }
-  
+
   // Additional methods for JSON serialization/deserialization
   Map<String, dynamic> toJson() {
     return {
@@ -434,18 +479,23 @@ class Component {
       'performanceTrends': performanceTrends.toJson(),
     };
   }
-  
+
   factory Component.fromJson(Map<String, dynamic> json) {
     return Component(
       componentId: json['componentId'] ?? json['id'] ?? '',
       title: json['title'] ?? json['Title'] ?? '',
-      type: ComponentTypeExtension.fromString(json['type'] ?? json['Type'] ?? ''),
-      componentStatus: statusFromFirestore(json['componentStatus'] ?? json['ComponentStatus'] ?? 'inactive'),
-      progress: (json['progress'] is num ? json['progress'] : (json['Progress'] is num ? json['Progress'] : 0)).toDouble(),
-      discussionQuestions: json['discussionQuestions'] != null 
+      type:
+          ComponentTypeExtension.fromString(json['type'] ?? json['Type'] ?? ''),
+      componentStatus: statusFromFirestore(
+          json['componentStatus'] ?? json['ComponentStatus'] ?? 'inactive'),
+      progress: (json['progress'] is num
+              ? json['progress']
+              : (json['Progress'] is num ? json['Progress'] : 0))
+          .toDouble(),
+      discussionQuestions: json['discussionQuestions'] != null
           ? List<String>.from(json['discussionQuestions'])
-          : (json['DiscussionQuestions'] != null 
-              ? List<String>.from(json['DiscussionQuestions']) 
+          : (json['DiscussionQuestions'] != null
+              ? List<String>.from(json['DiscussionQuestions'])
               : null),
       questionData: json['questionData'] != null
           ? (json['questionData'] as List)

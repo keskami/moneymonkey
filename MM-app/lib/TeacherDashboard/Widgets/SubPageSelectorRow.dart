@@ -12,6 +12,7 @@ class DashboardSubPageSelector extends StatelessWidget {
     "Overview",
     "Lesson Management",
     "Student Performance",
+    "Calendar", // Add the new Calendar tab
     "Classroom Performance",
   ];
   final TeacherDashboardController _teacherDashboardController = Get.find();
@@ -31,7 +32,7 @@ class DashboardSubPageSelector extends StatelessWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                          _teacherDashboardController.pageIndex.value=subPages.indexOf(subPage);
+                      _teacherDashboardController.pageIndex.value = subPages.indexOf(subPage);
                       _teacherDashboardController.currentPage.value =
                           _teacherDashboardController.pages[_teacherDashboardController.pageIndex.value];
                     },

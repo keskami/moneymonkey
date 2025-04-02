@@ -10,6 +10,7 @@ import 'package:money_monkey/TeacherDashboard/Pages/ClassroomPreferences.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/LessonManagement.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/Overview.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/StudentPerformance.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/TeacherCalendar.dart'; // Import the new calendar page
 import 'package:money_monkey/TeacherDashboard/Widgets/PlaceHolderTab.dart';
 
 class TeacherDashboardController extends GetxController {
@@ -20,6 +21,7 @@ class TeacherDashboardController extends GetxController {
     DashboardOverview(),
     LessonManagement(),
     StudentPerformance(),
+    TeacherCalendar(), // Add the new calendar tab
     ClassroomPreferences(),
   ];
 
@@ -66,9 +68,6 @@ class TeacherDashboardController extends GetxController {
     // Initialize controller with Firebase data
     initialize();
   }
-
-// Add this to your TeacherDashboardController class
-// Inside the refreshAllData method, modify it as follows:
 
   Future<void> refreshAllData() async {
     try {
@@ -152,7 +151,6 @@ class TeacherDashboardController extends GetxController {
     }
   }
 
-// Also modify the initialize method similarly:
   Future<void> initialize() async {
     try {
       isLoading.value = true;
@@ -190,7 +188,6 @@ class TeacherDashboardController extends GetxController {
     }
   }
 
-// Also modify setCurrentPage to check for data availability:
   void setCurrentPage(int index) {
     pageIndex.value = index;
 
@@ -479,22 +476,19 @@ class TeacherDashboardController extends GetxController {
 
   // Get page by index
   Widget getPage(int index) {
-    switch (index) {
-      case 0:
-        return DashboardOverview();
-      case 1:
-        return LessonManagement();
-      case 2:
-        return StudentPerformance();
-      case 3:
-        return ClassroomPreferences();
-      default:
-        return TeacherDashoardPlaceHolderPage();
+    if (index < 0 || index >= pages.length) {
+      return TeacherDashoardPlaceHolderPage();
     }
+    return pages[index];
   }
 
   String getClassId(String className) {
-    return classes.entries.firstWhere((tr) => tr.value == className).key;
+    try {
+      return classes.entries.firstWhere((tr) => tr.value == className).key;
+    } catch (e) {
+      print('Error getting class ID for $className: $e');
+      return '';
+    }
   }
 
   // Helper methods for StudentService operations with error handling
@@ -527,4 +521,4 @@ class TeacherDashboardController extends GetxController {
       return 0.0; // Default fallback
     }
   }
-}
+} 

@@ -2,9 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
 import 'package:money_monkey/LoginPages/login.dart';
+import 'package:money_monkey/TeacherDashboard/Pages/TeacherCalendar.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
+import 'package:intl/intl.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -47,7 +51,7 @@ class MyApp extends StatelessWidget {
                     return LoginScreen();
                   }
                 } else {
-                  return TeacherDashboard();
+                  return HomePage();
                 }
               },
             ),
