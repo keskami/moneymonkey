@@ -32,7 +32,7 @@ class Headings2 {
             color: Colors.black,
           ),
           SizedBox(
-            width: screenWidthUnit * 30.8,
+            width: screenWidthUnit * 20.8,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +53,7 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 115.8,
+            width: screenWidthUnit * 185.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +242,7 @@ class Headings2 {
             width: screenWidthUnit * 0.8,
           ),
           SizedBox(
-            width: screenWidthUnit * 135.8,
+            width: screenWidthUnit * 185.8,
             child: (savingsTransfer == 0 && checkingTransfer == 0)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -263,7 +263,7 @@ class _AllocateFundsButtonState extends State<AllocateFundsButton> {
                           widget.widget.Transactions.add(checkingTransaction);
                         }
 
-                        widget.widget.checkingAccountBalance = newChecking;
+                        //widget.widget.checkingAccountBalance = newChecking;
 
                         widget.widget.checkingAccountBalance +=
                             widget.widget.checkingTransfer;

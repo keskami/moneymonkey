@@ -45,13 +45,16 @@ class BudgetSimulator extends StatefulWidget {
     required this.bodyScore,
     required this.socialScore,
     required this.creditLimit,
+    required this.scoreCategories,
   });
   double savingsTransfer = 0;
+  final List<String> scoreCategories;
   int checkingTransfer = 0;
   int dayNumber = 1;
   int creditLimit;
   int totalPaymentsSeen = 0;
   int totalPaymentsPaid = 0;
+  double onTimePaymentScore = 0;
   final String name;
   int mindScore;
   int bodyScore;
@@ -252,7 +255,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           ],
                                         ),
                                         SizedBox(
-                                          width: widget.currentOption == "Calendar" ? screenWidthUnit * 835 : screenWidthUnit * 795,
+                                          width:
+                                              widget.currentOption == "Calendar"
+                                                  ? screenWidthUnit * 835
+                                                  : screenWidthUnit * 795,
                                         ),
                                         widget.currentOption == "Calendar"
                                             ? AllocateFundsButton(
@@ -406,10 +412,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     Transactions:
                                                         widget.Transactions,
                                                   )
-                                                : OverallScoreScreen( screenHeightUnit:
+                                                : OverallScoreScreen(
+                                                    screenHeightUnit:
                                                         screenHeightUnit,
                                                     screenWidthUnit:
-                                                        screenWidthUnit,),
+                                                        screenWidthUnit,
+                                                    scoreCategories:
+                                                        widget.scoreCategories,
+                                                    widget: this,
+                                                  ),
                                   ]),
                             ),
                             Container(
@@ -431,13 +442,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 //   startingDebt: startingDebt,
                                 //   currentDebt: widget.creditCardDebt as int,
                                 // ),
-                                 SizedBox(
+                                SizedBox(
                                   height: screenHeightUnit * 10,
                                 ),
                                 SimulatorTitle(
-                                    screenHeightUnit: screenHeightUnit,
-                                    screenWidthUnit: screenWidthUnit,
-                                    ),
+                                  screenHeightUnit: screenHeightUnit,
+                                  screenWidthUnit: screenWidthUnit,
+                                ),
                                 SizedBox(
                                   height: screenHeightUnit * 10,
                                 ),
@@ -727,6 +738,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
                           widget.totalPaymentsPaid += 1;
+                          widget.onTimePaymentScore += 20;
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -750,6 +762,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
               });
             } else {
               widget.totalPaymentsPaid += 1;
+              widget.onTimePaymentScore += 20;
             }
             setState(() {
               eventProccesed = true;
@@ -770,6 +783,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
                           widget.totalPaymentsPaid += 1;
+                          widget.onTimePaymentScore += 16.7;
+
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -802,6 +817,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             } else {
               setState(() {
                 widget.totalPaymentsPaid += 1;
+                widget.onTimePaymentScore += 16.7;
               });
             }
             setState(() {
@@ -821,6 +837,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                   expense.amountPaid >= expense.amount
                       ? setState(() {
                           widget.totalPaymentsPaid += 1;
+                          if (expense.name == "Utilities") {
+                            widget.onTimePaymentScore += 15;
+                          }
                           eventProccesed = true;
                           Navigator.of(context).pop();
                         })
@@ -845,6 +864,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             } else {
               setState(() {
                 widget.totalPaymentsPaid += 1;
+                if (expense.name == "Utilities") {
+                  widget.onTimePaymentScore += 15;
+                }
               });
             }
             setState(() {
@@ -987,20 +1009,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     if (widget.savingsAccountBalance > 0) {
       double dailyRate = pow(1 + (widget.savingsAPY / 100), 1 / 365) - 1;
       double interest = widget.savingsAccountBalance * dailyRate;
-      if ((interest) > 0.01) {
-        setState(() {
-          Transaction savingsTransaction = Transaction(
-              name: "Interest",
-              day: widget.now,
-              amount: (interest * 100).floorToDouble() / 100,
-              toOrFrom: "Interest in",
-              account: "Savings",
-              currentAmount: widget.savingsAccountBalance +
-                  ((interest * 100).floorToDouble() / 100) +
-                  savingsLeftOver);
-          widget.Transactions.add(savingsTransaction);
-        });
-      }
+
       setState(() {
         savingsLeftOver += interest;
       });
@@ -1146,8 +1155,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                         } else if (effect1 == "Physical Health") {
                           setState(() {
                             widget.bodyScore += effect1Amount;
-                            widget.bodyScore =
-                                min(widget.bodyScore, 1000);
+                            widget.bodyScore = min(widget.bodyScore, 1000);
                             widget.bodyScore = max(0, widget.bodyScore);
                           });
                         } else if (effect1 == "Mental Health") {
@@ -1171,8 +1179,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                         } else if (effect2 == "Physical Health") {
                           setState(() {
                             widget.bodyScore += effect2Amount;
-                            widget.bodyScore =
-                                min(widget.bodyScore, 1000);
+                            widget.bodyScore = min(widget.bodyScore, 1000);
                             widget.bodyScore = max(0, widget.bodyScore);
                           });
                         } else if (effect2 == "Mental Health") {

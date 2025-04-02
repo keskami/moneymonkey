@@ -4,7 +4,73 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 
-class BudgetSimulatorFunctions {
+class BudgetSimulatorFunctions 
+
+{
+
+  int s1P2WellnessScore(double body,double mind, double social) {
+    var score = (body + mind + social)/3 as int;
+    return score;
+  
+   
+  }
+   
+
+  int s1P2CCDebtScore(double score){
+    score = score.abs();
+    if (score <=  750) {
+      return 150;
+    } else if (score <=  1000) {
+      return 100;
+    } else if (score <=  1250) {
+      return 75;
+    } else if (score <=  1400) {
+      return 50;
+    } else if (score <=  1500) {
+      return 25;
+    } else {
+      return 0;
+    }
+  }
+
+  int s1P2CreditScoreScore(double score){
+    if (score >= 680) {
+      return 250;
+    } else if (score >= 660) {
+      return 200;
+    } else if (score >= 640) {
+      return 150;
+    } else if (score >= 620) {
+      return 100;
+    } else if (score >= 600) {
+      return 50;
+    } else {
+      return 0;
+    }
+  }
+
+  int s1P2SavingsScore(double savings){
+    if (savings >= 1000) {
+      return 300;
+    } else if (savings >= 750) {
+      return 225;
+    } else if (savings >= 500) {
+      return 150;
+    } else if (savings >= 250) {
+      return 75;
+    } else {
+      return 0;
+    }
+  }
+
+
+
+
+
+
+
+
+
   // widget.creditScore > 670
   //                                     ? Text(
   //                                         "Great",

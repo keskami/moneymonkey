@@ -13,6 +13,13 @@ class HomePagesController extends GetxController {
     PortfolioScreen(),
     ComingSoonPage(),
     BudgetSimulator(
+      scoreCategories: [
+        'Debt\nReduction',
+        'Payment\nTimeliness & Penalties',
+        'Credit Score\nImprovement',
+        'Wellness\nImprovement',
+        'Milestones\nAchieved'
+      ],
       creditLimit: 5000,
       level: "Intermediate",
       bodyScore: 30,

@@ -11,10 +11,15 @@ import 'package:money_monkey/BudgetSimulator/Widgets/undsertandingPayment.dart';
 class OverallScoreScreen extends StatefulWidget {
   final double screenWidthUnit;
   final double screenHeightUnit;
+  final List<String> scoreCategories;
+  final double savingsAccountBalance = 0.0;
+  final dynamic widget;
 
   OverallScoreScreen({
     required this.screenWidthUnit,
     required this.screenHeightUnit,
+    required this.scoreCategories,
+    required this.widget,
   });
 
   @override
@@ -136,7 +141,10 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
                     )
                   ],
                 ),
-                BudgetGraphWidget()
+                BudgetGraphWidget(
+                  scoreCategories: widget.scoreCategories,
+                  widget: widget.widget,
+                )
               ],
             ),
           ),

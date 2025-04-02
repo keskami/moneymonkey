@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 
 class BudgetGraphWidget extends StatefulWidget {
-  const BudgetGraphWidget({Key? key}) : super(key: key);
+  final List<String> scoreCategories;
+  final dynamic widget;
+
+  BudgetGraphWidget(
+      {Key? key, required this.scoreCategories, required this.widget})
+      : super(key: key);
 
   @override
   _BudgetGraphWidgetState createState() => _BudgetGraphWidgetState();
@@ -10,6 +16,23 @@ class BudgetGraphWidget extends StatefulWidget {
 
 class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
   int? hoveredIndex;
+
+  List<int> scores = [0, 0, 0, 0, 0];
+  List<int> potentialScores = [300, 250, 200, 150, 100];
+  BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      scores[0] =
+          functions.s1P2SavingsScore(widget.widget.widget.savingsAccountBalance);
+          scores[1] = functions.s1P2CreditScoreScore(widget.widget.widget.creditScore);
+          scores[2] = widget.widget.widget.onTimePaymentScore;
+          scores[3] = functions.s1P2CCDebtScore(widget.widget.widget.creditCardDebt);
+          scores[4] = functions.s1P2WellnessScore(widget.widget.widget.bodyScore , widget.widget.widget.mindScore, widget.widget.widget.socialScore);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,33 +67,31 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
               minY: 0,
               barTouchData: BarTouchData(
                 touchTooltipData: BarTouchTooltipData(
-                  tooltipRoundedRadius: 4,
+                  tooltipRoundedRadius: 8,
+                  tooltipPadding: EdgeInsets.all(5),
+                  tooltipMargin: 8,
                   getTooltipColor: (group) => Colors.white,
                   tooltipBorder: BorderSide(
                     color: Colors.grey.withOpacity(0.3),
                     width: 1,
                   ),
-
-
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     String tooltipText = '';
 
                     if (hoveredIndex != null) {
-                      if (hoveredIndex! < 2) {
+                      if (hoveredIndex! <= 4) {
                         tooltipText =
-                            'Payment History\nCurrent: ${rod.toY.toStringAsFixed(1)}\nPotential: ${rod.toY.toStringAsFixed(1)}';
-                      } else if (hoveredIndex! < 4) {
-                        tooltipText =
-                            'Credit Utilization\nValue: ${rod.toY.toStringAsFixed(1)}';
-                      } else {
-                        tooltipText =
-                            'Credit Mix\nValue: ${rod.toY.toStringAsFixed(1)}';
+                            '${widget.scoreCategories[hoveredIndex!]}\nCurrent: ${scores[hoveredIndex!].toStringAsFixed(1)} points\nPotential: ${potentialScores[hoveredIndex!].toStringAsFixed(1)} points';
                       }
                     }
 
                     return BarTooltipItem(
                       tooltipText,
-                      TextStyle(color: Colors.black),
+                      TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     );
                   },
                 ),
@@ -122,13 +143,16 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
               borderData: FlBorderData(show: false),
               groupsSpace: 100 * screenWidthUnit,
               barGroups: [
-                createBarGroup(0, 150, 200, screenWidthUnit), // Payment History
-                createBarGroup(
-                    1, 250, 200, screenWidthUnit), // Credit Utilization
-                createBarGroup(
-                    2, 200, 200, screenWidthUnit), // Length of Credit
-                createBarGroup(3, 150, 200, screenWidthUnit), // Credit Mix
-                createBarGroup(4, 50, 200, screenWidthUnit), // New Credit
+                createBarGroup(0, scores[0] as double,
+                    potentialScores[0] as double, screenWidthUnit),
+                createBarGroup(1, scores[1] as double,
+                    potentialScores[1] as double, screenWidthUnit),
+                createBarGroup(2, scores[2] as double,
+                    potentialScores[2] as double, screenWidthUnit),
+                createBarGroup(3, scores[3] as double,
+                    potentialScores[3] as double, screenWidthUnit),
+                createBarGroup(4, scores[4] as double,
+                    potentialScores[4] as double, screenWidthUnit),
               ],
             ),
           ),
@@ -163,13 +187,7 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
   }
 
   Widget getBottomTitles(double value, TitleMeta meta) {
-    final titles = [
-      'Debt\nReduction',
-      'Payment\nTimeliness & Penalties',
-      'Credit Score\nImprovement',
-      'Wellness\nImprovement',
-      'Milestones\nAchieved'
-    ];
+    final titles = widget.scoreCategories;
 
     final Widget text = Text(
       titles[value.toInt()],
