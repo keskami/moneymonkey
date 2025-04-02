@@ -69,7 +69,7 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
             left: widget.screenWidthUnit * 80,
           ),
           child: Container(
-            height: widget.screenHeightUnit * 650,
+            height: widget.screenHeightUnit * 800,
             width: widget.screenWidthUnit * 1000,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
