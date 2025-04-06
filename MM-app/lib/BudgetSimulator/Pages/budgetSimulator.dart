@@ -401,6 +401,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 paid: widget.paid,
                                                 done: widget.done,
                                                 monthsOccurd: monthsOccurd,
+                                                APR: widget.ccAPY,
+                                                creditCardMin: startingCCMin,
                                               )
                                             : widget.currentOption == "Accounts"
                                                 ? AccountsBudgetSimulatorPage(
