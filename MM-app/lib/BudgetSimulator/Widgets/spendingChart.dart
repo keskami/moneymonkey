@@ -116,7 +116,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
               
               Container(
                 height: 225 * widget.screenHeightUnit,
-                width: 300 * widget.screenHeightUnit,
+                width: 360 * widget.screenHeightUnit,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -175,6 +175,14 @@ class SpendingSidePart extends StatelessWidget {
           SizedBox(
             width: screenWidthUnit * 10,
           ),
+          type == "Subscriptions & Memberships" ?Text(
+            "Subs & Memberships",
+            style: GoogleFonts.baloo2(
+              fontSize: screenHeightUnit * 22,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ) :
           Text(
             type,
             style: GoogleFonts.baloo2(
@@ -186,7 +194,8 @@ class SpendingSidePart extends StatelessWidget {
           Spacer(),
           Padding(
             padding: EdgeInsets.only(left: screenWidthUnit * 15),
-            child: Text(
+            child: 
+            Text(
               "$percentage%",
               style: GoogleFonts.baloo2(
                   fontSize: screenHeightUnit * 22,

@@ -549,6 +549,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingRent = 1;
   int startingCCMin = 1;
   int startingUtilites = 1;
+  int startingPhone = 1;
+  int startingSub = 1;
   int startingTransportaion = 100;
   int startingGroceries = 250;
   List<Expense> trueExpenses = [];
@@ -591,11 +593,25 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           });
         } else if (expense.name == "Utilities") {
           setState(() {
-            expense.amount += startingCCMin;
+            expense.amount += startingUtilites;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
+        }else if (expense.name == "Internet & Phone") {
+          setState(() {
+            expense.amount += startingPhone;
             expense.dueDay = DateTime(expense.dueDay.year,
                 expense.dueDay.month + 1, expense.dueDay.day);
           });
         }
+        else if (expense.name == "Subscriptions & Memberships") {
+          setState(() {
+            expense.amount += startingSub;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
+        }
+        
       }
     }
     setState(() {
@@ -830,7 +846,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           }
         } else if (expense.name == "Utilities" ||
             expense.name == "Transportation" ||
-            expense.name == "Groceries") {
+            expense.name == "Groceries" || expense.name == "Internet & Phone" || expense.name == "Subscriptions & Memberships") {
           widget.totalPaymentsSeen += 1;
           await showDialog(
             context: context,
@@ -1066,6 +1082,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         });
       } else if (expense.name == "Groceries") {
         startingGroceries = expense.amount as int;
+      }else if (expense.name == "Internet & Phone") {
+        setState(() {
+          startingPhone = expense.amount as int;
+        });
+      }
+      else if (expense.name == "Subscriptions & Memberships") {
+        setState(() {
+          startingSub = expense.amount as int;
+        });
       }
     }
   }
