@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class SimulatorTitle extends StatelessWidget {
   final double screenHeightUnit;
   final double screenWidthUnit;
+  final String lifeStyle;
 
   const SimulatorTitle({
     Key? key,
     required this.screenHeightUnit,
     required this.screenWidthUnit,
+    required this.lifeStyle,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class SimulatorTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Career-Focused",
+            lifeStyle,
             style: TextStyle(
               fontSize: screenHeightUnit * 45,
               fontWeight: FontWeight.w600,

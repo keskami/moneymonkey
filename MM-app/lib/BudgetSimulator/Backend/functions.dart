@@ -54,8 +54,8 @@ class BudgetSimulatorFunctions
   }
 
   int s1P2WellnessScore(double body,double mind, double social) {
-    var score = (body + mind + social)/3 as int;
-    return score;
+    var score = (body + mind + social)/3;
+    return score.toInt();
   
    
   }

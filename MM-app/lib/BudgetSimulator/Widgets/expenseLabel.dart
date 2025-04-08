@@ -158,7 +158,7 @@ class _ExpenselabelState extends State<Expenselabel> {
       case "Groceries":
         return Color.fromRGBO(255, 243, 243, .7);
       default:
-        return Colors.transparent;
+        return Color.fromRGBO(243, 249, 255, 1);
     }
   }
 
@@ -177,7 +177,7 @@ class _ExpenselabelState extends State<Expenselabel> {
       case "Groceries":
         return Color.fromRGBO(255, 0, 0, 1);
       default:
-        return Colors.black;
+        return Color.fromRGBO(0, 127, 255, 1);
     }
   }
 
@@ -186,15 +186,20 @@ class _ExpenselabelState extends State<Expenselabel> {
       case "Pay Day":
         return "Pay Day!";
       case "Rent":
-        return "Rent Due";
+        return "Rent";
       case "CC Debt":
-        return "CC Min. Due";
+        return "CC Min.";
       case "Utilities":
-        return "Utilities Due";
+        return "Utilities";
       case "Transportation":
         return "Transportation";
       case "Groceries":
         return "Groceries";
+
+        case "Internet & Phone":
+        return "Internet & Phone";
+        case "Subscriptions & Memberships":
+        return "Subs & Memberships";
       default:
         return "";
     }

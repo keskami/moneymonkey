@@ -5,6 +5,7 @@ import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/circlePainter.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditCardManagmentPaymentTracker.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/creditUtilizationManagmentPopUp.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/lightBlueInfo.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/undsertandingPayment.dart';
 
 class CreditCardManagementScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class CreditCardManagementScreen extends StatefulWidget {
   final List<int> paid;
   final List<bool> done;
   final int monthsOccurd;
+  final double APR;
+  final int creditCardMin;
 
   CreditCardManagementScreen({
     required this.screenWidthUnit,
@@ -38,6 +41,8 @@ class CreditCardManagementScreen extends StatefulWidget {
     required this.paid,
     required this.done,
     required this.monthsOccurd,
+    required this.APR,
+    required this.creditCardMin,
   });
 
   @override
@@ -107,71 +112,226 @@ class _CreditCardManagementScreenState
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Goal: Reduce debt by 50% (to \$${ccDebt.originalTotal / 2})",
-                    style: GoogleFonts.baloo2(
-                        fontSize: widget.screenHeightUnit * 30,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Stack(
-                        children: [
-                          Container(
-                            width: widget.screenWidthUnit * 500,
-                            height: widget.screenHeightUnit * 45,
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(216, 216, 216, .3),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          Container(
-                            width: widget.screenWidthUnit *
-                                500 *
-                                ((2 *
-                                        ((ccDebt.originalTotal -
-                                                widget.credidCardDebt) /
-                                            ccDebt.originalTotal)))
-                                    .clamp(0.0, 1.0),
-                            height: widget.screenHeightUnit * 45,
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(0, 127, 255, 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: widget.screenHeightUnit * 60,
-                        width: widget.screenWidthUnit * 200,
-                        decoration: BoxDecoration(
-                            color: Color.fromRGBO(233, 244, 255, 1),
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color: Color.fromRGBO(0, 127, 255, 1),
-                              width: 1,
-                            )),
-                        child: Center(
-                          child: Text(
-                            "Credit Score: ${widget.creditScore}",
-                            style: GoogleFonts.baloo2(
-                              fontWeight: FontWeight.w600,
-                              color: Color.fromRGBO(0, 127, 255, 1),
-                              fontSize: widget.screenHeightUnit * 30,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
                   SizedBox(
                     height: widget.screenHeightUnit * 10,
                   ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: widget.screenHeightUnit * 355,
+                          width: widget.screenWidthUnit * 570,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: widget.screenWidthUnit * 16,
+                                      bottom: widget.screenHeightUnit * 6,
+                                      top: widget.screenHeightUnit * 10),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: widget.screenHeightUnit * 80,
+                                          width: widget.screenWidthUnit * 80,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color.fromRGBO(
+                                                  216, 216, 216, .4)),
+                                        ),
+                                        SizedBox(
+                                          width: widget.screenWidthUnit * 15,
+                                        ),
+                                        Text(
+                                          'Credit Summary',
+                                          style: GoogleFonts.baloo2(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black,
+                                            fontSize:
+                                                widget.screenHeightUnit * 35,
+                                          ),
+                                        ),
+                                      ])),
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: widget.screenWidthUnit * 30,
+                                      top: widget.screenHeightUnit * 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height:
+                                            widget.screenHeightUnit * 12,
+                                      ),
+                                      LightBlueInfo(
+                                        screenHeightUnit:
+                                            widget.screenHeightUnit,
+                                        screenWidthUnit:
+                                            widget.screenWidthUnit,
+                                        name: "Debt",
+                                        amount: "\$${widget.credidCardDebt.abs()}",
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            widget.screenHeightUnit * 12,
+                                      ),
+                                      LightBlueInfo(
+                                        screenHeightUnit:
+                                            widget.screenHeightUnit,
+                                        screenWidthUnit:
+                                            widget.screenWidthUnit,
+                                        name: "Interest Rate",
+                                        amount: "${widget.APR}% APR",
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            widget.screenHeightUnit * 12,
+                                      ),
+                                      LightBlueInfo(
+                                        screenHeightUnit:
+                                            widget.screenHeightUnit,
+                                        screenWidthUnit:
+                                            widget.screenWidthUnit,
+                                        name: "Minimum Monthly Payments",
+                                        amount: "\$${widget.creditCardMin}",
+                                      ),
+
+                                    ],
+                                  )),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: widget.screenWidthUnit * 50,
+                        ),
+                        Container(
+                          height: widget.screenHeightUnit * 355,
+                          width: widget.screenWidthUnit * 570,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: widget.screenWidthUnit * 16,
+                                      bottom: widget.screenHeightUnit * 6,
+                                      top: widget.screenHeightUnit * 10),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: widget.screenHeightUnit * 80,
+                                          width: widget.screenWidthUnit * 80,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color.fromRGBO(
+                                                  216, 216, 216, .4)),
+                                        ),
+                                        SizedBox(
+                                          width: widget.screenWidthUnit * 15,
+                                        ),
+                                        Text(
+                                          'Credit Score',
+                                          style: GoogleFonts.baloo2(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black,
+                                            fontSize:
+                                                widget.screenHeightUnit * 35,
+                                          ),
+                                        ),
+                                      ])),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(233, 244, 255, 1),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: creditColor.withOpacity(.7),
+                                    width: widget.screenWidthUnit * 12,
+                                  ),
+                                ),
+                                child: Center(
+                                    child: Container(
+                                  height: widget.screenHeightUnit * 210,
+                                  width: widget.screenWidthUnit * 210,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "${widget.creditScore}",
+                                          style: GoogleFonts.baloo2(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                            fontSize:
+                                                widget.screenHeightUnit * 67,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: widget.screenHeightUnit * 2,
+                                        ),
+                                        Text(
+                                          creditWord,
+                                          style: GoogleFonts.baloo2(
+                                            fontWeight: FontWeight.w600,
+                                            color: creditColor,
+                                            fontSize:
+                                                widget.screenHeightUnit * 38,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                  SizedBox(
+                    height: widget.screenHeightUnit * 20,
+                  ),
                   Center(
                       child: Container(
-                    height: widget.screenHeightUnit * 840,
+                    height: widget.screenHeightUnit * 560,
                     width: widget.screenWidthUnit * 1300,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -191,50 +351,7 @@ class _CreditCardManagementScreenState
                         SizedBox(
                           height: widget.screenHeightUnit * 10,
                         ),
-                        Center(
-                            child: Container(
-                          height: widget.screenHeightUnit * 225,
-                          width: widget.screenWidthUnit * 225,
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(233, 244, 255, 1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                              child: Container(
-                            height: widget.screenHeightUnit * 190,
-                            width: widget.screenWidthUnit * 190,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "${widget.creditScore}",
-                                    style: GoogleFonts.baloo2(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                      fontSize: widget.screenHeightUnit * 60,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: widget.screenHeightUnit * 2,
-                                  ),
-                                  Text(
-                                    creditWord,
-                                    style: GoogleFonts.baloo2(
-                                      fontWeight: FontWeight.w600,
-                                      color: creditColor,
-                                      fontSize: widget.screenHeightUnit * 35,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )),
-                        )),
+                        Center(child: Container()),
                         SizedBox(
                           height: widget.screenHeightUnit * 0,
                         ),
@@ -317,7 +434,7 @@ class _CreditCardManagementScreenState
                                             ),
                                             Container(
                                               height:
-                                                  widget.screenHeightUnit * 40,
+                                                  widget.screenHeightUnit * 30,
                                               width:
                                                   widget.screenWidthUnit * 155,
                                               decoration: BoxDecoration(
@@ -339,7 +456,7 @@ class _CreditCardManagementScreenState
                                                         0, 127, 255, 1),
                                                     fontSize: widget
                                                             .screenHeightUnit *
-                                                        20,
+                                                        18,
                                                   ),
                                                 ),
                                               ),
@@ -355,7 +472,7 @@ class _CreditCardManagementScreenState
                                                 color: paymentHistoryColor,
                                                 fontSize:
                                                     widget.screenHeightUnit *
-                                                        30,
+                                                        26,
                                               ),
                                             ),
                                             SizedBox(
@@ -375,7 +492,7 @@ class _CreditCardManagementScreenState
                                                         106, 114, 128, 1),
                                                     fontSize: widget
                                                             .screenHeightUnit *
-                                                        22,
+                                                        20,
                                                   ),
                                                 )),
                                           ],
@@ -386,7 +503,7 @@ class _CreditCardManagementScreenState
                             ),
                             Container(
                                 width: widget.screenWidthUnit * 475,
-                                height: widget.screenHeightUnit * 105,
+                                height: widget.screenHeightUnit * 100,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -396,8 +513,8 @@ class _CreditCardManagementScreenState
                                 ),
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                      top: widget.screenHeightUnit * 5,
-                                      bottom: widget.screenHeightUnit * 5,
+                                      top: widget.screenHeightUnit * 3,
+                                      bottom: widget.screenHeightUnit * 3,
                                       left: widget.screenWidthUnit * 30),
                                   child: Column(
                                     mainAxisAlignment:
@@ -446,7 +563,7 @@ class _CreditCardManagementScreenState
                                               child: Container(
                                                 height:
                                                     widget.screenHeightUnit *
-                                                        40,
+                                                        35,
                                                 width: widget.screenWidthUnit *
                                                     155,
                                                 decoration: BoxDecoration(
@@ -485,7 +602,7 @@ class _CreditCardManagementScreenState
                                               fontWeight: FontWeight.w600,
                                               color: utilizationColor,
                                               fontSize:
-                                                  widget.screenHeightUnit * 30,
+                                                  widget.screenHeightUnit * 26,
                                             ),
                                           ),
                                           SizedBox(
@@ -515,14 +632,14 @@ class _CreditCardManagementScreenState
                           ],
                         ),
                         SizedBox(
-                          height: widget.screenHeightUnit * 15,
+                          height: widget.screenHeightUnit * 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
                               width: widget.screenWidthUnit * 475,
-                              height: widget.screenHeightUnit * 400,
+                              height: widget.screenHeightUnit * 380,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -531,13 +648,13 @@ class _CreditCardManagementScreenState
                               child: Padding(
                                 padding: EdgeInsets.only(
                                     left: widget.screenWidthUnit * 30,
-                                    top: widget.screenHeightUnit * 18),
+                                    top: widget.screenHeightUnit * 14),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      height: widget.screenHeightUnit * 65,
+                                      height: widget.screenHeightUnit * 55,
                                       width: widget.screenWidthUnit * 260,
                                       decoration: BoxDecoration(
                                           color: paymentHistoryBackgroud,
@@ -576,7 +693,7 @@ class _CreditCardManagementScreenState
                             ),
                             Container(
                               width: widget.screenWidthUnit * 475,
-                              height: widget.screenHeightUnit * 420,
+                              height: widget.screenHeightUnit * 360,
                               child: Column(
                                 children: [
                                   Container(
@@ -593,7 +710,7 @@ class _CreditCardManagementScreenState
                                           padding: EdgeInsets.only(
                                               left: widget.screenWidthUnit * 30,
                                               top:
-                                                  widget.screenHeightUnit * 18),
+                                                  widget.screenHeightUnit * 14),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
@@ -603,7 +720,7 @@ class _CreditCardManagementScreenState
                                               Container(
                                                 height:
                                                     widget.screenHeightUnit *
-                                                        65,
+                                                        55,
                                                 width: widget.screenWidthUnit *
                                                     200,
                                                 decoration: BoxDecoration(
@@ -624,7 +741,7 @@ class _CreditCardManagementScreenState
                                                       color: utilizationColor,
                                                       fontSize: widget
                                                               .screenHeightUnit *
-                                                          30,
+                                                          26,
                                                     ),
                                                   ),
                                                 ),
@@ -632,7 +749,7 @@ class _CreditCardManagementScreenState
                                               SizedBox(
                                                 height:
                                                     widget.screenHeightUnit *
-                                                        45,
+                                                        50,
                                               ),
                                               Row(
                                                 mainAxisAlignment:
@@ -703,34 +820,6 @@ class _CreditCardManagementScreenState
                                               ),
                                             ],
                                           ))),
-                                  SizedBox(
-                                    height: widget.screenHeightUnit * 20,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        height: widget.screenHeightUnit * 60,
-                                        width: widget.screenWidthUnit * 240,
-                                        decoration: BoxDecoration(
-                                          color: Color.fromRGBO(0, 127, 255, 1),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "Simulate Payments",
-                                          style: GoogleFonts.baloo2(
-                                            fontSize:
-                                                widget.screenWidthUnit * 20,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                          ),
-                                        )),
-                                      ),
-                                    ),
-                                  )
                                 ],
                               ),
                             )
@@ -744,3 +833,96 @@ class _CreditCardManagementScreenState
             : Container());
   }
 }
+
+
+
+//Old Code
+
+// Text(
+                  //   "Goal: Reduce debt by 50% (to \$${ccDebt.originalTotal / 2})",
+                  //   style: GoogleFonts.baloo2(
+                  //       fontSize: widget.screenHeightUnit * 30,
+                  //       fontWeight: FontWeight.w600,
+                  //       color: Colors.black),
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Stack(
+                  //       children: [
+                  //         Container(
+                  //           width: widget.screenWidthUnit * 500,
+                  //           height: widget.screenHeightUnit * 45,
+                  //           decoration: BoxDecoration(
+                  //             color: Color.fromRGBO(216, 216, 216, .3),
+                  //             borderRadius: BorderRadius.circular(10),
+                  //           ),
+                  //         ),
+                  //         Container(
+                  //           width: widget.screenWidthUnit *
+                  //               500 *
+                  //               ((2 *
+                  //                       ((ccDebt.originalTotal -
+                  //                               widget.credidCardDebt) /
+                  //                           ccDebt.originalTotal)))
+                  //                   .clamp(0.0, 1.0),
+                  //           height: widget.screenHeightUnit * 45,
+                  //           decoration: BoxDecoration(
+                  //             color: Color.fromRGBO(0, 127, 255, 1),
+                  //             borderRadius: BorderRadius.circular(10),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     Container(
+                  //       height: widget.screenHeightUnit * 60,
+                  //       width: widget.screenWidthUnit * 200,
+                  //       decoration: BoxDecoration(
+                  //           color: Color.fromRGBO(233, 244, 255, 1),
+                  //           borderRadius: BorderRadius.circular(15),
+                  //           border: Border.all(
+                  //             color: Color.fromRGBO(0, 127, 255, 1),
+                  //             width: 1,
+                  //           )),
+                  //       child: Center(
+                  //         child: Text(
+                  //           "Credit Score: ${widget.creditScore}",
+                  //           style: GoogleFonts.baloo2(
+                  //             fontWeight: FontWeight.w600,
+                  //             color: Color.fromRGBO(0, 127, 255, 1),
+                  //             fontSize: widget.screenHeightUnit * 30,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
+
+                  //  SizedBox(
+//                                     height: widget.screenHeightUnit * 20,
+//                                   ),
+//                                   Align(
+//                                     alignment: Alignment.centerRight,
+//                                     child: GestureDetector(
+//                                       onTap: () {},
+//                                       child: Container(
+//                                         height: widget.screenHeightUnit * 60,
+//                                         width: widget.screenWidthUnit * 240,
+//                                         decoration: BoxDecoration(
+//                                           color: Color.fromRGBO(0, 127, 255, 1),
+//                                           borderRadius:
+//                                               BorderRadius.circular(10),
+//                                         ),
+//                                         child: Center(
+//                                             child: Text(
+//                                           "Simulate Payments",
+//                                           style: GoogleFonts.baloo2(
+//                                             fontSize:
+//                                                 widget.screenWidthUnit * 20,
+//                                             fontWeight: FontWeight.w600,
+//                                             color: Colors.white,
+//                                           ),
+//                                         )),
+//                                       ),
+//                                     ),
+//                                   )

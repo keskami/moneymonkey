@@ -20,6 +20,8 @@ class RandomEventPop extends StatefulWidget {
 class _RandomEventPopState extends State<RandomEventPop> {
   bool oneSelcted = false;
   bool twoSelected = false;
+  bool threeSelected = false;
+
   String option1Title = '';
   String option1SubTitle = '';
   String Cost11Name = '';
@@ -27,6 +29,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
   String Cost12Name = '';
   int cost12Cost = 0;
   int option1Cost = 0;
+
   String option2Title = '';
   String option2SubTitle = '';
   String Cost21Name = '';
@@ -35,8 +38,21 @@ class _RandomEventPopState extends State<RandomEventPop> {
   int cost22Cost = 0;
   int option2Cost = 0;
 
+  String option3Title = '';
+  String option3SubTitle = '';
+  String Cost31Name = '';
+  int cost31Cost = 0;
+  String Cost32Name = '';
+  int cost32Cost = 0;
+  int option3Cost = 0;
+
   String option1Source = '';
   String option2Source = '';
+  String option3Source = '';
+
+  String option1LifeStyle = '';
+  String option2LifeStyle = '';
+  String option3LifeStyle = '';
 
   bool isGood = false;
 
@@ -48,249 +64,151 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
   String effect2 = '';
   int effect2Amount = 0;
+  String lifeStyle = '';
 
   void getInfo(RandomEvent event) async {
-    String type = event.name;
-    if (type == "Car Repair Surprise") {
+    if(event.name == "Cracked Tooth"){
       setState(() {
-        option1Title = 'Pay for Repairs in Full';
-        option1SubTitle = 'You cover the entire repair cost using cash.';
+        option1Title = 'Premium Dental Work';
+        option1SubTitle = 'Visit a highly-rated dentist for immediate treatment';
 
-        Cost11Name = 'Credit Score';
-        cost11Cost = 2;
+        Cost11Name = 'Body';
+        cost11Cost = 9;
 
-        Cost12Name = 'Physical Health';
-        cost12Cost = -10;
+        Cost12Name = 'Mind';
+        cost12Cost = 4;
 
-        option1Cost = -250;
+        option1Cost = -800;
         option1Source = "CC";
+        option1LifeStyle = "Wellness-Focused";
 
-        option2Title = 'Take Public Transportation';
+
+        option2Title = 'Insurance-Covered Basic Fix';
         option2SubTitle =
-            'You skip the repair and instead take public transit.';
+            'Use your basic insurance coverage at an in-network provider';
 
-        Cost21Name = 'Credit Score';
-        cost21Cost = 1;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = 15;
-        option2Source = "Cash";
-
-        option2Cost = 0;
-      });
-    } else if (type == "Home Appliance Breakdown") {
-      setState(() {
-        option1Title = 'Pay in Full Immediately';
-        option1SubTitle =
-            'You settle the entire repair cost using available funds.';
-
-        Cost11Name = 'Credit Score';
-        cost11Cost = 2;
-
-        Cost12Name = 'Emotional Health';
-        cost12Cost = 15;
-
-        option1Cost = -100;
-        option1Source = "Cash";
-
-        option2Title = 'Forgo Repair';
-        option2SubTitle = 'You decide not to adjust your routine instead.';
-
-        Cost21Name = 'Credit Score';
-        cost21Cost = -4;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = 10;
-
-        option2Cost = 0;
-        option2Source = "Cash";
-      });
-    } else if (type == "Class Registration or Certification Fee") {
-      setState(() {
-        option1Title = 'Enroll Immediately';
-        option1SubTitle = 'Pay the fee now to secure your spot';
-
-        Cost11Name = 'Credit Score';
-        cost11Cost = -2;
-
-        Cost12Name = 'Emotional Health';
-        cost12Cost = 25;
-
-        option1Cost = -200;
-        option1Source = "CC";
-
-        option2Title = 'Postpone Enrollment';
-        option2SubTitle = ' You delay registration to conserve funds for now.';
-
-        Cost21Name = 'Credit Score';
-        cost21Cost = 2;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = -15;
-
-        option2Cost = 0;
-        option2Source = "Cash";
-      });
-    } else if (type == "Impulse Buy") {
-      setState(() {
-        option1Title = 'Purchase Immediately';
-        option1SubTitle = 'You buy the item right away using your funds.';
-
-        Cost11Name = 'Credit Score';
-        cost11Cost = -2;
-
-        Cost12Name = 'Emotional Health';
-        cost12Cost = 25;
-
-        option1Cost = -200;
-        option1Source = "CC";
-
-        option2Title = 'Resist the Temptation';
-        option2SubTitle =
-            'You decide against the purchase to keep your funds intact.';
-
-        Cost21Name = 'Credit Score';
-        cost21Cost = 3;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = 10;
-
-        option2Cost = 0;
-        option2Source = "Cash";
-      });
-    } else if (type == "Unexpected Windfall") {
-      setState(() {
-        option1Title = 'Apply Entirely to Debt Reduction';
-        option1SubTitle =
-            'You use the bonus to reduce your credit card balance immediately.';
-
-        Cost11Name = 'Credit Score';
-        cost11Cost = 5;
-
-        Cost12Name = 'Emotional Health';
-        cost12Cost = 5;
-
-        option1Cost = 150;
-        option1Source = "CC";
-
-        option2Title = 'Spend on Entertainment';
-        option2SubTitle =
-            'You allocate the bonus fully toward leisure and fun activities.';
-
-        Cost21Name = 'Credit Score';
-        cost21Cost = 0;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = 50;
-
-        option2Cost = 0;
+        Cost21Name = 'Body';
+        cost21Cost = 6;
+        Cost22Name = 'Mind';
+        cost22Cost = 2;
         option2Source = "CC";
+
+        option2Cost = -350;
+        option2LifeStyle = "Balanced";
+
+        option3Title = 'Temporary Relief Plan';
+        option3SubTitle =
+            'Get temporary pain relief and postpone major work';
+
+        Cost31Name = 'Body';
+        cost31Cost = 3;
+        Cost32Name = 'Mind';
+        cost32Cost = -4;
+        option3Source = "CC";
+
+        option3Cost = -120;
+        option3LifeStyle = " Frugal & Savings-Focused";
+
       });
-    } else if (type == "Wedding Invitation") {
-      setState(() {
-        option1Title = 'Attend Fully';
-        option1SubTitle =
-            'You commit to covering all associated costs to attend the wedding as planned.';
 
-        Cost11Name = 'Credit Score';
-        cost11Cost = -2;
-
-        Cost12Name = 'Emotional Health';
-        cost12Cost = 15;
-
-        option1Cost = -150;
-        option1Source = "CC";
-
-        option2Title = 'Decline the Invitation';
-        option2SubTitle =
-            'You choose not to attend the wedding, avoiding any related expenses.';
-
-        Cost21Name = 'Credit Score';
-        cost21Cost = 2;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = -15;
-
-        option2Cost = 0;
-        option2Source = "CC";
-      });
-    } else if (type == "Medical Bill") {
-      setState(() {
-        option1Title = 'Pay in Full Immediately';
-        option1SubTitle =
-            'You use your available cash to settle the bill right away.';
-
-        Cost11Name = 'Credit Score';
-        cost11Cost = 2;
-
-        Cost12Name = 'Physical Health';
-        cost12Cost = 20;
-
-        option1Cost = -300;
-        option1Source = "Cash";
-
-        option2Title = 'Charge to Your Credit Card';
-        option2SubTitle =
-            'You add the expense to your credit card balance to preserve cash.';
-
-        Cost21Name = 'Credit Score';
-        cost21Cost = -3;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = 10;
-
-        option2Cost = -300;
-        option2Source = "CC";
-      });
-    } else if (type == "Family Emergency Request") {
-      setState(() {
-        option1Title = 'Lend the Full \$200';
-        option1SubTitle =
-            'You provide the full amount to support your family member.';
-
-        Cost11Name = 'Credit Score';
-        cost11Cost = -2;
-
-        Cost12Name = 'Emotional Health';
-        cost12Cost = 25;
-
-        option1Cost = -200;
-        option1Source = "CC";
-
-        option2Title = 'Politely Decline';
-        option2SubTitle =
-            'You choose not to lend any money, preserving your current funds.';
-
-        Cost21Name = 'Credit Score';
-        cost21Cost = 2;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = -15;
-
-        option2Cost = 0;
-        option2Source = "CC";
-      });
     }
-    //WORKS
-    else if (type == "Small Bonus / Part-Time Gig") {
+
+    if(event.name == "Forgotten Refund"){
       setState(() {
-        option1Title = 'Apply Entirely to Debt Reduction';
-        option1SubTitle =
-            'You use the bonus to lower your outstanding debt immediately.';
+        option1Title = 'Retirement Boost';
+        option1SubTitle = 'Add the entire amount to your savings account';
 
-        Cost11Name = 'Credit Score';
-        cost11Cost = 3;
+        Cost11Name = 'Mind';
+        cost11Cost = 7;
 
-        Cost12Name = 'Emotional Health';
-        cost12Cost = 5;
+        Cost12Name = 'Credit Score';
+        cost12Cost = 2;
 
-        option1Cost = 100;
-        option1Source = "CC";
+        option1Cost = 600;
+        option1Source = "Savings";
+        option1LifeStyle = "Frugal & Savings-Focused";
 
-        option2Title = 'Spend on Leisure';
-        option2SubTitle = 'You decide not to adjust your routine instead.';
 
-        Cost21Name = 'Physical Health';
-        cost21Cost = 10;
-        Cost22Name = 'Emotional Health';
-        cost22Cost = 10;
+        option2Title = 'Debt Reduction';
+        option2SubTitle =
+            'Pay down your high-interest credit card debt immediately';
+
+        Cost21Name = 'Mind';
+        cost21Cost = 5;
+        Cost22Name = 'Credit Score';
+        cost22Cost = 4;
+        option2Source = "CC";
+
+        option2Cost = 600;
+        option2LifeStyle = "Balanced";
+
+        option3Title = 'Split Decision';
+        option3SubTitle =
+            'Use half for a social weekend trip and half for your emergency fund';
+
+        Cost31Name = 'Social';
+        cost31Cost = 4;
+        Cost32Name = 'Mind';
+        cost32Cost = 2;
+        option3Source = "Savings";
+
+        option3Cost = 300;
+        option3LifeStyle = "Social & Leisure-Focused";
+
+      });
+
+    }
+
+
+     if(event.name == "Project Excellence"){
+      setState(() {
+        option1Title = 'Immediate Bonus';
+        option1SubTitle = 'Accept a one-time \$400 performance bonus';
+
+        Cost11Name = 'Mind';
+        cost11Cost = 4;
+
+        Cost12Name = 'Social';
+        cost12Cost = -2;
+
+        option1Cost = 400;
+        option1Source = "Savings";
+        option1LifeStyle = "Frugal & Savings-Focused";
+
+
+        option2Title = 'Skills Investment';
+        option2SubTitle =
+            'Select \$700 in professional certification training';
+
+        Cost21Name = 'Mind';
+        cost21Cost = 6;
+        Cost22Name = 'Social';
+        cost22Cost = -2;
+        option2Source = "CC";
 
         option2Cost = 0;
-        option2Source = "CC";
+        option2LifeStyle = "Career-Focused";
+
+        option3Title = 'Team Celebration';
+        option3SubTitle =
+            'Request a \$500 team lunch and social event to celebrate';
+
+        Cost31Name = 'Social';
+        cost31Cost = 8;
+        Cost32Name = 'Mind';
+        cost32Cost = 2;
+        option3Source = "Savings";
+
+        option3Cost = 0;
+        option3LifeStyle = "Social & Leisure-Focused";
+
       });
+
     }
+
+
+
+   
   }
 
   @override
@@ -305,7 +223,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
     double screenWidthUnit = MediaQuery.of(context).size.width / 1920;
     return Container(
       height: screenHeightUnit * 930,
-      width: screenWidthUnit * 1065,
+      width: screenWidthUnit * 1665,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -326,7 +244,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
           Text(
             widget.event.name,
             style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 60,
+              fontSize: screenHeightUnit * 50,
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
@@ -337,7 +255,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
           Text(
             widget.event.description,
             style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 30,
+              fontSize: screenHeightUnit * 25,
               fontWeight: FontWeight.w700,
               color: Colors.grey,
             ),
@@ -371,6 +289,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                       setState(() {
                         oneSelcted = true;
                         twoSelected = false;
+                        threeSelected = false;
                       });
                     }
                   },
@@ -411,6 +330,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                         setState(() {
                           twoSelected = true;
                           oneSelcted = false;
+                          threeSelected = false;
                         });
                       }
                     },
@@ -425,7 +345,47 @@ class _RandomEventPopState extends State<RandomEventPop> {
                     effect2Cost: cost22Cost,
                     selected: twoSelected,
                     Source: option2Source),
-              )
+              ),
+               SizedBox(
+                width: screenWidthUnit * 20,
+              ),
+              Container(
+                height: screenHeightUnit * 297,
+                width: screenWidthUnit * 471,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                ),
+                child: RandomOption(
+                    onTap: () {
+                      if (threeSelected) {
+                        setState(() {
+                          threeSelected = false;
+                        });
+                      } else {
+                        setState(() {
+                          threeSelected = true;
+                          oneSelcted = false;
+                          twoSelected = false;
+                        });
+                      }
+                    },
+                    screenHeightUnit: screenHeightUnit,
+                    screenWidthUnit: screenWidthUnit,
+                    title: option3Title,
+                    subtitle: option3SubTitle,
+                    cost: option3Cost,
+                    effect1Name: Cost31Name,
+                    effect2Name: Cost32Name,
+                    effect1Cost: cost31Cost,
+                    effect2Cost: cost32Cost,
+                    selected: threeSelected,
+                    Source: option3Source),
+              ),
             ],
           ),
           SizedBox(
@@ -433,7 +393,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
           ),
           GestureDetector(
             onTap: () {
-              if (oneSelcted || twoSelected) {
+              if (oneSelcted || twoSelected || threeSelected) {
                 if (oneSelcted) {
                   finalSource = option1Source;
                   finalCost = option1Cost;
@@ -441,6 +401,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   effect1Amount = cost11Cost;
                   effect2 = Cost12Name;
                   effect2Amount = cost12Cost;
+                  lifeStyle = option1LifeStyle;
 
                   RandomEventTaken randomEventTaken = RandomEventTaken(
                       name: "Place Holder Name",
@@ -453,14 +414,15 @@ class _RandomEventPopState extends State<RandomEventPop> {
                       effect2: effect2,
                       effect2Amount: effect2Amount);
                   widget.onConfirm(randomEventTaken, finalSource, finalCost,
-                      effect1, effect1Amount, effect2, effect2Amount);
-                } else {
+                      effect1, effect1Amount, effect2, effect2Amount, lifeStyle);
+                } else if(twoSelected) {
                   finalSource = option2Source;
                   finalCost = option2Cost;
                   effect1 = Cost21Name;
                   effect1Amount = cost21Cost;
                   effect2 = Cost22Name;
                   effect2Amount = cost22Cost;
+                    lifeStyle = option2LifeStyle;
                   RandomEventTaken randomEventTaken = RandomEventTaken(
                       name: "Place Holder Name",
                       choiceTaken: "Place Holder Choice",
@@ -472,7 +434,28 @@ class _RandomEventPopState extends State<RandomEventPop> {
                       effect2: effect2,
                       effect2Amount: effect2Amount);
                   widget.onConfirm(randomEventTaken, finalSource, finalCost,
-                      effect1, effect1Amount, effect2, effect2Amount);
+                      effect1, effect1Amount, effect2, effect2Amount, lifeStyle);
+                }else{
+                  finalSource = option3Source;
+                  finalCost = option3Cost;
+                  effect1 = Cost31Name;
+                  effect1Amount = cost31Cost;
+                  effect2 = Cost32Name;
+                  effect2Amount = cost32Cost;
+                    lifeStyle = option3LifeStyle;
+                  RandomEventTaken randomEventTaken = RandomEventTaken(
+                      name: "Place Holder Name",
+                      choiceTaken: "Place Holder Choice",
+                      discription: "Place Holder Discription",
+                      trigerDay: widget.event.trigerDay,
+                      moneyEffect: finalCost,
+                      effect1: effect1,
+                      effect1Amount: effect1Amount,
+                      effect2: effect2,
+                      effect2Amount: effect2Amount);
+                  widget.onConfirm(randomEventTaken, finalSource, finalCost,
+                      effect1, effect1Amount, effect2, effect2Amount,lifeStyle);
+
                 }
               }
             },
@@ -480,7 +463,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
               height: screenHeightUnit * 73,
               width: screenWidthUnit * 307,
               decoration: BoxDecoration(
-                  color: (oneSelcted || twoSelected)
+                  color: (oneSelcted || twoSelected || threeSelected)
                       ? Color.fromRGBO(79, 195, 247, 1)
                       : Colors.grey,
                   borderRadius: BorderRadius.circular(7)),
@@ -490,7 +473,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   style: GoogleFonts.baloo2(
                     fontSize: screenWidthUnit * 20,
                     fontWeight: FontWeight.w600,
-                    color: (oneSelcted || twoSelected)
+                    color: (oneSelcted || twoSelected|| threeSelected)
                         ? Colors.white
                         : Colors.black,
                   ),
@@ -699,3 +682,260 @@ class _RandomOptionState extends State<RandomOption> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//  if (type == "Car Repair Surprise") {
+    //   setState(() {
+    //     option1Title = 'Pay for Repairs in Full';
+    //     option1SubTitle = 'You cover the entire repair cost using cash.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = 2;
+
+    //     Cost12Name = 'Physical Health';
+    //     cost12Cost = -10;
+
+    //     option1Cost = -250;
+    //     option1Source = "CC";
+
+    //     option2Title = 'Take Public Transportation';
+    //     option2SubTitle =
+    //         'You skip the repair and instead take public transit.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = 1;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = 15;
+    //     option2Source = "Cash";
+
+    //     option2Cost = 0;
+    //   });
+    // } else if (type == "Home Appliance Breakdown") {
+    //   setState(() {
+    //     option1Title = 'Pay in Full Immediately';
+    //     option1SubTitle =
+    //         'You settle the entire repair cost using available funds.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = 2;
+
+    //     Cost12Name = 'Emotional Health';
+    //     cost12Cost = 15;
+
+    //     option1Cost = -100;
+    //     option1Source = "Cash";
+
+    //     option2Title = 'Forgo Repair';
+    //     option2SubTitle = 'You decide not to adjust your routine instead.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = -4;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = 10;
+
+    //     option2Cost = 0;
+    //     option2Source = "Cash";
+    //   });
+    // } else if (type == "Class Registration or Certification Fee") {
+    //   setState(() {
+    //     option1Title = 'Enroll Immediately';
+    //     option1SubTitle = 'Pay the fee now to secure your spot';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = -2;
+
+    //     Cost12Name = 'Emotional Health';
+    //     cost12Cost = 25;
+
+    //     option1Cost = -200;
+    //     option1Source = "CC";
+
+    //     option2Title = 'Postpone Enrollment';
+    //     option2SubTitle = ' You delay registration to conserve funds for now.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = 2;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = -15;
+
+    //     option2Cost = 0;
+    //     option2Source = "Cash";
+    //   });
+    // } else if (type == "Impulse Buy") {
+    //   setState(() {
+    //     option1Title = 'Purchase Immediately';
+    //     option1SubTitle = 'You buy the item right away using your funds.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = -2;
+
+    //     Cost12Name = 'Emotional Health';
+    //     cost12Cost = 25;
+
+    //     option1Cost = -200;
+    //     option1Source = "CC";
+
+    //     option2Title = 'Resist the Temptation';
+    //     option2SubTitle =
+    //         'You decide against the purchase to keep your funds intact.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = 3;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = 10;
+
+    //     option2Cost = 0;
+    //     option2Source = "Cash";
+    //   });
+    // } else if (type == "Unexpected Windfall") {
+    //   setState(() {
+    //     option1Title = 'Apply Entirely to Debt Reduction';
+    //     option1SubTitle =
+    //         'You use the bonus to reduce your credit card balance immediately.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = 5;
+
+    //     Cost12Name = 'Emotional Health';
+    //     cost12Cost = 5;
+
+    //     option1Cost = 150;
+    //     option1Source = "CC";
+
+    //     option2Title = 'Spend on Entertainment';
+    //     option2SubTitle =
+    //         'You allocate the bonus fully toward leisure and fun activities.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = 0;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = 50;
+
+    //     option2Cost = 0;
+    //     option2Source = "CC";
+    //   });
+    // } else if (type == "Wedding Invitation") {
+    //   setState(() {
+    //     option1Title = 'Attend Fully';
+    //     option1SubTitle =
+    //         'You commit to covering all associated costs to attend the wedding as planned.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = -2;
+
+    //     Cost12Name = 'Emotional Health';
+    //     cost12Cost = 15;
+
+    //     option1Cost = -150;
+    //     option1Source = "CC";
+
+    //     option2Title = 'Decline the Invitation';
+    //     option2SubTitle =
+    //         'You choose not to attend the wedding, avoiding any related expenses.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = 2;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = -15;
+
+    //     option2Cost = 0;
+    //     option2Source = "CC";
+    //   });
+    // } else if (type == "Medical Bill") {
+    //   setState(() {
+    //     option1Title = 'Pay in Full Immediately';
+    //     option1SubTitle =
+    //         'You use your available cash to settle the bill right away.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = 2;
+
+    //     Cost12Name = 'Physical Health';
+    //     cost12Cost = 20;
+
+    //     option1Cost = -300;
+    //     option1Source = "Cash";
+
+    //     option2Title = 'Charge to Your Credit Card';
+    //     option2SubTitle =
+    //         'You add the expense to your credit card balance to preserve cash.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = -3;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = 10;
+
+    //     option2Cost = -300;
+    //     option2Source = "CC";
+    //   });
+    // } else if (type == "Family Emergency Request") {
+    //   setState(() {
+    //     option1Title = 'Lend the Full \$200';
+    //     option1SubTitle =
+    //         'You provide the full amount to support your family member.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = -2;
+
+    //     Cost12Name = 'Emotional Health';
+    //     cost12Cost = 25;
+
+    //     option1Cost = -200;
+    //     option1Source = "CC";
+
+    //     option2Title = 'Politely Decline';
+    //     option2SubTitle =
+    //         'You choose not to lend any money, preserving your current funds.';
+
+    //     Cost21Name = 'Credit Score';
+    //     cost21Cost = 2;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = -15;
+
+    //     option2Cost = 0;
+    //     option2Source = "CC";
+    //   });
+    // }
+    // //WORKS
+    // else if (type == "Small Bonus / Part-Time Gig") {
+    //   setState(() {
+    //     option1Title = 'Apply Entirely to Debt Reduction';
+    //     option1SubTitle =
+    //         'You use the bonus to lower your outstanding debt immediately.';
+
+    //     Cost11Name = 'Credit Score';
+    //     cost11Cost = 3;
+
+    //     Cost12Name = 'Emotional Health';
+    //     cost12Cost = 5;
+
+    //     option1Cost = 100;
+    //     option1Source = "CC";
+
+    //     option2Title = 'Spend on Leisure';
+    //     option2SubTitle = 'You decide not to adjust your routine instead.';
+
+    //     Cost21Name = 'Physical Health';
+    //     cost21Cost = 10;
+    //     Cost22Name = 'Emotional Health';
+    //     cost22Cost = 10;
+
+    //     option2Cost = 0;
+    //     option2Source = "CC";
+    //   });
+    // }
+
+
+
+
+

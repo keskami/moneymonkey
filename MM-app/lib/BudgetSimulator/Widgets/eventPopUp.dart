@@ -92,7 +92,7 @@ class _EventPopUpState extends State<EventPopUp> {
                   ],
                 )),
           )
-        : widget.expense.name == "Rent" ||  widget.expense.name =="Utilities" || widget.expense.name == "Groceries" ||  widget.expense.name =="Transportation"
+        : widget.expense.name == "Rent" ||  widget.expense.name =="Utilities" || widget.expense.name == "Groceries" ||  widget.expense.name =="Transportation" || widget.expense.name == "Internet & Phone" || widget.expense.name == "Subscriptions & Memberships"
             ? Center(
                 child: Container(
                     height: screenHeightUnit * 646,

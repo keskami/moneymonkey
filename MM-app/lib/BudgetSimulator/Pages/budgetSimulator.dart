@@ -69,6 +69,8 @@ class BudgetSimulator extends StatefulWidget {
   final double savingsAPY;
   final double ccAPY;
   List<Milestone> milestones;
+  String lifeStyle = "Carrer-Focused";
+
   double creditScore;
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
@@ -80,7 +82,7 @@ class BudgetSimulator extends StatefulWidget {
   int creditPaymentsSeen = 0;
 
   List<int> paid = [0, 0, 0];
-  List<int> due = [200, 400, 600];
+  List<int> due = [300, 600, 900];
   List<bool> done = [false, false, false];
 
   State<BudgetSimulator> createState() => _BudgetSimulatorState();
@@ -187,8 +189,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           widget.checkingTransfer as double,
                                       savingsTransfer:
                                           widget.savingsTransfer as double,
-                                          stageOfLife: "New College Grad"
-                                    )
+                                      stageOfLife: "New College Grad")
                                   : Container(),
                             )),
                       ),
@@ -401,6 +402,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 paid: widget.paid,
                                                 done: widget.done,
                                                 monthsOccurd: monthsOccurd,
+                                                APR: widget.ccAPY,
+                                                creditCardMin: startingCCMin,
                                               )
                                             : widget.currentOption == "Accounts"
                                                 ? AccountsBudgetSimulatorPage(
@@ -450,6 +453,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 SimulatorTitle(
                                   screenHeightUnit: screenHeightUnit,
                                   screenWidthUnit: screenWidthUnit,
+                                  lifeStyle: widget.lifeStyle,
                                 ),
                                 SizedBox(
                                   height: screenHeightUnit * 10,
@@ -547,6 +551,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int startingRent = 1;
   int startingCCMin = 1;
   int startingUtilites = 1;
+  int startingPhone = 1;
+  int startingSub = 1;
   int startingTransportaion = 100;
   int startingGroceries = 250;
   List<Expense> trueExpenses = [];
@@ -583,13 +589,25 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           });
         } else if (expense.name == "CC Debt") {
           setState(() {
-            expense.amount += startingCCMin;
+            expense.amount = startingCCMin + max(0, expense.amount);
             expense.dueDay = DateTime(expense.dueDay.year,
                 expense.dueDay.month + 1, expense.dueDay.day);
           });
         } else if (expense.name == "Utilities") {
           setState(() {
-            expense.amount += startingCCMin;
+            expense.amount += startingUtilites;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
+        } else if (expense.name == "Internet & Phone") {
+          setState(() {
+            expense.amount += startingPhone;
+            expense.dueDay = DateTime(expense.dueDay.year,
+                expense.dueDay.month + 1, expense.dueDay.day);
+          });
+        } else if (expense.name == "Subscriptions & Memberships") {
+          setState(() {
+            expense.amount += startingSub;
             expense.dueDay = DateTime(expense.dueDay.year,
                 expense.dueDay.month + 1, expense.dueDay.day);
           });
@@ -811,6 +829,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                 for (int i = widget.creditPaymentsSeen; i <= 3; i++) {
                   widget.due[i] += expense.penalty as int;
                 }
+
                 expense.amount += expense.penalty;
                 widget.creditCardDebt += expense.penalty;
                 widget.creditScore -= 10;
@@ -828,7 +847,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
           }
         } else if (expense.name == "Utilities" ||
             expense.name == "Transportation" ||
-            expense.name == "Groceries") {
+            expense.name == "Groceries" ||
+            expense.name == "Internet & Phone" ||
+            expense.name == "Subscriptions & Memberships") {
           widget.totalPaymentsSeen += 1;
           await showDialog(
             context: context,
@@ -1032,13 +1053,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     setState(() {
       widget.creditCardDebt += roundedInterest;
     });
-    for (Expense expense in widget.expenses) {
-      if (expense.name == "CC Debt") {
-        setState(() {
-          expense.amount += roundedInterest;
-        });
-      }
-    }
+    // for (Expense expense in widget.expenses) {
+    //   if (expense.name == "CC Debt") {
+    //     setState(() {
+    //       expense.amount += roundedInterest;
+    //     });
+    //   }
+    // }
   }
 
   Future<void> getStartingExpenses() async {
@@ -1064,6 +1085,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         });
       } else if (expense.name == "Groceries") {
         startingGroceries = expense.amount as int;
+      } else if (expense.name == "Internet & Phone") {
+        setState(() {
+          startingPhone = expense.amount as int;
+        });
+      } else if (expense.name == "Subscriptions & Memberships") {
+        setState(() {
+          startingSub = expense.amount as int;
+        });
       }
     }
   }
@@ -1072,7 +1101,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   List<List<int>> dayRanges = [
     [4, 8],
-    [18, 21],
+    [12, 18],
     [25, 28],
     [37, 40],
     [43, 47],
@@ -1131,8 +1160,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                         int effect1Amount,
                         String effect2,
                         int effect2Amount,
+                        String lifeStyle,
                       ) {
                         setState(() {
+                          widget.lifeStyle = lifeStyle;
                           widget.takenEvents.add(randomEventTaken);
                         });
                         Navigator.of(context).pop();
@@ -1143,6 +1174,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                         } else if (Source == "CC") {
                           setState(() {
                             widget.creditCardDebt -= amount;
+                            if (amount > 0) {
+                              spendOnExpense(amount, "CC Debt");
+                            }
+                          });
+                        } else if (Source == "Savings") {
+                          setState(() {
+                            widget.savingsAccountBalance += amount;
                           });
                         }
 
@@ -1150,17 +1188,17 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           setState(() {
                             widget.creditScore += effect1Amount;
                           });
-                        } else if (effect1 == "Emotional Health") {
+                        } else if (effect1 == "Mind") {
                           setState(() {
                             widget.mindScore += effect1Amount;
                           });
-                        } else if (effect1 == "Physical Health") {
+                        } else if (effect1 == "Body") {
                           setState(() {
                             widget.bodyScore += effect1Amount;
                             widget.bodyScore = min(widget.bodyScore, 1000);
                             widget.bodyScore = max(0, widget.bodyScore);
                           });
-                        } else if (effect1 == "Mental Health") {
+                        } else if (effect1 == "Social") {
                           setState(() {
                             widget.socialScore += effect1Amount;
                             widget.socialScore = min(widget.socialScore, 1000);
@@ -1174,17 +1212,17 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           setState(() {
                             widget.creditScore += effect2Amount;
                           });
-                        } else if (effect2 == "Emotional Health") {
+                        } else if (effect2 == "Mind") {
                           setState(() {
                             widget.mindScore += effect2Amount;
                           });
-                        } else if (effect2 == "Physical Health") {
+                        } else if (effect2 == "Body") {
                           setState(() {
                             widget.bodyScore += effect2Amount;
                             widget.bodyScore = min(widget.bodyScore, 1000);
                             widget.bodyScore = max(0, widget.bodyScore);
                           });
-                        } else if (effect2 == "Mental Health") {
+                        } else if (effect2 == "Social") {
                           setState(() {
                             widget.socialScore += effect2Amount;
                             widget.socialScore = min(widget.socialScore, 1000);

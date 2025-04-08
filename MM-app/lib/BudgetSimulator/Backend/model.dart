@@ -125,16 +125,14 @@ class Hint {
 class RandomEvent {
   final String name;
   final String description;
-  final List<String> options;
   DateTime trigerDay;
-  final int cost;
+
 
   RandomEvent({
     required this.name,
     required this.description,
-    required this.options,
     required this.trigerDay,
-    required this.cost,
+
   });
 }
 
