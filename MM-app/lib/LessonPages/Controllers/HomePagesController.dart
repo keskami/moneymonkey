@@ -9,6 +9,7 @@ import 'package:money_monkey/StudentHomeworkPage/Pages/StudentHomeworkPage.dart'
 
 class HomePagesController extends GetxController {
   RxInt pageIndex = 0.obs;
+  RxBool isSidebarExpanded=false.obs;
   var pages = [
     StudentHomeworkPage(),
     LessonsHome(),
@@ -227,4 +228,8 @@ class HomePagesController extends GetxController {
     ),
     ProfileScreen(),
   ];
+
+  void changePage(int pageIndex) {
+    this.pageIndex.value = pageIndex;
+  }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_utils/src/extensions/widget_extensions.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:money_monkey/Backend/Models/CalendarEvent.dart';
+import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
 import 'package:money_monkey/StudentHomeworkPage/Widgets/StudentCalendart.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -78,7 +80,7 @@ class _StudentHomeworkPageState extends State<StudentHomeworkPage> {
       type: EventType.deadline,
     ),
   ];
-
+  final HomePagesController homePagesController = Get.find();
   void _handleEventSelected(CalendarEvent event) {
     showDialog(
       context: context,

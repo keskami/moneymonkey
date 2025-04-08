@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/CalendarEvent.dart';
 import 'package:intl/intl.dart';
+import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
 class StudentCalendar extends StatefulWidget {
   final List<CalendarEvent> events;
@@ -117,6 +120,9 @@ class _StudentCalendarState extends State<StudentCalendar> {
     }
   }
 
+  final HomePagesController homePagesController =
+      Get.find<HomePagesController>();
+
   @override
   Widget build(BuildContext context) {
     // Apply responsive sizing factors
@@ -142,292 +148,309 @@ class _StudentCalendarState extends State<StudentCalendar> {
       calendarDays.add(day);
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Calendar and Upcoming Events in a Row
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Calendar grid - Changed from Expanded to fixed width fraction
-            Container(
-              width: widget.screenWidth *
-                  0.55, // Adjusted width to leave more space for tasks
-              height: widget.screenHeight * 0.59, // Slightly increased height
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.chevron_left),
-                          onPressed: () {
-                            setState(() {
-                              _focusedDay = DateTime(
-                                  _focusedDay.year, _focusedDay.month - 1, 1);
-                              _formattedMonth =
-                                  DateFormat('MMMM yyyy').format(_focusedDay);
-                              _updateUpcomingEvents();
-                            });
-                          },
-                        ),
-                        Text(
-                          _formattedMonth,
-                          style: TextStyle(
-                            fontSize: 18 * fontSizeFactor,
-                            fontWeight: FontWeight.w600,
+    return Obx(() {
+      // Calculate dynamic widths based on sidebar state
+      bool isSidebarExpanded = homePagesController.isSidebarExpanded.value;
+      double calendarWidth = isSidebarExpanded 
+          ? widget.screenWidth * 0.55 
+          : widget.screenWidth * 0.7;
+      double tasksWidth =widget.screenWidth * 0.18;
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Calendar Section
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOutQuad,
+                width: calendarWidth,
+                height: widget.screenHeight * 0.59,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Month navigation row remains the same
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.chevron_left),
+                            onPressed: () {
+                              setState(() {
+                                _focusedDay = DateTime(
+                                    _focusedDay.year, _focusedDay.month - 1, 1);
+                                _formattedMonth =
+                                    DateFormat('MMMM yyyy').format(_focusedDay);
+                                _updateUpcomingEvents();
+                              });
+                            },
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.chevron_right),
-                          onPressed: () {
-                            setState(() {
-                              _focusedDay = DateTime(
-                                  _focusedDay.year, _focusedDay.month + 1, 1);
-                              _formattedMonth =
-                                  DateFormat('MMMM yyyy').format(_focusedDay);
-                              _updateUpcomingEvents();
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 7,
-                        childAspectRatio: 1.6,
-                      ),
-                      itemCount: calendarDays.length,
-                      itemBuilder: (context, index) {
-                        final day = calendarDays[index];
-                        // Return empty cell for days outside the month
-                        if (day == null) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade100,
-                              border: Border.all(color: Colors.grey.shade300),
+                          Text(
+                            _formattedMonth,
+                            style: TextStyle(
+                              fontSize: 18 * fontSizeFactor,
+                              fontWeight: FontWeight.w600,
                             ),
-                          );
-                        }
-                        // Current date for this cell
-                        final date = DateTime(year, month, day);
-                
-                        // Check if this is the selected day or today
-                        final isSelected = isSameDay(date, _selectedDay);
-                        final isTodayDate = isToday(date);
-                
-                        // Special events based on the day of month
-                        final List<Widget> eventTags = [];
-                
-                        // Pay Day (1st and 15th)
-                        if (day == 1 || day == 15) {
-                          eventTags.add(_buildEventTag(
-                              'Pay Day!',
-                              Colors.green.shade100,
-                              Colors.green.shade700,
-                              fontSizeFactor));
-                        }
-                
-                        // Math Assignment (day 5)
-                        if (day == 5) {
-                          eventTags.add(_buildEventTag(
-                              'Math 3.2',
-                              Colors.red.shade100,
-                              Colors.red.shade700,
-                              fontSizeFactor));
-                        }
-                
-                        // Utilities Due (day 10)
-                        if (day == 10) {
-                          eventTags.add(_buildEventTag(
-                              'Utilities Due',
-                              Colors.blue.shade100,
-                              Colors.blue.shade700,
-                              fontSizeFactor));
-                        }
-                
-                        // Credit Card Minimum Due (day 25)
-                        if (day == 25) {
-                          eventTags.add(_buildEventTag(
-                              'CC Min. Due',
-                              Colors.grey.shade300,
-                              Colors.grey.shade700,
-                              fontSizeFactor));
-                        }
-                
-                        // Add events from the events list
-                        final events = _getEventsForDay(day);
-                        if (events.isNotEmpty && eventTags.isEmpty) {
-                          // Only add from real events if we don't already have a hardcoded event
-                          for (final event in events.take(1)) {
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.chevron_right),
+                            onPressed: () {
+                              setState(() {
+                                _focusedDay = DateTime(
+                                    _focusedDay.year, _focusedDay.month + 1, 1);
+                                _formattedMonth =
+                                    DateFormat('MMMM yyyy').format(_focusedDay);
+                                _updateUpcomingEvents();
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+
+                      // Rest of the grid remains unchanged
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 7,
+                          childAspectRatio: 1.6,
+                        ),
+                        itemCount: calendarDays.length,
+                        itemBuilder: (context, index) {
+                          final day = calendarDays[index];
+                          // Return empty cell for days outside the month
+                          if (day == null) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                border: Border.all(color: Colors.grey.shade300),
+                              ),
+                            );
+                          }
+                          // Current date for this cell
+                          final date = DateTime(year, month, day);
+
+                          // Check if this is the selected day or today
+                          final isSelected = isSameDay(date, _selectedDay);
+                          final isTodayDate = isToday(date);
+
+                          // Special events based on the day of month
+                          final List<Widget> eventTags = [];
+
+                          // Pay Day (1st and 15th)
+                          if (day == 1 || day == 15) {
                             eventTags.add(_buildEventTag(
-                                event.title,
-                                _getEventBgColor(event.type),
-                                _getEventTextColor(event.type),
+                                'Pay Day!',
+                                Colors.green.shade100,
+                                Colors.green.shade700,
                                 fontSizeFactor));
                           }
-                        }
-                
-                        return GestureDetector(
-                          onTap: () => _onDaySelected(date),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
+
+                          // Math Assignment (day 5)
+                          if (day == 5) {
+                            eventTags.add(_buildEventTag(
+                                'Math 3.2',
+                                Colors.red.shade100,
+                                Colors.red.shade700,
+                                fontSizeFactor));
+                          }
+
+                          // Utilities Due (day 10)
+                          if (day == 10) {
+                            eventTags.add(_buildEventTag(
+                                'Utilities Due',
+                                Colors.blue.shade100,
+                                Colors.blue.shade700,
+                                fontSizeFactor));
+                          }
+
+                          // Credit Card Minimum Due (day 25)
+                          if (day == 25) {
+                            eventTags.add(_buildEventTag(
+                                'CC Min. Due',
+                                Colors.grey.shade300,
+                                Colors.grey.shade700,
+                                fontSizeFactor));
+                          }
+
+                          // Add events from the events list
+                          final events = _getEventsForDay(day);
+                          if (events.isNotEmpty && eventTags.isEmpty) {
+                            // Only add from real events if we don't already have a hardcoded event
+                            for (final event in events.take(1)) {
+                              eventTags.add(_buildEventTag(
+                                  event.title,
+                                  _getEventBgColor(event.type),
+                                  _getEventTextColor(event.type),
+                                  fontSizeFactor));
+                            }
+                          }
+
+                          return GestureDetector(
+                            onTap: () => _onDaySelected(date),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1,
+                                ),
                                 color: isSelected
-                                    ? const Color(0xFF51A4F1)
-                                    : Colors.grey.shade300,
-                                width: isSelected ? 2 : 1,
+                                    ? LightTheme().pastelBlue.withValues(alpha: 0.4)
+                                    : Colors.white,
                               ),
-                              color: Colors.white,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // Day number (with special style for today)
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 3 * paddingFactor),
+                                    child: Text(
+                                      day.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12 * fontSizeFactor,
+                                        color: isTodayDate
+                                            ? Colors.blue
+                                            : Colors.grey.shade800,
+                                      ),
+                                    ),
+                                  ),
+
+                                  // Event tags
+                                  ...eventTags,
+                                ],
+                              ),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Day number (with special style for today)
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 3 * paddingFactor),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(width: 10 * paddingFactor),
+
+              // Upcoming tasks
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOutQuad,
+                width: tasksWidth,
+                padding: EdgeInsets.all(8 * paddingFactor),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Upcoming Tasks',
+                      style: TextStyle(
+                        fontSize: 15 * fontSizeFactor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8 * paddingFactor),
+
+                    // Container for tasks list
+                    Container(
+                      height: widget.screenHeight * 0.4,
+                      child: _upcomingEvents.isEmpty
+                          ? Container(
+                              padding: EdgeInsets.all(8 * paddingFactor),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 16 * paddingFactor),
                                   child: Text(
-                                    day.toString(),
+                                    'No upcoming tasks',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey.shade600,
                                       fontSize: 12 * fontSizeFactor,
-                                      color: isTodayDate
-                                          ? Colors.blue
-                                          : Colors.grey.shade800,
                                     ),
                                   ),
                                 ),
-
-                                // Event tags
-                                ...eventTags,
-                              ],
+                              ),
+                            )
+                          : ListView.separated(
+                              itemCount: _upcomingEvents.length,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 8 * paddingFactor),
+                              itemBuilder: (context, index) {
+                                final event = _upcomingEvents[index];
+                                return Container(
+                                  padding: EdgeInsets.all(paddingFactor * 3),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (widget.onEventSelected != null) {
+                                          widget.onEventSelected!(event);
+                                        }
+                                      },
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            event.title,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13 * fontSizeFactor,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Due ${DateFormat('M/d').format(event.dueDate)} @ ${DateFormat('h:mm a').format(event.dueDate)}',
+                                            style: TextStyle(
+                                              fontSize: 11 * fontSizeFactor,
+                                              color: Colors.grey.shade600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          ),
-                        );
-                      },
                     ),
                   ],
                 ),
               ),
-            ),
-
-            SizedBox(width: 10 * paddingFactor),
-
-            // Upcoming tasks - Changed from Expanded to fixed width fraction
-            Container(
-              width: widget.screenWidth * 0.18,
-              padding: EdgeInsets.all(8 * paddingFactor),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Colors.grey.shade300,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Upcoming Tasks',
-                    style: TextStyle(
-                      fontSize: 15 * fontSizeFactor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8 * paddingFactor),
-
-                  // Container for tasks list - make it match calendar height
-                  Container(
-                    height: widget.screenHeight * 0.4,
-                    child: _upcomingEvents.isEmpty
-                        ? Container(
-                            padding: EdgeInsets.all(8 * paddingFactor),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                              ),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 16 * paddingFactor),
-                                child: Text(
-                                  'No upcoming tasks',
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontSize: 12 * fontSizeFactor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : ListView.separated(
-                            // Changed to ListView.separated for better spacing
-                            itemCount: _upcomingEvents.length,
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 8 * paddingFactor),
-                            itemBuilder: (context, index) {
-                              final event = _upcomingEvents[index];
-                              return Container(
-                                padding: EdgeInsets.all(paddingFactor * 3),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Colors.grey.shade300,
-                                  ),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      if (widget.onEventSelected != null) {
-                                        widget.onEventSelected!(event);
-                                      }
-                                    },
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          event.title,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13 * fontSizeFactor,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Due ${DateFormat('M/d').format(event.dueDate)} @ ${DateFormat('h:mm a').format(event.dueDate)}',
-                                          style: TextStyle(
-                                            fontSize: 11 * fontSizeFactor,
-                                            color: Colors.grey.shade600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+            ],
+          ),
+        ],
+      );
+    });
   }
 
-  // Helper to build event tag indicators
+  
   Widget _buildEventTag(
-      String text, Color bgColor, Color textColor, double fontSizeFactor) {
+    String text, 
+    Color bgColor, 
+    Color textColor, 
+    double fontSizeFactor
+  ) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 2, left: 2, right: 2),

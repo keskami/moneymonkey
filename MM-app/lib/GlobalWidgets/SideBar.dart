@@ -3,148 +3,119 @@ import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
 
 class SideBar extends StatelessWidget {
-  SideBar({super.key});
-  final HomePagesController homePagesController = Get.find();
-  final Map<String, String> imageLinks = const {
-    "Home": "assets/images/globemonkey.png",
-    "Portfolio": "assets/images/treasure.png",
-    "Characters": "assets/images/bottommonkey.png",
-    "BudgetSimulator": "assets/images/budget_simulator.png",
-    "Profile": "assets/images/bluemonkey.png",
-  };
+  const SideBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeightUnit = screenHeight / 1406;
-    double screenWidthUnit = screenWidth / 2079;
+    final HomePagesController homePagesController = Get.find();
+    final Map<String, String> imageLinks = const {
+      "Home": "assets/images/globemonkey.png",
+      "Portfolio": "assets/images/treasure.png",
+      "Characters": "assets/images/bottommonkey.png",
+      "Home Work": "assets/images/HomeWorkPage.png",
+      "Budget Simulator": "assets/images/BudgetSimulator.png",
+      "Profile": "assets/images/bluemonkey.png",
+    };
 
     return Obx(() {
-      // Check if we're on the Budget Simulator page
-      bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
-      
-      if (isBudgetSimulator) {
-        // For Budget Simulator, show a minimal sidebar with just navigation icons
-        return Container(
-          width: screenWidthUnit * 70, // Narrower width for collapsed sidebar
-          color: Colors.white,
-          child: Column(
-            children: [
-              SizedBox(height: screenHeightUnit * 80),
-              // Only show icons in collapsed mode
-              for (var entry in imageLinks.entries)
-                GestureDetector(
-                  onTap: () {
-                    // Allow navigation to other pages
-                    homePagesController.pageIndex.value = 
-                        imageLinks.keys.toList().indexOf(entry.key);
-                  },
-                  child: Container(
-                    height: screenHeightUnit * 100,
-                    width: screenWidthUnit * 60,
-                    decoration: BoxDecoration(
-                      color: homePagesController.pageIndex.value == 
-                          imageLinks.keys.toList().indexOf(entry.key)
-                          ? Color.fromRGBO(225, 243, 254, 1)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Container(
-                        height: screenHeightUnit * 50,
-                        width: screenWidthUnit * 50,
-                        child: Image.asset(entry.value),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        );
-      } else {
-        // Regular sidebar for other pages
-        return Container(
-          width: screenWidthUnit * 250,
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: screenHeight * 0.05,
-              ),
-              for (var entry in imageLinks.entries)
-                SideBarTile(
-                  icon: entry.value,
-                  index: imageLinks.keys.toList().indexOf(entry.key),
-                  title: entry.key.toUpperCase(),
-                  isSelected: homePagesController.pageIndex.value ==
+      bool isExpanded = homePagesController.isSidebarExpanded.value;
+
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOutQuad,
+        width: isExpanded ? 250 : 100,
+        color: Colors.white,
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Navigation Items
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: imageLinks.entries.map((entry) => 
+                  _buildNavItem(
+                    context,
+                    icon: entry.value,
+                    title: entry.key,
+                    index: imageLinks.keys.toList().indexOf(entry.key),
+                    isActive: homePagesController.pageIndex.value == 
                       imageLinks.keys.toList().indexOf(entry.key),
-                ),
-            ],
-          ),
-        );
-      }
+                  )
+                ).toList(),
+              ),
+            ),
+            
+            // Bottom Actions or Settings
+            _buildBottomSection(context, isExpanded),
+          ],
+        ),
+      );
     });
   }
-}
 
-class SideBarTile extends StatelessWidget {
-  SideBarTile({
-    super.key,
-    required this.icon,
-    required this.index,
-    required this.title,
-    required this.isSelected,
-  });
-  final String icon;
-  final int index;
-  final String title;
-  final bool isSelected;
-  final HomePagesController homePagesController = Get.find();
-  
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        homePagesController.pageIndex.value = index;
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? Color.fromARGB(255, 225, 243, 254)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+  Widget _buildNavItem(
+    BuildContext context, {
+    required String icon, 
+    required String title, 
+    required int index, 
+    required bool isActive,
+  }) {
+    final HomePagesController homePagesController = Get.find();
+    bool isExpanded = homePagesController.isSidebarExpanded.value;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => homePagesController.changePage(index),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+          decoration: BoxDecoration(
+            color: isActive ? const Color.fromRGBO(225, 243, 254, 1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 17,
+                backgroundColor: Colors.transparent,
+                child: Image.asset(icon),
+              ),
+              if (isExpanded) ...[
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      color: isActive ? Colors.blue : Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 17,
-              backgroundColor: Colors.transparent,
-              child: Image.asset(
-                icon,
-              ),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(
-              title,
-              overflow: TextOverflow.visible,
-              softWrap: true,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-                color: isSelected ? Colors.blue : Colors.black,
-              ),
+      ),
+    );
+  }
+
+  Widget _buildBottomSection(BuildContext context, bool isExpanded) {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Row(
+        children: [
+          const Icon(Icons.settings_outlined, color: Colors.grey),
+          if (isExpanded) ...[
+            const SizedBox(width: 15),
+            const Text(
+              'Settings',
+              style: TextStyle(color: Colors.grey),
             ),
           ],
-        ).paddingSymmetric(
-          vertical: 10,
-        ),
+        ],
       ),
     );
   }

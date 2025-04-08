@@ -15,16 +15,36 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
   final HomePagesController homePagesController =
       Get.put(HomePagesController());
   int currentPage = 0;
+  late AnimationController _sidebarAnimationController;
+  late Animation<double> _sidebarWidthAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize animation controller
+    _sidebarAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 250),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _sidebarAnimationController.dispose();
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    
     // Decide whether to show web or mobile layout
     return screenWidth > screenHeight
         ? webDisplay(context, screenWidth)
@@ -36,28 +56,52 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Obx(
         () {
-          // Check if current page is Budget Simulator
-          bool isBudgetSimulator = homePagesController.pageIndex.value == 3;
+          // Calculate sidebar width animation
+          _sidebarWidthAnimation = Tween<double>(
+            begin: screenWidth * 0.06,  // Minimized width
+            end: screenWidth * 0.2,     // Expanded width
+          ).animate(CurvedAnimation(
+            parent: _sidebarAnimationController,
+            curve: Curves.easeInOutQuad,
+          ));
 
-          // Calculate widths based on the current page
-          double sidebarWidth =
-              isBudgetSimulator ? screenWidth * 0.05 : screenWidth * 0.2;
-          double contentWidth = screenWidth - sidebarWidth;
+          // Trigger animation based on sidebar state
+          if (homePagesController.isSidebarExpanded.value) {
+            _sidebarAnimationController.forward();
+          } else {
+            _sidebarAnimationController.reverse();
+          }
 
-          return Row(
-            children: [
-              // Sidebar (adjusted width based on page)
-              SizedBox(
-                width: sidebarWidth,
-                child: SideBar(),
-              ),
-              // Main content (adjusted width based on sidebar)
-              SizedBox(
-                width: contentWidth,
-                child: homePagesController
-                    .pages[homePagesController.pageIndex.value],
-              )
-            ],
+          return AnimatedBuilder(
+            animation: _sidebarAnimationController,
+            builder: (context, child) {
+              // Calculate content width dynamically
+              double sidebarWidth = _sidebarWidthAnimation.value;
+              double contentWidth = screenWidth - sidebarWidth;
+
+              return Row(
+                children: [
+                  // Sidebar with smooth width transition
+                  MouseRegion(
+                    onEnter: (_) => homePagesController.isSidebarExpanded.value = true,
+                    onExit: (_) => homePagesController.isSidebarExpanded.value = false,
+                    child: SizedBox(
+                      width: sidebarWidth,
+                      height: double.infinity,
+                      child: SideBar(
+                      ),
+                    ),
+                  ),
+                  
+                  // Main content with smooth width transition
+                  SizedBox(
+                    width: contentWidth,
+                    child: homePagesController
+                        .pages[homePagesController.pageIndex.value],
+                  )
+                ],
+              );
+            },
           );
         },
       ),
