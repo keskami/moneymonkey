@@ -26,11 +26,11 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
     super.initState();
     setState(() {
       scores[0] =
-          functions.s1P2SavingsScore(widget.widget.widget.savingsAccountBalance);
-          scores[1] = functions.s1P2CreditScoreScore(widget.widget.widget.creditScore);
-          scores[2] = widget.widget.widget.onTimePaymentScore;
-          scores[3] = functions.s1P2CCDebtScore(widget.widget.widget.creditCardDebt);
-          scores[4] = functions.s1P2WellnessScore(widget.widget.widget.bodyScore , widget.widget.widget.mindScore, widget.widget.widget.socialScore);
+          functions.s1P2SavingsScore(widget.widget.widget.savingsAccountBalance) as int ;
+          scores[1] = functions.s1P2CreditScoreScore(widget.widget.widget.creditScore) as int;
+          scores[2] = widget.widget.widget.onTimePaymentScore as int;
+          scores[3] = functions.s1P2CCDebtScore(widget.widget.widget.creditCardDebt) as int;
+          scores[4] = functions.s1P2WellnessScore(widget.widget.widget.bodyScore , widget.widget.widget.mindScore, widget.widget.widget.socialScore) as int;
     });
   }
 
@@ -143,16 +143,16 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
               borderData: FlBorderData(show: false),
               groupsSpace: 100 * screenWidthUnit,
               barGroups: [
-                createBarGroup(0, scores[0] as double,
-                    potentialScores[0] as double, screenWidthUnit),
-                createBarGroup(1, scores[1] as double,
-                    potentialScores[1] as double, screenWidthUnit),
-                createBarGroup(2, scores[2] as double,
-                    potentialScores[2] as double, screenWidthUnit),
-                createBarGroup(3, scores[3] as double,
-                    potentialScores[3] as double, screenWidthUnit),
-                createBarGroup(4, scores[4] as double,
-                    potentialScores[4] as double, screenWidthUnit),
+                createBarGroup(0, scores[0],
+                    potentialScores[0], screenWidthUnit),
+                createBarGroup(1, scores[1],
+                    potentialScores[1], screenWidthUnit),
+                createBarGroup(2, scores[2],
+                    potentialScores[2], screenWidthUnit),
+                createBarGroup(3, scores[3],
+                    potentialScores[3], screenWidthUnit),
+                createBarGroup(4, scores[4],
+                    potentialScores[4] , screenWidthUnit),
               ],
             ),
           ),
@@ -162,20 +162,20 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
   }
 
   BarChartGroupData createBarGroup(
-      int x, double blueValue, double whiteValue, double screenWidthUnit) {
+      int x, int blueValue, int whiteValue, double screenWidthUnit) {
     return BarChartGroupData(
       x: x,
       barRods: [
         // Blue bar with hover effect
         BarChartRodData(
-          toY: blueValue,
+          toY: blueValue.toDouble(),
           color: Color.fromRGBO(0, 127, 255, 1),
           width: 40 * screenWidthUnit,
           borderRadius: BorderRadius.zero,
         ),
         // White bar with light gray border
         BarChartRodData(
-          toY: whiteValue,
+          toY: whiteValue.toDouble(),
           color: Colors.grey.withOpacity(.7),
           width: 40 * screenWidthUnit,
           borderRadius: BorderRadius.zero,
