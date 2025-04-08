@@ -383,28 +383,36 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           )
                                         : widget.currentOption ==
                                                 "Credit Management"
-                                            ? CreditCardManagementScreen(
-                                                screenWidthUnit:
-                                                    screenWidthUnit,
-                                                screenHeightUnit:
-                                                    screenHeightUnit,
-                                                name: widget.name,
-                                                level: widget.level,
-                                                expenses: widget.expenses,
-                                                credidCardDebt:
-                                                    widget.creditCardDebt,
-                                                creditScore: widget.creditScore,
-                                                creditLimit: widget.creditLimit,
-                                                totalPayemntsSeen:
-                                                    widget.totalPaymentsSeen,
-                                                totalPaymentsPaid:
-                                                    widget.totalPaymentsPaid,
-                                                due: widget.due,
-                                                paid: widget.paid,
-                                                done: widget.done,
-                                                monthsOccurd: monthsOccurd,
-                                                APR: widget.ccAPY,
-                                                creditCardMin: startingCCMin,
+                                            ? Expanded(
+                                                child: SingleChildScrollView(
+                                                  child:
+                                                      CreditCardManagementScreen(
+                                                    screenWidthUnit:
+                                                        screenWidthUnit,
+                                                    screenHeightUnit:
+                                                        screenHeightUnit,
+                                                    name: widget.name,
+                                                    level: widget.level,
+                                                    expenses: widget.expenses,
+                                                    credidCardDebt:
+                                                        widget.creditCardDebt,
+                                                    creditScore:
+                                                        widget.creditScore,
+                                                    creditLimit:
+                                                        widget.creditLimit,
+                                                    totalPayemntsSeen: widget
+                                                        .totalPaymentsSeen,
+                                                    totalPaymentsPaid: widget
+                                                        .totalPaymentsPaid,
+                                                    due: widget.due,
+                                                    paid: widget.paid,
+                                                    done: widget.done,
+                                                    monthsOccurd: monthsOccurd,
+                                                    APR: widget.ccAPY,
+                                                    creditCardMin:
+                                                        startingCCMin,
+                                                  ),
+                                                ),
                                               )
                                             : widget.currentOption == "Accounts"
                                                 ? AccountsBudgetSimulatorPage(
@@ -420,7 +428,16 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                   )
                                                 : widget.currentOption ==
                                                         "Student Loans"
-                                                    ? StudentLoansScreen(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,)
+                                                    ? Expanded(
+                                                        child:
+                                                            SingleChildScrollView(
+                                                                child:
+                                                                    StudentLoansScreen(
+                                                        screenHeightUnit:
+                                                            screenHeightUnit,
+                                                        screenWidthUnit:
+                                                            screenWidthUnit,
+                                                      )))
                                                     : OverallScoreScreen(
                                                         screenHeightUnit:
                                                             screenHeightUnit,

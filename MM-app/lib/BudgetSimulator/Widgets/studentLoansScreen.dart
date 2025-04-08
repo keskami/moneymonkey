@@ -31,7 +31,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                  height: widget.screenHeightUnit * 400,
+                  height: widget.screenHeightUnit * 520,
                   width: widget.screenWidthUnit * 600,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -48,7 +48,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: widget.screenWidthUnit * 20,
-                        vertical: widget.screenHeightUnit * 5),
+                        vertical: widget.screenHeightUnit * 10),
                     child: Column(
                       children: [
                         Row(
@@ -56,8 +56,8 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: widget.screenWidthUnit * 60,
-                              height: widget.screenHeightUnit * 60,
+                              width: widget.screenWidthUnit * 70,
+                              height: widget.screenHeightUnit * 70,
                               decoration: BoxDecoration(
                                 color: Color.fromRGBO(216, 216, 216, .4),
                                 backgroundBlendMode: BlendMode.darken,
@@ -67,7 +67,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                 child: Icon(
                                   Icons.monetization_on,
                                   color: Colors.black,
-                                  size: widget.screenWidthUnit * 26,
+                                  size: widget.screenWidthUnit * 32,
                                 ),
                               ),
                             ),
@@ -121,9 +121,9 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                       ],
                     ),
                   )),
-              SizedBox(width: widget.screenWidthUnit * 60),
+              SizedBox(width: widget.screenWidthUnit * 10),
               Container(
-                  height: widget.screenHeightUnit * 400,
+                  height: widget.screenHeightUnit * 520,
                   width: widget.screenWidthUnit * 600,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -139,7 +139,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: widget.screenWidthUnit * 00,
+                        horizontal: widget.screenWidthUnit * 20,
                         vertical: widget.screenHeightUnit * 10),
                     child: Column(
                       children: [
@@ -151,8 +151,8 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                               width: widget.screenWidthUnit * 20,
                             ),
                             Container(
-                              width: widget.screenWidthUnit * 60,
-                              height: widget.screenHeightUnit * 60,
+                              width: widget.screenWidthUnit * 70,
+                              height: widget.screenHeightUnit * 70,
                               decoration: BoxDecoration(
                                 color: Color.fromRGBO(216, 216, 216, .4),
                                 backgroundBlendMode: BlendMode.darken,
@@ -162,7 +162,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                 child: Icon(
                                   Icons.speed,
                                   color: Colors.black,
-                                  size: widget.screenWidthUnit * 26,
+                                  size: widget.screenWidthUnit * 32,
                                 ),
                               ),
                             ),
@@ -207,9 +207,11 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                               widget.screenHeightUnit * 32,
                                           fontWeight: FontWeight.w600,
                                           color: Colors.black),
-                                    )),
+                                    )), 
                               ),
+                            
                             ),
+                            
                           ],
                         ),
                         SizedBox(

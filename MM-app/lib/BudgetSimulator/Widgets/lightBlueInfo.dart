@@ -20,8 +20,8 @@ class LightBlueInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenHeightUnit * 65,
-      width: !big ? screenWidthUnit * 450 : screenWidthUnit * 600,
+      height: screenHeightUnit * 80,
+      width: !big ? screenWidthUnit * 540 : screenWidthUnit * 600,
       decoration: BoxDecoration(
         color:  Color.fromRGBO(233, 244, 255, 1),
         borderRadius: BorderRadius.circular(10),
@@ -34,7 +34,7 @@ class LightBlueInfo extends StatelessWidget {
           Text(
             name,
             style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 25,
+              fontSize: screenHeightUnit * 27,
               fontWeight: FontWeight.w600,
               color: Color.fromRGBO(0, 127, 255, 1)
             ),
@@ -42,7 +42,7 @@ class LightBlueInfo extends StatelessWidget {
           Text(
             amount,
             style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 30,
+              fontSize: screenHeightUnit * 32,
               fontWeight: FontWeight.w600,
               color: Colors.black,
             ),
