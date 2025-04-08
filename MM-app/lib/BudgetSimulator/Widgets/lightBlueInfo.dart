@@ -6,20 +6,22 @@ class LightBlueInfo extends StatelessWidget {
   final double screenWidthUnit;
   final String name;
   final String amount;
+  final bool big;
 
   const LightBlueInfo({
     Key? key,
     required this.screenHeightUnit,
     required this.screenWidthUnit,
     required this.name,
-    required this.amount,
+    required this.amount, required this.big,
+
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: screenHeightUnit * 65,
-      width: screenWidthUnit * 450,
+      width: !big ? screenWidthUnit * 450 : screenWidthUnit * 600,
       decoration: BoxDecoration(
         color:  Color.fromRGBO(233, 244, 255, 1),
         borderRadius: BorderRadius.circular(10),

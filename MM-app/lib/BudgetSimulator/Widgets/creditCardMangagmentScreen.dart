@@ -189,6 +189,7 @@ class _CreditCardManagementScreenState
                                             widget.screenWidthUnit,
                                         name: "Debt",
                                         amount: "\$${widget.credidCardDebt.abs()}",
+                                        big: false
                                       ),
                                       SizedBox(
                                         height:
@@ -201,6 +202,7 @@ class _CreditCardManagementScreenState
                                             widget.screenWidthUnit,
                                         name: "Interest Rate",
                                         amount: "${widget.APR}% APR",
+                                        big: false
                                       ),
                                       SizedBox(
                                         height:
@@ -213,6 +215,7 @@ class _CreditCardManagementScreenState
                                             widget.screenWidthUnit,
                                         name: "Minimum Monthly Payments",
                                         amount: "\$${widget.creditCardMin}",
+                                        big: false
                                       ),
 
                                     ],

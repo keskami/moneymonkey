@@ -18,6 +18,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/randomEvent.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/simulatorTitle.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/spendingChart.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/bottomHint.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/studentLoansScreen.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/transferMoneyButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/weekdayRow.dart';
@@ -417,15 +418,18 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                     Transactions:
                                                         widget.Transactions,
                                                   )
-                                                : OverallScoreScreen(
-                                                    screenHeightUnit:
-                                                        screenHeightUnit,
-                                                    screenWidthUnit:
-                                                        screenWidthUnit,
-                                                    scoreCategories:
-                                                        widget.scoreCategories,
-                                                    widget: this,
-                                                  ),
+                                                : widget.currentOption ==
+                                                        "Student Loans"
+                                                    ? StudentLoansScreen(screenHeightUnit: screenHeightUnit, screenWidthUnit: screenWidthUnit,)
+                                                    : OverallScoreScreen(
+                                                        screenHeightUnit:
+                                                            screenHeightUnit,
+                                                        screenWidthUnit:
+                                                            screenWidthUnit,
+                                                        scoreCategories: widget
+                                                            .scoreCategories,
+                                                        widget: this,
+                                                      ),
                                   ]),
                             ),
                             Container(
