@@ -222,8 +222,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
     double screenHeightUnit = MediaQuery.of(context).size.height / 1080;
     double screenWidthUnit = MediaQuery.of(context).size.width / 1920;
     return Container(
-      height: screenHeightUnit * 930,
-      width: screenWidthUnit * 1665,
+      height: screenHeightUnit * 1200,
+      width: screenWidthUnit * 1100,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -233,7 +233,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: screenHeightUnit * 55,
+            height: screenHeightUnit * 45,
           ),
           Image.network(
               "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FUntitled%20design%20-%202025-02-22T131030.056%201.png?alt=media&token=5b1ec022-889e-4fb7-ada6-9fd88ca64519",
@@ -256,8 +256,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
             widget.event.description,
             style: GoogleFonts.baloo2(
               fontSize: screenHeightUnit * 25,
-              fontWeight: FontWeight.w700,
-              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+              color: Color.fromRGBO(108, 108, 108, 1),
             ),
             textAlign: TextAlign.center,
           ),
@@ -269,8 +269,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: screenHeightUnit * 297,
-                width: screenWidthUnit * 471,
+                height: screenHeightUnit * 430,
+                width: screenWidthUnit * 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -310,8 +310,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
                 width: screenWidthUnit * 20,
               ),
               Container(
-                height: screenHeightUnit * 297,
-                width: screenWidthUnit * 471,
+                height: screenHeightUnit * 430,
+                width: screenWidthUnit * 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -350,8 +350,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
                 width: screenWidthUnit * 20,
               ),
               Container(
-                height: screenHeightUnit * 297,
-                width: screenWidthUnit * 471,
+                height: screenHeightUnit * 430,
+                width: screenWidthUnit * 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -464,7 +464,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
               width: screenWidthUnit * 307,
               decoration: BoxDecoration(
                   color: (oneSelcted || twoSelected || threeSelected)
-                      ? Color.fromRGBO(79, 195, 247, 1)
+                      ? Color.fromRGBO(0, 127, 255, 1)
                       : Colors.grey,
                   borderRadius: BorderRadius.circular(7)),
               child: Center(
@@ -526,11 +526,11 @@ class _RandomOptionState extends State<RandomOption> {
     return GestureDetector(
       onTap: () => widget.onTap(),
       child: Container(
-          height: widget.screenHeightUnit * 297,
-          width: widget.screenWidthUnit * 471,
+          height: widget.screenHeightUnit * 430,
+          width: widget.screenWidthUnit * 300,
           decoration: BoxDecoration(
             color: widget.selected
-                ? Color.fromRGBO(79, 195, 247, 1)
+                ? Color.fromRGBO(0, 127, 255, 1)
                 : Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
@@ -540,8 +540,8 @@ class _RandomOptionState extends State<RandomOption> {
           ),
           child: Padding(
             padding: EdgeInsets.only(
-                left: widget.screenWidthUnit * 38,
-                top: widget.screenHeightUnit * 21),
+                left: widget.screenWidthUnit * 30,
+                top: widget.screenHeightUnit * 12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,9 +575,9 @@ class _RandomOptionState extends State<RandomOption> {
                     fontSize: widget.screenHeightUnit * 42,
                     fontWeight: FontWeight.w500,
                     color: widget.cost > 0
-                        ? Color.fromRGBO(30, 213, 58, 1)
+                        ? Color.fromRGBO(0, 199, 129, 1)
                         : widget.cost < 0
-                            ? Color.fromRGBO(243, 52, 52, 1)
+                            ? Color.fromRGBO(255, 0, 0, 1)
                             : widget.selected
                                 ? Colors.white
                                 : Colors.black,
@@ -587,7 +587,7 @@ class _RandomOptionState extends State<RandomOption> {
                 SizedBox(
                   height: widget.screenHeightUnit * 10,
                 ),
-                Row(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -597,9 +597,16 @@ class _RandomOptionState extends State<RandomOption> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: widget.effect1Cost > 0
-                                ? Color.fromRGBO(199, 244, 191, 1)
-                                : Color.fromRGBO(255, 213, 213, 1),
+                                ? Color.fromRGBO(242, 255, 245, 1)
+                                : Color.fromRGBO(255, 243, 243, 1),
                             borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: widget.effect1Cost > 0
+                                  ?  Color.fromRGBO(0, 199, 129, 1)
+                                      : Color.fromRGBO(255, 0, 0, 1),
+                              width: 1,
+
+                            )
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -621,8 +628,8 @@ class _RandomOptionState extends State<RandomOption> {
                                   fontSize: widget.screenHeightUnit * 22,
                                   fontWeight: FontWeight.w500,
                                   color: widget.effect1Cost > 0
-                                      ? Color.fromRGBO(30, 213, 58, 1)
-                                      : Color.fromRGBO(243, 52, 52, 1),
+                                      ? Color.fromRGBO(0, 199, 129, 1)
+                                      : Color.fromRGBO(255, 0, 0, 1),
                                 ),
                               ),
                               SizedBox(width: widget.screenWidthUnit * 18),
@@ -632,7 +639,7 @@ class _RandomOptionState extends State<RandomOption> {
                       ),
                     ),
                     SizedBox(
-                      width: widget.screenWidthUnit * 11,
+                      height: widget.screenHeightUnit * 15,
                     ),
                     SizedBox(
                       height: widget.screenHeightUnit * 40,
@@ -640,9 +647,15 @@ class _RandomOptionState extends State<RandomOption> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: widget.effect2Cost > 0
-                                ? Color.fromRGBO(199, 244, 191, 1)
-                                : Color.fromRGBO(255, 213, 213, 1),
+                                ? Color.fromRGBO(242, 255, 245, 1)
+                                : Color.fromRGBO(255, 243, 243, 1),
                             borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: widget.effect2Cost > 0
+                                  ? Color.fromRGBO(30, 213, 58, 1)
+                                  : Color.fromRGBO(243, 52, 52, 1),
+                              width: 1,
+                            ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -664,8 +677,8 @@ class _RandomOptionState extends State<RandomOption> {
                                   fontSize: widget.screenHeightUnit * 22,
                                   fontWeight: FontWeight.w500,
                                   color: widget.effect2Cost > 0
-                                      ? Color.fromRGBO(30, 213, 58, 1)
-                                      : Color.fromRGBO(243, 52, 52, 1),
+                                      ? Color.fromRGBO(0, 199, 129, 1)
+                                      : Color.fromRGBO(255, 0, 0, 1),
                                 ),
                               ),
                               SizedBox(width: widget.screenWidthUnit * 18),

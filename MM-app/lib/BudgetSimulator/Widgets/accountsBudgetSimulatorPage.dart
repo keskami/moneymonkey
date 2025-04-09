@@ -30,14 +30,14 @@ class _AccountsBudgetSimulatorPageState
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.screenHeightUnit * 980,
+      height: widget.screenHeightUnit * 940,
       width: widget.screenWidthUnit * 1490,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: widget.screenHeightUnit * 40,
+            height: widget.screenHeightUnit * 30,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -59,7 +59,7 @@ class _AccountsBudgetSimulatorPageState
             ],
           ),
           SizedBox(
-            height: widget.screenHeightUnit * 30,
+            height: widget.screenHeightUnit * 25,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

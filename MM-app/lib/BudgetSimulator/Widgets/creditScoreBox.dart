@@ -44,7 +44,7 @@ class _MeterBoxState extends State<MeterBox> {
     });
 
     return Container(
-      height: widget.screenHeightUnit * 195,
+      height: widget.screenHeightUnit * 220,
       width: widget.screenWidthUnit * 470,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -126,9 +126,9 @@ class _MeterBoxState extends State<MeterBox> {
                 width: widget.screenWidthUnit * 52,
               ),
               Padding(
-                padding: EdgeInsets.only(top: widget.screenHeightUnit * 40),
+                padding: EdgeInsets.only(top: widget.screenHeightUnit * 60),
                 child: Container(
-                  height: widget.screenHeightUnit * 90,
+                  height: widget.screenHeightUnit * 95,
                   width: widget.screenWidthUnit * 220,
                   child: SfRadialGauge(
                     animationDuration: 1000,

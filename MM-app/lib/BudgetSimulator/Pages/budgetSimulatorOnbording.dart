@@ -860,19 +860,19 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               RandomEvent(
                 name: "Cracked Tooth",
                 description:
-                    "While eating, you experience sudden sharp pain from a cracked molar\nthat requires immediate attention.",
+                    "While eating, you experience sudden sharp pain from a cracked molar that requires immediate attention.",
                 trigerDay: DateTime.now(),
               ),
               RandomEvent(
                 name: "Forgotten Refund",
                 description:
-                    "You receive notice of an unexpected \$600 tax adjustment refund from\nan overlooked education credit",
+                    "You receive notice of an unexpected \$600 tax adjustment refund from an overlooked education credit",
                 trigerDay: DateTime.now(),
               ),
               RandomEvent(
                 name: "Project Excellence",
                 description:
-                    "YYour manager offers either a small immediate bonus or professional\ndevelopment funding after your successful project completion.",
+                    "YYour manager offers either a small immediate bonus or professional development funding after your successful project completion.",
                 trigerDay: DateTime.now(),
               )
 

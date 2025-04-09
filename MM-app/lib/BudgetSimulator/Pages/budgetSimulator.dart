@@ -254,7 +254,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                   fontWeight: FontWeight.w600,
                                                   color: Color.fromRGBO(
                                                       108, 108, 108, 1),
-                                                ))
+                                                )),
+                                                SizedBox(
+                                              height: screenHeightUnit * 30,
+                                            ),
                                           ],
                                         ),
                                         SizedBox(
@@ -354,9 +357,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       bottom:
-                                                          screenHeightUnit * 15,
+                                                          screenHeightUnit * 0,
                                                       top: screenHeightUnit *
-                                                          15),
+                                                          35),
                                                   child: Center(
                                                     child: Bottomwarning(
                                                       screenHeightUnit:
@@ -457,7 +460,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                             SizedBox(
                               width: screenWidthUnit * 20,
                             ),
-                            Column(
+                            SingleChildScrollView(
+                              child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -469,7 +473,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 //   currentDebt: widget.creditCardDebt as int,
                                 // ),
                                 SizedBox(
-                                  height: screenHeightUnit * 10,
+                                  height: screenHeightUnit * 30,
                                 ),
                                 SimulatorTitle(
                                   screenHeightUnit: screenHeightUnit,
@@ -477,7 +481,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   lifeStyle: widget.lifeStyle,
                                 ),
                                 SizedBox(
-                                  height: screenHeightUnit * 10,
+                                  height: screenHeightUnit * 20,
                                 ),
                                 WellnessBoxNew(
                                     screenHeightUnit: screenHeightUnit,
@@ -485,7 +489,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     score: widget.bodyScore,
                                     type: "Body"),
                                 SizedBox(
-                                  height: screenHeightUnit * 10,
+                                  height: screenHeightUnit * 20,
                                 ),
                                 WellnessBoxNew(
                                     screenHeightUnit: screenHeightUnit,
@@ -493,7 +497,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     score: widget.mindScore,
                                     type: "Mind"),
                                 SizedBox(
-                                  height: screenHeightUnit * 10,
+                                  height: screenHeightUnit * 20,
                                 ),
 
                                 WellnessBoxNew(
@@ -503,7 +507,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                     type: "Social"),
 
                                 SizedBox(
-                                  height: screenHeightUnit * 10,
+                                  height: screenHeightUnit * 20,
                                 ),
                                 MeterBox(
                                   screenHeightUnit: screenHeightUnit,
@@ -519,7 +523,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                 //   wellnessScore: widget.wellnessScore,
                                 // ),
                                 SizedBox(
-                                  height: screenHeightUnit * 10,
+                                  height: screenHeightUnit * 20,
                                 ),
                                 SpendingDonutChart(
                                   screenWidthUnit: screenWidthUnit,
@@ -529,8 +533,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   total: totalSpending,
                                   chartData: chartData,
                                 ),
+                                 SizedBox(
+                                  height: screenHeightUnit * 30,
+                                ),
                               ],
                             )
+                            )
+                            
                           ],
                         ),
                       ))

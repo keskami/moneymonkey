@@ -51,7 +51,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
     mapExpenses();
     return Center(
       child: Container(
-          height: widget.screenHeightUnit * 830,
+          height: widget.screenHeightUnit * 730,
           width: widget.screenWidthUnit * 1290,
           child: SingleChildScrollView(
             child: TableCalendar(

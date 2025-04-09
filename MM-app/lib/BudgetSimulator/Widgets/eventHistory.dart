@@ -24,7 +24,7 @@ class _EventHistoryState extends State<EventHistory> {
   Widget build(BuildContext context) {
     return Container(
       width: widget.screenWidthUnit * 517,
-      height: widget.screenHeightUnit * 540,
+      height: widget.screenHeightUnit * 500,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -51,7 +51,7 @@ class _EventHistoryState extends State<EventHistory> {
                   left: widget.screenWidthUnit * 32),
               child: Container(
                 width: widget.screenWidthUnit * 428,
-                height: widget.screenHeightUnit * 400,
+                height: widget.screenHeightUnit * 370,
                 child: SingleChildScrollView(
                   child: Column(
                     children: widget.eventsTaken
