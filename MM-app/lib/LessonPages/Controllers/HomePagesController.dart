@@ -13,6 +13,7 @@ class HomePagesController extends GetxController {
     PortfolioScreen(),
     ComingSoonPage(),
     BudgetSimulator(
+      studentLoanDebt: 20000,
       scoreCategories: [
         'Debt\nReduction',
         'Payment\nTimeliness & Penalties',
@@ -32,9 +33,12 @@ class HomePagesController extends GetxController {
       creditCardDebt: 3000,
       startingBalance: 600,
       creditScore: 600,
-      randomEvents: [
-        
-      ],
+      studentLoan: StudentLoan(
+          name: "Standard Repayment Plan",
+          interestRate: 5,
+          monthlyPayment: 250,
+          monthsLeft: 120),
+      randomEvents: [],
       savingsAPY: 3,
       ccAPY: 19.99,
       hints: [

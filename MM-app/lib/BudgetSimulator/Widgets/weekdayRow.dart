@@ -19,7 +19,7 @@ class WeekdayRow extends StatelessWidget {
       child: Center(
         child: Container(
           width: screenWidthUnit * 1290,
-          height: screenHeightUnit * 61,
+          height: screenHeightUnit * 71,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Color.fromRGBO(243, 249, 255, 1),
@@ -30,11 +30,12 @@ class WeekdayRow extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 "MO",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 18,
+                  fontSize: screenWidthUnit  * 19,
                   fontWeight: FontWeight.w600,
                   color: dayColor
                 ),
@@ -42,7 +43,7 @@ class WeekdayRow extends StatelessWidget {
               Text(
                 "TUES",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 18,
+                  fontSize: screenWidthUnit  * 19,
                   fontWeight: FontWeight.w600,
                   color: dayColor
                 ),
@@ -50,7 +51,7 @@ class WeekdayRow extends StatelessWidget {
               Text(
                 "WED",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 18,
+                  fontSize: screenWidthUnit  * 19,
                   fontWeight: FontWeight.w600,
                   color: dayColor
                 ),
@@ -58,7 +59,7 @@ class WeekdayRow extends StatelessWidget {
               Text(
                 "THURS",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 18,
+                  fontSize: screenWidthUnit  * 19,
                   fontWeight: FontWeight.w600,
                   color: dayColor
                 ),
@@ -66,7 +67,7 @@ class WeekdayRow extends StatelessWidget {
               Text(
                 "FRI",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 18,
+                  fontSize: screenWidthUnit  * 19,
                   fontWeight: FontWeight.w600,
                   color: dayColor
                 ),
@@ -74,7 +75,7 @@ class WeekdayRow extends StatelessWidget {
               Text(
                 "SAT",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 18,
+                  fontSize: screenWidthUnit  * 19,
                   fontWeight: FontWeight.w600,
                   color: dayColor
                 ),
@@ -82,7 +83,7 @@ class WeekdayRow extends StatelessWidget {
               Text(
                 "SUN",
                 style: GoogleFonts.baloo2(
-                  fontSize: screenWidthUnit * 18,
+                  fontSize: screenWidthUnit  * 19,
                   fontWeight: FontWeight.w600,
                   color: dayColor
                 ),

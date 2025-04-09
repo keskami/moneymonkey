@@ -46,7 +46,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
     });
 
     return Container(
-      height: widget.screenHeightUnit * 150,
+      height: widget.screenHeightUnit * 180,
       width: widget.screenWidthUnit * 470,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -73,7 +73,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
                     child: Text(
                       "${widget.type}",
                       style: GoogleFonts.baloo2(
-                          fontSize: widget.screenHeightUnit * 35,
+                          fontSize: widget.screenHeightUnit * 40,
                           fontWeight: FontWeight.w600,
                           color: Colors.black),
                     ),
@@ -101,7 +101,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
                                 children: [
                                   Text('${widget.score}',
                                       style: GoogleFonts.baloo2(
-                                        fontSize: widget.screenHeightUnit * 56,
+                                        fontSize: widget.screenHeightUnit * 62,
                                         fontWeight: FontWeight.w600,
                                         color: widget.score > 80
                                             ? sectionColors[4]
@@ -121,7 +121,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
                                     child: Text(
                                       '/100',
                                       style: GoogleFonts.baloo2(
-                                        fontSize: widget.screenHeightUnit * 35,
+                                        fontSize: widget.screenHeightUnit * 40,
                                         color: Colors.black,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -142,15 +142,15 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
             ),
             Container(
               width: widget.screenWidthUnit * 1,
-              height: widget.screenHeightUnit * 150,
+              height: widget.screenHeightUnit * 180,
               color: Colors.black,
             ),
            
             Container(
               child: Padding(
-                padding: EdgeInsets.only(top: widget.screenHeightUnit * 60, left: widget.screenWidthUnit * 30),
+                padding: EdgeInsets.only(top: widget.screenHeightUnit * 70, left: widget.screenWidthUnit * 30),
                 child: Container(
-                  height: widget.screenHeightUnit * 90,
+                  height: widget.screenHeightUnit * 110,
                   width: widget.screenWidthUnit * 220,
                   child: SfRadialGauge(
                     animationDuration: 1000,
