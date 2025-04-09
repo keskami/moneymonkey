@@ -112,6 +112,21 @@ class Expense {
   });
 }
 
+class StudentLoan {
+  final String name;
+  final double interestRate;
+  final double monthlyPayment;
+  final int monthsLeft;
+
+  StudentLoan({
+    required this.name,
+    required this.interestRate,
+    required this.monthlyPayment,
+    required this.monthsLeft,
+   
+  });
+}
+
 class Hint {
   final String text;
   final bool good;

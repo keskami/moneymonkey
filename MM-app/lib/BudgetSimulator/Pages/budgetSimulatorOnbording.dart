@@ -59,6 +59,12 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
+                    studentLoanDebt: 20000,
+                    studentLoan: StudentLoan(
+                        name: "Standard Repayment Plan",
+                        interestRate: 5,
+                        monthlyPayment: 250,
+                        monthsLeft: 120),
                     scoreCategories: [
                       'Debt\nReduction',
                       'Payment\nTimeliness & Penalties',
@@ -837,6 +843,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
+            studentLoanDebt: 20000,
             scoreCategories: [
               'Savings',
               'Credit Score\nImprovement',
@@ -875,10 +882,13 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
                     "YYour manager offers either a small immediate bonus or professional development funding after your successful project completion.",
                 trigerDay: DateTime.now(),
               )
-
-              
             ],
             savingsAPY: 3,
+            studentLoan: StudentLoan(
+                name: "Standard Repayment Plan",
+                interestRate: 5,
+                monthlyPayment: 250,
+                monthsLeft: 120),
             ccAPY: 19.99,
             hints: [
               Hint(

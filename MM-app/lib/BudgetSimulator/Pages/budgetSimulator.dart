@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsBudgetSimulatorPage.dart';
@@ -47,7 +48,11 @@ class BudgetSimulator extends StatefulWidget {
     required this.socialScore,
     required this.creditLimit,
     required this.scoreCategories,
+    required this.studentLoan,
+    required this.studentLoanDebt,
   });
+  double studentLoanDebt;
+  StudentLoan studentLoan;
   double savingsTransfer = 0;
   final List<String> scoreCategories;
   double checkingTransfer = 0;
@@ -440,6 +445,14 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                             screenHeightUnit,
                                                         screenWidthUnit:
                                                             screenWidthUnit,
+                                                            studentLoan: widget
+                                                                .studentLoan,
+                                                                studentLoanDebt: widget.studentLoanDebt,
+                                                                onClick: (StudentLoan studentLoan) {
+                                                                  setState(() {
+                                                                    widget.studentLoan = studentLoan;
+                                                                  });
+                                                                },
                                                       )))
                                                     : OverallScoreScreen(
                                                         screenHeightUnit:
