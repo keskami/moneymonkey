@@ -29,7 +29,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
   StudentLoan studentLoanStandard = StudentLoan(
     name: "Standard Repayment Plan",
     interestRate: 5,
-    monthlyPayment: 250,
+    monthlyPayment: 225,
     monthsLeft: 120,
   );
   StudentLoan studentLoanExtended = StudentLoan(
@@ -732,9 +732,10 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                             ),
                                           ),
                                           Text(
-                                            option1.monthsLeft > 36
-                                                ? "${(option1.monthsLeft / 12).toStringAsFixed(0)} Years"
-                                                : "${option1.monthsLeft} Months",
+                                            (widget.studentLoanDebt / option1.monthlyPayment).ceil()
+                                             > 36
+                                                ? "${(widget.studentLoanDebt / option1.monthlyPayment / 12).toStringAsFixed(0)} Years"
+                                                : "${widget.studentLoanDebt / option1.monthlyPayment} Months",
 
                                             
                                             style: GoogleFonts.baloo2(

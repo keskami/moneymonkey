@@ -449,8 +449,10 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                                 .studentLoan,
                                                                 studentLoanDebt: widget.studentLoanDebt,
                                                                 onClick: (StudentLoan studentLoan) {
-                                                                  setState(() {
+                                                                    setState(() {
                                                                     widget.studentLoan = studentLoan;
+                                                                    int monthsLeft = (widget.studentLoanDebt / widget.studentLoan.monthlyPayment).ceil();
+                                                                    widget.studentLoan.monthsLeft = monthsLeft;
                                                                   });
                                                                 },
                                                       )))

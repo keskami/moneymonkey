@@ -59,11 +59,11 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
               children: [
                 Container(
                   child: BudgetSimulator(
-                    studentLoanDebt: 20000,
+                    studentLoanDebt: 27000,
                     studentLoan: StudentLoan(
                         name: "Standard Repayment Plan",
                         interestRate: 5,
-                        monthlyPayment: 250,
+                        monthlyPayment: 225,
                         monthsLeft: 120),
                     scoreCategories: [
                       'Debt\nReduction',
@@ -843,7 +843,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             ),
           )
         : BudgetSimulator(
-            studentLoanDebt: 20000,
+            studentLoanDebt: 27000,
             scoreCategories: [
               'Savings',
               'Credit Score\nImprovement',
@@ -887,7 +887,7 @@ class _BudgetSimulatorOnboardingState extends State<BudgetSimulatorOnboarding> {
             studentLoan: StudentLoan(
                 name: "Standard Repayment Plan",
                 interestRate: 5,
-                monthlyPayment: 250,
+                monthlyPayment: 225,
                 monthsLeft: 120),
             ccAPY: 19.99,
             hints: [
