@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/results.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsBudgetSimulatorPage.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
@@ -96,6 +97,13 @@ class BudgetSimulator extends StatefulWidget {
   List<Transaction> Transactions = [];
 }
 
+
+
+
+
+
+
+
 class _BudgetSimulatorState extends State<BudgetSimulator> {
   @override
   void initState() {
@@ -125,6 +133,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     setState(() {
       widget.due = [startingCCMin, startingCCMin * 2, startingCCMin * 3];
     });
+
+
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => BudgetingReport(widget: this, scoreCategories: widget.scoreCategories,)),
+      );
+    });
+   
+    
   }
 
   List<BudgetSimulatorChartData> chartData = [];
@@ -673,9 +690,6 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     mapExpenses();
   }
 
-  Future<void> endGame() async {
-    // Credit Score
-  }
 
   Future<void> nextDay() async {
     if (widget.now.month != widget.now.add(Duration(days: 1)).month) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulator.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/budgetSimulatorOnbording.dart';
+import 'package:money_monkey/BudgetSimulator/Pages/results.dart';
 import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/TeacherDashboard/Pages/TeacherDashboard.dart';
 import 'package:money_monkey/home.dart';

@@ -116,7 +116,7 @@ class StudentLoan {
   final String name;
   final double interestRate;
   final double monthlyPayment;
-   int monthsLeft;
+  int monthsLeft;
 
   StudentLoan({
     required this.name,
