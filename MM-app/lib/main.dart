@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                     return LoginScreen();
                   }
                 } else {
-                  return HomePage();
+                  return TeacherDashboard();
                 }
               },
             ),
