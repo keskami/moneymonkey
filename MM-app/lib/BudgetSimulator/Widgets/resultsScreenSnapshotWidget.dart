@@ -5,16 +5,6 @@ import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/results.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/scoreGraph.dart';
 
-//  BudgetCategory(
-//         id: "goal-progress",
-//         category: "Goal Progress",
-//         label: "Retirement Ready",
-//         score: 90,
-//         status: "Strong",
-//         statusColor: Colors.green,
-//         icon: Icons.track_changes,
-//         tooltip: "You saved steadily toward your main financial goal."
-//       ),
 
 class ResultsScreenSnapShot extends StatefulWidget {
   final List<String> scoreCategories;
@@ -31,8 +21,6 @@ class ResultsScreenSnapShot extends StatefulWidget {
 class _ResultsScreenSnapShotState extends State<ResultsScreenSnapShot> {
   bool showRadarChart = true;
   final snapshotKey = GlobalKey();
-  late List<BudgetCategory> budgetCategories;
-
   List<int> scores = [0, 0, 0, 0, 0];
   List<int> potentialScores = [300, 250, 200, 150, 100];
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
