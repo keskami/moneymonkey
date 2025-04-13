@@ -88,8 +88,8 @@ class BudgetSimulator extends StatefulWidget {
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
   int creditPaymentsSeen = 0;
-  double rentThisMonth = 0;
-  double transportationThisMonth = 0;
+  double rentThisMonth = 20;
+  double transportationThisMonth = 10;
   double subsAndMembershipsThisMonth = 0;
   double utilitiesThisMonth = 0;
   double internetAndPhoneThisMonth = 0;

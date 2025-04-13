@@ -5,23 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 
 class BudgetSimulatorFunctions {
+  double EssentialExpensesTotal(widget) {
 
-  Expense getExpenseToSpendOn(
-    name,
-   widget
-   
-  ) {
-    for (Expense expense in widget.widget.expenses) {
-      if(expense.name == name) {
-        return expense;
-      }
-
-      
-    }
-    return widget.widget.expenses[0];
+    double total = 0.0;
+    total += widget.widget.rentThisMonth;
+    total += widget.widget.utilitiesThisMonth;
+    total += widget.widget.internetAndPhoneThisMonth;
+    total += widget.widget.transportationThisMonth;
+    total += widget.widget.subsAndMembershipsThisMonth;
+    return total;
   }
-
-
 
   List<Map<String, dynamic>> EssentialExpenses(widget) {
     List<Map<String, dynamic>> items = [

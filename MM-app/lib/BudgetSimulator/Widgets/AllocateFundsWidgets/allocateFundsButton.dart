@@ -17,7 +17,7 @@ class BudgetDashboard extends StatefulWidget {
 }
 
 class _BudgetDashboardState extends State<BudgetDashboard> {
-  DateTime currentDate = DateTime(2025, 3, 1); 
+  DateTime currentDate = DateTime(2025, 3, 1);
   double cashOnHand = 2100;
   double unallocated = 2100;
   int creditScore = 665;
@@ -36,25 +36,21 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
   late Map<String, dynamic> goal;
   late Map<String, dynamic> debt;
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
+  Map<String, dynamic> expenseSpending = {};
 
   @override
   void initState() {
     super.initState();
 
-    
-
-
-
     setState(() {
- 
       currentDate = widget.widget.widget.now;
       cashOnHand = widget.widget.widget.checkingAccountBalance;
       unallocated = widget.widget.widget.checkingAccountBalance;
       creditScore = widget.widget.widget.creditScore;
 
       essentials = {
-        'allocated': widget.widget.widget.spendingToday ?? 0,
         'items': functions.EssentialExpenses(widget.widget),
+        'allocated': functions.EssentialExpensesTotal(widget.widget),
       };
 
       goal = {
@@ -110,7 +106,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       };
     });
 
-    //_loadFromSharedPreferences();
+    _loadFromSharedPreferences();
   }
 
   // Handle expense selection
@@ -126,10 +122,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
     var amount = inputValue.isEmpty ? 0.0 : double.parse(inputValue);
 
     if (amount <= 0) return;
-    
+
     amount = min(amount, unallocated);
-    print(amount);
-    print(inputValue);
 
     setState(() {
       unallocated -= amount;
@@ -137,20 +131,24 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       switch (category) {
         case 'essentials':
           final selectedEssentialIndex = selectedExpenses['essentials']!;
+
           final items = List<Map<String, dynamic>>.from(essentials['items']);
+
           items[selectedEssentialIndex]['allocated'] =
               (items[selectedEssentialIndex]['allocated'] as double) + amount;
+
+          
+
+          String name = items[selectedEssentialIndex]['name'];
+          if (expenseSpending.containsKey(name)) {
+            expenseSpending[name] = expenseSpending[name] + amount;
+          } else {
+            expenseSpending[name] = amount;
+          }
 
           essentials['allocated'] =
               (essentials['allocated'] as double) + amount;
           essentials['items'] = items;
-          
-          
-
-          
-
-          
-
 
           break;
 
@@ -178,7 +176,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
     });
 
     // Save to SharedPreferences
-    //_saveToSharedPreferences();
+    _saveToSharedPreferences();
   }
 
   // Handle loan plan change
@@ -203,46 +201,50 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
           'Student Loan', selectedPlan['amount'], debtItems[0]['dueDate']);
 
       // Save to SharedPreferences
-      //_saveToSharedPreferences();
+      _saveToSharedPreferences();
     }
   }
 
-  // Update calendar event
   void _updateCalendarEvent(String name, double amount, int dueDate) {
-    // In a real implementation, this would update a calendar event
-    // debugPrint(
-    //     'Updating calendar event: $name, Amount: \$${amount.toStringAsFixed(0)}, Due: ${dueDate}th');
 
-    // _getSharedPreferences().then((prefs) {
-    //   final String calendarEventsJson = prefs.getString('calendarEvents') ?? '[]';
-    //   final List<dynamic> calendarEvents = jsonDecode(calendarEventsJson);
+  
+   
 
-    //   final eventIndex = calendarEvents.indexWhere((event) => event['name'] == name);
+    _getSharedPreferences().then((prefs) {
+      final String calendarEventsJson =
+          prefs.getString('calendarEvents') ?? '[]';
+      final List<dynamic> calendarEvents = jsonDecode(calendarEventsJson);
 
-    //   if (eventIndex >= 0) {
-    //     calendarEvents[eventIndex] = {'name': name, 'amount': amount, 'dueDate': dueDate};
-    //   } else {
-    //     calendarEvents.add({'name': name, 'amount': amount, 'dueDate': dueDate});
-    //   }
+      final eventIndex =
+          calendarEvents.indexWhere((event) => event['name'] == name);
 
-    //   prefs.setString('calendarEvents', jsonEncode(calendarEvents));
-    // });
+      if (eventIndex >= 0) {
+        calendarEvents[eventIndex] = {
+          'name': name,
+          'amount': amount,
+          'dueDate': dueDate
+        };
+      } else {
+        calendarEvents
+            .add({'name': name, 'amount': amount, 'dueDate': dueDate});
+      }
+
+      prefs.setString('calendarEvents', jsonEncode(calendarEvents));
+    });
   }
 
   // Reset all allocations
   void handleReset() {
     setState(() {
-      // Reset cash and unallocated
-      cashOnHand = 2100;
-      unallocated = 2100;
+      expenseSpending = {};
+      cashOnHand = widget.widget.widget.checkingAccountBalance;
+      unallocated = widget.widget.widget.checkingAccountBalance;
 
-      // Reset essentials allocations
       essentials = {
-        'allocated': widget.widget.widget.spendingToday ?? 0,
         'items': functions.EssentialExpenses(widget.widget),
+        'allocated': functions.EssentialExpensesTotal(widget.widget),
       };
 
-      // Reset goal allocations
       goal = {
         'allocated': 0.0,
         'target': 2500.0,
@@ -252,7 +254,6 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
         'progress': 0.0
       };
 
-      // Reset debt allocations - preserving the selected loan plan
       final debtItems = List<Map<String, dynamic>>.from(debt['items']);
       final currentPlan = debtItems[0]['plan'];
       final plans = List<Map<String, dynamic>>.from(debtItems[0]['plans']);
@@ -313,26 +314,26 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
     });
 
     // Save to SharedPreferences
-    //_saveToSharedPreferences();
+    _saveToSharedPreferences();
   }
 
-  // Submit budget
   void handleSubmit() {
-    // Update calendar events for all expenses
-    final essentialItems = List<Map<String, dynamic>>.from(essentials['items']);
-    essentialItems.forEach((item) {
-      _updateCalendarEvent(item['name'], item['amount'], item['dueDate']);
-    });
 
-    _updateCalendarEvent(
-        'Retirement Contribution', goal['monthlyTarget'], goal['dueDate']);
+    if (expenseSpending != null && expenseSpending.isNotEmpty){
+      for(String name in expenseSpending.keys){
+        if(name == "Rent"){
+          widget.widget.spendOnExpense( expenseSpending[name], name);
+          widget.widget.widget.rentThisMonth += expenseSpending[name];
 
-    final debtItems = List<Map<String, dynamic>>.from(debt['items']);
-    debtItems.forEach((item) {
-      _updateCalendarEvent(item['name'], item['amount'], item['dueDate']);
-    });
+        }
 
-    // Save final budget state
+    }
+
+    }
+
+    
+   
+
     final finalBudget = {
       'essentials': essentials,
       'goal': goal,
@@ -340,17 +341,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       'date': currentDate.toIso8601String()
     };
 
-    // _getSharedPreferences().then((prefs) {
-    //   prefs.setString('submittedBudget', jsonEncode(finalBudget));
-
-    //   // Success notification
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text('Budget submitted successfully! Your allocations have been saved and calendar events updated.'),
-    //       backgroundColor: Colors.green,
-    //     ),
-    //   );
-    // });
+    
   }
 
   // Find next upcoming expenses
@@ -435,44 +426,53 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
     ).format(value);
   }
 
-  // // Save data to SharedPreferences
-  // Future<void> _saveToSharedPreferences() async {
-  //   final prefs = await _getSharedPreferences();
+  // Save data to SharedPreferences
+  Future<void> _saveToSharedPreferences() async {
+    final prefs = await _getSharedPreferences();
 
-  //   final budgetData = {
-  //     'essentials': essentials,
-  //     'goal': goal,
-  //     'debt': debt,
-  //     'unallocated': unallocated,
-  //     'cashOnHand': cashOnHand,
-  //     'creditScore': creditScore
-  //   };
+    await prefs.setString("expenseSpending", jsonEncode(expenseSpending));
 
-  //   await prefs.setString('budgetData', jsonEncode(budgetData));
-  // }
+
+
+    final budgetData = {
+      'essentials': essentials,
+      'goal': goal,
+      'debt': debt,
+      'unallocated': unallocated,
+      'cashOnHand': cashOnHand,
+      'creditScore': creditScore
+    };
+
+    await prefs.setString('budgetData', jsonEncode(budgetData));
+  }
 
   // Load data from SharedPreferences
-  // Future<void> _loadFromSharedPreferences() async {
-  //   final prefs = await _getSharedPreferences();
+  Future<void> _loadFromSharedPreferences() async {
+    final prefs = await _getSharedPreferences();
 
-  //   final savedData = prefs.getString('budgetData');
-  //   if (savedData != null) {
-  //     final Map<String, dynamic> parsedData = jsonDecode(savedData);
+    final savedData = prefs.getString('budgetData');
+    final expenseSpendingData = prefs.getString('expenseSpending');
+    print(expenseSpendingData);
 
-  //     setState(() {
-  //       essentials = parsedData['essentials'];
-  //       goal = parsedData['goal'];
-  //       debt = parsedData['debt'];
-  //       unallocated = parsedData['unallocated'];
-  //       cashOnHand = parsedData['cashOnHand'];
-  //       creditScore = parsedData['creditScore'];
-  //     });
-  //   }
-  // }
+    if (savedData != null) {
+      final Map<String, dynamic> parsedData = jsonDecode(savedData);
 
-  // Future<SharedPreferences> _getSharedPreferences() async {
-  //   return await SharedPreferences.getInstance();
-  // }
+      setState(() {
+        essentials = parsedData['essentials'];
+        goal = parsedData['goal'];
+        debt = parsedData['debt'];
+        unallocated = parsedData['unallocated'];
+        cashOnHand = parsedData['cashOnHand'];
+        creditScore = parsedData['creditScore'];
+        expenseSpending = jsonDecode(expenseSpendingData!);
+        
+      });
+    }
+  }
+
+  Future<SharedPreferences> _getSharedPreferences() async {
+    return await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
