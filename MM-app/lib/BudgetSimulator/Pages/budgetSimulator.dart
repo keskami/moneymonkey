@@ -88,6 +88,13 @@ class BudgetSimulator extends StatefulWidget {
   DateTime focusedDay = DateTime(2025, 5, 1);
   DateTime selectedDay = DateTime(2025, 5, 1);
   int creditPaymentsSeen = 0;
+  double rentThisMonth = 0;
+  double transportationThisMonth = 0;
+  double subsAndMembershipsThisMonth = 0;
+  double utilitiesThisMonth = 0;
+  double internetAndPhoneThisMonth = 0;
+
+  int spendingToday = 0;
 
   List<int> paid = [0, 0, 0];
   List<int> due = [300, 600, 900];
@@ -136,11 +143,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     });
 
 
-     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => BudgetingReport(widget: this, scoreCategories: widget.scoreCategories,)),
-      );
-    });
+    //  WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(builder: (context) => BudgetingReport(widget: this, scoreCategories: widget.scoreCategories,)),
+    //   );
+    // });
    
     
   }
@@ -300,7 +307,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                   context: context,
                                                   builder: (BuildContext context) {
                                                     return Dialog(
-                                                    child: BudgetDashboard(),
+                                                    child: BudgetDashboard(widget: this),
                                                     );
                                                   },
                                                   );

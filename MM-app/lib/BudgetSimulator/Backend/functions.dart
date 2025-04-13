@@ -4,12 +4,113 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 
-class BudgetSimulatorFunctions 
+class BudgetSimulatorFunctions {
 
-{
+  Expense getExpenseToSpendOn(
+    name,
+   widget
+   
+  ) {
+    for (Expense expense in widget.widget.expenses) {
+      if(expense.name == name) {
+        return expense;
+      }
 
-  String s1P2ScoreGrade(score){
-     if (score >= 900) {
+      
+    }
+    return widget.widget.expenses[0];
+  }
+
+
+
+  List<Map<String, dynamic>> EssentialExpenses(widget) {
+    List<Map<String, dynamic>> items = [
+      {
+        'name': 'Rent',
+        'amount': 1200.0,
+        'dueDate': 3,
+        'paid': false,
+        'allocated': widget.widget.rentThisMonth
+      },
+      {
+        'name': 'Utilities',
+        'amount': 150.0,
+        'dueDate': 5,
+        'paid': false,
+        'allocated': widget.widget.utilitiesThisMonth
+      },
+      {
+        'name': 'Internet & Phone',
+        'amount': 100.0,
+        'dueDate': 8,
+        'paid': false,
+        'allocated': widget.widget.internetAndPhoneThisMonth
+      },
+      {
+        'name': 'Transportation',
+        'amount': 400.0,
+        'dueDate': 10,
+        'paid': false,
+        'allocated': widget.widget.transportationThisMonth
+      },
+      {
+        'name': "Subs & Memberships",
+        'amount': 50.0,
+        'dueDate': 15,
+        'paid': false,
+        'allocated': widget.widget.subsAndMembershipsThisMonth
+      },
+    ];
+
+    for (Expense expense in widget.expenses) {
+      if (expense.name == "Rent") {
+        items[0]['amount'] = expense.amount;
+        items[0]['dueDate'] = expense.dueDay.day;
+        if (expense.amountPaid >= expense.amount) {
+          items[0]['paid'] = true;
+        } else {
+          items[0]['paid'] = false;
+        }
+      } else if (expense.name == "Utilities") {
+        items[1]['amount'] = expense.amount;
+        items[1]['dueDate'] = expense.dueDay.day;
+        if (expense.amountPaid >= expense.amount) {
+          items[1]['paid'] = true;
+        } else {
+          items[1]['paid'] = false;
+        }
+      } else if (expense.name == "Internet & Phone") {
+        items[2]['amount'] = expense.amount;
+        items[2]['dueDate'] = expense.dueDay.day;
+        if (expense.amountPaid >= expense.amount) {
+          items[2]['paid'] = true;
+        } else {
+          items[2]['paid'] = false;
+        }
+      } else if (expense.name == "Transportation") {
+        items[3]['amount'] = expense.amount;
+        items[3]['dueDate'] = expense.dueDay.day;
+        if (expense.amountPaid >= expense.amount) {
+          items[3]['paid'] = true;
+        } else {
+          items[3]['paid'] = false;
+        }
+      } else if (expense.name == "Subscriptions & Memberships") {
+        items[4]['amount'] = expense.amount;
+        items[4]['dueDate'] = expense.dueDay.day;
+        if (expense.amountPaid >= expense.amount) {
+          items[4]['paid'] = true;
+        } else {
+          items[4]['paid'] = false;
+        }
+      }
+    }
+
+    return items;
+  }
+
+  String s1P2ScoreGrade(score) {
+    if (score >= 900) {
       return "A";
     } else if (score >= 800) {
       return "B";
@@ -20,11 +121,10 @@ class BudgetSimulatorFunctions
     } else {
       return "F";
     }
-
   }
 
-  String s1P2ScoreTextWord(score){
-     if (score >= 900) {
+  String s1P2ScoreTextWord(score) {
+    if (score >= 900) {
       return "Great";
     } else if (score >= 800) {
       return "Good";
@@ -35,11 +135,10 @@ class BudgetSimulatorFunctions
     } else {
       return "Bad";
     }
-
   }
 
-  Color s1P2ScoreTextColor(score){
-     if (score >= 900) {
+  Color s1P2ScoreTextColor(score) {
+    if (score >= 900) {
       return Colors.green;
     } else if (score >= 800) {
       return Colors.lightGreen;
@@ -50,35 +149,31 @@ class BudgetSimulatorFunctions
     } else {
       return Colors.red;
     }
-
   }
 
-  int s1P2WellnessScore(double body,double mind, double social) {
-    var score = (body + mind + social)/3;
+  int s1P2WellnessScore(double body, double mind, double social) {
+    var score = (body + mind + social) / 3;
     return score.toInt();
-  
-   
   }
-   
 
-  int s1P2CCDebtScore(double score){
+  int s1P2CCDebtScore(double score) {
     score = score.abs();
-    if (score <=  750) {
+    if (score <= 750) {
       return 150;
-    } else if (score <=  1000) {
+    } else if (score <= 1000) {
       return 100;
-    } else if (score <=  1250) {
+    } else if (score <= 1250) {
       return 75;
-    } else if (score <=  1400) {
+    } else if (score <= 1400) {
       return 50;
-    } else if (score <=  1500) {
+    } else if (score <= 1500) {
       return 25;
     } else {
       return 0;
     }
   }
 
-  int s1P2CreditScoreScore(double score){
+  int s1P2CreditScoreScore(double score) {
     if (score >= 680) {
       return 250;
     } else if (score >= 660) {
@@ -94,7 +189,7 @@ class BudgetSimulatorFunctions
     }
   }
 
-  int s1P2SavingsScore(double savings){
+  int s1P2SavingsScore(double savings) {
     if (savings >= 1000) {
       return 300;
     } else if (savings >= 750) {
@@ -107,14 +202,6 @@ class BudgetSimulatorFunctions
       return 0;
     }
   }
-
-
-
-
-
-
-
-
 
   // widget.creditScore > 670
   //                                     ? Text(
@@ -252,34 +339,30 @@ class BudgetSimulatorFunctions
   }
 
   Color getPaymentHistoryBackgroudColor(double percentage, int amount) {
-     
-      if (percentage == 100) {
-        return Color.fromRGBO(243, 255, 250, 1);
-      } else if (percentage != 0) {
-        return Color.fromRGBO(255, 247, 233, 1);
-      } else {
-        if (amount == 0) {
+    if (percentage == 100) {
+      return Color.fromRGBO(243, 255, 250, 1);
+    } else if (percentage != 0) {
       return Color.fromRGBO(255, 247, 233, 1);
-    } 
-        return Color.fromRGBO(255, 243, 243, 1);
+    } else {
+      if (amount == 0) {
+        return Color.fromRGBO(255, 247, 233, 1);
       }
-    
+      return Color.fromRGBO(255, 243, 243, 1);
+    }
   }
 
   Color getPaymentHistoryTextColor(double percentage, int amount) {
-    
-    
-      if (percentage == 100) {
-        return Colors.green;
-      } else if (percentage != 0) {
-        return Color.fromRGBO(255, 176, 0, 1);
-      } else {
-        if (amount == 0) {
+    if (percentage == 100) {
+      return Colors.green;
+    } else if (percentage != 0) {
       return Color.fromRGBO(255, 176, 0, 1);
-    }
-        return Colors.red;
+    } else {
+      if (amount == 0) {
+        return Color.fromRGBO(255, 176, 0, 1);
       }
-    
+      return Colors.red;
+    }
+
     return Color.fromRGBO(255, 176, 0, 1);
   }
 

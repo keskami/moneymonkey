@@ -1,215 +1,62 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BudgetDashboard extends StatefulWidget {
-  const BudgetDashboard({Key? key}) : super(key: key);
+  dynamic widget;
+
+  BudgetDashboard({Key? key, required this.widget}) : super(key: key);
 
   @override
   _BudgetDashboardState createState() => _BudgetDashboardState();
 }
 
 class _BudgetDashboardState extends State<BudgetDashboard> {
-  // Sample initial data
-  DateTime currentDate = DateTime(2025, 3, 1); // April 1, 2025
+  DateTime currentDate = DateTime(2025, 3, 1); 
   double cashOnHand = 2100;
   double unallocated = 2100;
   int creditScore = 665;
   String? expandedPanel;
-  
-  // Selected expenses for allocation
-  Map<String, int> selectedExpenses = {
-    'essentials': 0, // Index of selected expense
-    'debt': 0 // Index of selected debt expense
-  };
-  
+
+  Map<String, int> selectedExpenses = {'essentials': 0, 'debt': 0};
+
   Map<String, TextEditingController> allocationControllers = {
     'essentials': TextEditingController(),
     'goal': TextEditingController(),
     'debt': TextEditingController()
   };
-  
+
   // Budget categories
   late Map<String, dynamic> essentials;
   late Map<String, dynamic> goal;
   late Map<String, dynamic> debt;
+  BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
 
   @override
   void initState() {
     super.initState();
-    
-    // Initialize budget categories
-    essentials = {
-      'allocated': 0.0,
-      'items': [
-        {'name': 'Rent', 'amount': 1200.0, 'dueDate': 3, 'paid': false, 'allocated': 0.0},
-        {'name': 'Utilities', 'amount': 150.0, 'dueDate': 5, 'paid': false, 'allocated': 0.0},
-        {'name': 'Internet & Phone', 'amount': 100.0, 'dueDate': 8, 'paid': false, 'allocated': 0.0},
-        {'name': 'Transportation', 'amount': 400.0, 'dueDate': 10, 'paid': false, 'allocated': 0.0}
-      ]
-    };
-    
-    goal = {
-      'allocated': 0.0,
-      'target': 2500.0,
-      'monthlyTarget': 833.0,
-      'dueDate': 18,
-      'paid': false,
-      'progress': 0.0
-    };
-    
-    debt = {
-      'allocated': 0.0,
-      'items': [
-        {
-          'name': 'Student Loan',
-          'amount': 250.0,
-          'dueDate': 12,
-          'paid': false,
-          'allocated': 0.0,
-          'plan': 'standard',
-          'plans': [
-            {'name': 'Standard', 'amount': 250.0, 'interest': '5%', 'term': '10 years'},
-            {'name': 'Extended', 'amount': 150.0, 'interest': '5.5%', 'term': '15 years'},
-            {'name': 'Graduated', 'amount': 100.0, 'interest': '5.25%', 'term': '10 years'}
-          ]
-        },
-        {
-          'name': 'Credit Card',
-          'amount': 75.0,
-          'dueDate': 25,
-          'paid': false,
-          'allocated': 0.0,
-          'balance': 2500.0,
-          'interest': '18% APR'
-        }
-      ]
-    };
-    
-    // Load saved data
-    _loadFromSharedPreferences();
-  }
-  
-  // Handle expense selection
-  void handleExpenseSelect(String category, int index) {
-    setState(() {
-      selectedExpenses[category] = index;
-    });
-  }
-  
-  // Handle allocation
-  void handleAllocation(String category) {
-    final inputValue = allocationControllers[category]!.text;
-    final amount = inputValue.isEmpty ? 0.0 : double.parse(inputValue);
-    
-    if (amount <= 0 || amount > unallocated) return;
-    
-    setState(() {
-      unallocated -= amount;
-      
-      switch(category) {
-        case 'essentials':
-          final selectedEssentialIndex = selectedExpenses['essentials']!;
-          final items = List<Map<String, dynamic>>.from(essentials['items']);
-          items[selectedEssentialIndex]['allocated'] = 
-              (items[selectedEssentialIndex]['allocated'] as double) + amount;
-          
-          essentials['allocated'] = (essentials['allocated'] as double) + amount;
-          essentials['items'] = items;
-          break;
-          
-        case 'goal':
-          goal['allocated'] = (goal['allocated'] as double) + amount;
-          goal['progress'] = ((goal['allocated'] as double) / (goal['target'] as double)) * 100;
-          if (goal['progress'] > 100) goal['progress'] = 100.0;
-          break;
-          
-        case 'debt':
-          final selectedDebtIndex = selectedExpenses['debt']!;
-          final items = List<Map<String, dynamic>>.from(debt['items']);
-          items[selectedDebtIndex]['allocated'] = 
-              (items[selectedDebtIndex]['allocated'] as double) + amount;
-          
-          debt['allocated'] = (debt['allocated'] as double) + amount;
-          debt['items'] = items;
-          break;
-      }
-      
-      // Clear input after allocation
-      allocationControllers[category]!.clear();
-    });
-    
-    // Save to SharedPreferences
-    _saveToSharedPreferences();
-  }
 
-  // Handle loan plan change
-  void handleLoanPlanChange(String planName) {
-    final debtItems = List<Map<String, dynamic>>.from(debt['items']);
-    final plans = List<Map<String, dynamic>>.from(debtItems[0]['plans']);
     
-    final selectedPlan = plans.firstWhere(
-      (plan) => plan['name'].toString().toLowerCase() == planName.toLowerCase(),
-      orElse: () => <String, dynamic>{},
-    );
-    
-    if (selectedPlan.isNotEmpty) {
-      setState(() {
-        debtItems[0]['plan'] = planName.toLowerCase();
-        debtItems[0]['amount'] = selectedPlan['amount'];
-        debt['items'] = debtItems;
-      });
-      
-      // Update calendar event for student loan
-      _updateCalendarEvent('Student Loan', selectedPlan['amount'], debtItems[0]['dueDate']);
-      
-      // Save to SharedPreferences
-      _saveToSharedPreferences();
-    }
-  }
-  
-  // Update calendar event
-  void _updateCalendarEvent(String name, double amount, int dueDate) {
-    // In a real implementation, this would update a calendar event
-    debugPrint('Updating calendar event: $name, Amount: \$${amount.toStringAsFixed(0)}, Due: ${dueDate}th');
-    
-    _getSharedPreferences().then((prefs) {
-      final String calendarEventsJson = prefs.getString('calendarEvents') ?? '[]';
-      final List<dynamic> calendarEvents = jsonDecode(calendarEventsJson);
-      
-      final eventIndex = calendarEvents.indexWhere((event) => event['name'] == name);
-      
-      if (eventIndex >= 0) {
-        calendarEvents[eventIndex] = {'name': name, 'amount': amount, 'dueDate': dueDate};
-      } else {
-        calendarEvents.add({'name': name, 'amount': amount, 'dueDate': dueDate});
-      }
-      
-      prefs.setString('calendarEvents', jsonEncode(calendarEvents));
-    });
-  }
-  
-  // Reset all allocations
-  void handleReset() {
+
+
+
     setState(() {
-      // Reset cash and unallocated
-      cashOnHand = 2100;
-      unallocated = 2100;
-      
-      // Reset essentials allocations
+ 
+      currentDate = widget.widget.widget.now;
+      cashOnHand = widget.widget.widget.checkingAccountBalance;
+      unallocated = widget.widget.widget.checkingAccountBalance;
+      creditScore = widget.widget.widget.creditScore;
+
       essentials = {
-        'allocated': 0.0,
-        'items': [
-          {'name': 'Rent', 'amount': 1200.0, 'dueDate': 3, 'paid': false, 'allocated': 0.0},
-          {'name': 'Utilities', 'amount': 150.0, 'dueDate': 5, 'paid': false, 'allocated': 0.0},
-          {'name': 'Internet & Phone', 'amount': 100.0, 'dueDate': 8, 'paid': false, 'allocated': 0.0},
-          {'name': 'Transportation', 'amount': 400.0, 'dueDate': 10, 'paid': false, 'allocated': 0.0}
-        ]
+        'allocated': widget.widget.widget.spendingToday ?? 0,
+        'items': functions.EssentialExpenses(widget.widget),
       };
-      
-      // Reset goal allocations
+
       goal = {
         'allocated': 0.0,
         'target': 2500.0,
@@ -218,30 +65,36 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
         'paid': false,
         'progress': 0.0
       };
-      
-      // Reset debt allocations - preserving the selected loan plan
-      final debtItems = List<Map<String, dynamic>>.from(debt['items']);
-      final currentPlan = debtItems[0]['plan'];
-      final plans = List<Map<String, dynamic>>.from(debtItems[0]['plans']);
-      final planDetails = plans.firstWhere(
-        (p) => p['name'].toString().toLowerCase() == currentPlan.toString().toLowerCase(),
-        orElse: () => {'amount': 250.0},
-      );
-      
+
       debt = {
         'allocated': 0.0,
         'items': [
           {
             'name': 'Student Loan',
-            'amount': planDetails['amount'],
+            'amount': 250.0,
             'dueDate': 12,
             'paid': false,
             'allocated': 0.0,
-            'plan': currentPlan ?? 'standard',
+            'plan': 'standard',
             'plans': [
-              {'name': 'Standard', 'amount': 250.0, 'interest': '5%', 'term': '10 years'},
-              {'name': 'Extended', 'amount': 150.0, 'interest': '5.5%', 'term': '15 years'},
-              {'name': 'Graduated', 'amount': 100.0, 'interest': '5.25%', 'term': '10 years'}
+              {
+                'name': 'Standard',
+                'amount': 250.0,
+                'interest': '5%',
+                'term': '10 years'
+              },
+              {
+                'name': 'Extended',
+                'amount': 150.0,
+                'interest': '5.5%',
+                'term': '15 years'
+              },
+              {
+                'name': 'Graduated',
+                'amount': 100.0,
+                'interest': '5.25%',
+                'term': '10 years'
+              }
             ]
           },
           {
@@ -255,17 +108,214 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
           }
         ]
       };
-      
+    });
+
+    //_loadFromSharedPreferences();
+  }
+
+  // Handle expense selection
+  void handleExpenseSelect(String category, int index) {
+    setState(() {
+      selectedExpenses[category] = index;
+    });
+  }
+
+  // Handle allocation
+  void handleAllocation(String category) {
+    final inputValue = allocationControllers[category]!.text;
+    var amount = inputValue.isEmpty ? 0.0 : double.parse(inputValue);
+
+    if (amount <= 0) return;
+    
+    amount = min(amount, unallocated);
+    print(amount);
+    print(inputValue);
+
+    setState(() {
+      unallocated -= amount;
+
+      switch (category) {
+        case 'essentials':
+          final selectedEssentialIndex = selectedExpenses['essentials']!;
+          final items = List<Map<String, dynamic>>.from(essentials['items']);
+          items[selectedEssentialIndex]['allocated'] =
+              (items[selectedEssentialIndex]['allocated'] as double) + amount;
+
+          essentials['allocated'] =
+              (essentials['allocated'] as double) + amount;
+          essentials['items'] = items;
+          
+          
+
+          
+
+          
+
+
+          break;
+
+        case 'goal':
+          goal['allocated'] = (goal['allocated'] as double) + amount;
+          goal['progress'] =
+              ((goal['allocated'] as double) / (goal['target'] as double)) *
+                  100;
+          if (goal['progress'] > 100) goal['progress'] = 100.0;
+          break;
+
+        case 'debt':
+          final selectedDebtIndex = selectedExpenses['debt']!;
+          final items = List<Map<String, dynamic>>.from(debt['items']);
+          items[selectedDebtIndex]['allocated'] =
+              (items[selectedDebtIndex]['allocated'] as double) + amount;
+
+          debt['allocated'] = (debt['allocated'] as double) + amount;
+          debt['items'] = items;
+          break;
+      }
+
+      // Clear input after allocation
+      allocationControllers[category]!.clear();
+    });
+
+    // Save to SharedPreferences
+    //_saveToSharedPreferences();
+  }
+
+  // Handle loan plan change
+  void handleLoanPlanChange(String planName) {
+    final debtItems = List<Map<String, dynamic>>.from(debt['items']);
+    final plans = List<Map<String, dynamic>>.from(debtItems[0]['plans']);
+
+    final selectedPlan = plans.firstWhere(
+      (plan) => plan['name'].toString().toLowerCase() == planName.toLowerCase(),
+      orElse: () => <String, dynamic>{},
+    );
+
+    if (selectedPlan.isNotEmpty) {
+      setState(() {
+        debtItems[0]['plan'] = planName.toLowerCase();
+        debtItems[0]['amount'] = selectedPlan['amount'];
+        debt['items'] = debtItems;
+      });
+
+      // Update calendar event for student loan
+      _updateCalendarEvent(
+          'Student Loan', selectedPlan['amount'], debtItems[0]['dueDate']);
+
+      // Save to SharedPreferences
+      //_saveToSharedPreferences();
+    }
+  }
+
+  // Update calendar event
+  void _updateCalendarEvent(String name, double amount, int dueDate) {
+    // In a real implementation, this would update a calendar event
+    // debugPrint(
+    //     'Updating calendar event: $name, Amount: \$${amount.toStringAsFixed(0)}, Due: ${dueDate}th');
+
+    // _getSharedPreferences().then((prefs) {
+    //   final String calendarEventsJson = prefs.getString('calendarEvents') ?? '[]';
+    //   final List<dynamic> calendarEvents = jsonDecode(calendarEventsJson);
+
+    //   final eventIndex = calendarEvents.indexWhere((event) => event['name'] == name);
+
+    //   if (eventIndex >= 0) {
+    //     calendarEvents[eventIndex] = {'name': name, 'amount': amount, 'dueDate': dueDate};
+    //   } else {
+    //     calendarEvents.add({'name': name, 'amount': amount, 'dueDate': dueDate});
+    //   }
+
+    //   prefs.setString('calendarEvents', jsonEncode(calendarEvents));
+    // });
+  }
+
+  // Reset all allocations
+  void handleReset() {
+    setState(() {
+      // Reset cash and unallocated
+      cashOnHand = 2100;
+      unallocated = 2100;
+
+      // Reset essentials allocations
+      essentials = {
+        'allocated': widget.widget.widget.spendingToday ?? 0,
+        'items': functions.EssentialExpenses(widget.widget),
+      };
+
+      // Reset goal allocations
+      goal = {
+        'allocated': 0.0,
+        'target': 2500.0,
+        'monthlyTarget': 833.0,
+        'dueDate': 18,
+        'paid': false,
+        'progress': 0.0
+      };
+
+      // Reset debt allocations - preserving the selected loan plan
+      final debtItems = List<Map<String, dynamic>>.from(debt['items']);
+      final currentPlan = debtItems[0]['plan'];
+      final plans = List<Map<String, dynamic>>.from(debtItems[0]['plans']);
+      final planDetails = plans.firstWhere(
+        (p) =>
+            p['name'].toString().toLowerCase() ==
+            currentPlan.toString().toLowerCase(),
+        orElse: () => {'amount': 250.0},
+      );
+
+      debt = {
+        'allocated': 0.0,
+        'items': [
+          {
+            'name': 'Student Loan',
+            'amount': planDetails['amount'],
+            'dueDate': 12,
+            'paid': false,
+            'allocated': 0.0,
+            'plan': currentPlan ?? 'standard',
+            'plans': [
+              {
+                'name': 'Standard',
+                'amount': 250.0,
+                'interest': '5%',
+                'term': '10 years'
+              },
+              {
+                'name': 'Extended',
+                'amount': 150.0,
+                'interest': '5.5%',
+                'term': '15 years'
+              },
+              {
+                'name': 'Graduated',
+                'amount': 100.0,
+                'interest': '5.25%',
+                'term': '10 years'
+              }
+            ]
+          },
+          {
+            'name': 'Credit Card',
+            'amount': 75.0,
+            'dueDate': 25,
+            'paid': false,
+            'allocated': 0.0,
+            'balance': 2500.0,
+            'interest': '18% APR'
+          }
+        ]
+      };
+
       // Reset inputs
       allocationControllers.forEach((key, controller) {
         controller.clear();
       });
     });
-    
+
     // Save to SharedPreferences
-    _saveToSharedPreferences();
+    //_saveToSharedPreferences();
   }
-  
+
   // Submit budget
   void handleSubmit() {
     // Update calendar events for all expenses
@@ -273,14 +323,15 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
     essentialItems.forEach((item) {
       _updateCalendarEvent(item['name'], item['amount'], item['dueDate']);
     });
-    
-    _updateCalendarEvent('Retirement Contribution', goal['monthlyTarget'], goal['dueDate']);
-    
+
+    _updateCalendarEvent(
+        'Retirement Contribution', goal['monthlyTarget'], goal['dueDate']);
+
     final debtItems = List<Map<String, dynamic>>.from(debt['items']);
     debtItems.forEach((item) {
       _updateCalendarEvent(item['name'], item['amount'], item['dueDate']);
     });
-    
+
     // Save final budget state
     final finalBudget = {
       'essentials': essentials,
@@ -288,42 +339,44 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       'debt': debt,
       'date': currentDate.toIso8601String()
     };
-    
-    _getSharedPreferences().then((prefs) {
-      prefs.setString('submittedBudget', jsonEncode(finalBudget));
-      
-      // Success notification
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Budget submitted successfully! Your allocations have been saved and calendar events updated.'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    });
+
+    // _getSharedPreferences().then((prefs) {
+    //   prefs.setString('submittedBudget', jsonEncode(finalBudget));
+
+    //   // Success notification
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text('Budget submitted successfully! Your allocations have been saved and calendar events updated.'),
+    //       backgroundColor: Colors.green,
+    //     ),
+    //   );
+    // });
   }
-  
+
   // Find next upcoming expenses
   Map<String, dynamic> getNextExpenses() {
     final day = currentDate.day;
     List<Map<String, dynamic>> nextExpenses = [];
     int minDaysAway = 31;
-    
+
     // Helper function to check and add expenses
     void checkAndAddExpense(Map<String, dynamic> expense, String category) {
       final daysAway = expense['dueDate'] >= day
           ? expense['dueDate'] - day
           : expense['dueDate'] + 30 - day;
-      
+
       if (daysAway < minDaysAway) {
         // Found a closer expense, clear array and add this one
         minDaysAway = daysAway;
-        nextExpenses = [{'category': category, ...expense}];
+        nextExpenses = [
+          {'category': category, ...expense}
+        ];
       } else if (daysAway == minDaysAway) {
         // Same day as current closest, add to array
         nextExpenses.add({'category': category, ...expense});
       }
     }
-    
+
     // Check essentials
     final essentialItems = List<Map<String, dynamic>>.from(essentials['items']);
     essentialItems.forEach((item) {
@@ -331,7 +384,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
         checkAndAddExpense(item, 'essentials');
       }
     });
-    
+
     // Check goal
     if (!(goal['paid'] as bool)) {
       checkAndAddExpense({
@@ -340,7 +393,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
         'dueDate': goal['dueDate']
       }, 'goal');
     }
-    
+
     // Check debt
     final debtItems = List<Map<String, dynamic>>.from(debt['items']);
     debtItems.forEach((item) {
@@ -348,30 +401,31 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
         checkAndAddExpense(item, 'debt');
       }
     });
-    
+
     return {'expenses': nextExpenses, 'daysAway': minDaysAway};
   }
-  
+
   // Calculate total due amounts
   double get essentialsDue {
     final items = List<Map<String, dynamic>>.from(essentials['items']);
+    double x = items.fold(0, (sum, item) => sum + (item['amount'] as double));
     return items.fold(0, (sum, item) => sum + (item['amount'] as double));
   }
-  
+
   double get goalDue => goal['monthlyTarget'] as double;
-  
+
   double get debtDue {
     final items = List<Map<String, dynamic>>.from(debt['items']);
     return items.fold(0, (sum, item) => sum + (item['amount'] as double));
   }
-  
+
   // Toggle panel expansion
   void togglePanel(String panel) {
     setState(() {
       expandedPanel = expandedPanel == panel ? null : panel;
     });
   }
-  
+
   // Format currency
   String formatCurrency(double value) {
     return NumberFormat.currency(
@@ -380,52 +434,53 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       decimalDigits: 0,
     ).format(value);
   }
-  
-  // Save data to SharedPreferences
-  Future<void> _saveToSharedPreferences() async {
-    final prefs = await _getSharedPreferences();
-    
-    final budgetData = {
-      'essentials': essentials,
-      'goal': goal,
-      'debt': debt,
-      'unallocated': unallocated,
-      'cashOnHand': cashOnHand,
-      'creditScore': creditScore
-    };
-    
-    await prefs.setString('budgetData', jsonEncode(budgetData));
-  }
-  
+
+  // // Save data to SharedPreferences
+  // Future<void> _saveToSharedPreferences() async {
+  //   final prefs = await _getSharedPreferences();
+
+  //   final budgetData = {
+  //     'essentials': essentials,
+  //     'goal': goal,
+  //     'debt': debt,
+  //     'unallocated': unallocated,
+  //     'cashOnHand': cashOnHand,
+  //     'creditScore': creditScore
+  //   };
+
+  //   await prefs.setString('budgetData', jsonEncode(budgetData));
+  // }
+
   // Load data from SharedPreferences
-  Future<void> _loadFromSharedPreferences() async {
-    final prefs = await _getSharedPreferences();
-    
-    final savedData = prefs.getString('budgetData');
-    if (savedData != null) {
-      final Map<String, dynamic> parsedData = jsonDecode(savedData);
-      
-      setState(() {
-        essentials = parsedData['essentials'];
-        goal = parsedData['goal'];
-        debt = parsedData['debt'];
-        unallocated = parsedData['unallocated'];
-        cashOnHand = parsedData['cashOnHand'];
-        creditScore = parsedData['creditScore'];
-      });
-    }
-  }
-  
-  Future<SharedPreferences> _getSharedPreferences() async {
-    return await SharedPreferences.getInstance();
-  }
+  // Future<void> _loadFromSharedPreferences() async {
+  //   final prefs = await _getSharedPreferences();
+
+  //   final savedData = prefs.getString('budgetData');
+  //   if (savedData != null) {
+  //     final Map<String, dynamic> parsedData = jsonDecode(savedData);
+
+  //     setState(() {
+  //       essentials = parsedData['essentials'];
+  //       goal = parsedData['goal'];
+  //       debt = parsedData['debt'];
+  //       unallocated = parsedData['unallocated'];
+  //       cashOnHand = parsedData['cashOnHand'];
+  //       creditScore = parsedData['creditScore'];
+  //     });
+  //   }
+  // }
+
+  // Future<SharedPreferences> _getSharedPreferences() async {
+  //   return await SharedPreferences.getInstance();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final nextExpensesData = getNextExpenses();
-    final nextExpenses = List<Map<String, dynamic>>.from(nextExpensesData['expenses']);
+    final nextExpenses =
+        List<Map<String, dynamic>>.from(nextExpensesData['expenses']);
     final daysAway = nextExpensesData['daysAway'] as int;
-    
+
     return Scaffold(
       body: Container(
         color: Colors.grey[800]?.withOpacity(0.5),
@@ -463,7 +518,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.calendar_today, color: Colors.white),
+                              const Icon(Icons.calendar_today,
+                                  color: Colors.white),
                               const SizedBox(width: 8),
                               Text(
                                 DateFormat('MMMM d, yyyy').format(currentDate),
@@ -477,7 +533,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                           ),
                           Row(
                             children: [
-                              const Icon(Icons.attach_money, color: Colors.white),
+                              const Icon(Icons.attach_money,
+                                  color: Colors.white),
                               const SizedBox(width: 4),
                               Text(
                                 'Cash on Hand: ${formatCurrency(cashOnHand)}',
@@ -496,7 +553,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                           ),
                         ],
                       ),
-                      
+
                       // Next expense alert
                       if (nextExpenses.isNotEmpty)
                         Container(
@@ -527,22 +584,29 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       ),
                                     ),
                                     const SizedBox(height: 4),
-                                    ...nextExpenses.map((expense) => Padding(
-                                      padding: const EdgeInsets.only(bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            expense['name'],
-                                            style: const TextStyle(fontSize: 14),
-                                          ),
-                                          Text(
-                                            '${formatCurrency(expense['amount'])} on the ${expense['dueDate']}th',
-                                            style: const TextStyle(fontSize: 14),
-                                          ),
-                                        ],
-                                      ),
-                                    )).toList(),
+                                    ...nextExpenses
+                                        .map((expense) => Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 4),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    expense['name'],
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                  Text(
+                                                    '${formatCurrency(expense['amount'])} on the ${expense['dueDate']}th',
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                ],
+                                              ),
+                                            ))
+                                        .toList(),
                                   ],
                                 ),
                               ),
@@ -552,7 +616,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                     ],
                   ),
                 ),
-                
+
                 // Main content
                 Flexible(
                   child: Container(
@@ -570,19 +634,24 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                             panelName: 'essentials',
                             content: Column(
                               children: [
-                                ...(essentials['items'] as List).asMap().entries.map((entry) {
+                                ...(essentials['items'] as List)
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
                                   final index = entry.key;
                                   final item = entry.value;
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 12),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
                                             Text(
                                               item['name'],
-                                              style: const TextStyle(fontWeight: FontWeight.w500),
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                             Text(
                                               ' (Due: ${item['dueDate']}th)',
@@ -596,7 +665,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                         Text(
                                           '${formatCurrency(item['allocated'])} / ${formatCurrency(item['amount'])}',
                                           style: TextStyle(
-                                            color: item['allocated'] >= item['amount'] 
+                                            color: item['allocated'] >=
+                                                    item['amount']
                                                 ? const Color(0xFF00C781)
                                                 : const Color(0xFF007FFF),
                                           ),
@@ -622,9 +692,13 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       value: selectedExpenses['essentials'],
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
                                       ),
-                                      items: (essentials['items'] as List).asMap().entries.map((entry) {
+                                      items: (essentials['items'] as List)
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
                                         final index = entry.key;
                                         final item = entry.value;
                                         return DropdownMenuItem<int>(
@@ -636,7 +710,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       }).toList(),
                                       onChanged: (value) {
                                         if (value != null) {
-                                          handleExpenseSelect('essentials', value);
+                                          handleExpenseSelect(
+                                              'essentials', value);
                                         }
                                       },
                                     ),
@@ -645,34 +720,41 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       children: [
                                         Expanded(
                                           child: TextField(
-                                            controller: allocationControllers['essentials'],
+                                            controller: allocationControllers[
+                                                'essentials'],
                                             decoration: const InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(4),
-                                                  bottomLeft: Radius.circular(4),
+                                                  bottomLeft:
+                                                      Radius.circular(4),
                                                 ),
                                               ),
-                                              hintText: 'Enter amount to allocate',
+                                              hintText:
+                                                  'Enter amount to allocate',
                                             ),
                                             keyboardType: TextInputType.number,
                                           ),
                                         ),
                                         TextButton(
-                                          onPressed: () => handleAllocation('essentials'),
+                                          onPressed: () =>
+                                              handleAllocation('essentials'),
                                           style: TextButton.styleFrom(
-                                            backgroundColor: const Color(0xFF007FFF),
+                                            backgroundColor:
+                                                const Color(0xFF007FFF),
                                             shape: const RoundedRectangleBorder(
                                               borderRadius: BorderRadius.only(
                                                 topRight: Radius.circular(4),
                                                 bottomRight: Radius.circular(4),
                                               ),
                                             ),
-                                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16, horizontal: 16),
                                           ),
                                           child: const Text(
                                             'Allocate',
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
@@ -691,24 +773,27 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                               ],
                             ),
                           ),
-                          
+
                           const SizedBox(height: 16),
-                          
+
                           // Goal (Retirement) Panel
                           _buildPanel(
                             title: 'Goal (Retirement)',
-                            subtitle: 'Target: ${formatCurrency(goal['target'])} in 3 months',
+                            subtitle:
+                                'Target: ${formatCurrency(goal['target'])} in 3 months',
                             allocated: goal['allocated'],
                             due: goalDue,
                             panelName: 'goal',
                             content: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
                                       'Monthly Contribution',
-                                      style: TextStyle(fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
                                     ),
                                     Text(
                                       'Due: ${goal['dueDate']}th - ${formatCurrency(goal['monthlyTarget'])}',
@@ -719,10 +804,15 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                 Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text('Progress', style: TextStyle(fontSize: 14)),
-                                        Text('${goal['progress'].toStringAsFixed(0)}%', style: const TextStyle(fontSize: 14)),
+                                        const Text('Progress',
+                                            style: TextStyle(fontSize: 14)),
+                                        Text(
+                                            '${goal['progress'].toStringAsFixed(0)}%',
+                                            style:
+                                                const TextStyle(fontSize: 14)),
                                       ],
                                     ),
                                     const SizedBox(height: 4),
@@ -731,7 +821,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       child: LinearProgressIndicator(
                                         value: goal['progress'] / 100,
                                         backgroundColor: Colors.grey[200],
-                                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF007FFF)),
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Color(0xFF007FFF)),
                                         minHeight: 10,
                                       ),
                                     ),
@@ -742,7 +834,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                   children: [
                                     Expanded(
                                       child: TextField(
-                                        controller: allocationControllers['goal'],
+                                        controller:
+                                            allocationControllers['goal'],
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.only(
@@ -758,14 +851,16 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                     TextButton(
                                       onPressed: () => handleAllocation('goal'),
                                       style: TextButton.styleFrom(
-                                        backgroundColor: const Color(0xFF007FFF),
+                                        backgroundColor:
+                                            const Color(0xFF007FFF),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(4),
                                             bottomRight: Radius.circular(4),
                                           ),
                                         ),
-                                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 16, horizontal: 16),
                                       ),
                                       child: const Text(
                                         'Allocate',
@@ -788,9 +883,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                               ],
                             ),
                           ),
-                          
+
                           const SizedBox(height: 16),
-                          
+
                           // Debt Panel
                           _buildPanel(
                             title: 'Debt',
@@ -806,13 +901,15 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
                                             const Text(
                                               'Student Loan',
-                                              style: TextStyle(fontWeight: FontWeight.w500),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                             Text(
                                               ' (Due: ${debt['items'][0]['dueDate']}th)',
@@ -826,7 +923,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                         Text(
                                           '${formatCurrency(debt['items'][0]['allocated'])} / ${formatCurrency(debt['items'][0]['amount'])}',
                                           style: TextStyle(
-                                            color: debt['items'][0]['allocated'] >= debt['items'][0]['amount'] 
+                                            color: debt['items'][0]
+                                                        ['allocated'] >=
+                                                    debt['items'][0]['amount']
                                                 ? const Color(0xFF00C781)
                                                 : const Color(0xFF007FFF),
                                           ),
@@ -841,7 +940,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           const Text(
                                             'Loan Plan Options:',
@@ -853,44 +953,74 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                           const SizedBox(height: 8),
                                           GridView.builder(
                                             shrinkWrap: true,
-                                            physics: const NeverScrollableScrollPhysics(),
-                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 3,
                                               childAspectRatio: 2.5,
                                               crossAxisSpacing: 8,
                                               mainAxisSpacing: 8,
                                             ),
-                                            itemCount: (debt['items'][0]['plans'] as List).length,
+                                            itemCount: (debt['items'][0]
+                                                    ['plans'] as List)
+                                                .length,
                                             itemBuilder: (context, idx) {
-                                              final plan = debt['items'][0]['plans'][idx];
-                                              final isSelected = debt['items'][0]['plan'] == plan['name'].toString().toLowerCase();
-                                              
+                                              final plan = debt['items'][0]
+                                                  ['plans'][idx];
+                                              final isSelected = debt['items']
+                                                      [0]['plan'] ==
+                                                  plan['name']
+                                                      .toString()
+                                                      .toLowerCase();
+
                                               return GestureDetector(
-                                                onTap: () => handleLoanPlanChange(plan['name']),
+                                                onTap: () =>
+                                                    handleLoanPlanChange(
+                                                        plan['name']),
                                                 child: Container(
-                                                  padding: const EdgeInsets.all(8),
+                                                  padding:
+                                                      const EdgeInsets.all(8),
                                                   decoration: BoxDecoration(
-                                                    color: isSelected ? const Color(0xFFE6F5FF) : Colors.white,
+                                                    color: isSelected
+                                                        ? const Color(
+                                                            0xFFE6F5FF)
+                                                        : Colors.white,
                                                     border: Border.all(
-                                                      color: isSelected ? const Color(0xFF007FFF) : Colors.grey[300]!,
+                                                      color: isSelected
+                                                          ? const Color(
+                                                              0xFF007FFF)
+                                                          : Colors.grey[300]!,
                                                     ),
-                                                    borderRadius: BorderRadius.circular(4),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
                                                   ),
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisSize: MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
                                                     children: [
                                                       Text(
                                                         plan['name'],
-                                                        style: const TextStyle(fontWeight: FontWeight.w500),
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
                                                       ),
                                                       Text(
                                                         '${formatCurrency(plan['amount'])}/month',
-                                                        style: const TextStyle(fontSize: 12),
+                                                        style: const TextStyle(
+                                                            fontSize: 12),
                                                       ),
                                                       Text(
                                                         '${plan['interest']} for ${plan['term']}',
-                                                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors
+                                                                .grey[600]),
                                                       ),
                                                     ],
                                                   ),
@@ -903,21 +1033,23 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                     ),
                                   ],
                                 ),
-                                
+
                                 const SizedBox(height: 16),
-                                
+
                                 // Credit Card
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
                                             const Text(
                                               'Credit Card',
-                                              style: TextStyle(fontWeight: FontWeight.w500),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                             Text(
                                               ' (Due: ${debt['items'][1]['dueDate']}th)',
@@ -931,7 +1063,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                         Text(
                                           '${formatCurrency(debt['items'][1]['allocated'])} / ${formatCurrency(debt['items'][1]['amount'])}',
                                           style: TextStyle(
-                                            color: debt['items'][1]['allocated'] >= debt['items'][1]['amount'] 
+                                            color: debt['items'][1]
+                                                        ['allocated'] >=
+                                                    debt['items'][1]['amount']
                                                 ? const Color(0xFF00C781)
                                                 : const Color(0xFF007FFF),
                                           ),
@@ -948,23 +1082,34 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       child: Column(
                                         children: [
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text('Current Balance:', style: TextStyle(fontSize: 14)),
+                                              const Text('Current Balance:',
+                                                  style:
+                                                      TextStyle(fontSize: 14)),
                                               Text(
-                                                formatCurrency(debt['items'][1]['balance']),
-                                                style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                                                formatCurrency(debt['items'][1]
+                                                    ['balance']),
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14),
                                               ),
                                             ],
                                           ),
                                           const SizedBox(height: 8),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text('Interest Rate:', style: TextStyle(fontSize: 14)),
+                                              const Text('Interest Rate:',
+                                                  style:
+                                                      TextStyle(fontSize: 14)),
                                               Text(
                                                 debt['items'][1]['interest'],
-                                                style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14),
                                               ),
                                             ],
                                           ),
@@ -973,9 +1118,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                     ),
                                   ],
                                 ),
-                                
+
                                 const Divider(height: 32),
-                                
+
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -991,9 +1136,13 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       value: selectedExpenses['debt'],
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
                                       ),
-                                      items: (debt['items'] as List).asMap().entries.map((entry) {
+                                      items: (debt['items'] as List)
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
                                         final index = entry.key;
                                         final item = entry.value;
                                         return DropdownMenuItem<int>(
@@ -1014,34 +1163,41 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                       children: [
                                         Expanded(
                                           child: TextField(
-                                            controller: allocationControllers['debt'],
+                                            controller:
+                                                allocationControllers['debt'],
                                             decoration: const InputDecoration(
                                               border: OutlineInputBorder(
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(4),
-                                                  bottomLeft: Radius.circular(4),
+                                                  bottomLeft:
+                                                      Radius.circular(4),
                                                 ),
                                               ),
-                                              hintText: 'Enter amount to allocate',
+                                              hintText:
+                                                  'Enter amount to allocate',
                                             ),
                                             keyboardType: TextInputType.number,
                                           ),
                                         ),
                                         TextButton(
-                                          onPressed: () => handleAllocation('debt'),
+                                          onPressed: () =>
+                                              handleAllocation('debt'),
                                           style: TextButton.styleFrom(
-                                            backgroundColor: const Color(0xFF007FFF),
+                                            backgroundColor:
+                                                const Color(0xFF007FFF),
                                             shape: const RoundedRectangleBorder(
                                               borderRadius: BorderRadius.only(
                                                 topRight: Radius.circular(4),
                                                 bottomRight: Radius.circular(4),
                                               ),
                                             ),
-                                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16, horizontal: 16),
                                           ),
                                           child: const Text(
                                             'Allocate',
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
@@ -1056,7 +1212,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                     ),
                   ),
                 ),
-                
+
                 // Metrics & Feedback Area
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -1079,7 +1235,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                       _buildMetricItem(
                         icon: Icons.trending_up,
                         label: 'Retirement Progress',
-                        value: '${formatCurrency(goal['allocated'])} / ${formatCurrency(goal['target'])}',
+                        value:
+                            '${formatCurrency(goal['allocated'])} / ${formatCurrency(goal['target'])}',
                         color: const Color(0xFF007FFF),
                       ),
                       _buildMetricItem(
@@ -1091,13 +1248,14 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                       _buildMetricItem(
                         icon: Icons.attach_money,
                         label: 'Debt Paydown',
-                        value: '${formatCurrency(debt['allocated'])} This Month',
+                        value:
+                            '${formatCurrency(debt['allocated'])} This Month',
                         color: const Color(0xFFF33434),
                       ),
                     ],
                   ),
                 ),
-                
+
                 // Action Buttons
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -1113,14 +1271,16 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                       TextButton.icon(
                         onPressed: handleReset,
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
                           backgroundColor: Colors.white,
                           side: BorderSide(color: Colors.grey[300]!),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
-                        icon: const Icon(Icons.refresh, size: 18, color: Colors.grey),
+                        icon: const Icon(Icons.refresh,
+                            size: 18, color: Colors.grey),
                         label: const Text(
                           'Reset Allocations',
                           style: TextStyle(color: Colors.grey),
@@ -1129,7 +1289,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                       ElevatedButton.icon(
                         onPressed: handleSubmit,
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
                           backgroundColor: const Color(0xFF00C781),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
@@ -1148,7 +1309,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       ),
     );
   }
-  
+
   Widget _buildPanel({
     required String title,
     required String subtitle,
@@ -1197,7 +1358,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                         '${formatCurrency(allocated)} / ${formatCurrency(due)}',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: allocated < due ? const Color(0xFFF33434) : const Color(0xFF00C781),
+                          color: allocated < due
+                              ? const Color(0xFFF33434)
+                              : const Color(0xFF00C781),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -1218,7 +1381,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
               ),
             ),
           ),
-          if (expandedPanel == panelName) 
+          if (expandedPanel == panelName)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -1232,7 +1395,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       ),
     );
   }
-  
+
   Widget _buildMetricItem({
     required IconData icon,
     required String label,
@@ -1268,7 +1431,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       ),
     );
   }
-  
+
   @override
   void dispose() {
     // Dispose controllers when widget is removed
