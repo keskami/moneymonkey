@@ -5,6 +5,7 @@ import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'package:money_monkey/BudgetSimulator/Pages/results.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/AllocateFundsWidgets/allocateFundsButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/accountsBudgetSimulatorPage.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/allocateFundingButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/baseSideOfScreen.dart';
@@ -288,42 +289,34 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                   ? screenWidthUnit * 835
                                                   : screenWidthUnit * 795,
                                         ),
-                                        widget.currentOption == "Calendar"
-                                            ? AllocateFundsButton(
-                                                now: widget.now,
-                                                spendOnExpense: spendOnExpense,
-                                                screenWidthUnit:
-                                                    screenWidthUnit,
-                                                screenHeightUnit:
-                                                    screenHeightUnit,
-                                                checkingTransfer:
-                                                    checkingTransfer as int,
-                                                getInterestSavings:
-                                                    getInterestSavings,
-                                                setStateCallback: setState,
-                                                widget: widget,
-                                                functions: functions,
-                                                expenses: expenses,
-                                                nextExpense: widget.nextExpense,
-                                                getEvents: getEvents,
-                                                checkRandomEvents:
-                                                    checkRandomEvents,
-                                                savingsTransfer:
-                                                    savingsTransfer,
-                                                monthlyEntertainment:
-                                                    monthlyEntertainment,
-                                                monthlyFitness: monthlyFitness,
-                                                monthsOccurd: monthsOccurd,
-                                                daysUnderLuxary:
-                                                    daysUnderLuxary,
-                                                daysUnderLuxaryDone:
-                                                    daysUnderLuxaryDone,
-                                                toLuxaryForWeek:
-                                                    toLuxaryForWeek,
-                                                recalculatePercentages:
-                                                    recalculatePercentages,
-                                                nextDay: nextDay,
-                                                mapExpenses: mapExpenses)
+                                        widget.currentOption == "Calendar" ?
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            GestureDetector(
+                                              onTap:(){
+                                                  showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return Dialog(
+                                                    child: BudgetDashboard(),
+                                                    );
+                                                  },
+                                                  );
+                                                
+
+                                              },
+                                              child: Container(
+                                                height: screenHeightUnit * 60,
+                                                width: screenWidthUnit * 195,
+                                                color: Colors.blue,
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                       
+                                            
                                             : widget.currentOption == "Accounts"
                                                 ? TransferMoneyButton(
                                                     screenHeightUnit:
