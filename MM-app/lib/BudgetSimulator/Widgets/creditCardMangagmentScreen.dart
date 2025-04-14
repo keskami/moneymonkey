@@ -355,7 +355,7 @@ class _CreditCardManagementScreenState
                       ),
                       Center(
                           child: Container(
-                        height: widget.screenHeightUnit * 700,
+                        height: widget.screenHeightUnit * 750,
                         width: widget.screenWidthUnit * 1300,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -373,7 +373,7 @@ class _CreditCardManagementScreenState
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: widget.screenHeightUnit * 10,
+                              height: widget.screenHeightUnit * 50,
                             ),
                             Center(child: Container()),
                             SizedBox(
