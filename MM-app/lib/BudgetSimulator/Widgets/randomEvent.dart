@@ -67,10 +67,11 @@ class _RandomEventPopState extends State<RandomEventPop> {
   String lifeStyle = '';
 
   void getInfo(RandomEvent event) async {
-    if(event.name == "Cracked Tooth"){
+    if (event.name == "Cracked Tooth") {
       setState(() {
         option1Title = 'Premium Dental Work';
-        option1SubTitle = 'Visit a highly-rated dentist for immediate treatment';
+        option1SubTitle =
+            'Visit a highly-rated dentist for immediate treatment';
 
         Cost11Name = 'Body';
         cost11Cost = 9;
@@ -81,7 +82,6 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Cost = -800;
         option1Source = "CC";
         option1LifeStyle = "Wellness-Focused";
-
 
         option2Title = 'Insurance-Covered Basic Fix';
         option2SubTitle =
@@ -97,8 +97,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option2LifeStyle = "Balanced";
 
         option3Title = 'Temporary Relief Plan';
-        option3SubTitle =
-            'Get temporary pain relief and postpone major work';
+        option3SubTitle = 'Get temporary pain relief and postpone major work';
 
         Cost31Name = 'Body';
         cost31Cost = 3;
@@ -108,12 +107,10 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         option3Cost = -120;
         option3LifeStyle = " Frugal & Savings-Focused";
-
       });
-
     }
 
-    if(event.name == "Forgotten Refund"){
+    if (event.name == "Forgotten Refund") {
       setState(() {
         option1Title = 'Retirement Boost';
         option1SubTitle = 'Add the entire amount to your savings account';
@@ -127,7 +124,6 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Cost = 600;
         option1Source = "Savings";
         option1LifeStyle = "Frugal & Savings-Focused";
-
 
         option2Title = 'Debt Reduction';
         option2SubTitle =
@@ -154,13 +150,10 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         option3Cost = 300;
         option3LifeStyle = "Social & Leisure-Focused";
-
       });
-
     }
 
-
-     if(event.name == "Project Excellence"){
+    if (event.name == "Project Excellence") {
       setState(() {
         option1Title = 'Immediate Bonus';
         option1SubTitle = 'Accept a one-time \$400 performance bonus';
@@ -175,10 +168,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
         option1Source = "Savings";
         option1LifeStyle = "Frugal & Savings-Focused";
 
-
         option2Title = 'Skills Investment';
-        option2SubTitle =
-            'Select \$700 in professional certification training';
+        option2SubTitle = 'Select \$700 in professional certification training';
 
         Cost21Name = 'Mind';
         cost21Cost = 6;
@@ -201,14 +192,8 @@ class _RandomEventPopState extends State<RandomEventPop> {
 
         option3Cost = 0;
         option3LifeStyle = "Social & Leisure-Focused";
-
       });
-
     }
-
-
-
-   
   }
 
   @override
@@ -252,14 +237,17 @@ class _RandomEventPopState extends State<RandomEventPop> {
           SizedBox(
             height: screenHeightUnit * 5,
           ),
-          Text(
-            widget.event.description,
-            style: GoogleFonts.baloo2(
-              fontSize: screenHeightUnit * 25,
-              fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(108, 108, 108, 1),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidthUnit * 20),
+            child: Text(
+              widget.event.description,
+              style: GoogleFonts.baloo2(
+                fontSize: screenHeightUnit * 25,
+                fontWeight: FontWeight.w500,
+                color: Color.fromRGBO(108, 108, 108, 1),
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
           SizedBox(
             height: screenHeightUnit * 46,
@@ -346,7 +334,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                     selected: twoSelected,
                     Source: option2Source),
               ),
-               SizedBox(
+              SizedBox(
                 width: screenWidthUnit * 20,
               ),
               Container(
@@ -413,16 +401,23 @@ class _RandomEventPopState extends State<RandomEventPop> {
                       effect1Amount: effect1Amount,
                       effect2: effect2,
                       effect2Amount: effect2Amount);
-                  widget.onConfirm(randomEventTaken, finalSource, finalCost,
-                      effect1, effect1Amount, effect2, effect2Amount, lifeStyle);
-                } else if(twoSelected) {
+                  widget.onConfirm(
+                      randomEventTaken,
+                      finalSource,
+                      finalCost,
+                      effect1,
+                      effect1Amount,
+                      effect2,
+                      effect2Amount,
+                      lifeStyle);
+                } else if (twoSelected) {
                   finalSource = option2Source;
                   finalCost = option2Cost;
                   effect1 = Cost21Name;
                   effect1Amount = cost21Cost;
                   effect2 = Cost22Name;
                   effect2Amount = cost22Cost;
-                    lifeStyle = option2LifeStyle;
+                  lifeStyle = option2LifeStyle;
                   RandomEventTaken randomEventTaken = RandomEventTaken(
                       name: "Place Holder Name",
                       choiceTaken: "Place Holder Choice",
@@ -433,16 +428,23 @@ class _RandomEventPopState extends State<RandomEventPop> {
                       effect1Amount: effect1Amount,
                       effect2: effect2,
                       effect2Amount: effect2Amount);
-                  widget.onConfirm(randomEventTaken, finalSource, finalCost,
-                      effect1, effect1Amount, effect2, effect2Amount, lifeStyle);
-                }else{
+                  widget.onConfirm(
+                      randomEventTaken,
+                      finalSource,
+                      finalCost,
+                      effect1,
+                      effect1Amount,
+                      effect2,
+                      effect2Amount,
+                      lifeStyle);
+                } else {
                   finalSource = option3Source;
                   finalCost = option3Cost;
                   effect1 = Cost31Name;
                   effect1Amount = cost31Cost;
                   effect2 = Cost32Name;
                   effect2Amount = cost32Cost;
-                    lifeStyle = option3LifeStyle;
+                  lifeStyle = option3LifeStyle;
                   RandomEventTaken randomEventTaken = RandomEventTaken(
                       name: "Place Holder Name",
                       choiceTaken: "Place Holder Choice",
@@ -453,9 +455,15 @@ class _RandomEventPopState extends State<RandomEventPop> {
                       effect1Amount: effect1Amount,
                       effect2: effect2,
                       effect2Amount: effect2Amount);
-                  widget.onConfirm(randomEventTaken, finalSource, finalCost,
-                      effect1, effect1Amount, effect2, effect2Amount,lifeStyle);
-
+                  widget.onConfirm(
+                      randomEventTaken,
+                      finalSource,
+                      finalCost,
+                      effect1,
+                      effect1Amount,
+                      effect2,
+                      effect2Amount,
+                      lifeStyle);
                 }
               }
             },
@@ -473,7 +481,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
                   style: GoogleFonts.baloo2(
                     fontSize: screenWidthUnit * 20,
                     fontWeight: FontWeight.w600,
-                    color: (oneSelcted || twoSelected|| threeSelected)
+                    color: (oneSelcted || twoSelected || threeSelected)
                         ? Colors.white
                         : Colors.black,
                   ),
@@ -529,9 +537,8 @@ class _RandomOptionState extends State<RandomOption> {
           height: widget.screenHeightUnit * 400,
           width: widget.screenWidthUnit * 300,
           decoration: BoxDecoration(
-            color: widget.selected
-                ? Color.fromRGBO(0, 127, 255, 1)
-                : Colors.white,
+            color:
+                widget.selected ? Color.fromRGBO(0, 127, 255, 1) : Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: Colors.black,
@@ -557,14 +564,19 @@ class _RandomOptionState extends State<RandomOption> {
                 SizedBox(
                   height: widget.screenHeightUnit * 6,
                 ),
-                Text(
-                  widget.subtitle,
-                  style: GoogleFonts.baloo2(
-                    fontSize: widget.screenHeightUnit * 20,
-                    fontWeight: FontWeight.w500,
-                    color: widget.selected ? Colors.white : Colors.black,
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: widget.screenWidthUnit * 10,
+                      right: widget.screenWidthUnit * 10),
+                  child: Text(
+                    widget.subtitle,
+                    style: GoogleFonts.baloo2(
+                      fontSize: widget.screenHeightUnit * 20,
+                      fontWeight: FontWeight.w500,
+                      color: widget.selected ? Colors.white : Colors.black,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
-                  textAlign: TextAlign.start,
                 ),
                 SizedBox(
                   height: widget.screenHeightUnit * 14,
@@ -596,18 +608,16 @@ class _RandomOptionState extends State<RandomOption> {
                       child: IntrinsicWidth(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: widget.effect1Cost > 0
-                                ? Color.fromRGBO(242, 255, 245, 1)
-                                : Color.fromRGBO(255, 243, 243, 1),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
                               color: widget.effect1Cost > 0
-                                  ?  Color.fromRGBO(0, 199, 129, 1)
-                                      : Color.fromRGBO(255, 0, 0, 1),
-                              width: .6,
-
-                            )
-                          ),
+                                  ? Color.fromRGBO(242, 255, 245, 1)
+                                  : Color.fromRGBO(255, 243, 243, 1),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: widget.effect1Cost > 0
+                                    ? Color.fromRGBO(0, 199, 129, 1)
+                                    : Color.fromRGBO(255, 0, 0, 1),
+                                width: .6,
+                              )),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.start,

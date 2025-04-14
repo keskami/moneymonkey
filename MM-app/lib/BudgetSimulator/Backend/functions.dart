@@ -98,7 +98,6 @@ class BudgetSimulatorFunctions {
         }
       }
     }
-    print(items);
 
     return items;
   }
