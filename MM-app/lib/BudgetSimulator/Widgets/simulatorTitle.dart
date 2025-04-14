@@ -33,7 +33,7 @@ class SimulatorTitle extends StatelessWidget {
           Text(
             lifeStyle,
             style: TextStyle(
-              fontSize: screenHeightUnit * 45,
+              fontSize: lifeStyle == "Carrer-Focused" || lifeStyle == "Balanced"?   screenHeightUnit * 45 : screenHeightUnit * 30,
               fontWeight: FontWeight.w600,
               color: Color.fromRGBO(0, 127, 255, 1),
             ),

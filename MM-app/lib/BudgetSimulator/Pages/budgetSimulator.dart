@@ -723,6 +723,13 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
   int monthsOccurd = 0;
 
   Future<void> nextMonth() async {
+    setState(() {
+      widget.subsAndMembershipsThisMonth = 0;
+      widget.transportationThisMonth = 0;
+      widget.internetAndPhoneThisMonth = 0;
+      widget.utilitiesThisMonth = 0;
+      widget.rentThisMonth = 0;
+    });
     if (monthsOccurd < 2) {
       for (Expense expense in widget.expenses) {
         if (expense.name == "Pay Day") {

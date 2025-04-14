@@ -28,7 +28,7 @@ class OverallScoreScreen extends StatefulWidget {
 
 class _OverallScoreScreenState extends State<OverallScoreScreen> {
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
-  double score = 0;
+  int score = 0;
   Color textColor = Color.fromRGBO(0, 0, 0, 0);
   String grade = '';
   String description = '';
