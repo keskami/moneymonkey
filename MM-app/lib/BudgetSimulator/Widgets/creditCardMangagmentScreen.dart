@@ -744,7 +744,7 @@ class _CreditCardManagementScreenState
                                                 color: paymentHistoryColor,
                                                 fontSize:
                                                     widget.screenHeightUnit *
-                                                        30,
+                                                        25,
                                               ),
                                             ),
                                           ),

@@ -323,7 +323,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
         if (name == "Rent") {
           widget.widget.widget.rentThisMonth += essentialsExpenseSpending[name];
         } else if (name == "Subscriptions & Memberships") {
-          widget.widget.widget.subscriptionsThisMonth +=
+          widget.widget.widget.subsAndMembershipsThisMonth +=
               essentialsExpenseSpending[name];
         } else if (name == "Groceries") {
           widget.widget.widget.groceriesThisMonth +=
