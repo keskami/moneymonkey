@@ -28,7 +28,7 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
       scores[0] =
           functions.s1P2SavingsScore(widget.widget.widget.savingsAccountBalance) as int ;
           scores[1] = functions.s1P2CreditScoreScore(widget.widget.widget.creditScore) as int;
-          scores[2] = widget.widget.widget.onTimePaymentScore as int;
+          scores[2] = widget.widget.widget.onTimePaymentScore.toInt();
           scores[3] = functions.s1P2CCDebtScore(widget.widget.widget.creditCardDebt) as int;
           scores[4] = functions.s1P2WellnessScore(widget.widget.widget.bodyScore , widget.widget.widget.mindScore, widget.widget.widget.socialScore) as int;
     });
