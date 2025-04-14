@@ -42,6 +42,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
 
   @override
   void initState() {
+    
     super.initState();
 
     setState(() {
@@ -49,9 +50,10 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       cashOnHand = widget.widget.widget.checkingAccountBalance;
       unallocated = widget.widget.widget.checkingAccountBalance;
       creditScore = widget.widget.widget.creditScore;
+      print("here");
 
       essentials = {
-        'items': functions.EssentialExpenses(widget.widget),
+        'items': functions.EssentialExpenses(widget.widget, widget.widget.widget.expenses),
         'allocated': functions.EssentialExpensesTotal(widget.widget),
       };
 
@@ -239,8 +241,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       cashOnHand = widget.widget.widget.checkingAccountBalance;
       unallocated = widget.widget.widget.checkingAccountBalance;
 
+
       essentials = {
-        'items': functions.EssentialExpenses(widget.widget),
+        'items': functions.EssentialExpenses(widget.widget,widget.widget.widget.expenses),
         'allocated': functions.EssentialExpensesTotal(widget.widget),
       };
 
@@ -472,8 +475,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
     final savedData = prefs.getString('budgetData');
     final essentialsExpenseSpendingData =
         prefs.getString('essentialsExpenseSpending');
-    print("my data");
-    print(essentialsExpenseSpendingData);
+
 
     if (savedData != null) {
       final Map<String, dynamic> parsedData = jsonDecode(savedData);
@@ -689,7 +691,6 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-                          // Essentials Panel
                           _buildPanel(
                             title: 'Essentials',
                             subtitle: 'Basic living expenses',

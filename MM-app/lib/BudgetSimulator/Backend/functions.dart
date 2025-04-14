@@ -16,7 +16,7 @@ class BudgetSimulatorFunctions {
     return total;
   }
 
-  List<Map<String, dynamic>> EssentialExpenses(widget) {
+  List<Map<String, dynamic>> EssentialExpenses(widget, Newexpenses) {
     List<Map<String, dynamic>> items = [
       {
         'name': 'Rent',
@@ -55,9 +55,9 @@ class BudgetSimulatorFunctions {
       },
     ];
 
-    for (Expense expense in widget.expenses) {
+    for (Expense expense in Newexpenses) {
       if (expense.name == "Rent") {
-        items[0]['amount'] = expense.amount;
+        items[0]['amount'] = expense.amountToStartMonth;
         items[0]['dueDate'] = expense.dueDay.day;
         if (expense.amountPaid >= expense.amount) {
           items[0]['paid'] = true;
@@ -65,7 +65,7 @@ class BudgetSimulatorFunctions {
           items[0]['paid'] = false;
         }
       } else if (expense.name == "Utilities") {
-        items[1]['amount'] = expense.amount;
+        items[1]['amount'] = expense.amountToStartMonth;
         items[1]['dueDate'] = expense.dueDay.day;
         if (expense.amountPaid >= expense.amount) {
           items[1]['paid'] = true;
@@ -73,7 +73,7 @@ class BudgetSimulatorFunctions {
           items[1]['paid'] = false;
         }
       } else if (expense.name == "Internet & Phone") {
-        items[2]['amount'] = expense.amount;
+        items[2]['amount'] = expense.amountToStartMonth;
         items[2]['dueDate'] = expense.dueDay.day;
         if (expense.amountPaid >= expense.amount) {
           items[2]['paid'] = true;
@@ -81,7 +81,7 @@ class BudgetSimulatorFunctions {
           items[2]['paid'] = false;
         }
       } else if (expense.name == "Transportation") {
-        items[3]['amount'] = expense.amount;
+        items[3]['amount'] = expense.amountToStartMonth;
         items[3]['dueDate'] = expense.dueDay.day;
         if (expense.amountPaid >= expense.amount) {
           items[3]['paid'] = true;
@@ -89,7 +89,7 @@ class BudgetSimulatorFunctions {
           items[3]['paid'] = false;
         }
       } else if (expense.name == "Subscriptions & Memberships") {
-        items[4]['amount'] = expense.amount;
+        items[4]['amount'] = expense.amountToStartMonth;
         items[4]['dueDate'] = expense.dueDay.day;
         if (expense.amountPaid >= expense.amount) {
           items[4]['paid'] = true;
@@ -98,6 +98,7 @@ class BudgetSimulatorFunctions {
         }
       }
     }
+    print(items);
 
     return items;
   }

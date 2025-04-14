@@ -95,11 +95,12 @@ class ScenarioLevelConfig {
 class Expense {
   final String name;
   double amount;
-  final String dueDateType; // "Fixed" or "Gradual"
-  DateTime dueDay; // For fixed expenses (e.g., Day 5)
+  final String dueDateType; 
+  DateTime dueDay; 
   double amountPaid;
   final double penalty;
   double originalTotal;
+  double amountToStartMonth;
 
   Expense({
     required this.name,
@@ -108,6 +109,7 @@ class Expense {
     required this.dueDay,
     required this.amountPaid,
     required this.penalty,
+    this.amountToStartMonth = 0,
     this.originalTotal = 0,
   });
 }

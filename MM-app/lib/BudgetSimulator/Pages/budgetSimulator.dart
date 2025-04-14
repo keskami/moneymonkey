@@ -722,6 +722,25 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
 
   int monthsOccurd = 0;
 
+  Future<void> setToStartMonths() async{
+    List<Expense> expenses = [];
+    for(Expense expense in widget.expenses){
+
+      if(expense.amountToStartMonth != 0){
+        setState(() {
+       
+          expense.amountToStartMonth = expense.amount - expense.amountPaid;
+         
+        });
+      }
+      expenses.add(expense);
+    }
+    setState(() {
+      widget.expenses = expenses;
+    });
+
+  }
+
   Future<void> nextMonth() async {
     setState(() {
       widget.subsAndMembershipsThisMonth = 0;
@@ -794,6 +813,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       noLatePayments = true;
     });
     mapExpenses();
+    setToStartMonths();
   }
 
   Future<void> nextDay() async {
