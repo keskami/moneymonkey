@@ -21,7 +21,7 @@ class SimulatorTitle extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.black,
-          width: screenWidthUnit * 1,
+          width: .6,
 
         ),
       ),
@@ -33,7 +33,7 @@ class SimulatorTitle extends StatelessWidget {
           Text(
             lifeStyle,
             style: TextStyle(
-              fontSize: screenHeightUnit * 45,
+              fontSize: lifeStyle == "Carrer-Focused" || lifeStyle == "Balanced"?   screenHeightUnit * 45 : screenHeightUnit * 30,
               fontWeight: FontWeight.w600,
               color: Color.fromRGBO(0, 127, 255, 1),
             ),

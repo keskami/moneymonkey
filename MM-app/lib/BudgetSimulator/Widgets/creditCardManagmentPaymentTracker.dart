@@ -88,10 +88,10 @@ class MonthTrackerRow extends StatelessWidget {
           size: screenHeightUnit * 60,
         ),
         SizedBox(
-          width: screenWidthUnit * 30,
+          width: screenWidthUnit * 40,
         ),
         Container(
-            width: screenWidthUnit * 40,
+            width: screenWidthUnit * 50,
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -103,10 +103,10 @@ class MonthTrackerRow extends StatelessWidget {
               ),
             )),
         SizedBox(
-          width: screenWidthUnit * 130,
+          width: screenWidthUnit * 150,
         ),
         Container(
-            width: screenWidthUnit * 70,
+            width: screenWidthUnit * 80,
             child: Align(
               alignment: Alignment.centerLeft,
               child: (i == 0 || doneList[i - 1])

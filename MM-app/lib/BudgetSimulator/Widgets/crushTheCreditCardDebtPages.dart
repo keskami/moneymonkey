@@ -46,7 +46,7 @@ class _CrushTheCreditCardDebtPagesState
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                width: widget.screenHeightUnit * 85,
+                width: widget.screenHeightUnit * 55,
                 height: widget.screenHeightUnit * 1,
                 color: Colors.black,
               ),
@@ -79,7 +79,7 @@ class _CrushTheCreditCardDebtPagesState
                 ],
               ),
               Container(
-                width: widget.screenHeightUnit * 85,
+                width: widget.screenHeightUnit * 55,
                 height: widget.screenHeightUnit * 1,
                 color: Colors.black,
               ),
@@ -112,7 +112,7 @@ class _CrushTheCreditCardDebtPagesState
                 ),
               ),
                Container(
-                width: widget.screenHeightUnit * 85,
+                width: widget.screenHeightUnit * 55,
                 height: widget.screenHeightUnit * 1,
                 color: Colors.black,
               ),
@@ -146,7 +146,7 @@ class _CrushTheCreditCardDebtPagesState
               ),
              
               Container(
-                width: widget.screenHeightUnit * 85,
+                width: widget.screenHeightUnit * 55,
                 height: widget.screenHeightUnit * 1,
                 color: Colors.black,
               ),
@@ -179,7 +179,7 @@ class _CrushTheCreditCardDebtPagesState
                 ),
               ),
                Container(
-                width: widget.screenHeightUnit * 85,
+                width: widget.screenHeightUnit * 55,
                 height: widget.screenHeightUnit * 1,
                 color: Colors.black,
               ),

@@ -40,7 +40,7 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
       score += functions
           .s1P2SavingsScore(widget.widget.widget.savingsAccountBalance);
       score += functions.s1P2CreditScoreScore(widget.widget.widget.creditScore);
-      score += widget.widget.widget.onTimePaymentScore as int;
+      score += widget.widget.widget.onTimePaymentScore.toInt();
       score += functions.s1P2CCDebtScore(widget.widget.widget.creditCardDebt);
       score += functions.s1P2WellnessScore(widget.widget.widget.bodyScore,
           widget.widget.widget.mindScore, widget.widget.widget.socialScore) as int;
@@ -69,7 +69,7 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
               color: Color.fromRGBO(233, 244, 255, 1),
               border: Border.all(
                 color: Color.fromRGBO(0, 127, 255, 1),
-                width: 1,
+                width: .6,
               ),
             ),
             child: Center(

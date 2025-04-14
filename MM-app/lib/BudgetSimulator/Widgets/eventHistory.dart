@@ -23,12 +23,12 @@ class _EventHistoryState extends State<EventHistory> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.screenWidthUnit * 517,
+      width: widget.screenWidthUnit * 607,
       height: widget.screenHeightUnit * 500,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 1, color: Colors.black)),
+          border: Border.all(width: .6, color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +50,7 @@ class _EventHistoryState extends State<EventHistory> {
                   top: widget.screenHeightUnit * 24,
                   left: widget.screenWidthUnit * 32),
               child: Container(
-                width: widget.screenWidthUnit * 428,
+                width: widget.screenWidthUnit * 528,
                 height: widget.screenHeightUnit * 370,
                 child: SingleChildScrollView(
                   child: Column(
@@ -99,7 +99,7 @@ class _RandomEventHistoryDropdownState
         height: clicked
             ? widget.screenHeightUnit * 210
             : widget.screenHeightUnit * 50,
-        width: widget.screenWidthUnit * 428,
+        width: widget.screenWidthUnit * 528,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +142,7 @@ class _RandomEventHistoryDropdownState
             ),
             clicked
                 ? Container(
-                    width: widget.screenWidthUnit * 428,
+                    width: widget.screenWidthUnit * 488,
                     height: widget.screenHeightUnit * 160,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -231,7 +231,7 @@ class _RandomEventHistoryDropdownState
                                             : Color.fromRGBO(255, 243, 243, 1),
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                          width: 1,
+                                          width: .6,
                                           color: widget.eventTaken
                                                       .effect1Amount >
                                                   0
@@ -290,7 +290,7 @@ class _RandomEventHistoryDropdownState
                                             : Color.fromRGBO(255, 243, 243, 1),
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                          width: 1,
+                                          width: .6,
                                           color: widget.eventTaken
                                                       .effect2Amount >
                                                   0

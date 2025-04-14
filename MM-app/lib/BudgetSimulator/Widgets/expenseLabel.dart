@@ -52,7 +52,7 @@ class _ExpenselabelState extends State<Expenselabel> {
                     style: GoogleFonts.baloo2(
                         color: _getTextColor(),
                         fontWeight: FontWeight.w600,
-                        fontSize: widget.screenHeightUnit * 27),
+                        fontSize: widget.screenHeightUnit * 22),
                   )
                 ],
               )
@@ -79,7 +79,7 @@ class _ExpenselabelState extends State<Expenselabel> {
                           style: GoogleFonts.baloo2(
                               color: _getTextColor(),
                               fontWeight: FontWeight.w600,
-                              fontSize: widget.screenHeightUnit * 20),
+                              fontSize: widget.screenHeightUnit * 18),
                         ),
                       ),
                       Row(
@@ -99,7 +99,7 @@ class _ExpenselabelState extends State<Expenselabel> {
                           ),
                           Container(
                               height: widget.screenHeightUnit * 35,
-                              width: widget.screenWidthUnit * 95,
+                              width: widget.screenWidthUnit * 85,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   color: Colors.white),
@@ -114,13 +114,13 @@ class _ExpenselabelState extends State<Expenselabel> {
                                         "\$${widget.expense.penalty}",
                                         style: GoogleFonts.baloo2(
                                           color: Color.fromRGBO(243, 52, 52, 1),
-                                          fontSize: widget.screenWidthUnit * 18,
+                                          fontSize: widget.screenWidthUnit * 16,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: widget.screenWidthUnit * 2,
+                                      width: widget.screenWidthUnit * 1,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
@@ -129,7 +129,7 @@ class _ExpenselabelState extends State<Expenselabel> {
                                         "Penalty",
                                         style: GoogleFonts.baloo2(
                                           color: Color.fromRGBO(243, 52, 52, 1),
-                                          fontSize: widget.screenWidthUnit * 14,
+                                          fontSize: widget.screenWidthUnit * 11,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),

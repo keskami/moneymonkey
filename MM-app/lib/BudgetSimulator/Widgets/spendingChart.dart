@@ -56,7 +56,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.black,
-          width: 1,
+          width: .6,
         ),
       ),
       child: Column(
@@ -116,7 +116,7 @@ class _SpendingDonutChartState extends State<SpendingDonutChart> {
               
               Container(
                 height: 225 * widget.screenHeightUnit,
-                width: 360 * widget.screenHeightUnit,
+                width: 310 * widget.screenHeightUnit,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

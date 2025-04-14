@@ -71,7 +71,7 @@ class _ResultsStyleState extends State<ResultsStyle> {
                 decoration: BoxDecoration(
                   color: Colors.blue[50],
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blue[100]!),
+                  border: Border.all(color: Colors.blue[100]!, width: .6),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.blue.withOpacity(0.1),

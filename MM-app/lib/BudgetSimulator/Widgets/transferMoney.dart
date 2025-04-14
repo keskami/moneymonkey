@@ -165,7 +165,7 @@ class _TransferMoneyPopUpState extends State<TransferMoneyPopUp> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey.shade300),
+                    border: Border.all(color: Colors.grey.shade300, width: .6),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
@@ -205,7 +205,7 @@ class _TransferMoneyPopUpState extends State<TransferMoneyPopUp> {
                   height: widget.screenHeightUnit * 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey.shade300, width: 1),
+                    border: Border.all(color: Colors.grey.shade300, width: .6),
                   ),
                   child: Row(
                     children: [
@@ -273,15 +273,9 @@ class _TransferMoneyPopUpState extends State<TransferMoneyPopUp> {
                         Navigator.of(context).pop();
                         return;
                       }
-                      widget.setStateCallback(() {
-                        widget.widget.checkingAccountBalance =
-                          widget.widget.checkingAccountBalance +
-                              (widget.widget.checkingTransfer);
-                              widget.widget.savingsAccountBalance =
-                              widget.widget.savingsAccountBalance + widget.widget.savingsTransfer;
-                      });
                       
-                      widget.nextDay();
+                      
+                      //widget.nextDay();
 
                       if (_selectedValue == 'Checking → Savings') {
                         widget.setStateCallback(() {

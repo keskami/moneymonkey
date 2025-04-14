@@ -24,12 +24,12 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.screenWidthUnit * 517,
+      width: widget.screenWidthUnit * 607,
       height: widget.screenHeightUnit * 500,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 1, color: Colors.black)),
+          border: Border.all(width: .6, color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                   top: widget.screenHeightUnit * 24,
                   left: widget.screenWidthUnit * 32),
               child: Container(
-                width: widget.screenWidthUnit * 420,
+                width: widget.screenWidthUnit * 520,
                 height: widget.screenHeightUnit * 370,
                 child: SingleChildScrollView(
                   child: Column(
@@ -98,9 +98,9 @@ class _TransactionHistoryDropdownState
       padding: EdgeInsets.only(bottom: widget.screenHeightUnit * 20),
       child: Container(
         height: clicked
-            ? widget.screenHeightUnit * 185
-            : widget.screenHeightUnit * 55,
-        width: widget.screenWidthUnit * 428,
+            ? widget.screenHeightUnit * 205
+            : widget.screenHeightUnit * 75,
+        width: widget.screenWidthUnit * 508,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +113,7 @@ class _TransactionHistoryDropdownState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                    width: widget.screenWidthUnit * 200,
+                    width: widget.screenWidthUnit * 250,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text('${widget.transaction.account} Account',
@@ -157,7 +157,7 @@ class _TransactionHistoryDropdownState
             ),
             clicked
                 ? Container(
-                    width: widget.screenWidthUnit * 428,
+                    width: widget.screenWidthUnit * 488,
                     height: widget.screenHeightUnit * 132,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -186,7 +186,7 @@ class _TransactionHistoryDropdownState
                               Text(
                                 '${DateFormat.MMMM().format(widget.transaction.day)} ${widget.transaction.day.day}, ${widget.transaction.day.year}',
                                 style: GoogleFonts.baloo2(
-                                    fontSize: widget.screenHeightUnit * 32,
+                                    fontSize: widget.screenHeightUnit * 36,
                                     fontWeight: FontWeight.w500,
                                     color: Color.fromRGBO(108, 108, 108, 1)),
                               ),
@@ -203,7 +203,7 @@ class _TransactionHistoryDropdownState
                                             : Color.fromRGBO(255, 243, 243, 1),
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                          width: 1,
+                                          width: .6,
                                           color: widget.transaction.amount >= 0
                                               ? Color.fromRGBO(0, 199, 129, 1)
                                               : Color.fromRGBO(255, 0, 0, 1),
@@ -221,7 +221,7 @@ class _TransactionHistoryDropdownState
                                           '${widget.transaction.toOrFrom}',
                                           style: GoogleFonts.baloo2(
                                             fontSize:
-                                                widget.screenHeightUnit * 26,
+                                                widget.screenHeightUnit * 28,
                                             fontWeight: FontWeight.w500,
                                             color: widget.transaction.amount >=
                                                     0
@@ -242,7 +242,7 @@ class _TransactionHistoryDropdownState
                                       "\$${widget.transaction.amount}",
                                       style: GoogleFonts.baloo2(
                                           fontSize:
-                                              widget.screenHeightUnit * 26,
+                                              widget.screenHeightUnit * 28,
                                           fontWeight: FontWeight.w500,
                                           color:
                                               Color.fromRGBO(0, 199, 129, 1)),
@@ -251,7 +251,7 @@ class _TransactionHistoryDropdownState
                                       "-\$${(widget.transaction.amount).abs()}",
                                       style: GoogleFonts.baloo2(
                                           fontSize:
-                                              widget.screenHeightUnit * 26,
+                                              widget.screenHeightUnit * 28,
                                           fontWeight: FontWeight.w500,
                                           color: Color.fromRGBO(255, 0, 0, 1)),
                                     ),
@@ -262,7 +262,7 @@ class _TransactionHistoryDropdownState
                           ),
                           Text("${widget.transaction.name}",
                               style: GoogleFonts.baloo2(
-                                  fontSize: widget.screenHeightUnit * 30,
+                                  fontSize: widget.screenHeightUnit * 32,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black))
                         ],

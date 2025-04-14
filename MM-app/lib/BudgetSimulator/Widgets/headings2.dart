@@ -25,7 +25,7 @@ class Headings2 {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-            width: screenWidthUnit * 44,
+            width: screenWidthUnit * 24,
           ),
           Icon(
             Icons.account_balance,
@@ -399,7 +399,7 @@ class Headings2 {
             ),
           ),
           SizedBox(
-            width: screenWidthUnit * 85.8, // Increased by 10%
+            width: screenWidthUnit * 45.8, // Increased by 10%
           ),
           Text(
             "\$${ double.parse((netCash + savingsLeftOver).toStringAsFixed(2))}",
@@ -410,7 +410,7 @@ class Headings2 {
             ),
           ),
           SizedBox(
-            width: screenWidthUnit * 38.5, // Increased by 10%
+            width: screenWidthUnit * 28.5, // Increased by 10%
           ),
           Container(
             width: screenWidthUnit * 1,
@@ -423,7 +423,7 @@ class Headings2 {
             color: Colors.black,
           ),
           SizedBox(
-            width: screenWidthUnit * 44, // Increased by 10%
+            width: screenWidthUnit * 34, // Increased by 10%
           ),
           Icon(
             Icons.person_2_outlined,
@@ -436,7 +436,7 @@ class Headings2 {
           //   color: Colors.black,
           // ),
           SizedBox(
-            width: screenWidthUnit * 34.2, // Increased by 10%
+            width: screenWidthUnit * 10.2, // Increased by 10%
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

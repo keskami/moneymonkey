@@ -443,7 +443,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: Color.fromRGBO(106, 114, 128, 1),
-                                    width: 1,
+                                    width: .6,
                                   ),
                                 ),
                                 child: Padding(
@@ -598,7 +598,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                           "Choose This Plan",
                                           style: GoogleFonts.baloo2(
                                             fontSize:
-                                                widget.screenHeightUnit * 30,
+                                                widget.screenHeightUnit * 23,
                                             fontWeight: FontWeight.w600,
                                             color: Colors.white,
                                           ),
@@ -655,7 +655,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: Color.fromRGBO(106, 114, 128, 1),
-                                    width: 1,
+                                    width: .6,
                                   ),
                                 ),
                                 child: Padding(
@@ -811,7 +811,7 @@ class _StudentLoansScreenState extends State<StudentLoansScreen> {
                                           "Choose This Plan",
                                           style: GoogleFonts.baloo2(
                                             fontSize:
-                                                widget.screenHeightUnit * 30,
+                                                widget.screenHeightUnit * 23,
                                             fontWeight: FontWeight.w600,
                                             color: Colors.white,
                                           ),

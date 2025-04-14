@@ -43,7 +43,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
               color: Colors.white,
               border: Border.all(
                 color: Colors.grey,
-                width: 1,
+                width: .6,
               ),
             ),
             child: Row(
@@ -136,7 +136,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                        border: Border.all(
                               color: widget.hints[0].good
                             ? widget.goodText: widget.badText,
-                            width: 1,
+                            width: .6,
                             )
                 ),
                 child: Row(
@@ -150,7 +150,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                       child: Text(
                         widget.hints[0].text,
                         style: GoogleFonts.baloo2(
-                          fontSize: 24 * widget.screenWidthUnit,
+                          fontSize: 27 * widget.screenWidthUnit,
                           color: widget.hints[0].good
                               ? widget.goodText
                               : widget.badText,
@@ -193,7 +193,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                            border: Border.all(
                               color: widget.hints[0].good
                             ? widget.goodText: widget.badText,
-                            width: 1,
+                            width: .6,
                             )
                       ),
                       child: Row(
@@ -207,7 +207,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                             child: Text(
                               widget.hints[0].text,
                               style: GoogleFonts.baloo2(
-                                fontSize: 24 * widget.screenWidthUnit,
+                                fontSize: 20 * widget.screenWidthUnit,
                                 color: widget.hints[0].good
                                     ? widget.goodText
                               : widget.badText,
@@ -248,7 +248,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                             border: Border.all(
                               color: widget.hints[0].good
                             ? widget.goodText: widget.badText,
-                            width: 1,
+                            width: .6,
                             )
                       ),
                       child: Row(
@@ -257,13 +257,14 @@ class _BottomwarningtState extends State<Bottomwarning> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
+                              top: 10 * widget.screenHeightUnit,
                               left: widget.screenWidthUnit * 15,
                               right: widget.screenWidthUnit * 10,
                             ),
                             child: Text(
                               "${widget.hints.length}",
                               style: GoogleFonts.baloo2(
-                                fontSize: 55 * widget.screenWidthUnit,
+                                fontSize: 45 * widget.screenWidthUnit,
                                 color: widget.hints[0].good? widget.goodText
                               : widget.badText,
                                 fontWeight: FontWeight.w700,
@@ -275,7 +276,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                               child: Text(
                             "hints\npending",
                             style: GoogleFonts.baloo2(
-                              fontSize: 20 * widget.screenWidthUnit,
+                              fontSize: 22 * widget.screenWidthUnit,
                               color: widget.hints[0].good? widget.goodText
                               : widget.badText,
                               fontWeight: FontWeight.w700,
@@ -294,7 +295,7 @@ class _BottomwarningtState extends State<Bottomwarning> {
                                 },
                                 child: Icon(
                                   Icons.close,
-                                  size: 55 * widget.screenHeightUnit,
+                                  size: 50 * widget.screenHeightUnit,
                                   color: widget.hints[0].good
                                       ? widget.goodText
                               : widget.badText,

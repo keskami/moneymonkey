@@ -33,9 +33,9 @@ class UtilizationPopUp extends StatelessWidget {
                               left: screenWidthUnit * 46,
                               top: screenHeightUnit * 36),
                           child: Text(
-                            "Understanding Payment History",
+                            "Understanding Credit Utilization",
                             style: GoogleFonts.baloo2(
-                              fontSize: screenHeightUnit * 65,
+                              fontSize: screenHeightUnit * 50,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
@@ -54,9 +54,9 @@ class UtilizationPopUp extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: "What is Payment History? ",
+                                  text: "What is Credit Utilization?",
                                   style: GoogleFonts.baloo2(
-                                    fontSize: screenHeightUnit * 50,
+                                    fontSize: screenHeightUnit * 40,
                                     fontWeight: FontWeight.w700,
                                     color: Color.fromRGBO(106, 114, 128, 1),
                                   ),
@@ -65,7 +65,7 @@ class UtilizationPopUp extends StatelessWidget {
                                   text:
                                       "Credit utilization is the percentage of your\navailable credit that you're currently using.",
                                   style: GoogleFonts.baloo2(
-                                    fontSize: screenHeightUnit * 50,
+                                    fontSize: screenHeightUnit * 40,
                                     fontWeight: FontWeight.w500,
                                     color: Color.fromRGBO(106, 114, 128, 1),
                                   ),
@@ -77,14 +77,14 @@ class UtilizationPopUp extends StatelessWidget {
                         SizedBox(height: screenHeightUnit * 30),
                         Center(
                             child: Container(
-                          height: screenHeightUnit * 350,
+                          height: screenHeightUnit * 300,
                           width: screenWidthUnit * 600,
                           decoration: BoxDecoration(
                               color: Color.fromRGBO(233, 244, 255, 1),
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(
                                 color: Color.fromRGBO(0, 127, 255, 1),
-                                width: 1,
+                                width: .6,
                               )),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -92,17 +92,17 @@ class UtilizationPopUp extends StatelessWidget {
                               children: [
                                 
                                 Text(
-                                  "Payment History = 35% of your Credit Score",
+                                  "Credit Utilization",
                                   style: GoogleFonts.baloo2(
                                     fontWeight: FontWeight.w600,
                                     color: Color.fromRGBO(0, 127, 255, 1),
-                                    fontSize: screenHeightUnit * 65,
+                                    fontSize: screenHeightUnit * 60,
                                   ),
                                 ),
                                 Text(
                                   "Utilization = (Current Balance ÷ Credit Limit) × 100%\nExample: \$3,000 balance on a \$5,000 limit = 60% utilization",
                                   style: GoogleFonts.baloo2(
-                                    fontSize: screenHeightUnit * 50,
+                                    fontSize: screenHeightUnit * 40,
                                     fontWeight: FontWeight.w500,
                                     color: Color.fromRGBO(106, 114, 128, 1)
                                   ),
@@ -112,7 +112,7 @@ class UtilizationPopUp extends StatelessWidget {
 
                               ]),
                         )),
-                        SizedBox(height: screenHeightUnit * 65),
+                        SizedBox(height: screenHeightUnit * 45),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -190,7 +190,7 @@ class UtilizationInfoBox extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: Colors.black)),
+            border: Border.all(width: .6, color: Colors.black)),
         child: Padding(
           padding: EdgeInsets.only(
               left: screenWidthUnit * 18, top: screenHeightUnit * 18),
@@ -201,7 +201,7 @@ class UtilizationInfoBox extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.baloo2(
-                    fontSize: screenHeightUnit * 34,
+                    fontSize: screenHeightUnit * 28,
                     fontWeight: FontWeight.w600,
                     color: textColor),
                 textAlign: TextAlign.left,
@@ -215,7 +215,7 @@ class UtilizationInfoBox extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    width: 1,
+                    width: .6,
                     color: textColor,
                   ),
                   color: backColor,
@@ -230,7 +230,7 @@ class UtilizationInfoBox extends StatelessWidget {
                             TextSpan(
                               text: "Credit Score: ",
                               style: GoogleFonts.baloo2(
-                                fontSize: screenHeightUnit * 30,
+                                fontSize: screenHeightUnit * 25,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black,
                               ),
@@ -238,7 +238,7 @@ class UtilizationInfoBox extends StatelessWidget {
                             TextSpan(
                               text: effect,
                               style: GoogleFonts.baloo2(
-                                fontSize: screenHeightUnit * 30,
+                                fontSize: screenHeightUnit * 25,
                                 fontWeight: FontWeight.w500,
                                 color: textColor,
                               ),

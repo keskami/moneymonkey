@@ -35,7 +35,7 @@ class UnderstandingPayment extends StatelessWidget {
                           child: Text(
                             "Understanding Payment History",
                             style: GoogleFonts.baloo2(
-                              fontSize: screenHeightUnit * 65,
+                              fontSize: screenHeightUnit * 50,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
@@ -56,7 +56,7 @@ class UnderstandingPayment extends StatelessWidget {
                                 TextSpan(
                                   text: "What is Payment History? ",
                                   style: GoogleFonts.baloo2(
-                                    fontSize: screenHeightUnit * 50,
+                                    fontSize: screenHeightUnit * 40,
                                     fontWeight: FontWeight.w700,
                                     color: Color.fromRGBO(106, 114, 128, 1),
                                   ),
@@ -65,7 +65,7 @@ class UnderstandingPayment extends StatelessWidget {
                                   text:
                                       "Payment history tracks whether you've\npaid your bills on time. It's the single most important factor in your\ncredit score.",
                                   style: GoogleFonts.baloo2(
-                                    fontSize: screenHeightUnit * 50,
+                                    fontSize: screenHeightUnit * 40,
                                     fontWeight: FontWeight.w500,
                                     color: Color.fromRGBO(106, 114, 128, 1),
                                   ),
@@ -84,7 +84,7 @@ class UnderstandingPayment extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(
                                 color: Color.fromRGBO(0, 127, 255, 1),
-                                width: 1,
+                                width: .6,
                               )),
                           child: Center(
                             child: Text(
@@ -92,7 +92,7 @@ class UnderstandingPayment extends StatelessWidget {
                               style: GoogleFonts.baloo2(
                                 fontWeight: FontWeight.w600,
                                 color: Color.fromRGBO(0, 127, 255, 1),
-                                fontSize: screenHeightUnit * 65,
+                                fontSize: screenHeightUnit * 50,
                               ),
                             ),
                           ),
@@ -156,7 +156,7 @@ class PaymentInfoBox extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: Colors.black)),
+            border: Border.all(width: .6, color: Colors.black)),
         child: Padding(
           padding: EdgeInsets.only(
               left: screenWidthUnit * 18, top: screenHeightUnit * 18),
@@ -167,7 +167,7 @@ class PaymentInfoBox extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.baloo2(
-                    fontSize: screenHeightUnit * 40,
+                    fontSize: screenHeightUnit * 32,
                     fontWeight: FontWeight.w600,
                     color: textColor),
                 textAlign: TextAlign.left,
@@ -181,7 +181,7 @@ class PaymentInfoBox extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    width: 1,
+                    width: .6,
                     color: textColor,
                   ),
                   color: backColor,
@@ -196,7 +196,7 @@ class PaymentInfoBox extends StatelessWidget {
                         TextSpan(
                           text: "Credit Score: ",
                           style: GoogleFonts.baloo2(
-                            fontSize: screenHeightUnit * 30,
+                            fontSize: screenHeightUnit * 24,
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
                           ),
@@ -204,7 +204,7 @@ class PaymentInfoBox extends StatelessWidget {
                         TextSpan(
                           text: effect,
                           style: GoogleFonts.baloo2(
-                            fontSize: screenHeightUnit * 30,
+                            fontSize: screenHeightUnit * 24,
                             fontWeight: FontWeight.w500,
                             color: textColor,
                           ),
