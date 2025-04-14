@@ -52,7 +52,7 @@ class _WellnessBoxNewState extends State<WellnessBoxNew> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.black,
-          width: widget.screenWidthUnit,
+          width: .6,
         ),
       ),
       child: Row(

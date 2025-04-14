@@ -25,7 +25,7 @@ class WeekdayRow extends StatelessWidget {
             color: Color.fromRGBO(243, 249, 255, 1),
             border: Border.all(
               color: dayColor,
-              width: 1,
+              width: .6,
             )
           ),
           child: Row(

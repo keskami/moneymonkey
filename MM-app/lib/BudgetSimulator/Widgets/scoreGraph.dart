@@ -49,7 +49,7 @@ class _BudgetGraphWidgetState extends State<BudgetGraphWidget> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Color.fromRGBO(0, 127, 255, 1),
-          width: 1,
+          width: .6,
         ),
       ),
       child: Padding(

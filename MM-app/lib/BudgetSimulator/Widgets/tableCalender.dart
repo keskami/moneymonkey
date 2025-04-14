@@ -90,7 +90,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                       color: Color.fromRGBO(192, 192, 192, .5),
                       border: Border.all(
                         color: Colors.grey,
-                        width: 1,
+                        width: .6,
                       ),
                     ),
                   );
@@ -112,7 +112,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                   return isSameDay(day, widget.now)
                       ? Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1),
+                            border: Border.all(color: Colors.grey, width: .6),
                             color: Colors.white,
                           ),
                           child: Stack(
@@ -152,7 +152,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                             color: fillColor,
                             border: Border.all(
                               color: borderColor,
-                              width: (isSelected || isFocused ? 1 : 1),
+                              width: .6,
                             ),
                           ),
                           child: Stack(
@@ -177,7 +177,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                   final bool isToday = isSameDay(day, widget.now);
                   return Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 1),
+                      border: Border.all(color: Colors.grey, width: .6),
                       color: Colors.white,
                     ),
                     child: Stack(
@@ -252,7 +252,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                             color: Color.fromRGBO(192, 192, 192, .5),
                             border: Border.all(
                               color: Colors.grey,
-                              width: 1,
+                              width: .6,
                             ),
                           ),
                         )
@@ -260,7 +260,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                           ? Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: const Color(0xFF51A4F1), width: 2),
+                                    color: const Color(0xFF51A4F1), width: .6),
                                 color: Colors.white,
                               ),
                               child: Stack(
@@ -294,7 +294,7 @@ class _BudgetSimulatorCalenderState extends State<BudgetSimulatorCalender> {
                           : Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: const Color(0xFF51A4F1), width: 2),
+                                    color: const Color(0xFF51A4F1), width: .6),
                                 color: Colors.white,
                               ),
                               child: Stack(

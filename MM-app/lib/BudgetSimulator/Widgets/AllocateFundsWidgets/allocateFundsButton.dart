@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:money_monkey/BudgetSimulator/Backend/functions.dart';
+import 'package:money_monkey/BudgetSimulator/Backend/model.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,7 +38,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
   late Map<String, dynamic> goal;
   late Map<String, dynamic> debt;
   BudgetSimulatorFunctions functions = BudgetSimulatorFunctions();
-  Map<String, dynamic> expenseSpending = {};
+  Map<String, dynamic> essentialsExpenseSpending = {};
 
   @override
   void initState() {
@@ -131,19 +133,20 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       switch (category) {
         case 'essentials':
           final selectedEssentialIndex = selectedExpenses['essentials']!;
-
           final items = List<Map<String, dynamic>>.from(essentials['items']);
 
           items[selectedEssentialIndex]['allocated'] =
               (items[selectedEssentialIndex]['allocated'] as double) + amount;
 
-          
-
           String name = items[selectedEssentialIndex]['name'];
-          if (expenseSpending.containsKey(name)) {
-            expenseSpending[name] = expenseSpending[name] + amount;
+          if (name == "Subs & Memberships") {
+            name = "Subscriptions & Memberships";
+          }
+          if (essentialsExpenseSpending.containsKey(name)) {
+            essentialsExpenseSpending[name] =
+                essentialsExpenseSpending[name] + amount;
           } else {
-            expenseSpending[name] = amount;
+            essentialsExpenseSpending[name] = amount;
           }
 
           essentials['allocated'] =
@@ -206,10 +209,6 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
   }
 
   void _updateCalendarEvent(String name, double amount, int dueDate) {
-
-  
-   
-
     _getSharedPreferences().then((prefs) {
       final String calendarEventsJson =
           prefs.getString('calendarEvents') ?? '[]';
@@ -236,7 +235,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
   // Reset all allocations
   void handleReset() {
     setState(() {
-      expenseSpending = {};
+      essentialsExpenseSpending = {};
       cashOnHand = widget.widget.widget.checkingAccountBalance;
       unallocated = widget.widget.widget.checkingAccountBalance;
 
@@ -318,21 +317,44 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
   }
 
   void handleSubmit() {
-
-    if (expenseSpending != null && expenseSpending.isNotEmpty){
-      for(String name in expenseSpending.keys){
-        if(name == "Rent"){
-          widget.widget.spendOnExpense( expenseSpending[name], name);
-          widget.widget.widget.rentThisMonth += expenseSpending[name];
-
+    if (essentialsExpenseSpending != null &&
+        essentialsExpenseSpending.isNotEmpty) {
+      for (String name in essentialsExpenseSpending.keys) {
+        if (name == "Rent") {
+          widget.widget.widget.rentThisMonth += essentialsExpenseSpending[name];
+        } else if (name == "Subscriptions & Memberships") {
+          widget.widget.widget.subscriptionsThisMonth +=
+              essentialsExpenseSpending[name];
+        } else if (name == "Groceries") {
+          widget.widget.widget.groceriesThisMonth +=
+              essentialsExpenseSpending[name];
+        } else if (name == "Utilities") {
+          widget.widget.widget.utilitiesThisMonth +=
+              essentialsExpenseSpending[name];
+        } else if (name == "Transportation") {
+          widget.widget.widget.transportationThisMonth +=
+              essentialsExpenseSpending[name];
         }
+        setState(() {
+          widget.widget.spendOnExpense(essentialsExpenseSpending[name], name);
+          widget.widget.widget.checkingAccountBalance -=
+              essentialsExpenseSpending[name];
+          Transaction transaction = Transaction(
+              name: "$name Paid",
+              day: widget.widget.widget.now,
+              amount: -essentialsExpenseSpending[name],
+              toOrFrom: "Transfer out",
+              account: "Checking",
+              currentAmount: widget.widget.widget.checkingAccountBalance);
+          widget.widget.widget.Transactions.add(transaction);
+        });
+      }
 
+      setState(() {
+        essentialsExpenseSpending = {};
+        cashOnHand = widget.widget.widget.checkingAccountBalance;
+      });
     }
-
-    }
-
-    
-   
 
     final finalBudget = {
       'essentials': essentials,
@@ -340,8 +362,6 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
       'debt': debt,
       'date': currentDate.toIso8601String()
     };
-
-    
   }
 
   // Find next upcoming expenses
@@ -430,9 +450,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
   Future<void> _saveToSharedPreferences() async {
     final prefs = await _getSharedPreferences();
 
-    await prefs.setString("expenseSpending", jsonEncode(expenseSpending));
-
-
+    await prefs.setString(
+        "essentialsExpenseSpending", jsonEncode(essentialsExpenseSpending));
 
     final budgetData = {
       'essentials': essentials,
@@ -451,8 +470,10 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
     final prefs = await _getSharedPreferences();
 
     final savedData = prefs.getString('budgetData');
-    final expenseSpendingData = prefs.getString('expenseSpending');
-    print(expenseSpendingData);
+    final essentialsExpenseSpendingData =
+        prefs.getString('essentialsExpenseSpending');
+    print("my data");
+    print(essentialsExpenseSpendingData);
 
     if (savedData != null) {
       final Map<String, dynamic> parsedData = jsonDecode(savedData);
@@ -464,8 +485,7 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
         unallocated = parsedData['unallocated'];
         cashOnHand = parsedData['cashOnHand'];
         creditScore = parsedData['creditScore'];
-        expenseSpending = jsonDecode(expenseSpendingData!);
-        
+        essentialsExpenseSpending = jsonDecode(essentialsExpenseSpendingData!);
       });
     }
   }
@@ -593,16 +613,60 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    expense['name'],
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
-                                                  Text(
-                                                    '${formatCurrency(expense['amount'])} on the ${expense['dueDate']}th',
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
+                                                  widget
+                                                                  .widget
+                                                                  .widget
+                                                                  .nextExpense
+                                                                  .dueDay
+                                                                  .year >
+                                                              2025 ==
+                                                          ""
+                                                      ? Text(
+                                                          "No More Payments This Month",
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                        )
+                                                      : Text(
+                                                          widget
+                                                                      .widget
+                                                                      .widget
+                                                                      .nextExpense
+                                                                      .dueDay
+                                                                      .difference(widget
+                                                                          .widget
+                                                                          .widget
+                                                                          .now)
+                                                                      .inDays ==
+                                                                  0
+                                                              ? "${widget.widget.widget.nextExpense.name} Today"
+                                                              : widget
+                                                                          .widget
+                                                                          .widget
+                                                                          .nextExpense
+                                                                          .dueDay
+                                                                          .difference(widget
+                                                                              .widget
+                                                                              .widget
+                                                                              .now)
+                                                                          .inDays ==
+                                                                      1
+                                                                  ? "${widget.widget.widget.nextExpense.name} in ${widget.widget.widget.nextExpense.dueDay.difference(widget.widget.widget.now).inDays} day"
+                                                                  : widget.widget.widget.nextExpense
+                                                                              .dueDay
+                                                                              .difference(widget.widget.widget.now)
+                                                                              .inDays >
+                                                                          35
+                                                                      ? "No More Required Payments This Month"
+                                                                      : "${widget.widget.widget.nextExpense.name}  in ${widget.widget.widget.nextExpense.dueDay.difference(widget.widget.widget.now).inDays} days",
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                        ),
                                                 ],
                                               ),
                                             ))
@@ -734,32 +798,73 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                                   'Enter amount to allocate',
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: [
+                                              TextInputFormatter.withFunction(
+                                                (oldValue, newValue) {
+                                                  final text = newValue.text;
+                                                  if (text.isEmpty) {
+                                                    return newValue;
+                                                  }
+                                                  final value =
+                                                      double.tryParse(text);
+                                                  if (value == null) {
+                                                    return oldValue;
+                                                  }
+                                                  final selectedEssentialIndex =
+                                                      selectedExpenses[
+                                                          'essentials']!;
+                                                  final items = List<
+                                                          Map<String,
+                                                              dynamic>>.from(
+                                                      essentials['items']);
+                                                  final selectedItem = items[
+                                                      selectedEssentialIndex];
+                                                  final maxAmount = min<double>(
+                                                      widget.widget.widget
+                                                              .checkingAccountBalance
+                                                          as double,
+                                                      (selectedItem['amount'] -
+                                                              selectedItem[
+                                                                  'allocated'])
+                                                          as double);
+
+                                                  if (value > maxAmount) {
+                                                    return oldValue;
+                                                  }
+                                                  return newValue;
+                                                },
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              handleAllocation('essentials'),
-                                          style: TextButton.styleFrom(
-                                            backgroundColor:
-                                                const Color(0xFF007FFF),
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(4),
-                                                bottomRight: Radius.circular(4),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 8),
+                                          child: TextButton(
+                                            onPressed: () =>
+                                                handleAllocation('essentials'),
+                                            style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color(0xFF007FFF),
+                                              shape:
+                                                   RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
                                               ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16,
+                                                      horizontal: 16),
                                             ),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16, horizontal: 16),
-                                          ),
-                                          child: const Text(
-                                            'Allocate',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            child: Text(
+                                              'Allocate',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 8),
+                                    SizedBox(height: 8),
                                     Text(
                                       'Most people prioritize Essentials first',
                                       style: TextStyle(
@@ -848,16 +953,14 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                         keyboardType: TextInputType.number,
                                       ),
                                     ),
+                                    SizedBox(width: 8),
                                     TextButton(
                                       onPressed: () => handleAllocation('goal'),
                                       style: TextButton.styleFrom(
                                         backgroundColor:
                                             const Color(0xFF007FFF),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(4),
-                                            bottomRight: Radius.circular(4),
-                                          ),
+                                        shape:  RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5),
                                         ),
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 16, horizontal: 16),
@@ -1179,17 +1282,15 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                                             keyboardType: TextInputType.number,
                                           ),
                                         ),
+                                        const SizedBox(width: 8),
                                         TextButton(
                                           onPressed: () =>
                                               handleAllocation('debt'),
                                           style: TextButton.styleFrom(
                                             backgroundColor:
                                                 const Color(0xFF007FFF),
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(4),
-                                                bottomRight: Radius.circular(4),
-                                              ),
+                                            shape:  RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5)
                                             ),
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 16, horizontal: 16),
@@ -1214,15 +1315,17 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                 ),
 
                 // Metrics & Feedback Area
+                
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  width: double.infinity,
+                  padding:  EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     border: Border(
                       top: BorderSide(color: Colors.grey[200]!),
                     ),
                   ),
-                  child: Wrap(
+                  child: Center(child: Wrap(
                     spacing: 16,
                     runSpacing: 16,
                     children: [
@@ -1253,7 +1356,9 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                         color: const Color(0xFFF33434),
                       ),
                     ],
-                  ),
+                  ),)
+                  
+                  
                 ),
 
                 // Action Buttons
@@ -1296,8 +1401,8 @@ class _BudgetDashboardState extends State<BudgetDashboard> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
-                        icon: const Icon(Icons.check_circle, size: 18),
-                        label: const Text('Submit Budget'),
+                        icon: const Icon(Icons.check_circle, size: 18, color: Colors.white,),
+                        label: const Text('Submit Budget', style: TextStyle(color: Colors.white,),),
                       ),
                     ],
                   ),

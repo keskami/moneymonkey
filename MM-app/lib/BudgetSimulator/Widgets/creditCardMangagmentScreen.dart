@@ -101,9 +101,7 @@ class _CreditCardManagementScreenState
 
   @override
   Widget build(BuildContext context) {
-    return 
-    
-    SingleChildScrollView(
+    return SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.only(
                 left: widget.screenWidthUnit * 81,
@@ -162,6 +160,10 @@ class _CreditCardManagementScreenState
                                                   shape: BoxShape.circle,
                                                   color: Color.fromRGBO(
                                                       216, 216, 216, .4)),
+                                              child: Icon(Icons.speed,
+                                                  color: Colors.black,
+                                                  size: widget.screenWidthUnit *
+                                                      32),
                                             ),
                                             SizedBox(
                                               width:
@@ -273,6 +275,10 @@ class _CreditCardManagementScreenState
                                                   shape: BoxShape.circle,
                                                   color: Color.fromRGBO(
                                                       216, 216, 216, .4)),
+                                              child: Icon(Icons.speed,
+                                                  color: Colors.black,
+                                                  size: widget.screenWidthUnit *
+                                                      32),
                                             ),
                                             SizedBox(
                                               width:
@@ -377,7 +383,7 @@ class _CreditCardManagementScreenState
                               alignment: Alignment.centerLeft,
                               child: Padding(
                                   padding: EdgeInsets.only(
-                                      left: widget.screenWidthUnit * 60),
+                                      left: widget.screenWidthUnit * 30),
                                   child: Text(
                                     'Main contributors to score:',
                                     style: GoogleFonts.baloo2(
@@ -388,7 +394,7 @@ class _CreditCardManagementScreenState
                                   )),
                             ),
                             SizedBox(
-                              height: widget.screenHeightUnit * 12,
+                              height: widget.screenHeightUnit * 24,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -418,14 +424,15 @@ class _CreditCardManagementScreenState
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.white,
                                         border: Border.all(
-                                            width: 1,
+                                            width: .5,
                                             color:
                                                 Color.fromRGBO(0, 127, 255, 1)),
                                       ),
                                       child: Padding(
                                         padding: EdgeInsets.only(
                                             top: widget.screenHeightUnit * 10,
-                                            bottom: widget.screenHeightUnit * 10,
+                                            bottom:
+                                                widget.screenHeightUnit * 10,
                                             left: widget.screenWidthUnit * 30),
                                         child: Column(
                                           mainAxisAlignment:
@@ -439,27 +446,34 @@ class _CreditCardManagementScreenState
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  "Payment History",
-                                                  style: GoogleFonts.baloo2(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color.fromRGBO(
-                                                        55, 65, 81, 1),
-                                                    fontSize: widget
-                                                            .screenHeightUnit *
-                                                        33,
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: widget
+                                                              .screenHeightUnit *
+                                                          0),
+                                                  child: Text(
+                                                    "Payment History",
+                                                    style: GoogleFonts.baloo2(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Color.fromRGBO(
+                                                          55, 65, 81, 1),
+                                                      fontSize: widget
+                                                              .screenHeightUnit *
+                                                          33,
+                                                    ),
+                                                    textAlign: TextAlign.start,
                                                   ),
-                                                  textAlign: TextAlign.start,
                                                 ),
                                                 SizedBox(
                                                   width:
                                                       widget.screenWidthUnit *
-                                                          65,
+                                                          135,
                                                 ),
                                                 Container(
                                                   height:
                                                       widget.screenHeightUnit *
-                                                          50,
+                                                          40,
                                                   width:
                                                       widget.screenWidthUnit *
                                                           155,
@@ -484,7 +498,7 @@ class _CreditCardManagementScreenState
                                                             0, 127, 255, 1),
                                                         fontSize: widget
                                                                 .screenHeightUnit *
-                                                            22,
+                                                            18,
                                                       ),
                                                     ),
                                                   ),
@@ -545,7 +559,7 @@ class _CreditCardManagementScreenState
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.white,
                                       border: Border.all(
-                                          width: 1,
+                                          width: .5,
                                           color:
                                               Color.fromRGBO(0, 127, 255, 1)),
                                     ),
@@ -580,7 +594,7 @@ class _CreditCardManagementScreenState
                                               ),
                                               SizedBox(
                                                 width: widget.screenWidthUnit *
-                                                    125,
+                                                    210,
                                               ),
                                               GestureDetector(
                                                   onTap: () {
@@ -602,10 +616,11 @@ class _CreditCardManagementScreenState
                                                       },
                                                     );
                                                   },
+
                                                   child: Container(
                                                     height: widget
                                                             .screenHeightUnit *
-                                                        50,
+                                                        40,
                                                     width:
                                                         widget.screenWidthUnit *
                                                             155,
@@ -631,7 +646,7 @@ class _CreditCardManagementScreenState
                                                               0, 127, 255, 1),
                                                           fontSize: widget
                                                                   .screenHeightUnit *
-                                                              22,
+                                                              18,
                                                         ),
                                                       ),
                                                     ),
@@ -683,12 +698,11 @@ class _CreditCardManagementScreenState
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment:  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
                                   width: widget.screenWidthUnit * 30,
                                 ),
-
                                 Container(
                                   width: widget.screenWidthUnit * 560,
                                   height: widget.screenHeightUnit * 430,
@@ -696,6 +710,7 @@ class _CreditCardManagementScreenState
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.white,
                                       border: Border.all(
+                                          width: .5,
                                           color:
                                               Color.fromRGBO(0, 127, 255, 1))),
                                   child: Padding(
@@ -708,16 +723,18 @@ class _CreditCardManagementScreenState
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+
+                                        SizedBox(height: widget.screenHeightUnit * 10,),
                                         Container(
                                           height: widget.screenHeightUnit * 55,
                                           width: widget.screenWidthUnit * 260,
                                           decoration: BoxDecoration(
                                               color: paymentHistoryBackgroud,
                                               borderRadius:
-                                                  BorderRadius.circular(15),
+                                                  BorderRadius.circular(10),
                                               border: Border.all(
                                                 color: paymentHistoryColor,
-                                                width: 1,
+                                                width: .5,
                                               )),
                                           child: Center(
                                             child: Text(
@@ -765,6 +782,7 @@ class _CreditCardManagementScreenState
                                                   BorderRadius.circular(10),
                                               color: Colors.white,
                                               border: Border.all(
+                                                  width: .5,
                                                   color: Color.fromRGBO(
                                                       0, 127, 255, 1))),
                                           child: Padding(
@@ -779,38 +797,49 @@ class _CreditCardManagementScreenState
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Container(
-                                                    height: widget
-                                                            .screenHeightUnit *
-                                                        55,
-                                                    width:
-                                                        widget.screenWidthUnit *
-                                                            200,
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            utilizationBackgroud,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                        border: Border.all(
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: widget
+                                                                .screenHeightUnit *
+                                                            10),
+                                                    child: Container(
+                                                      height: widget
+                                                              .screenHeightUnit *
+                                                          55,
+                                                      width: widget
+                                                              .screenWidthUnit *
+                                                          200,
+                                                      decoration: BoxDecoration(
                                                           color:
-                                                              utilizationColor,
-                                                          width: 1,
-                                                        )),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "$utilizationWord Utilization",
-                                                        style:
-                                                            GoogleFonts.baloo2(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color:
-                                                              utilizationColor,
-                                                          fontSize: widget
-                                                                  .screenHeightUnit *
-                                                              26,
+                                                              utilizationBackgroud,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          border: Border.all(
+                                                            color:
+                                                                utilizationColor,
+                                                            width: .5,
+                                                          )),
+                                                      child: Center(
+                                                          child: Padding(
+                                                        padding: EdgeInsets.only(
+                                                            top: widget
+                                                                    .screenHeightUnit *
+                                                                0),
+                                                        child: Text(
+                                                          "$utilizationWord Utilization",
+                                                          style: GoogleFonts
+                                                              .baloo2(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                utilizationColor,
+                                                            fontSize: widget
+                                                                    .screenHeightUnit *
+                                                                26,
+                                                          ),
                                                         ),
-                                                      ),
+                                                      )),
                                                     ),
                                                   ),
                                                   SizedBox(

@@ -21,7 +21,7 @@ class SimulatorTitle extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.black,
-          width: screenWidthUnit * 1,
+          width: .6,
 
         ),
       ),

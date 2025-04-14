@@ -45,7 +45,7 @@ class _MilestoneProgressState extends State<MilestoneProgress> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                  color: Colors.black, width: widget.screenWidthUnit),
+                  color: Colors.black, width: .6),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

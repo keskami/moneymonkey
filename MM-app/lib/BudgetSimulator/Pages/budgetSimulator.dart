@@ -82,7 +82,7 @@ class BudgetSimulator extends StatefulWidget {
   double creditScore;
   List<Expense> expenses;
   List<RandomEvent> randomEvents;
-  late Expense nextExpense = expenses[0];
+  late Expense nextExpense = expenses[2];
   String currentOption = "Calendar";
   DateTime now = DateTime(2025, 5, 1);
   DateTime focusedDay = DateTime(2025, 5, 1);
@@ -104,13 +104,6 @@ class BudgetSimulator extends StatefulWidget {
   List<RandomEventTaken> takenEvents = [];
   List<Transaction> Transactions = [];
 }
-
-
-
-
-
-
-
 
 class _BudgetSimulatorState extends State<BudgetSimulator> {
   @override
@@ -142,14 +135,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
       widget.due = [startingCCMin, startingCCMin * 2, startingCCMin * 3];
     });
 
-
     //  WidgetsBinding.instance.addPostFrameCallback((_) {
     //   Navigator.of(context).pushReplacement(
     //     MaterialPageRoute(builder: (context) => BudgetingReport(widget: this, scoreCategories: widget.scoreCategories,)),
     //   );
     // });
-   
-    
   }
 
   List<BudgetSimulatorChartData> chartData = [];
@@ -199,7 +189,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                               color: Colors.white,
                               border: Border.all(
                                 color: Colors.black,
-                                width: 1,
+                                width: .6,
                               ),
                             ),
                             child: Center(
@@ -213,8 +203,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                       creditCardDebt: widget.creditCardDebt,
                                       netCash: widget.checkingAccountBalance +
                                           widget.savingsAccountBalance,
-                                      screenWidthUnit: screenWidthUnit,
-                                      screenHeightUnit: screenHeightUnit * .9,
+                                      screenWidthUnit: screenWidthUnit ,
+                                      screenHeightUnit: screenHeightUnit * .85,
                                       APY: widget.savingsAPY,
                                       checkingTransfer:
                                           widget.checkingTransfer as double,
@@ -236,7 +226,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                           borderRadius: BorderRadius.circular(3),
                           border: Border.all(
                             color: Colors.black,
-                            width: 1,
+                            width: .6,
                           ),
                         ),
                         child: Row(
@@ -266,6 +256,9 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            SizedBox(
+                        height: screenHeightUnit * 19,
+                      ),
                                             Text(
                                               "Budget Simulator",
                                               style: GoogleFonts.baloo2(
@@ -285,7 +278,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                   color: Color.fromRGBO(
                                                       108, 108, 108, 1),
                                                 )),
-                                                SizedBox(
+                                            SizedBox(
                                               height: screenHeightUnit * 30,
                                             ),
                                           ],
@@ -293,37 +286,135 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                         SizedBox(
                                           width:
                                               widget.currentOption == "Calendar"
-                                                  ? screenWidthUnit * 835
+                                                  ? screenWidthUnit * 615
                                                   : screenWidthUnit * 795,
                                         ),
-                                        widget.currentOption == "Calendar" ?
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            GestureDetector(
-                                              onTap:(){
-                                                  showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return Dialog(
-                                                    child: BudgetDashboard(widget: this),
-                                                    );
-                                                  },
-                                                  );
-                                                
-
-                                              },
-                                              child: Container(
-                                                height: screenHeightUnit * 60,
-                                                width: screenWidthUnit * 195,
-                                                color: Colors.blue,
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                       
+                                        widget.currentOption == "Calendar"
+                                            ? Padding(padding: EdgeInsets.only(top: screenHeightUnit * 19),child:
                                             
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      showDialog(
+                                                      context: context,
+                                                      barrierDismissible:
+                                                          true,
+                                                      builder: (BuildContext context) {
+                                                        return Dialog(
+                                                       
+                                                        child: BudgetDashboard(
+                                                          widget: this),
+                                                        );
+                                                      },
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      height:
+                                                          screenHeightUnit * 60,
+                                                      width:
+                                                          screenWidthUnit * 195,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(11),
+                                                        color: Color.fromRGBO(0, 127, 255, 1),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "Allocate Funds",
+                                                          style: GoogleFonts
+                                                              .baloo2(
+                                                            fontSize:
+                                                                screenHeightUnit *
+                                                                    23,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: screenWidthUnit * 20,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      recalculatePercentages();
+                                                      mapExpenses();
+                                                      getInterestSavings();
+                                                      nextDay();
+                                                      var data = functions
+                                                          .updateNextExpense(
+                                                              widget.expenses,
+                                                              widget.now);
+                                                      widget.expenses =
+                                                          data['expenses'];
+                                                      widget.nextExpense =
+                                                          data['nextExpense'];
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) {
+                                                        getEvents();
+                                                        checkRandomEvents();
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      height:
+                                                          screenHeightUnit * 60,
+                                                      width:
+                                                          screenWidthUnit * 195,
+                                                      decoration:  BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(11),
+                                                        color: Color.fromRGBO(0, 127, 255, 1),
+                                                      ),
+                                                      child: Center(
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Text(
+                                                          "Next Day ",
+                                                          style: GoogleFonts
+                                                              .baloo2(
+                                                            fontSize:
+                                                                screenHeightUnit *
+                                                                    23,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        Padding(padding: EdgeInsets.only(top: screenHeightUnit * 4),child:
+                                                        Text(
+                                                          ">>",
+                                                          style: GoogleFonts
+                                                              .baloo2(
+                                                            fontSize:
+                                                                screenHeightUnit *
+                                                                    25,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),)
+
+                                                          ],
+
+                                                        )
+                                                        
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ))
                                             : widget.currentOption == "Accounts"
                                                 ? TransferMoneyButton(
                                                     screenHeightUnit:
@@ -462,16 +553,26 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                                             screenHeightUnit,
                                                         screenWidthUnit:
                                                             screenWidthUnit,
-                                                            studentLoan: widget
-                                                                .studentLoan,
-                                                                studentLoanDebt: widget.studentLoanDebt,
-                                                                onClick: (StudentLoan studentLoan) {
-                                                                    setState(() {
-                                                                    widget.studentLoan = studentLoan;
-                                                                    int monthsLeft = (widget.studentLoanDebt / widget.studentLoan.monthlyPayment).ceil();
-                                                                    widget.studentLoan.monthsLeft = monthsLeft;
-                                                                  });
-                                                                },
+                                                        studentLoan:
+                                                            widget.studentLoan,
+                                                        studentLoanDebt: widget
+                                                            .studentLoanDebt,
+                                                        onClick: (StudentLoan
+                                                            studentLoan) {
+                                                          setState(() {
+                                                            widget.studentLoan =
+                                                                studentLoan;
+                                                            int monthsLeft = (widget
+                                                                        .studentLoanDebt /
+                                                                    widget
+                                                                        .studentLoan
+                                                                        .monthlyPayment)
+                                                                .ceil();
+                                                            widget.studentLoan
+                                                                    .monthsLeft =
+                                                                monthsLeft;
+                                                          });
+                                                        },
                                                       )))
                                                     : OverallScoreScreen(
                                                         screenHeightUnit:
@@ -485,7 +586,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   ]),
                             ),
                             Container(
-                              width: screenHeightUnit * 1,
+                              width: screenHeightUnit * .6,
                               height: screenHeightUnit * 1170,
                               color: Colors.black,
                             ),
@@ -493,7 +594,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                               width: screenWidthUnit * 20,
                             ),
                             SingleChildScrollView(
-                              child: Column(
+                                child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -565,13 +666,11 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
                                   total: totalSpending,
                                   chartData: chartData,
                                 ),
-                                 SizedBox(
+                                SizedBox(
                                   height: screenHeightUnit * 30,
                                 ),
                               ],
-                            )
-                            )
-                            
+                            ))
                           ],
                         ),
                       ))
@@ -690,8 +789,15 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     mapExpenses();
   }
 
-
   Future<void> nextDay() async {
+
+    setState(() {
+      widget.checkingAccountBalance += widget.checkingTransfer;
+      widget.savingsAccountBalance += widget.savingsTransfer;
+      widget.checkingTransfer = 0;
+      widget.savingsTransfer = 0;
+    });
+
     if (widget.now.month != widget.now.add(Duration(days: 1)).month) {
       getInterestCCDebt();
       nextMonth();
@@ -762,6 +868,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             widget.now, widget.level, widget.name);
       });
     }
+
+    
   }
 
   Future<void> getEvents() async {
@@ -1023,6 +1131,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
         break;
       }
     }
+    recalculatePercentages();
   }
 
   recalculatePercentages() {

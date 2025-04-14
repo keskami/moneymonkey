@@ -69,7 +69,7 @@ class _OverallScoreScreenState extends State<OverallScoreScreen> {
               color: Color.fromRGBO(233, 244, 255, 1),
               border: Border.all(
                 color: Color.fromRGBO(0, 127, 255, 1),
-                width: 1,
+                width: .6,
               ),
             ),
             child: Center(

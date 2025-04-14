@@ -84,7 +84,7 @@ class UtilizationPopUp extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(
                                 color: Color.fromRGBO(0, 127, 255, 1),
-                                width: 1,
+                                width: .6,
                               )),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -190,7 +190,7 @@ class UtilizationInfoBox extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: Colors.black)),
+            border: Border.all(width: .6, color: Colors.black)),
         child: Padding(
           padding: EdgeInsets.only(
               left: screenWidthUnit * 18, top: screenHeightUnit * 18),
@@ -215,7 +215,7 @@ class UtilizationInfoBox extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    width: 1,
+                    width: .6,
                     color: textColor,
                   ),
                   color: backColor,

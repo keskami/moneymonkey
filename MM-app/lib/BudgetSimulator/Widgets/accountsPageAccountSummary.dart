@@ -26,12 +26,12 @@ class _AccountsPageAccountSummaryState extends State<AccountsPageAccountSummary>
   Widget build(BuildContext context) {
     return Container(
       height: widget.screenHeightUnit * 320,
-      width: widget.screenWidthUnit * 517,
+      width: widget.screenWidthUnit * 607,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          width: 1,
+          width: .6,
           color: Colors.black
         )
       ),

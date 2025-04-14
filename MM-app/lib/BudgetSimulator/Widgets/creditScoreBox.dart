@@ -50,7 +50,7 @@ class _MeterBoxState extends State<MeterBox> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.black,
-          width: widget.screenWidthUnit,
+          width: .6,
         ),
       ),
       child: Column(
@@ -88,7 +88,7 @@ class _MeterBoxState extends State<MeterBox> {
                         children: [
                           Text('${widget.creditScore}',
                               style: GoogleFonts.baloo2(
-                                fontSize: widget.screenWidthUnit * 52,
+                                fontSize: widget.screenWidthUnit * 60,
                                 fontWeight: FontWeight.w600,
                                 color: widget.creditScore >
                                         670
@@ -112,7 +112,7 @@ class _MeterBoxState extends State<MeterBox> {
                             child: Text(
                               '/850',
                               style: GoogleFonts.baloo2(
-                                fontSize: widget.screenWidthUnit * 30,
+                                fontSize: widget.screenWidthUnit * 40,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -123,7 +123,7 @@ class _MeterBoxState extends State<MeterBox> {
                 ],
               ),
               SizedBox(
-                width: widget.screenWidthUnit * 52,
+                width: widget.screenWidthUnit * 22,
               ),
               Padding(
                 padding: EdgeInsets.only(top: widget.screenHeightUnit * 60),

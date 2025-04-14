@@ -269,14 +269,14 @@ class _RandomEventPopState extends State<RandomEventPop> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: screenHeightUnit * 430,
+                height: screenHeightUnit * 410,
                 width: screenWidthUnit * 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: Colors.black,
-                    width: 1,
+                    width: .6,
                   ),
                 ),
                 child: RandomOption(
@@ -310,14 +310,14 @@ class _RandomEventPopState extends State<RandomEventPop> {
                 width: screenWidthUnit * 20,
               ),
               Container(
-                height: screenHeightUnit * 430,
+                height: screenHeightUnit * 410,
                 width: screenWidthUnit * 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: Colors.black,
-                    width: 1,
+                    width: .6,
                   ),
                 ),
                 child: RandomOption(
@@ -350,14 +350,14 @@ class _RandomEventPopState extends State<RandomEventPop> {
                 width: screenWidthUnit * 20,
               ),
               Container(
-                height: screenHeightUnit * 430,
+                height: screenHeightUnit * 410,
                 width: screenWidthUnit * 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: Colors.black,
-                    width: 1,
+                    width: .6,
                   ),
                 ),
                 child: RandomOption(
@@ -389,7 +389,7 @@ class _RandomEventPopState extends State<RandomEventPop> {
             ],
           ),
           SizedBox(
-            height: screenHeightUnit * 50,
+            height: screenHeightUnit * 30,
           ),
           GestureDetector(
             onTap: () {
@@ -526,7 +526,7 @@ class _RandomOptionState extends State<RandomOption> {
     return GestureDetector(
       onTap: () => widget.onTap(),
       child: Container(
-          height: widget.screenHeightUnit * 430,
+          height: widget.screenHeightUnit * 400,
           width: widget.screenWidthUnit * 300,
           decoration: BoxDecoration(
             color: widget.selected
@@ -535,7 +535,7 @@ class _RandomOptionState extends State<RandomOption> {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: Colors.black,
-              width: 1,
+              width: .6,
             ),
           ),
           child: Padding(
@@ -549,25 +549,25 @@ class _RandomOptionState extends State<RandomOption> {
                 Text(
                   widget.title,
                   style: GoogleFonts.baloo2(
-                    fontSize: widget.screenHeightUnit * 35,
+                    fontSize: widget.screenHeightUnit * 32,
                     fontWeight: FontWeight.w600,
                     color: widget.selected ? Colors.white : Colors.black,
                   ),
                 ),
                 SizedBox(
-                  height: widget.screenHeightUnit * 8,
+                  height: widget.screenHeightUnit * 6,
                 ),
                 Text(
                   widget.subtitle,
                   style: GoogleFonts.baloo2(
-                    fontSize: widget.screenHeightUnit * 22,
+                    fontSize: widget.screenHeightUnit * 20,
                     fontWeight: FontWeight.w500,
                     color: widget.selected ? Colors.white : Colors.black,
                   ),
                   textAlign: TextAlign.start,
                 ),
                 SizedBox(
-                  height: widget.screenHeightUnit * 20,
+                  height: widget.screenHeightUnit * 14,
                 ),
                 Text(
                   "\$${widget.cost}",
@@ -585,7 +585,7 @@ class _RandomOptionState extends State<RandomOption> {
                   textAlign: TextAlign.start,
                 ),
                 SizedBox(
-                  height: widget.screenHeightUnit * 10,
+                  height: widget.screenHeightUnit * 6,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -604,7 +604,7 @@ class _RandomOptionState extends State<RandomOption> {
                               color: widget.effect1Cost > 0
                                   ?  Color.fromRGBO(0, 199, 129, 1)
                                       : Color.fromRGBO(255, 0, 0, 1),
-                              width: 1,
+                              width: .6,
 
                             )
                           ),
@@ -639,7 +639,7 @@ class _RandomOptionState extends State<RandomOption> {
                       ),
                     ),
                     SizedBox(
-                      height: widget.screenHeightUnit * 15,
+                      height: widget.screenHeightUnit * 10,
                     ),
                     SizedBox(
                       height: widget.screenHeightUnit * 40,
@@ -654,7 +654,7 @@ class _RandomOptionState extends State<RandomOption> {
                               color: widget.effect2Cost > 0
                                   ? Color.fromRGBO(30, 213, 58, 1)
                                   : Color.fromRGBO(243, 52, 52, 1),
-                              width: 1,
+                              width: .6,
                             ),
                           ),
                           child: Row(
