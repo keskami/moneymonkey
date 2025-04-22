@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/Pages/gs_home.dart';
+import 'package:money_monkey/LessonPages/NewPages/NewLessonHome.dart';
 import 'package:money_monkey/home.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -220,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => NewLessonsHome(),
           ),
         );
       }
@@ -294,7 +295,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => NewLessonsHome(),
           ),
         );
       }
@@ -374,8 +375,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            GettingStartedHome(),
+                                        builder: (context) => NewLessonsHome(),
                                       ),
                                     );
                                   },
@@ -862,9 +862,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                GettingStartedHome(),
-                                                          ),
+                                                              builder: (context) =>
+                                                                  NewLessonsHome()),
                                                         );
                                                       },
                                                       child: Text(
