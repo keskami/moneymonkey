@@ -117,7 +117,7 @@ class _NewLessonsHomeState extends State<NewLessonsHome> {
                 // The lessons themselves
                 NewLessonHomeUnit(
                   heightUnit: screenHeight/1342,
-                  widthUnit: screenWidth/1920, currentIndex: 2,
+                  widthUnit: screenWidth/1920, currentIndex: 4,
                 ),
                 //LessonsHomeUnit(lessons: lessons),
 

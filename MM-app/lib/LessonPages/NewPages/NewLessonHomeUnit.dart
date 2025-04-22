@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:money_monkey/LessonPages/NewPages/5Pages/exitCheck.dart';
 
 class NewLessonHomeUnit extends StatelessWidget {
   final double heightUnit;
@@ -593,7 +594,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Kickoff",
+                                "Exit Check",
                                 style: GoogleFonts.baloo2(
                                   fontSize: heightUnit * 28,
                                   fontWeight: FontWeight.w700,
@@ -614,13 +615,23 @@ class NewLessonHomeUnit extends StatelessWidget {
                             ],
                           ),
                          
-                          Text("Money Emotions & Personal Values",
+                          Text("Values-Money Connection Quiz",
                               style: GoogleFonts.baloo2(
                                 fontSize: heightUnit * 16,
                                 fontWeight: FontWeight.w500,
                               )),
 
-                              GestureDetector(onTap: (){}, child: Center(
+                              GestureDetector(onTap: (){
+                                if(currentIndex >= 4){
+                                   Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ExitCheck(heightUnit: heightUnit, widthUnit: widthUnit), 
+                                  ),
+                                );
+
+                                }
+                               
+                              }, child: Center(
                                 child: Container(
                                   width: widthUnit * 257,
                                   height: heightUnit * 43,
