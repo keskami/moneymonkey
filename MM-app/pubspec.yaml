@@ -56,6 +56,7 @@ dependencies:
   shared_preferences: ^2.5.2
   connectivity_plus: ^6.1.3
   get_storage: ^2.1.1
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - keys.env
     - assets/images/HomeWorkPage.png
     - assets/images/BudgetSimulator.png
     - assets/sample_stock_data.json

@@ -26,7 +26,7 @@ class TeacherDashboardController extends GetxController {
   ];
 
   // Observable properties
-  Rx<Widget> currentPage = Rx<Widget>(TeacherDashoardPlaceHolderPage());
+  Rx<Widget> currentPage = Rx<Widget>(TeacherCalendar());
   RxInt pageIndex = 0.obs;
   RxString lessonId = "".obs;
   Rx<List<Student>> classRoomStudents = Rx<List<Student>>([]);

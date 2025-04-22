@@ -291,7 +291,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 ),
                 
                 Container(
-                  height: isCalendarPage ? screenHeight * 0.7 : screenHeight * 0.65, // More height for calendar
+                  height: isCalendarPage ? screenHeight * 0.85 : screenHeight * 0.65, // More height for calendar
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                   child: Obx(() {
                     // Safely render current page or fallback to placeholder
