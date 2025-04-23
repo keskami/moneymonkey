@@ -21,6 +21,7 @@ class _NewLessonsHomeState extends State<NewLessonsHome> {
   String _currentLessonTitle = '';
   String _currentUnitId = "A.1";
   String unitTitle = "";
+  int _currentLessonIndex = 4;
 
   // For illustration, assume each "lesson block" is ~400px tall
   final double _lessonBlockHeight = 700;
@@ -117,7 +118,7 @@ class _NewLessonsHomeState extends State<NewLessonsHome> {
                 // The lessons themselves
                 NewLessonHomeUnit(
                   heightUnit: screenHeight/1342,
-                  widthUnit: screenWidth/1920, currentIndex: 4,
+                  widthUnit: screenWidth/1920, currentIndex: _currentLessonIndex,
                 ),
                 //LessonsHomeUnit(lessons: lessons),
 
