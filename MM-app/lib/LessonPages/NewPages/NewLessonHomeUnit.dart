@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/NewPages/5Pages/exitCheck.dart';
+import 'package:money_monkey/LessonPages/NewPages/5Pages/reflect.dart';
 
 class NewLessonHomeUnit extends StatelessWidget {
   final double heightUnit;
   final double widthUnit;
-  final int currentIndex; // New parameter for tracking progress
+  final int currentIndex; 
 
   NewLessonHomeUnit({
     Key? key,
     required this.heightUnit,
     required this.widthUnit,
-    required this.currentIndex, // Required parameter
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -62,7 +63,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Kickoff",
+                                "Reflection",
                                 style: GoogleFonts.baloo2(
                                   fontSize: heightUnit * 28,
                                   fontWeight: FontWeight.w700,
@@ -426,15 +427,16 @@ class NewLessonHomeUnit extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: heightUnit * (330 + 490 + 135),
+                   top: heightUnit * (330 + 490 + 135),
                   left: widthUnit * 500,
+                 
                   child: Container(
                     width: widthUnit * 287,
                     height: heightUnit * 137,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
-                          color: currentIndex > 3
+                          color: currentIndex > 2
                               ? Color.fromRGBO(25, 160, 18, 1)
                               : Color.fromRGBO(135, 206, 235, 1),
                           width: 1),
@@ -461,7 +463,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Kickoff",
+                                "Exit Check",
                                 style: GoogleFonts.baloo2(
                                   fontSize: heightUnit * 28,
                                   fontWeight: FontWeight.w700,
@@ -482,13 +484,23 @@ class NewLessonHomeUnit extends StatelessWidget {
                             ],
                           ),
                          
-                          Text("Money Emotions & Personal Values",
+                          Text("Values-Money Connection Quiz",
                               style: GoogleFonts.baloo2(
                                 fontSize: heightUnit * 16,
                                 fontWeight: FontWeight.w500,
                               )),
 
-                              GestureDetector(onTap: (){}, child: Center(
+                              GestureDetector(onTap: (){
+                                if(currentIndex >= 3){
+                                   Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ExitCheck(heightUnit: heightUnit, widthUnit: widthUnit), 
+                                  ),
+                                );
+
+                                }
+                               
+                              }, child: Center(
                                 child: Container(
                                   width: widthUnit * 257,
                                   height: heightUnit * 43,
@@ -559,7 +571,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: heightUnit * (330 + 490 + 245 + 105),
+                   top: heightUnit * (330 + 490 + 245 + 105),
                   left: widthUnit * 300,
                   child: Container(
                     width: widthUnit * 287,
@@ -567,7 +579,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
-                          color: currentIndex > 3
+                          color: currentIndex > 4
                               ? Color.fromRGBO(25, 160, 18, 1)
                               : Color.fromRGBO(135, 206, 235, 1),
                           width: 1),
@@ -594,7 +606,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Exit Check",
+                                "Kickoff",
                                 style: GoogleFonts.baloo2(
                                   fontSize: heightUnit * 28,
                                   fontWeight: FontWeight.w700,
@@ -615,7 +627,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                             ],
                           ),
                          
-                          Text("Values-Money Connection Quiz",
+                          Text("Money Emotions & Personal Values",
                               style: GoogleFonts.baloo2(
                                 fontSize: heightUnit * 16,
                                 fontWeight: FontWeight.w500,
@@ -625,12 +637,11 @@ class NewLessonHomeUnit extends StatelessWidget {
                                 if(currentIndex >= 4){
                                    Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => ExitCheck(heightUnit: heightUnit, widthUnit: widthUnit), 
+                                    builder: (context) => Reflection(heightUnit: heightUnit, widthUnit: widthUnit), 
                                   ),
                                 );
 
                                 }
-                               
                               }, child: Center(
                                 child: Container(
                                   width: widthUnit * 257,
@@ -701,6 +712,7 @@ class NewLessonHomeUnit extends StatelessWidget {
                     ),
                   ),
                 ),
+                
               ],
             ),
           ),
