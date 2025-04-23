@@ -33,7 +33,7 @@ class ColoredPaddedContainer extends Container {
       decoration: decoration ??
           BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: color ?? LightTheme().pastelGreen.withValues(alpha: 0.2),
+            color: color ?? LightTheme().pastelGreen.withOpacity(0.2),
           ),
       child: child,
     );

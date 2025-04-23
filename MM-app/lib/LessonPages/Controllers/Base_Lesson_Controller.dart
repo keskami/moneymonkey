@@ -44,6 +44,7 @@ class BaseLessonController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    print("AAAAA" + type.toString());
     loadConceptData();
   }
 

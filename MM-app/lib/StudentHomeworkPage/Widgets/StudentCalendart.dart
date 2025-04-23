@@ -298,7 +298,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
                                   width: 1,
                                 ),
                                 color: isSelected
-                                    ? LightTheme().pastelBlue.withValues(alpha: 0.4)
+                                    ? LightTheme().pastelBlue.withOpacity(0.4)
                                     : Colors.white,
                               ),
                               child: Column(

@@ -36,14 +36,34 @@ class _LessonsHomeState extends State<LessonsHome> {
     _scrollController.addListener(_onScroll);
   }
 
-  void _loadData() {
-    final currentUnit = localService.getUnit(_currentUnitId);
-    // unitTitle = currentUnit.title;
-    // final List lessonIds = currentUnit.lessonIds;
-    // lessons = [];
-    // for (var i = 0; i < currentUnit.lessonIds.length; i++) {
-    //   // lessons.add(localService.getLesson(lessonIds[i]));
-    // }
+  Future<void> _loadData() async {
+    try {
+      // Wait for the unit to be fetched since getUnit returns a Future
+      final Unit currentUnit = await localService.getUnit(_currentUnitId);
+
+      // Update the state with the unit title
+      setState(() {
+        unitTitle = currentUnit.title;
+      });
+
+      // Get lessons for each lesson ID
+      List<Lesson> loadedLessons = [];
+      for (String lessonId in currentUnit.lessonIds) {
+        try {
+          final lesson = await localService.getLesson(lessonId);
+          loadedLessons.add(lesson);
+        } catch (e) {
+          print('Error loading lesson $lessonId: $e');
+        }
+      }
+
+      // Update the state with loaded lessons
+      setState(() {
+        lessons = loadedLessons;
+      });
+    } catch (e) {
+      print('Error loading unit data: $e');
+    }
   }
 
   void _onScroll() {

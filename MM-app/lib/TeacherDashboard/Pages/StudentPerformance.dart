@@ -83,7 +83,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
 
   Color getFilterButtonColor(String filter) {
     if (currentFilter == filter) {
-      return LightTheme().primaryBlue.withValues(alpha: 0.2);
+      return LightTheme().primaryBlue.withOpacity(0.2);
     }
     return Colors.transparent;
   }
@@ -358,7 +358,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                   color: selectedStudentIndex == index
                                       ? LightTheme()
                                           .primaryBlue
-                                          .withValues(alpha: 0.2)
+                                          .withOpacity(0.2)
                                       : Colors.transparent,
                                   child: Row(
                                     children: [
@@ -396,7 +396,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                               horizontal: 10,
                                               vertical: 10,
                                             ),
-                                            color: statusColor.withValues(alpha: 0.3),
+                                            color: statusColor.withOpacity(0.3),
                                             child: Text(
                                               status.name.replaceAll('_', ' '),
                                               textAlign: TextAlign.center,
@@ -491,7 +491,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                     horizontal: 12,
                                     vertical: 16,
                                   ),
-                                  color: statusColor.withValues(alpha: 0.3),
+                                  color: statusColor.withOpacity(0.3),
                                   child: Text(
                                     status.name.replaceAll('_', ' '),
                                     textAlign: TextAlign.center,

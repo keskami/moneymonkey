@@ -215,7 +215,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                             );
                           },
                           child: ColoredPaddedContainer(
-                            color: Colors.blue.withValues(alpha: 0.2),
+                            color: Colors.blue.withOpacity(0.2),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -272,7 +272,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                             );
                           },
                           child: ColoredPaddedContainer(
-                            color: Colors.orange.withValues(alpha: 0.2),
+                            color: Colors.orange.withOpacity(0.2),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -318,7 +318,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                     style: TextStyles.containerTitle,
                   ),
                   ColoredPaddedContainer(
-                    color: Colors.blue.withValues(alpha: 0.2),
+                    color: Colors.blue.withOpacity(0.2),
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.02,
                       vertical: screenHeight * 0.02,
@@ -343,7 +343,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
                     ),
                   ),
                   ColoredPaddedContainer(
-                    color: Colors.purple.withValues(alpha: 0.2),
+                    color: Colors.purple.withOpacity(0.2),
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.02,
                       vertical: screenHeight * 0.02,
@@ -384,7 +384,7 @@ class _ClassroomPreferencesState extends State<ClassroomPreferences> {
     );
     return li.entries.map(
       (entry) => ColoredPaddedContainer(
-        color: color.withValues(alpha: 0.2),
+        color: color.withOpacity(0.2),
         padding: EdgeInsets.symmetric(
           horizontal: 40,
           vertical: 30,

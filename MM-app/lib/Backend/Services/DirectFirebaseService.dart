@@ -192,7 +192,7 @@ class DirectFirebaseService {
   Future<Unit> getUnit(String unitId) async {
     try {
       // First try the nested path based on the unit ID pattern (e.g., "A.1")
-      final String path = 'Levels/Advanced/Units/$unitId';
+      final String path = 'Units/$unitId';
 
       try {
         final doc = await _firestore.doc(path).get();
@@ -359,7 +359,7 @@ class DirectFirebaseService {
       // First try the ComponentsIndex for the path
       try {
         final indexDoc = await _firestore
-            .collection('ComponentsIndex')
+            .collection('Components')
             .doc(componentId)
             .get();
 

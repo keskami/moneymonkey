@@ -77,7 +77,7 @@ class LoadingPageWrapper extends StatelessWidget {
 
   Future<BaseLessonController> _initializeController() async {
     BaseLessonController controller;
-
+    
     controller = Get.put<BaseLessonController>(
       BaseLessonController(componentId: componentId, type: type),
     );
@@ -87,9 +87,9 @@ class LoadingPageWrapper extends StatelessWidget {
 
   Future<void> _preLoadImages(BuildContext context) async {
     final localService = DirectFirebaseService();
-    final component = await localService.getComponent(componentId);
+    final Component component = await localService.getComponent(componentId);
 
-    switch (component.componentType) {
+    switch (component.type) {
       case ComponentType.concept:
       case ComponentType.interactiveActivity:
         await _preLoadImagesForLesson(context);

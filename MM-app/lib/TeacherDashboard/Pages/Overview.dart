@@ -118,7 +118,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                           ),
                         ),
                         backgroundColor: WidgetStatePropertyAll(
-                          LightTheme().primaryBlue.withValues(alpha: 0.3),
+                          LightTheme().primaryBlue.withOpacity(0.3),
                         ),
                       ),
                       child: Text(
@@ -242,7 +242,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                       color: randomColorList[teacherDashboardController
                               .quickActionsSuggestions
                               .indexOf(suggestion)]
-                          .withValues(alpha: 0.1),
+                          .withOpacity(0.1),
                     ),
                     child: Text(
                       suggestion,
@@ -304,7 +304,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Colors.blue.withValues(alpha: 0.1),
+                              color: Colors.blue.withOpacity(0.1),
                             ),
                             child: Text(
                               question,
