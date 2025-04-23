@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/LessonPages/NewPages/newPageWidgets/exitCheckOption.dart';
 import 'package:money_monkey/LessonPages/NewPages/newPageWidgets/exitCheckQuizQuestion.dart';
+import 'package:money_monkey/LessonPages/NewPages/newPageWidgets/finalReflection.dart';
+import 'package:money_monkey/LessonPages/NewPages/newPageWidgets/quizFeedback.dart';
+import 'package:money_monkey/LessonPages/NewPages/newPageWidgets/setAGoal.dart';
 
 class ExitCheck extends StatefulWidget {
   final double heightUnit;
@@ -18,12 +23,57 @@ class ExitCheck extends StatefulWidget {
 }
 
 class _ExitCheckState extends State<ExitCheck> {
-  //To Be fixed with backend
+  //Kestan to fill in with firebase below
+  final String goalHintText = 'e.g., Save \$1000 for a emergency fund';
+  final String goal = "Financial";
   final String LessonName = 'Financial Values';
+  final List<String> quesions = [
+    "What is a financial value?",
+    "Which of the following is NOT considerd a financial value?",
+    "What are your financial goals?",
+  ];
+  final List<List<String>> options = [
+    [
+      "The exact Dollar amount you are saving",
+      "A value that is related to time",
+      "An amount of money you want to save",
+      "A value that is related to money"
+    ],
+    ["Time", "Money", "Both", "None"],
+    ["To save money", "To spend money", "To invest money", "To waste money"],
+  ];
+  // indexed from 0
+  final List<int> correctAnswers = [
+    0,
+    0,
+    0,
+  ];
+  //Kestan to fill in with firebase above
+
+  List<int> selectedOptions = [-1, -1, -1];
 
   bool selected1 = true;
   bool selected2 = false;
   bool selected3 = false;
+  String goalLength = "Week";
+
+  bool quizSubmitted = false;
+  late TextEditingController goalController;
+  late TextEditingController reflectionController;
+
+  @override
+  void initState() {
+    super.initState();
+    goalController = TextEditingController();
+    reflectionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    goalController.dispose();
+    reflectionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +169,7 @@ class _ExitCheckState extends State<ExitCheck> {
                         selected3 = false;
                       });
                     },
-                    text: "Set A Financial Goal",
+                    text: "Set A ${goal} Goal",
                     icon: Icon(
                       Icons.center_focus_strong,
                       size: widget.heightUnit * 40,
@@ -232,26 +282,108 @@ class _ExitCheckState extends State<ExitCheck> {
                   child: Center(
                     child: SingleChildScrollView(
                         child: selected1
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(height: widget.heightUnit * 50,),
-                                  ExitCheckQuizQuestion(
-                                      heightUnit: widget.heightUnit,
-                                      widthUnit: widget.widthUnit),
-                                      SizedBox(height: widget.heightUnit * 50,),
-                                       ExitCheckQuizQuestion(
-                                      heightUnit: widget.heightUnit,
-                                      widthUnit: widget.widthUnit),
-                                      SizedBox(height: widget.heightUnit * 50,),
-                                       ExitCheckQuizQuestion(
-                                      heightUnit: widget.heightUnit,
-                                      widthUnit: widget.widthUnit),
-                                      SizedBox(height: widget.heightUnit * 50,),
-                                ],
-                              )
-                            : Column()),
+                            ? quizSubmitted
+                                ? QuizFeedback(
+                                    heightUnit: widget.heightUnit,
+                                    widthUnit: widget.widthUnit,
+                                    selectedAnswers: selectedOptions,
+                                    correctAnswers: correctAnswers,
+                                    options: options,
+                                    questions: quesions,
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: widget.heightUnit * 50,
+                                      ),
+                                      ...List.generate(quesions.length,
+                                          (index) {
+                                        return Column(
+                                          children: [
+                                            ExitCheckQuizQuestion(
+                                              heightUnit: widget.heightUnit,
+                                              widthUnit: widget.widthUnit,
+                                              quesionNumber: index + 1,
+                                              questionText: quesions[index],
+                                              options: options[index],
+                                              correctAnswer:
+                                                  correctAnswers[index],
+                                              onAnswerSelected:
+                                                  (int selectedOption) {
+                                                setState(() {
+                                                  selectedOptions[index] =
+                                                      selectedOption;
+                                                });
+                                              },
+                                            ),
+                                            SizedBox(
+                                              height: widget.heightUnit * 50,
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              right: widget.widthUnit * 210),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                if (selectedOptions.every(
+                                                    (option) => option > -1)) {
+                                                  setState(() {
+                                                    quizSubmitted = true;
+                                                  });
+                                                }
+                                              },
+                                              child: Container(
+                                                height: widget.heightUnit * 80,
+                                                width: widget.widthUnit * 250,
+                                                decoration: BoxDecoration(
+                                                    color: Color.fromRGBO(
+                                                        0, 127, 255, 1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Submit Quiz",
+                                                    style: GoogleFonts.baloo2(
+                                                        fontSize:
+                                                            widget.heightUnit *
+                                                                30,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        height: widget.heightUnit * 50,
+                                      ),
+                                    ],
+                                  )
+                            : selected2
+                                ? SetAGoalWidget(
+                                    width: widget.widthUnit,
+                                    height: widget.heightUnit,
+                                    goalName: goal,
+                                    hintText: goalHintText,
+                                    goalController: goalController,
+                                    goalLength: goalLength,
+                                    Widget: this,
+                                  )
+                                : FinalReflection(
+                                    textController: reflectionController,
+                                    height: widget.heightUnit,
+                                    width: widget.widthUnit,
+                                    reflectionType: goal,
+                                  )),
                   ),
                 )
               ],
