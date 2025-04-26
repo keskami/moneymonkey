@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Widgets/LessonHome/treasure_widget.dart';
-import 'package:money_monkey/LessonPages/Widgets/PolygonAvatar.dart';
+import 'package:money_monkey/LessonPages/Widgets/LessonHome/lesson_box.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 class CustomPolygonRow extends StatelessWidget {
@@ -171,13 +171,9 @@ class CustomPolygonRow extends StatelessWidget {
               ],
             ),
           ),
-          child: LessonPolygon(
-            backgroundColor: Colors.grey.shade400,
-            icon: Icon(
-              Icons.lock,
-            ),
-            isActivated: isActivated,
+          child: LessonBox(
             width: width,
+            isActivated: isActivated,
             index: index,
             imageLinks: imageLinks,
           ),
@@ -319,13 +315,9 @@ class CustomPolygonRow extends StatelessWidget {
               ],
             ),
           ),
-          child: LessonPolygon(
-            backgroundColor: Colors.grey.shade400,
-            icon: Icon(
-              Icons.lock,
-            ),
-            isActivated: isActivated,
+          child: LessonBox(
             width: width,
+            isActivated: isActivated,
             index: index,
             imageLinks: imageLinks,
           ),
@@ -534,13 +526,9 @@ class CustomPolygonRow extends StatelessWidget {
                 ],
               ),
             ),
-            child: LessonPolygon(
-              backgroundColor: Colors.grey.shade400,
-              icon: Icon(
-                Icons.lock,
-              ),
-              isActivated: isActivated,
+            child: LessonBox(
               width: width,
+              isActivated: isActivated,
               index: index,
               imageLinks: imageLinks,
             ),

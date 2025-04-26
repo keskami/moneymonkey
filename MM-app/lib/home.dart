@@ -94,24 +94,20 @@ class _HomePageState extends State<HomePage> {
     
     return Scaffold(
       body: Obx(() {
-        // Get current sidebar width based on expanded state
-        double sidebarWidth = homePagesController.isSidebarExpanded.value 
+        // Determine if sidebar should be expanded based on page index
+        final int pageIndex = homePagesController.pageIndex.value;
+        final bool isSidebarExpanded = !(pageIndex == 0 || pageIndex == 4);
+        homePagesController.isSidebarExpanded.value = isSidebarExpanded;
+        double sidebarWidth = isSidebarExpanded
             ? screenWidth * 0.17  // Expanded width
             : screenWidth * 0.06; // Minimized width
         
         return Row(
           children: [
-            // Sidebar with MouseRegion to handle expansion
-            MouseRegion(
-              onEnter: (_) => homePagesController.isSidebarExpanded.value = true,
-              onExit: (_) => homePagesController.isSidebarExpanded.value = false,
-              child: SizedBox(
-                width: sidebarWidth,
-                child: const SideBar(),
-              ),
+            SizedBox(
+              width: sidebarWidth,
+              child: const SideBar(),
             ),
-            
-            // Content area with GetBuilder for immediate updates
             Expanded(
               child: GetBuilder<HomePagesController>(
                 builder: (controller) {
