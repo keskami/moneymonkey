@@ -18,7 +18,8 @@ class _TryItPageState extends State<TryItPage> {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  //Kestan to fill below
+  
+
   final List<String> startingMessages = [
     "Welcome to the Bean Game! I'll help you explore your financial values through a budgeting exercise.",
     "You have 20 beans that represent your total resources. Let's start building your budget by allocating them to different categories. Ready to begin?",
@@ -44,7 +45,6 @@ class _TryItPageState extends State<TryItPage> {
     'clothing': 0,
   };
 
-  //Kestan to fill above
 
   List<ChatMessage> chatHistory = [];
 
