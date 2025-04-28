@@ -19,6 +19,7 @@ import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/transferMoneyButton.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/weekdayRow.dart';
 import 'package:money_monkey/BudgetSimulator/Widgets/wellnessBoxNew.dart';
+import 'package:money_monkey/BudgetSimulator/Widgets/tableCalender.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class BudgetSimulator extends StatefulWidget {
@@ -94,7 +95,7 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
     getExpenses();
     getUniqueWeekCountForMonth(widget.focusedDay.year, widget.focusedDay.month);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getEvents();
+      // getEvents(); // removed initial event trigger
     });
     getStartingExpenses();
     setState(() {
@@ -654,6 +655,8 @@ class _BudgetSimulatorState extends State<BudgetSimulator> {
             widget.now, widget.level, widget.name);
       });
     }
+    // Trigger events after advancing the day
+    await getEvents();
   }
 
   Future<void> getEvents() async {

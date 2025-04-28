@@ -76,13 +76,26 @@ class LoadingPageWrapper extends StatelessWidget {
   }
 
   Future<BaseLessonController> _initializeController() async {
-    BaseLessonController controller;
-    
-    controller = Get.put<BaseLessonController>(
-      BaseLessonController(componentId: componentId, type: type),
-    );
-
-    return controller;
+    if (Get.isRegistered<BaseLessonController>()) {
+      final existing = Get.find<BaseLessonController>();
+      if (existing.componentId != componentId) {
+        // Delete controller for different component
+        Get.delete<BaseLessonController>();
+        final newController = Get.put<BaseLessonController>(
+          BaseLessonController(componentId: componentId, type: type),
+        );
+        return newController;
+      } else {
+        // Reuse existing controller to preserve progress
+        return existing;
+      }
+    } else {
+      // First time registration
+      final controller = Get.put<BaseLessonController>(
+        BaseLessonController(componentId: componentId, type: type),
+      );
+      return controller;
+    }
   }
 
   Future<void> _preLoadImages(BuildContext context) async {
@@ -90,26 +103,23 @@ class LoadingPageWrapper extends StatelessWidget {
     final Component component = await localService.getComponent(componentId);
 
     switch (component.type) {
-      case ComponentType.concept:
-      case ComponentType.interactiveActivity:
-        await _preLoadImagesForLesson(context);
-        break;
-      case ComponentType.story:
+      case ComponentType.kickoff:
         await _preLoadImagesForStory(context);
         break;
-      case ComponentType.scenarioSimulation:
+      case ComponentType.learnIt:
+        await _preLoadImagesForLesson(context);
+        break;
+      case ComponentType.tryIt:
         await _preLoadImagesForScenario(context);
         break;
-      case ComponentType.peerReflection:
-      case ComponentType.quiz:
+      case ComponentType.exitCheck:
         await _preLoadImagesForPeerReflection(context);
         break;
-      case ComponentType.toolkit:
+      case ComponentType.recap:
         await _preLoadImagesForLesson(context);
         break;
       default:
-        print(
-            "Warning: No specific preload images for component type: ${component.type}");
+        print("Warning: No specific preload images for component type: ${component.type}");
         // Load default images or perform minimal preloading
         await _preLoadImagesForLesson(context);
     }

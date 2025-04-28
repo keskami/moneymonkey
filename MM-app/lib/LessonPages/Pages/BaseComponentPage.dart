@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/GlobalWidgets/progress_bar.dart';
+import 'package:money_monkey/LessonPages/Widgets/LessonPages/lesson_progress_bar.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
 import 'package:money_monkey/home.dart';
 
@@ -23,13 +23,9 @@ class _BaseComponentPage extends State<BaseComponentPage> {
     controller = Get.find<BaseLessonController>();
   }
 
-
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed
-    if (Get.isRegistered<BaseLessonController>()) {
-      Get.delete<BaseLessonController>();
-    }
+    // Preserve lesson controller to maintain progress on re-entry
     super.dispose();
   }
 
@@ -47,77 +43,22 @@ class _BaseComponentPage extends State<BaseComponentPage> {
   @override
   Widget build(BuildContext context) {
     _preLoadImages();
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: screenHeight * .06,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            if (controller.pageIndex == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-            } else {
-              controller.pageIndex -= 1;
-            }
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            size: screenHeight * .0375,
-          ),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: screenHeight * 0.0,
-          ),
-          //Progress Bar Row
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Obx(
+        () {
+          final pages = controller.pages;
+          final idx = controller.pageIndex.value;
+          return Column(
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.close),
+              LessonProgressBar(
+                currentPage: idx,
+                currentProgress: 1.0,
+                totalPages: pages.length,
               ),
-              Container(
-                width: screenWidth * 0.44,
-                child: CustomProgressBar(
-                  pageType: widget.pageType,
-                  width: screenWidth * 0.44,
-                  key: ValueKey(controller.pageIndex.value),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Image.network(
-                  width: 30,
-                  "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FbananasWorth.png?alt=media&token=551b2c7b-08d9-4624-a077-31641e5bd003"),
-              Text(
-                "3",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Expanded(child: pages[idx]),
             ],
-          ),
-          Obx(
-            () => controller
-                .pages[controller.pageIndex.value],
-          ),
-        ],
+          );
+        },
       ),
     );
   }

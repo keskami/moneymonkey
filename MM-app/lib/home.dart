@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> {
         // Determine if sidebar should be expanded based on page index
         final int pageIndex = homePagesController.pageIndex.value;
         final bool isSidebarExpanded = !(pageIndex == 0 || pageIndex == 4);
-        homePagesController.isSidebarExpanded.value = isSidebarExpanded;
         double sidebarWidth = isSidebarExpanded
             ? screenWidth * 0.17  // Expanded width
             : screenWidth * 0.06; // Minimized width
@@ -109,10 +108,9 @@ class _HomePageState extends State<HomePage> {
               child: const SideBar(),
             ),
             Expanded(
-              child: GetBuilder<HomePagesController>(
-                builder: (controller) {
-                  return controller.pages[controller.pageIndex.value];
-                },
+              child: IndexedStack(
+                index: pageIndex,
+                children: homePagesController.pages,
               ),
             )
           ],

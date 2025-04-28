@@ -9,14 +9,11 @@ enum Status {
 }
 
 enum ComponentType {
+  kickoff,
+  learnIt,
+  tryIt,
+  exitCheck,
   recap,
-  concept,
-  interactiveActivity,
-  story,
-  scenarioSimulation,
-  peerReflection,
-  toolkit,
-  quiz,
 }
 
 extension ComponentTypeExtension on ComponentType {
@@ -25,7 +22,7 @@ extension ComponentTypeExtension on ComponentType {
   static ComponentType fromString(String str) {
     return ComponentType.values.firstWhere(
       (e) => e.name == str,
-      orElse: () => ComponentType.concept,
+      orElse: () => ComponentType.learnIt,
     );
   }
 }

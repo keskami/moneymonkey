@@ -229,6 +229,15 @@ class HomePagesController extends GetxController {
     ProfileScreen(),
   ];
 
+  @override
+  void onInit() {
+    super.onInit();
+    ever(pageIndex, (int idx) {
+      // Expand sidebar on pages 1-3, collapse on 0 and 4
+      isSidebarExpanded.value = !(idx == 0 || idx == 4);
+    });
+  }
+
   // Enhanced changePage method that ensures immediate UI updates
   void changePage(int newPageIndex) {
     pageIndex.value = newPageIndex;
