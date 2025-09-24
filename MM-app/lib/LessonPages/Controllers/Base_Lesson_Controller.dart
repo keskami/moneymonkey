@@ -5,7 +5,10 @@ import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
 import 'package:money_monkey/Backend/Services/AcademicServices.dart';
 import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/ExitCheck.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/KickOff.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/LearnIt.dart';
 import 'package:money_monkey/LessonPages/SubComponentPages/Reflect.dart';
+import 'package:money_monkey/LessonPages/SubComponentPages/TryIt.dart';
 
 class BaseLessonController extends GetxController {
   /// Indicates whether the controller is still loading data.
@@ -34,21 +37,14 @@ class BaseLessonController extends GetxController {
       // final Component data =
       //     await localAcademicService.getComponent(componentId);
 
-      pages.add(const ExitCheck());
-
-      pages.add(const ExitCheck());
-
-      pages.add(const ExitCheck());
-
-      pages.add(const ExitCheck());
-
-      pages.add(const ExitCheck());
-
-      // pages.add(const Reflection());
+      pages.add(TryItComponent());
     } catch (e) {
       print("Error loading concept data: $e");
     } finally {
       isLoading.value = false; // using the inherited property
     }
   }
+
+  /// Advance to next page in the lesson sequence
+  void nextPage() => pageIndex.value++;
 }

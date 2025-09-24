@@ -86,7 +86,6 @@ class _PerformanceTrendsChartState extends State<PerformanceTrendsChart> {
                     lineTouchData: LineTouchData(
                       enabled: true,
                       touchTooltipData: LineTouchTooltipData(
-                        tooltipRoundedRadius: 8,
                         fitInsideHorizontally: true,
                         fitInsideVertically: true,
                         tooltipMargin: 0,

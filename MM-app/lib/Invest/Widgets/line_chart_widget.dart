@@ -113,7 +113,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           touchTooltipData: LineTouchTooltipData(
             getTooltipColor: (group) => Colors.black,
             tooltipMargin: 8,
-            tooltipRoundedRadius: 10,
             tooltipPadding: const EdgeInsets.symmetric(
               horizontal: 5,
               vertical: 3,

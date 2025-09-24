@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
+import 'package:money_monkey/home.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,46 +15,13 @@ class AuthService {
   final SignUpController signUpController = Get.find();
   final StartFreshController startFreshController = Get.find();
   final GettingStartedController gettingStartedController = Get.find();
-  String user = "";
 
-  //Google Sign In
-  Future<void> googleAuth(BuildContext context) async {
-    try {
-      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return; // User cancelled sign-in
-
-      GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
-      user = googleUser.displayName!;
-
-      AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      String userId = userCredential.user?.uid ?? '';
-      String email = userCredential.user?.email ?? '';
-
-      if (email.isNotEmpty) {
-        addUserDetails(userId, email);
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Container(
-              color: Colors.red[100],
-              child: Text(
-                "Error during Google Sign In: $e",
-              ))));
-      // Handle error and inform the user (e.g., show a snackbar)
-    }
-  }
-
+  /// Checks if an email is already in use
   Future<bool> checkEmailUsed(String email, BuildContext context) async {
-    // Validate email format
     signUpController.isLoading.value = true;
+    
     if (!email.isEmail) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Enter a valid email.")));
-
+      _showSnackBar(context, "Enter a valid email.", Colors.red);
       signUpController.isLoading.value = false;
       return false;
     }
@@ -66,8 +33,7 @@ class AuthService {
           .get();
 
       if (emailSnapshot.docs.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Email already associated with a user.")));
+        _showSnackBar(context, "Email already associated with a user.", Colors.red);
         signUpController.isLoading.value = false;
         return false;
       }
@@ -75,69 +41,133 @@ class AuthService {
       signUpController.isLoading.value = false;
       return true;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error checking email: $e"),
-        backgroundColor: Colors.red[100],
-      ));
+      _showSnackBar(context, "Error checking email: $e", Colors.red);
       signUpController.isLoading.value = false;
       return false;
     }
   }
 
-  Future<void> signUpUser(BuildContext context) async {
+  /// Signs up a new user with email and password
+  Future<bool> signUpUser(BuildContext context) async {
     try {
-      // Get the user input from the controller
-      String email = signUpController.email.value;
+      signUpController.isLoading.value = true;
+      
+      String email = signUpController.email.value.trim();
       String password = signUpController.password.value;
 
-      // Create the user in Firebase Authentication
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
+      // Create user in Firebase Auth
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
       String userId = userCredential.user!.uid;
-      addUserDetails(userId, signUpController.email.value.trim());
-      // Get the current user
-    } catch (e) {
-      // Handle errors such as invalid email, weak password, etc.
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Container(
-              color: Colors.red[100],
-              child: Text(
-                "Error during Google Sign In: $e",
-              ))));
-      rethrow;
-    }
-  }
 
-  // Function to sign in an existing user
-  Future<void> signInUser(
-      String email, String password, BuildContext context) async {
-    try {
-      await _auth.signInWithEmailAndPassword(
+      // Create user profile in Firestore
+      await _createUserProfile(
+        userId: userId,
         email: email,
-        password: password,
+        fullName: signUpController.name.value,
+        username: signUpController.username.value,
+        phoneNumber: signUpController.phoneNumber.value,
+        age: gettingStartedController.age.value,
+        knowledgeLevel: gettingStartedController.knowledgeLevel.value,
+        learningGoal: startFreshController.learningGoal.value,
       );
+
+      signUpController.isLoading.value = false;
+      _navigateToHome(context);
+      return true;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Container(
-              color: Colors.red[100],
-              child: Text(
-                "Error Signing In: $e",
-              ))));
-      rethrow;
+      signUpController.isLoading.value = false;
+      _handleAuthError(e, context, "Error during sign up");
+      return false;
     }
   }
 
-  Future<void> addUserDetails(String userId, String email) async {
-    final userDocRef =
-        FirebaseFirestore.instance.collection('Users').doc(userId);
-    final userSnapshot = await userDocRef.get();
-
-    if (userSnapshot.exists) {
-      return;
+  /// Signs in an existing user with email and password
+  Future<bool> signInUser(String email, String password, BuildContext context) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      _navigateToHome(context);
+      return true;
+    } catch (e) {
+      _handleAuthError(e, context, "Error signing in");
+      return false;
     }
+  }
+
+  /// Handles Google authentication for both sign up and sign in (WEB VERSION)
+  Future<bool> googleAuth(BuildContext context) async {
+    try {
+      // For web, use GoogleAuthProvider directly with Firebase Auth
+      final GoogleAuthProvider googleProvider = GoogleAuthProvider();
+      
+      // Add scopes if needed
+      googleProvider.addScope('email');
+      googleProvider.addScope('profile');
+      
+      // Sign in with popup for web
+      final UserCredential userCredential = await _auth.signInWithPopup(googleProvider);
+      
+      String userId = userCredential.user?.uid ?? '';
+      String email = userCredential.user?.email ?? '';
+      String? displayName = userCredential.user?.displayName;
+
+      if (email.isEmpty) {
+        _showSnackBar(context, "Unable to get email from Google account.", Colors.red);
+        return false;
+      }
+
+      // Check if user profile exists, create if not
+      final userDoc = await _firestore.collection('Users').doc(userId).get();
+      if (!userDoc.exists) {
+        await _createUserProfile(
+          userId: userId,
+          email: email,
+          fullName: displayName ?? 'User',
+          username: displayName ?? 'User',
+        );
+      }
+
+      _navigateToHome(context);
+      return true;
+    } catch (e) {
+      _handleAuthError(e, context, "Error during Google Sign In");
+      return false;
+    }
+  }
+
+  /// Signs out the current user (WEB VERSION)
+  Future<bool> signOut(BuildContext context) async {
+    try {
+      await _auth.signOut();
+      // For web, Firebase Auth handles Google sign-out automatically
+      return true;
+    } catch (e) {
+      _showSnackBar(context, "Error during sign out: $e", Colors.red);
+      return false;
+    }
+  }
+
+  /// Creates a comprehensive user profile in Firestore
+  Future<void> _createUserProfile({
+    required String userId,
+    required String email,
+    String fullName = 'Your Name Here',
+    String username = 'Your Name Here',
+    String phoneNumber = '',
+    int age = 0,
+    int knowledgeLevel = 0,
+    int learningGoal = 0,
+  }) async {
+    final userDocRef = _firestore.collection('Users').doc(userId);
+    
+    // Check if user already exists
+    final userSnapshot = await userDocRef.get();
+    if (userSnapshot.exists) return;
+
+    // Default followers and following (consider removing in production)
     List<String> following = [
       "QofNULUkjTRKL0cQccTNrwuri5I3",
       'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
@@ -152,15 +182,15 @@ class AuthService {
     await userDocRef.set({
       'User ID': userId,
       'Email': email,
-      'Phone Number': signUpController.phoneNumber.value,
-      'Age': gettingStartedController.age.value,
-      'Knowledge Level': gettingStartedController.knowledgeLevel.value,
-      'Learning Goal Per Day': startFreshController.learningGoal.value,
+      'Phone Number': phoneNumber,
+      'Age': age,
+      'Knowledge Level': knowledgeLevel,
+      'Learning Goal Per Day': learningGoal,
       'Profile': {
-        'Full Name': signUpController.name.value,
-        'Username': signUpController.username.value,
-        'Number of Followers': 3,
-        'Following': 2,
+        'Full Name': fullName,
+        'Username': username,
+        'Number of Followers': followers.length,
+        'Following': following.length,
         'Top Achievements': 0,
         'Streak': 0,
         'Total Profit': 0,
@@ -182,7 +212,7 @@ class AuthService {
         'Total Profit (Bonds)': -10,
         'Total invested Bananas': 7089,
         'Profit from Invested Bananas (Current Month)': 890,
-        'Username': "Josh5"
+        'Username': username
       },
       'following': following,
       'followers': followers,
@@ -218,57 +248,124 @@ class AuthService {
       }
     });
 
+    // Create sample transactions
+    await _createSampleTransactions(userDocRef);
+    
+    // Create progression collection
+    await _createProgressionCollection(userDocRef);
+  }
+
+  /// Creates sample transactions for new users
+  Future<void> _createSampleTransactions(DocumentReference userDocRef) async {
     final transactionsRef = userDocRef.collection('Transactions');
 
-    await transactionsRef.add(
+    final sampleTransactions = [
       {
         'Source/Destination': 'Test Source',
         'Amount': 200,
         'Date': FieldValue.serverTimestamp(),
         'Type': "Income"
       },
-    );
-    await transactionsRef.add({
-      'Source/Destination': 'Test Source 2',
-      'Amount': 150,
-      'Date': FieldValue.serverTimestamp(),
-      'Type': "Income"
-    });
+      {
+        'Source/Destination': 'Test Source 2',
+        'Amount': 150,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Income"
+      },
+      {
+        'Source/Destination': 'Test Expense Source 1',
+        'Amount': -100,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Expense"
+      },
+      {
+        'Source/Destination': 'Test Expense Source 2',
+        'Amount': -50,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Expense"
+      },
+      {
+        'Source/Destination': 'Test Source 3',
+        'Amount': 300,
+        'Date': FieldValue.serverTimestamp(),
+        'Type': "Income"
+      },
+    ];
 
-    await transactionsRef.add({
-      'Source/Destination': 'Test Expense Source 1',
-      'Amount': -100,
-      'Date': FieldValue.serverTimestamp(),
-      'Type': "Expense"
-    });
+    for (var transaction in sampleTransactions) {
+      await transactionsRef.add(transaction);
+    }
+  }
 
-    await transactionsRef.add({
-      'Source/Destination': 'Test Expense Source 2',
-      'Amount': -50,
-      'Date': FieldValue.serverTimestamp(),
-      'Type': "Expense"
-    });
-
-    await transactionsRef.add({
-      'Source/Destination': 'Test Source 3',
-      'Amount': 300,
-      'Date': FieldValue.serverTimestamp(),
-      'Type': "Income"
+  /// Creates initial progression data for new users
+  Future<void> _createProgressionCollection(DocumentReference userDocRef) async {
+    final progressionCollectionRef = userDocRef.collection('Progression');
+    
+    await progressionCollectionRef.doc('progression1').set({
+      'Level': 1,
+      'Unit': 1,
+      'Lesson': 'Earning and Saving',
+      'Progress': 0,
+      'Quiz Scores': [],
+      'Earnings from Lesson': {
+        'Monkeys': 0,
+        'Diamonds': 0,
+        'Bananas': 0,
+      },
     });
   }
 
-  // Function to sign out the user
-  Future<void> signOut(BuildContext context) async {
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Container(
-              color: Colors.red[100],
-              child: Text(
-                "Error during Signing Out: $e",
-              ))));
-      rethrow;
+  /// Navigates to the home page
+  void _navigateToHome(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
+
+  /// Shows a snackbar message
+  void _showSnackBar(BuildContext context, String message, Color? backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  /// Handles authentication errors
+  void _handleAuthError(dynamic error, BuildContext context, String defaultMessage) {
+    String message = defaultMessage;
+    
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'weak-password':
+          message = 'The password provided is too weak.';
+          break;
+        case 'email-already-in-use':
+          message = 'The account already exists for that email.';
+          break;
+        case 'invalid-email':
+          message = 'The email address is not valid.';
+          break;
+        case 'user-not-found':
+          message = 'No user found for that email.';
+          break;
+        case 'wrong-password':
+          message = 'Wrong password provided for that user.';
+          break;
+        case 'invalid-credential':
+          message = 'Invalid email or password.';
+          break;
+        case 'network-request-failed':
+          message = 'Network error. Please check your connection.';
+          break;
+        default:
+          message = error.message ?? defaultMessage;
+      }
     }
+
+    _showSnackBar(context, message, Colors.red);
   }
 }

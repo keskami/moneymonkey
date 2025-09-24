@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ReflectionPrompts extends StatefulWidget {
-  final double height;
-  final double width;
+class ReflectionPrompts extends StatelessWidget {
   final String prompt;
   final int selectedIndex;
   final int index;
@@ -10,8 +8,6 @@ class ReflectionPrompts extends StatefulWidget {
 
   const ReflectionPrompts({
     Key? key,
-    required this.height,
-    required this.width,
     required this.prompt,
     required this.selectedIndex,
     required this.index,
@@ -19,50 +15,43 @@ class ReflectionPrompts extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ReflectionPromptsState createState() => _ReflectionPromptsState();
-}
-
-class _ReflectionPromptsState extends State<ReflectionPrompts> {
-  @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(bottom: widget.height * 30),
-        child: GestureDetector(
-            onTap: () {
-              widget.onTap(widget.index);
-            },
-            child: Container(
-              width: widget.width * 400,
-              decoration: BoxDecoration(
-                color: widget.selectedIndex == widget.index
-                    ? Color.fromRGBO(232, 246, 255, 1)
-                    : Color.fromRGBO(242, 242, 242, 1),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: widget.selectedIndex == widget.index
-                      ? Color.fromRGBO(0, 127, 255, 1)
-                      : Color.fromRGBO(242, 242, 242, 1),
-                  width: widget.selectedIndex == widget.index ? .6 : 0,
+      padding: const EdgeInsets.only(bottom: 8),
+      child: GestureDetector(
+        onTap: () {
+          onTap(index);
+        },
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: selectedIndex == index
+                ? const Color(0xFFE8F6FF)
+                : const Color(0xFFF2F2F2),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: selectedIndex == index
+                  ? const Color(0xFF007FFF)
+                  : const Color(0xFFF2F2F2),
+              width: selectedIndex == index ? 0.6 : 0,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                prompt,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: widget.width * 20,
-                    right: widget.width * 20,
-                    top: widget.height * 20,
-                    bottom: widget.height * 20),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    widget.prompt,
-                    style: TextStyle(
-                      fontSize: widget.height * 30,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            )));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
