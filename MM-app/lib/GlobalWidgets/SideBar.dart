@@ -41,6 +41,7 @@ class SideBar extends StatelessWidget {
                     index: imageLinks.keys.toList().indexOf(entry.key),
                     isActive: homePagesController.pageIndex.value == 
                       imageLinks.keys.toList().indexOf(entry.key),
+                    isExpanded: isExpanded, // ✅ Pass the reactive value as parameter
                   )
                 ).toList(),
               ),
@@ -60,9 +61,11 @@ class SideBar extends StatelessWidget {
     required String title, 
     required int index, 
     required bool isActive,
+    required bool isExpanded, // ✅ Add the parameter
   }) {
     final HomePagesController homePagesController = Get.find();
-    bool isExpanded = homePagesController.isSidebarExpanded.value;
+    // ✅ Remove this line - don't read reactive value here!
+    // bool isExpanded = homePagesController.isSidebarExpanded.value;
 
     return Material(
       color: Colors.transparent,

@@ -10,6 +10,9 @@
 .svn/
 migrate_working_dir/
 
+# Firebase service account key
+money-monkey-f4d73-firebase-adminsdk-vhr5p-e96e398198.json
+
 # IntelliJ related
 *.iml
 *.ipr

@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
       body: Obx(() {
         // Determine if sidebar should be expanded based on page index
         final int pageIndex = homePagesController.pageIndex.value;
-        final bool isSidebarExpanded = !(pageIndex == 0 || pageIndex == 4);
+        final bool isSidebarExpanded = !(pageIndex == 3 || pageIndex == 4);
         double sidebarWidth = isSidebarExpanded
             ? screenWidth * 0.17  // Expanded width
             : screenWidth * 0.06; // Minimized width

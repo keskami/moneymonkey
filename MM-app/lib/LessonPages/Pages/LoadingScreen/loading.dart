@@ -61,9 +61,6 @@ class _LoadingPageState extends State<LoadingPage>
             await widget.initializeController();
         _updateProgress(0.3);
 
-        // Call loadConceptData with a valid context here!
-        await controller.loadConceptData(context);
-
         // Wait until the controller finishes loading data
         while (controller.isLoading.value) {
           await Future.delayed(Duration(milliseconds: 100));
@@ -196,7 +193,7 @@ class _LoadingPageState extends State<LoadingPage>
 
             SizedBox(height: screenHeight * 0.03),
             Text(
-              widget.pageType == ComponentType.kickoff
+              widget.pageType == ComponentType.story
                   ? 'Loading story...'
                   : 'Loading lesson...',
               style: TextStyle(

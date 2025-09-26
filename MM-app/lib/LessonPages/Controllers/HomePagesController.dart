@@ -11,10 +11,10 @@ class HomePagesController extends GetxController {
   RxInt pageIndex = 0.obs;
   RxBool isSidebarExpanded = false.obs;
   var pages = [
-    StudentHomeworkPage(),
     LessonsHome(),
     PortfolioScreen(),
     ComingSoonPage(),
+    StudentHomeworkPage(),
     BudgetSimulator(
       creditLimit: 5000,
       level: "Intermediate",
@@ -232,16 +232,18 @@ class HomePagesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // set initial expand state according to current pageIndex
+    isSidebarExpanded.value = (pageIndex.value != 3 && pageIndex.value != 4);
+
     ever(pageIndex, (int idx) {
       // Expand sidebar on pages 1-3, collapse on 0 and 4
-      isSidebarExpanded.value = !(idx == 0 || idx == 4);
+      isSidebarExpanded.value = (idx != 3 && idx != 4);
     });
   }
 
   // Enhanced changePage method that ensures immediate UI updates
   void changePage(int newPageIndex) {
     pageIndex.value = newPageIndex;
-    // Call update() to force an immediate UI refresh
-    update();
+    // no need to call update(); Rx will notify Obx listeners
   }
 }

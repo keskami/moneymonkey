@@ -56,7 +56,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
             return LessonHomeUnit_NewUI(
               heightUnit: heightUnit,
               widthUnit: widthUnit,
-              currentIndex: 4, // TODO: Replace with actual lesson progress logic
+              currentIndex: 6, // TODO: Replace with actual lesson progress logic
               pageLinks: pageLinks,
               lesson: lesson,
             );

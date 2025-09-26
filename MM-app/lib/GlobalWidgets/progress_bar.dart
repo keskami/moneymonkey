@@ -18,23 +18,23 @@ class CustomProgressBar extends StatelessWidget {
     double progress = 0;
     final BaseLessonController controller = Get.find();
     switch (pageType) {
-      case ComponentType.kickoff:
-        progress = controller.pageIndex.value / 8;
+      case ComponentType.concept:
+        progress = controller.pageIndex.value / 9;
         break;
-      case ComponentType.learnIt:
-        progress = controller.pageIndex.value / 4;
+      case ComponentType.peerReflection:
+        progress = controller.pageIndex.value / 5;
         break;
-      case ComponentType.tryIt:
-        progress = controller.pageIndex.value / 4;
+      case ComponentType.quiz:
+        progress = controller.pageIndex.value / 5;
         break;
-      case ComponentType.exitCheck:
-        progress = controller.pageIndex.value / 6;
+      case ComponentType.story:
+        progress = controller.pageIndex.value / 7;
         break;
-      case ComponentType.recap:
-        progress = controller.pageIndex.value / 4;
+      case ComponentType.scenarioSimulation:
+        progress = controller.pageIndex.value / 5;
         break;
       default:
-        progress = pageNum / 8;
+        progress = pageNum / 9;
     }
     return progress;
   }
