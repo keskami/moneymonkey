@@ -4,41 +4,87 @@ import 'package:money_monkey/Backend/Services/auth_service.dart';
 import 'package:money_monkey/GettingStarted/Widgets/option_tile.dart';
 import 'package:money_monkey/GettingStarted/Widgets/sign_in_button.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
-import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
+import 'package:money_monkey/home.dart';
 
-class SUDetailsEmailPage extends StatefulWidget {
+class SUDetailsEmailPage extends GetView<SignUpController> {
   const SUDetailsEmailPage({super.key});
 
   @override
-  State<SUDetailsEmailPage> createState() => _SUDetailsEmailPageState();
+  Widget build(BuildContext context) {
+    return _SUDetailsEmailPageView();
+  }
 }
 
-SignUpController signUpController = Get.put(SignUpController());
+class _SUDetailsEmailPageView extends StatefulWidget {
+  @override
+  State<_SUDetailsEmailPageView> createState() => _SUDetailsEmailPageViewState();
+}
 
-class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
+class _SUDetailsEmailPageViewState extends State<_SUDetailsEmailPageView> {
   final TextEditingController emailController = TextEditingController();
-  final AuthService authService =
-      AuthService(); // Create an instance of AuthService
+  final AuthService authService = AuthService();
+  
+  late final SignUpController signUpController = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    // Sync the text controller with the stored value when page loads
+    emailController.text = signUpController.email.value;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> submitEmail(String val) async {
+    signUpController.email.value = val;
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    Future<void> submitEmail(String val) async {
-      signUpController.email.value = val;
-    }
 
     return Obx(
       () => Stack(
         children: [
-          screenWidth > screenHeight
-              ? webDisplay(submitEmail, context, screenWidth)
-              : mobileDisplay(submitEmail, context, screenWidth),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 60),
+                
+                // Header Section
+                _buildHeader(),
+                
+                const SizedBox(height: 48),
+                
+                // Email Input Section
+                _buildEmailInput(),
+                
+                const SizedBox(height: 40),
+                
+                // Divider
+                _buildDivider(),
+                
+                const SizedBox(height: 32),
+                
+                // Social Sign In Section
+                Expanded(
+                  child: _buildSocialSignInSection(context, screenWidth),
+                ),
+              ],
+            ),
+          ),
           if (signUpController.isLoading.value)
             Container(
               color: Colors.grey.withOpacity(0.5),
               height: screenHeight,
               width: screenWidth,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             ),
@@ -47,348 +93,391 @@ class _SUDetailsEmailPageState extends State<SUDetailsEmailPage> {
     );
   }
 
-  Column webDisplay(Future<void> submitEmail(String val), BuildContext context,
-      double screenWidth) {
+  Widget _buildHeader() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // User Avatar or Icon
+        Container(
+          height: 80,
+          width: 80,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            border: Border.all(
+              color: Theme.of(context).primaryColor.withOpacity(0.2),
+              width: 2,
+            ),
+          ),
+          child: Icon(
+            Icons.person,
+            size: 40,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        
+        const SizedBox(height: 24),
+        
+        // Title
+        Text(
+          "What's your email, ${signUpController.name.value}?",
+          style: const TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        
+        const SizedBox(height: 12),
+        
+        // Subtitle
+        Text(
+          "We'll use this to create your account",
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmailInput() {
+    return Obx(() {
+      final email = signUpController.email.value;
+      final hasValidEmail = email.trim().isNotEmpty && email.isEmail;
+      final hasText = email.trim().isNotEmpty;
+      
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: hasValidEmail 
+                ? Theme.of(context).primaryColor 
+                : (hasText && !email.isEmail)
+                    ? Colors.red
+                    : Colors.grey[300]!,
+            width: hasValidEmail || (hasText && !email.isEmail) ? 2 : 1,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: TextField(
+          controller: emailController,
+          onChanged: (value) {
+            submitEmail(value.trim());
+          },
+          autofocus: true,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: "Enter your email address",
+            hintStyle: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[500],
+            ),
+            prefixIcon: Icon(
+              Icons.email_outlined,
+              color: hasValidEmail 
+                  ? Theme.of(context).primaryColor 
+                  : (hasText && !email.isEmail)
+                      ? Colors.red
+                      : Colors.grey[400],
+            ),
+            suffixIcon: hasValidEmail 
+                ? Icon(
+                    Icons.check_circle,
+                    color: Theme.of(context).primaryColor,
+                    size: 20,
+                  )
+                : (hasText && !email.isEmail)
+                    ? Icon(
+                        Icons.error,
+                        color: Colors.red,
+                        size: 20,
+                      )
+                    : null,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 20,
+            ),
+          ),
+          style: const TextStyle(
+            color: Colors.black87,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          onSubmitted: (value) {
+            submitEmail(value.trim());
+          },
+        ),
+      );
+    });
+  }
+
+  Widget _buildDivider() {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(
+            color: Colors.grey[300],
+            thickness: 1,
+          ),
+        ),
         Padding(
-          padding: const EdgeInsets.only(left: 22),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            "What is your email, ${signUpController.name.value}?",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+            "Or continue with",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
-        CustomOptionTile(
-          isSelected: false,
-          childWidget: TextField(
-            onChanged: (value) {
-              submitEmail(value);
-            },
-            autofocus: true,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText:
-                  emailController.text.isEmpty ? "Email" : emailController.text,
-              hintStyle: const TextStyle(
-                fontSize: 23,
-              ),
-            ),
-            style: const TextStyle(
-              color: Color.fromARGB(255, 178, 182, 182),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-            onSubmitted: (value) {
-              submitEmail(value);
-            },
+        Expanded(
+          child: Divider(
+            color: Colors.grey[300],
+            thickness: 1,
           ),
         ),
-        const Spacer(),
-        Center(
-          child: Column(
-            children: [
-              CustomSignInButton(
-                color: Colors.white,
-                isBordered: true,
-                toNextPage: () async {
-                  await authService.googleAuth(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                  ));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fgoogle_logo.png?alt=media&token=b1cc9b7e-785b-4af5-9e37-9af74d69eeb9",
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          // If loadingProgress is null, the image has fully loaded
-                          return child;
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                      height: screenWidth * 0.1,
-                    ),
-                    const SizedBox(width: 20),
-                    const Text(
-                      "Sign in with Google",
-                      style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CustomSignInButton(
-                color: Colors.white,
-                isBordered: true,
-                toNextPage: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Ffacebook_logo.png?alt=media&token=a1810c16-71d9-4537-9201-6d7c47d22577",
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          // If loadingProgress is null, the image has fully loaded
-                          return child;
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                      height: screenWidth * 0.1,
-                    ),
-                    const Text(
-                      "Sign in with Facebook",
-                      style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CustomSignInButton(
-                color: Colors.white,
-                isBordered: true,
-                toNextPage: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          // If loadingProgress is null, the image has fully loaded
-                          return child;
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                      "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fapple_logo.png?alt=media&token=151b1835-0e40-4bf7-b6d2-61dc70de963b",
-                      height: screenWidth * 0.1,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      "Sign in with Apple",
-                      style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialSignInSection(BuildContext context, double screenWidth) {
+    return Column(
+      children: [
+        _buildGoogleSignInButton(context),
+        const SizedBox(height: 12),
+        _buildAppleSignInButton(),
         const Spacer(),
       ],
     );
   }
 
-  SingleChildScrollView mobileDisplay(Future<void> submitEmail(String val),
-      BuildContext context, double screenWidth) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0), // Optional padding for better UI
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 17),
-            Padding(
-              padding: const EdgeInsets.only(left: 22),
-              child: Text(
-                "What is your email, ${signUpController.name.value}?",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            CustomOptionTile(
-              isSelected: false,
-              childWidget: TextField(
-                onChanged: (value) {
-                  submitEmail(value);
+  Widget _buildGoogleSignInButton(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey[300]!,
+          width: 1,
+        ),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () async {
+            await authService.googleAuth(context);
+            Get.offAll(
+              () => HomePage(),
+              predicate: (route) => false,
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fgoogle_logo.png?alt=media&token=b1cc9b7e-785b-4af5-9e37-9af74d69eeb9",
+                height: 24,
+                width: 24,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
                 },
-                autofocus: true,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: emailController.text.isEmpty
-                      ? "Email"
-                      : emailController.text,
-                  hintStyle: const TextStyle(
-                    fontSize: 23,
-                  ),
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.login,
+                  size: 24,
+                  color: Colors.grey[600],
                 ),
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 178, 182, 182),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                "Continue with Google",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
-                onSubmitted: (value) {
-                  submitEmail(value);
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFacebookSignInButton() {
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey[300]!,
+          width: 1,
+        ),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            // TODO: Implement Facebook sign in
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Ffacebook_logo.png?alt=media&token=a1810c16-71d9-4537-9201-6d7c47d22577",
+                height: 24,
+                width: 24,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
                 },
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.facebook,
+                  size: 24,
+                  color: Colors.blue[600],
+                ),
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 3.5,
-            ),
-            // Sign in with Google button
-            CustomSignInButton(
-              color: Colors.white,
-              isBordered: true,
-              toNextPage: () async {
-                await authService.googleAuth(context);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                ));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fgoogle_logo.png?alt=media&token=b1cc9b7e-785b-4af5-9e37-9af74d69eeb9",
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        // If loadingProgress is null, the image has fully loaded
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                    height: screenWidth * 0.1,
-                  ),
-                  const SizedBox(width: 20),
-                  const Text(
-                    "Sign in with Google",
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
+              const SizedBox(width: 12),
+              const Text(
+                "Continue with Facebook",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppleSignInButton() {
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey[300]!,
+          width: 1,
+        ),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            // TODO: Implement Apple sign in
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fapple_logo.png?alt=media&token=151b1835-0e40-4bf7-b6d2-61dc70de963b",
+                height: 24,
+                width: 24,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
                     ),
-                  ),
-                ],
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.apple,
+                  size: 24,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            // Sign in with Facebook button
-            CustomSignInButton(
-              color: Colors.white,
-              isBordered: true,
-              toNextPage: () {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Ffacebook_logo.png?alt=media&token=a1810c16-71d9-4537-9201-6d7c47d22577",
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        // If loadingProgress is null, the image has fully loaded
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                    height: screenWidth * 0.1,
-                  ),
-                  const Text(
-                    "Sign in with Facebook",
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              const SizedBox(width: 12),
+              const Text(
+                "Continue with Apple",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            // Sign in with Apple button
-            CustomSignInButton(
-              color: Colors.white,
-              isBordered: true,
-              toNextPage: () {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        // If loadingProgress is null, the image has fully loaded
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                    "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2Fapple_logo.png?alt=media&token=151b1835-0e40-4bf7-b6d2-61dc70de963b",
-                    height: screenWidth * 0.1,
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Sign in with Apple",
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 134), // For spacing at the bottom
-          ],
+            ],
+          ),
         ),
       ),
     );

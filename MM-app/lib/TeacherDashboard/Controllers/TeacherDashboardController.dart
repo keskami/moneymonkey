@@ -498,7 +498,7 @@ class TeacherDashboardController extends GetxController {
       return await service.getStatusFromProgress();
     } catch (e) {
       print('Error getting student status: $e');
-      return StudentStatus.On_Track; // Default fallback
+      return StudentStatus.OnTrack; // Default fallback
     }
   }
 

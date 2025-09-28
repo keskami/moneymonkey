@@ -1,1244 +1,575 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Models/StudentData.dart';
-import 'package:money_monkey/Backend/Models/SubComponentModel.dart';
-import 'package:money_monkey/Backend/Models/Teacher.dart';
+// services/student_profile_service.dart
+import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
-class TeacherCacheBuilder {
+class StudentProfileService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static const String _collection = 'users';
+  
+  // Cache configuration
+  static const String _cachePrefix = 'student_profile_';
+  static const String _cacheTimestampPrefix = 'cache_timestamp_';
+  static const Duration _cacheExpiry = Duration(hours: 1); // Cache expires after 1 hour
+  
+  // In-memory cache for active session
+  final Map<String, Student> _memoryCache = {};
+  final Map<String, DateTime> _memoryCacheTimestamps = {};
 
-  // Main function to build the cache
-  Future<void> buildTeacherCache(String teacherId) async {
+  // CACHING LAYER
+
+  /// Get cache key for a user
+  String _getCacheKey(String userId) => '$_cachePrefix$userId';
+  String _getTimestampKey(String userId) => '$_cacheTimestampPrefix$userId';
+
+  /// Check if cache is valid (not expired)
+  bool _isCacheValid(DateTime cacheTime) {
+    return DateTime.now().difference(cacheTime) < _cacheExpiry;
+  }
+
+  /// Save profile to persistent cache
+  Future<void> _saveToCache(Student profile) async {
     try {
-      // Validate teacherId first
-      if (teacherId.isEmpty) {
-        throw Exception(
-            'Teacher ID cannot be empty. Please provide a valid teacher ID.');
-      }
-
-      // Initialize the cache structure
-      final Map<String, dynamic> cache = {
-        'teacher': {},
-        'classrooms': {},
-        'students': [],
-        'units': {},
-        'lessons': {},
-        'components': {},
-        'metadata': {
-          'version': '1.0.0',
-          'generatedAt': DateTime.now().toIso8601String(),
-        }
-      };
-
-      print('Starting cache build for teacher: $teacherId');
-
-      // 1. Fetch teacher data
-      print('Fetching teacher data...');
-      final Teacher teacher = await _fetchTeacher(teacherId);
-      cache['teacher'] = teacher.toJson();
-      print('Teacher data fetched successfully.');
-
-      // 2. Fetch classrooms
-      print('Fetching ${teacher.classRooms.length} classrooms...');
-      final Map<String, Classroom> classrooms =
-          await _fetchClassrooms(teacher.classRooms);
-      cache['classrooms'] = _mapToJson(classrooms);
-      print('Fetched ${classrooms.length} classrooms successfully.');
-
-      // 3. Fetch students from all classrooms
-      print('Extracting student IDs from classrooms...');
-      final Set<String> studentIds = _extractStudentIds(classrooms);
-      print('Fetching ${studentIds.length} students...');
-      final List<Student> students = await _fetchStudents(studentIds);
-      cache['students'] = students.map((student) => student.toJson()).toList();
-      print('Fetched ${students.length} students successfully.');
-
-      // 4. Fetch lessons from classrooms
-      print('Extracting lesson IDs from classrooms...');
-      final Set<String> lessonIds = _extractLessonIds(classrooms);
-      print('Fetching ${lessonIds.length} lessons...');
-      final Map<String, Lesson> lessons = await _fetchLessons(lessonIds);
-      cache['lessons'] = _mapToJson(lessons);
-      print('Fetched ${lessons.length} lessons successfully.');
-
-      // 5. Extract unit IDs from lessons and fetch units
-      print('Extracting unit IDs from lessons...');
-      final Set<String> unitIds = _extractUnitIds(lessons);
-      print('Fetching ${unitIds.length} units...');
-      final Map<String, Unit> units = await _fetchUnits(unitIds);
-      cache['units'] = _mapToJson(units);
-      print('Fetched ${units.length} units successfully.');
-
-      // 6. Extract component IDs from lessons and fetch components
-      print('Extracting component IDs from lessons...');
-      final Set<String> componentIds = _extractComponentIds(lessons);
-      print('Fetching ${componentIds.length} components...');
-      final Map<String, Component> components =
-          await _fetchComponents(componentIds);
-      cache['components'] = _mapToJson(components);
-      print('Fetched ${components.length} components successfully.');
-
-      // Store to SharedPreferences instead of file (for web compatibility)
-      print('Storing cache in web-compatible storage...');
-      await TeacherDashboardCache.storeCache(cache);
-
-      print('Teacher cache successfully built!');
-      print('Cache details:');
-      print('- Teacher: ${teacher.name} (${teacher.id})');
-      print('- Classrooms: ${classrooms.length}');
-      print('- Students: ${students.length}');
-      print('- Units: ${units.length}');
-      print('- Lessons: ${lessons.length}');
-      print('- Components: ${components.length}');
-      print('- Generated at: ${cache["metadata"]["generatedAt"]}');
+      final prefs = await SharedPreferences.getInstance();
+      final jsonString = jsonEncode(profile.toJson());
+      final cacheKey = _getCacheKey(profile.userId);
+      final timestampKey = _getTimestampKey(profile.userId);
+      
+      await prefs.setString(cacheKey, jsonString);
+      await prefs.setString(timestampKey, DateTime.now().toIso8601String());
+      
+      // Also save to memory cache
+      _memoryCache[profile.userId] = profile;
+      _memoryCacheTimestamps[profile.userId] = DateTime.now();
+      
+      debugPrint('💾 Cached profile for ${profile.name}');
     } catch (e) {
-      print('Error building teacher cache: $e');
-      throw Exception('Failed to build teacher cache: $e');
+      debugPrint('❌ Error saving to cache: $e');
     }
   }
 
-  // Fetch teacher data
-  Future<Teacher> _fetchTeacher(String teacherId) async {
+  /// Load profile from cache
+  Future<Student?> _loadFromCache(String userId) async {
     try {
-      // Double-check the teacherId before sending to Firestore
-      if (teacherId.isEmpty) {
-        throw Exception('Teacher ID cannot be empty');
+      // First check memory cache
+      if (_memoryCache.containsKey(userId) && 
+          _memoryCacheTimestamps.containsKey(userId)) {
+        final cacheTime = _memoryCacheTimestamps[userId]!;
+        if (_isCacheValid(cacheTime)) {
+          debugPrint('🚀 Loaded from memory cache: ${_memoryCache[userId]!.name}');
+          return _memoryCache[userId];
+        } else {
+          // Memory cache expired
+          _memoryCache.remove(userId);
+          _memoryCacheTimestamps.remove(userId);
+        }
       }
 
-      final DocumentSnapshot doc =
-          await _firestore.collection('Teachers').doc(teacherId).get();
+      // Check persistent cache
+      final prefs = await SharedPreferences.getInstance();
+      final cacheKey = _getCacheKey(userId);
+      final timestampKey = _getTimestampKey(userId);
+      
+      final jsonString = prefs.getString(cacheKey);
+      final timestampString = prefs.getString(timestampKey);
+      
+      if (jsonString != null && timestampString != null) {
+        final cacheTime = DateTime.parse(timestampString);
+        
+        if (_isCacheValid(cacheTime)) {
+          final json = jsonDecode(jsonString) as Map<String, dynamic>;
+          final profile = Student.fromJson(json);
+          
+          // Restore to memory cache
+          _memoryCache[userId] = profile;
+          _memoryCacheTimestamps[userId] = cacheTime;
+          
+          debugPrint('📱 Loaded from persistent cache: ${profile.name}');
+          return profile;
+        } else {
+          // Cache expired, remove it
+          await _clearUserCache(userId);
+        }
+      }
+      
+      return null;
+    } catch (e) {
+      debugPrint('❌ Error loading from cache: $e');
+      return null;
+    }
+  }
 
+  /// Clear cache for specific user
+  Future<void> _clearUserCache(String userId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_getCacheKey(userId));
+      await prefs.remove(_getTimestampKey(userId));
+      
+      // Also clear from memory
+      _memoryCache.remove(userId);
+      _memoryCacheTimestamps.remove(userId);
+      
+      debugPrint('🗑️ Cleared cache for user: $userId');
+    } catch (e) {
+      debugPrint('❌ Error clearing cache: $e');
+    }
+  }
+
+  /// Clear all cached profiles
+  Future<void> clearAllCache() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final keys = prefs.getKeys();
+      
+      for (final key in keys) {
+        if (key.startsWith(_cachePrefix) || key.startsWith(_cacheTimestampPrefix)) {
+          await prefs.remove(key);
+        }
+      }
+      
+      _memoryCache.clear();
+      _memoryCacheTimestamps.clear();
+      
+      debugPrint('🗑️ Cleared all profile cache');
+    } catch (e) {
+      debugPrint('❌ Error clearing all cache: $e');
+    }
+  }
+
+  // DATA LOADING PATTERNS
+
+  /// PATTERN 1: Load with Cache-First Strategy
+  /// Tries cache first, then Firebase if cache miss or expired
+  Future<Student> loadProfileWithCache(String userId, {bool forceRefresh = false}) async {
+    try {
+      debugPrint('🔄 Loading profile with cache strategy for: $userId');
+      
+      // Force refresh bypasses cache
+      if (!forceRefresh) {
+        final cachedProfile = await _loadFromCache(userId);
+        if (cachedProfile != null) {
+          return cachedProfile;
+        }
+      }
+      
+      // Cache miss or force refresh - load from Firebase
+      debugPrint('📡 Cache miss, loading from Firebase...');
+      final doc = await _firestore.collection(_collection).doc(userId).get();
+      
       if (!doc.exists) {
-        throw Exception('Teacher not found with ID: $teacherId');
+        throw Exception('User not found: $userId');
       }
 
-      // The upload script uses a slightly different naming convention
-      final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      return Teacher(
-        name: data['Name'] ?? '',
-        id: doc.id,
-        classRooms: List<String>.from(data['ClassRooms'] ?? []),
-        profilePictureLink: data['ProfilePictureLink'] ?? '',
+      final profile = Student.fromFirestore(doc.data()!, doc.id);
+      
+      // Save to cache for future use
+      await _saveToCache(profile);
+      
+      debugPrint('✅ Loaded and cached profile for ${profile.name}');
+      return profile;
+      
+    } catch (e) {
+      debugPrint('❌ Error loading profile: $e');
+      rethrow;
+    }
+  }
+
+  /// PATTERN 2: Real-time Stream with Cache Sync
+  /// Provides real-time updates while maintaining cache
+  Stream<Student> getProfileStreamWithCache(String userId) {
+    debugPrint('👂 Setting up real-time stream with cache sync for: $userId');
+    
+    return _firestore
+        .collection(_collection)
+        .doc(userId)
+        .snapshots()
+        .asyncMap((doc) async {
+          if (!doc.exists) {
+            throw Exception('User not found: $userId');
+          }
+          
+          final profile = Student.fromFirestore(doc.data()!, doc.id);
+          
+          // Update cache with real-time data
+          await _saveToCache(profile);
+          
+          debugPrint('🔄 Real-time update cached for ${profile.name}');
+          return profile;
+        });
+  }
+
+  /// PATTERN 3: Offline-First Loading
+  /// Always returns cache first, then updates in background
+  Future<Student> loadProfileOfflineFirst(String userId) async {
+    debugPrint('📱 Loading profile offline-first for: $userId');
+    
+    // Always try cache first
+    final cachedProfile = await _loadFromCache(userId);
+    
+    if (cachedProfile != null) {
+      debugPrint('✅ Returning cached profile for ${cachedProfile.name}');
+      
+      // Update in background (fire and forget)
+      _updateCacheInBackground(userId);
+      
+      return cachedProfile;
+    }
+    
+    // No cache available, must load from Firebase
+    return loadProfileWithCache(userId);
+  }
+
+  /// Background cache update (doesn't block UI)
+  void _updateCacheInBackground(String userId) {
+    debugPrint('🔄 Updating cache in background for: $userId');
+    
+    _firestore.collection(_collection).doc(userId).get().then((doc) {
+      if (doc.exists) {
+        final profile = Student.fromFirestore(doc.data()!, doc.id);
+        _saveToCache(profile);
+        debugPrint('✅ Background cache update completed for ${profile.name}');
+      }
+    }).catchError((error) {
+      debugPrint('❌ Background cache update failed: $error');
+    });
+  }
+
+  // UPDATE PATTERNS WITH CACHE INVALIDATION
+
+  /// Update profile section and sync cache
+  Future<void> updateProfileSection(
+    String userId, 
+    Map<String, dynamic> updates, 
+    {bool updateCache = true}
+  ) async {
+    try {
+      debugPrint('🔄 Updating profile section for: $userId');
+      
+      // Update Firebase
+      await _firestore.collection(_collection).doc(userId).update(updates);
+      
+      if (updateCache) {
+        // Invalidate cache to force fresh load next time
+        await _clearUserCache(userId);
+        debugPrint('🗑️ Cache invalidated after update');
+      }
+      
+      debugPrint('✅ Profile section updated successfully');
+      
+    } catch (e) {
+      debugPrint('❌ Error updating profile section: $e');
+      rethrow;
+    }
+  }
+
+  /// Update profile with optimistic caching
+  Future<void> updateProfileOptimistic(
+    String userId, 
+    Student updatedProfile
+  ) async {
+    try {
+      debugPrint('🔄 Optimistic update for: $userId');
+      
+      // 1. Update cache immediately (optimistic)
+      await _saveToCache(updatedProfile);
+      debugPrint('✅ Optimistic cache update completed');
+      
+      // 2. Update Firebase
+      await _firestore.collection(_collection).doc(userId).set(updatedProfile.toFirestore());
+      debugPrint('✅ Firebase update completed');
+      
+    } catch (e) {
+      debugPrint('❌ Optimistic update failed, clearing cache: $e');
+      // If Firebase update fails, clear cache to avoid inconsistency
+      await _clearUserCache(userId);
+      rethrow;
+    }
+  }
+
+  // BUSINESS LOGIC EXAMPLES
+
+  /// Handle lesson completion with cache update
+  Future<void> handleLessonCompletion(
+    String userId, 
+    LessonCompletionData lessonData
+  ) async {
+    debugPrint('\n=== LESSON COMPLETION ===');
+    
+    try {
+      // Load current profile (from cache if available)
+      final currentProfile = await loadProfileWithCache(userId);
+      
+      // Create updated profile
+      final updatedProfile = currentProfile.copyWith(
+        knowledgeLevel: lessonData.newKnowledgeLevel,
+        progress: lessonData.newProgress,
+        profile: currentProfile.profile.copyWith(
+          streak: lessonData.newStreak,
+          portfolioScore: lessonData.newScore,
+        ),
       );
+      
+      // Use optimistic update
+      await updateProfileOptimistic(userId, updatedProfile);
+      
+      debugPrint('✅ Lesson completion processed');
+      
     } catch (e) {
-      print('Error fetching teacher: $e');
+      debugPrint('❌ Failed to process lesson completion: $e');
       rethrow;
     }
   }
 
-  // Fetch classrooms
-  Future<Map<String, Classroom>> _fetchClassrooms(
-      List<String> classroomIds) async {
+  /// Update user preferences with immediate cache sync
+  Future<void> updateUserPreferences(
+    String userId, 
+    UserPreferences newPreferences
+  ) async {
+    debugPrint('\n=== PREFERENCES UPDATE ===');
+    
     try {
-      Map<String, Classroom> classrooms = {};
-
-      for (String id in classroomIds) {
-        if (id.isEmpty) {
-          print('Skipping empty classroom ID');
-          continue;
-        }
-
-        final DocumentSnapshot doc =
-            await _firestore.collection('Classrooms').doc(id).get();
-
-        if (doc.exists) {
-          classrooms[id] = Classroom.fromFirestore(
-              doc.data() as Map<String, dynamic>, doc.id);
-        } else {
-          print('Classroom with ID $id not found');
-        }
-      }
-
-      return classrooms;
-    } catch (e) {
-      print('Error fetching classrooms: $e');
-      rethrow;
-    }
-  }
-
-  // Extract all student IDs from classrooms
-  Set<String> _extractStudentIds(Map<String, Classroom> classrooms) {
-    final Set<String> studentIds = {};
-
-    for (final classroom in classrooms.values) {
-      studentIds.addAll(classroom.studentIds.where((id) => id.isNotEmpty));
-    }
-
-    return studentIds;
-  }
-
-  // Fetch student data
-  Future<List<Student>> _fetchStudents(Set<String> studentIds) async {
-    try {
-      List<Student> students = [];
-
-      for (String id in studentIds) {
-        if (id.isEmpty) {
-          print('Skipping empty student ID');
-          continue;
-        }
-
-        final DocumentSnapshot doc =
-            await _firestore.collection('Students').doc(id).get();
-
-        if (doc.exists) {
-          students.add(Student.fromFirestore(
-              doc.data() as Map<String, dynamic>, doc.id));
-        } else {
-          print('Student with ID $id not found');
-        }
-      }
-
-      return students;
-    } catch (e) {
-      print('Error fetching students: $e');
-      rethrow;
-    }
-  }
-
-  // Extract all lesson IDs from classrooms
-  Set<String> _extractLessonIds(Map<String, Classroom> classrooms) {
-    final Set<String> lessonIds = {};
-
-    for (final classroom in classrooms.values) {
-      if (classroom.lessonId.isNotEmpty) {
-        lessonIds.add(classroom.lessonId);
-      }
-    }
-
-    return lessonIds;
-  }
-
-  // Fetch lessons using the LessonsIndex collection for direct access
-  Future<Map<String, Lesson>> _fetchLessons(Set<String> lessonIds) async {
-    try {
-      Map<String, Lesson> lessons = {};
-
-      for (String id in lessonIds) {
-        if (id.isEmpty) {
-          print('Skipping empty lesson ID');
-          continue;
-        }
-
-        // First try the LessonsIndex for the path
-        try {
-          final DocumentSnapshot indexDoc =
-              await _firestore.collection('LessonsIndex').doc(id).get();
-
-          if (indexDoc.exists) {
-            final indexData = indexDoc.data() as Map<String, dynamic>;
-            final String path = indexData['path'] ?? '';
-
-            if (path.isNotEmpty) {
-              // Use the path to get the full lesson document
-              final DocumentSnapshot lessonDoc =
-                  await _firestore.doc(path).get();
-
-              if (lessonDoc.exists) {
-                lessons[id] = Lesson.fromFirestore(
-                    lessonDoc.data() as Map<String, dynamic>, id);
-                continue;
-              }
-            }
-          }
-        } catch (e) {
-          print('Error fetching lesson $id from LessonsIndex: $e');
-        }
-
-        // Fallback - try to construct the path based on the lesson ID pattern (e.g., "A.1.2")
-        final parts = id.split('.');
-        if (parts.length >= 3) {
-          final String unitId = '${parts[0]}.${parts[1]}';
-          final String path = 'Levels/Advanced/Units/$unitId/Lessons/$id';
-
-          try {
-            final DocumentSnapshot lessonDoc = await _firestore.doc(path).get();
-
-            if (lessonDoc.exists) {
-              lessons[id] = Lesson.fromFirestore(
-                  lessonDoc.data() as Map<String, dynamic>, id);
-              continue; // Successfully fetched, move to next
-            }
-          } catch (e) {
-            print('Error fetching lesson $id using constructed path: $e');
-          }
-
-          // Try one more approach - direct collection
-          try {
-            final DocumentSnapshot directDoc =
-                await _firestore.collection('Lessons').doc(id).get();
-
-            if (directDoc.exists) {
-              lessons[id] = Lesson.fromFirestore(
-                  directDoc.data() as Map<String, dynamic>, id);
-            } else {
-              print('Lesson with ID $id not found in any location');
-            }
-          } catch (innerE) {
-            print('Error fetching lesson $id from direct collection: $innerE');
-          }
-        } else {
-          print('Lesson ID $id has invalid format');
-        }
-      }
-
-      return lessons;
-    } catch (e) {
-      print('Error fetching lessons: $e');
-      rethrow;
-    }
-  }
-
-  // Extract unit IDs from lessons
-  Set<String> _extractUnitIds(Map<String, Lesson> lessons) {
-    final Set<String> unitIds = {};
-
-    for (String lessonId in lessons.keys) {
-      // Extract unit ID from lesson ID (e.g., "A.1.2" -> "A.1")
-      final List<String> parts = lessonId.split('.');
-      if (parts.length >= 2) {
-        final String unitId = '${parts[0]}.${parts[1]}';
-        unitIds.add(unitId);
-      }
-    }
-
-    return unitIds;
-  }
-
-  // Fetch units from the nested structure
-  Future<Map<String, Unit>> _fetchUnits(Set<String> unitIds) async {
-    try {
-      Map<String, Unit> units = {};
-
-      for (String id in unitIds) {
-        if (id.isEmpty) {
-          print('Skipping empty unit ID');
-          continue;
-        }
-
-        // Fetch from nested structure first
-        try {
-          final String path = 'Levels/Advanced/Units/$id';
-          final DocumentSnapshot doc = await _firestore.doc(path).get();
-
-          if (doc.exists) {
-            final unitData = doc.data() as Map<String, dynamic>;
-
-            // Fetch lesson IDs from the Lessons subcollection
-            final QuerySnapshot lessonsSnapshot =
-                await _firestore.collection('$path/Lessons').get();
-            final List<String> lessonIds =
-                lessonsSnapshot.docs.map((doc) => doc.id).toList();
-
-            // Create the unit with the lesson IDs
-            units[id] = Unit(
-              unitId: id,
-              title: unitData['title'] ?? '',
-              description: unitData['description'] ?? '',
-              lessonIds: lessonIds,
-              unitStatus:
-                  statusFromFirestore(unitData['unitStatus'] ?? 'inactive'),
-              totalLessons: unitData['totalLessons'] ?? 0,
-              createdAt: unitData['createdAt']?.toDate(),
-              updatedAt: unitData['updatedAt']?.toDate(),
-            );
-            continue; // Skip fallback if successful
-          }
-        } catch (e) {
-          print('Error fetching unit $id from nested structure: $e');
-        }
-
-        // Fallback to top-level collection
-        try {
-          final DocumentSnapshot doc =
-              await _firestore.collection('Units').doc(id).get();
-
-          if (doc.exists) {
-            units[id] =
-                Unit.fromFirestore(doc.data() as Map<String, dynamic>, id);
-          } else {
-            print('Unit with ID $id not found in any location');
-          }
-        } catch (e) {
-          print('Error fetching unit $id from top-level collection: $e');
-        }
-      }
-
-      return units;
-    } catch (e) {
-      print('Error fetching units: $e');
-      rethrow;
-    }
-  }
-
-  // Extract component IDs from lessons
-  Set<String> _extractComponentIds(Map<String, Lesson> lessons) {
-    final Set<String> componentIds = {};
-
-    for (final lesson in lessons.values) {
-      componentIds.addAll(lesson.components.where((id) => id.isNotEmpty));
-    }
-
-    return componentIds;
-  }
-
-  // Fetch components using the ComponentsIndex collection for direct access
-  Future<Map<String, Component>> _fetchComponents(
-      Set<String> componentIds) async {
-    try {
-      Map<String, Component> components = {};
-
-      for (String id in componentIds) {
-        if (id.isEmpty) {
-          print('Skipping empty component ID');
-          continue;
-        }
-
-        // First try the ComponentsIndex for the path
-        try {
-          final DocumentSnapshot indexDoc =
-              await _firestore.collection('ComponentsIndex').doc(id).get();
-
-          if (indexDoc.exists) {
-            final indexData = indexDoc.data() as Map<String, dynamic>;
-            final String path = indexData['path'] ?? '';
-
-            if (path.isNotEmpty) {
-              // Use the path to get the full component document
-              final DocumentSnapshot componentDoc =
-                  await _firestore.doc(path).get();
-
-              if (componentDoc.exists) {
-                Component component = Component.fromFirestore(
-                    componentDoc.data() as Map<String, dynamic>, id);
-
-                // Fetch associated questions from the Questions subcollection
-                try {
-                  final QuerySnapshot questionsSnapshot = await _firestore
-                      .doc(path)
-                      .collection('Questions')
-                      .orderBy('index')
-                      .get();
-
-                  if (questionsSnapshot.docs.isNotEmpty) {
-                    List<SubComponent> questionsList = [];
-
-                    for (final questionDoc in questionsSnapshot.docs) {
-                      final questionData =
-                          questionDoc.data() as Map<String, dynamic>;
-                      try {
-                        final String typeString = questionData['type'] ?? '';
-                        final SubComponentType type =
-                            SubComponentTypeExtension.fromString(typeString);
-
-                        // Create the appropriate data object based on the component type
-                        dynamic parsedData;
-                        try {
-                          switch (type) {
-                            case SubComponentType.multipleChoice:
-                              parsedData = MultipleChoice.fromMap(questionData);
-                              break;
-                            case SubComponentType.revealCard:
-                              parsedData = RevealCard.fromMap(questionData);
-                              break;
-                            case SubComponentType.iconReveal:
-                              parsedData = IconReveal.fromMap(questionData);
-                              break;
-                            case SubComponentType.learningCheck:
-                              parsedData = LearningCheck.fromMap(questionData);
-                              break;
-                            case SubComponentType.scenario:
-                              parsedData = Scenario.fromMap(questionData);
-                              break;
-                            case SubComponentType.keyTakeaways:
-                              parsedData = KeyTakeaways.fromMap(questionData);
-                              break;
-                            case SubComponentType.intro:
-                              parsedData = IntroPage.fromMap(questionData);
-                              break;
-                            case SubComponentType.newlanding:
-                              parsedData = newlanding.fromMap(questionData);
-                              break;
-                            case SubComponentType.problem:
-                              parsedData = ProblemPage.fromMap(questionData);
-                              break;
-                            case SubComponentType.solution:
-                              parsedData = SolutionPage.fromMap(questionData);
-                              break;
-                            case SubComponentType.impact:
-                              parsedData = Impact.fromMap(questionData);
-                              break;
-                            case SubComponentType.scenariointro:
-                              parsedData =
-                                  IntroductionPage.fromMap(questionData);
-                              break;
-                            case SubComponentType.scenarioquestion:
-                              parsedData =
-                                  ScenarioQuestion.fromMap(questionData);
-                              break;
-                            case SubComponentType.scenariochoice:
-                              parsedData = ScenarioChoice.fromMap(questionData);
-                              break;
-                            case SubComponentType.scenarioresults:
-                              parsedData = ScenarioResult.fromMap(questionData);
-                              break;
-                            case SubComponentType.peerintro:
-                              parsedData =
-                                  PeerReflectionIntro.fromMap(questionData);
-                              break;
-                            case SubComponentType.peerstories:
-                              parsedData = PeerStories.fromMap(questionData);
-                              break;
-                            case SubComponentType.peermatch:
-                              parsedData = PeerMatch.fromMap(questionData);
-                              break;
-                            case SubComponentType.peerreflectionend:
-                              parsedData =
-                                  PeerReflectionEnd.fromMap(questionData);
-                              break;
-                            case SubComponentType.quizimagemcquestion:
-                              parsedData =
-                                  QuizMultipleChoice.fromMap(questionData);
-                              break;
-                            case SubComponentType.quiztextmcquestion:
-                              parsedData =
-                                  TextBasedQuestion.fromMap(questionData);
-                              break;
-                            default:
-                              print(
-                                  "Unknown component type: $type, using raw data");
-                              parsedData = questionData;
-                              break;
-                          }
-                          questionsList
-                              .add(SubComponent(type: type, data: parsedData));
-                        } catch (e) {
-                          print("Error parsing component of type $type: $e");
-                          // Add with raw data as fallback
-                          questionsList.add(
-                              SubComponent(type: type, data: questionData));
-                        }
-                      } catch (e) {
-                        print('Error parsing question in component $id: $e');
-                      }
-                    }
-
-                    // Update the component with the questions
-                    component = Component(
-                      componentId: component.componentId,
-                      title: component.title,
-                      type: component.type,
-                      componentStatus: component.componentStatus,
-                      progress: component.progress,
-                      discussionQuestions: component.discussionQuestions,
-                      questionData: questionsList,
-                      performanceTrends: component.performanceTrends,
-                    );
-                  }
-                } catch (e) {
-                  print('Error fetching questions for component $id: $e');
-                }
-
-                components[id] = component;
-                continue; // Skip fallback methods if successful
-              }
-            }
-          }
-        } catch (e) {
-          print('Error fetching component $id from ComponentsIndex: $e');
-        }
-
-        // Fallback - try to construct the path based on the component ID pattern (e.g., "A.1.2.3")
-        final parts = id.split('.');
-        if (parts.length >= 4) {
-          final String unitId = '${parts[0]}.${parts[1]}';
-          final String lessonId = '${parts[0]}.${parts[1]}.${parts[2]}';
-          final String path =
-              'Levels/Advanced/Units/$unitId/Lessons/$lessonId/Components/$id';
-
-          try {
-            final DocumentSnapshot componentDoc =
-                await _firestore.doc(path).get();
-
-            if (componentDoc.exists) {
-              Component component = Component.fromFirestore(
-                  componentDoc.data() as Map<String, dynamic>, id);
-
-              // Fetch associated questions
-              try {
-                final QuerySnapshot questionsSnapshot = await _firestore
-                    .doc(path)
-                    .collection('Questions')
-                    .orderBy('index')
-                    .get();
-
-                if (questionsSnapshot.docs.isNotEmpty) {
-                  List<SubComponent> questionsList = [];
-
-                  for (final questionDoc in questionsSnapshot.docs) {
-                    final questionData =
-                        questionDoc.data() as Map<String, dynamic>;
-                    try {
-                      final String typeString = questionData['type'] ?? '';
-                      final SubComponentType type =
-                          SubComponentTypeExtension.fromString(typeString);
-
-                      // Create the appropriate data object based on the component type
-                      dynamic parsedData;
-                      try {
-                        switch (type) {
-                          case SubComponentType.multipleChoice:
-                            parsedData = MultipleChoice.fromMap(questionData);
-                            break;
-                          case SubComponentType.revealCard:
-                            parsedData = RevealCard.fromMap(questionData);
-                            break;
-                          case SubComponentType.iconReveal:
-                            parsedData = IconReveal.fromMap(questionData);
-                            break;
-                          case SubComponentType.learningCheck:
-                            parsedData = LearningCheck.fromMap(questionData);
-                            break;
-                          case SubComponentType.scenario:
-                            parsedData = Scenario.fromMap(questionData);
-                            break;
-                          case SubComponentType.keyTakeaways:
-                            parsedData = KeyTakeaways.fromMap(questionData);
-                            break;
-                          case SubComponentType.intro:
-                            parsedData = IntroPage.fromMap(questionData);
-                            break;
-                          case SubComponentType.newlanding:
-                            parsedData = newlanding.fromMap(questionData);
-                            break;
-                          case SubComponentType.problem:
-                            parsedData = ProblemPage.fromMap(questionData);
-                            break;
-                          case SubComponentType.solution:
-                            parsedData = SolutionPage.fromMap(questionData);
-                            break;
-                          case SubComponentType.impact:
-                            parsedData = Impact.fromMap(questionData);
-                            break;
-                          case SubComponentType.scenariointro:
-                            parsedData = IntroductionPage.fromMap(questionData);
-                            break;
-                          case SubComponentType.scenarioquestion:
-                            parsedData = ScenarioQuestion.fromMap(questionData);
-                            break;
-                          case SubComponentType.scenariochoice:
-                            parsedData = ScenarioChoice.fromMap(questionData);
-                            break;
-                          case SubComponentType.scenarioresults:
-                            parsedData = ScenarioResult.fromMap(questionData);
-                            break;
-                          case SubComponentType.peerintro:
-                            parsedData =
-                                PeerReflectionIntro.fromMap(questionData);
-                            break;
-                          case SubComponentType.peerstories:
-                            parsedData = PeerStories.fromMap(questionData);
-                            break;
-                          case SubComponentType.peermatch:
-                            parsedData = PeerMatch.fromMap(questionData);
-                            break;
-                          case SubComponentType.peerreflectionend:
-                            parsedData =
-                                PeerReflectionEnd.fromMap(questionData);
-                            break;
-                          case SubComponentType.quizimagemcquestion:
-                            parsedData =
-                                QuizMultipleChoice.fromMap(questionData);
-                            break;
-                          case SubComponentType.quiztextmcquestion:
-                            parsedData =
-                                TextBasedQuestion.fromMap(questionData);
-                            break;
-                          default:
-                            print(
-                                "Unknown component type: $type, using raw data");
-                            parsedData = questionData;
-                            break;
-                        }
-                        questionsList
-                            .add(SubComponent(type: type, data: parsedData));
-                      } catch (e) {
-                        print("Error parsing component of type $type: $e");
-                        // Add with raw data as fallback
-                        questionsList
-                            .add(SubComponent(type: type, data: questionData));
-                      }
-                    } catch (e) {
-                      print('Error parsing question in component $id: $e');
-                    }
-                  }
-
-                  // Update the component with the questions
-                  component = Component(
-                    componentId: component.componentId,
-                    title: component.title,
-                    type: component.type,
-                    componentStatus: component.componentStatus,
-                    progress: component.progress,
-                    discussionQuestions: component.discussionQuestions,
-                    questionData: questionsList,
-                    performanceTrends: component.performanceTrends,
-                  );
-                }
-              } catch (e) {
-                print('Error fetching questions for component $id: $e');
-              }
-
-              components[id] = component;
-              continue; // Skip final fallback if successful
-            }
-          } catch (e) {
-            print('Error fetching component $id using constructed path: $e');
-          }
-
-          // Final fallback - direct collection
-          try {
-            final DocumentSnapshot directDoc =
-                await _firestore.collection('Components').doc(id).get();
-
-            if (directDoc.exists) {
-              components[id] = Component.fromFirestore(
-                  directDoc.data() as Map<String, dynamic>, id);
-            } else {
-              print('Component with ID $id not found in any location');
-            }
-          } catch (innerE) {
-            print(
-                'Error fetching component $id from direct collection: $innerE');
-          }
-        } else {
-          print('Component ID $id has invalid format');
-        }
-      }
-
-      return components;
-    } catch (e) {
-      print('Error fetching components: $e');
-      rethrow;
-    }
-  }
-
-  // Convert a map to JSON-serializable format
-  Map<String, dynamic> _mapToJson(Map<String, dynamic> map) {
-    Map<String, dynamic> result = {};
-
-    map.forEach((key, value) {
-      if (value is Map) {
-        result[key] = value;
-      } else {
-        // Using toJson method of the object
-        result[key] = value.toJson();
-      }
-    });
-
-    return result;
-  }
-
-  // Helper method to update the cache
-  Future<void> updateTeacherCache(String teacherId) async {
-    print('Updating teacher cache...');
-    await buildTeacherCache(teacherId);
-  }
-
-  // Helper method to schedule regular cache updates
-  void scheduleRegularUpdates(String teacherId,
-      {Duration interval = const Duration(hours: 24)}) {
-    print('Scheduling regular cache updates every ${interval.inHours} hours');
-
-    // Set up a timer for regular updates
-    Future.delayed(interval, () async {
-      try {
-        print('Running scheduled cache update...');
-        await updateTeacherCache(teacherId);
-        print('Scheduled cache update completed successfully.');
-      } catch (e) {
-        print('Error during scheduled cache update: $e');
-      } finally {
-        // Schedule the next update regardless of success/failure
-        scheduleRegularUpdates(teacherId, interval: interval);
-      }
-    });
-  }
-
-  // Helper method to fetch and update only specific lessons
-  Future<void> updateSpecificLessons(
-      String teacherId, List<String> lessonIds) async {
-    try {
-      print('Updating specific lessons: $lessonIds');
-
-      // In web, we need to get the current cache from SharedPreferences
-      // Attempt to initialize the cache first
-      final currentCache = TeacherDashboardCache();
-      try {
-        await currentCache.initialize();
-      } catch (e) {
-        // If we can't initialize, build a complete new cache
-        print('Existing cache not found, building complete cache instead');
-        await buildTeacherCache(teacherId);
-        return;
-      }
-
-      // Convert the existing cache to a modifiable map
-      final Map<String, dynamic> cacheMap = {
-        'teacher': currentCache.teacher.toJson(),
-        'classrooms': _mapToJson(currentCache.classrooms),
-        'students': currentCache.students.map((s) => s.toJson()).toList(),
-        'units': _mapToJson(currentCache.units),
-        'lessons': _mapToJson(currentCache.lessons),
-        'components': _mapToJson(currentCache.components),
-        'metadata': currentCache.metadata,
+      final updates = {
+        'settings.preferences': newPreferences.toFirestore(),
       };
+      
+      await updateProfileSection(userId, updates);
+      
+      debugPrint('✅ User preferences updated');
+      
+    } catch (e) {
+      debugPrint('❌ Failed to update preferences: $e');
+      rethrow;
+    }
+  }
 
-      // Fetch updated lessons
-      final Map<String, Lesson> updatedLessons =
-          await _fetchLessons(Set.from(lessonIds));
+  // QUERY METHODS WITH CACHING
 
-      // Extract any new component IDs
-      final Set<String> newComponentIds = {};
-      for (final lesson in updatedLessons.values) {
-        for (final componentId in lesson.components) {
-          if (!currentCache.components.containsKey(componentId)) {
-            newComponentIds.add(componentId);
+  /// Get multiple students with smart caching
+  Future<List<Student>> getStudentsByKnowledgeLevel(
+    int minLevel, 
+    {bool useCache = true}
+  ) async {
+    debugPrint('🔍 Querying students with knowledge level >= $minLevel');
+    
+    try {
+      final querySnapshot = await _firestore
+          .collection(_collection)
+          .where('role', isEqualTo: 'student')
+          .where('knowledgeLevel', isGreaterThanOrEqualTo: minLevel)
+          .get();
+
+      final students = <Student>[];
+      
+      for (final doc in querySnapshot.docs) {
+        if (useCache) {
+          // Try to get from cache first
+          final cached = await _loadFromCache(doc.id);
+          if (cached != null) {
+            students.add(cached);
+            continue;
+          }
+        }
+        
+        // Not in cache, create from Firestore and cache it
+        final profile = Student.fromFirestore(doc.data(), doc.id);
+        await _saveToCache(profile);
+        students.add(profile);
+      }
+      
+      debugPrint('✅ Found ${students.length} students (cache optimization applied)');
+      return students;
+      
+    } catch (e) {
+      debugPrint('❌ Error querying students: $e');
+      rethrow;
+    }
+  }
+
+  // CACHE MANAGEMENT UTILITIES
+
+  /// Get cache statistics
+  Future<CacheStats> getCacheStats() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final keys = prefs.getKeys();
+      
+      int profileCount = 0;
+      int expiredCount = 0;
+      int totalSizeBytes = 0;
+      
+      for (final key in keys) {
+        if (key.startsWith(_cachePrefix)) {
+          profileCount++;
+          final jsonString = prefs.getString(key);
+          if (jsonString != null) {
+            totalSizeBytes += jsonString.length;
+          }
+          
+          // Check if expired
+          final timestampKey = key.replaceFirst(_cachePrefix, _cacheTimestampPrefix);
+          final timestampString = prefs.getString(timestampKey);
+          if (timestampString != null) {
+            final cacheTime = DateTime.parse(timestampString);
+            if (!_isCacheValid(cacheTime)) {
+              expiredCount++;
+            }
           }
         }
       }
-
-      // Fetch new components
-      final Map<String, Component> newComponents =
-          await _fetchComponents(newComponentIds);
-
-      // Update lessons in cache
-      final Map<String, dynamic> lessonsMap =
-          cacheMap['lessons'] as Map<String, dynamic>;
-      updatedLessons.forEach((id, lesson) {
-        lessonsMap[id] = lesson.toJson();
-      });
-
-      // Update components in cache
-      final Map<String, dynamic> componentsMap =
-          cacheMap['components'] as Map<String, dynamic>;
-      newComponents.forEach((id, component) {
-        componentsMap[id] = component.toJson();
-      });
-
-      // Update metadata
-      final Map<String, String> metadataMap =
-          Map<String, String>.from(cacheMap['metadata']);
-      metadataMap['updatedAt'] = DateTime.now().toIso8601String();
-      cacheMap['metadata'] = metadataMap;
-
-      // Store updated cache in SharedPreferences
-      await TeacherDashboardCache.storeCache(cacheMap);
-
-      print(
-          'Successfully updated ${updatedLessons.length} lessons and ${newComponents.length} new components.');
+      
+      return CacheStats(
+        profileCount: profileCount,
+        expiredCount: expiredCount,
+        memoryCount: _memoryCache.length,
+        totalSizeBytes: totalSizeBytes,
+      );
+      
     } catch (e) {
-      print('Error updating specific lessons: $e');
-      throw Exception('Failed to update specific lessons: $e');
+      debugPrint('❌ Error getting cache stats: $e');
+      return CacheStats(profileCount: 0, expiredCount: 0, memoryCount: 0, totalSizeBytes: 0);
+    }
+  }
+
+  /// Clean up expired cache entries
+  Future<void> cleanExpiredCache() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final keys = prefs.getKeys();
+      
+      int cleanedCount = 0;
+      
+      for (final key in keys) {
+        if (key.startsWith(_cacheTimestampPrefix)) {
+          final timestampString = prefs.getString(key);
+          if (timestampString != null) {
+            final cacheTime = DateTime.parse(timestampString);
+            if (!_isCacheValid(cacheTime)) {
+              final userId = key.replaceFirst(_cacheTimestampPrefix, '');
+              await _clearUserCache(userId);
+              cleanedCount++;
+            }
+          }
+        }
+      }
+      
+      debugPrint('🧹 Cleaned $cleanedCount expired cache entries');
+      
+    } catch (e) {
+      debugPrint('❌ Error cleaning expired cache: $e');
     }
   }
 }
 
-class TeacherDashboardCache {
-  // Singleton instance
-  static final TeacherDashboardCache _instance =
-      TeacherDashboardCache._internal();
+// Data Transfer Objects
 
-  factory TeacherDashboardCache() {
-    return _instance;
+class LessonCompletionData {
+  final int newStreak;
+  final double newScore;
+  final String newProgress;
+  final int newKnowledgeLevel;
+
+  const LessonCompletionData({
+    required this.newStreak,
+    required this.newScore,
+    required this.newProgress,
+    required this.newKnowledgeLevel,
+  });
+}
+
+class CacheStats {
+  final int profileCount;
+  final int expiredCount;
+  final int memoryCount;
+  final int totalSizeBytes;
+
+  const CacheStats({
+    required this.profileCount,
+    required this.expiredCount,
+    required this.memoryCount,
+    required this.totalSizeBytes,
+  });
+  
+  double get totalSizeKB => totalSizeBytes / 1024;
+  double get totalSizeMB => totalSizeKB / 1024;
+  
+  @override
+  String toString() {
+    return 'CacheStats(profiles: $profileCount, expired: $expiredCount, '
+           'memory: $memoryCount, size: ${totalSizeKB.toStringAsFixed(1)}KB)';
   }
+}
 
-  TeacherDashboardCache._internal();
+// FLUTTER INTEGRATION EXAMPLES
 
-  // Cache data
-  late Teacher teacher;
-  Map<String, Classroom> classrooms = {};
-  List<Student> students = [];
-  Map<String, Unit> units = {};
-  Map<String, Lesson> lessons = {};
-  Map<String, Component> components = {};
-  Map<String, String> metadata = {};
+/// Provider for state management
+class StudentProfileProvider extends ChangeNotifier {
+  final StudentProfileService _service = StudentProfileService();
+  Student? _profile;
+  bool _loading = false;
+  String? _error;
 
-  bool _isInitialized = false;
+  Student? get profile => _profile;
+  bool get loading => _loading;
+  String? get error => _error;
 
-  // Cache key for web storage
-  static const String _cacheKey = 'teacher_dashboard_cache';
-
-  // Initialize by loading from the cache
-  Future<void> initialize() async {
-    if (_isInitialized) return;
+  /// Load profile with cache-first strategy
+  Future<void> loadProfile(String userId, {bool forceRefresh = false}) async {
+    _loading = true;
+    _error = null;
+    notifyListeners();
 
     try {
-      String? jsonString;
-
-      // Try to load from shared preferences first (works for web)
-      if (kIsWeb) {
-        final prefs = await SharedPreferences.getInstance();
-        jsonString = prefs.getString(_cacheKey);
-
-        // If not found in shared preferences, try to build it
-        if (jsonString == null) {
-          print(
-              'Cache not found in SharedPreferences. Either build a new cache or use default data.');
-          throw Exception('Cache not found in web storage');
-        }
-      } else {
-        // For mobile/desktop, try to load from assets
-        try {
-          jsonString = await rootBundle
-              .loadString("assets/lib/Resources/TeacherCache.json");
-        } catch (e) {
-          print('Failed to load from assets: $e');
-
-          // Try shared preferences as fallback for mobile
-          final prefs = await SharedPreferences.getInstance();
-          jsonString = prefs.getString(_cacheKey);
-
-          if (jsonString == null) {
-            throw Exception('Cache not found in assets or shared preferences');
-          }
-        }
-      }
-
-      // Parse the cache data
-      final jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
-
-      // Parse the teacher data
-      teacher = Teacher.fromJson(jsonData['teacher']);
-
-      // Parse classrooms
-      final classroomsData = jsonData['classrooms'] as Map<String, dynamic>;
-      classrooms = classroomsData
-          .map((key, value) => MapEntry(key, Classroom.fromJson(value)));
-
-      // Parse students
-      final studentsData = jsonData['students'] as List;
-      students = studentsData.map((data) => Student.fromJson(data)).toList();
-
-      // Parse units
-      final unitsData = jsonData['units'] as Map<String, dynamic>;
-      units =
-          unitsData.map((key, value) => MapEntry(key, Unit.fromJson(value)));
-
-      // Parse lessons
-      final lessonsData = jsonData['lessons'] as Map<String, dynamic>;
-      lessons = lessonsData
-          .map((key, value) => MapEntry(key, Lesson.fromJson(value)));
-
-      // Parse components
-      final componentsData = jsonData['components'] as Map<String, dynamic>;
-      components = componentsData
-          .map((key, value) => MapEntry(key, Component.fromJson(value)));
-
-      // Parse metadata
-      final metadataData = jsonData['metadata'] as Map<String, dynamic>;
-      metadata =
-          metadataData.map((key, value) => MapEntry(key, value.toString()));
-
-      _isInitialized = true;
-      print('Teacher dashboard cache initialized successfully');
-      print('Cache version: ${metadata['version']}');
-      print('Cache generated at: ${metadata['generatedAt']}');
+      _profile = await _service.loadProfileWithCache(userId, forceRefresh: forceRefresh);
     } catch (e) {
-      print('Error initializing teacher dashboard cache: $e');
-      throw Exception('Failed to load teacher dashboard cache: $e');
+      _error = e.toString();
+    } finally {
+      _loading = false;
+      notifyListeners();
     }
   }
 
-  // Store cache data in SharedPreferences (works for web and mobile)
-  static Future<void> storeCache(Map<String, dynamic> cache) async {
+  /// Load profile offline-first (immediate response)
+  Future<void> loadProfileOffline(String userId) async {
+    _loading = true;
+    _error = null;
+    notifyListeners();
+
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final jsonString = jsonEncode(cache);
-      await prefs.setString(_cacheKey, jsonString);
-      print('Cache stored in SharedPreferences successfully');
+      _profile = await _service.loadProfileOfflineFirst(userId);
     } catch (e) {
-      print('Error storing cache in SharedPreferences: $e');
-      throw Exception('Failed to store cache: $e');
+      _error = e.toString();
+    } finally {
+      _loading = false;
+      notifyListeners();
     }
   }
 
-  // Clear cached data
-  static Future<void> clearCache() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_cacheKey);
-      print('Cache cleared from SharedPreferences');
-    } catch (e) {
-      print('Error clearing cache: $e');
-    }
-  }
-
-  // Rest of your methods remain the same
-
-  // Get a classroom by ID
-  Classroom? getClassroom(String classroomId) {
-    _ensureInitialized();
-    return classrooms[classroomId];
-  }
-
-  // Get all classrooms for the teacher
-  List<Classroom> getTeacherClassrooms() {
-    _ensureInitialized();
-    return classrooms.values
-        .where((classroom) => classroom.teacherId == teacher.id)
-        .toList();
-  }
-
-  // Get students in a classroom
-  List<Student> getStudentsInClassroom(String classroomId) {
-    _ensureInitialized();
-    final classroom = classrooms[classroomId];
-    if (classroom == null) return [];
-
-    return students
-        .where((student) => classroom.studentIds.contains(student.studentId))
-        .toList();
-  }
-
-  // Get a lesson by ID
-  Lesson? getLesson(String lessonId) {
-    _ensureInitialized();
-    return lessons[lessonId];
-  }
-
-  // Get components for a lesson
-  List<Component> getComponentsForLesson(String lessonId) {
-    _ensureInitialized();
-    final lesson = lessons[lessonId];
-    if (lesson == null) return [];
-
-    return lesson.components
-        .map((id) => components[id])
-        .where((comp) => comp != null)
-        .cast<Component>()
-        .toList();
-  }
-
-  // Get the current lesson for a classroom
-  Lesson? getCurrentLessonForClassroom(String classroomId) {
-    _ensureInitialized();
-    final classroom = classrooms[classroomId];
-    if (classroom == null) return null;
-
-    return lessons[classroom.lessonId];
-  }
-
-  // Get unit by ID
-  Unit? getUnit(String unitId) {
-    _ensureInitialized();
-    return units[unitId];
-  }
-
-  // Get unit for a lesson
-  Unit? getUnitForLesson(String lessonId) {
-    _ensureInitialized();
-    final lessonUnit = lessonId.split('.').take(2).join('.');
-    return units[lessonUnit];
-  }
-
-  // Ensure the cache is initialized
-  void _ensureInitialized() {
-    if (!_isInitialized) {
-      throw Exception(
-          'TeacherDashboardCache not initialized. Call initialize() first.');
-    }
-  }
-
-  /// Update component status and sync with both cache and Firestore
-  Future<void> updateComponentStatus(
-      String componentId, Status newStatus) async {
-    try {
-      // Check if component exists in cache
-      if (!_isInitialized) {
-        await initialize();
-      }
-
-      if (!components.containsKey(componentId)) {
-        throw Exception('Component not found in cache: $componentId');
-      }
-
-      // Get the current component
-      final component = components[componentId];
-
-      // Check for network connectivity
-      bool isOnline = false;
-      try {
-        final connectivityResult = await Connectivity().checkConnectivity();
-        isOnline = connectivityResult != ConnectivityResult.none;
-      } catch (e) {
-        print('Error checking connectivity: $e');
-      }
-
-      // Update in Firebase if online
-      if (isOnline) {
-        try {
-          await FirebaseFirestore.instance
-              .collection('components')
-              .doc(componentId)
-              .update({'ComponentStatus': statusToFirestore(newStatus)});
-          print(
-              'Component status updated in Firebase: $componentId -> ${statusToFirestore(newStatus)}');
-        } catch (e) {
-          print('Error updating component in Firebase: $e');
-          // Continue with local update even if Firebase fails
-        }
-      }
-
-      // Update the local cache
-      final updatedComponent = Component(
-        componentId: component!.componentId,
-        title: component.title,
-        type: component.type,
-        componentStatus: newStatus,
-        progress: component.progress,
-        discussionQuestions: component.discussionQuestions,
-        questionData: component.questionData,
-        performanceTrends: component.performanceTrends,
+  /// Update preferences optimistically
+  Future<void> updatePreferences(String userId, UserPreferences preferences) async {
+    if (_profile != null) {
+      // Optimistic UI update
+      _profile = _profile!.copyWith(
+        settings: _profile!.settings.copyWith(preferences: preferences),
       );
-
-      // Update in memory cache
-      components[componentId] = updatedComponent;
-
-      // Save updated cache
-      await _saveCache();
-
-      print(
-          'Component status updated in cache: $componentId -> ${statusToFirestore(newStatus)}');
-    } catch (e) {
-      print('Error updating component status: $e');
-      throw Exception('Failed to update component status: $e');
+      notifyListeners();
     }
-  }
 
-  /// Update multiple component statuses at once
-  Future<void> updateMultipleComponentStatuses(
-      Map<String, Status> updates) async {
     try {
-      // Check if initialized
-      if (!_isInitialized) {
-        await initialize();
-      }
-
-      // Check for network connectivity
-      bool isOnline = false;
-      try {
-        final connectivityResult = await Connectivity().checkConnectivity();
-        isOnline = connectivityResult != ConnectivityResult.none;
-      } catch (e) {
-        print('Error checking connectivity: $e');
-      }
-
-      // Update in Firebase if online
-      if (isOnline) {
-        try {
-          final batch = FirebaseFirestore.instance.batch();
-
-          for (final entry in updates.entries) {
-            final componentId = entry.key;
-            final newStatus = entry.value;
-
-            final docRef = FirebaseFirestore.instance
-                .collection('components')
-                .doc(componentId);
-
-            batch.update(
-                docRef, {'ComponentStatus': statusToFirestore(newStatus)});
-          }
-
-          await batch.commit();
-          print('Updated ${updates.length} component statuses in Firebase');
-        } catch (e) {
-          print('Error batch updating components in Firebase: $e');
-          // Continue with local update even if Firebase fails
-        }
-      }
-
-      // Update local cache components
-      for (final entry in updates.entries) {
-        final componentId = entry.key;
-        final newStatus = entry.value;
-
-        if (components.containsKey(componentId)) {
-          final component = components[componentId];
-
-          final updatedComponent = Component(
-            componentId: component!.componentId,
-            title: component.title,
-            type: component.type,
-            componentStatus: newStatus,
-            progress: component.progress,
-            discussionQuestions: component.discussionQuestions,
-            questionData: component.questionData,
-            performanceTrends: component.performanceTrends,
-          );
-
-          components[componentId] = updatedComponent;
-        }
-      }
-
-      // Save updated cache
-      await _saveCache();
-
-      print('Updated ${updates.length} component statuses in cache');
+      await _service.updateUserPreferences(userId, preferences);
     } catch (e) {
-      print('Error updating multiple component statuses: $e');
-      throw Exception('Failed to update multiple component statuses: $e');
+      _error = e.toString();
+      // Reload profile on error to restore correct state
+      await loadProfile(userId);
     }
   }
 
-// Add this helper method to TeacherDashboardCache
-  Future<void> _saveCache() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-
-      // Convert the cached data to a format that can be stored
-      final cacheMap = {
-        'teacher': teacher.toJson(),
-        'classrooms': _mapToJson(classrooms),
-        'students': students.map((s) => s.toJson()).toList(),
-        'units': _mapToJson(units),
-        'lessons': _mapToJson(lessons),
-        'components': _mapToJson(components),
-        'metadata': {
-          'version': metadata['version'] ?? '1.0.0',
-          'generatedAt':
-              metadata['generatedAt'] ?? DateTime.now().toIso8601String(),
-          'updatedAt': DateTime.now().toIso8601String(),
-        },
-      };
-
-      final jsonString = jsonEncode(cacheMap);
-      await prefs.setString(_cacheKey, jsonString);
-      print('Cache saved successfully');
-    } catch (e) {
-      print('Error saving cache: $e');
-    }
-  }
-
-  Map<String, dynamic> _mapToJson(Map<String, dynamic> map) {
-    Map<String, dynamic> result = {};
-
-    map.forEach((key, value) {
-      if (value is Map) {
-        result[key] = value;
-      } else {
-        // Using toJson method of the object
-        result[key] = value.toJson();
-      }
-    });
-
-    return result;
-  }
+  /// Get cache statistics
+  Future<CacheStats> getCacheStats() => _service.getCacheStats();
+  
+  /// Clear all cache
+  Future<void> clearCache() => _service.clearAllCache();
 }

@@ -133,7 +133,7 @@ class _LessonsHomeState extends State<LessonsHome> {
 
                 // The skip container
                 // The skip container
-// The skip container
+                // The skip container
                 Align(
                   alignment:
                       Alignment.centerLeft, // Aligns the container to the left

@@ -100,7 +100,7 @@ class StudentService {
     if (progress > 1) {
       return StudentStatus.Ahead;
     } else if (progress > 0.6) {
-      return StudentStatus.On_Track;
+      return StudentStatus.OnTrack;
     } else {
       return StudentStatus.Behind;
     }

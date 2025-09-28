@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_final_fields
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Pages/gs_home.dart';
 import 'package:money_monkey/Backend/Services/auth_service.dart';
@@ -93,9 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Navigates to sign up screen
   void _navigateToSignUp() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => GettingStartedHome()),
+    Get.to(
+      () => GettingStartedHome(),
     );
   }
 

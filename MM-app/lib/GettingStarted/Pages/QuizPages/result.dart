@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
 import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
@@ -190,11 +191,10 @@ class QuizResultPage extends StatelessWidget {
               const Spacer(),
               NextButton(
                 nextPage: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StartFreshHome(),
-                      ));
+                  // ✅ Use GetX navigation with binding to continue StartFresh flow
+                  Get.off(
+                    () => StartFreshHome(),
+                  );
                 },
                 isEnabled: true,
                 text: "Start your Journey!",

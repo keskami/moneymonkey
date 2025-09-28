@@ -14,14 +14,16 @@ class GettingStartedHome extends StatefulWidget {
 }
 
 class _GettingStartedHomeState extends State<GettingStartedHome> {
-  final GettingStartedController gettingStartedController =
-      Get.put(GettingStartedController());
-
+  // ✅ Controller will be created in initState
+  late final GettingStartedController gettingStartedController;
+  
   bool _isKeyboardVisible = false;
 
   @override
   void initState() {
     super.initState();
+    gettingStartedController = Get.put(GettingStartedController());
+    
     KeyboardVisibilityController().onChange.listen((bool visible) {
       setState(() {
         _isKeyboardVisible = visible;
@@ -29,14 +31,20 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
     });
   }
 
+  @override
+  void dispose() {
+    // ✅ Clean up when leaving this flow
+    Get.delete<GettingStartedController>();
+    super.dispose();
+  }
+
   void toNextPage() {
     int currentIndex = gettingStartedController.pageIndex.value;
-    if (currentIndex + 1 == 5) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StartFreshHome(),
-          ));
+    if (currentIndex + 1 == 4) {
+      // ✅ Use GetX navigation with binding
+      Get.to(
+        () => StartFreshHome(),
+      );
       return;
     }
     gettingStartedController.pageIndex.value += 1;
@@ -46,6 +54,7 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: LightTheme().primaryBackgroundColor,

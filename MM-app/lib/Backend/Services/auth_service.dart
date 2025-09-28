@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
+import 'package:money_monkey/Backend/Services/CacheServices.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/sign_up_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
@@ -12,12 +14,16 @@ import 'package:money_monkey/home.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final SignUpController signUpController = Get.find();
-  final StartFreshController startFreshController = Get.find();
-  final GettingStartedController gettingStartedController = Get.find();
+  final StudentProfileService _profileService = StudentProfileService();
+
 
   /// Checks if an email is already in use
   Future<bool> checkEmailUsed(String email, BuildContext context) async {
+    if (!Get.isRegistered<SignUpController>()) {
+      _showSnackBar(context, "Internal error: SignUp flow not initialized.", Colors.red);
+      return false;
+    }
+    final SignUpController signUpController = Get.find<SignUpController>();
     signUpController.isLoading.value = true;
     
     if (!email.isEmail) {
@@ -27,9 +33,10 @@ class AuthService {
     }
 
     try {
+      // Use the new collection name and field structure
       final emailSnapshot = await _firestore
-          .collection('Users')
-          .where('Email', isEqualTo: email)
+          .collection('users')
+          .where('email', isEqualTo: email)
           .get();
 
       if (emailSnapshot.docs.isNotEmpty) {
@@ -49,6 +56,16 @@ class AuthService {
 
   /// Signs up a new user with email and password
   Future<bool> signUpUser(BuildContext context) async {
+    // Ensure required controllers are registered before attempting signup
+    if (!Get.isRegistered<SignUpController>() ||
+        !Get.isRegistered<StartFreshController>() ||
+        !Get.isRegistered<GettingStartedController>()) {
+      _showSnackBar(context, "Internal error: Sign up controllers not available.", Colors.red);
+      return false;
+    }
+    final SignUpController signUpController = Get.find<SignUpController>();
+    final StartFreshController startFreshController = Get.find<StartFreshController>();
+    final GettingStartedController gettingStartedController = Get.find<GettingStartedController>();
     try {
       signUpController.isLoading.value = true;
       
@@ -63,8 +80,8 @@ class AuthService {
 
       String userId = userCredential.user!.uid;
 
-      // Create user profile in Firestore
-      await _createUserProfile(
+      // Create comprehensive student profile using the new model
+      final student = _createStudentProfile(
         userId: userId,
         email: email,
         fullName: signUpController.name.value,
@@ -74,6 +91,13 @@ class AuthService {
         knowledgeLevel: gettingStartedController.knowledgeLevel.value,
         learningGoal: startFreshController.learningGoal.value,
       );
+
+      // Save using the profile service (includes caching)
+      await _profileService.updateProfileOptimistic(userId, student);
+
+      // Create additional user data collections
+      await _createSampleTransactions(userId);
+      await _createProgressionCollection(userId);
 
       signUpController.isLoading.value = false;
       _navigateToHome(context);
@@ -89,6 +113,18 @@ class AuthService {
   Future<bool> signInUser(String email, String password, BuildContext context) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      
+      // Preload user profile into cache for better performance
+      final userId = _auth.currentUser?.uid;
+      if (userId != null) {
+        try {
+          await _profileService.loadProfileWithCache(userId);
+        } catch (e) {
+          // Profile loading error shouldn't prevent sign in
+          debugPrint('Failed to preload profile: $e');
+        }
+      }
+      
       _navigateToHome(context);
       return true;
     } catch (e) {
@@ -119,15 +155,24 @@ class AuthService {
         return false;
       }
 
-      // Check if user profile exists, create if not
-      final userDoc = await _firestore.collection('Users').doc(userId).get();
-      if (!userDoc.exists) {
-        await _createUserProfile(
+      // Check if user profile exists using the profile service
+      try {
+        await _profileService.loadProfileWithCache(userId);
+        // Profile exists, user is signed in
+      } catch (e) {
+        // Profile doesn't exist, create new student profile
+        final student = _createStudentProfile(
           userId: userId,
           email: email,
           fullName: displayName ?? 'User',
           username: displayName ?? 'User',
         );
+
+        await _profileService.updateProfileOptimistic(userId, student);
+        
+        // Create additional collections for new Google user
+        await _createSampleTransactions(userId);
+        await _createProgressionCollection(userId);
       }
 
       _navigateToHome(context);
@@ -138,11 +183,14 @@ class AuthService {
     }
   }
 
-  /// Signs out the current user (WEB VERSION)
+  /// Signs out the current user and clears cache
   Future<bool> signOut(BuildContext context) async {
     try {
       await _auth.signOut();
-      // For web, Firebase Auth handles Google sign-out automatically
+      
+      // Clear all cached profile data on sign out
+      await _profileService.clearAllCache();
+      
       return true;
     } catch (e) {
       _showSnackBar(context, "Error during sign out: $e", Colors.red);
@@ -150,8 +198,8 @@ class AuthService {
     }
   }
 
-  /// Creates a comprehensive user profile in Firestore
-  Future<void> _createUserProfile({
+  /// Creates a Student profile object with all required data
+  Student _createStudentProfile({
     required String userId,
     required String email,
     String fullName = 'Your Name Here',
@@ -160,104 +208,96 @@ class AuthService {
     int age = 0,
     int knowledgeLevel = 0,
     int learningGoal = 0,
-  }) async {
-    final userDocRef = _firestore.collection('Users').doc(userId);
-    
-    // Check if user already exists
-    final userSnapshot = await userDocRef.get();
-    if (userSnapshot.exists) return;
+  }) {
+    // Create default followers and following (consider removing in production)
+    Map<String, bool> defaultClassrooms = {
+      'tempClassId1_2025': true,
+      'tempClassId2_2025': true,
+    };
 
-    // Default followers and following (consider removing in production)
-    List<String> following = [
-      "QofNULUkjTRKL0cQccTNrwuri5I3",
-      'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
-    ];
+    // Create profile data
+    final profileData = ProfileData(
+      fullName: fullName,
+      username: username,
+      numberOfFollowers: 3, // Based on your original followers list
+      following: 2, // Based on your original following list
+      topAchievements: 0,
+      streak: 0,
+      totalProfit: 0.0,
+      portfolioScore: 0.0,
+      averageMonthlyGrowth: 0.0,
+    );
 
-    List<String> followers = [
-      "QofNULUkjTRKL0cQccTNrwuri5I3",
-      'J5OHmCH5dAgTtqgBtC9qHUSj34L2',
-      '6mMH88Ebp4aiYWIT3jGfBDyxxRB2'
-    ];
+    // Create settings with all nested structures
+    final announcementNotifications = AnnouncementNotifications(
+      educationalTipsEmail: true,
+      educationalTipsPhone: false,
+      marketingNotificationsEmail: true,
+      marketingNotificationsPhone: false,
+    );
 
-    await userDocRef.set({
-      'User ID': userId,
-      'Email': email,
-      'Phone Number': phoneNumber,
-      'Age': age,
-      'Knowledge Level': knowledgeLevel,
-      'Learning Goal Per Day': learningGoal,
-      'Profile': {
-        'Full Name': fullName,
-        'Username': username,
-        'Number of Followers': followers.length,
-        'Following': following.length,
-        'Top Achievements': 0,
-        'Streak': 0,
-        'Total Profit': 0,
-        'Average Monthly Growth': 0,
-      },
-      'Portfolio': {
-        'Total Bananas': 8976,
-        'Balance': 908,
-        'Weekly net gain': -90,
-      },
-      'Invest Page (Discover)': {
-        'Total Invested (Stocks)': 100,
-        'Total Profit (Stocks)': 50,
-        'Total Invested (ETFs)': 300,
-        'Total Profit (ETFs)': -50,
-        'Total Invested (Mutual Funds)': 500,
-        'Total Profit (Mutual Funds)': 600,
-        'Total Invested (Bonds)': 234,
-        'Total Profit (Bonds)': -10,
-        'Total invested Bananas': 7089,
-        'Profit from Invested Bananas (Current Month)': 890,
-        'Username': username
-      },
-      'following': following,
-      'followers': followers,
-      'Settings': {
-        'Preferences': {
-          'Sound Effects': true,
-          'Audio': false,
-          'Dark Mode': false,
-        },
-        'Notifications': {
-          'Reminders': {
-            'Reminder Time': "08:00 AM",
-            'Practice Email': true,
-            'Practice Phone': false,
-            'Weekly Progress': false,
-          },
-          'Friends': {
-            'New Follower Email': true,
-            'New Follower Phone': false,
-            'Friend Activity Email': true,
-            'Friend Activity Phone': false,
-          },
-          'Announcements': {
-            'Marketing Notifications Email': true,
-            'Marketing Notifications Phone': false,
-            'Educational Tips Email': true,
-            'Educational Tips Phone': false,
-          },
-        },
-        'Privacy Settings': {
-          'Public Profile': true,
-        },
-      }
-    });
+    final friendNotifications = FriendNotifications(
+      friendActivityEmail: true,
+      friendActivityPhone: false,
+      newFollowerEmail: true,
+      newFollowerPhone: false,
+    );
 
-    // Create sample transactions
-    await _createSampleTransactions(userDocRef);
-    
-    // Create progression collection
-    await _createProgressionCollection(userDocRef);
+    final reminderNotifications = ReminderNotifications(
+      practiceEmail: true,
+      practicePhone: false,
+      reminderTime: '08:00 AM',
+      weeklyProgress: false,
+    );
+
+    final notificationSettings = NotificationSettings(
+      announcements: announcementNotifications,
+      friends: friendNotifications,
+      reminders: reminderNotifications,
+    );
+
+    final userPreferences = UserPreferences(
+      audio: false,
+      darkMode: false,
+      soundEffects: true,
+    );
+
+    final privacySettings = PrivacySettings(
+      publicProfile: true,
+    );
+
+    final settingsData = SettingsData(
+      notifications: notificationSettings,
+      preferences: userPreferences,
+      privacySettings: privacySettings,
+    );
+
+    // Create the complete student profile
+    return Student(
+      userId: userId,
+      email: email,
+      name: fullName,
+      role: 'student',
+      createdAt: DateTime.now(),
+      isActive: true,
+      age: age,
+      classrooms: defaultClassrooms,
+      knowledgeLevel: knowledgeLevel,
+      learningGoalPerDay: learningGoal,
+      phoneNumber: phoneNumber,
+      startingLevel: 1,
+      progress: 'A.1.1.1',
+      profile: profileData,
+      settings: settingsData,
+    );
   }
 
   /// Creates sample transactions for new users
-  Future<void> _createSampleTransactions(DocumentReference userDocRef) async {
-    final transactionsRef = userDocRef.collection('Transactions');
+  Future<void> _createSampleTransactions(String userId) async {
+    final transactionsRef = _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('Transactions');
 
     final sampleTransactions = [
       {
@@ -298,8 +338,11 @@ class AuthService {
   }
 
   /// Creates initial progression data for new users
-  Future<void> _createProgressionCollection(DocumentReference userDocRef) async {
-    final progressionCollectionRef = userDocRef.collection('Progression');
+  Future<void> _createProgressionCollection(String userId) async {
+    final progressionCollectionRef = _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('Progression');
     
     await progressionCollectionRef.doc('progression1').set({
       'Level': 1,
@@ -313,6 +356,44 @@ class AuthService {
         'Bananas': 0,
       },
     });
+  }
+
+  /// Gets the current user's profile from cache or Firebase
+  Future<Student?> getCurrentUserProfile() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+
+    try {
+      return await _profileService.loadProfileWithCache(user.uid);
+    } catch (e) {
+      debugPrint('Error loading current user profile: $e');
+      return null;
+    }
+  }
+
+  /// Checks if user is signed in and has a valid profile
+  Future<bool> isUserSignedIn() async {
+    final user = _auth.currentUser;
+    if (user == null) return false;
+
+    try {
+      // loadProfileOfflineFirst throws if profile not found; success means user has profile
+      await _profileService.loadProfileOfflineFirst(user.uid);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Updates the current user's profile
+  Future<bool> updateCurrentUserProfile(Student updatedProfile) async {
+    try {
+      await _profileService.updateProfileOptimistic(updatedProfile.userId, updatedProfile);
+      return true;
+    } catch (e) {
+      debugPrint('Error updating user profile: $e');
+      return false;
+    }
   }
 
   /// Navigates to the home page
@@ -368,4 +449,13 @@ class AuthService {
 
     _showSnackBar(context, message, Colors.red);
   }
+
+  // Stream for listening to auth state changes
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  
+  // Get current user
+  User? get currentUser => _auth.currentUser;
+  
+  // Get current user ID
+  String? get currentUserId => _auth.currentUser?.uid;
 }

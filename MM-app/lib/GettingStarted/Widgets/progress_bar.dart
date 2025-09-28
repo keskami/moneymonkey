@@ -22,7 +22,7 @@ class CustomProgressBar extends StatelessWidget {
       progress = startFreshController.pageIndex.value / 5;
     } else if (page == 1) {
       final SignUpController signUpController = Get.find<SignUpController>();
-      progress = signUpController.pageIndex.value / 5;
+      progress = signUpController.pageIndex.value / 4;
     } else if (page == 2) {
       final QuizController quizController = Get.find();
       progress = quizController.pageIndex.value / 9;

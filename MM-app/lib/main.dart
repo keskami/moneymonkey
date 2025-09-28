@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:money_monkey/Backend/Services/AiServiceInitializer.dart';
+import 'package:money_monkey/GettingStarted/Pages/gs_home.dart';
 import 'package:money_monkey/LoginPages/login.dart';
-import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'firebase_options.dart';
 
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
     return SafeArea(
       child: ConstrainedBox(
         constraints: BoxConstraints(minWidth: 600, minHeight: 1000),
-        child: MaterialApp(
+        child: GetMaterialApp(
           darkTheme: AppThemes.darkTheme,
           theme: AppThemes.lightTheme,
           themeMode: ThemeMode.light,
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
                     return LoginScreen();
                   }
                 } else {
-                  return HomePage();
+                  return GettingStartedHome();
                 }
               },
             ),

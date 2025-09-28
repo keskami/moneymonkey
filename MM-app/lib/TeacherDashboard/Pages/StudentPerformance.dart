@@ -120,7 +120,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
     switch (status) {
       case StudentStatus.Ahead:
         return LightTheme().primaryBlue;
-      case StudentStatus.On_Track:
+      case StudentStatus.OnTrack:
         return LightTheme().pastelGreen;
       case StudentStatus.Behind:
         return LightTheme().pastelRed;
@@ -131,8 +131,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
 
   // Get student status with caching to avoid repeated Firebase calls
   Future<StudentStatus> _getStudentStatus(Student student) async {
-    if (studentStatusCache.containsKey(student.studentId)) {
-      return studentStatusCache[student.studentId]!;
+    if (studentStatusCache.containsKey(student.userId)) {
+      return studentStatusCache[student.userId]!;
     }
     
     setState(() {
@@ -144,11 +144,11 @@ class _StudentPerformanceState extends State<StudentPerformance> {
       final status = await studentService.getStatusFromProgress();
       
       // Cache the result
-      studentStatusCache[student.studentId] = status;
+      studentStatusCache[student.userId] = status;
       return status;
     } catch (e) {
       print('Error getting student status: $e');
-      return StudentStatus.On_Track; // Default fallback
+      return StudentStatus.OnTrack; // Default fallback
     } finally {
       setState(() {
         isLoadingStatus = false;
@@ -158,8 +158,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
   
   // Get lesson progress with caching
   Future<double> _getLessonProgress(Student student) async {
-    if (lessonProgressCache.containsKey(student.studentId)) {
-      return lessonProgressCache[student.studentId]!;
+    if (lessonProgressCache.containsKey(student.userId)) {
+      return lessonProgressCache[student.userId]!;
     }
     
     try {
@@ -167,7 +167,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
       final progress = await studentService.getLessonProgress();
       
       // Cache the result
-      lessonProgressCache[student.studentId] = progress;
+      lessonProgressCache[student.userId] = progress;
       return progress;
     } catch (e) {
       print('Error getting lesson progress: $e');
@@ -177,8 +177,8 @@ class _StudentPerformanceState extends State<StudentPerformance> {
   
   // Get overall progress with caching
   Future<double> _getOverallProgress(Student student) async {
-    if (overallProgressCache.containsKey(student.studentId)) {
-      return overallProgressCache[student.studentId]!;
+    if (overallProgressCache.containsKey(student.userId)) {
+      return overallProgressCache[student.userId]!;
     }
     
     try {
@@ -186,7 +186,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
       final progress = await studentService.getOverallProgress();
       
       // Cache the result
-      overallProgressCache[student.studentId] = progress;
+      overallProgressCache[student.userId] = progress;
       return progress;
     } catch (e) {
       print('Error getting overall progress: $e');
@@ -386,7 +386,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                             );
                                           }
                                           
-                                          final status = snapshot.data ?? StudentStatus.On_Track;
+                                          final status = snapshot.data ?? StudentStatus.OnTrack;
                                           final statusColor = getStatusColor(status);
                                           
                                           return ColoredPaddedContainer(
@@ -481,7 +481,7 @@ class _StudentPerformanceState extends State<StudentPerformance> {
                                   );
                                 }
                                 
-                                final status = snapshot.data ?? StudentStatus.On_Track;
+                                final status = snapshot.data ?? StudentStatus.OnTrack;
                                 final statusColor = getStatusColor(status);
                                 
                                 return ColoredPaddedContainer(

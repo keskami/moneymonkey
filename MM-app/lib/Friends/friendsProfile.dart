@@ -8,6 +8,7 @@ import 'package:money_monkey/Friends/Widgets/custom_stat_friends.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import '../Profile/profile_page.dart';
@@ -331,7 +332,7 @@ class _friendProfileState extends State<friendProfile> {
         });
         if (_currentIndex == 0) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => HomePage(),
           ));
         } else if (_currentIndex == 1) {
           Navigator.of(context).push(MaterialPageRoute(

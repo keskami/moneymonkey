@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/chat_bubble.dart';
+import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 
-class StartFreshPage4 extends StatelessWidget {
+class StartFreshPage4 extends GetView<StartFreshController> {
   const StartFreshPage4({super.key});
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    
     return Center(
       child: screenWidth > screenHeight
           ? webDisplay(screenWidth)
@@ -15,48 +18,59 @@ class StartFreshPage4 extends StatelessWidget {
     );
   }
 
-  Container webDisplay(double screenWidth) {
-    return Container(
-      child: Row(
-        children: [
-          const Spacer(),
-          Image.network(
-            "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+  Widget webDisplay(double screenWidth) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Spacer(),
+        Image.network(
+          "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+          height: screenWidth * 0.2,
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) => SizedBox(
             height: screenWidth * 0.2,
-            errorBuilder: (context, error, stackTrace) => const SizedBox(
-              height: 250,
-              child: Center(
-                child: Text('Unable to fetch Image.'),
-              ),
+            width: screenWidth * 0.2,
+            child: const Center(
+              child: Text('Unable to fetch Image.'),
             ),
           ),
-          const ChatBubbleContainer(
-            borderRadius: 12,
-            childWidget: Text(
-              "It can be hard to\nstay motivated...",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 23,
-              ),
+        ),
+        const SizedBox(width: 16),
+        const ChatBubbleContainer(
+          borderRadius: 12,
+          childWidget: Text(
+            "It can be hard to\nstay motivated...",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 23,
             ),
-            trianglePosition: TrianglePosition.left,
-            borderWidth: 1,
           ),
-          const SizedBox(
-            height: 25,
-          ),
-          const Spacer(),
-        ],
-      ),
+          trianglePosition: TrianglePosition.left,
+          borderWidth: 1,
+        ),
+        const Spacer(),
+      ],
     );
   }
 
-  Container mobileDisplay() {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 30,
-      ),
+  Widget mobileDisplay() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
           const ChatBubbleContainer(
@@ -71,18 +85,33 @@ class StartFreshPage4 extends StatelessWidget {
             trianglePosition: TrianglePosition.bottom,
             borderWidth: 1,
           ),
+          const SizedBox(height: 16),
           Image.network(
             "https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Images%20and%20Vectors%2FMoneyMonkey%2Fmoney_monkey.png?alt=media&token=28f5bc02-2a06-42e5-94db-5aaeeaaae5f6",
+            height: 250,
+            loadingBuilder: (BuildContext context, Widget child,
+                ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              }
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
             errorBuilder: (context, error, stackTrace) => const SizedBox(
               height: 250,
+              width: 250,
               child: Center(
                 child: Text('Unable to fetch Image.'),
               ),
             ),
           ),
-          const SizedBox(
-            height: 25,
-          ),
+          const SizedBox(height: 25),
           const Spacer(),
         ],
       ),
