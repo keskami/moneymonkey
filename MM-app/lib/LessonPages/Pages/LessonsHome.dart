@@ -235,57 +235,108 @@ class _LessonsHomeState extends State<LessonsHome> {
               child: Container(
                 color: LightTheme().primaryBackgroundColor,
               )),
-          // 2) Pinned heading at top-left
           Positioned(
             top: screenHeight * 0.05,
             left: screenWidth * 0.025,
-            height: 120,
+            height: 120, // Slightly increased height
             width: screenWidth * 0.45,
             child: Container(
               margin: EdgeInsets.fromLTRB(
                   screenWidth * 0.02, 0, screenWidth * 0.02, 0),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.all(20), // More generous padding
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16), // More rounded corners
+                color: LightTheme().primaryBlue,
+                // Add modern shadow and gradient
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    LightTheme().primaryBlue,
+                    LightTheme().primaryBlue.withOpacity(0.8),
+                  ],
+                ),
+              ),
               child: Row(
                 children: [
-                  // Lesson title
+                  // Content section with better typography hierarchy
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          unitTitle,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        // Unit indicator with badge style
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            unitTitle.isNotEmpty ? unitTitle : 'Unit ${_currentUnitId}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.5,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 12),
+                        // Current lesson with larger, cleaner text
                         Text(
-                          _currentLessonTitle,
+                          _currentLessonTitle.isNotEmpty ? _currentLessonTitle : 'Loading...',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 24,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            height: 1.2, // Better line spacing
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  // Back arrow
-                  GestureDetector(
-                    onTap: () => _onBackArrowTap(_currentUnitId),
-                    child: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 28,
+                  const SizedBox(width: 12),
+                  // Modern back button with circular background
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(24),
+                        onTap: () => _onBackArrowTap(_currentUnitId),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new, // More modern arrow
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: LightTheme().primaryBlue),
             ),
           ),
 

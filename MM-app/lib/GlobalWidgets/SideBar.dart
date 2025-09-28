@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/LessonPages/Controllers/HomePagesController.dart';
+import 'package:money_monkey/Settings/Pages/settings.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({Key? key}) : super(key: key);
@@ -108,17 +109,28 @@ class SideBar extends StatelessWidget {
   Widget _buildBottomSection(BuildContext context, bool isExpanded) {
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: Row(
-        children: [
-          const Icon(Icons.settings_outlined, color: Colors.grey),
-          if (isExpanded) ...[
-            const SizedBox(width: 15),
-            const Text(
-              'Settings',
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
-        ],
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            // Navigate to settings page
+            Get.to(() => ProfileSettingsPage());
+            // OR use named routes if you prefer:
+            // Get.toNamed('/settings');
+          },
+          child: Row(
+            children: [
+              const Icon(Icons.settings_outlined, color: Colors.grey),
+              if (isExpanded) ...[
+                const SizedBox(width: 15),
+                const Text(
+                  'Settings',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }
