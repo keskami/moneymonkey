@@ -130,9 +130,7 @@ class _MCQPageState extends State<MCQPage> {
         const SizedBox(
           width: 10,
         ),
-        Container(
-          height: screenHeight * 0.5,
-          child: Expanded(
+          Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: widget.options.map((answer) {
@@ -162,7 +160,6 @@ class _MCQPageState extends State<MCQPage> {
               ),
             ),
           ),
-        ),
         SizedBox(
           height: screenHeight * 0.1,
         ),

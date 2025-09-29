@@ -47,10 +47,10 @@ export default function Navbar() {
             {/* Right-Aligned Register and Login Links */}
             <div className={styles.desktopNavRegister}>
                 {/* Right-Aligned Register and Login Links */}
-                <div className={styles.desktopNavRegister}>
-                    <a href="/register" className={styles.signInLink}>Register</a>
-                    <a href="/login" className={styles.registerButton}>Login</a>
-                </div>
+            <div className={styles.desktopNavRegister}>
+                <a href="https://money-monkey-f4d73.web.app/" className={styles.signInLink}>Register</a>
+                <a href="https://money-monkey-f4d73.web.app/" className={styles.registerButton}>Login</a>
+            </div>
             </div>
 
             {/* Mobile Hamburger */}
