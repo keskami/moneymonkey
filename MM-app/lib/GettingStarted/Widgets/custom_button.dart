@@ -8,11 +8,13 @@ class Custombutton extends StatelessWidget {
     required this.color,
     required this.isBordered,
     required this.toNextPage,
+    this.fontSize = 25.0,
   });
   final String text;
   final Color color;
   final bool isBordered;
   final Function() toNextPage;
+  final double fontSize;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,7 +44,7 @@ class Custombutton extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 25,
+              fontSize: fontSize,
               fontWeight: FontWeight.w600,
               color: isBordered
                   ? Colors.black

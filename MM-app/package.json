@@ -17,6 +17,7 @@
     "firebase-tools": "^13.23.1"
   },
   "dependencies": {
+    "firebase-admin": "^13.5.0",
     "moneymonkey-1": "file:"
   }
 }

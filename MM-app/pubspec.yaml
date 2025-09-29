@@ -7,17 +7,20 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  
+  animated_text_kit: ^4.2.2
   flutter:
     sdk: flutter
-  firebase_core: ^3.5.0
-  cloud_firestore: ^5.4.2  # Downgrade to this version
+  firebase_core: ^4.1.1
+  cloud_firestore: ^6.0.2
 
-  firebase_auth: ^5.3.0
-  google_sign_in: ^6.1.5
-  firebase_storage: ^12.3.2
+    # Downgrade to this version
+
+  firebase_auth: ^6.1.0
+  firebase_storage: ^13.0.2
   cupertino_icons: ^1.0.8
   #firebase
   flutter_localizations:
@@ -25,11 +28,11 @@ dependencies:
   cached_network_image: ^3.3.0
   flutter_svg: ^2.0.9
   get: ^4.6.6
-  swipable_stack: ^0.2.1
+  swipable_stack: ^2.0.0
   flip_card: ^0.7.0
   swipeable_card_stack: ^0.0.5
   google_fonts: ^6.2.1
-  fl_chart: ^0.69.0
+  fl_chart: ^1.1.1
   confetti: ^0.8.0
   lottie: ^3.1.2
   webview_flutter: ^4.10.0
@@ -38,8 +41,21 @@ dependencies:
   url_launcher: ^6.3.1
   aligned_dialog: ^0.0.7
   shimmer: ^3.0.0
-  syncfusion_flutter_gauges: ^27.1.58
+  syncfusion_flutter_gauges: ^31.1.21
   align_positioned: ^5.0.1
+  permission_handler: ^12.0.1
+  dio: ^5.7.0
+  open_filex: ^4.6.0
+  path_provider: ^2.1.5
+  flutter_chat_bubble: ^2.0.2
+  flutter_popup: ^3.3.0
+  table_calendar: ^3.1.3
+  syncfusion_flutter_charts: ^31.1.21
+  shared_preferences: ^2.5.2
+  connectivity_plus: ^7.0.0
+  get_storage: ^2.1.1
+  flutter_dotenv: ^6.0.0
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +65,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/images/HomeWorkPage.png
+    - assets/images/BudgetSimulator.png
     - assets/sample_stock_data.json
     - assets/images/banknote.png
     - assets/images/bigbanana.png
@@ -144,6 +162,25 @@ flutter:
     - assets/images/money-manager.svg
     - assets/images/savings-jar.svg
     - assets/images/price-tags.svg
+    - assets/images/newMonkeys/Maria.png
+    - assets/images/newMonkeys/Ava.png
+    - assets/images/newMonkeys/Jason.png
+    - assets/images/newMonkeys/check.png
+    - assets/images/newMonkeys/Minty.png
+    - assets/images/lfwLessonPage5/piggy.png
+    - assets/images/lfwLessonPage5/house.png
+    - assets/images/lfwLessonPage5/grad.png
+    - assets/images/lfwLessonPage5/bubble.png
+    - assets/images/lfwLessonPage5/bubble2.png
+    - assets/images/lfwLessonPage5/check.png
+    - assets/images/budgetSim/blueSquare.png
+    - "assets/lessonFlow/bulb.png"
+    - "assets/lessonFlow/brain.png"
+    - "assets/lessonFlow/book_flip.png"
+    - "assets/lessonFlow/briefcase.png"
+    - "assets/lessonFlow/recycle.png"
+    - assets/images/LOGO.png
+    - assets/images/budget_simulator.png
 
   fonts:
     - family: Baloo 2

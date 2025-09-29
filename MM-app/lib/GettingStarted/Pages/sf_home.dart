@@ -3,28 +3,47 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Pages/QuizPages/questions.dart';
 import 'package:money_monkey/GettingStarted/Pages/su_home.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/Widgets/progress_bar.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/GettingStarted/controller/start_fresh_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
-class StartFreshHome extends StatefulWidget {
+class StartFreshHome extends GetView<StartFreshController> {
   StartFreshHome({super.key});
 
   @override
-  State<StartFreshHome> createState() => _StartFreshHomeState();
+  Widget build(BuildContext context) {
+    return _StartFreshHomeView();
+  }
 }
 
-class _StartFreshHomeState extends State<StartFreshHome> {
-  final StartFreshController startFreshController =
-      Get.put(StartFreshController());
+class _StartFreshHomeView extends StatefulWidget {
+  @override
+  State<_StartFreshHomeView> createState() => _StartFreshHomeViewState();
+}
+
+class _StartFreshHomeViewState extends State<_StartFreshHomeView> {
+  // ✅ Find controllers that were created by the binding
+  late final StartFreshController startFreshController;
 
   bool _isNextButtonEnabled = false;
 
   @override
+  void initState() {
+    super.initState();
+    startFreshController= Get.put(StartFreshController());
+
+  }
+
+  @override
+  void dispose() {
+    Get.delete<StartFreshController>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    GettingStartedController gettingStartedController = Get.find();
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: LightTheme().primaryGreen,
@@ -36,6 +55,7 @@ class _StartFreshHomeState extends State<StartFreshHome> {
       int currentIndex = startFreshController.pageIndex.value;
       print(_isNextButtonEnabled);
       print(currentIndex);
+      
       if (currentIndex + 1 == 1 &&
           startFreshController.learningGoal.value > 20) {
         setState(() {
@@ -44,26 +64,23 @@ class _StartFreshHomeState extends State<StartFreshHome> {
       } else {
         _isNextButtonEnabled = true;
       }
+      
       if (currentIndex + 1 == 3) {
         if (startFreshController.startingFresh.value == 2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => QuizHome(),
-            ),
-          );
-        } else if (startFreshController.startingFresh.value == 1) {
-          gettingStartedController.knowledgeLevel.value = 1;
+          // ✅ Use GetX navigation for consistency
+          Get.to(() => QuizHome());
+          return;
         }
       }
+      
+      // Update the navigation in your start fresh flow
       if (currentIndex + 1 > 4) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignUpDetailsHome(),
-            ));
+        Get.to(
+          () => SignUpDetailsHome(),
+        );
         return;
       }
+      
       startFreshController.pageIndex.value += 1;
     }
 
@@ -72,112 +89,114 @@ class _StartFreshHomeState extends State<StartFreshHome> {
       if (currentIndex > 0) {
         startFreshController.pageIndex.value -= 1;
       } else {
-        Navigator.pop(context);
+        // ✅ Use GetX navigation for consistency
+        Get.back();
       }
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: LightTheme().primaryBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Obx(
-              () {
-                if (startFreshController.pageIndex < 5) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        onPressed: toPreviousPage,
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          size: 37,
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    
+    return Obx(
+      () => Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: LightTheme().primaryBackgroundColor,
+        body: Padding(
+          padding: EdgeInsets.all(screenWidth * 0.02),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Obx(
+                () {
+                  if (startFreshController.pageIndex < 5) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Spacer(),
+                        IconButton(
+                          onPressed: toPreviousPage,
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            size: 37,
+                          ),
                         ),
-                      ),
-                      const Expanded(
-                        child: CustomProgressBar(
-                          page: 0,
+                        Container(
+                          width: screenWidth * 0.8,
+                          child: CustomProgressBar(
+                            page: 0,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                    ],
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
-            Expanded(
-              child: Obx(() {
-                int pageIndex = startFreshController.pageIndex.value;
-                if (pageIndex < startFreshController.pages.length) {
-                  return startFreshController.pages[pageIndex];
-                } else {
-                  return const Center(child: Text('Invalid page index'));
-                }
-              }),
-            ),
-          ],
+                        const Spacer(),
+                      ],
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+              Expanded(
+                child: Obx(() {
+                  int pageIndex = startFreshController.pageIndex.value;
+                  if (pageIndex < startFreshController.pages.length) {
+                    return startFreshController.pages[pageIndex];
+                  } else {
+                    return const Center(child: Text('Invalid page index'));
+                  }
+                }),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: Obx(
-        () {
-          if (startFreshController.pageIndex.value == 0 &&
-              startFreshController.learningGoal.value > 20) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
+        floatingActionButton: Obx(
+          () {
+            if (startFreshController.pageIndex.value == 0 &&
+                startFreshController.learningGoal.value > 20) {
+              return Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
                   isEnabled: false,
                   nextPage: toNextPage,
                 ),
-              ),
-            );
-          } else if (startFreshController.pageIndex.value == 2 &&
-              startFreshController.startingFresh.value == 0) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
+              );
+            } else if (startFreshController.pageIndex.value == 2 &&
+                startFreshController.startingFresh.value == 0) {
+              return Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
                   isEnabled: false,
                   nextPage: toNextPage,
                 ),
-              ),
-            );
-          } else if (startFreshController.pageIndex.value == 2) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
+              );
+            } else if (startFreshController.pageIndex.value == 2) {
+              return Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
                   isEnabled: true,
                   nextPage: toNextPage,
                 ),
-              ),
-            );
-          } else if (startFreshController.pageIndex.value >= 0 &&
-              startFreshController.pageIndex.value <
-                  startFreshController.pages.length) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
+              );
+            } else if (startFreshController.pageIndex.value >= 0 &&
+                startFreshController.pageIndex.value <
+                    startFreshController.pages.length) {
+              return Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: NextButton(
                   isEnabled: true,
                   nextPage: toNextPage,
                 ),
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+        ),
+        floatingActionButtonLocation: screenWidth < screenHeight
+            ? FloatingActionButtonLocation.centerDocked
+            : startFreshController.pageIndex.value == 3 ||
+                    startFreshController.pageIndex.value == 4
+                ? FloatingActionButtonLocation.centerDocked
+                : FloatingActionButtonLocation.endFloat,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

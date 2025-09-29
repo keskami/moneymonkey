@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GettingStarted/Pages/sf_home.dart';
-import 'package:money_monkey/GettingStarted/Widgets/next_button.dart';
+import 'package:money_monkey/GettingStarted/Widgets/continue_button.dart';
 import 'package:money_monkey/GettingStarted/controller/intro_pages_controller.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
@@ -14,14 +14,16 @@ class GettingStartedHome extends StatefulWidget {
 }
 
 class _GettingStartedHomeState extends State<GettingStartedHome> {
-  final GettingStartedController gettingStartedController =
-      Get.put(GettingStartedController());
-
+  // ✅ Controller will be created in initState
+  late final GettingStartedController gettingStartedController;
+  
   bool _isKeyboardVisible = false;
 
   @override
   void initState() {
     super.initState();
+    gettingStartedController = Get.put(GettingStartedController());
+    
     KeyboardVisibilityController().onChange.listen((bool visible) {
       setState(() {
         _isKeyboardVisible = visible;
@@ -29,14 +31,20 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
     });
   }
 
+  @override
+  void dispose() {
+    // ✅ Clean up when leaving this flow
+    Get.delete<GettingStartedController>();
+    super.dispose();
+  }
+
   void toNextPage() {
     int currentIndex = gettingStartedController.pageIndex.value;
-    if (currentIndex + 1 == 5) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StartFreshHome(),
-          ));
+    if (currentIndex + 1 == 4) {
+      // ✅ Use GetX navigation with binding
+      Get.to(
+        () => StartFreshHome(),
+      );
       return;
     }
     gettingStartedController.pageIndex.value += 1;
@@ -44,6 +52,9 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: LightTheme().primaryBackgroundColor,
@@ -89,7 +100,9 @@ class _GettingStartedHomeState extends State<GettingStartedHome> {
           return const SizedBox.shrink();
         }
       }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: screenWidth > screenHeight
+          ? FloatingActionButtonLocation.endFloat
+          : FloatingActionButtonLocation.centerDocked,
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/Lesson Flow/Widgets/lesson_card.dart';
 import 'package:money_monkey/Lesson Flow/controller/controller.dart';
-import 'package:money_monkey/Lesson%20Flow/Widgets/custom_app_bar.dart';
 
 class LessonPage extends StatelessWidget {
   final ProgressController progressController = Get.put(ProgressController());
@@ -18,8 +17,8 @@ class LessonPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0XFFFFFFFF),
-        appBar: CustomAppBar(
-            progressController: progressController), // Custom app bar
+        //appBar: CustomAppBar(
+        //progressController: progressController), // Custom app bar
         body: Center(
           child: Padding(
             padding: EdgeInsets.symmetric(

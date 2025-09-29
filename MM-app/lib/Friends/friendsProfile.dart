@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:money_monkey/Backend/Models/user_data.dart';
+import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/firestore_service.dart';
 import 'package:money_monkey/Friends/Widgets/add_friends_button_friends.dart';
 import 'package:money_monkey/Friends/Widgets/custom_stat_friends.dart';
 import 'package:money_monkey/Lesson%20Flow/Screens/home.dart';
 import 'package:money_monkey/PortfolioPages/portfolio_screen.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
+import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 
 import '../Profile/profile_page.dart';
@@ -25,7 +26,7 @@ class _friendProfileState extends State<friendProfile> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
 
-  UserData? userData;
+  Student? userData;
   bool isLoading = true;
   late bool isFollowing = false;
   final FirestoreService firestoreService = FirestoreService();
@@ -331,7 +332,7 @@ class _friendProfileState extends State<friendProfile> {
         });
         if (_currentIndex == 0) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => HomePage(),
           ));
         } else if (_currentIndex == 1) {
           Navigator.of(context).push(MaterialPageRoute(

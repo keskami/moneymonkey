@@ -14,6 +14,8 @@ class CustomSignInButton extends StatelessWidget {
   final Function() toNextPage;
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: toNextPage,
       child: Container(
@@ -36,7 +38,9 @@ class CustomSignInButton extends StatelessWidget {
             10,
           ),
         ),
-        width: double.infinity,
+        height:
+            screenWidth > screenHeight ? screenHeight * 0.1 : double.infinity,
+        width: screenWidth > screenHeight ? screenWidth * 0.4 : double.infinity,
         child: Center(
           child: child,
         ),

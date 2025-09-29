@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../Models/stock_data.dart';
+import '../Models/StockData.dart';
 
 class StockService {
   static const String apiKey = 'NWARSDS78TNT8VN1';

@@ -41,6 +41,13 @@
   font-size: large;
 }
 
+.desktopNavP {
+  font-family: "Baloo 2", sans-serif;
+  text-decoration: none;
+  color: #333;
+  font-size: large;
+}
+
 /* Right-Aligned Register and Login Links */
 /* Update these styles in your Navbar.module.css */
 .desktopNavRegister {
