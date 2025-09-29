@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Loading%20Widgets/shimmer_loading_container.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/CacheServices.dart';
+import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
 import 'package:money_monkey/Profile/Widgets/add_friends_button.dart';
 import 'package:money_monkey/Profile/Widgets/share_button.dart';
 import 'package:money_monkey/Settings/Pages/settings.dart';
@@ -27,12 +29,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Student? userData;
   bool isLoading = true;
   final StudentProfileService profileService = StudentProfileService();
+  Worker? _refreshWorker;
 
-  void getUserInfo() async {
+  void getUserInfo({bool forceRefresh = false}) async {
     try {
       if (userID != null) {
-        // Use offline-first loading for instant response
-        userData = await profileService.loadProfileOfflineFirst(userID!);
+        // Use forceRefresh when triggered by completion events
+        userData = forceRefresh
+            ? await profileService.loadProfileWithCache(userID!, forceRefresh: true)
+            : await profileService.loadProfileOfflineFirst(userID!);
       }
     } catch (e) {
       debugPrint("Error fetching user data: $e");
@@ -132,7 +137,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     getUserInfo();
+    
+    // Set up the refresh listener - same pattern as LessonsHomeUnit
+    if (Get.isRegistered<LessonRefreshController>()) {
+      _refreshWorker = ever(Get.find<LessonRefreshController>().shouldRefresh, (_) {
+        if (mounted) {
+          debugPrint('🔄 Profile refresh triggered, reloading from Firebase...');
+          setState(() {
+            isLoading = true; // Optional: show loading state during refresh
+          });
+          getUserInfo(forceRefresh: true); // Force refresh from Firebase
+        }
+      });
+    }
   }
+
+  @override
+  void dispose() {
+    _refreshWorker?.dispose(); // Clean up the listener
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

@@ -89,10 +89,6 @@ class _SignUpDetailsHomeViewState extends State<_SignUpDetailsHomeView> {
     //     ),
     //   );
     //   return;
-    } else if (currentIndex == 2 &&
-        !(await AuthService()
-            .checkEmailUsed(signUpController.email.value, context))) {
-      return;
     } else if (currentIndex == 3 &&
         (signUpController.password.value.isEmpty ||
             signUpController.password.value.length < 6)) {

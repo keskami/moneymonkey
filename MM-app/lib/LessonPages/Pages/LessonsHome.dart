@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/AcademicServices.dart';
 import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
+import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonHomeUnit.dart';
 import 'package:money_monkey/GlobalWidgets/Scoreboard.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -24,16 +26,19 @@ class _LessonsHomeState extends State<LessonsHome> {
 
   // For illustration, assume each "lesson block" is ~400px tall
   final double _lessonBlockHeight = 700;
-
+  
   @override
   void initState() {
     super.initState();
     _loadData();
-
-    if (lessons.isNotEmpty) {
-      _currentLessonTitle = lessons.first.title;
-    }
     _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);  // Add this - clean up listener
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -57,9 +62,12 @@ class _LessonsHomeState extends State<LessonsHome> {
         }
       }
 
-      // Update the state with loaded lessons
       setState(() {
         lessons = loadedLessons;
+        // Set initial lesson title when lessons are loaded
+        if (loadedLessons.isNotEmpty) {
+          _currentLessonTitle = loadedLessons.first.title;
+        }
       });
     } catch (e) {
       print('Error loading unit data: $e');

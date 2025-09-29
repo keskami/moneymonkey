@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/CacheServices.dart';
 import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
+import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,12 +25,29 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
   final StudentProfileService _profileService = StudentProfileService();
   String? _currentProgress;
   bool _isLoading = true;
+  Worker? _refreshWorker;
 
   @override
   void initState() {
     super.initState();
     _loadUserProgress();
     _pageFutures = widget.lessons.map((lesson) => _getPages(lesson.components)).toList();
+
+    // Listen for refresh triggers - THIS IS THE KEY PART
+    if (Get.isRegistered<LessonRefreshController>()) {
+      _refreshWorker = ever(Get.find<LessonRefreshController>().shouldRefresh, (_) {
+        if (mounted) {
+          debugPrint('🔄 Refresh triggered, reloading progress from Firebase with forceRefresh...');
+          _loadUserProgress(forceRefresh: true); // Force refresh from Firebase
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _refreshWorker?.dispose(); // <-- This is where it's used (cleanup)
+    super.dispose();
   }
 
   @override
@@ -39,23 +58,30 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
     }
   }
 
-  Future<void> _loadUserProgress() async {
+  Future<void> _loadUserProgress({bool forceRefresh = false}) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
       return;
     }
 
     try {
-      final student = await _profileService.loadProfileOfflineFirst(userId);
-      setState(() {
-        _currentProgress = student.progress;
-        _isLoading = false;
-      });
-      debugPrint('Current user progress: $_currentProgress');
+      // Use loadProfileWithCache which respects forceRefresh
+      final student = await _profileService.loadProfileWithCache(
+        userId, 
+        forceRefresh: forceRefresh  // This will bypass cache when true
+      );
+          
+      if (mounted) {
+        setState(() {
+          _currentProgress = student.progress;
+          _isLoading = false;
+        });
+      }
+      debugPrint('✅ Loaded progress: $_currentProgress');
     } catch (e) {
-      debugPrint('Error loading user progress: $e');
-      setState(() => _isLoading = false);
+      debugPrint('❌ Error loading user progress: $e');
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 

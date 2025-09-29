@@ -1,194 +1,354 @@
-// services/lesson_progress_service.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:money_monkey/Backend/Services/CacheServices.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:money_monkey/Backend/Services/game_mechanics_service.dart';
+import 'package:money_monkey/Backend/Services/lesson_progress_service.dart';
+import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
+import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
+import 'package:money_monkey/LessonPages/Widgets/NextButton.dart';
+import 'package:money_monkey/themes/color_themes.dart';
 
-class LessonProgressService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final StudentProfileService _profileService = StudentProfileService();
+class CelebrationScreen extends StatefulWidget {
+  final String completedLessonId;
+  
+  const CelebrationScreen({
+    super.key,
+    required this.completedLessonId,
+  });
 
-  /// Calculates the next lesson based on completed lesson
-  /// Format: A.1.1.1 -> A.1.1.3 -> A.1.1.5 -> A.1.1.6 -> A.1.2.1 -> ... -> A.2.2.4
-  String calculateNextLesson(String completedLesson) {
-    // Parse completed lesson (e.g., "A.1.1.1")
-    final parts = completedLesson.split('.');
-    if (parts.length != 4) {
-      debugPrint('Invalid lesson format: $completedLesson');
-      return 'A.1.1.1'; // Default to first lesson
-    }
-
-    String level = parts[0]; // A, B, C, etc.
-    int unit = int.tryParse(parts[1]) ?? 1;
-    int section = int.tryParse(parts[2]) ?? 1;
-    int lesson = int.tryParse(parts[3]) ?? 1;
-
-    // Increment lesson based on the pattern: 1 -> 3 -> 5 -> 6 -> next section
-    if (lesson == 1) {
-      lesson = 3;
-    } else if (lesson == 3) {
-      lesson = 5;
-    } else if (lesson == 5) {
-      lesson = 6;
-    } else if (lesson == 6) {
-      // Move to next section, start at lesson 1
-      lesson = 1;
-      section++;
-    } else {
-      // Unexpected lesson number, default to next odd number
-      lesson = lesson + 2;
-      if (lesson > 6) {
-        lesson = 1;
-        section++;
-      }
-    }
-
-    // If section exceeds 2, move to next unit
-    if (section > 2) {
-      section = 1;
-      unit++;
-    }
-
-    // If unit exceeds 2, move to next level (A -> B -> C, etc.)
-    if (unit > 2) {
-      unit = 1;
-      section = 1;
-      lesson = 1;
-      // Move to next level
-      level = String.fromCharCode(level.codeUnitAt(0) + 1);
-    }
-
-    return '$level.$unit.$section.$lesson';
-  }
-
-  /// Updates lesson progress and streak for a user
-  Future<bool> updateLessonProgress(String userId, String currentProgress) async {
-    try {
-      debugPrint('📚 Updating lesson progress for user: $userId');
-      debugPrint('Current progress: $currentProgress');
-
-      // Calculate next lesson
-      final nextLesson = calculateNextLesson(currentProgress);
-      debugPrint('Next lesson: $nextLesson');
-
-      // Get current student profile
-      final currentProfile = await _profileService.loadProfileWithCache(userId);
-      
-      // Check streak status (don't auto-increment here)
-      final streakResult = await checkStreak(userId);
-      
-      // Update profile with new progress (streak updated by checkStreak if needed)
-      final updatedProfile = currentProfile.copyWith(
-        progress: nextLesson,
-        profile: currentProfile.profile.copyWith(
-          streak: streakResult.newStreak,
-        ),
-      );
-
-      // Save the updated profile (includes cache update)
-      await _profileService.updateProfileOptimistic(userId, updatedProfile);
-
-      // Update last completion timestamp for today
-      await _updateLastCompletionDate(userId);
-
-      debugPrint('✅ Progress updated successfully');
-      debugPrint('📈 New progress: $nextLesson');
-      debugPrint('🔥 Streak: ${streakResult.newStreak} days');
-      
-      return true;
-      
-    } catch (e) {
-      debugPrint('❌ Error updating lesson progress: $e');
-      return false;
-    }
-  }
-
-  /// Updates the last completion timestamp in Firestore
-  Future<void> _updateLastCompletionDate(String userId) async {
-    try {
-      await _firestore.collection('users').doc(userId).update({
-        'lastCompletionDate': FieldValue.serverTimestamp(),
-      });
-      
-      debugPrint('📅 Updated last completion date');
-      
-    } catch (e) {
-      debugPrint('❌ Error updating last completion date: $e');
-      // Don't throw - this is metadata that shouldn't break the flow
-    }
-  }
-
-  /// Checks streak status based on last completion date
-  Future<StreakResult> checkStreak(String userId) async {
-    try {
-      final doc = await _firestore.collection('users').doc(userId).get();
-      final data = doc.data();
-      
-      if (data == null || !data.containsKey('lastCompletionDate')) {
-        // No previous completion, start fresh
-        return StreakResult(newStreak: 1, isNewStreak: true);
-      }
-
-      final lastCompletionTimestamp = data['lastCompletionDate'] as Timestamp;
-      final lastCompletionDate = lastCompletionTimestamp.toDate();
-      
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-      final lastDate = DateTime(
-        lastCompletionDate.year,
-        lastCompletionDate.month,
-        lastCompletionDate.day,
-      );
-
-      final daysDifference = today.difference(lastDate).inDays;
-
-      final student = await _profileService.loadProfileWithCache(userId);
-      final currentStreak = student.profile.streak;
-
-      if (daysDifference == 0) {
-        // Completed today already, maintain streak
-        return StreakResult(newStreak: currentStreak, isNewStreak: false);
-      } else if (daysDifference == 1) {
-        // Completed yesterday, increment streak
-        return StreakResult(newStreak: currentStreak + 1, isNewStreak: true);
-      } else {
-        // Missed a day, reset streak to 1
-        return StreakResult(newStreak: 1, isNewStreak: true, streakBroken: true);
-      }
-      
-    } catch (e) {
-      debugPrint('❌ Error checking streak: $e');
-      // Return safe default
-      return StreakResult(newStreak: 1, isNewStreak: true);
-    }
-  }
-
-  /// Gets the user's current progress
-  Future<String> getCurrentProgress(String userId) async {
-    try {
-      final student = await _profileService.loadProfileWithCache(userId);
-      return student.progress;
-    } catch (e) {
-      debugPrint('❌ Error getting current progress: $e');
-      return 'A.1.1.1'; // Default to first lesson
-    }
-  }
-
-  /// Validates if a progress string is in correct format
-  bool isValidProgress(String progress) {
-    final regex = RegExp(r'^[A-Z]\.\d+\.\d+\.\d+$');
-    return regex.hasMatch(progress);
-  }
+  @override
+  State<CelebrationScreen> createState() => _CelebrationScreenState();
 }
 
-/// Result of streak calculation
-class StreakResult {
-  final int newStreak;
-  final bool isNewStreak;
-  final bool streakBroken;
+class _CelebrationScreenState extends State<CelebrationScreen> {
+  final RewardService _rewardService = RewardService();
+  final LessonProgressService _progressService = LessonProgressService();
+  
+  bool _rewardAwarded = false;
+  bool _progressUpdated = false;
+  bool _isProcessing = false;
+  final int _bananasEarned = 10;
+  
+  String? _nextProgress;
+  int? _newStreak;
+  bool _streakIncreased = false;
+  bool _streakBroken = false;
 
-  StreakResult({
-    required this.newStreak,
-    required this.isNewStreak,
-    this.streakBroken = false,
-  });
+  @override
+  void initState() {
+    super.initState();
+    _processLessonCompletion();
+  }
+
+  Future<void> _processLessonCompletion() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    setState(() {
+      _isProcessing = true;
+    });
+
+    try {
+      debugPrint('Completed lesson: ${widget.completedLessonId}');
+      
+      _nextProgress = _progressService.calculateNextLesson(widget.completedLessonId);
+      debugPrint('Next lesson will be: $_nextProgress');
+
+      final rewardSuccess = await _rewardService.award10Bananas(
+        userId, 
+        'Lesson ${widget.completedLessonId} completion'
+      );
+
+      final progressSuccess = await _progressService.updateLessonProgress(
+        userId,
+        widget.completedLessonId,
+      );
+
+      final streakResult = await _progressService.checkStreak(userId);
+      
+      setState(() {
+        _rewardAwarded = rewardSuccess;
+        _progressUpdated = progressSuccess;
+        _newStreak = streakResult.newStreak;
+        _streakIncreased = streakResult.isNewStreak;
+        _streakBroken = streakResult.streakBroken;
+      });
+
+      if (rewardSuccess && progressSuccess) {
+        _showSuccessMessage();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Some updates failed. Please check your progress.'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error processing lesson completion: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isProcessing = false;
+      });
+    }
+  }
+
+  void _showSuccessMessage() {
+    if (_streakIncreased && !_streakBroken) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Text('🔥 ', style: TextStyle(fontSize: 20)),
+              Expanded(
+                child: Text(
+                  'Streak increased to $_newStreak days!',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.orange[700],
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    } else if (_streakBroken) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Streak reset. Start a new one today!'),
+          backgroundColor: Colors.blue,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  void _navigateToHome() {
+    if (Get.isRegistered<BaseLessonController>()) {
+      Get.delete<BaseLessonController>();
+    }
+    
+    if (Get.isRegistered<LessonRefreshController>()) {
+      Get.find<LessonRefreshController>().triggerRefresh();
+    }
+    
+    Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF007FFF),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      '🎉 Lesson Complete! 🎉',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 40),
+                    Center(
+                      child: Container(
+                        width: 400,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 15,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: SizedBox(
+                              width: 300,
+                              height: 300,
+                              child: Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/money-monkey-f4d73.appspot.com/o/Gifs%2Fcelebration_animation_GIF.gif?alt=media&token=10d648af-02e3-4c34-8672-71d38133adfa',
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Container(
+                                    width: 300,
+                                    height: 300,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    width: 300,
+                                    height: 300,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.celebration,
+                                        size: 100,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    Container(
+                      width: 300,
+                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+                      decoration: BoxDecoration(
+                        color: _isProcessing 
+                            ? Colors.grey[400] 
+                            : const Color(0xFF8BC34A),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _isProcessing 
+                              ? Colors.grey[600]! 
+                              : const Color(0xFF689F38),
+                          width: 3,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            _isProcessing ? 'PROCESSING...' : 'BANANAS EARNED',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          if (_isProcessing)
+                            const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          else
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('🍌', style: TextStyle(fontSize: 28)),
+                                const SizedBox(width: 12),
+                                Text(
+                                  '$_bananasEarned',
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          if (!_isProcessing) ...[
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  _rewardAwarded ? Icons.check_circle : Icons.error,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  _rewardAwarded ? 'Reward added' : 'Reward failed',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  _progressUpdated ? Icons.check_circle : Icons.error,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  _progressUpdated ? 'Progress updated' : 'Progress failed',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 60),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              right: 20,
+              bottom: 20,
+              child: ElevatedButton(
+                onPressed: _navigateToHome,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: LightTheme().pastelGreen,
+                  padding: EdgeInsets.zero,
+                ),
+                child: CustomNextButton(
+                  nextPage: _navigateToHome,
+                  isEnabled: true,
+                  text: "Finish",
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

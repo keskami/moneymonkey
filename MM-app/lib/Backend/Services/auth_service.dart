@@ -16,44 +16,6 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final StudentProfileService _profileService = StudentProfileService();
 
-
-  /// Checks if an email is already in use
-  Future<bool> checkEmailUsed(String email, BuildContext context) async {
-    if (!Get.isRegistered<SignUpController>()) {
-      _showSnackBar(context, "Internal error: SignUp flow not initialized.", Colors.red);
-      return false;
-    }
-    final SignUpController signUpController = Get.find<SignUpController>();
-    signUpController.isLoading.value = true;
-    
-    if (!email.isEmail) {
-      _showSnackBar(context, "Enter a valid email.", Colors.red);
-      signUpController.isLoading.value = false;
-      return false;
-    }
-
-    try {
-      // Use the new collection name and field structure
-      final emailSnapshot = await _firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .get();
-
-      if (emailSnapshot.docs.isNotEmpty) {
-        _showSnackBar(context, "Email already associated with a user.", Colors.red);
-        signUpController.isLoading.value = false;
-        return false;
-      }
-
-      signUpController.isLoading.value = false;
-      return true;
-    } catch (e) {
-      _showSnackBar(context, "Error checking email: $e", Colors.red);
-      signUpController.isLoading.value = false;
-      return false;
-    }
-  }
-
   /// Signs up a new user with email and password
   Future<bool> signUpUser(BuildContext context) async {
     // Ensure required controllers are registered before attempting signup

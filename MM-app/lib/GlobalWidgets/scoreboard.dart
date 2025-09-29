@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:money_monkey/Backend/Models/StudentData.dart';
 import 'package:money_monkey/Backend/Services/CacheServices.dart';
 import 'package:money_monkey/Backend/Services/game_mechanics_service.dart';
+import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
 
 class ScoreboardWidget extends StatefulWidget {
   const ScoreboardWidget({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class _ScoreboardWidgetState extends State<ScoreboardWidget> {
   Student? _student;
   bool _isLoading = true;
   String? _error;
+  Worker? _refreshWorker;  // Add this
 
   // Daily quest progress (mock data - replace with real quest tracking)
   int _unitsCompleted = 0;
@@ -28,10 +31,27 @@ class _ScoreboardWidgetState extends State<ScoreboardWidget> {
   void initState() {
     super.initState();
     _loadUserData();
-    _checkDailyLoginBonus();
+    
+    // Set up the refresh listener - same pattern as other widgets
+    if (!Get.isRegistered<LessonRefreshController>()) {
+      Get.put(LessonRefreshController());
+    }
+    
+    _refreshWorker = ever(Get.find<LessonRefreshController>().shouldRefresh, (_) {
+      if (mounted) {
+        debugPrint('🔄 Scoreboard refresh triggered, reloading from Firebase...');
+        _loadUserData(forceRefresh: true);
+      }
+    });
   }
 
-  Future<void> _loadUserData() async {
+  @override
+  void dispose() {
+    _refreshWorker?.dispose();  // Clean up the listener
+    super.dispose();
+  }
+
+  Future<void> _loadUserData({bool forceRefresh = false}) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
       setState(() {
@@ -42,8 +62,10 @@ class _ScoreboardWidgetState extends State<ScoreboardWidget> {
     }
 
     try {
-      // Load student profile using offline-first strategy for instant response
-      final student = await _profileService.loadProfileOfflineFirst(userId);
+      // Use forceRefresh when triggered by completion events
+      final student = forceRefresh
+          ? await _profileService.loadProfileWithCache(userId, forceRefresh: true)
+          : await _profileService.loadProfileOfflineFirst(userId);
       
       // Calculate daily quest progress based on student data
       _calculateDailyQuestProgress(student);
@@ -63,26 +85,20 @@ class _ScoreboardWidgetState extends State<ScoreboardWidget> {
     }
   }
 
-  Future<void> _checkDailyLoginBonus() async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      // Award daily login bonus (simple 10 banana reward)
-      try {
-        await _rewardService.award10Bananas(userId, 'Daily login bonus');
-        debugPrint('Daily login bonus awarded');
-      } catch (e) {
-        debugPrint('Failed to award daily login bonus: $e');
-        // Don't show error to user for bonus failures
-      }
-    }
-  }
-
   void _calculateDailyQuestProgress(Student student) {
     // Mock calculation based on student data
     // Replace with actual quest tracking logic from your database
+
+    var units = student.progress.split('.'); // e.g. "A.1.2.3"
+    if (units.length >= 2) {
+      int unitNumber = int.tryParse(units[1]) ?? 1;
+      _unitsCompleted = unitNumber - 1; // Assume each unit completed increments this
+    } else {
+      _unitsCompleted = 0;
+    }
     
     // Example: Based on knowledge level progression
-    _unitsCompleted = (student.knowledgeLevel % 4); // 0-3 units completed today
+    _unitsCompleted = (_unitsCompleted % 3); // 0-3 units completed today
     
     // Example: Based on portfolio score (mock calculation)
     _highScoreLessons = student.profile.portfolioScore > 80 ? 1 : 0;
@@ -118,6 +134,8 @@ class _ScoreboardWidgetState extends State<ScoreboardWidget> {
       }
     }
   }
+
+  // ... rest of your code stays the same
 
   @override
   Widget build(BuildContext context) {

@@ -65,7 +65,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - keys.env
     - assets/images/HomeWorkPage.png
     - assets/images/BudgetSimulator.png
     - assets/sample_stock_data.json
