@@ -148,61 +148,59 @@ class _ScenarioPageState extends State<ScenarioPage> {
               ],
               color: Colors.white,
             ),
-            child: Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: screenHeight * 0.02,
+            child: SingleChildScrollView(  // ✅ Removed Expanded
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: screenHeight * 0.02,
+                  ),
+                  Text(
+                    widget.containerHeading,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
                     ),
-                    Text(
-                      widget.containerHeading,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19,
-                      ),
-                    ).marginSymmetric(horizontal: screenWidth * 0.015),
-                    SizedBox(
-                      height: screenHeight * 0.01,
+                  ).marginSymmetric(horizontal: screenWidth * 0.015),
+                  SizedBox(
+                    height: screenHeight * 0.01,
+                  ),
+                  Text(
+                    widget.containerSubHeading,
+                    softWrap: true,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
-                    Text(
-                      widget.containerSubHeading,
-                      softWrap: true,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ).marginSymmetric(horizontal: screenWidth * 0.015),
-                    SizedBox(
-                      height: screenHeight * 0.01,
-                    ),
-                    ...widget.options.map((answer) {
-                      return GestureDetector(
-                        onTap: () {
-                          answerQuestion(answer);
-                        },
-                        child: OptionsTile(
-                          isSelected: currentAnswers.contains(answer),
-                          childWidget: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 15,
-                            ),
-                            child: Text(
-                              answer,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
+                  ).marginSymmetric(horizontal: screenWidth * 0.015),
+                  SizedBox(
+                    height: screenHeight * 0.01,
+                  ),
+                  ...widget.options.map((answer) {
+                    return GestureDetector(
+                      onTap: () {
+                        answerQuestion(answer);
+                      },
+                      child: OptionsTile(
+                        isSelected: currentAnswers.contains(answer),
+                        childWidget: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 15,
+                          ),
+                          child: Text(
+                            answer,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ],
-                ),
+                      ),
+                    );
+                  }).toList(),
+                ],
               ),
             ),
           ),
