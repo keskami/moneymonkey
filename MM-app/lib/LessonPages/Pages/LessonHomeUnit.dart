@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
+import 'package:money_monkey/Backend/Services/CacheServices.dart';
 import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,10 +20,14 @@ class LessonsHomeUnit extends StatefulWidget {
 
 class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
   late List<Future<List<Widget>>> _pageFutures;
+  final StudentProfileService _profileService = StudentProfileService();
+  String? _currentProgress;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _loadUserProgress();
     _pageFutures = widget.lessons.map((lesson) => _getPages(lesson.components)).toList();
   }
 
@@ -33,6 +39,119 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
     }
   }
 
+  Future<void> _loadUserProgress() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      setState(() => _isLoading = false);
+      return;
+    }
+
+    try {
+      final student = await _profileService.loadProfileOfflineFirst(userId);
+      setState(() {
+        _currentProgress = student.progress;
+        _isLoading = false;
+      });
+      debugPrint('Current user progress: $_currentProgress');
+    } catch (e) {
+      debugPrint('Error loading user progress: $e');
+      setState(() => _isLoading = false);
+    }
+  }
+
+  /// Calculate the current index (0-3) based on student's progress and lesson section
+  /// Returns the index of the current lesson within this section
+  int _calculateCurrentIndex(Lesson lesson) {
+    if (_currentProgress == null || lesson.components.isEmpty) {
+      return 0; // Default to first lesson if no progress
+    }
+
+    // Get the section from the first component (e.g., "A.1.1" from "A.1.1.1")
+    final firstComponent = lesson.components.first;
+    final lessonSection = _extractSection(firstComponent);
+    
+    // Get the section from current progress (e.g., "A.1.1" from "A.1.1.3")
+    final progressSection = _extractSection(_currentProgress!);
+    
+    debugPrint('Lesson section: $lessonSection, Progress section: $progressSection');
+    
+    // Compare sections to determine unlock status
+    final sectionComparison = _compareSections(progressSection, lessonSection);
+    
+    if (sectionComparison > 0) {
+      // Progress is ahead of this section - unlock all lessons
+      debugPrint('Section completed - unlocking all ${lesson.components.length} lessons');
+      return lesson.components.length; // All lessons unlocked
+    } else if (sectionComparison < 0) {
+      // Progress is behind this section - lock all lessons
+      debugPrint('Section locked - no lessons unlocked');
+      return -1; // Changed from 0 to -1
+    } else {
+      // We're in the current section - find the specific lesson
+      final currentIndex = _findLessonIndex(lesson.components, _currentProgress!);
+      debugPrint('In current section - lesson index: $currentIndex');
+      return currentIndex;
+    }
+  }
+
+  /// Extract section from lesson ID (e.g., "A.1.1.1" -> "A.1.1")
+  String _extractSection(String lessonId) {
+    final parts = lessonId.split('.');
+    if (parts.length >= 3) {
+      return '${parts[0]}.${parts[1]}.${parts[2]}';
+    }
+    return lessonId;
+  }
+
+  /// Compare two sections to determine which is ahead
+  /// Returns: -1 if section1 < section2, 0 if equal, 1 if section1 > section2
+  int _compareSections(String section1, String section2) {
+    final parts1 = section1.split('.');
+    final parts2 = section2.split('.');
+    
+    // Compare level (A, B, C...)
+    if (parts1[0] != parts2[0]) {
+      return parts1[0].compareTo(parts2[0]);
+    }
+    
+    // Compare unit
+    final unit1 = int.tryParse(parts1[1]) ?? 0;
+    final unit2 = int.tryParse(parts2[1]) ?? 0;
+    if (unit1 != unit2) {
+      return unit1.compareTo(unit2);
+    }
+    
+    // Compare section
+    final sect1 = int.tryParse(parts1[2]) ?? 0;
+    final sect2 = int.tryParse(parts2[2]) ?? 0;
+    return sect1.compareTo(sect2);
+  }
+
+  /// Find the index of the current lesson within the components list
+  /// Maps: A.X.X.1 -> 0, A.X.X.3 -> 1, A.X.X.5 -> 2, A.X.X.6 -> 3
+  int _findLessonIndex(List<String> components, String progress) {
+    // Extract the lesson number from progress (e.g., "1" from "A.1.1.1")
+    final progressParts = progress.split('.');
+    if (progressParts.length < 4) return 0;
+    
+    final progressLesson = int.tryParse(progressParts[3]) ?? 1;
+    
+    // Map lesson number to index: 1->0, 3->1, 5->2, 6->3
+    final lessonToIndex = {
+      1: 0,
+      3: 1,
+      5: 2,
+      6: 3,
+    };
+    
+    final index = lessonToIndex[progressLesson] ?? 0;
+    
+    // Return index + 1 to indicate "completed up to this point"
+    // e.g., if on lesson 1 (index 0), we've completed 0 lessons
+    // if on lesson 3 (index 1), we've completed lesson 1 (index 0)
+    return index;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -40,12 +159,18 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
     double heightUnit = screenHeight / 1342;
     double widthUnit = screenWidth / 1920;
 
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: widget.lessons.length,
       itemBuilder: (context, index) {
         final lesson = widget.lessons[index];
+        final currentIndex = _calculateCurrentIndex(lesson);
+        
         return FutureBuilder<List<Widget>>(
           future: _pageFutures[index],
           builder: (context, snapshot) {
@@ -56,7 +181,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
             return LessonHomeUnit_NewUI(
               heightUnit: heightUnit,
               widthUnit: widthUnit,
-              currentIndex: 6, // TODO: Replace with actual lesson progress logic
+              currentIndex: currentIndex,
               pageLinks: pageLinks,
               lesson: lesson,
             );
@@ -75,7 +200,10 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
     for (String componentId in componentIds) {
       try {
         final component = await _firebaseService.getComponent(componentId);
-        pagesLink.add(LoadingPageWrapper(type: component.type, componentId: componentId));
+        pagesLink.add(LoadingPageWrapper(
+          type: component.type, 
+          componentId: componentId,
+        ));
       } catch (e) {
         print("Error fetching component $componentId: $e");
         pagesLink.add(Container());
@@ -86,7 +214,6 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
 }
 
 // -------- Merged NewUI Classes --------
-// UI for individual lesson parts with zigzag layout and connectors
 class LessonHomeUnit_NewUI extends StatelessWidget {
   final double heightUnit;
   final double widthUnit;
@@ -109,6 +236,7 @@ class LessonHomeUnit_NewUI extends StatelessWidget {
     final double spacingVal = heightUnit * 215;
     final double boxH = heightUnit * 137;
     final double totalHeight = baseY + spacingVal * (pageLinks.length - 1) + boxH;
+    
     return Container(
       width: widthUnit * 1500,
       height: totalHeight,
@@ -131,6 +259,11 @@ class LessonHomeUnit_NewUI extends StatelessWidget {
                       ? widthUnit * 500
                       : widthUnit * 300;
               final double top = baseY + spacingVal * index;
+              
+              // Determine if this lesson is unlocked or current
+              final isUnlocked = index < currentIndex;
+              final isCurrent = index == currentIndex && currentIndex >= 0;
+              
               return Positioned(
                 top: top,
                 left: left,
@@ -138,14 +271,24 @@ class LessonHomeUnit_NewUI extends StatelessWidget {
                   context,
                   title: 'Lesson Part ${index + 1}',
                   subtitle: lesson.title ?? '',
-                  isUnlocked: currentIndex > index,
-                  isCurrent: currentIndex == index,
+                  isUnlocked: isUnlocked,
+                  isCurrent: isCurrent,
                   heightUnit: heightUnit,
                   widthUnit: widthUnit,
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => link),
-                    );
+                    if (isUnlocked || isCurrent) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => link),
+                      );
+                    } else {
+                      // Show locked message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Complete previous lessons to unlock this one!'),
+                          backgroundColor: Colors.orange,
+                        ),
+                      );
+                    }
                   },
                 ),
               );
@@ -174,7 +317,9 @@ class LessonHomeUnit_NewUI extends StatelessWidget {
         border: Border.all(
             color: isUnlocked
                 ? Color.fromRGBO(25, 160, 18, 1)
-                : Color.fromRGBO(135, 206, 235, 1),
+                : isCurrent
+                    ? Color.fromRGBO(135, 206, 235, 1)
+                    : Color.fromRGBO(178, 182, 182, 1),
             width: 1),
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
@@ -186,7 +331,11 @@ class LessonHomeUnit_NewUI extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(left: widthUnit * 15, top: heightUnit * 10, right: widthUnit * 15),
+        padding: EdgeInsets.only(
+          left: widthUnit * 15, 
+          top: heightUnit * 10, 
+          right: widthUnit * 15
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -201,13 +350,17 @@ class LessonHomeUnit_NewUI extends StatelessWidget {
                   ),
                 ),
                 Icon(
-                  isUnlocked ? Icons.check_circle : Icons.lock,
+                  isUnlocked 
+                      ? Icons.check_circle 
+                      : isCurrent
+                          ? Icons.play_circle_outline
+                          : Icons.lock,
                   color: isUnlocked
                       ? Color.fromRGBO(25, 160, 18, 1)
-                      : !isCurrent
-                          ? Color.fromRGBO(53, 47, 47, 1)
-                          : Color.fromRGBO(135, 206, 235, 1),
-                  size: isCurrent ? heightUnit * .01 : heightUnit * 30,
+                      : isCurrent
+                          ? Color.fromRGBO(135, 206, 235, 1)
+                          : Color.fromRGBO(178, 182, 182, 1),
+                  size: heightUnit * 30,
                 ),
               ],
             ),
@@ -311,7 +464,7 @@ class BoxConnectorPainter extends CustomPainter {
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke
       ..color = Color.fromRGBO(178, 182, 182, 1);
-    // Loop through all page links to draw connector lines dynamically
+    
     for (int i = 0; i < itemCount - 1; i++) {
       double x1;
       switch (i % 4) {
@@ -337,8 +490,9 @@ class BoxConnectorPainter extends CustomPainter {
       }
       final start = Offset(x1 + halfW, baseY + spacing * i + halfH);
       final end = Offset(x2 + halfW, baseY + spacing * (i + 1) + halfH);
-      // Use done style for completed links, pending otherwise
-      final paint = (i < currentIndex - 1) ? paintDone : paintPending;
+      
+      // Green if completed, grey if pending
+      final paint = (i < currentIndex) ? paintDone : paintPending;
       canvas.drawLine(start, end, paint);
     }
   }

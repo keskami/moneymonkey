@@ -177,16 +177,10 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
             CustomNextButton(
               nextPage: () {
                 // or whichever final logic you want
-                baseLessonController.pageIndex.value = 0;
-                Navigator.pop(context);
-
-                // If removing from memory
-                if (Get.isRegistered<BaseLessonController>()) {
-                  Get.delete<BaseLessonController>();
-                }
+                baseLessonController.pageIndex.value += 1;
               },
               isEnabled: isEnabled,
-              text: 'Finish',
+              text: 'Next',
             ),
           ],
         ),
@@ -317,8 +311,7 @@ class _ComponentImpactPageState extends State<ComponentImpactPage> {
           Center(
             child: CustomNextButton(
               nextPage: () {
-                baseLessonController.pageIndex.value = 0;
-                Navigator.pop(context);
+                baseLessonController.pageIndex.value += 1;
               },
               isEnabled: isEnabled,
               text: 'Finish',

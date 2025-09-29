@@ -34,6 +34,7 @@ class ScenarioPage extends StatefulWidget {
 class _ScenarioPageState extends State<ScenarioPage> {
   String currentQuestion = "";
   List<String> currentAnswers = [];
+  bool _hasAnswered = false; // Add this flag to prevent multiple answers
 
   BaseLessonController baseLessonController =
         Get.find<BaseLessonController>();
@@ -41,14 +42,31 @@ class _ScenarioPageState extends State<ScenarioPage> {
   @override
   void initState() {
     super.initState();
+    _hasAnswered = false; // Reset for each new question
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
   }
 
+  @override
+  void didUpdateWidget(ScenarioPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset when widget updates (new question)
+    if (oldWidget.componentId != widget.componentId || 
+        oldWidget.containerHeading != widget.containerHeading) {
+      _hasAnswered = false;
+      currentAnswers.clear();
+    }
+  }
+
   void answerQuestion(String ans) {
+    // Prevent multiple answers only if they got it right
+    if (_hasAnswered) return;
+    
     currentAnswers.clear();
+    
     if (widget.correctAnswer == ans) {
+      _hasAnswered = true; // Only mark as answered if correct
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
           .showSnackBar(CorrectAnswerSnackBar(message: widget.correct));
@@ -62,6 +80,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
         },
       );
     } else {
+      // Don't set _hasAnswered = true for wrong answers, allow retry
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
           .showSnackBar(WrongAnswerSnackBar(message: widget.wrong));

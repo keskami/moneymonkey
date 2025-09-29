@@ -28,7 +28,7 @@ class CustomProgressBar extends StatelessWidget {
         progress = controller.pageIndex.value / 5;
         break;
       case ComponentType.story:
-        progress = controller.pageIndex.value / 7;
+        progress = controller.pageIndex.value / 5;
         break;
       case ComponentType.scenarioSimulation:
         progress = controller.pageIndex.value / 5;

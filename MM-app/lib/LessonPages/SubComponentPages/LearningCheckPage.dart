@@ -47,6 +47,26 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
   String answer1 = "";
   String answer2 = "";
   bool loading = false;
+  bool _hasSubmitted = false; // Add flag to prevent multiple submissions
+
+  @override
+  void initState() {
+    super.initState();
+    _hasSubmitted = false; // Reset for each new question
+  }
+
+  @override
+  void didUpdateWidget(LearningCheckPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset when widget updates (new question)
+    if (oldWidget.title != widget.title || 
+        oldWidget.question1 != widget.question1 ||
+        oldWidget.question2 != widget.question2) {
+      _hasSubmitted = false;
+      answer1 = "";
+      answer2 = "";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +79,24 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
 
   /// Show a message based on correctness
   void showMessage() {
+    // Prevent multiple submissions
+    if (_hasSubmitted) return;
+    
+    // Check if both questions are answered
+    if (answer1.isEmpty || answer2.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Please answer both questions before checking."),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
     ScaffoldMessenger.of(context).clearSnackBars();
     if (answer1 == widget.correctAns1 && answer2 == widget.correctAns2) {
+      _hasSubmitted = true; // Only prevent further interaction if both are correct
       ScaffoldMessenger.of(context).showSnackBar(
         CorrectAnswerSnackBar(message: widget.bothCorrect),
       );
@@ -71,10 +107,12 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
         },
       );
     } else if (answer1 == widget.correctAns1 || answer2 == widget.correctAns2) {
+      // Don't set _hasSubmitted = true, allow retry for partial correct
       ScaffoldMessenger.of(context).showSnackBar(
         WrongAnswerSnackBar(message: widget.oneCorrect),
       );
     } else {
+      // Don't set _hasSubmitted = true, allow retry for all wrong
       ScaffoldMessenger.of(context).showSnackBar(
         WrongAnswerSnackBar(message: widget.wrong),
       );
@@ -83,6 +121,9 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
 
   /// Record which answer was selected for each question
   void answerQuestion(int questionNumber, String ans) {
+    // Don't allow changing answers after submission
+    if (_hasSubmitted) return;
+    
     setState(() {
       if (questionNumber == 1) {
         answer1 = ans;
@@ -140,7 +181,9 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
                     width: screenWidth * 0.6,
                     height: screenHeight * 0.08,
                     decoration: BoxDecoration(
-                      color: LightTheme().pastelGreen,
+                      color: _hasSubmitted 
+                          ? Colors.grey 
+                          : LightTheme().pastelGreen,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
@@ -200,7 +243,9 @@ class _LearningCheckPageState extends State<LearningCheckPage> {
                     width: double.infinity,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: LightTheme().pastelGreen,
+                      color: _hasSubmitted 
+                          ? Colors.grey 
+                          : LightTheme().pastelGreen,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(

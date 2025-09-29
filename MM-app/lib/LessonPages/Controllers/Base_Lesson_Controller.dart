@@ -62,6 +62,7 @@ class BaseLessonController extends GetxController {
 
               scenarioPages.add(
                 ScenarioPage(
+                  key: ValueKey('scenario_${componentId}_${j}_${question.questionHeading}'), // Unique key
                   title: subcomponent.data.title,
                   subTitle: subcomponent.data.scenarioExplanation,
                   wrong: question.prompts.incorrect,
@@ -391,6 +392,6 @@ class BaseLessonController extends GetxController {
       }
     }
 
-    pages.add(CelebrationScreen());
+    pages.add(CelebrationScreen(completedLessonId: componentId));
   }
 }

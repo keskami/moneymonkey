@@ -37,6 +37,7 @@ class Page4 extends StatefulWidget {
 class _Page4State extends State<Page4> {
   final User? user = FirebaseAuth.instance.currentUser;
   final String? userID = FirebaseAuth.instance.currentUser?.uid;
+  final BaseLessonController baseLessonController = Get.find();
 
   bool mariaClicked = false;
   bool jasonClicked = false;
@@ -192,14 +193,7 @@ class _Page4State extends State<Page4> {
         GestureDetector(
           onTap: () {
             if (finishMode) {
-              // If user already submitted => "Finish" -> HomePage
-              if (Get.isRegistered<BaseLessonController>()) {
-                Get.delete<BaseLessonController>();
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
+              baseLessonController.pageIndex.value += 1;
             } else if ((avaClicked || jasonClicked || mariaClicked) &&
                 delay &&
                 !submitted) {
@@ -240,7 +234,7 @@ class _Page4State extends State<Page4> {
             ),
             child: Center(
               child: Text(
-                finishMode ? "Finish" : widget.button,
+                finishMode ? "Next" : widget.button,
                 style: GoogleFonts.baloo2(
                   fontSize: 18,
                   color: Colors.white,
@@ -358,14 +352,7 @@ class _Page4State extends State<Page4> {
           GestureDetector(
             onTap: () {
               if (finishMode) {
-                // If user already submitted => "Finish" -> HomePage
-                if (Get.isRegistered<BaseLessonController>()) {
-                  Get.delete<BaseLessonController>();
-                }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
+                baseLessonController.pageIndex.value += 1;
               } else if ((avaClicked || jasonClicked || mariaClicked) &&
                   delay &&
                   !submitted) {

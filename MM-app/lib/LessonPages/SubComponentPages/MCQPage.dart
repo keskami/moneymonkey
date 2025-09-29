@@ -35,14 +35,32 @@ class _MCQPageState extends State<MCQPage> {
 
   String currentQuestion = "";
   List<String> currentAnswers = [];
+  bool _hasAnswered = false; // Add this flag to prevent multiple answers
 
   @override
   void initState() {
     super.initState();
+    _hasAnswered = false; // Reset for each new question
+  }
+
+  @override
+  void didUpdateWidget(MCQPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset when widget updates (new question)
+    if (oldWidget.question != widget.question || 
+        oldWidget.title != widget.title) {
+      _hasAnswered = false;
+      currentAnswers.clear();
+    }
   }
 
   void answerQuestion(String ans) {
+    // Prevent multiple answers
+    if (_hasAnswered) return;
+    
+    _hasAnswered = true; // Mark as answered immediately
     currentAnswers.clear();
+    
     if (widget.correctAnswer == ans) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
@@ -187,7 +205,9 @@ class _MCQPageState extends State<MCQPage> {
                 child: Column(
                   children: widget.options.map((answer) {
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        answerQuestion(answer); // Fixed: was empty before
+                      },
                       child: CustomOptionTile(
                         isSelected: currentAnswers.contains(answer),
                         childWidget: Container(
