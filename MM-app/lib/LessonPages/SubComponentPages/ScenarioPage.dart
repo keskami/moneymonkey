@@ -2,47 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_monkey/GlobalWidgets/CustomSnackBars.dart';
 import 'package:money_monkey/LessonPages/Controllers/Base_Lesson_Controller.dart';
- 
 import 'package:money_monkey/LessonPages/Widgets/OptionsTile.dart';
 
 class ScenarioPage extends StatefulWidget {
-  String title = '';
-  String subTitle = '';
-  String wrong = '';
-  String correct = '';
-  String containerHeading = '';
-  String containerSubHeading = '';
-  List<String> options = [];
-  String correctAnswer = '';
-  String componentId;
-  ScenarioPage(
-      {super.key,
-      required this.title,
-      required this.subTitle,
-      required this.wrong,
-      required this.correct,
-      required this.containerHeading,
-      required this.containerSubHeading,
-      required this.options,
-      required this.correctAnswer,
-      required this.componentId});
+  final String title;
+  final String subTitle;
+  final String wrong;
+  final String correct;
+  final String containerHeading;
+  final String containerSubHeading;
+  final List<String> options;
+  final String correctAnswer;
+  final String componentId;
+
+  const ScenarioPage({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.wrong,
+    required this.correct,
+    required this.containerHeading,
+    required this.containerSubHeading,
+    required this.options,
+    required this.correctAnswer,
+    required this.componentId,
+  });
 
   @override
   State<ScenarioPage> createState() => _ScenarioPageState();
 }
 
 class _ScenarioPageState extends State<ScenarioPage> {
-  String currentQuestion = "";
   List<String> currentAnswers = [];
-  bool _hasAnswered = false; // Add this flag to prevent multiple answers
+  bool _hasAnswered = false;
 
   BaseLessonController baseLessonController =
-        Get.find<BaseLessonController>();
+      Get.find<BaseLessonController>();
 
   @override
   void initState() {
     super.initState();
-    _hasAnswered = false; // Reset for each new question
+    _hasAnswered = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).clearSnackBars();
     });
@@ -51,8 +51,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
   @override
   void didUpdateWidget(ScenarioPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Reset when widget updates (new question)
-    if (oldWidget.componentId != widget.componentId || 
+    if (oldWidget.componentId != widget.componentId ||
         oldWidget.containerHeading != widget.containerHeading) {
       _hasAnswered = false;
       currentAnswers.clear();
@@ -60,13 +59,12 @@ class _ScenarioPageState extends State<ScenarioPage> {
   }
 
   void answerQuestion(String ans) {
-    // Prevent multiple answers only if they got it right
     if (_hasAnswered) return;
-    
+
     currentAnswers.clear();
-    
+
     if (widget.correctAnswer == ans) {
-      _hasAnswered = true; // Only mark as answered if correct
+      _hasAnswered = true;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
           .showSnackBar(CorrectAnswerSnackBar(message: widget.correct));
@@ -80,7 +78,6 @@ class _ScenarioPageState extends State<ScenarioPage> {
         },
       );
     } else {
-      // Don't set _hasAnswered = true for wrong answers, allow retry
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
           .showSnackBar(WrongAnswerSnackBar(message: widget.wrong));
@@ -99,14 +96,13 @@ class _ScenarioPageState extends State<ScenarioPage> {
         : mobileDisplay();
   }
 
-  webDisplay(double screenWidth, double screenHeight) {
+  Widget webDisplay(double screenWidth, double screenHeight) {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(height: screenWidth * 0.02),
-          //Heading
           Text(
             widget.title,
             softWrap: true,
@@ -115,8 +111,9 @@ class _ScenarioPageState extends State<ScenarioPage> {
               fontSize: 27,
             ),
           ).marginSymmetric(
-              vertical: screenHeight * 0.025, horizontal: screenWidth * 0.015),
-          //SubHeading
+            vertical: screenHeight * 0.025,
+            horizontal: screenWidth * 0.015,
+          ),
           Text(
             widget.subTitle,
             softWrap: true,
@@ -128,9 +125,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
             vertical: screenHeight * 0.01,
             horizontal: screenWidth * 0.015,
           ),
-          SizedBox(
-            height: screenHeight * 0.03,
-          ),
+          SizedBox(height: screenHeight * 0.03),
           Container(
             height: screenHeight * 0.4,
             padding: EdgeInsets.symmetric(
@@ -148,13 +143,11 @@ class _ScenarioPageState extends State<ScenarioPage> {
               ],
               color: Colors.white,
             ),
-            child: SingleChildScrollView(  // ✅ Removed Expanded
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: screenHeight * 0.02,
-                  ),
+                  SizedBox(height: screenHeight * 0.02),
                   Text(
                     widget.containerHeading,
                     style: TextStyle(
@@ -162,9 +155,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
                       fontSize: 19,
                     ),
                   ).marginSymmetric(horizontal: screenWidth * 0.015),
-                  SizedBox(
-                    height: screenHeight * 0.01,
-                  ),
+                  SizedBox(height: screenHeight * 0.01),
                   Text(
                     widget.containerSubHeading,
                     softWrap: true,
@@ -173,9 +164,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
                       fontSize: 16,
                     ),
                   ).marginSymmetric(horizontal: screenWidth * 0.015),
-                  SizedBox(
-                    height: screenHeight * 0.01,
-                  ),
+                  SizedBox(height: screenHeight * 0.01),
                   ...widget.options.map((answer) {
                     return GestureDetector(
                       onTap: () {
@@ -209,5 +198,9 @@ class _ScenarioPageState extends State<ScenarioPage> {
     );
   }
 
-  mobileDisplay() {}
+  Widget mobileDisplay() {
+    return Center(
+      child: Text('Mobile view not implemented'),
+    );
+  }
 }
