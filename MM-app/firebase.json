@@ -1,1 +1,58 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"money-monkey-f4d73","appId":"1:851718603804:android:da547fd5aa807baf458bd9","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"money-monkey-f4d73","appId":"1:851718603804:ios:93ee6341a4d42da0458bd9","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"money-monkey-f4d73","configurations":{"android":"1:851718603804:android:da547fd5aa807baf458bd9","ios":"1:851718603804:ios:93ee6341a4d42da0458bd9","web":"1:851718603804:web:f7afdb4064129d3b458bd9"}}}}},"functions":[{"source":"functions","codebase":"default","ignore":["venv",".git","firebase-debug.log","firebase-debug.*.log","*.local"]}]}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "money-monkey-f4d73",
+          "appId": "1:851718603804:android:da547fd5aa807baf458bd9",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "money-monkey-f4d73",
+          "appId": "1:851718603804:ios:93ee6341a4d42da0458bd9",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "money-monkey-f4d73",
+          "configurations": {
+            "android": "1:851718603804:android:da547fd5aa807baf458bd9",
+            "ios": "1:851718603804:ios:93ee6341a4d42da0458bd9",
+            "web": "1:851718603804:web:f7afdb4064129d3b458bd9"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "venv",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
