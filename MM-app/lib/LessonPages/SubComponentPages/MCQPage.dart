@@ -35,12 +35,12 @@ class _MCQPageState extends State<MCQPage> {
 
   String currentQuestion = "";
   List<String> currentAnswers = [];
-  bool _hasAnswered = false; // Add this flag to prevent multiple answers
+  bool _isCorrectAnswered = false; // Only lock when correct answer is given
 
   @override
   void initState() {
     super.initState();
-    _hasAnswered = false; // Reset for each new question
+    _isCorrectAnswered = false;
   }
 
   @override
@@ -49,19 +49,20 @@ class _MCQPageState extends State<MCQPage> {
     // Reset when widget updates (new question)
     if (oldWidget.question != widget.question || 
         oldWidget.title != widget.title) {
-      _hasAnswered = false;
+      _isCorrectAnswered = false;
       currentAnswers.clear();
     }
   }
 
   void answerQuestion(String ans) {
-    // Prevent multiple answers
-    if (_hasAnswered) return;
+    // Only prevent answering if correct answer was already given
+    if (_isCorrectAnswered) return;
     
-    _hasAnswered = true; // Mark as answered immediately
     currentAnswers.clear();
     
     if (widget.correctAnswer == ans) {
+      // Correct answer - lock and advance
+      _isCorrectAnswered = true;
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
           .showSnackBar(CorrectAnswerSnackBar(message: widget.correct));
@@ -75,12 +76,24 @@ class _MCQPageState extends State<MCQPage> {
         },
       );
     } else {
+      // Wrong answer - show feedback but allow retry
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context)
           .showSnackBar(WrongAnswerSnackBar(message: widget.wrong));
       setState(() {
         currentAnswers.add(ans);
       });
+      // Clear the selection after a brief delay to allow retry
+      Future.delayed(
+        Duration(milliseconds: 1500),
+        () {
+          if (mounted && !_isCorrectAnswered) {
+            setState(() {
+              currentAnswers.clear();
+            });
+          }
+        },
+      );
     }
   }
 
@@ -92,8 +105,6 @@ class _MCQPageState extends State<MCQPage> {
     if (baseLessonController.pages.isEmpty) {
       return Center(child: Text("No data available"));
     }
-    // At this point, if the question is still empty, setData() should be called.
-    // (Our ever() listener above should handle this.)
     return screenWidth > screenHeight
         ? webDisplay(screenWidth, screenHeight)
         : mobileDisplay();
@@ -130,7 +141,9 @@ class _MCQPageState extends State<MCQPage> {
         const SizedBox(
           width: 10,
         ),
-          Expanded(
+        Container(
+          height: screenHeight * 0.5,
+          child: Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: widget.options.map((answer) {
@@ -160,6 +173,7 @@ class _MCQPageState extends State<MCQPage> {
               ),
             ),
           ),
+        ),
         SizedBox(
           height: screenHeight * 0.1,
         ),
@@ -203,7 +217,7 @@ class _MCQPageState extends State<MCQPage> {
                   children: widget.options.map((answer) {
                     return GestureDetector(
                       onTap: () {
-                        answerQuestion(answer); // Fixed: was empty before
+                        answerQuestion(answer);
                       },
                       child: CustomOptionTile(
                         isSelected: currentAnswers.contains(answer),
