@@ -73,7 +73,7 @@ const CallToAction = () => {
           life.
         </motion.h2>
         <motion.div variants={buttonVariants}>
-          <Link href="/signup" className={styles.button}>
+          <Link href="https://money-monkey-f4d73.web.app/" className={styles.button}>
             Sign Up for Free
           </Link>
         </motion.div>

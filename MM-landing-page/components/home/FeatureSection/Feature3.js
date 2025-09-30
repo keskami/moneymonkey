@@ -99,7 +99,7 @@ const Feature1 = () => {
             className={styles.buttonContainer}
             variants={fadeUpVariants}
           >
-            <Link href="/simulators" className={styles.button}>
+            <Link href="/Ecosystem/stock-simulator" className={styles.button}>
               Simulators
             </Link>
             <Link href="/pricing" className={`${styles.button} ${styles.buttonSecondary}`}>

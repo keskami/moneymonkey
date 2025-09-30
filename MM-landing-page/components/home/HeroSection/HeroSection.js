@@ -591,7 +591,7 @@ const HeroSection = () => {
           </p>
 
           <div className="button-container">
-            <button className="button">
+            <button className="button" onClick={() => window.location.href = 'https://money-monkey-f4d73.web.app/'}>
               Get started
               <svg
                 viewBox="0 0 24 24"
