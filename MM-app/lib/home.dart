@@ -15,15 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    
-    // Register the general assistant
-    _initializeGeneralAssistant();
   }
-  
-  Future<void> _initializeGeneralAssistant() async {
-  final assistantId = 'asst_Miaq9XzcKdd5B5jM0k3ZRinx';
-  print('Initializing general assistant with ID: $assistantId');
-}
 
   @override
   Widget build(BuildContext context) {

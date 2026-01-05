@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
-import 'package:money_monkey/Backend/Services/AcademicServices.dart';
 import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
-import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
+import 'package:money_monkey/Backend/Services/lesson_preload_service.dart';
 import 'package:money_monkey/LessonPages/Pages/LessonHomeUnit.dart';
 import 'package:money_monkey/GlobalWidgets/Scoreboard.dart';
 import 'package:money_monkey/themes/color_themes.dart';
@@ -17,6 +15,7 @@ class LessonsHome extends StatefulWidget {
 
 class _LessonsHomeState extends State<LessonsHome> {
   final localService = DirectFirebaseService();
+  final lessonPreloadService = LessonPreloadService();
   final ScrollController _scrollController = ScrollController();
 
   List<Lesson> lessons = [];
@@ -43,30 +42,48 @@ class _LessonsHomeState extends State<LessonsHome> {
 
   Future<void> _loadData() async {
     try {
-      // Wait for the unit to be fetched since getUnit returns a Future
-      final Unit currentUnit = await localService.getUnit(_currentUnitId);
+      // Try to get cached unit first
+      Unit? currentUnit = lessonPreloadService.getCachedUnit(_currentUnitId);
+      List<Lesson>? loadedLessons = lessonPreloadService.getCachedLessons(_currentUnitId);
+      
+      // If we have cached data, use it immediately
+      if (currentUnit != null && loadedLessons != null && loadedLessons.isNotEmpty) {
+        debugPrint('📦 Using cached lesson data for unit: $_currentUnitId');
+        final cachedUnit = currentUnit;
+        final cachedLessons = loadedLessons;
+        setState(() {
+          unitTitle = cachedUnit.title;
+          lessons = cachedLessons;
+          _currentLessonTitle = cachedLessons.first.title;
+        });
+        return;
+      }
+      
+      // No cache, fetch from Firebase
+      debugPrint('🔄 Loading lessons from Firebase for unit: $_currentUnitId');
+      currentUnit = await localService.getUnit(_currentUnitId);
 
       // Update the state with the unit title
       setState(() {
-        unitTitle = currentUnit.title;
+        unitTitle = currentUnit!.title;
       });
 
       // Get lessons for each lesson ID
-      List<Lesson> loadedLessons = [];
+      final List<Lesson> freshLoadedLessons = [];
       for (String lessonId in currentUnit.lessonIds) {
         try {
           final lesson = await localService.getLesson(lessonId);
-          loadedLessons.add(lesson);
+          freshLoadedLessons.add(lesson);
         } catch (e) {
           print('Error loading lesson $lessonId: $e');
         }
       }
 
       setState(() {
-        lessons = loadedLessons;
+        lessons = freshLoadedLessons;
         // Set initial lesson title when lessons are loaded
-        if (loadedLessons.isNotEmpty) {
-          _currentLessonTitle = loadedLessons.first.title;
+        if (freshLoadedLessons.isNotEmpty) {
+          _currentLessonTitle = freshLoadedLessons.first.title;
         }
       });
     } catch (e) {

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:money_monkey/Backend/Models/Academic.dart';
 import 'package:money_monkey/Backend/Services/CacheServices.dart';
 import 'package:money_monkey/Backend/Services/DirectFirebaseService.dart';
+import 'package:money_monkey/Backend/Services/lesson_preload_service.dart';
 import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
 import 'package:money_monkey/LessonPages/Pages/LoadingScreen/loading_wrapper.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,17 +22,18 @@ class LessonsHomeUnit extends StatefulWidget {
 }
 
 class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
-  late List<Future<List<Widget>>> _pageFutures;
+  late List<List<Widget>> _pageWidgets; // Changed from Future to direct widgets
   final StudentProfileService _profileService = StudentProfileService();
   String? _currentProgress;
   bool _isLoading = true;
+  bool _widgetsReady = false;
   Worker? _refreshWorker;
 
   @override
   void initState() {
     super.initState();
     _loadUserProgress();
-    _pageFutures = widget.lessons.map((lesson) => _getPages(lesson.components)).toList();
+    _buildPageWidgets();
 
     // Listen for refresh triggers - THIS IS THE KEY PART
     if (Get.isRegistered<LessonRefreshController>()) {
@@ -54,7 +56,29 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
   void didUpdateWidget(LessonsHomeUnit oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.lessons != widget.lessons) {
-      _pageFutures = widget.lessons.map((lesson) => _getPages(lesson.components)).toList();
+      _buildPageWidgets();
+    }
+  }
+
+  /// Build page widgets - synchronously if cached, async if not
+  void _buildPageWidgets() async {
+    debugPrint('🔨 Building page widgets...');
+    final stopwatch = Stopwatch()..start();
+    final List<List<Widget>> allPageWidgets = [];
+    
+    for (final lesson in widget.lessons) {
+      final widgets = await _getPages(lesson.components);
+      allPageWidgets.add(widgets);
+    }
+    
+    stopwatch.stop();
+    debugPrint('✅ Page widgets built in ${stopwatch.elapsedMilliseconds}ms');
+    
+    if (mounted) {
+      setState(() {
+        _pageWidgets = allPageWidgets;
+        _widgetsReady = true;
+      });
     }
   }
 
@@ -185,7 +209,7 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
     double heightUnit = screenHeight / 1342;
     double widthUnit = screenWidth / 1920;
 
-    if (_isLoading) {
+    if (_isLoading || !_widgetsReady) {
       return Center(child: CircularProgressIndicator());
     }
 
@@ -196,46 +220,75 @@ class _LessonsHomeUnitState extends State<LessonsHomeUnit> {
       itemBuilder: (context, index) {
         final lesson = widget.lessons[index];
         final currentIndex = _calculateCurrentIndex(lesson);
+        final pageLinks = _pageWidgets[index];
         
-        return FutureBuilder<List<Widget>>(
-          future: _pageFutures[index],
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            final pageLinks = snapshot.data ?? [];
-            return LessonHomeUnit_NewUI(
-              heightUnit: heightUnit,
-              widthUnit: widthUnit,
-              currentIndex: currentIndex,
-              pageLinks: pageLinks,
-              lesson: lesson,
-            );
-          },
+        return LessonHomeUnit_NewUI(
+          heightUnit: heightUnit,
+          widthUnit: widthUnit,
+          currentIndex: currentIndex,
+          pageLinks: pageLinks,
+          lesson: lesson,
         );
       },
     );
   }
 
   Future<List<Widget>> _getPages(List<String> componentIds) async {
-    final List<Widget> pagesLink = [];
     if (componentIds.isEmpty) {
-      return pagesLink;
+      return [];
     }
+    
     final _firebaseService = DirectFirebaseService();
-    for (String componentId in componentIds) {
-      try {
-        final component = await _firebaseService.getComponent(componentId);
+    final _preloadService = LessonPreloadService();
+    
+    // Check if all components are cached
+    bool allCached = true;
+    for (final componentId in componentIds) {
+      if (_preloadService.getCachedComponent(componentId) == null) {
+        allCached = false;
+        break;
+      }
+    }
+    
+    if (allCached) {
+      // All cached - build synchronously for instant rendering
+      debugPrint('⚡ All components cached, building instantly');
+      final List<Widget> pagesLink = [];
+      for (final componentId in componentIds) {
+        final component = _preloadService.getCachedComponent(componentId)!;
         pagesLink.add(LoadingPageWrapper(
           type: component.type, 
           componentId: componentId,
         ));
+      }
+      return pagesLink;
+    }
+    
+    // Some or all not cached - fetch in parallel
+    debugPrint('🔄 Some components not cached, fetching...');
+    final componentFutures = componentIds.map((componentId) async {
+      try {
+        // Check cache first
+        Component? component = _preloadService.getCachedComponent(componentId);
+        
+        // If not in cache, fetch from Firebase
+        if (component == null) {
+          component = await _firebaseService.getComponent(componentId);
+        }
+        
+        return LoadingPageWrapper(
+          type: component.type, 
+          componentId: componentId,
+        );
       } catch (e) {
         print("Error fetching component $componentId: $e");
-        pagesLink.add(Container());
+        return Container();
       }
-    }
-    return pagesLink;
+    });
+    
+    // Wait for all components to load in parallel
+    final widgets = await Future.wait(componentFutures);
+    return widgets;
   }
 }
 

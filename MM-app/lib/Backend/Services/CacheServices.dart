@@ -238,6 +238,31 @@ class StudentProfileService {
     });
   }
 
+  /// PATTERN 4: Real-time Listener with Persistent Connection
+  /// Listens to core progress stats and auto-syncs cache
+  /// Returns a stream that emits updated Student objects whenever Firebase data changes
+  Stream<Student> getProfileRealTimeWithCache(String userId) {
+    debugPrint('👂 Setting up real-time listener with cache for: $userId');
+    
+    return _firestore
+        .collection(_collection)
+        .doc(userId)
+        .snapshots()
+        .asyncMap((doc) async {
+          if (!doc.exists) {
+            throw Exception('User not found: $userId');
+          }
+          
+          final profile = Student.fromFirestore(doc.data()!, doc.id);
+          
+          // Auto-sync to both memory and persistent cache
+          await _saveToCache(profile);
+          
+          debugPrint('🔄 Real-time update: streak=${profile.profile.streak}, score=${profile.profile.portfolioScore}, level=${profile.knowledgeLevel}, progress=${profile.progress}');
+          return profile;
+        });
+  }
+
   // UPDATE PATTERNS WITH CACHE INVALIDATION
 
   /// Update profile section and sync cache

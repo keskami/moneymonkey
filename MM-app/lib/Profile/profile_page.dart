@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,18 +31,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isLoading = true;
   final StudentProfileService profileService = StudentProfileService();
   Worker? _refreshWorker;
+  
+  // Real-time listener subscription
+  StreamSubscription<Student>? _profileSubscription;
 
-  void getUserInfo({bool forceRefresh = false}) async {
+  void _setupRealtimeListener() async {
+    if (userID == null) return;
+    
     try {
-      if (userID != null) {
-        // Use forceRefresh when triggered by completion events
-        userData = forceRefresh
-            ? await profileService.loadProfileWithCache(userID!, forceRefresh: true)
-            : await profileService.loadProfileOfflineFirst(userID!);
+      // Load from cache first for instant display
+      userData = await profileService.loadProfileOfflineFirst(userID!);
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
       }
+      
+      // Then setup real-time listener for updates
+      _profileSubscription = profileService
+          .getProfileRealTimeWithCache(userID!)
+          .listen(
+            (profile) {
+              if (mounted) {
+                setState(() {
+                  userData = profile;
+                  isLoading = false;
+                });
+              }
+            },
+            onError: (error) {
+              debugPrint('❌ Real-time listener error: $error');
+              if (mounted) {
+                setState(() {
+                  isLoading = false;
+                });
+              }
+            },
+          );
     } catch (e) {
-      debugPrint("Error fetching user data: $e");
-    } finally {
+      debugPrint('❌ Error setting up listener: $e');
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -136,17 +164,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    getUserInfo();
+    _setupRealtimeListener();
     
-    // Set up the refresh listener - same pattern as LessonsHomeUnit
+    // Keep existing refresh worker for compatibility
     if (Get.isRegistered<LessonRefreshController>()) {
       _refreshWorker = ever(Get.find<LessonRefreshController>().shouldRefresh, (_) {
         if (mounted) {
-          debugPrint('🔄 Profile refresh triggered, reloading from Firebase...');
-          setState(() {
-            isLoading = true; // Optional: show loading state during refresh
-          });
-          getUserInfo(forceRefresh: true); // Force refresh from Firebase
+          debugPrint('🔄 Manual refresh triggered - real-time listener handles updates automatically');
+          // Real-time listener handles updates automatically
         }
       });
     }
@@ -154,7 +179,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void dispose() {
-    _refreshWorker?.dispose(); // Clean up the listener
+    _profileSubscription?.cancel();
+    _refreshWorker?.dispose();
     super.dispose();
   }
 
@@ -335,13 +361,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  "@${userData!.profile.username}",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 18,
-                                    color: const Color(0xFF64748B),
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "@${userData!.profile.username}",
+                                      style: GoogleFonts.inter(
+                                        fontSize: 18,
+                                        color: const Color(0xFF64748B),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    // Real-time connection indicator
+                                    Tooltip(
+                                      message: _profileSubscription != null ? 'Live updates active' : 'Offline mode',
+                                      child: Container(
+                                        padding: const EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                          color: _profileSubscription != null 
+                                              ? Colors.green.withOpacity(0.1)
+                                              : Colors.grey.withOpacity(0.1),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.circle,
+                                          size: 8,
+                                          color: _profileSubscription != null 
+                                              ? Colors.green 
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 16),
                                 // Experience Level Badge
@@ -967,13 +1019,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          Text(
-                            "Profile",
-                            style: GoogleFonts.inter(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF1E293B),
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                "Profile",
+                                style: GoogleFonts.inter(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF1E293B),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              // Real-time connection indicator
+                              Tooltip(
+                                message: _profileSubscription != null ? 'Live' : 'Offline',
+                                child: Icon(
+                                  Icons.circle,
+                                  size: 8,
+                                  color: _profileSubscription != null 
+                                      ? Colors.green 
+                                      : Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
                           // Settings Button
                           Container(

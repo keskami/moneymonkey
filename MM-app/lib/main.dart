@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:money_monkey/Backend/Services/image_preload_service.dart';
+import 'package:money_monkey/Backend/Services/lesson_preload_service.dart';
 import 'package:money_monkey/GettingStarted/Pages/gs_home.dart';
 import 'package:money_monkey/LessonPages/Controllers/Lesson_Refresh.dart';
-import 'package:money_monkey/LoginPages/login.dart';
 import 'package:money_monkey/home.dart';
 import 'package:money_monkey/themes/color_themes.dart';
 import 'firebase_options.dart';
@@ -94,11 +95,36 @@ class MyApp extends StatelessWidget {
                       
                       // User is logged in
                       if (snapshot.hasData && snapshot.data != null) {
-                        return HomePage();
+                        return HomePageLoader();
                       }
                       
-                      // User not logged in
-                      return GettingStartedHome();
+                      // User not logged in - preload images before showing getting started
+                      return FutureBuilder(
+                        future: ImagePreloadService.preloadGettingStartedImages(context),
+                        builder: (context, preloadSnapshot) {
+                          if (preloadSnapshot.connectionState == ConnectionState.waiting) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'Loading...',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          
+                          // Images are preloaded, show getting started
+                          return GettingStartedHome();
+                        },
+                      );
                     },
                   ),
                 ),
@@ -108,5 +134,92 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Widget that preloads home page images before displaying HomePage
+class HomePageLoader extends StatefulWidget {
+  const HomePageLoader({Key? key}) : super(key: key);
+
+  @override
+  State<HomePageLoader> createState() => _HomePageLoaderState();
+}
+
+class _HomePageLoaderState extends State<HomePageLoader> {
+  bool _isLoading = true;
+  String _loadingMessage = 'Loading home page...';
+
+  @override
+  void initState() {
+    super.initState();
+    _preloadAllData();
+  }
+
+  Future<void> _preloadAllData() async {
+    // Small delay to ensure context is mounted and ready
+    await Future.delayed(Duration(milliseconds: 100));
+    
+    if (!mounted) return;
+    
+    debugPrint('🚀 HomePageLoader: Starting preload...');
+    
+    // Update loading message for lessons
+    setState(() {
+      _loadingMessage = 'Loading lessons...';
+    });
+    
+    // Preload lessons first (usually takes longer)
+    debugPrint('📚 HomePageLoader: Preloading lessons...');
+    try {
+      await LessonPreloadService().preloadInitialLessons();
+    } catch (e) {
+      debugPrint('⚠️ Failed to preload lessons: $e');
+      // Continue anyway - lessons will load on demand
+    }
+    
+    if (!mounted) return;
+    
+    // Update loading message for images
+    setState(() {
+      _loadingMessage = 'Loading graphics...';
+    });
+    
+    // Then preload images
+    debugPrint('🎨 HomePageLoader: Preloading images...');
+    await ImagePreloadService.preloadHomePageImages(context);
+    
+    debugPrint('✅ HomePageLoader: All preload complete, showing HomePage');
+    
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text(
+                _loadingMessage,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    
+    return HomePage();
   }
 }
